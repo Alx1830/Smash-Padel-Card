@@ -1,3 +1,5 @@
+"use client";
+
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
 const INK2  = "#7a8298";
