@@ -253,7 +253,7 @@ export default function LoginPage() {
         fontFamily: MONO, fontSize: "10px",
         letterSpacing: "0.2em", textTransform: "uppercase", color: INK2,
       }}>
-        SMASH PADEL CARD — Season One 2025/26
+        SMASH PADEL CARD
       </div>
     </main>
   );

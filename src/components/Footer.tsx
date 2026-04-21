@@ -71,7 +71,7 @@ const MarqueeItem = () => (
   <div className="flex items-center gap-10 px-6 whitespace-nowrap"
     style={{ fontFamily: "var(--font-jetbrains)", fontSize: "11px", letterSpacing: "0.25em", color: "rgba(46,230,193,0.5)", textTransform: "uppercase" }}>
     <span>Smash Padel Card</span><span style={{ color: "rgba(214,255,61,0.4)" }}>✦</span>
-    <span>Season One 2025/26</span><span style={{ color: "rgba(214,255,61,0.4)" }}>✦</span>
+
     <span>Cúcuta, Colombia</span><span style={{ color: "rgba(214,255,61,0.4)" }}>✦</span>
     <span>Tu card, tu identidad</span><span style={{ color: "rgba(214,255,61,0.4)" }}>✦</span>
     <span>Padel competitivo</span><span style={{ color: "rgba(214,255,61,0.4)" }}>✦</span>

@@ -279,7 +279,7 @@ export function ProfilePage({ player }: { player: PlayerData }) {
             letterSpacing: "0.2em", textTransform: "uppercase", color: INK2,
           }}>
             <span>SMASH PADEL CARD</span>
-            <span>Season One — 2025/26</span>
+            <span>Colombia</span>
           </div>
         </div>
 
