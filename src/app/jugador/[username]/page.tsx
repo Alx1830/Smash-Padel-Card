@@ -1,0 +1,55 @@
+import { createClient } from "@/lib/supabase/server";
+import { ProfilePage } from "@/components/ProfilePage";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { notFound } from "next/navigation";
+
+export default async function JugadorPage({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}) {
+  const { username } = await params;
+  const supabase = await createClient();
+
+  const [{ data }, { data: { user } }] = await Promise.all([
+    supabase.from("players").select("*").eq("username", username).single(),
+    supabase.auth.getUser(),
+  ]);
+
+  if (!data) notFound();
+
+  const player = {
+    username:      data.username,
+    firstName:     data.first_name ?? "",
+    lastName:      data.last_name ?? "",
+    category:      data.category ?? "SIN CATEGORÍA",
+    position:      (data.position ?? "Drive") as "Drive" | "Revés",
+    rankingLiga:   data.ranking_liga?.toString() ?? "—",
+    ciudad:        data.ciudad ?? "—",
+    partner:       data.partner_id ?? "Sin partner",
+    edad:          data.edad ?? 0,
+    manoDominante: data.mano_dominante ?? "—",
+    clubBase:      data.club_id ?? "Sin club",
+    liga:          data.liga_id ?? "Sin liga",
+    pala:          data.pala ?? "—",
+    tenis:         data.tenis ?? "—",
+    paletero:      data.paletero ?? "—",
+    torneos:       (data.torneos ?? []).map((t: { nombre: string; posicion: string }) => ({
+      nombre: t.nombre,
+      puesto: `#${t.posicion} puesto`,
+    })),
+    photoUrl:      data.photo_url || undefined,
+    year:          data.year ?? "2025-26",
+    profileUserId: data.user_id ?? undefined,
+    currentUserId: user?.id ?? null,
+  };
+
+  return (
+    <main style={{ background: "#05070d", minHeight: "100vh" }}>
+      <Navbar />
+      <ProfilePage player={player} />
+      <Footer />
+    </main>
+  );
+}
