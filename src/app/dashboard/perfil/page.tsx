@@ -208,11 +208,11 @@ export default function PerfilPage() {
 
       // 4. Persistir en DB: intentar UPDATE primero (respeta RLS de forma más segura);
       //    si no hay fila aún, caer en INSERT vía upsert.
-      const { error: updateError, count } = await supabase
+      const { error: updateError, data: updatedRows } = await supabase
         .from("players")
         .update({ photo_url: url })
         .eq("user_id", uid)
-        .select("user_id", { count: "exact", head: true });
+        .select("user_id");
 
       if (updateError) {
         console.error("[handlePhoto] Error en UPDATE de photo_url:", updateError);
@@ -227,7 +227,7 @@ export default function PerfilPage() {
           setUploading(false);
           return;
         }
-      } else if (count === 0) {
+      } else if (!updatedRows || updatedRows.length === 0) {
         // UPDATE no afectó ninguna fila → la fila aún no existe, crear con upsert
         console.warn("[handlePhoto] UPDATE no afectó filas — la fila del jugador no existe aún. Creando con upsert.");
         const { error: upsertError } = await supabase
