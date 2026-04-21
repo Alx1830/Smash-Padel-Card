@@ -65,6 +65,9 @@ export default function DashboardHome() {
         </h1>
       </div>
 
+      {/* Fila de widgets */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "24px", alignItems: "flex-start" }}>
+
       {/* Tarjeta ver perfil */}
       <div style={{
         border: "1px solid rgba(255,255,255,0.08)",
@@ -139,13 +142,10 @@ export default function DashboardHome() {
         )}
       </div>
 
-      {/* Widget últimos seguidores */}
-      {userId && (
-        <div style={{ marginTop: "24px" }}>
-          <FollowersWidget userId={userId} />
-        </div>
-      )}
+      {/* Widget últimos seguidores — al lado de Mi carta pública */}
+      {userId && <FollowersWidget userId={userId} />}
 
+      </div>{/* fin fila widgets */}
     </div>
   );
 }
