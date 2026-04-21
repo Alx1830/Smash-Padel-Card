@@ -29,11 +29,23 @@ const STEPS = [
 
 export default async function LandingPage() {
   const supabase = await createClient();
-  const { data: featured } = await supabase
+  // Intenta por username exacto, si falla toma el primer jugador con foto
+  let { data: featured } = await supabase
     .from("players")
     .select("username, first_name, last_name, category, position, photo_url, year")
     .ilike("username", "alx1830")
-    .single();
+    .maybeSingle();
+
+  if (!featured) {
+    const { data: fallback } = await supabase
+      .from("players")
+      .select("username, first_name, last_name, category, position, photo_url, year")
+      .not("photo_url", "is", null)
+      .not("username", "is", null)
+      .limit(1)
+      .maybeSingle();
+    featured = fallback;
+  }
 
   return (
     <main style={{ background: BG0, color: INK0, overflowX: "hidden" }}>
