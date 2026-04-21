@@ -32,7 +32,7 @@ export default async function LandingPage() {
   const { data: featured } = await supabase
     .from("players")
     .select("username, first_name, last_name, category, position, photo_url, year")
-    .eq("username", "ALX1830")
+    .ilike("username", "alx1830")
     .single();
 
   return (
@@ -81,7 +81,7 @@ export default async function LandingPage() {
       </nav>
 
       {/* ══ HERO ══ */}
-      <section style={{ minHeight: "100vh", paddingTop: "64px", position: "relative", overflow: "hidden" }}>
+      <section style={{ paddingTop: "64px", position: "relative", overflow: "hidden" }}>
         {/* Fondo degradado */}
         <div style={{ position: "absolute", inset: 0, zIndex: 0, background: `radial-gradient(ellipse 70% 60% at 20% 50%, rgba(46,230,193,0.18), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 60%, rgba(255,79,216,0.12), transparent 70%), linear-gradient(180deg, #0a1320 0%, ${BG0} 100%)` }} />
 
@@ -97,7 +97,7 @@ export default async function LandingPage() {
         <div style={{
           position: "relative", zIndex: 10,
           maxWidth: "1200px", margin: "0 auto", padding: "0 40px",
-          minHeight: "calc(100vh - 64px)",
+          padding: "80px 40px",
           display: "flex", alignItems: "center", justifyContent: "space-between",
           gap: "64px",
         }}>
