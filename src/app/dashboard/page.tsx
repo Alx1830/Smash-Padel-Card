@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { FollowersWidget } from "@/components/FollowersWidget";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -16,12 +17,14 @@ export default function DashboardHome() {
   const router   = useRouter();
   const supabase = createClient();
   const [username, setUsername] = useState<string | null>(null);
+  const [userId,   setUserId]   = useState<string | null>(null);
   const [loading,  setLoading]  = useState(true);
 
   useEffect(() => {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
+      setUserId(user.id);
       const { data } = await supabase
         .from("players")
         .select("username")
@@ -135,6 +138,13 @@ export default function DashboardHome() {
           )
         )}
       </div>
+
+      {/* Widget últimos seguidores */}
+      {userId && (
+        <div style={{ marginTop: "24px" }}>
+          <FollowersWidget userId={userId} />
+        </div>
+      )}
 
     </div>
   );

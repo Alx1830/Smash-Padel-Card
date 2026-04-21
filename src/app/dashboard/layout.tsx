@@ -26,7 +26,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname  = usePathname();
   const router    = useRouter();
   const supabase  = createClient();
-  const [collapsed, setCollapsed] = useState(true); // móvil: colapsado por defecto
+  const [collapsed, setCollapsed] = useState(true);
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -36,7 +36,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <>
       <style>{`
-        /* ── Desktop: sidebar fijo a la izquierda ── */
         .dash-sidebar {
           position: fixed;
           top: 0; left: 0;
@@ -54,9 +53,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           background: #05070d;
         }
         .dash-label { display: inline; }
+        .dash-logo-text { display: inline; }
         .dash-toggle { display: none; }
 
-        /* ── Móvil: sidebar colapsado a solo iconos ── */
         @media (max-width: 767px) {
           .dash-sidebar {
             width: ${collapsed ? "56px" : "200px"};
@@ -67,18 +66,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             margin-left: ${collapsed ? "56px" : "200px"};
             transition: margin-left 0.25s ease;
           }
-          .dash-label { display: ${collapsed ? "none" : "inline"}; }
-          .dash-toggle { display: flex; }
+          .dash-label    { display: ${collapsed ? "none" : "inline"}; }
           .dash-logo-text { display: ${collapsed ? "none" : "inline"}; }
+          .dash-toggle   { display: flex; }
         }
       `}</style>
 
       <div style={{ display: "flex", minHeight: "100vh", background: "#05070d" }}>
-
-        {/* ── SIDEBAR ── */}
         <aside className="dash-sidebar">
 
-          {/* Logo + botón toggle en móvil */}
+          {/* Logo + toggle */}
           <div style={{
             padding: "20px 14px",
             borderBottom: "1px solid rgba(255,255,255,0.06)",
@@ -93,8 +90,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 SMASH PADEL
               </span>
             </Link>
-
-            {/* Botón hamburguesa solo en móvil */}
             <button
               className="dash-toggle"
               onClick={() => setCollapsed(v => !v)}
@@ -109,20 +104,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </button>
           </div>
 
-          {/* Nav */}
+          {/* Nav — cierra el sidebar en móvil al hacer clic */}
           <nav style={{ flex: 1, padding: "12px 6px", overflowY: "auto" }}>
             {NAV_ITEMS.map(({ href, label, icon }) => {
               const active = pathname === href;
               return (
-                <Link key={href} href={href} style={{
-                  display: "flex", alignItems: "center", gap: "10px",
-                  padding: "9px 10px", borderRadius: "9px", marginBottom: "2px",
-                  textDecoration: "none",
-                  background: active ? `${COURT}18` : "transparent",
-                  border: active ? `1px solid ${COURT}33` : "1px solid transparent",
-                  transition: "all 0.15s",
-                  whiteSpace: "nowrap",
-                }}>
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setCollapsed(true)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: "10px",
+                    padding: "9px 10px", borderRadius: "9px", marginBottom: "2px",
+                    textDecoration: "none",
+                    background: active ? `${COURT}18` : "transparent",
+                    border: active ? `1px solid ${COURT}33` : "1px solid transparent",
+                    transition: "all 0.15s",
+                    whiteSpace: "nowrap",
+                  }}
+                >
                   <span style={{ fontSize: "15px", color: active ? COURT : INK2, lineHeight: 1, flexShrink: 0 }}>{icon}</span>
                   <span className="dash-label" style={{
                     fontFamily: MONO, fontSize: "11px",

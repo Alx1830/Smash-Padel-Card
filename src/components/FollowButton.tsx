@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 
@@ -33,6 +34,8 @@ export function FollowButton({ profileUserId, currentUserId }: FollowButtonProps
   const [showPopup, setShowPopup]       = useState(false);
   const [followers, setFollowers]       = useState<Follower[]>([]);
   const [loadingFollowers, setLoadingFollowers] = useState(false);
+  const [popupPos, setPopupPos]         = useState({ top: 0, left: 0 });
+  const wrapRef  = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
 
   /* ── Carga inicial: count + si el usuario actual sigue ── */
@@ -62,9 +65,10 @@ export function FollowButton({ profileUserId, currentUserId }: FollowButtonProps
   /* ── Cerrar popup al hacer clic fuera ── */
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
-        setShowPopup(false);
-      }
+      const target = e.target as Node;
+      const inWrap  = wrapRef.current?.contains(target);
+      const inPopup = popupRef.current?.contains(target);
+      if (!inWrap && !inPopup) setShowPopup(false);
     }
     if (showPopup) document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
@@ -95,6 +99,11 @@ export function FollowButton({ profileUserId, currentUserId }: FollowButtonProps
   /* ── Abrir popup con lista de seguidores ── */
   async function handleCountClick() {
     if (count === 0) return;
+    // Calcular posición del botón para el portal
+    if (wrapRef.current) {
+      const r = wrapRef.current.getBoundingClientRect();
+      setPopupPos({ top: r.bottom + window.scrollY + 8, left: r.left + window.scrollX });
+    }
     setShowPopup(v => !v);
     if (!showPopup && followers.length === 0) {
       setLoadingFollowers(true);
@@ -175,11 +184,9 @@ export function FollowButton({ profileUserId, currentUserId }: FollowButtonProps
         }
         .follow-count:hover { color: ${count > 0 ? INK0 : INK2}; background: rgba(255,255,255,0.04); }
 
-        /* Popup */
+        /* Popup — renderizado via portal en body */
         .follow-popup {
           position: absolute;
-          top: calc(100% + 10px);
-          left: 0;
           z-index: 9999;
           background: #0f1420;
           border: 1px solid rgba(255,255,255,0.1);
@@ -236,7 +243,7 @@ export function FollowButton({ profileUserId, currentUserId }: FollowButtonProps
         }
       `}</style>
 
-      <div style={{ position: "relative", display: "inline-flex" }} ref={popupRef}>
+      <div style={{ position: "relative", display: "inline-flex" }} ref={wrapRef}>
         <div className="follow-btn">
           {/* Botón principal: "Seguidores" si es propio, "Seguir/Siguiendo" si es ajeno */}
           {isOwn ? (
@@ -268,50 +275,46 @@ export function FollowButton({ profileUserId, currentUserId }: FollowButtonProps
           </button>
         </div>
 
-        {/* Popup lista de seguidores */}
-        {showPopup && (
-          <div className="follow-popup">
-            <div className="follow-popup-title">Seguidores · {count}</div>
-            {loadingFollowers ? (
-              <div style={{ color: INK2, fontFamily: MONO, fontSize: "11px", padding: "12px 0" }}>
-                Cargando…
-              </div>
-            ) : followers.length === 0 ? (
-              <div style={{ color: INK2, fontFamily: MONO, fontSize: "11px", padding: "12px 0" }}>
-                Sin seguidores aún
-              </div>
-            ) : (
-              followers.map(f => (
-                <a
-                  key={f.username}
-                  href={`/jugador/${f.username}`}
-                  style={{ textDecoration: "none", display: "block" }}
-                >
-                  <div className="follower-row">
-                    <div className="follower-avatar">
-                      {f.photo_url ? (
-                        <Image
-                          src={f.photo_url}
-                          alt={`${f.first_name} ${f.last_name}`}
-                          fill
-                          className="object-cover"
-                          unoptimized
-                        />
-                      ) : (
-                        `${f.first_name?.[0] ?? ""}${f.last_name?.[0] ?? ""}`
-                      )}
-                    </div>
-                    <div>
-                      <div className="follower-name">{f.first_name} {f.last_name}</div>
-                      <div className="follower-username">@{f.username}</div>
-                    </div>
-                  </div>
-                </a>
-              ))
-            )}
-          </div>
-        )}
       </div>
+
+      {/* Popup via portal — escapa cualquier stacking context */}
+      {showPopup && typeof document !== "undefined" && createPortal(
+        <div
+          ref={popupRef}
+          className="follow-popup"
+          style={{ top: popupPos.top, left: popupPos.left }}
+        >
+          <div className="follow-popup-title">Seguidores · {count}</div>
+          {loadingFollowers ? (
+            <div style={{ color: INK2, fontFamily: MONO, fontSize: "11px", padding: "12px 0" }}>
+              Cargando…
+            </div>
+          ) : followers.length === 0 ? (
+            <div style={{ color: INK2, fontFamily: MONO, fontSize: "11px", padding: "12px 0" }}>
+              Sin seguidores aún
+            </div>
+          ) : (
+            followers.map(f => (
+              <a key={f.username} href={`/jugador/${f.username}`} style={{ textDecoration: "none", display: "block" }}>
+                <div className="follower-row">
+                  <div className="follower-avatar">
+                    {f.photo_url ? (
+                      <Image src={f.photo_url} alt={`${f.first_name} ${f.last_name}`} fill className="object-cover" unoptimized />
+                    ) : (
+                      `${f.first_name?.[0] ?? ""}${f.last_name?.[0] ?? ""}`
+                    )}
+                  </div>
+                  <div>
+                    <div className="follower-name">{f.first_name} {f.last_name}</div>
+                    <div className="follower-username">@{f.username}</div>
+                  </div>
+                </div>
+              </a>
+            ))
+          )}
+        </div>,
+        document.body
+      )}
     </>
   );
 }
