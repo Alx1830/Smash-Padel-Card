@@ -13,7 +13,7 @@ export default async function JugadorPage({
   const supabase = await createClient();
 
   const [{ data }, { data: { user } }] = await Promise.all([
-    supabase.from("players").select("*").eq("username", username).single(),
+    supabase.from("players").select("*").ilike("username", username).single(),
     supabase.auth.getUser(),
   ]);
 
