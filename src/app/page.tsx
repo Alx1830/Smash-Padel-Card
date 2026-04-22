@@ -29,23 +29,22 @@ const STEPS = [
 
 export default async function LandingPage() {
   const supabase = await createClient();
-  // Intenta por username exacto, si falla toma el primer jugador con foto
-  let { data: featured } = await supabase
+  const { data: fetched } = await supabase
     .from("players")
     .select("username, first_name, last_name, category, position, photo_url, year")
     .ilike("username", "alx1830")
     .maybeSingle();
 
-  if (!featured) {
-    const { data: fallback } = await supabase
-      .from("players")
-      .select("username, first_name, last_name, category, position, photo_url, year")
-      .not("photo_url", "is", null)
-      .not("username", "is", null)
-      .limit(1)
-      .maybeSingle();
-    featured = fallback;
-  }
+  // Fallback con datos reales de ALX1830 por si el fetch falla
+  const featured = fetched ?? {
+    username: "ALX1830",
+    first_name: "Alexis",
+    last_name: "Torres",
+    category: "7MA CATEGORÍA",
+    position: "Drive" as const,
+    photo_url: null,
+    year: "",
+  };
 
   return (
     <main style={{ background: BG0, color: INK0, overflowX: "hidden" }}>
@@ -142,20 +141,18 @@ export default async function LandingPage() {
             </p>
           </div>
 
-          {/* Columna derecha — card real de Alx1830 */}
-          {featured && (
-            <div style={{ flexShrink: 0, animation: "float 7s ease-in-out infinite" }}>
-              <PlayerCard3D
-                username={featured.username}
-                firstName={featured.first_name ?? ""}
-                lastName={featured.last_name ?? ""}
-                category={featured.category ?? "SIN CATEGORÍA"}
-                position={(featured.position ?? "Drive") as "Drive" | "Revés"}
-                year={featured.year ?? ""}
-                photoUrl={featured.photo_url || undefined}
-              />
-            </div>
-          )}
+          {/* Columna derecha — card de ALX1830 */}
+          <div style={{ flexShrink: 0, animation: "float 7s ease-in-out infinite" }}>
+            <PlayerCard3D
+              username={featured.username}
+              firstName={featured.first_name ?? ""}
+              lastName={featured.last_name ?? ""}
+              category={featured.category ?? "SIN CATEGORÍA"}
+              position={(featured.position ?? "Drive") as "Drive" | "Revés"}
+              year={featured.year ?? ""}
+              photoUrl={featured.photo_url || undefined}
+            />
+          </div>
         </div>
       </section>
 
