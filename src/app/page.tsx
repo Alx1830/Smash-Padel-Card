@@ -107,8 +107,7 @@ export default async function LandingPage() {
         {/* Contenido en dos columnas */}
         <div style={{
           position: "relative", zIndex: 10,
-          maxWidth: "1200px", margin: "0 auto", padding: "0 40px",
-          padding: "80px 40px",
+          maxWidth: "1200px", margin: "0 auto", padding: "80px 40px",
           display: "flex", alignItems: "center", justifyContent: "space-between",
           gap: "64px",
         }}>
