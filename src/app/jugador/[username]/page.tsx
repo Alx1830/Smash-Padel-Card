@@ -64,6 +64,7 @@ export default async function JugadorPage({
     profileUserId:    data.user_id ?? undefined,
     currentUserId:    user?.id ?? null,
     setStats,
+    inventoryRows:    invRows ?? [],
   };
 
   return (

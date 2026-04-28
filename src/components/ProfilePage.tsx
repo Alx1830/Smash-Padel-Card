@@ -1,11 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import { useState, useRef } from "react";
 import { PlayerCard3D } from "./PlayerCard3D";
 import { FollowButton } from "./FollowButton";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { SET_CARDS, VERSION_LABEL } from "@/data/pokemon-cards";
 
 type SetStats = { unique: number; total: number; totalQty: number };
+type InvRow   = { card_id: number; set_id: string; quantity: number };
 
 interface PlayerData {
   username:         string;
@@ -24,6 +27,7 @@ interface PlayerData {
   profileUserId?:   string;
   currentUserId?:   string | null;
   setStats?:        Record<string, SetStats>;
+  inventoryRows?:   InvRow[];
 }
 
 const COURT = "#2ee6c1";
@@ -273,25 +277,141 @@ export function ProfilePage({ player }: { player: PlayerData }) {
         `}</style>
       </section>
 
-      {/* ══ COLECCIÓN ══ */}
+      {/* ══ SHOWCASE + COLECCIÓN ══ */}
       {player.setStats && Object.keys(player.setStats).length > 0 && (
-        <CollectionSection setStats={player.setStats} />
+        <CollectionSection
+          setStats={player.setStats}
+          inventoryRows={player.inventoryRows ?? []}
+        />
       )}
 
     </div>
   );
 }
 
-/* ── Collection stats section ───────────────────────────────── */
-const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
+/* ── Shared constants ───────────────────────────────────────── */
+const ALL_SETS   = POKEMON_SERIES.flatMap(s => s.sets);
+const COURT_C    = "#2ee6c1";
+const INK0_C     = "#f5f7fb";
+const INK2_C     = "#7a8298";
+const BG0_C      = "#05070d";
+const MONO_C     = "var(--font-jetbrains)";
+const DISP_C     = "var(--font-archivo)";
 
-function CollectionSection({ setStats }: { setStats: Record<string, SetStats> }) {
-  const COURT = "#2ee6c1";
-  const INK0  = "#f5f7fb";
-  const INK2  = "#7a8298";
-  const BG0   = "#05070d";
-  const MONO  = "var(--font-jetbrains)";
-  const DISP  = "var(--font-archivo)";
+const VERSION_COLOR_MAP: Record<string, string> = {
+  N:  "#7a8298",
+  RH: "#2ee6c1",
+  H:  "#ffd24f",
+};
+
+/* ── Mini card for showcase / expand grid ──────────────────── */
+function MiniCard({ cardId, setId, quantity }: { cardId: number; setId: string; quantity: number }) {
+  const cards = SET_CARDS[setId];
+  const card  = cards?.find(c => c.id === cardId);
+  if (!card) return null;
+  const label      = VERSION_LABEL[card.version];
+  const labelColor = VERSION_COLOR_MAP[label] ?? INK2_C;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+      <div style={{ position: "relative", width: "160px", height: "224px", borderRadius: "8px", overflow: "hidden",
+        boxShadow: "0 8px 24px rgba(0,0,0,0.6)" }}>
+        <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="160px" unoptimized />
+        <div style={{
+          position: "absolute", bottom: "7px", right: "7px",
+          fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.12em",
+          color: labelColor, border: `1px solid ${labelColor}80`,
+          borderRadius: "4px", padding: "2px 6px",
+          background: "rgba(5,7,13,0.8)", backdropFilter: "blur(4px)",
+          pointerEvents: "none",
+        }}>{label}</div>
+      </div>
+      <span style={{ fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.06em", color: INK2_C, textAlign: "center" }}>
+        #{String(card.card_number).padStart(3, "0")} {card.name}
+      </span>
+      <span style={{ fontFamily: MONO_C, fontSize: "10px", color: COURT_C }}>×{quantity}</span>
+    </div>
+  );
+}
+
+/* ── Showcase slider ────────────────────────────────────────── */
+function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
+  const [idx, setIdx] = useState(0);
+
+  // Pick up to 10 owned cards (unique card_ids, highest qty first)
+  const owned = inventoryRows
+    .filter(r => r.quantity > 0)
+    .sort((a, b) => b.quantity - a.quantity)
+    .slice(0, 10);
+
+  if (owned.length < 3) return null;
+
+  const canPrev = idx > 0;
+  const canNext = idx + 3 < owned.length;
+
+  const btnStyle = (active: boolean): React.CSSProperties => ({
+    background: active ? "rgba(46,230,193,0.12)" : "rgba(255,255,255,0.04)",
+    border: `1px solid ${active ? COURT_C + "55" : "rgba(255,255,255,0.1)"}`,
+    color: active ? COURT_C : INK2_C,
+    borderRadius: "8px", width: "36px", height: "36px",
+    cursor: active ? "pointer" : "default",
+    fontFamily: MONO_C, fontSize: "16px",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    flexShrink: 0,
+  });
+
+  return (
+    <div style={{ marginBottom: "64px" }}>
+      <div style={{
+        fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
+        textTransform: "uppercase", color: COURT_C,
+        display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
+      }}>
+        <span style={{ width: "22px", height: "1px", background: COURT_C, display: "inline-block" }} />
+        Showcase
+      </div>
+      <h2 style={{ fontFamily: DISP_C, fontSize: "clamp(24px, 2.5vw, 36px)", letterSpacing: "-0.02em", margin: "0 0 32px", color: INK0_C }}>
+        Mis cartas destacadas
+      </h2>
+
+      <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        <button style={btnStyle(canPrev)} onClick={() => canPrev && setIdx(i => i - 1)} disabled={!canPrev}>‹</button>
+
+        <div style={{ display: "flex", gap: "20px", overflow: "hidden", flex: 1 }}>
+          {owned.slice(idx, idx + 3).map(row => (
+            <div key={`${row.card_id}-${row.set_id}`} style={{ flex: "0 0 calc(33.33% - 14px)" }}>
+              <MiniCard cardId={row.card_id} setId={row.set_id} quantity={row.quantity} />
+            </div>
+          ))}
+        </div>
+
+        <button style={btnStyle(canNext)} onClick={() => canNext && setIdx(i => i + 1)} disabled={!canNext}>›</button>
+      </div>
+
+      {owned.length > 3 && (
+        <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginTop: "20px" }}>
+          {Array.from({ length: Math.ceil(owned.length / 3) }).map((_, i) => (
+            <button key={i} onClick={() => setIdx(i * 3)} style={{
+              width: i * 3 === idx ? "20px" : "6px", height: "6px",
+              borderRadius: "3px", border: "none", cursor: "pointer",
+              background: i * 3 === idx ? COURT_C : "rgba(255,255,255,0.2)",
+              transition: "all 0.2s", padding: 0,
+            }} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Collection stats section ───────────────────────────────── */
+function CollectionSection({
+  setStats, inventoryRows,
+}: {
+  setStats: Record<string, SetStats>;
+  inventoryRows: InvRow[];
+}) {
+  const [expandedSetId, setExpandedSetId] = useState<string | null>(null);
 
   const entries = Object.entries(setStats).map(([setId, stats]) => {
     const set = ALL_SETS.find(s => s.id === setId);
@@ -300,60 +420,119 @@ function CollectionSection({ setStats }: { setStats: Record<string, SetStats> })
 
   if (entries.length === 0) return null;
 
-  return (
-    <section style={{ background: BG0, padding: "0 0 80px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-      <div className="coll-pad" style={{ padding: "64px 80px 0" }}>
-        <div style={{
-          fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em",
-          textTransform: "uppercase", color: COURT,
-          display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
-        }}>
-          <span style={{ width: "22px", height: "1px", background: COURT, display: "inline-block" }} />
-          Colección
-        </div>
-        <h2 style={{ fontFamily: DISP, fontSize: "clamp(24px, 2.5vw, 36px)", letterSpacing: "-0.02em", margin: "0 0 40px", color: INK0 }}>
-          Pokémon TCG
-        </h2>
+  // Cards owned per set for expand view
+  const ownedBySet = (setId: string) => {
+    const cards = SET_CARDS[setId] ?? [];
+    return inventoryRows
+      .filter(r => r.set_id === setId && r.quantity > 0)
+      .map(r => ({ card: cards.find(c => c.id === r.card_id), qty: r.quantity }))
+      .filter(x => x.card) as { card: NonNullable<typeof cards[0]>; qty: number }[];
+  };
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          {entries.map(({ set, stats }) => {
-            const pct = Math.round((stats.unique / stats.total) * 100);
-            return (
-              <div key={set.id} style={{
-                padding: "20px 24px", background: "rgba(255,255,255,0.02)",
-                borderRadius: "14px", border: "1px solid rgba(255,255,255,0.07)",
-              }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "12px", flexWrap: "wrap" }}>
-                  <div style={{ position: "relative", width: "100px", height: "38px", flexShrink: 0 }}>
-                    <Image src={set.logo} alt={set.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} unoptimized />
-                  </div>
-                  <div style={{ flex: 1, display: "flex", justifyContent: "flex-end", gap: "24px", flexWrap: "wrap" }}>
-                    <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: COURT }}>
-                      {stats.unique}/{stats.total} únicas
-                    </span>
-                    <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: INK2 }}>
-                      {stats.totalQty} total
-                    </span>
-                    <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: INK0, minWidth: "36px", textAlign: "right" }}>
-                      {pct}%
-                    </span>
-                  </div>
+  return (
+    <section style={{ background: BG0_C, padding: "0 0 80px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="coll-outer" style={{ padding: "64px 80px 0", display: "flex", gap: "64px", alignItems: "flex-start", flexWrap: "wrap" }}>
+
+        {/* ── Showcase (left) ── */}
+        {inventoryRows.filter(r => r.quantity > 0).length >= 3 && (
+          <div className="showcase-col" style={{ flex: "0 0 auto", width: "clamp(280px, 35%, 420px)" }}>
+            <Showcase inventoryRows={inventoryRows} />
+          </div>
+        )}
+
+        {/* ── Colección (right) ── */}
+        <div style={{ flex: 1, minWidth: "280px" }}>
+          <div style={{
+            fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
+            textTransform: "uppercase", color: COURT_C,
+            display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
+          }}>
+            <span style={{ width: "22px", height: "1px", background: COURT_C, display: "inline-block" }} />
+            Colección
+          </div>
+          <h2 style={{ fontFamily: DISP_C, fontSize: "clamp(24px, 2.5vw, 36px)", letterSpacing: "-0.02em", margin: "0 0 32px", color: INK0_C }}>
+            Pokémon TCG
+          </h2>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            {entries.map(({ set, stats }) => {
+              const pct      = Math.round((stats.unique / stats.total) * 100);
+              const isOpen   = expandedSetId === set.id;
+              const ownedCards = isOpen ? ownedBySet(set.id) : [];
+
+              return (
+                <div key={set.id}>
+                  {/* Progress card — clickable */}
+                  <button
+                    onClick={() => setExpandedSetId(prev => prev === set.id ? null : set.id)}
+                    style={{
+                      width: "100%", textAlign: "left",
+                      padding: "20px 24px", background: isOpen ? "rgba(46,230,193,0.06)" : "rgba(255,255,255,0.02)",
+                      borderRadius: isOpen ? "14px 14px 0 0" : "14px",
+                      border: `1px solid ${isOpen ? COURT_C + "44" : "rgba(255,255,255,0.07)"}`,
+                      borderBottom: isOpen ? "none" : undefined,
+                      cursor: "pointer", display: "block", transition: "background 0.2s",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "12px", flexWrap: "wrap" }}>
+                      <div style={{ position: "relative", width: "100px", height: "38px", flexShrink: 0 }}>
+                        <Image src={set.logo} alt={set.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} unoptimized />
+                      </div>
+                      <div style={{ flex: 1, display: "flex", justifyContent: "flex-end", gap: "24px", flexWrap: "wrap", alignItems: "center" }}>
+                        <span style={{ fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.1em", color: COURT_C }}>
+                          {stats.unique}/{stats.total} únicas
+                        </span>
+                        <span style={{ fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.1em", color: INK2_C }}>
+                          {stats.totalQty} total
+                        </span>
+                        <span style={{ fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.1em", color: INK0_C, minWidth: "36px", textAlign: "right" }}>
+                          {pct}%
+                        </span>
+                        <span style={{ fontFamily: MONO_C, fontSize: "14px", color: INK2_C, marginLeft: "4px" }}>
+                          {isOpen ? "▲" : "▼"}
+                        </span>
+                      </div>
+                    </div>
+                    <div style={{ height: "4px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", overflow: "hidden" }}>
+                      <div style={{
+                        height: "100%", width: `${pct}%`,
+                        background: `linear-gradient(90deg, ${COURT_C}, #4ff0ff)`,
+                        borderRadius: "2px",
+                      }} />
+                    </div>
+                  </button>
+
+                  {/* Expanded card grid */}
+                  {isOpen && (
+                    <div style={{
+                      padding: "24px", background: "rgba(46,230,193,0.03)",
+                      border: `1px solid ${COURT_C}44`, borderTop: "none",
+                      borderRadius: "0 0 14px 14px",
+                    }}>
+                      <div className="prof-cards-grid" style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(6, 1fr)",
+                        gap: "20px 16px",
+                        justifyItems: "center",
+                      }}>
+                        {ownedCards.map(({ card, qty }) => (
+                          <MiniCard key={`${card.id}`} cardId={card.id} setId={set.id} quantity={qty} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div style={{ height: "4px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", overflow: "hidden" }}>
-                  <div style={{
-                    height: "100%", width: `${pct}%`,
-                    background: `linear-gradient(90deg, ${COURT}, #4ff0ff)`,
-                    borderRadius: "2px",
-                  }} />
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
+
       <style>{`
         @media (max-width: 767px) {
-          .coll-pad { padding: 48px 24px 0 !important; }
+          .coll-outer { padding: 48px 24px 0 !important; flex-direction: column !important; }
+          .showcase-col { width: 100% !important; }
+          .prof-cards-grid { grid-template-columns: repeat(3, 1fr) !important; }
         }
       `}</style>
     </section>

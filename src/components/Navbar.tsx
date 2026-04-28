@@ -6,13 +6,17 @@ import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
-const NAV_LINKS = [
-  { label: "INICIO",    href: "/" },
-  { label: "JUGADORES", href: "/jugadores" },
-  { label: "CLUBES",    href: "/clubes" },
-  { label: "LIGAS",     href: "/ligas" },
-  { label: "TORNEOS",   href: "/torneos" },
-  { label: "MERCADO",   href: "/mercado" },
+const NAV_LINKS_GUEST = [
+  { label: "INICIO",     href: "/" },
+  { label: "AMIGOS",     href: "/dashboard/amigos" },
+  { label: "INVENTARIO", href: "/dashboard/inventario" },
+  { label: "MARKET",     href: "/dashboard/market" },
+];
+const NAV_LINKS_AUTH = [
+  { label: "INICIO",     href: "/dashboard" },
+  { label: "AMIGOS",     href: "/dashboard/amigos" },
+  { label: "INVENTARIO", href: "/dashboard/inventario" },
+  { label: "MARKET",     href: "/dashboard/market" },
 ];
 
 export function Navbar() {
@@ -76,7 +80,7 @@ export function Navbar() {
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b border-[#2ee6c1]/10 bg-[#05070d]/90 backdrop-blur-md">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 shrink-0">
+        <Link href={loggedIn ? "/dashboard" : "/"} className="flex items-center gap-2.5 shrink-0">
           <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#2ee6c1] flex-shrink-0"
             style={{ boxShadow: "0 0 8px #2ee6c1" }} />
           <span className="text-white font-bold text-sm tracking-wider uppercase"
@@ -87,7 +91,7 @@ export function Navbar() {
 
         {/* Desktop links — hidden on mobile */}
         <div className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map(({ label, href }) => (
+          {(loggedIn ? NAV_LINKS_AUTH : NAV_LINKS_GUEST).map(({ label, href }) => (
             <Link key={label} href={href}
               className="text-xs font-medium tracking-[0.15em] text-white/60 hover:text-[#2ee6c1] transition-colors duration-200"
               style={{ fontFamily: "var(--font-jetbrains)" }}>
@@ -193,7 +197,7 @@ export function Navbar() {
 
         {/* Nav links */}
         <nav className="flex flex-col px-8 pt-8 gap-1 flex-1">
-          {NAV_LINKS.map(({ label, href }) => (
+          {(loggedIn ? NAV_LINKS_AUTH : NAV_LINKS_GUEST).map(({ label, href }) => (
             <Link key={label} href={href} onClick={() => setMobileOpen(false)}
               className="text-xl font-bold tracking-widest text-white/70 hover:text-[#2ee6c1] transition-colors py-4 border-b border-white/6 uppercase"
               style={{ fontFamily: "var(--font-archivo)" }}>

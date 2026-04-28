@@ -80,8 +80,9 @@ function TcgCard({
   onInventoryChange: (cardId: number, qty: number) => void;
 }) {
   const ref   = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [mouse, setMouse] = useState({ x: 0.5, y: 0.5 });
+  const [tilt, setTilt]       = useState({ x: 0, y: 0 });
+  const [mouse, setMouse]     = useState({ x: 0.5, y: 0.5 });
+  const [hovered, setHovered] = useState(false);
 
   const qty = inventory[card.id] ?? 0;
 
@@ -99,13 +100,14 @@ function TcgCard({
   const onLeave = () => {
     setTilt({ x: 0, y: 0 });
     setMouse({ x: 0.5, y: 0.5 });
+    setHovered(false);
   };
 
   const label = VERSION_LABEL[card.version];
   const labelColor = VERSION_COLOR[label] ?? INK2;
   const isRH = label === "RH";
   const isH  = label === "H";
-  const isGray = userId ? qty === 0 : false;
+  const isGray = userId ? (qty === 0 && !hovered) : false;
 
   const mx = mouse.x * 100;
   const my = mouse.y * 100;
@@ -119,6 +121,7 @@ function TcgCard({
         style={{ perspective: "800px", cursor: "pointer" }}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
+        onMouseEnter={() => setHovered(true)}
       >
         <div style={{
           width: "240px", height: "336px",
@@ -126,7 +129,9 @@ function TcgCard({
           overflow: "hidden",
           position: "relative",
           transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-          transition: tilt.x === 0 ? "transform 0.6s cubic-bezier(0.2,0.8,0.2,1)" : "transform 0.05s linear",
+          transition: tilt.x === 0
+            ? "transform 0.6s cubic-bezier(0.2,0.8,0.2,1), filter 0.3s ease"
+            : "transform 0.05s linear, filter 0.3s ease",
           willChange: "transform",
           filter: isGray ? "grayscale(1) brightness(0.5)" : "none",
           boxShadow: isGray
@@ -365,14 +370,29 @@ function SetProgress({ setId, inventory }: { setId: string; inventory: Inventory
 }
 
 /* ── Main section ───────────────────────────────────────────── */
+type CardFilter = "todas" | "tengo" | "faltan" | "normal" | "holofoil" | "reverseHolofoil";
+
+const FILTERS: { id: CardFilter; label: string; authOnly?: boolean }[] = [
+  { id: "todas",           label: "Todas" },
+  { id: "tengo",           label: "Cartas en inventario", authOnly: true },
+  { id: "faltan",          label: "Cartas restantes",     authOnly: true },
+  { id: "normal",          label: "Normales" },
+  { id: "reverseHolofoil", label: "Reverse Holo" },
+  { id: "holofoil",        label: "Holofoil" },
+];
+
 export function PokemonSetsSection({ userId }: { userId?: string }) {
   const [openSeriesId, setOpenSeriesId] = useState<string | null>(null);
   const [openSetId,    setOpenSetId]    = useState<string | null>(null);
   const [inventory,    setInventory]    = useState<InventoryMap>({});
   const [loadingInv,   setLoadingInv]   = useState(false);
+  const [activeFilter, setActiveFilter] = useState<CardFilter>("todas");
 
   const openSeries = POKEMON_SERIES.find(s => s.id === openSeriesId);
   const openSet    = openSeries?.sets.find(s => s.id === openSetId);
+
+  // Reset filter when set changes
+  useEffect(() => { setActiveFilter("todas"); }, [openSetId]);
 
   // Fetch inventory for the open set when it changes
   useEffect(() => {
@@ -476,39 +496,78 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
         )}
 
         {/* ── Cards grid ── */}
-        {openSet && SET_CARDS[openSet.id] && (
-          <div style={{
-            borderTop: "1px solid rgba(255,255,255,0.06)",
-            paddingTop: "32px", paddingBottom: "40px",
-          }}>
-            <SectionLabel>
-              {openSet.name} — {SET_CARDS[openSet.id].length} cartas
-              {loadingInv && <span style={{ color: INK2, fontSize: "10px", marginLeft: "8px" }}>cargando...</span>}
-            </SectionLabel>
-
-            {userId && (
-              <SetProgress setId={openSet.id} inventory={inventory} />
-            )}
-
-            <div className="pks-cards-grid" style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(6, 1fr)",
-              gap: "32px 24px",
-              justifyItems: "center",
+        {openSet && SET_CARDS[openSet.id] && (() => {
+          const allCards = SET_CARDS[openSet.id];
+          const visibleCards = allCards.filter(card => {
+            if (activeFilter === "tengo")           return (inventory[card.id] ?? 0) > 0;
+            if (activeFilter === "faltan")          return (inventory[card.id] ?? 0) === 0;
+            if (activeFilter === "normal")          return card.version === "normal";
+            if (activeFilter === "holofoil")        return card.version === "holofoil";
+            if (activeFilter === "reverseHolofoil") return card.version === "reverseHolofoil";
+            return true;
+          });
+          return (
+            <div style={{
+              borderTop: "1px solid rgba(255,255,255,0.06)",
+              paddingTop: "32px", paddingBottom: "40px",
             }}>
-              {SET_CARDS[openSet.id].map(card => (
-                <TcgCard
-                  key={card.id}
-                  card={card}
-                  userId={userId}
-                  setId={openSet.id}
-                  inventory={inventory}
-                  onInventoryChange={handleInventoryChange}
-                />
-              ))}
+              <SectionLabel>
+                {openSet.name} — {allCards.length} cartas
+                {loadingInv && <span style={{ color: INK2, fontSize: "10px", marginLeft: "8px" }}>cargando...</span>}
+              </SectionLabel>
+
+              {userId && (
+                <SetProgress setId={openSet.id} inventory={inventory} />
+              )}
+
+              {/* Filter buttons */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "28px" }}>
+                {FILTERS.filter(f => !f.authOnly || userId).map(f => (
+                  <button
+                    key={f.id}
+                    onClick={() => setActiveFilter(f.id)}
+                    style={{
+                      fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em",
+                      textTransform: "uppercase",
+                      color: activeFilter === f.id ? BG0 : INK2,
+                      background: activeFilter === f.id ? COURT : "rgba(255,255,255,0.04)",
+                      border: `1px solid ${activeFilter === f.id ? COURT : "rgba(255,255,255,0.1)"}`,
+                      borderRadius: "6px", padding: "5px 12px",
+                      cursor: "pointer", transition: "all 0.15s",
+                    }}
+                  >
+                    {f.label}
+                    {f.id === "tengo" && userId ? ` (${allCards.filter(c => (inventory[c.id] ?? 0) > 0).length})` : ""}
+                    {f.id === "faltan" && userId ? ` (${allCards.filter(c => (inventory[c.id] ?? 0) === 0).length})` : ""}
+                  </button>
+                ))}
+              </div>
+
+              <div className="pks-cards-grid" style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(6, 1fr)",
+                gap: "32px 24px",
+                justifyItems: "center",
+              }}>
+                {visibleCards.map(card => (
+                  <TcgCard
+                    key={card.id}
+                    card={card}
+                    userId={userId}
+                    setId={openSet.id}
+                    inventory={inventory}
+                    onInventoryChange={handleInventoryChange}
+                  />
+                ))}
+                {visibleCards.length === 0 && (
+                  <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "60px 0", color: INK2, fontFamily: MONO, fontSize: "12px", letterSpacing: "0.1em" }}>
+                    No hay cartas en este filtro
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
       </div>
 

@@ -17,7 +17,7 @@ const NAV_ITEMS = [
   { href: "/dashboard/perfil",      label: "Perfil",     icon: "◉" },
   { href: "/dashboard/amigos",      label: "Amigos",     icon: "⊕" },
   { href: "/dashboard/inventario",  label: "Inventario", icon: "⬡" },
-  { href: "/dashboard/mercado",     label: "Mercado",    icon: "◬" },
+  { href: "/dashboard/market",      label: "Market",     icon: "◬" },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
