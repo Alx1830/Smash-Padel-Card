@@ -455,22 +455,25 @@ function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
 
   if (owned.length < 3) return null;
 
-  const canPrev = idx > 0;
-  const canNext = idx + 1 < owned.length;
+  const prevIdx = (idx - 1 + owned.length) % owned.length;
+  const nextIdx = (idx + 1) % owned.length;
 
-  const btnStyle = (active: boolean): React.CSSProperties => ({
-    background: active ? "rgba(46,230,193,0.12)" : "rgba(255,255,255,0.04)",
-    border: `1px solid ${active ? COURT_C + "55" : "rgba(255,255,255,0.1)"}`,
-    color: active ? COURT_C : INK2_C,
-    borderRadius: "8px", width: "44px", height: "44px",
-    cursor: active ? "pointer" : "default",
-    fontFamily: MONO_C, fontSize: "20px",
-    display: "flex", alignItems: "center", justifyContent: "center",
-    flexShrink: 0,
-  });
+  // Auto-advance every 2 seconds, infinite loop
+  useEffect(() => {
+    const t = setInterval(() => setIdx(i => (i + 1) % owned.length), 2000);
+    return () => clearInterval(t);
+  }, [owned.length]);
 
   return (
     <div style={{ marginBottom: "64px" }}>
+      <style>{`
+        @keyframes sc-in {
+          from { opacity: 0; transform: scale(0.88) translateY(10px); }
+          to   { opacity: 1; transform: scale(1)    translateY(0); }
+        }
+        .sc-center { animation: sc-in 0.45s cubic-bezier(0.2,0.8,0.2,1) forwards; }
+      `}</style>
+
       <div style={{
         fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
         textTransform: "uppercase", color: COURT_C,
@@ -483,26 +486,56 @@ function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
         Mis cartas destacadas
       </h2>
 
-      <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-        <button style={btnStyle(canPrev)} onClick={() => canPrev && setIdx(i => i - 1)} disabled={!canPrev}>‹</button>
-        <div style={{ flex: 1, overflow: "hidden" }}>
+      {/* Card fan — 3 cards stacked, side ones behind center */}
+      <div style={{ position: "relative", padding: "0 10%", paddingBottom: "6%" }}>
+
+        {/* Left background card */}
+        <div style={{
+          position: "absolute", top: "5%", left: "0",
+          width: "78%",
+          transform: "rotateZ(-9deg) rotateY(-8deg)",
+          transformOrigin: "bottom center",
+          opacity: 0.45,
+          filter: "brightness(0.5)",
+          zIndex: 1,
+          transition: "opacity 0.3s ease",
+          pointerEvents: "none",
+        }}>
+          <ShowcaseCard cardId={owned[prevIdx].card_id} setId={owned[prevIdx].set_id} quantity={owned[prevIdx].quantity} />
+        </div>
+
+        {/* Right background card */}
+        <div style={{
+          position: "absolute", top: "5%", right: "0",
+          width: "78%",
+          transform: "rotateZ(9deg) rotateY(8deg)",
+          transformOrigin: "bottom center",
+          opacity: 0.45,
+          filter: "brightness(0.5)",
+          zIndex: 2,
+          transition: "opacity 0.3s ease",
+          pointerEvents: "none",
+        }}>
+          <ShowcaseCard cardId={owned[nextIdx].card_id} setId={owned[nextIdx].set_id} quantity={owned[nextIdx].quantity} />
+        </div>
+
+        {/* Center card — interactive, animates on change */}
+        <div key={idx} className="sc-center" style={{ position: "relative", zIndex: 10 }}>
           <ShowcaseCard cardId={owned[idx].card_id} setId={owned[idx].set_id} quantity={owned[idx].quantity} />
         </div>
-        <button style={btnStyle(canNext)} onClick={() => canNext && setIdx(i => i + 1)} disabled={!canNext}>›</button>
       </div>
 
-      {owned.length > 1 && (
-        <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginTop: "20px" }}>
-          {owned.map((_, i) => (
-            <button key={i} onClick={() => setIdx(i)} style={{
-              width: i === idx ? "20px" : "6px", height: "6px",
-              borderRadius: "3px", border: "none", cursor: "pointer",
-              background: i === idx ? COURT_C : "rgba(255,255,255,0.2)",
-              transition: "all 0.2s", padding: 0,
-            }} />
-          ))}
-        </div>
-      )}
+      {/* Dots */}
+      <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginTop: "16px" }}>
+        {owned.map((_, i) => (
+          <button key={i} onClick={() => setIdx(i)} style={{
+            width: i === idx ? "20px" : "6px", height: "6px",
+            borderRadius: "3px", border: "none", cursor: "pointer",
+            background: i === idx ? COURT_C : "rgba(255,255,255,0.2)",
+            transition: "all 0.2s", padding: 0,
+          }} />
+        ))}
+      </div>
     </div>
   );
 }
