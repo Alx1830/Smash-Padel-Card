@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { PlayerCard3D } from "./PlayerCard3D";
 import { FollowButton } from "./FollowButton";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
