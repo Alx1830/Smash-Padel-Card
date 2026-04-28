@@ -20,76 +20,96 @@ interface PlayerData {
   currentUserId?:   string | null;
 }
 
-/* CSS tokens */
 const COURT = "#2ee6c1";
-const BALL  = "#d6ff3d";
 const INK0  = "#f5f7fb";
 const INK1  = "#c9cfdd";
 const INK2  = "#7a8298";
 const BG0   = "#05070d";
+const MONO  = "var(--font-jetbrains)";
+const DISP  = "var(--font-archivo)";
 
-const MONO = "var(--font-jetbrains)";
-const DISP = "var(--font-archivo)";
+const FLAG: Record<string, string> = {
+  "Afganistán":"🇦🇫","Albania":"🇦🇱","Alemania":"🇩🇪","Andorra":"🇦🇩","Angola":"🇦🇴",
+  "Antigua y Barbuda":"🇦🇬","Arabia Saudita":"🇸🇦","Argelia":"🇩🇿","Argentina":"🇦🇷",
+  "Armenia":"🇦🇲","Australia":"🇦🇺","Austria":"🇦🇹","Azerbaiyán":"🇦🇿","Bahamas":"🇧🇸",
+  "Bahrein":"🇧🇭","Bangladesh":"🇧🇩","Barbados":"🇧🇧","Bélgica":"🇧🇪","Belice":"🇧🇿",
+  "Benín":"🇧🇯","Bielorrusia":"🇧🇾","Bolivia":"🇧🇴","Bosnia y Herzegovina":"🇧🇦",
+  "Botsuana":"🇧🇼","Brasil":"🇧🇷","Brunéi":"🇧🇳","Bulgaria":"🇧🇬","Burkina Faso":"🇧🇫",
+  "Burundi":"🇧🇮","Bután":"🇧🇹","Cabo Verde":"🇨🇻","Camboya":"🇰🇭","Camerún":"🇨🇲",
+  "Canadá":"🇨🇦","Catar":"🇶🇦","Chad":"🇹🇩","Chile":"🇨🇱","China":"🇨🇳","Chipre":"🇨🇾",
+  "Colombia":"🇨🇴","Comoras":"🇰🇲","Congo":"🇨🇬","Corea del Norte":"🇰🇵",
+  "Corea del Sur":"🇰🇷","Costa de Marfil":"🇨🇮","Costa Rica":"🇨🇷","Croacia":"🇭🇷",
+  "Cuba":"🇨🇺","Dinamarca":"🇩🇰","Djibouti":"🇩🇯","Dominica":"🇩🇲","Ecuador":"🇪🇨",
+  "Egipto":"🇪🇬","El Salvador":"🇸🇻","Emiratos Árabes Unidos":"🇦🇪","Eritrea":"🇪🇷",
+  "Eslovaquia":"🇸🇰","Eslovenia":"🇸🇮","España":"🇪🇸","Estados Unidos":"🇺🇸",
+  "Estonia":"🇪🇪","Etiopía":"🇪🇹","Filipinas":"🇵🇭","Finlandia":"🇫🇮","Fiyi":"🇫🇯",
+  "Francia":"🇫🇷","Gabón":"🇬🇦","Gambia":"🇬🇲","Georgia":"🇬🇪","Ghana":"🇬🇭",
+  "Granada":"🇬🇩","Grecia":"🇬🇷","Guatemala":"🇬🇹","Guinea":"🇬🇳",
+  "Guinea Ecuatorial":"🇬🇶","Guinea-Bisáu":"🇬🇼","Guyana":"🇬🇾","Haití":"🇭🇹",
+  "Honduras":"🇭🇳","Hungría":"🇭🇺","India":"🇮🇳","Indonesia":"🇮🇩","Irak":"🇮🇶",
+  "Irán":"🇮🇷","Irlanda":"🇮🇪","Islandia":"🇮🇸","Islas Marshall":"🇲🇭",
+  "Islas Salomón":"🇸🇧","Israel":"🇮🇱","Italia":"🇮🇹","Jamaica":"🇯🇲","Japón":"🇯🇵",
+  "Jordania":"🇯🇴","Kazajistán":"🇰🇿","Kenia":"🇰🇪","Kirguistán":"🇰🇬","Kiribati":"🇰🇮",
+  "Kuwait":"🇰🇼","Laos":"🇱🇦","Lesoto":"🇱🇸","Letonia":"🇱🇻","Líbano":"🇱🇧",
+  "Liberia":"🇱🇷","Libia":"🇱🇾","Liechtenstein":"🇱🇮","Lituania":"🇱🇹",
+  "Luxemburgo":"🇱🇺","Madagascar":"🇲🇬","Malasia":"🇲🇾","Malaui":"🇲🇼",
+  "Maldivas":"🇲🇻","Mali":"🇲🇱","Malta":"🇲🇹","Marruecos":"🇲🇦","Mauricio":"🇲🇺",
+  "Mauritania":"🇲🇷","México":"🇲🇽","Micronesia":"🇫🇲","Moldavia":"🇲🇩","Mónaco":"🇲🇨",
+  "Mongolia":"🇲🇳","Montenegro":"🇲🇪","Mozambique":"🇲🇿","Myanmar":"🇲🇲",
+  "Namibia":"🇳🇦","Nauru":"🇳🇷","Nepal":"🇳🇵","Nicaragua":"🇳🇮","Níger":"🇳🇪",
+  "Nigeria":"🇳🇬","Noruega":"🇳🇴","Nueva Zelanda":"🇳🇿","Omán":"🇴🇲",
+  "Países Bajos":"🇳🇱","Pakistán":"🇵🇰","Palaos":"🇵🇼","Palestina":"🇵🇸",
+  "Panamá":"🇵🇦","Papúa Nueva Guinea":"🇵🇬","Paraguay":"🇵🇾","Perú":"🇵🇪",
+  "Polonia":"🇵🇱","Portugal":"🇵🇹","Reino Unido":"🇬🇧","República Centroafricana":"🇨🇫",
+  "República Checa":"🇨🇿","República Democrática del Congo":"🇨🇩",
+  "República Dominicana":"🇩🇴","Ruanda":"🇷🇼","Rumania":"🇷🇴","Rusia":"🇷🇺",
+  "Samoa":"🇼🇸","San Cristóbal y Nieves":"🇰🇳","San Marino":"🇸🇲",
+  "San Vicente y las Granadinas":"🇻🇨","Santa Lucía":"🇱🇨",
+  "Santo Tomé y Príncipe":"🇸🇹","Senegal":"🇸🇳","Serbia":"🇷🇸","Seychelles":"🇸🇨",
+  "Sierra Leona":"🇸🇱","Singapur":"🇸🇬","Siria":"🇸🇾","Somalia":"🇸🇴",
+  "Sri Lanka":"🇱🇰","Suazilandia":"🇸🇿","Sudáfrica":"🇿🇦","Sudán":"🇸🇩",
+  "Sudán del Sur":"🇸🇸","Suecia":"🇸🇪","Suiza":"🇨🇭","Surinam":"🇸🇷",
+  "Tailandia":"🇹🇭","Tanzania":"🇹🇿","Tayikistán":"🇹🇯","Timor Oriental":"🇹🇱",
+  "Togo":"🇹🇬","Tonga":"🇹🇴","Trinidad y Tobago":"🇹🇹","Túnez":"🇹🇳",
+  "Turkmenistán":"🇹🇲","Turquía":"🇹🇷","Tuvalu":"🇹🇻","Ucrania":"🇺🇦",
+  "Uganda":"🇺🇬","Uruguay":"🇺🇾","Uzbekistán":"🇺🇿","Vanuatu":"🇻🇺",
+  "Venezuela":"🇻🇪","Vietnam":"🇻🇳","Yemen":"🇾🇪","Yibuti":"🇩🇯",
+  "Zambia":"🇿🇲","Zimbabue":"🇿🇼",
+};
 
-function SectionH3({ num, children, mobile }: { num: string; children: React.ReactNode; mobile?: boolean }) {
-  return (
-    <h3 style={{
-      fontFamily: DISP,
-      fontSize: mobile ? "22px" : "28px",
-      letterSpacing: "-0.01em",
-      margin: mobile ? "0 0 16px" : "0 0 24px",
-      color: INK0,
-    }}>
-      <span style={{
-        fontFamily: MONO,
-        fontSize: mobile ? "11px" : "12px",
-        color: COURT,
-        letterSpacing: "0.2em",
-        textTransform: "uppercase",
-        marginRight: mobile ? "12px" : "16px",
-      }}>
-        {num}
-      </span>
-      {children}
-    </h3>
-  );
+function flagLabel(pais: string) {
+  const f = FLAG[pais];
+  return f ? `${f} ${pais}` : pais || "—";
 }
 
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div style={{
-      display: "flex", alignItems: "center",
-      padding: "9px 0",
+      display: "flex", alignItems: "center", padding: "9px 0",
       borderBottom: "1px dashed rgba(255,255,255,0.08)",
       gap: "6px", flexWrap: "wrap",
     }}>
-      <span style={{
-        fontFamily: MONO, fontSize: "12px",
-        letterSpacing: "0.12em", textTransform: "uppercase",
-        color: INK2, flexShrink: 0,
-      }}>
+      <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.12em", textTransform: "uppercase", color: INK2, flexShrink: 0 }}>
         {label}
       </span>
       <span style={{ color: INK2, fontSize: "12px", flexShrink: 0 }}>/</span>
-      <span style={{ fontFamily: MONO, fontSize: "14px", color: INK0, fontWeight: 500 }}>
-        {value}
-      </span>
+      <span style={{ fontFamily: MONO, fontSize: "14px", color: INK0, fontWeight: 500 }}>{value}</span>
     </div>
   );
 }
 
 export function ProfilePage({ player }: { player: PlayerData }) {
-  const CARD_H    = 416 * 1.2;
-  const COVER_H   = 460;
+  const CARD_H     = 416 * 1.2;
+  const COVER_H    = 460;
   const NEG_MARGIN = Math.round(CARD_H / 2);
+
+  const paisLabel = flagLabel(player.pais);
 
   return (
     <div style={{ width: "100%" }}>
 
       {/* ══ COVER ══ */}
       <section id="cover" style={{ position: "relative", overflow: "hidden", isolation: "isolate" }}>
-
-        {/* Fondo */}
         <div style={{
           position: "absolute", inset: 0, zIndex: -2,
           background: `
@@ -101,29 +121,16 @@ export function ProfilePage({ player }: { player: PlayerData }) {
         }} />
         <div style={{
           position: "absolute", inset: 0, zIndex: -1,
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)
-          `,
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)`,
           backgroundSize: "80px 80px",
           WebkitMaskImage: "radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%)",
           maskImage: "radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%)",
           animation: "gridPan 6s linear infinite",
         }} />
-        <div style={{
-          position: "absolute", inset: 0, zIndex: -1,
-          background: `
-            radial-gradient(circle 400px at 20% 40%, rgba(46,230,193,0.15), transparent),
-            radial-gradient(circle 500px at 80% 60%, rgba(214,255,61,0.08), transparent)
-          `,
-        }} />
 
         {/* Desktop */}
         <div className="cover-desktop" style={{ height: `${COVER_H}px`, display: "none", position: "relative" }}>
-          <div style={{
-            position: "absolute", top: "38%", left: "80px",
-            transform: "translateY(-80%)", maxWidth: "520px", zIndex: 20,
-          }}>
+          <div style={{ position: "absolute", top: "38%", left: "80px", transform: "translateY(-80%)", maxWidth: "520px", zIndex: 20 }}>
             <div style={{
               fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em",
               textTransform: "uppercase", color: COURT,
@@ -159,23 +166,19 @@ export function ProfilePage({ player }: { player: PlayerData }) {
               letterSpacing: "0.2em", textTransform: "uppercase",
               display: "flex", alignItems: "center", gap: "10px",
             }}>
-              <span className="neon-dot" style={{
-                width: "10px", height: "10px", borderRadius: "50%",
-                background: COURT, display: "inline-block", flexShrink: 0,
-              }} />
+              <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: COURT, display: "inline-block", flexShrink: 0 }} />
               {player.tipoPerfil || "Maestro Pokémon"}
             </p>
           </div>
 
           <div style={{
-            position: "absolute", top: "38%", right: "80px",
-            transform: "translateY(-80%)", textAlign: "right",
-            fontFamily: MONO, fontSize: "15px", letterSpacing: "0.15em",
-            textTransform: "uppercase", color: INK2, lineHeight: 2.2, zIndex: 20,
+            position: "absolute", top: "38%", right: "80px", transform: "translateY(-80%)",
+            textAlign: "right", fontFamily: MONO, fontSize: "15px",
+            letterSpacing: "0.15em", textTransform: "uppercase", color: INK2, lineHeight: 2.2, zIndex: 20,
           }}>
-            <div>Energía / <b style={{ color: INK0, fontWeight: 600 }}>{player.energiaFavorita || "—"}</b></div>
-            <div>Gimnasio / <b style={{ color: INK0, fontWeight: 600 }}>{player.gimnasioPokemon || "—"}</b></div>
-            <div>Ciudad / <b style={{ color: INK0, fontWeight: 600 }}>{player.ciudad || "—"}</b></div>
+            <div>Energía Favorita / <b style={{ color: INK0 }}>{player.energiaFavorita || "—"}</b></div>
+            <div>Gimnasio Favorito / <b style={{ color: INK0 }}>{player.gimnasioPokemon || "—"}</b></div>
+            <div>Ciudad / <b style={{ color: INK0 }}>{player.ciudad || "—"}</b></div>
           </div>
 
           <div style={{
@@ -183,11 +186,11 @@ export function ProfilePage({ player }: { player: PlayerData }) {
             display: "flex", alignItems: "center", justifyContent: "space-between",
             padding: "14px 48px",
             background: "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
-            fontFamily: MONO, fontSize: "11px",
-            letterSpacing: "0.2em", textTransform: "uppercase", color: INK2,
+            fontFamily: MONO, fontSize: "11px", letterSpacing: "0.2em",
+            textTransform: "uppercase", color: INK2,
           }}>
             <span>POKÉMON CARD COLLECTOR</span>
-            <span>{player.pais || "—"}</span>
+            <span>{paisLabel}</span>
           </div>
         </div>
 
@@ -201,10 +204,7 @@ export function ProfilePage({ player }: { player: PlayerData }) {
             <span style={{ width: "18px", height: "1px", background: COURT, display: "inline-block" }} />
             PERFIL MAESTRO POKÉMON
           </div>
-          <h1 style={{
-            fontFamily: DISP, fontSize: "clamp(36px, 10vw, 56px)",
-            lineHeight: 0.92, margin: 0, letterSpacing: "-0.02em", color: INK0,
-          }}>
+          <h1 style={{ fontFamily: DISP, fontSize: "clamp(36px, 10vw, 56px)", lineHeight: 0.92, margin: 0, letterSpacing: "-0.02em", color: INK0 }}>
             {player.firstName}{" "}
             <em style={{
               fontStyle: "normal",
@@ -225,19 +225,16 @@ export function ProfilePage({ player }: { player: PlayerData }) {
             letterSpacing: "0.2em", textTransform: "uppercase",
             display: "flex", alignItems: "center", gap: "8px",
           }}>
-            <span className="neon-dot" style={{
-              width: "8px", height: "8px", borderRadius: "50%",
-              background: COURT, display: "inline-block", flexShrink: 0,
-            }} />
+            <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: COURT, display: "inline-block", flexShrink: 0 }} />
             {player.tipoPerfil || "Maestro Pokémon"}
           </p>
           <div style={{
             marginTop: "20px", display: "flex", flexWrap: "wrap", gap: "8px 24px",
-            fontFamily: MONO, fontSize: "11px",
-            letterSpacing: "0.1em", textTransform: "uppercase", color: INK2,
+            fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em",
+            textTransform: "uppercase", color: INK2,
           }}>
-            <span>Energía / <b style={{ color: INK0 }}>{player.energiaFavorita || "—"}</b></span>
-            <span>Gimnasio / <b style={{ color: INK0 }}>{player.gimnasioPokemon || "—"}</b></span>
+            <span>Energía Favorita / <b style={{ color: INK0 }}>{player.energiaFavorita || "—"}</b></span>
+            <span>Gimnasio Favorito / <b style={{ color: INK0 }}>{player.gimnasioPokemon || "—"}</b></span>
             <span>Ciudad / <b style={{ color: INK0 }}>{player.ciudad || "—"}</b></span>
           </div>
         </div>
@@ -268,29 +265,23 @@ export function ProfilePage({ player }: { player: PlayerData }) {
                   lastName={player.lastName}
                   position={player.tipoPerfil}
                   category={player.pais}
-                  year={player.year ?? "2025-26"}
+                  energiaFavorita={player.energiaFavorita}
                   photoUrl={player.photoUrl}
                 />
               </div>
             </div>
 
             <div style={{ flex: 1, paddingTop: "20px" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", rowGap: "30px", columnGap: "40px" }}>
-
-                <div>
-                  <SectionH3 num="01">Maestro</SectionH3>
-                  <Row label="Pokémon Fav."  value={player.pokemonFavorito || "—"} />
-                  <Row label="Edad"           value={player.edad ? `${player.edad} años` : "—"} />
-                  <Row label="Energía"        value={player.energiaFavorita || "—"} />
-                </div>
-
-                <div>
-                  <SectionH3 num="02">Perfil</SectionH3>
-                  <Row label="Tipo"       value={player.tipoPerfil || "—"} />
-                  <Row label="País"       value={player.pais || "—"} />
-                  <Row label="Gimnasio"   value={player.gimnasioPokemon || "—"} />
-                </div>
-
+              <div style={{ marginBottom: "8px" }}>
+                <h3 style={{ fontFamily: DISP, fontSize: "28px", letterSpacing: "-0.01em", margin: "0 0 24px", color: INK0 }}>
+                  Perfil Maestro Pokémon
+                </h3>
+                <Row label="Pokémon Favorito"  value={player.pokemonFavorito || "—"} />
+                <Row label="Edad"               value={player.edad ? `${player.edad} años` : "—"} />
+                <Row label="Energía Favorita"   value={player.energiaFavorita || "—"} />
+                <Row label="Tipo de Perfil"     value={player.tipoPerfil || "—"} />
+                <Row label="País"               value={paisLabel} />
+                <Row label="Gimnasio Favorito"  value={player.gimnasioPokemon || "—"} />
               </div>
             </div>
           </div>
@@ -305,28 +296,20 @@ export function ProfilePage({ player }: { player: PlayerData }) {
               lastName={player.lastName}
               position={player.tipoPerfil}
               category={player.pais}
-              year={player.year ?? "2025-26"}
+              energiaFavorita={player.energiaFavorita}
               photoUrl={player.photoUrl}
             />
           </div>
           <div style={{ width: "100%", height: "1px", marginBottom: "40px", background: "rgba(255,255,255,0.06)" }} />
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", rowGap: "40px", columnGap: "16px" }}>
-
-            <div>
-              <SectionH3 num="01" mobile>Maestro</SectionH3>
-              <Row label="Pokémon Fav." value={player.pokemonFavorito || "—"} />
-              <Row label="Edad"          value={player.edad ? `${player.edad} años` : "—"} />
-              <Row label="Energía"       value={player.energiaFavorita || "—"} />
-            </div>
-
-            <div>
-              <SectionH3 num="02" mobile>Perfil</SectionH3>
-              <Row label="Tipo"     value={player.tipoPerfil || "—"} />
-              <Row label="País"     value={player.pais || "—"} />
-              <Row label="Gimnasio" value={player.gimnasioPokemon || "—"} />
-            </div>
-
-          </div>
+          <h3 style={{ fontFamily: DISP, fontSize: "22px", letterSpacing: "-0.01em", margin: "0 0 16px", color: INK0 }}>
+            Perfil Maestro Pokémon
+          </h3>
+          <Row label="Pokémon Favorito"  value={player.pokemonFavorito || "—"} />
+          <Row label="Edad"               value={player.edad ? `${player.edad} años` : "—"} />
+          <Row label="Energía Favorita"   value={player.energiaFavorita || "—"} />
+          <Row label="Tipo de Perfil"     value={player.tipoPerfil || "—"} />
+          <Row label="País"               value={paisLabel} />
+          <Row label="Gimnasio Favorito"  value={player.gimnasioPokemon || "—"} />
         </div>
 
         <style>{`

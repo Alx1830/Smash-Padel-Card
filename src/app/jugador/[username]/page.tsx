@@ -31,7 +31,6 @@ export default async function JugadorPage({
     edad:            data.edad ?? 0,
     energiaFavorita: data.energia_favorita ?? "—",
     photoUrl:        data.photo_url || undefined,
-    year:            data.year ?? "2025-26",
     profileUserId:   data.user_id ?? undefined,
     currentUserId:   user?.id ?? null,
   };
