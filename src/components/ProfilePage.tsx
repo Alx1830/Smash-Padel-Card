@@ -583,6 +583,7 @@ function Showcase({ featuredCards, inventoryRows }: { featuredCards: FeaturedCar
             }}>
               Ve a tu inventario, haz clic en una carta y presiona{" "}
               <span style={{ color: COURT_C, fontWeight: 600 }}>Destacar</span>
+              {" "}— mínimo 3 cartas
             </p>
           </div>
         )}
