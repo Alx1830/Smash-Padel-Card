@@ -241,6 +241,13 @@ export function ProfilePage({ player }: { player: PlayerData }) {
                 <Row label="Gimnasio Favorito"  value={player.gimnasioPokemon || "—"} />
               </div>
             </div>
+
+            {/* Showcase — right column */}
+            {(player.inventoryRows ?? []).filter(r => r.quantity > 0).length >= 3 && (
+              <div style={{ flex: "0 0 auto", width: "clamp(240px, 26%, 340px)", paddingTop: "20px" }}>
+                <Showcase inventoryRows={player.inventoryRows ?? []} />
+              </div>
+            )}
           </div>
         </div>
 
@@ -267,6 +274,11 @@ export function ProfilePage({ player }: { player: PlayerData }) {
           <Row label="Tipo de Perfil"     value={player.tipoPerfil || "—"} />
           <Row label="País"               value={player.pais || "—"} />
           <Row label="Gimnasio Favorito"  value={player.gimnasioPokemon || "—"} />
+          {(player.inventoryRows ?? []).filter(r => r.quantity > 0).length >= 3 && (
+            <div style={{ marginTop: "40px" }}>
+              <Showcase inventoryRows={player.inventoryRows ?? []} />
+            </div>
+          )}
         </div>
 
         <style>{`
@@ -347,10 +359,27 @@ function MiniCard({ cardId, setId, quantity }: { cardId: number; setId: string; 
 }
 
 /* ── Showcase card 3D ───────────────────────────────────────── */
-function ShowcaseCard({ cardId, setId, quantity }: { cardId: number; setId: string; quantity: number }) {
+function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
+  cardId: number; setId: string; quantity: number; autoAnimate?: boolean;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [tilt,  setTilt]  = useState({ x: 0, y: 0 });
   const [mouse, setMouse] = useState({ x: 0.5, y: 0.5 });
+
+  // Continuous shimmer + tilt animation for background cards
+  useEffect(() => {
+    if (!autoAnimate) return;
+    let frame: number;
+    let t = 0;
+    const loop = () => {
+      t += 0.016;
+      setMouse({ x: 0.5 + Math.cos(t) * 0.42, y: 0.5 + Math.sin(t * 0.65) * 0.38 });
+      setTilt({ x: Math.sin(t * 0.7) * 7, y: Math.cos(t) * 7 });
+      frame = requestAnimationFrame(loop);
+    };
+    frame = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(frame);
+  }, [autoAnimate]);
 
   const cards = SET_CARDS[setId];
   const card  = cards?.find(c => c.id === cardId);
@@ -501,7 +530,7 @@ function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
           transition: "opacity 0.3s ease",
           pointerEvents: "none",
         }}>
-          <ShowcaseCard cardId={owned[prevIdx].card_id} setId={owned[prevIdx].set_id} quantity={owned[prevIdx].quantity} />
+          <ShowcaseCard cardId={owned[prevIdx].card_id} setId={owned[prevIdx].set_id} quantity={owned[prevIdx].quantity} autoAnimate />
         </div>
 
         {/* Right background card */}
@@ -516,7 +545,7 @@ function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
           transition: "opacity 0.3s ease",
           pointerEvents: "none",
         }}>
-          <ShowcaseCard cardId={owned[nextIdx].card_id} setId={owned[nextIdx].set_id} quantity={owned[nextIdx].quantity} />
+          <ShowcaseCard cardId={owned[nextIdx].card_id} setId={owned[nextIdx].set_id} quantity={owned[nextIdx].quantity} autoAnimate />
         </div>
 
         {/* Center card — interactive, animates on change */}
@@ -567,17 +596,10 @@ function CollectionSection({
 
   return (
     <section style={{ background: BG0_C, padding: "0 0 80px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-      <div className="coll-outer" style={{ padding: "64px 80px 0", display: "flex", gap: "64px", alignItems: "flex-start", flexWrap: "wrap", justifyContent: "center" }}>
+      <div className="coll-outer" style={{ padding: "64px 80px 0" }}>
 
-        {/* ── Showcase (left) ── */}
-        {inventoryRows.filter(r => r.quantity > 0).length >= 3 && (
-          <div className="showcase-col" style={{ flex: "0 0 auto", width: "clamp(280px, 42%, 460px)" }}>
-            <Showcase inventoryRows={inventoryRows} />
-          </div>
-        )}
-
-        {/* ── Colección (right) ── */}
-        <div style={{ flex: 1, minWidth: "280px", maxWidth: "600px" }}>
+        {/* ── Colección ── */}
+        <div style={{ maxWidth: "600px" }}>
           <div style={{
             fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
             textTransform: "uppercase", color: COURT_C,
@@ -666,8 +688,7 @@ function CollectionSection({
 
       <style>{`
         @media (max-width: 767px) {
-          .coll-outer { padding: 40px 20px 0 !important; flex-direction: column !important; }
-          .showcase-col { width: 100% !important; max-width: 100% !important; }
+          .coll-outer { padding: 40px 20px 0 !important; }
           .prof-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px 12px !important; }
         }
       `}</style>
