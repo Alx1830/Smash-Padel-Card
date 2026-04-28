@@ -113,7 +113,7 @@ function TcgCard({
   const my = mouse.y * 100;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px", width: "100%" }}>
 
       {/* Card with 3D tilt */}
       <div
@@ -580,11 +580,15 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
         .tcg-card-wrap { width: 240px; }
         .tcg-card-body { width: 240px; height: 336px; overflow: hidden; position: relative; }
         @media (max-width: 767px) {
-          .pks-header { padding: 48px 20px 32px !important; }
-          .pks-body   { padding: 0 20px !important; }
-          .pks-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 20px 12px !important; }
-          .tcg-card-wrap { width: 100%; max-width: 100%; }
-          .tcg-card-body { width: 100%; height: auto; aspect-ratio: 5 / 7; }
+          .pks-header { padding: 48px 12px 32px !important; }
+          .pks-body   { padding: 0 12px !important; }
+          .pks-cards-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 28px 10px !important;
+            align-items: start !important;
+          }
+          .tcg-card-wrap { width: 100% !important; max-width: 100% !important; }
+          .tcg-card-body { width: 100% !important; height: auto !important; aspect-ratio: 5 / 7 !important; }
         }
       `}</style>
     </section>
