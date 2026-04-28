@@ -38,7 +38,7 @@ export default function DashboardHome() {
 
   function handleVerPerfil() {
     if (username) {
-      router.push(`/${username}`);
+      window.location.href = `/${username}`;
     }
   }
 

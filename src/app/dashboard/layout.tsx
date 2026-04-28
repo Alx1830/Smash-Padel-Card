@@ -55,11 +55,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     load();
   }, []);
 
-  /* Close dropdowns on outside click */
+  /* Close dropdown on outside click — checks both desktop and mobile refs */
   useEffect(() => {
     function onOutside(e: MouseEvent) {
-      if (menuRef.current   && !menuRef.current.contains(e.target as Node))   setMenuOpen(false);
-      if (mobileRef.current && !mobileRef.current.contains(e.target as Node)) setMenuOpen(false);
+      const inDesktop = menuRef.current?.contains(e.target as Node);
+      const inMobile  = mobileRef.current?.contains(e.target as Node);
+      if (!inDesktop && !inMobile) setMenuOpen(false);
     }
     document.addEventListener("mousedown", onOutside);
     return () => document.removeEventListener("mousedown", onOutside);
@@ -90,7 +91,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </p>
       </div>
       {username && (
-        <Link href={`/${username}`} onClick={() => setMenuOpen(false)} style={{
+        <a href={`/${username}`} style={{
           display: "flex", alignItems: "center", gap: "10px",
           padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)",
         }}
@@ -99,10 +100,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         >
           <User size={14} color={COURT} strokeWidth={1.8} />
           <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Ver perfil</span>
-        </Link>
+        </a>
       )}
       <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-      <Link href="/dashboard/perfil" onClick={() => setMenuOpen(false)} style={{
+      <a href="/dashboard/perfil" style={{
         display: "flex", alignItems: "center", gap: "10px",
         padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)",
       }}
@@ -111,7 +112,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       >
         <Pencil size={14} color={COURT} strokeWidth={1.8} />
         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Editar perfil</span>
-      </Link>
+      </a>
       <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
       <button onClick={handleLogout} style={{
         width: "100%", display: "flex", alignItems: "center", gap: "10px",
