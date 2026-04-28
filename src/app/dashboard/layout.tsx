@@ -82,15 +82,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             borderBottom: "1px solid rgba(255,255,255,0.06)",
             display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px",
           }}>
-            <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", minWidth: 0 }}>
-              <span style={{
-                width: "8px", height: "8px", borderRadius: "50%", flexShrink: 0,
-                background: COURT, boxShadow: `0 0 10px ${COURT}`, display: "inline-block",
-              }} />
+            <span style={{ display: "flex", alignItems: "center", minWidth: 0 }}>
               <span className="dash-logo-text" style={{ fontFamily: DISP, fontSize: "12px", letterSpacing: "0.06em", color: INK0, textTransform: "uppercase", whiteSpace: "nowrap" }}>
                 FACEBINDER
               </span>
-            </Link>
+            </span>
             <button
               className="dash-toggle"
               onClick={() => setCollapsed(v => !v)}

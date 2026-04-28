@@ -346,54 +346,99 @@ function MiniCard({ cardId, setId, quantity }: { cardId: number; setId: string; 
   );
 }
 
-/* ── Showcase card (grande, con versión destacada) ─────────── */
+/* ── Showcase card 3D ───────────────────────────────────────── */
 function ShowcaseCard({ cardId, setId, quantity }: { cardId: number; setId: string; quantity: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [tilt,  setTilt]  = useState({ x: 0, y: 0 });
+  const [mouse, setMouse] = useState({ x: 0.5, y: 0.5 });
+
   const cards = SET_CARDS[setId];
   const card  = cards?.find(c => c.id === cardId);
   if (!card) return null;
+
   const label      = VERSION_LABEL[card.version];
   const labelColor = VERSION_COLOR_MAP[label] ?? INK2_C;
   const fullLabel  = VERSION_FULL_LABEL[label] ?? label;
   const glow       = VERSION_GLOW[label] ?? "none";
+  const isRH = label === "RH";
+  const isH  = label === "H";
+  const mx = mouse.x * 100;
+  const my = mouse.y * 100;
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    setMouse({ x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height });
+    setTilt({ x: (-((e.clientY - r.top) / r.height - 0.5)) * 24, y: (((e.clientX - r.left) / r.width - 0.5)) * 24 });
+  };
+  const onLeave = () => { setTilt({ x: 0, y: 0 }); setMouse({ x: 0.5, y: 0.5 }); };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", flex: 1 }}>
-      <div style={{
-        position: "relative", width: "100%", maxWidth: "240px", aspectRatio: "5/7",
-        borderRadius: "12px", overflow: "hidden",
-        boxShadow: `0 12px 40px rgba(0,0,0,0.7), ${glow}`,
-        border: `1px solid ${labelColor}30`,
-      }}>
-        <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="240px" unoptimized />
-
-        {/* Badge versión */}
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", width: "100%" }}>
+      <div
+        ref={ref}
+        style={{ perspective: "800px", cursor: "pointer", width: "100%" }}
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+      >
         <div style={{
-          position: "absolute", top: "10px", left: "10px",
-          fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.14em", textTransform: "uppercase",
-          color: labelColor, border: `1px solid ${labelColor}80`,
-          borderRadius: "5px", padding: "3px 8px",
-          background: "rgba(5,7,13,0.85)", backdropFilter: "blur(6px)",
-        }}>{fullLabel}</div>
+          width: "100%", aspectRatio: "5 / 7",
+          borderRadius: "14px", overflow: "hidden", position: "relative",
+          transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+          transition: tilt.x === 0 ? "transform 0.6s cubic-bezier(0.2,0.8,0.2,1)" : "transform 0.05s linear",
+          willChange: "transform",
+          boxShadow: `0 20px 60px rgba(0,0,0,0.75), ${glow}`,
+          border: `1px solid ${labelColor}30`,
+        }}>
+          <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="420px" unoptimized />
 
-        {/* Cantidad */}
-        {quantity > 1 && (
+          {isRH && (
+            <div style={{
+              position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
+              background: `radial-gradient(ellipse 80% 60% at ${mx}% ${my}%, rgba(220,220,240,0.55) 0%, rgba(180,180,210,0.25) 30%, transparent 60%),
+                linear-gradient(${105 + tilt.y * 2}deg, transparent 20%, rgba(200,200,230,0.18) 35%, rgba(255,255,255,0.28) 45%, rgba(200,200,230,0.18) 55%, transparent 70%)`,
+            }} />
+          )}
+          {isH && (
+            <div style={{
+              position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "color-dodge",
+              background: `radial-gradient(ellipse 90% 70% at ${mx}% ${my}%, rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%, rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%, rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)`,
+            }} />
+          )}
+          {isH && (
+            <div style={{
+              position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
+              background: `linear-gradient(${120 + tilt.y * 3}deg, transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%, rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`,
+            }} />
+          )}
           <div style={{
-            position: "absolute", bottom: "10px", right: "10px",
-            fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.1em",
-            color: COURT_C, border: `1px solid ${COURT_C}60`,
-            borderRadius: "5px", padding: "3px 8px",
+            position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
+            background: `linear-gradient(${110 + tilt.y}deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`,
+          }} />
+
+          <div style={{
+            position: "absolute", top: "12px", left: "12px",
+            fontFamily: MONO_C, fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase",
+            color: labelColor, border: `1px solid ${labelColor}80`,
+            borderRadius: "5px", padding: "4px 10px",
             background: "rgba(5,7,13,0.85)", backdropFilter: "blur(6px)",
-          }}>×{quantity}</div>
-        )}
+          }}>{fullLabel}</div>
+
+          {quantity > 1 && (
+            <div style={{
+              position: "absolute", bottom: "12px", right: "12px",
+              fontFamily: MONO_C, fontSize: "12px", letterSpacing: "0.1em",
+              color: COURT_C, border: `1px solid ${COURT_C}60`,
+              borderRadius: "5px", padding: "4px 10px",
+              background: "rgba(5,7,13,0.85)", backdropFilter: "blur(6px)",
+            }}>×{quantity}</div>
+          )}
+        </div>
       </div>
 
       <div style={{ textAlign: "center" }}>
-        <div style={{ fontFamily: MONO_C, fontSize: "10px", letterSpacing: "0.08em", color: INK0_C, marginBottom: "4px" }}>
-          {card.name}
-        </div>
-        <div style={{ fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.06em", color: INK2_C }}>
-          #{String(card.card_number).padStart(3, "0")}
-        </div>
+        <div style={{ fontFamily: MONO_C, fontSize: "14px", letterSpacing: "0.06em", color: INK0_C, marginBottom: "6px" }}>{card.name}</div>
+        <div style={{ fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.06em", color: INK2_C }}>#{String(card.card_number).padStart(3, "0")}</div>
       </div>
     </div>
   );
@@ -402,16 +447,6 @@ function ShowcaseCard({ cardId, setId, quantity }: { cardId: number; setId: stri
 /* ── Showcase slider ────────────────────────────────────────── */
 function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
   const [idx, setIdx] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  const perPage = isMobile ? 1 : 3;
 
   const owned = inventoryRows
     .filter(r => r.quantity > 0)
@@ -421,20 +456,18 @@ function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
   if (owned.length < 3) return null;
 
   const canPrev = idx > 0;
-  const canNext = idx + perPage < owned.length;
+  const canNext = idx + 1 < owned.length;
 
   const btnStyle = (active: boolean): React.CSSProperties => ({
     background: active ? "rgba(46,230,193,0.12)" : "rgba(255,255,255,0.04)",
     border: `1px solid ${active ? COURT_C + "55" : "rgba(255,255,255,0.1)"}`,
     color: active ? COURT_C : INK2_C,
-    borderRadius: "8px", width: "36px", height: "36px",
+    borderRadius: "8px", width: "44px", height: "44px",
     cursor: active ? "pointer" : "default",
-    fontFamily: MONO_C, fontSize: "16px",
+    fontFamily: MONO_C, fontSize: "20px",
     display: "flex", alignItems: "center", justifyContent: "center",
     flexShrink: 0,
   });
-
-  const pages = Math.ceil(owned.length / perPage);
 
   return (
     <div style={{ marginBottom: "64px" }}>
@@ -452,25 +485,19 @@ function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
 
       <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
         <button style={btnStyle(canPrev)} onClick={() => canPrev && setIdx(i => i - 1)} disabled={!canPrev}>‹</button>
-
-        <div style={{ display: "flex", gap: "20px", overflow: "hidden", flex: 1 }}>
-          {owned.slice(idx, idx + perPage).map(row => (
-            <div key={`${row.card_id}-${row.set_id}`} style={{ flex: `0 0 calc(${100 / perPage}% - ${perPage > 1 ? "14px" : "0px"})` }}>
-              <ShowcaseCard cardId={row.card_id} setId={row.set_id} quantity={row.quantity} />
-            </div>
-          ))}
+        <div style={{ flex: 1, overflow: "hidden" }}>
+          <ShowcaseCard cardId={owned[idx].card_id} setId={owned[idx].set_id} quantity={owned[idx].quantity} />
         </div>
-
         <button style={btnStyle(canNext)} onClick={() => canNext && setIdx(i => i + 1)} disabled={!canNext}>›</button>
       </div>
 
-      {owned.length > perPage && (
+      {owned.length > 1 && (
         <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginTop: "20px" }}>
-          {Array.from({ length: pages }).map((_, i) => (
-            <button key={i} onClick={() => setIdx(i * perPage)} style={{
-              width: i * perPage === idx ? "20px" : "6px", height: "6px",
+          {owned.map((_, i) => (
+            <button key={i} onClick={() => setIdx(i)} style={{
+              width: i === idx ? "20px" : "6px", height: "6px",
               borderRadius: "3px", border: "none", cursor: "pointer",
-              background: i * perPage === idx ? COURT_C : "rgba(255,255,255,0.2)",
+              background: i === idx ? COURT_C : "rgba(255,255,255,0.2)",
               transition: "all 0.2s", padding: 0,
             }} />
           ))}
@@ -507,11 +534,11 @@ function CollectionSection({
 
   return (
     <section style={{ background: BG0_C, padding: "0 0 80px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-      <div className="coll-outer" style={{ padding: "64px 80px 0", display: "flex", gap: "64px", alignItems: "flex-start", flexWrap: "wrap" }}>
+      <div className="coll-outer" style={{ padding: "64px 80px 0", display: "flex", gap: "64px", alignItems: "flex-start", flexWrap: "wrap", justifyContent: "center" }}>
 
         {/* ── Showcase (left) ── */}
         {inventoryRows.filter(r => r.quantity > 0).length >= 3 && (
-          <div className="showcase-col" style={{ flex: "0 0 auto", width: "clamp(280px, 35%, 420px)" }}>
+          <div className="showcase-col" style={{ flex: "0 0 auto", width: "clamp(280px, 42%, 460px)" }}>
             <Showcase inventoryRows={inventoryRows} />
           </div>
         )}

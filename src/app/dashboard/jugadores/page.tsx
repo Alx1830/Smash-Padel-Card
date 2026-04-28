@@ -92,7 +92,7 @@ export default function AmigosPage() {
       ) : (
         <div style={{ display: "flex", flexWrap: "wrap", gap: "32px" }}>
           {players.map(p => (
-            <Link key={p.username} href={`/jugador/${p.username}`} style={{ textDecoration: "none" }}>
+            <Link key={p.username} href={`/${p.username}`} style={{ textDecoration: "none" }}>
               <PlayerCard3D
                 username={p.username}
                 firstName={p.first_name ?? ""}

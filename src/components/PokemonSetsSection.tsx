@@ -118,13 +118,13 @@ function TcgCard({
       {/* Card with 3D tilt */}
       <div
         ref={ref}
-        style={{ perspective: "800px", cursor: "pointer", width: "100%", maxWidth: "240px" }}
+        className="tcg-card-wrap"
+        style={{ perspective: "800px", cursor: "pointer" }}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
         onMouseEnter={() => setHovered(true)}
       >
-        <div style={{
-          width: "100%", aspectRatio: "5 / 7",
+        <div className="tcg-card-body" style={{
           borderRadius: "12px",
           overflow: "hidden",
           position: "relative",
@@ -545,8 +545,8 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
 
               <div className="pks-cards-grid" style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-                gap: "32px 16px",
+                gridTemplateColumns: "repeat(6, 1fr)",
+                gap: "32px 24px",
                 justifyItems: "center",
               }}>
                 {visibleCards.map(card => (
@@ -577,10 +577,14 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           50%  { opacity: 1;   filter: hue-rotate(180deg); }
           100% { opacity: 0.7; filter: hue-rotate(360deg); }
         }
+        .tcg-card-wrap { width: 240px; }
+        .tcg-card-body { width: 240px; height: 336px; overflow: hidden; position: relative; }
         @media (max-width: 767px) {
           .pks-header { padding: 48px 20px 32px !important; }
           .pks-body   { padding: 0 20px !important; }
           .pks-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 20px 12px !important; }
+          .tcg-card-wrap { width: 100%; max-width: 100%; }
+          .tcg-card-body { width: 100%; height: auto; aspect-ratio: 5 / 7; }
         }
       `}</style>
     </section>

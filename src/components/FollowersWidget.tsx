@@ -82,7 +82,7 @@ export function FollowersWidget({ userId }: { userId: string }) {
           followers.map(f => (
             <a
               key={f.username}
-              href={`/jugador/${f.username}`}
+              href={`/${f.username}`}
               style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 16px", borderRadius: "10px", textDecoration: "none", transition: "background 0.15s" }}
               onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.04)"}
               onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = "transparent"}

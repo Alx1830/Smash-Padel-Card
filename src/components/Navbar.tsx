@@ -25,6 +25,7 @@ export function Navbar() {
   const avatarRef     = useRef<HTMLDivElement>(null);
 
   const [photoUrl, setPhotoUrl]       = useState<string | null>(null);
+  const [username, setUsername]       = useState<string | null>(null);
   const [avatarOpen, setAvatarOpen]   = useState(false);
   const [mobileOpen, setMobileOpen]   = useState(false);
   const [loggedIn, setLoggedIn]       = useState(false);
@@ -35,8 +36,9 @@ export function Navbar() {
       if (!user) return;
       setLoggedIn(true);
       const { data } = await supabase
-        .from("players").select("photo_url").eq("user_id", user.id).single();
+        .from("players").select("photo_url, username").eq("user_id", user.id).single();
       if (data?.photo_url) setPhotoUrl(data.photo_url);
+      if (data?.username)  setUsername(data.username);
     }
     load();
   }, []);
@@ -126,6 +128,14 @@ export function Navbar() {
                     <p className="text-[10px] text-white/40 uppercase tracking-widest"
                       style={{ fontFamily: "var(--font-jetbrains)" }}>Mi cuenta</p>
                   </div>
+                  {username && (
+                    <Link href={`/${username}`} onClick={() => setAvatarOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 text-xs text-white/80 hover:bg-[#2ee6c1]/10 hover:text-[#2ee6c1] transition-colors"
+                      style={{ fontFamily: "var(--font-jetbrains)", letterSpacing: "0.08em" }}>
+                      <span>◉</span> Ver perfil
+                    </Link>
+                  )}
+                  <div className="h-px bg-white/8" />
                   <Link href="/dashboard/perfil" onClick={() => setAvatarOpen(false)}
                     className="flex items-center gap-3 px-4 py-3 text-xs text-white/80 hover:bg-[#2ee6c1]/10 hover:text-[#2ee6c1] transition-colors"
                     style={{ fontFamily: "var(--font-jetbrains)", letterSpacing: "0.08em" }}>

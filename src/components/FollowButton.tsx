@@ -295,7 +295,7 @@ export function FollowButton({ profileUserId, currentUserId }: FollowButtonProps
             </div>
           ) : (
             followers.map(f => (
-              <a key={f.username} href={`/jugador/${f.username}`} style={{ textDecoration: "none", display: "block" }}>
+              <a key={f.username} href={`/${f.username}`} style={{ textDecoration: "none", display: "block" }}>
                 <div className="follower-row">
                   <div className="follower-avatar">
                     {f.photo_url ? (
