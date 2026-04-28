@@ -4,7 +4,13 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES, type PokemonSet } from "@/data/pokemon-sets";
-import { SET_CARDS, VERSION_LABEL, type PokemonCard } from "@/data/pokemon-cards";
+import { VERSION_LABEL, SET_CARD_COUNT, type PokemonCard } from "@/data/pokemon-cards";
+
+/* Lazy-load card data only when a set is opened */
+async function fetchSetCards(setId: string): Promise<PokemonCard[]> {
+  const mod = await import("@/data/pokemon-cards");
+  return mod.SET_CARDS[setId] ?? [];
+}
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
@@ -147,8 +153,8 @@ function TcgCard({
             alt={card.name}
             fill
             style={{ objectFit: "cover" }}
-            sizes="240px"
-            unoptimized
+            sizes="(max-width: 767px) 45vw, 240px"
+            loading="lazy"
           />
 
           {/* RH — metallic shimmer */}
@@ -291,7 +297,7 @@ function Thumb({
         filter: isGray ? "grayscale(1) brightness(0.45)" : "none",
         transition: "filter 0.3s",
       }}>
-        <Image src={imgSrc} alt={label} fill style={{ objectFit: "contain" }} unoptimized />
+        <Image src={imgSrc} alt={label} fill style={{ objectFit: "contain" }} loading="lazy" sizes="130px" />
       </div>
       <span style={{
         fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em",
@@ -332,9 +338,8 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 /* ── Progress bar ──────────────────────────────────────────── */
-function SetProgress({ setId, inventory }: { setId: string; inventory: InventoryMap }) {
-  const cards = SET_CARDS[setId];
-  if (!cards) return null;
+function SetProgress({ cards, inventory }: { cards: PokemonCard[]; inventory: InventoryMap }) {
+  if (!cards.length) return null;
   const total   = cards.length;
   const unique  = cards.filter(c => (inventory[c.id] ?? 0) > 0).length;
   const totalQty = cards.reduce((s, c) => s + (inventory[c.id] ?? 0), 0);
@@ -416,10 +421,15 @@ function Breadcrumb({ items }: { items: { label: string; onClick?: () => void }[
 
 type DrillView = "series" | "sets" | "cards";
 
+/* Cache loaded card arrays in memory so re-opening a set is instant */
+const cardCache: Record<string, PokemonCard[]> = {};
+
 export function PokemonSetsSection({ userId }: { userId?: string }) {
   const [view,         setView]        = useState<DrillView>("series");
   const [openSeriesId, setOpenSeriesId] = useState<string | null>(null);
   const [openSetId,    setOpenSetId]    = useState<string | null>(null);
+  const [setCards,     setSetCards]     = useState<PokemonCard[]>([]);
+  const [loadingCards, setLoadingCards] = useState(false);
   const [inventory,    setInventory]    = useState<InventoryMap>({});
   const [loadingInv,   setLoadingInv]   = useState(false);
   const [activeFilter, setActiveFilter] = useState<CardFilter>("todas");
@@ -428,6 +438,18 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const openSet    = openSeries?.sets.find(s => s.id === openSetId);
 
   useEffect(() => { setActiveFilter("todas"); }, [openSetId]);
+
+  /* Lazy-load card data when a set is opened */
+  useEffect(() => {
+    if (!openSetId) return;
+    if (cardCache[openSetId]) { setSetCards(cardCache[openSetId]); return; }
+    setLoadingCards(true);
+    fetchSetCards(openSetId).then(cards => {
+      cardCache[openSetId] = cards;
+      setSetCards(cards);
+      setLoadingCards(false);
+    });
+  }, [openSetId]);
 
   useEffect(() => {
     if (!userId || !openSetId) return;
@@ -527,7 +549,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
             <SectionLabel>{openSeries.name} — {openSeries.sets.length} sets</SectionLabel>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
               {openSeries.sets.map(set => {
-                const hasCards = !!SET_CARDS[set.id];
+                const cardCount = SET_CARD_COUNT[set.id] ?? 0;
                 return (
                   <Thumb
                     key={set.id}
@@ -535,9 +557,9 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                     imgW={120} imgH={56}
                     label={set.name}
                     isOpen={false}
-                    isGray={!hasCards}
-                    badgeText={hasCards ? `${SET_CARDS[set.id].length} cartas` : undefined}
-                    onClick={() => { if (hasCards) goToCards(set.id); }}
+                    isGray={!cardCount}
+                    badgeText={cardCount ? `${cardCount} cartas` : undefined}
+                    onClick={() => { if (cardCount) goToCards(set.id); }}
                   />
                 );
               })}
@@ -546,8 +568,8 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
         )}
 
         {/* ── VISTA: Cards ── */}
-        {view === "cards" && openSet && SET_CARDS[openSet.id] && (() => {
-          const allCards = SET_CARDS[openSet.id];
+        {view === "cards" && openSet && (() => {
+          const allCards = setCards;
           const visibleCards = allCards.filter(card => {
             if (activeFilter === "tengo")           return (inventory[card.id] ?? 0) > 0;
             if (activeFilter === "faltan")          return (inventory[card.id] ?? 0) === 0;
@@ -566,10 +588,10 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
 
               <SectionLabel>
                 {openSet.name} — {allCards.length} cartas
-                {loadingInv && <span style={{ color: INK2, fontSize: "10px", marginLeft: "8px" }}>cargando...</span>}
+                {(loadingCards || loadingInv) && <span style={{ color: INK2, fontSize: "10px", marginLeft: "8px" }}>cargando...</span>}
               </SectionLabel>
 
-              {userId && <SetProgress setId={openSet.id} inventory={inventory} />}
+              {userId && <SetProgress cards={allCards} inventory={inventory} />}
 
               {/* Filter buttons */}
               <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "28px" }}>

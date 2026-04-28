@@ -220,6 +220,11 @@ export const SET_CARDS: Record<string, PokemonCard[]> = {
   "perfect-order": PERFECT_ORDER_CARDS,
 };
 
+/* Lightweight map used for UI checks (hasCards, card count) without loading all data */
+export const SET_CARD_COUNT: Record<string, number> = Object.fromEntries(
+  Object.entries(SET_CARDS).map(([id, cards]) => [id, cards.length])
+);
+
 export const VERSION_LABEL: Record<CardVersion, string> = {
   normal: "N",
   reverseHolofoil: "RH",

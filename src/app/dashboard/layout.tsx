@@ -318,18 +318,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     background: COURT,
                   }} />
                 )}
-                {/* Highlight pill behind Inventario icon */}
-                {highlight && (
-                  <div style={{
-                    position: "absolute",
-                    top: "50%", left: "50%",
-                    transform: "translate(-50%, -58%)",
-                    width: 48, height: 48, borderRadius: "14px",
-                    background: active ? `${COURT}20` : `${COURT}10`,
-                    border: `1px solid ${COURT}${active ? "40" : "20"}`,
-                    transition: "all 0.2s",
-                  }} />
-                )}
                 <Icon size={iconSz} color={color} strokeWidth={active ? 2.2 : 1.7} style={{ position: "relative" }} />
                 <span style={{
                   fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em",
