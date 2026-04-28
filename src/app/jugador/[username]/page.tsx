@@ -20,29 +20,20 @@ export default async function JugadorPage({
   if (!data) notFound();
 
   const player = {
-    username:      data.username,
-    firstName:     data.first_name ?? "",
-    lastName:      data.last_name ?? "",
-    category:      data.category ?? "SIN CATEGORÍA",
-    position:      (data.position ?? "Drive") as "Drive" | "Revés",
-    rankingLiga:   data.ranking_liga?.toString() ?? "—",
-    ciudad:        data.ciudad ?? "—",
-    partner:       data.partner_id ?? "Sin partner",
-    edad:          data.edad ?? 0,
-    manoDominante: data.mano_dominante ?? "—",
-    clubBase:      data.club_id ?? "Sin club",
-    liga:          data.liga_id ?? "Sin liga",
-    pala:          data.pala ?? "—",
-    tenis:         data.tenis ?? "—",
-    paletero:      data.paletero ?? "—",
-    torneos:       (data.torneos ?? []).map((t: { nombre: string; posicion: string }) => ({
-      nombre: t.nombre,
-      puesto: `#${t.posicion} puesto`,
-    })),
-    photoUrl:      data.photo_url || undefined,
-    year:          data.year ?? "2025-26",
-    profileUserId: data.user_id ?? undefined,
-    currentUserId: user?.id ?? null,
+    username:        data.username,
+    firstName:       data.first_name ?? "",
+    lastName:        data.last_name ?? "",
+    pais:            data.pais ?? "—",
+    tipoPerfil:      data.tipo_perfil ?? "—",
+    gimnasioPokemon: data.gimnasio_pokemon?.toString() ?? "—",
+    ciudad:          data.ciudad ?? "—",
+    pokemonFavorito: data.pokemon_favorito ?? "—",
+    edad:            data.edad ?? 0,
+    energiaFavorita: data.energia_favorita ?? "—",
+    photoUrl:        data.photo_url || undefined,
+    year:            data.year ?? "2025-26",
+    profileUserId:   data.user_id ?? undefined,
+    currentUserId:   user?.id ?? null,
   };
 
   return (
