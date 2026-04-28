@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { PokemonSetsSection } from "@/components/PokemonSetsSection";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import { redirect } from "next/navigation";
 
 const COURT = "#2ee6c1";
@@ -32,6 +33,7 @@ export default async function InventarioPage() {
         </h1>
       </div>
       <PokemonSetsSection userId={user.id} />
+      <ScrollToTop />
     </div>
   );
 }

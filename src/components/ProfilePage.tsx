@@ -262,6 +262,7 @@ export function ProfilePage({ player }: { player: PlayerData }) {
               category={player.pais}
               energiaFavorita={player.energiaFavorita}
               photoUrl={player.photoUrl}
+              setFavoritoId={player.setFavoritoId}
             />
           </div>
           <div style={{ width: "100%", height: "1px", marginBottom: "40px", background: "rgba(255,255,255,0.06)" }} />
@@ -509,11 +510,8 @@ function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
         display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
       }}>
         <span style={{ width: "22px", height: "1px", background: COURT_C, display: "inline-block" }} />
-        Showcase
-      </div>
-      <h2 style={{ fontFamily: DISP_C, fontSize: "clamp(24px, 2.5vw, 36px)", letterSpacing: "-0.02em", margin: "0 0 32px", color: INK0_C }}>
         Mis cartas destacadas
-      </h2>
+      </div>
 
       {/* Card fan — 3 cards stacked, side ones behind center */}
       <div style={{ position: "relative", padding: "0 10%", paddingBottom: "6%" }}>

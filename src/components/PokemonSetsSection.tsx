@@ -155,6 +155,7 @@ function TcgCard({
             style={{ objectFit: "cover" }}
             sizes="(max-width: 767px) 45vw, 240px"
             loading="lazy"
+            unoptimized
           />
 
           {/* RH — metallic shimmer */}

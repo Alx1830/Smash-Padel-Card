@@ -90,10 +90,20 @@ export default function AmigosPage() {
           </p>
         </div>
       ) : (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "32px" }}>
+        <>
+          <style>{`
+            .amigos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+            .amigos-grid a { display: flex; justify-content: center; }
+            .amigos-card-wrap { transition: transform 0.2s; }
+            @media (max-width: 1023px) {
+              .amigos-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+              .amigos-card-wrap { transform: scale(0.6); transform-origin: top center; margin-bottom: -168px; }
+            }
+          `}</style>
+          <div className="amigos-grid">
           {players.map(p => (
             <Link key={p.username} href={`/${p.username}`} style={{ textDecoration: "none" }}>
-              <PlayerCard3D
+              <div className="amigos-card-wrap"><PlayerCard3D
                 username={p.username}
                 firstName={p.first_name ?? ""}
                 lastName={p.last_name ?? ""}
@@ -102,10 +112,11 @@ export default function AmigosPage() {
                 energiaFavorita={p.energia_favorita ?? "—"}
                 photoUrl={p.photo_url || undefined}
                 setFavoritoId={p.set_favorito || undefined}
-              />
+              /></div>
             </Link>
           ))}
-        </div>
+          </div>
+        </>
       )}
     </div>
   );

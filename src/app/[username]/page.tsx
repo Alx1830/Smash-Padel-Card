@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ProfilePage } from "@/components/ProfilePage";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { MobileTabBar } from "@/components/MobileTabBar";
 import { notFound } from "next/navigation";
 import { SET_CARDS } from "@/data/pokemon-cards";
 
@@ -72,6 +73,7 @@ export default async function JugadorPage({
       <Navbar />
       <ProfilePage player={player} />
       <Footer />
+      <MobileTabBar />
     </main>
   );
 }
