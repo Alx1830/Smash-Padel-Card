@@ -70,20 +70,18 @@ const STYLES = `
 const MarqueeItem = () => (
   <div className="flex items-center gap-10 px-6 whitespace-nowrap"
     style={{ fontFamily: "var(--font-jetbrains)", fontSize: "11px", letterSpacing: "0.25em", color: "rgba(46,230,193,0.5)", textTransform: "uppercase" }}>
-    <span>Smash Padel Card</span><span style={{ color: "rgba(214,255,61,0.4)" }}>✦</span>
-
-    <span>Cúcuta, Colombia</span><span style={{ color: "rgba(214,255,61,0.4)" }}>✦</span>
-    <span>Tu card, tu identidad</span><span style={{ color: "rgba(214,255,61,0.4)" }}>✦</span>
-    <span>Padel competitivo</span><span style={{ color: "rgba(214,255,61,0.4)" }}>✦</span>
+    <span>Facebinder</span><span style={{ color: "rgba(214,255,61,0.4)" }}>✦</span>
+    <span>Pokémon TCG</span><span style={{ color: "rgba(214,255,61,0.4)" }}>✦</span>
+    <span>Tu binder digital</span><span style={{ color: "rgba(214,255,61,0.4)" }}>✦</span>
+    <span>Coleccionistas</span><span style={{ color: "rgba(214,255,61,0.4)" }}>✦</span>
   </div>
 );
 
 const NAV_LINKS = [
-  { label: "Jugadores", href: "/jugadores" },
-  { label: "Clubes",    href: "/clubes" },
-  { label: "Ligas",     href: "/ligas" },
-  { label: "Torneos",   href: "/torneos" },
-  { label: "Mercado",   href: "/mercado" },
+  { label: "Inicio",      href: "/" },
+  { label: "Amigos",      href: "/dashboard/amigos" },
+  { label: "Inventario",  href: "/dashboard/inventario" },
+  { label: "Market",      href: "/dashboard/market" },
 ];
 
 export function Footer() {
@@ -131,7 +129,7 @@ export function Footer() {
           whiteSpace: "nowrap", zIndex: 0, pointerEvents: "none",
           fontFamily: "var(--font-archivo)",
         }}>
-          SMASH
+          FACEBINDER
         </div>
 
         {/* Marquee */}
@@ -156,7 +154,7 @@ export function Footer() {
             fontWeight: 900, letterSpacing: "-0.03em",
             margin: "0 0 48px",
           }}>
-            ¿Listo para crear<br />tu card?
+            ¿Listo para armar<br />tu colección?
           </h2>
 
           <div ref={linksRef} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "20px" }}>
@@ -170,7 +168,7 @@ export function Footer() {
               textDecoration: "none", boxShadow: "0 0 40px rgba(46,230,193,0.25)",
               transition: "opacity 0.2s",
             }}>
-              → Crear mi Card
+              → Crear mi Facebinder
             </Link>
 
             {/* Nav links */}
@@ -197,25 +195,22 @@ export function Footer() {
           flexWrap: "wrap", gap: "12px",
         }}>
           {/* Logo */}
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#2ee6c1", boxShadow: "0 0 8px #2ee6c1", display: "inline-block" }} />
-            <span style={{ fontFamily: "var(--font-archivo)", fontSize: "13px", color: "#f5f7fb", letterSpacing: "0.06em" }}>SMASH PADEL CARD</span>
-          </div>
+          <span style={{ fontFamily: "var(--font-archivo)", fontSize: "13px", color: "#f5f7fb", letterSpacing: "0.06em" }}>FACEBINDER</span>
 
-          {/* Made with */}
-          <div className="spc-pill" style={{
+          {/* Made by */}
+          <a href="https://adxmedialab.com" target="_blank" rel="noopener noreferrer" className="spc-pill" style={{
             display: "inline-flex", alignItems: "center", gap: "8px",
             padding: "8px 20px", borderRadius: "999px",
             fontFamily: "var(--font-jetbrains)", fontSize: "10px",
             letterSpacing: "0.12em", color: "rgba(201,207,221,0.5)",
-            textTransform: "uppercase",
+            textTransform: "uppercase", textDecoration: "none",
           }}>
-            Hecho con <span className="spc-heartbeat" style={{ color: "#ff4f4f" }}>❤</span> en Cúcuta
-          </div>
+            Hecho por <span style={{ color: "#2ee6c1" }}>Adxmedialab</span>
+          </a>
 
           {/* Copyright */}
           <span style={{ fontFamily: "var(--font-jetbrains)", fontSize: "10px", color: "rgba(122,130,152,0.7)", letterSpacing: "0.12em" }}>
-            © 2026 SMASH PADEL CARD — SEASON ONE
+            © 2026 FACEBINDER · Pokémon TCG
           </span>
         </div>
       </footer>

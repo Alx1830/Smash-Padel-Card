@@ -154,7 +154,7 @@ export function Navbar() {
             <Link href="/login"
               className="hidden md:inline-flex px-4 py-2 rounded-full border border-white/30 text-white text-xs font-medium tracking-wider hover:bg-white hover:text-[#05070d] transition-all duration-200"
               style={{ fontFamily: "var(--font-jetbrains)" }}>
-              Crear mi Card
+              Crear mi Facebinder
             </Link>
           )}
 
@@ -230,7 +230,7 @@ export function Navbar() {
             <Link href="/login" onClick={() => setMobileOpen(false)}
               className="mt-6 px-6 py-3 rounded-full border border-white/30 text-white text-sm font-medium tracking-wider text-center hover:bg-white hover:text-[#05070d] transition-all"
               style={{ fontFamily: "var(--font-jetbrains)" }}>
-              Crear mi Card
+              Crear mi Facebinder
             </Link>
           )}
         </nav>
