@@ -90,9 +90,9 @@ export default function AdminJugadores() {
                 username={p.username}
                 firstName={p.first_name ?? ""}
                 lastName={p.last_name ?? ""}
-                category={p.category ?? "SIN CATEGORÍA"}
-                position={(p.position as "Drive" | "Revés") ?? "Drive"}
-                year={p.year ?? "2025-26"}
+                category={p.pais ?? "—"}
+                position={p.tipo_perfil ?? "—"}
+                energiaFavorita={p.energia_favorita ?? "—"}
                 photoUrl={p.photo_url || undefined}
               />
             </Link>
