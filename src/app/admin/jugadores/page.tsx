@@ -14,13 +14,13 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
 interface Player {
-  username: string;
-  first_name: string;
-  last_name: string;
-  category: string;
-  position: string;
-  photo_url: string | null;
-  year: string | null;
+  username:         string;
+  first_name:       string;
+  last_name:        string;
+  pais:             string | null;
+  tipo_perfil:      string | null;
+  energia_favorita: string | null;
+  photo_url:        string | null;
 }
 
 export default function AdminJugadores() {
