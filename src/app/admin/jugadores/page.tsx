@@ -32,7 +32,7 @@ export default function AdminJugadores() {
     async function load() {
       const { data } = await supabase
         .from("players")
-        .select("username, first_name, last_name, category, position, photo_url, year")
+        .select("username, first_name, last_name, pais, tipo_perfil, energia_favorita, photo_url")
         .not("username", "is", null)
         .order("created_at", { ascending: false });
       setPlayers(data ?? []);
