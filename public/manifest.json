@@ -1,0 +1,28 @@
+{
+  "name": "FaceBinder",
+  "short_name": "FaceBinder",
+  "description": "Tu binder digital de cartas Pokémon TCG",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#05070d",
+  "theme_color": "#2ee6c1",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ]
+}
