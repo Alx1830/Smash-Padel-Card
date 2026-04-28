@@ -249,6 +249,7 @@ export default function PerfilPage() {
   const fileRef      = useRef<HTMLInputElement>(null);
   const [saving, setSaving]           = useState(false);
   const [saved,  setSaved]            = useState(false);
+  const [saveError, setSaveError]     = useState("");
   const [uploading, setUploading]     = useState(false);
   const [photoSaved, setPhotoSaved]   = useState(false);
   const [photoError, setPhotoError]   = useState("");
@@ -339,7 +340,8 @@ export default function PerfilPage() {
       if (existing) { setUsernameError("Este nombre de usuario ya está en uso. Elige otro."); return; }
     }
     setSaving(true);
-    await supabase.from("players").upsert({
+    setSaveError("");
+    const { error } = await supabase.from("players").upsert({
       user_id:          userId,
       username:         form.username,
       first_name:       form.first_name,
@@ -354,8 +356,12 @@ export default function PerfilPage() {
       photo_url:        form.photo_url,
     }, { onConflict: "user_id" });
     setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+    if (error) {
+      setSaveError(`Error al guardar: ${error.message}`);
+    } else {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    }
   }
 
   const sectionTitle = (num: string, title: string) => (
@@ -548,6 +554,7 @@ export default function PerfilPage() {
             {saving ? "Guardando..." : "Guardar cambios"}
           </button>
           {saved && <span style={{ fontFamily: MONO, fontSize: "12px", color: COURT }}>✓ Guardado correctamente</span>}
+          {saveError && <span style={{ fontFamily: MONO, fontSize: "12px", color: "#ff4f4f" }}>✕ {saveError}</span>}
         </div>
 
       </form>
