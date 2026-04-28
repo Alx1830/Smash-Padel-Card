@@ -10,6 +10,8 @@ import { SET_CARDS, VERSION_LABEL } from "@/data/pokemon-cards";
 type SetStats = { unique: number; total: number; totalQty: number };
 type InvRow   = { card_id: number; set_id: string; quantity: number };
 
+type FeaturedCard = { card_id: number; set_id: string };
+
 interface PlayerData {
   username:         string;
   firstName:        string;
@@ -28,6 +30,7 @@ interface PlayerData {
   currentUserId?:   string | null;
   setStats?:        Record<string, SetStats>;
   inventoryRows?:   InvRow[];
+  featuredCards?:   FeaturedCard[];
 }
 
 const COURT = "#2ee6c1";
@@ -242,12 +245,10 @@ export function ProfilePage({ player }: { player: PlayerData }) {
               </div>
             </div>
 
-            {/* Showcase — right column */}
-            {(player.inventoryRows ?? []).filter(r => r.quantity > 0).length >= 3 && (
-              <div style={{ flex: "0 0 auto", width: "clamp(240px, 26%, 340px)", paddingTop: "20px" }}>
-                <Showcase inventoryRows={player.inventoryRows ?? []} />
-              </div>
-            )}
+            {/* Showcase — right column, siempre visible */}
+            <div style={{ flex: "0 0 auto", width: "clamp(240px, 26%, 340px)", paddingTop: "20px" }}>
+              <Showcase featuredCards={player.featuredCards ?? []} inventoryRows={player.inventoryRows ?? []} />
+            </div>
           </div>
         </div>
 
@@ -275,11 +276,9 @@ export function ProfilePage({ player }: { player: PlayerData }) {
           <Row label="Tipo de Perfil"     value={player.tipoPerfil || "—"} />
           <Row label="País"               value={player.pais || "—"} />
           <Row label="Gimnasio Favorito"  value={player.gimnasioPokemon || "—"} />
-          {(player.inventoryRows ?? []).filter(r => r.quantity > 0).length >= 3 && (
-            <div style={{ marginTop: "40px" }}>
-              <Showcase inventoryRows={player.inventoryRows ?? []} />
-            </div>
-          )}
+          <div style={{ marginTop: "40px" }}>
+            <Showcase featuredCards={player.featuredCards ?? []} inventoryRows={player.inventoryRows ?? []} />
+          </div>
         </div>
 
         <style>{`
@@ -474,25 +473,39 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
   );
 }
 
+/* 3 cartas placeholder fijas para el estado vacío */
+const PLACEHOLDER_ENTRIES = (() => {
+  for (const [setId, cards] of Object.entries(SET_CARDS)) {
+    if (cards.length >= 3) {
+      return [cards[0], cards[Math.floor(cards.length / 2)], cards[cards.length - 1]]
+        .map(c => ({ card_id: c.id, set_id: setId }));
+    }
+  }
+  return [];
+})();
+
 /* ── Showcase slider ────────────────────────────────────────── */
-function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
+function Showcase({ featuredCards, inventoryRows }: { featuredCards: FeaturedCard[]; inventoryRows: InvRow[] }) {
   const [idx, setIdx] = useState(0);
 
-  const owned = inventoryRows
-    .filter(r => r.quantity > 0)
-    .sort((a, b) => b.quantity - a.quantity)
-    .slice(0, 10);
+  const owned = featuredCards.slice(0, 10).map(f => {
+    const row = inventoryRows.find(r => r.card_id === f.card_id && r.set_id === f.set_id);
+    return { card_id: f.card_id, set_id: f.set_id, quantity: row?.quantity ?? 1 };
+  });
 
-  if (owned.length < 3) return null;
+  const isEmpty = owned.length < 3;
 
-  const prevIdx = (idx - 1 + owned.length) % owned.length;
-  const nextIdx = (idx + 1) % owned.length;
+  const displayCards = isEmpty ? PLACEHOLDER_ENTRIES : owned;
+  const prevIdx = (idx - 1 + displayCards.length) % displayCards.length;
+  const nextIdx = (idx + 1) % displayCards.length;
 
-  // Auto-advance every 2 seconds, infinite loop
   useEffect(() => {
-    const t = setInterval(() => setIdx(i => (i + 1) % owned.length), 2000);
+    if (isEmpty) return;
+    const t = setInterval(() => setIdx(i => (i + 1) % displayCards.length), 2000);
     return () => clearInterval(t);
-  }, [owned.length]);
+  }, [isEmpty, displayCards.length]);
+
+  if (displayCards.length < 3) return null;
 
   return (
     <div style={{ marginBottom: "64px" }}>
@@ -513,56 +526,81 @@ function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
         Mis cartas destacadas
       </div>
 
-      {/* Card fan — 3 cards stacked, side ones behind center */}
+      {/* Fan de cartas — si está vacío muestra placeholder gris con overlay */}
       <div style={{ position: "relative", padding: "0 10%", paddingBottom: "6%" }}>
 
-        {/* Left background card */}
+        {/* Izquierda */}
         <div style={{
-          position: "absolute", top: "5%", left: "0",
-          width: "78%",
+          position: "absolute", top: "5%", left: "0", width: "78%",
           transform: "rotateZ(-9deg) rotateY(-8deg)",
           transformOrigin: "bottom center",
-          opacity: 0.45,
-          filter: "brightness(0.5)",
-          zIndex: 1,
-          transition: "opacity 0.3s ease",
-          pointerEvents: "none",
+          opacity: 0.45, filter: isEmpty ? "grayscale(1) brightness(0.35)" : "brightness(0.5)",
+          zIndex: 1, transition: "opacity 0.3s ease", pointerEvents: "none",
         }}>
-          <ShowcaseCard cardId={owned[prevIdx].card_id} setId={owned[prevIdx].set_id} quantity={owned[prevIdx].quantity} autoAnimate />
+          <ShowcaseCard cardId={displayCards[prevIdx].card_id} setId={displayCards[prevIdx].set_id} quantity={1} autoAnimate={!isEmpty} />
         </div>
 
-        {/* Right background card */}
+        {/* Derecha */}
         <div style={{
-          position: "absolute", top: "5%", right: "0",
-          width: "78%",
+          position: "absolute", top: "5%", right: "0", width: "78%",
           transform: "rotateZ(9deg) rotateY(8deg)",
           transformOrigin: "bottom center",
-          opacity: 0.45,
-          filter: "brightness(0.5)",
-          zIndex: 2,
-          transition: "opacity 0.3s ease",
+          opacity: 0.45, filter: isEmpty ? "grayscale(1) brightness(0.35)" : "brightness(0.5)",
+          zIndex: 2, transition: "opacity 0.3s ease", pointerEvents: "none",
+        }}>
+          <ShowcaseCard cardId={displayCards[nextIdx].card_id} setId={displayCards[nextIdx].set_id} quantity={1} autoAnimate={!isEmpty} />
+        </div>
+
+        {/* Centro */}
+        <div key={isEmpty ? "empty" : idx} className="sc-center" style={{
+          position: "relative", zIndex: 10,
+          filter: isEmpty ? "grayscale(1) brightness(0.35)" : "none",
           pointerEvents: "none",
         }}>
-          <ShowcaseCard cardId={owned[nextIdx].card_id} setId={owned[nextIdx].set_id} quantity={owned[nextIdx].quantity} autoAnimate />
+          <ShowcaseCard cardId={displayCards[isEmpty ? 1 : idx].card_id} setId={displayCards[isEmpty ? 1 : idx].set_id} quantity={1} />
         </div>
 
-        {/* Center card — interactive, animates on change */}
-        <div key={idx} className="sc-center" style={{ position: "relative", zIndex: 10 }}>
-          <ShowcaseCard cardId={owned[idx].card_id} setId={owned[idx].set_id} quantity={owned[idx].quantity} />
-        </div>
+        {/* Overlay mensaje cuando no hay destacadas */}
+        {isEmpty && (
+          <div style={{
+            position: "absolute", inset: 0, zIndex: 20,
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            gap: "10px",
+            background: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(5,7,13,0.82) 30%, transparent 100%)",
+          }}>
+            <span style={{
+              fontFamily: MONO_C, fontSize: "10px", letterSpacing: "0.22em",
+              textTransform: "uppercase", color: COURT_C,
+              display: "flex", alignItems: "center", gap: "8px",
+            }}>
+              <span style={{ width: "14px", height: "1px", background: COURT_C, display: "inline-block" }} />
+              Sin cartas destacadas
+            </span>
+            <p style={{
+              fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.08em",
+              color: INK0_C, textAlign: "center", lineHeight: 1.6,
+              margin: 0, maxWidth: "200px",
+            }}>
+              Ve a tu inventario, haz clic en una carta y presiona{" "}
+              <span style={{ color: COURT_C, fontWeight: 600 }}>Destacar</span>
+            </p>
+          </div>
+        )}
       </div>
 
-      {/* Dots */}
-      <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginTop: "16px" }}>
-        {owned.map((_, i) => (
-          <button key={i} onClick={() => setIdx(i)} style={{
-            width: i === idx ? "20px" : "6px", height: "6px",
-            borderRadius: "3px", border: "none", cursor: "pointer",
-            background: i === idx ? COURT_C : "rgba(255,255,255,0.2)",
-            transition: "all 0.2s", padding: 0,
-          }} />
-        ))}
-      </div>
+      {/* Dots — solo cuando hay cartas reales */}
+      {!isEmpty && (
+        <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginTop: "16px" }}>
+          {owned.map((_, i) => (
+            <button key={i} onClick={() => setIdx(i)} style={{
+              width: i === idx ? "20px" : "6px", height: "6px",
+              borderRadius: "3px", border: "none", cursor: "pointer",
+              background: i === idx ? COURT_C : "rgba(255,255,255,0.2)",
+              transition: "all 0.2s", padding: 0,
+            }} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -594,10 +632,10 @@ function CollectionSection({
 
   return (
     <section style={{ background: BG0_C, padding: "0 0 80px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-      <div className="coll-outer" style={{ padding: "64px 80px 0" }}>
+      <div className="coll-outer" style={{ padding: "64px 80px 0", display: "flex", gap: "64px", alignItems: "flex-start" }}>
 
         {/* ── Colección ── */}
-        <div style={{ maxWidth: "600px" }}>
+        <div style={{ maxWidth: "600px", flex: 1, margin: "0 auto" }}>
           <div style={{
             fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
             textTransform: "uppercase", color: COURT_C,

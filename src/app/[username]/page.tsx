@@ -21,16 +21,22 @@ export default async function JugadorPage({
 
   if (!data) notFound();
 
-  // Fetch inventory for sets that have cards
+  // Fetch inventory + featured cards in parallel
   const setIds = Object.keys(SET_CARDS);
-  const { data: invRows } = data.user_id
-    ? await supabase
-        .from("card_inventory")
-        .select("card_id, set_id, quantity")
-        .eq("user_id", data.user_id)
-        .in("set_id", setIds)
-        .gt("quantity", 0)
-    : { data: null };
+  const [{ data: invRows }, { data: featuredRows }] = data.user_id
+    ? await Promise.all([
+        supabase
+          .from("card_inventory")
+          .select("card_id, set_id, quantity")
+          .eq("user_id", data.user_id)
+          .in("set_id", setIds)
+          .gt("quantity", 0),
+        supabase
+          .from("featured_cards")
+          .select("card_id, set_id")
+          .eq("user_id", data.user_id),
+      ])
+    : [{ data: null }, { data: null }];
 
   // Build per-set stats: { setId → { unique, total, totalQty } }
   type SetStats = { unique: number; total: number; totalQty: number };
@@ -66,6 +72,7 @@ export default async function JugadorPage({
     currentUserId:    user?.id ?? null,
     setStats,
     inventoryRows:    invRows ?? [],
+    featuredCards:    (featuredRows ?? []) as { card_id: number; set_id: string }[],
   };
 
   return (
