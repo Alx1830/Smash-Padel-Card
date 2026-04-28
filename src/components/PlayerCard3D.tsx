@@ -12,7 +12,7 @@ interface PlayerCardProps {
   username: string;   // → rank  (N°Alx1830)
   firstName: string;
   lastName: string;
-  position: "Drive" | "Revés";
+  position: string;
   category: string;   // → rarity  ("7MA CATEGORIA" → "7MA")
   year: string;       // → season
   photoUrl?: string;
