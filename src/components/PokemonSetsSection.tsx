@@ -174,71 +174,77 @@ function TcgCard({ card }: { card: PokemonCard }) {
   );
 }
 
-/* ── Set thumbnail (B&W if no cards, color if has cards) ───── */
-function SetThumb({
-  set, isOpen, hasCards, onClick,
+/* ── Thumb base — shared card style ───────────────────────── */
+function Thumb({
+  imgSrc, imgW, imgH, label, sublabel, isOpen, isGray, onClick, badgeText,
 }: {
-  set: PokemonSet;
-  isOpen: boolean;
-  hasCards: boolean;
-  onClick: () => void;
+  imgSrc: string; imgW: number; imgH: number;
+  label: string; sublabel?: string;
+  isOpen: boolean; isGray?: boolean;
+  onClick: () => void; badgeText?: string;
 }) {
+  const clickable = !isGray;
   return (
     <button
       onClick={onClick}
       style={{
-        background: "none", border: "none", cursor: hasCards ? "pointer" : "default",
+        background: isOpen ? "rgba(46,230,193,0.08)" : "rgba(255,255,255,0.02)",
+        border: `1px solid ${isOpen ? `${COURT}55` : "rgba(255,255,255,0.07)"}`,
+        cursor: clickable ? "pointer" : "default",
         display: "flex", flexDirection: "column", alignItems: "center", gap: "10px",
-        padding: "16px 12px",
-        borderRadius: "12px",
-        outline: isOpen ? `2px solid ${COURT}` : "2px solid transparent",
-        outlineOffset: "2px",
-        transition: "background 0.2s, outline-color 0.2s",
+        padding: "18px 14px", borderRadius: "14px",
+        transition: "background 0.2s, border-color 0.2s",
+        outline: "none",
       }}
       onMouseEnter={e => {
-        if (hasCards) (e.currentTarget as HTMLButtonElement).style.background = "rgba(46,230,193,0.07)";
+        if (clickable && !isOpen) (e.currentTarget as HTMLButtonElement).style.background = "rgba(46,230,193,0.05)";
       }}
       onMouseLeave={e => {
-        (e.currentTarget as HTMLButtonElement).style.background = "none";
+        if (!isOpen) (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.02)";
       }}
     >
-      {/* Logo */}
       <div style={{
-        position: "relative", width: "120px", height: "56px",
-        filter: hasCards ? "none" : "grayscale(1) brightness(0.5)",
+        position: "relative", width: `${imgW}px`, height: `${imgH}px`, flexShrink: 0,
+        filter: isGray ? "grayscale(1) brightness(0.45)" : "none",
         transition: "filter 0.3s",
       }}>
-        <Image src={set.logo} alt={set.name} fill style={{ objectFit: "contain" }} unoptimized />
+        <Image src={imgSrc} alt={label} fill style={{ objectFit: "contain" }} unoptimized />
       </div>
-
-      {/* Symbol + name */}
-      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-        {set.symbol && (
-          <div style={{
-            position: "relative", width: "18px", height: "18px", flexShrink: 0,
-            filter: hasCards ? "none" : "grayscale(1) brightness(0.4)",
-          }}>
-            <Image src={set.symbol} alt="" fill style={{ objectFit: "contain" }} unoptimized />
-          </div>
-        )}
-        <span style={{
-          fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em",
-          color: hasCards ? INK0 : INK2,
-          textAlign: "center", lineHeight: 1.3,
-        }}>
-          {set.name}
+      <span style={{
+        fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em",
+        color: isGray ? INK2 : INK0, textAlign: "center", lineHeight: 1.4,
+        maxWidth: "130px",
+      }}>
+        {label}
+      </span>
+      {sublabel && !isGray && (
+        <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.1em", color: INK2 }}>
+          {sublabel}
         </span>
-      </div>
-
-      {hasCards && (
+      )}
+      {badgeText && !isGray && (
         <span style={{
           fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em",
           color: COURT, textTransform: "uppercase",
         }}>
-          {SET_CARDS[set.id].length} cartas ↓
+          {badgeText}
         </span>
       )}
     </button>
+  );
+}
+
+/* ── Sub-label helper ──────────────────────────────────────── */
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{
+      fontFamily: MONO, fontSize: "11px", letterSpacing: "0.2em",
+      textTransform: "uppercase", color: COURT, marginBottom: "20px",
+      display: "flex", alignItems: "center", gap: "10px",
+    }}>
+      <span style={{ width: "16px", height: "1px", background: COURT, display: "inline-block" }} />
+      {children}
+    </div>
   );
 }
 
@@ -247,18 +253,13 @@ export function PokemonSetsSection() {
   const [openSeriesId, setOpenSeriesId] = useState<string | null>(null);
   const [openSetId,    setOpenSetId]    = useState<string | null>(null);
 
-  const toggleSet = (setId: string) => {
-    if (!SET_CARDS[setId]) return;
-    setOpenSetId(prev => prev === setId ? null : setId);
-  };
+  const openSeries = POKEMON_SERIES.find(s => s.id === openSeriesId);
+  const openSet    = openSeries?.sets.find(s => s.id === openSetId);
 
   return (
     <section style={{ background: BG0, padding: "0 0 80px" }}>
       {/* Header */}
-      <div className="pks-header" style={{
-        padding: "64px 80px 48px",
-        borderTop: "1px solid rgba(255,255,255,0.06)",
-      }}>
+      <div className="pks-header" style={{ padding: "64px 80px 48px" }}>
         <div style={{
           fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em",
           textTransform: "uppercase", color: COURT,
@@ -281,107 +282,80 @@ export function PokemonSetsSection() {
         </p>
       </div>
 
-      {/* Accordion */}
       <div className="pks-body" style={{ padding: "0 80px" }}>
-        {POKEMON_SERIES.map(series => {
-          const isSeriesOpen = openSeriesId === series.id;
-          return (
-            <div key={series.id} style={{
-              borderTop: "1px solid rgba(255,255,255,0.07)",
-              overflow: "hidden",
-            }}>
-              {/* Series row */}
-              <button
-                onClick={() => {
-                  setOpenSeriesId(prev => prev === series.id ? null : series.id);
-                  setOpenSetId(null);
-                }}
-                style={{
-                  width: "100%", background: "none", border: "none",
-                  cursor: "pointer", display: "flex", alignItems: "center",
-                  gap: "20px", padding: "20px 0", textAlign: "left",
-                }}
-              >
-                <div style={{ position: "relative", width: "56px", height: "32px", flexShrink: 0 }}>
-                  <Image src={series.icon} alt={series.name} fill style={{ objectFit: "contain" }} unoptimized />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <span style={{ fontFamily: DISP, fontSize: "18px", letterSpacing: "-0.01em", color: INK0 }}>
-                    {series.name}
-                  </span>
-                  <span style={{
-                    fontFamily: MONO, fontSize: "11px", color: INK2,
-                    letterSpacing: "0.1em", marginLeft: "12px",
-                  }}>
-                    {series.sets.length} sets
-                  </span>
-                </div>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                  style={{
-                    flexShrink: 0, color: INK2,
-                    transform: isSeriesOpen ? "rotate(180deg)" : "rotate(0deg)",
-                    transition: "transform 0.3s ease",
-                  }}
-                >
-                  <path d="M3 6l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
 
-              {/* Sets grid */}
-              {isSeriesOpen && (
-                <div>
-                  <div style={{
-                    display: "flex", flexWrap: "wrap", gap: "12px",
-                    paddingBottom: "24px",
-                  }}>
-                    {series.sets.map(set => {
-                      const hasCards = !!SET_CARDS[set.id];
-                      const isSetOpen = openSetId === set.id;
-                      return (
-                        <div key={set.id}>
-                          <SetThumb
-                            set={set}
-                            isOpen={isSetOpen}
-                            hasCards={hasCards}
-                            onClick={() => toggleSet(set.id)}
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
+        {/* ── Series grid ── */}
+        <SectionLabel>Series</SectionLabel>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
+          {POKEMON_SERIES.map(series => (
+            <Thumb
+              key={series.id}
+              imgSrc={series.icon}
+              imgW={110} imgH={50}
+              label={series.name}
+              sublabel={`${series.sets.length} sets`}
+              isOpen={openSeriesId === series.id}
+              onClick={() => {
+                setOpenSeriesId(prev => prev === series.id ? null : series.id);
+                setOpenSetId(null);
+              }}
+            />
+          ))}
+        </div>
 
-                  {/* Cards panel — shown below the set grid */}
-                  {openSetId && series.sets.some(s => s.id === openSetId) && SET_CARDS[openSetId] && (
-                    <div style={{
-                      borderTop: "1px solid rgba(255,255,255,0.06)",
-                      paddingTop: "32px", paddingBottom: "40px",
-                    }}>
-                      <div style={{
-                        fontFamily: MONO, fontSize: "11px", letterSpacing: "0.2em",
-                        textTransform: "uppercase", color: COURT, marginBottom: "24px",
-                        display: "flex", alignItems: "center", gap: "10px",
-                      }}>
-                        <span style={{ width: "16px", height: "1px", background: COURT, display: "inline-block" }} />
-                        {series.sets.find(s => s.id === openSetId)?.name} — {SET_CARDS[openSetId].length} cartas
-                      </div>
-                      <div className="pks-cards-grid" style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(6, 1fr)",
-                        gap: "32px 24px",
-                        justifyItems: "center",
-                      }}>
-                        {SET_CARDS[openSetId].map(card => (
-                          <TcgCard key={card.id} card={card} />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
+        {/* ── Sets grid (visible when a series is open) ── */}
+        {openSeries && (
+          <div style={{
+            borderTop: "1px solid rgba(255,255,255,0.06)",
+            paddingTop: "32px", marginBottom: "40px",
+          }}>
+            <SectionLabel>{openSeries.name} — {openSeries.sets.length} sets</SectionLabel>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
+              {openSeries.sets.map(set => {
+                const hasCards = !!SET_CARDS[set.id];
+                return (
+                  <Thumb
+                    key={set.id}
+                    imgSrc={set.logo}
+                    imgW={120} imgH={56}
+                    label={set.name}
+                    sublabel={set.symbol ? undefined : undefined}
+                    isOpen={openSetId === set.id}
+                    isGray={!hasCards}
+                    badgeText={hasCards ? `${SET_CARDS[set.id].length} cartas` : undefined}
+                    onClick={() => {
+                      if (!hasCards) return;
+                      setOpenSetId(prev => prev === set.id ? null : set.id);
+                    }}
+                  />
+                );
+              })}
             </div>
-          );
-        })}
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }} />
+          </div>
+        )}
+
+        {/* ── Cards grid (visible when a set is open) ── */}
+        {openSet && SET_CARDS[openSet.id] && (
+          <div style={{
+            borderTop: "1px solid rgba(255,255,255,0.06)",
+            paddingTop: "32px", paddingBottom: "40px",
+          }}>
+            <SectionLabel>
+              {openSet.name} — {SET_CARDS[openSet.id].length} cartas
+            </SectionLabel>
+            <div className="pks-cards-grid" style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(6, 1fr)",
+              gap: "32px 24px",
+              justifyItems: "center",
+            }}>
+              {SET_CARDS[openSet.id].map(card => (
+                <TcgCard key={card.id} card={card} />
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
 
       <style>{`

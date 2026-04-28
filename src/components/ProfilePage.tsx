@@ -2,7 +2,6 @@
 
 import { PlayerCard3D } from "./PlayerCard3D";
 import { FollowButton } from "./FollowButton";
-import { PokemonSetsSection } from "./PokemonSetsSection";
 
 interface PlayerData {
   username:         string;
@@ -268,9 +267,6 @@ export function ProfilePage({ player }: { player: PlayerData }) {
           }
         `}</style>
       </section>
-
-      {/* ══ POKÉMON SETS ══ */}
-      <PokemonSetsSection />
 
     </div>
   );
