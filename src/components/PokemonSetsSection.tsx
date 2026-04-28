@@ -145,6 +145,7 @@ function TiltCard({
         onMouseLeave={onLeave}
         onMouseEnter={() => setHovered(true)}
         onClick={onCardClick}
+        title={VERSION_FULL[label] ?? label}
       >
         <div className="tcg-card-body" style={{
           borderRadius: "12px",
@@ -234,8 +235,8 @@ function TiltCard({
       </div>
 
       <span style={{
-        fontFamily: MONO, fontSize: "10px", letterSpacing: "0.06em",
-        color: INK2, textAlign: "center", lineHeight: 1.3, maxWidth: "100%",
+        fontFamily: MONO, fontSize: "12px", letterSpacing: "0.06em",
+        color: INK0, textAlign: "center", lineHeight: 1.3, maxWidth: "100%",
       }}>
         #{String(card.card_number).padStart(3, "0")} {card.name}
       </span>
