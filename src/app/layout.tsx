@@ -15,8 +15,8 @@ const archiveBlack = Archivo_Black({
 });
 
 export const metadata: Metadata = {
-  title: "SMASH PADEL CARD",
-  description: "La comunidad de jugadores de pádel",
+  title: "Facebinder",
+  description: "Tu binder digital de cartas Pokémon TCG. Crea comunidad y lleva el control de tu colección.",
 };
 
 export default function RootLayout({

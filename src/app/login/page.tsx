@@ -107,25 +107,23 @@ export default function LoginPage() {
 
         {/* Logo + título */}
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
-          <div style={{
-            display: "inline-flex", alignItems: "center", justifyContent: "center",
-            width: "48px", height: "48px", borderRadius: "12px",
-            background: `linear-gradient(135deg, ${COURT}, ${BALL})`,
-            marginBottom: "20px",
-          }}>
-            <span style={{ fontSize: "22px" }}>🎾</span>
+          <div style={{ marginBottom: "20px" }}>
+            <span style={{
+              fontFamily: DISP, fontSize: "20px", letterSpacing: "0.08em",
+              color: "#f5f7fb", textTransform: "uppercase",
+            }}>FACEBINDER</span>
           </div>
           <h1 style={{
             fontFamily: DISP, fontSize: "22px", color: "#f5f7fb",
             margin: "0 0 8px", letterSpacing: "-0.01em",
           }}>
-            Bienvenido
+            Bienvenido coleccionista
           </h1>
           <p style={{
             fontFamily: MONO, fontSize: "12px", color: INK2,
             letterSpacing: "0.08em", margin: 0,
           }}>
-            Inicia sesión en SMASH PADEL CARD
+            Tu binder digital de Pokémon TCG
           </p>
         </div>
 
@@ -253,7 +251,7 @@ export default function LoginPage() {
         fontFamily: MONO, fontSize: "10px",
         letterSpacing: "0.2em", textTransform: "uppercase", color: INK2,
       }}>
-        SMASH PADEL CARD
+        FACEBINDER · POKÉMON TCG
       </div>
     </main>
   );

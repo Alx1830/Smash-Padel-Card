@@ -304,7 +304,19 @@ const VERSION_COLOR_MAP: Record<string, string> = {
   H:  "#ffd24f",
 };
 
-/* ── Mini card for showcase / expand grid ──────────────────── */
+const VERSION_FULL_LABEL: Record<string, string> = {
+  N:  "Normal",
+  RH: "Reverse Holo",
+  H:  "Holofoil",
+};
+
+const VERSION_GLOW: Record<string, string> = {
+  N:  "none",
+  RH: "0 0 16px rgba(46,230,193,0.35)",
+  H:  "0 0 20px rgba(255,210,79,0.45)",
+};
+
+/* ── Mini card for expand grid ──────────────────────────────── */
 function MiniCard({ cardId, setId, quantity }: { cardId: number; setId: string; quantity: number }) {
   const cards = SET_CARDS[setId];
   const card  = cards?.find(c => c.id === cardId);
@@ -330,6 +342,59 @@ function MiniCard({ cardId, setId, quantity }: { cardId: number; setId: string; 
         #{String(card.card_number).padStart(3, "0")} {card.name}
       </span>
       <span style={{ fontFamily: MONO_C, fontSize: "10px", color: COURT_C }}>×{quantity}</span>
+    </div>
+  );
+}
+
+/* ── Showcase card (grande, con versión destacada) ─────────── */
+function ShowcaseCard({ cardId, setId, quantity }: { cardId: number; setId: string; quantity: number }) {
+  const cards = SET_CARDS[setId];
+  const card  = cards?.find(c => c.id === cardId);
+  if (!card) return null;
+  const label      = VERSION_LABEL[card.version];
+  const labelColor = VERSION_COLOR_MAP[label] ?? INK2_C;
+  const fullLabel  = VERSION_FULL_LABEL[label] ?? label;
+  const glow       = VERSION_GLOW[label] ?? "none";
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", flex: 1 }}>
+      <div style={{
+        position: "relative", width: "100%", maxWidth: "240px", aspectRatio: "5/7",
+        borderRadius: "12px", overflow: "hidden",
+        boxShadow: `0 12px 40px rgba(0,0,0,0.7), ${glow}`,
+        border: `1px solid ${labelColor}30`,
+      }}>
+        <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="240px" unoptimized />
+
+        {/* Badge versión */}
+        <div style={{
+          position: "absolute", top: "10px", left: "10px",
+          fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.14em", textTransform: "uppercase",
+          color: labelColor, border: `1px solid ${labelColor}80`,
+          borderRadius: "5px", padding: "3px 8px",
+          background: "rgba(5,7,13,0.85)", backdropFilter: "blur(6px)",
+        }}>{fullLabel}</div>
+
+        {/* Cantidad */}
+        {quantity > 1 && (
+          <div style={{
+            position: "absolute", bottom: "10px", right: "10px",
+            fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.1em",
+            color: COURT_C, border: `1px solid ${COURT_C}60`,
+            borderRadius: "5px", padding: "3px 8px",
+            background: "rgba(5,7,13,0.85)", backdropFilter: "blur(6px)",
+          }}>×{quantity}</div>
+        )}
+      </div>
+
+      <div style={{ textAlign: "center" }}>
+        <div style={{ fontFamily: MONO_C, fontSize: "10px", letterSpacing: "0.08em", color: INK0_C, marginBottom: "4px" }}>
+          {card.name}
+        </div>
+        <div style={{ fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.06em", color: INK2_C }}>
+          #{String(card.card_number).padStart(3, "0")}
+        </div>
+      </div>
     </div>
   );
 }
@@ -380,7 +445,7 @@ function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
         <div style={{ display: "flex", gap: "20px", overflow: "hidden", flex: 1 }}>
           {owned.slice(idx, idx + 3).map(row => (
             <div key={`${row.card_id}-${row.set_id}`} style={{ flex: "0 0 calc(33.33% - 14px)" }}>
-              <MiniCard cardId={row.card_id} setId={row.set_id} quantity={row.quantity} />
+              <ShowcaseCard cardId={row.card_id} setId={row.set_id} quantity={row.quantity} />
             </div>
           ))}
         </div>
@@ -511,7 +576,7 @@ function CollectionSection({
                     }}>
                       <div className="prof-cards-grid" style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(6, 1fr)",
+                        gridTemplateColumns: "repeat(3, 1fr)",
                         gap: "20px 16px",
                         justifyItems: "center",
                       }}>

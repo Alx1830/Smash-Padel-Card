@@ -80,12 +80,10 @@ export function Navbar() {
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b border-[#2ee6c1]/10 bg-[#05070d]/90 backdrop-blur-md">
 
         {/* Logo */}
-        <Link href={loggedIn ? "/dashboard" : "/"} className="flex items-center gap-2.5 shrink-0">
-          <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#2ee6c1] flex-shrink-0"
-            style={{ boxShadow: "0 0 8px #2ee6c1" }} />
+        <Link href={loggedIn ? "/dashboard" : "/"} className="flex items-center shrink-0">
           <span className="text-white font-bold text-sm tracking-wider uppercase"
             style={{ fontFamily: "var(--font-archivo)" }}>
-            SMASH PADEL CARD
+            FACEBINDER
           </span>
         </Link>
 
