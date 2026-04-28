@@ -19,31 +19,37 @@ interface Player {
   tipo_perfil:      string | null;
   energia_favorita: string | null;
   photo_url:        string | null;
+  set_favorito:     string | null;
 }
 
-export default function JugadoresPage() {
+export default function AmigosPage() {
   const supabase = createClient();
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { setLoading(false); return; }
+
+      const { data: follows } = await supabase
+        .from("follows")
+        .select("following_id")
+        .eq("follower_id", user.id);
+
+      if (!follows || follows.length === 0) { setLoading(false); return; }
+
+      const ids = follows.map(f => f.following_id);
       const { data } = await supabase
         .from("players")
-        .select("username, first_name, last_name, pais, tipo_perfil, energia_favorita, photo_url")
-        .not("username", "is", null)
-        .order("created_at", { ascending: false });
+        .select("username, first_name, last_name, pais, tipo_perfil, energia_favorita, photo_url, set_favorito")
+        .in("user_id", ids)
+        .not("username", "is", null);
+
       setPlayers(data ?? []);
       setLoading(false);
     }
     load();
-
-    // Tiempo real
-    const channel = supabase
-      .channel("players-realtime")
-      .on("postgres_changes", { event: "*", schema: "public", table: "players" }, () => load())
-      .subscribe();
-    return () => { supabase.removeChannel(channel); };
   }, []);
 
   return (
@@ -62,16 +68,16 @@ export default function JugadoresPage() {
           Comunidad
         </div>
         <h1 style={{ fontFamily: DISP, fontSize: "36px", color: INK0, margin: 0 }}>
-          Jugadores
+          Amigos
           <span style={{ fontFamily: MONO, fontSize: "13px", color: INK2, marginLeft: "16px", fontWeight: 400 }}>
-            {loading ? "…" : `${players.length} registrados`}
+            {loading ? "…" : `${players.length} siguiendo`}
           </span>
         </h1>
       </div>
 
       {loading ? (
         <div style={{ textAlign: "center", padding: "80px", fontFamily: MONO, fontSize: "12px", color: INK2 }}>
-          Cargando jugadores…
+          Cargando…
         </div>
       ) : players.length === 0 ? (
         <div style={{
@@ -80,13 +86,11 @@ export default function JugadoresPage() {
         }}>
           <div style={{ fontSize: "48px", marginBottom: "16px", opacity: 0.3 }}>⊕</div>
           <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-            Aún no hay jugadores registrados
+            Aún no sigues a nadie — explora jugadores y presiona Seguir
           </p>
         </div>
       ) : (
-        <div style={{
-          display: "flex", flexWrap: "wrap", gap: "32px",
-        }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "32px" }}>
           {players.map(p => (
             <Link key={p.username} href={`/jugador/${p.username}`} style={{ textDecoration: "none" }}>
               <PlayerCard3D
@@ -97,6 +101,7 @@ export default function JugadoresPage() {
                 position={p.tipo_perfil ?? "—"}
                 energiaFavorita={p.energia_favorita ?? "—"}
                 photoUrl={p.photo_url || undefined}
+                setFavoritoId={p.set_favorito || undefined}
               />
             </Link>
           ))}

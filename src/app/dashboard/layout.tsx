@@ -15,10 +15,8 @@ const DISP  = "var(--font-archivo)";
 const NAV_ITEMS = [
   { href: "/dashboard",             label: "Inicio",     icon: "⊞" },
   { href: "/dashboard/perfil",      label: "Perfil",     icon: "◉" },
-  { href: "/dashboard/jugadores",   label: "Jugadores",  icon: "⊕" },
-  { href: "/dashboard/clubs",       label: "Clubs",      icon: "⬡" },
-  { href: "/dashboard/ligas",       label: "Ligas",      icon: "◈" },
-  { href: "/dashboard/torneos",     label: "Torneos",    icon: "◇" },
+  { href: "/dashboard/jugadores",   label: "Amigos",     icon: "⊕" },
+  { href: "/dashboard/clubs",       label: "Inventario", icon: "⬡" },
   { href: "/dashboard/mercado",     label: "Mercado",    icon: "◬" },
 ];
 
@@ -87,7 +85,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 background: COURT, boxShadow: `0 0 10px ${COURT}`, display: "inline-block",
               }} />
               <span className="dash-logo-text" style={{ fontFamily: DISP, fontSize: "12px", letterSpacing: "0.06em", color: INK0, textTransform: "uppercase", whiteSpace: "nowrap" }}>
-                SMASH PADEL
+                FACEBINDER
               </span>
             </Link>
             <button

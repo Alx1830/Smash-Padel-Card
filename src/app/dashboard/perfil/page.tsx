@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { CustomSelect } from "@/components/ui/custom-select";
+import { POKEMON_SERIES } from "@/data/pokemon-sets";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -24,8 +25,13 @@ interface PerfilForm {
   energia_favorita: string;
   pokemon_favorito: string;
   gimnasio_pokemon: string;
+  set_favorito:     string;
   photo_url:        string;
 }
+
+const SET_OPTS = POKEMON_SERIES.flatMap(series =>
+  series.sets.map(set => ({ value: set.id, label: `${series.name} — ${set.name}` }))
+);
 
 async function compressImage(file: File, maxPx = 480, quality = 0.82): Promise<Blob> {
   return new Promise((resolve, reject) => {
@@ -263,7 +269,7 @@ export default function PerfilPage() {
     pais: "", tipo_perfil: "", ciudad: "",
     edad: "", energia_favorita: "",
     pokemon_favorito: "", gimnasio_pokemon: "",
-    photo_url: "",
+    set_favorito: "", photo_url: "",
   });
 
   useEffect(() => {
@@ -287,6 +293,7 @@ export default function PerfilPage() {
           energia_favorita: data.energia_favorita ?? "",
           pokemon_favorito: data.pokemon_favorito ?? "",
           gimnasio_pokemon: data.gimnasio_pokemon?.toString() ?? "",
+          set_favorito:     data.set_favorito ?? "",
           photo_url:        data.photo_url ?? "",
         });
         if (data.photo_url) setPreview(data.photo_url);
@@ -353,6 +360,7 @@ export default function PerfilPage() {
       energia_favorita: form.energia_favorita,
       pokemon_favorito: form.pokemon_favorito,
       gimnasio_pokemon: form.gimnasio_pokemon || null,
+      set_favorito:     form.set_favorito || null,
       photo_url:        form.photo_url,
     }, { onConflict: "user_id" });
     setSaving(false);
@@ -376,10 +384,12 @@ export default function PerfilPage() {
   );
 
   return (
-    <div className="page-container" style={{ maxWidth: "860px" }}>
+    <div className="page-container" style={{ maxWidth: "1100px" }}>
       <style>{`
         .page-container { padding: 24px; }
         @media (min-width: 768px) { .page-container { padding: 48px; } }
+        .perfil-sections { display: flex; gap: 48px; align-items: flex-start; flex-wrap: wrap; }
+        .perfil-section  { flex: 1; min-width: 280px; }
       `}</style>
 
       {/* Header */}
@@ -450,94 +460,106 @@ export default function PerfilPage() {
           </div>
         </div>
 
-        {/* 01 IDENTIDAD */}
-        <div style={{ marginBottom: "48px" }}>
-          {sectionTitle("01", "Identidad")}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-            <Field label={`Usuario${usernameFixed ? "  🔒" : ""}`}>
-              <div style={{ position: "relative" }}>
-                <input
-                  style={{ ...inputStyle, opacity: usernameFixed ? 0.6 : 1, cursor: usernameFixed ? "not-allowed" : "text" }}
-                  value={form.username}
-                  onChange={e => !usernameFixed && set("username", e.target.value)}
-                  placeholder="Crea tu nombre de usuario"
-                  readOnly={usernameFixed}
+        <div className="perfil-sections" style={{ marginBottom: "48px" }}>
+          {/* 01 IDENTIDAD */}
+          <div className="perfil-section">
+            {sectionTitle("01", "Identidad")}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+              <Field label={`Usuario${usernameFixed ? "  🔒" : ""}`}>
+                <div style={{ position: "relative" }}>
+                  <input
+                    style={{ ...inputStyle, opacity: usernameFixed ? 0.6 : 1, cursor: usernameFixed ? "not-allowed" : "text" }}
+                    value={form.username}
+                    onChange={e => !usernameFixed && set("username", e.target.value)}
+                    placeholder="Crea tu nombre de usuario"
+                    readOnly={usernameFixed}
+                  />
+                </div>
+                {usernameFixed ? (
+                  <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "6px 0 0", lineHeight: 1.5 }}>
+                    El usuario es permanente — es tu identificador único en la plataforma.
+                  </p>
+                ) : (
+                  <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ffc800", margin: "6px 0 0", lineHeight: 1.5 }}>
+                    ⚠ Elige bien tu usuario — una vez guardado no podrá cambiarse.
+                  </p>
+                )}
+                {usernameError && <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ff4f4f", margin: "6px 0 0" }}>✕ {usernameError}</p>}
+              </Field>
+              <Field label="Ciudad">
+                <input style={inputStyle} value={form.ciudad}
+                  onChange={e => set("ciudad", e.target.value)} placeholder="¿En qué ciudad estás?" />
+              </Field>
+              <Field label="Nombre">
+                <input style={inputStyle} value={form.first_name}
+                  onChange={e => set("first_name", e.target.value)} placeholder="Tu nombre" />
+              </Field>
+              <Field label="Apellido">
+                <input style={inputStyle} value={form.last_name}
+                  onChange={e => set("last_name", e.target.value)} placeholder="Tus apellidos" />
+              </Field>
+              <Field label="Edad">
+                <input style={inputStyle} type="number" min="1" max="99"
+                  value={form.edad} onChange={e => set("edad", e.target.value)} placeholder="Tu edad" />
+              </Field>
+              <Field label="País">
+                <CustomSelect
+                  value={form.pais}
+                  onChange={v => set("pais", v)}
+                  options={PAISES_OPTS}
+                  placeholder="Seleccionar país"
                 />
-              </div>
-              {usernameFixed ? (
-                <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "6px 0 0", lineHeight: 1.5 }}>
-                  El usuario es permanente — es tu identificador único en la plataforma.
-                </p>
-              ) : (
-                <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ffc800", margin: "6px 0 0", lineHeight: 1.5 }}>
-                  ⚠ Elige bien tu usuario — una vez guardado no podrá cambiarse.
-                </p>
-              )}
-              {usernameError && <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ff4f4f", margin: "6px 0 0" }}>✕ {usernameError}</p>}
-            </Field>
-            <Field label="Ciudad">
-              <input style={inputStyle} value={form.ciudad}
-                onChange={e => set("ciudad", e.target.value)} placeholder="¿En qué ciudad estás?" />
-            </Field>
-            <Field label="Nombre">
-              <input style={inputStyle} value={form.first_name}
-                onChange={e => set("first_name", e.target.value)} placeholder="Tu nombre" />
-            </Field>
-            <Field label="Apellido">
-              <input style={inputStyle} value={form.last_name}
-                onChange={e => set("last_name", e.target.value)} placeholder="Tus apellidos" />
-            </Field>
-            <Field label="Edad">
-              <input style={inputStyle} type="number" min="1" max="99"
-                value={form.edad} onChange={e => set("edad", e.target.value)} placeholder="Tu edad" />
-            </Field>
-            <Field label="Energía Favorita">
-              <CustomSelect
-                value={form.energia_favorita}
-                onChange={v => set("energia_favorita", v)}
-                options={ENERGIA_OPTS}
-                placeholder="Seleccionar energía"
-              />
-            </Field>
+              </Field>
+            </div>
           </div>
-        </div>
 
-        {/* 02 PERFIL POKÉMON */}
-        <div style={{ marginBottom: "48px" }}>
-          {sectionTitle("02", "Perfil Pokémon")}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-            <Field label="País">
-              <CustomSelect
-                value={form.pais}
-                onChange={v => set("pais", v)}
-                options={PAISES_OPTS}
-                placeholder="Seleccionar país"
-              />
-            </Field>
-            <Field label="Tipo de Perfil">
-              <CustomSelect
-                value={form.tipo_perfil}
-                onChange={v => set("tipo_perfil", v)}
-                options={TIPO_PERFIL_OPTS}
-                placeholder="Seleccionar tipo"
-              />
-            </Field>
-            <Field label="Pokémon Favorito">
-              <CustomSelect
-                value={form.pokemon_favorito}
-                onChange={v => set("pokemon_favorito", v)}
-                options={POKEMON_OPTS}
-                placeholder="Buscar Pokémon..."
-              />
-            </Field>
-            <Field label="Gimnasio Pokémon">
-              <CustomSelect
-                value={form.gimnasio_pokemon}
-                onChange={v => set("gimnasio_pokemon", v)}
-                options={GIMNASIO_OPTS}
-                placeholder="Seleccionar gimnasio"
-              />
-            </Field>
+          {/* 02 PERFIL POKÉMON */}
+          <div className="perfil-section">
+            {sectionTitle("02", "Perfil Pokémon")}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+              <Field label="Tipo de Perfil">
+                <CustomSelect
+                  value={form.tipo_perfil}
+                  onChange={v => set("tipo_perfil", v)}
+                  options={TIPO_PERFIL_OPTS}
+                  placeholder="Seleccionar tipo"
+                />
+              </Field>
+              <Field label="Energía Favorita">
+                <CustomSelect
+                  value={form.energia_favorita}
+                  onChange={v => set("energia_favorita", v)}
+                  options={ENERGIA_OPTS}
+                  placeholder="Seleccionar energía"
+                />
+              </Field>
+              <Field label="Pokémon Favorito">
+                <CustomSelect
+                  value={form.pokemon_favorito}
+                  onChange={v => set("pokemon_favorito", v)}
+                  options={POKEMON_OPTS}
+                  placeholder="Buscar Pokémon..."
+                />
+              </Field>
+              <Field label="Gimnasio Pokémon">
+                <CustomSelect
+                  value={form.gimnasio_pokemon}
+                  onChange={v => set("gimnasio_pokemon", v)}
+                  options={GIMNASIO_OPTS}
+                  placeholder="Seleccionar gimnasio"
+                />
+              </Field>
+              <div style={{ gridColumn: "1 / -1" }}>
+                <Field label="Tu Set Favorito">
+                  <CustomSelect
+                    value={form.set_favorito}
+                    onChange={v => set("set_favorito", v)}
+                    options={SET_OPTS}
+                    placeholder="Buscar set..."
+                  />
+                </Field>
+              </div>
+            </div>
           </div>
         </div>
 

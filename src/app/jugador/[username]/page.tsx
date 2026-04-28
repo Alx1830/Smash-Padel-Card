@@ -29,10 +29,11 @@ export default async function JugadorPage({
     ciudad:          data.ciudad ?? "—",
     pokemonFavorito: data.pokemon_favorito ?? "—",
     edad:            data.edad ?? 0,
-    energiaFavorita: data.energia_favorita ?? "—",
-    photoUrl:        data.photo_url || undefined,
-    profileUserId:   data.user_id ?? undefined,
-    currentUserId:   user?.id ?? null,
+    energiaFavorita:  data.energia_favorita ?? "—",
+    setFavoritoId:    data.set_favorito ?? undefined,
+    photoUrl:         data.photo_url || undefined,
+    profileUserId:    data.user_id ?? undefined,
+    currentUserId:    user?.id ?? null,
   };
 
   return (

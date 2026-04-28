@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import { POKEMON_SERIES } from "@/data/pokemon-sets";
 
 interface PlayerCardProps {
   username:        string;
@@ -11,6 +12,7 @@ interface PlayerCardProps {
   category:        string;
   energiaFavorita: string;
   photoUrl?:       string;
+  setFavoritoId?:  string;
 }
 
 const COURT  = "#2ee6c1";
@@ -18,64 +20,13 @@ const HOLO3  = "#ffd24f";
 const INK0   = "#f5f7fb";
 const INK1   = "#c9cfdd";
 
-/* País (es) → flag emoji */
-const FLAG: Record<string, string> = {
-  "Afganistán":"🇦🇫","Albania":"🇦🇱","Alemania":"🇩🇪","Andorra":"🇦🇩","Angola":"🇦🇴",
-  "Antigua y Barbuda":"🇦🇬","Arabia Saudita":"🇸🇦","Argelia":"🇩🇿","Argentina":"🇦🇷",
-  "Armenia":"🇦🇲","Australia":"🇦🇺","Austria":"🇦🇹","Azerbaiyán":"🇦🇿","Bahamas":"🇧🇸",
-  "Bahrein":"🇧🇭","Bangladesh":"🇧🇩","Barbados":"🇧🇧","Bélgica":"🇧🇪","Belice":"🇧🇿",
-  "Benín":"🇧🇯","Bielorrusia":"🇧🇾","Bolivia":"🇧🇴","Bosnia y Herzegovina":"🇧🇦",
-  "Botsuana":"🇧🇼","Brasil":"🇧🇷","Brunéi":"🇧🇳","Bulgaria":"🇧🇬","Burkina Faso":"🇧🇫",
-  "Burundi":"🇧🇮","Bután":"🇧🇹","Cabo Verde":"🇨🇻","Camboya":"🇰🇭","Camerún":"🇨🇲",
-  "Canadá":"🇨🇦","Catar":"🇶🇦","Chad":"🇹🇩","Chile":"🇨🇱","China":"🇨🇳","Chipre":"🇨🇾",
-  "Colombia":"🇨🇴","Comoras":"🇰🇲","Congo":"🇨🇬","Corea del Norte":"🇰🇵",
-  "Corea del Sur":"🇰🇷","Costa de Marfil":"🇨🇮","Costa Rica":"🇨🇷","Croacia":"🇭🇷",
-  "Cuba":"🇨🇺","Dinamarca":"🇩🇰","Djibouti":"🇩🇯","Dominica":"🇩🇲","Ecuador":"🇪🇨",
-  "Egipto":"🇪🇬","El Salvador":"🇸🇻","Emiratos Árabes Unidos":"🇦🇪","Eritrea":"🇪🇷",
-  "Eslovaquia":"🇸🇰","Eslovenia":"🇸🇮","España":"🇪🇸","Estados Unidos":"🇺🇸",
-  "Estonia":"🇪🇪","Etiopía":"🇪🇹","Filipinas":"🇵🇭","Finlandia":"🇫🇮","Fiyi":"🇫🇯",
-  "Francia":"🇫🇷","Gabón":"🇬🇦","Gambia":"🇬🇲","Georgia":"🇬🇪","Ghana":"🇬🇭",
-  "Granada":"🇬🇩","Grecia":"🇬🇷","Guatemala":"🇬🇹","Guinea":"🇬🇳",
-  "Guinea Ecuatorial":"🇬🇶","Guinea-Bisáu":"🇬🇼","Guyana":"🇬🇾","Haití":"🇭🇹",
-  "Honduras":"🇭🇳","Hungría":"🇭🇺","India":"🇮🇳","Indonesia":"🇮🇩","Irak":"🇮🇶",
-  "Irán":"🇮🇷","Irlanda":"🇮🇪","Islandia":"🇮🇸","Islas Marshall":"🇲🇭",
-  "Islas Salomón":"🇸🇧","Israel":"🇮🇱","Italia":"🇮🇹","Jamaica":"🇯🇲","Japón":"🇯🇵",
-  "Jordania":"🇯🇴","Kazajistán":"🇰🇿","Kenia":"🇰🇪","Kirguistán":"🇰🇬","Kiribati":"🇰🇮",
-  "Kuwait":"🇰🇼","Laos":"🇱🇦","Lesoto":"🇱🇸","Letonia":"🇱🇻","Líbano":"🇱🇧",
-  "Liberia":"🇱🇷","Libia":"🇱🇾","Liechtenstein":"🇱🇮","Lituania":"🇱🇹",
-  "Luxemburgo":"🇱🇺","Madagascar":"🇲🇬","Malasia":"🇲🇾","Malaui":"🇲🇼",
-  "Maldivas":"🇲🇻","Mali":"🇲🇱","Malta":"🇲🇹","Marruecos":"🇲🇦","Mauricio":"🇲🇺",
-  "Mauritania":"🇲🇷","México":"🇲🇽","Micronesia":"🇫🇲","Moldavia":"🇲🇩","Mónaco":"🇲🇨",
-  "Mongolia":"🇲🇳","Montenegro":"🇲🇪","Mozambique":"🇲🇿","Myanmar":"🇲🇲",
-  "Namibia":"🇳🇦","Nauru":"🇳🇷","Nepal":"🇳🇵","Nicaragua":"🇳🇮","Níger":"🇳🇪",
-  "Nigeria":"🇳🇬","Noruega":"🇳🇴","Nueva Zelanda":"🇳🇿","Omán":"🇴🇲",
-  "Países Bajos":"🇳🇱","Pakistán":"🇵🇰","Palaos":"🇵🇼","Palestina":"🇵🇸",
-  "Panamá":"🇵🇦","Papúa Nueva Guinea":"🇵🇬","Paraguay":"🇵🇾","Perú":"🇵🇪",
-  "Polonia":"🇵🇱","Portugal":"🇵🇹","Reino Unido":"🇬🇧","República Centroafricana":"🇨🇫",
-  "República Checa":"🇨🇿","República Democrática del Congo":"🇨🇩",
-  "República Dominicana":"🇩🇴","Ruanda":"🇷🇼","Rumania":"🇷🇴","Rusia":"🇷🇺",
-  "Samoa":"🇼🇸","San Cristóbal y Nieves":"🇰🇳","San Marino":"🇸🇲",
-  "San Vicente y las Granadinas":"🇻🇨","Santa Lucía":"🇱🇨",
-  "Santo Tomé y Príncipe":"🇸🇹","Senegal":"🇸🇳","Serbia":"🇷🇸","Seychelles":"🇸🇨",
-  "Sierra Leona":"🇸🇱","Singapur":"🇸🇬","Siria":"🇸🇾","Somalia":"🇸🇴",
-  "Sri Lanka":"🇱🇰","Suazilandia":"🇸🇿","Sudáfrica":"🇿🇦","Sudán":"🇸🇩",
-  "Sudán del Sur":"🇸🇸","Suecia":"🇸🇪","Suiza":"🇨🇭","Surinam":"🇸🇷",
-  "Tailandia":"🇹🇭","Tanzania":"🇹🇿","Tayikistán":"🇹🇯","Timor Oriental":"🇹🇱",
-  "Togo":"🇹🇬","Tonga":"🇹🇴","Trinidad y Tobago":"🇹🇹","Túnez":"🇹🇳",
-  "Turkmenistán":"🇹🇲","Turquía":"🇹🇷","Tuvalu":"🇹🇻","Ucrania":"🇺🇦",
-  "Uganda":"🇺🇬","Uruguay":"🇺🇾","Uzbekistán":"🇺🇿","Vanuatu":"🇻🇺",
-  "Venezuela":"🇻🇪","Vietnam":"🇻🇳","Yemen":"🇾🇪","Yibuti":"🇩🇯",
-  "Zambia":"🇿🇲","Zimbabue":"🇿🇼",
-};
 
-function countryLabel(pais: string) {
-  const flag = FLAG[pais];
-  return flag ? `${flag} ${pais}` : pais;
-}
+const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
 
 export function PlayerCard3D({
-  username, firstName, lastName, position, category, energiaFavorita, photoUrl,
+  username, firstName, lastName, position, category, energiaFavorita, photoUrl, setFavoritoId,
 }: PlayerCardProps) {
+  const setLogo = setFavoritoId ? ALL_SETS.find(s => s.id === setFavoritoId)?.logo : undefined;
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
@@ -245,13 +196,19 @@ export function PlayerCard3D({
             zIndex: 10,
             background: "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
           }}>
-            {/* Energía favorita */}
-            <div style={{
-              fontFamily: "var(--font-jetbrains)", fontSize: "11px",
-              letterSpacing: "0.1em", color: INK1,
-            }}>
-              {energiaFavorita || "—"}
-            </div>
+            {/* Set favorito o energía favorita */}
+            {setLogo ? (
+              <div style={{ position: "relative", width: "80px", height: "28px", flexShrink: 0 }}>
+                <Image src={setLogo} alt="Set favorito" fill style={{ objectFit: "contain", objectPosition: "left center" }} unoptimized />
+              </div>
+            ) : (
+              <div style={{
+                fontFamily: "var(--font-jetbrains)", fontSize: "11px",
+                letterSpacing: "0.1em", color: INK1,
+              }}>
+                {energiaFavorita || "—"}
+              </div>
+            )}
 
             {/* País con bandera */}
             <div style={{
@@ -261,7 +218,7 @@ export function PlayerCard3D({
               border: "1px solid rgba(255,210,79,0.4)",
               borderRadius: "4px", whiteSpace: "nowrap",
             }}>
-              {countryLabel(category)}
+              {category || "—"}
             </div>
           </div>
 
