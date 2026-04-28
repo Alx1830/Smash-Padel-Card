@@ -31,19 +31,18 @@ export default async function LandingPage() {
   const supabase = await createClient();
   const { data: fetched } = await supabase
     .from("players")
-    .select("username, first_name, last_name, category, position, photo_url, year")
+    .select("username, first_name, last_name, pais, tipo_perfil, energia_favorita, photo_url")
     .ilike("username", "alx1830")
     .maybeSingle();
 
-  // Fallback con datos reales de ALX1830 por si el fetch falla
   const featured = fetched ?? {
     username: "ALX1830",
     first_name: "Alexis",
     last_name: "Torres",
-    category: "7MA CATEGORÍA",
-    position: "Drive" as const,
+    pais: "Colombia",
+    tipo_perfil: "Coleccionista",
+    energia_favorita: "⚡ Eléctrica/Rayo",
     photo_url: null,
-    year: "",
   };
 
   return (
@@ -146,9 +145,9 @@ export default async function LandingPage() {
               username={featured.username}
               firstName={featured.first_name ?? ""}
               lastName={featured.last_name ?? ""}
-              category={featured.category ?? "SIN CATEGORÍA"}
-              position={(featured.position ?? "Drive") as "Drive" | "Revés"}
-              year={featured.year ?? ""}
+              category={featured.pais ?? "—"}
+              position={featured.tipo_perfil ?? "—"}
+              energiaFavorita={featured.energia_favorita ?? "—"}
               photoUrl={featured.photo_url || undefined}
             />
           </div>

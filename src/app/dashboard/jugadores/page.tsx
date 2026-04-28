@@ -12,13 +12,13 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
 interface Player {
-  username: string;
-  first_name: string;
-  last_name: string;
-  category: string;
-  position: string;
-  photo_url: string | null;
-  year: string | null;
+  username:         string;
+  first_name:       string;
+  last_name:        string;
+  pais:             string | null;
+  tipo_perfil:      string | null;
+  energia_favorita: string | null;
+  photo_url:        string | null;
 }
 
 export default function JugadoresPage() {
@@ -30,7 +30,7 @@ export default function JugadoresPage() {
     async function load() {
       const { data } = await supabase
         .from("players")
-        .select("username, first_name, last_name, category, position, photo_url, year")
+        .select("username, first_name, last_name, pais, tipo_perfil, energia_favorita, photo_url")
         .not("username", "is", null)
         .order("created_at", { ascending: false });
       setPlayers(data ?? []);
@@ -93,9 +93,9 @@ export default function JugadoresPage() {
                 username={p.username}
                 firstName={p.first_name ?? ""}
                 lastName={p.last_name ?? ""}
-                category={p.category ?? "SIN CATEGORÍA"}
-                position={(p.position as "Drive" | "Revés") ?? "Drive"}
-                year={p.year ?? "2025-26"}
+                category={p.pais ?? "—"}
+                position={p.tipo_perfil ?? "—"}
+                energiaFavorita={p.energia_favorita ?? "—"}
                 photoUrl={p.photo_url || undefined}
               />
             </Link>
