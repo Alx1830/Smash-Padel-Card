@@ -67,7 +67,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   async function handleLogout() {
     await supabase.auth.signOut();
-    router.push("/login");
+    window.location.href = "/";
   }
 
   /* Shared avatar dropdown content */
@@ -217,8 +217,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             borderBottom: "1px solid rgba(255,255,255,0.06)",
             display: "flex", alignItems: "center",
           }}>
-            <span style={{ fontFamily: DISP, fontSize: "14px", letterSpacing: "0.06em", color: INK0, textTransform: "uppercase" }}>
-              FACEBINDER
+            <span style={{
+              fontFamily: DISP, fontSize: "17px", fontWeight: 900, letterSpacing: "0.02em",
+              background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+              backgroundClip: "text", userSelect: "none",
+            }}>
+              FaceBinder
             </span>
           </div>
 
@@ -274,8 +279,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* ══ MOBILE TOP BAR ══ */}
         <div className="mob-topbar">
           {/* Logo */}
-          <span style={{ fontFamily: DISP, fontSize: "13px", letterSpacing: "0.08em", color: INK0, textTransform: "uppercase" }}>
-            FACEBINDER
+          <span style={{
+            fontFamily: DISP, fontSize: "17px", fontWeight: 900, letterSpacing: "0.02em",
+            background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            backgroundClip: "text", userSelect: "none",
+          }}>
+            FaceBinder
           </span>
 
           {/* Avatar button — top right */}

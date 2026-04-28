@@ -83,9 +83,14 @@ export function Navbar() {
 
         {/* Logo */}
         <Link href={loggedIn ? "/dashboard" : "/"} className="flex items-center shrink-0">
-          <span className="text-white font-bold text-sm tracking-wider uppercase"
-            style={{ fontFamily: "var(--font-archivo)" }}>
-            FACEBINDER
+          <span style={{
+            fontFamily: "var(--font-archivo)", fontSize: "17px", fontWeight: 900,
+            letterSpacing: "0.02em",
+            background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            backgroundClip: "text", userSelect: "none", pointerEvents: "none",
+          }}>
+            FaceBinder
           </span>
         </Link>
 

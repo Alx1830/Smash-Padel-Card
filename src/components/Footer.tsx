@@ -195,7 +195,12 @@ export function Footer() {
           flexWrap: "wrap", gap: "12px",
         }}>
           {/* Logo */}
-          <span style={{ fontFamily: "var(--font-archivo)", fontSize: "13px", color: "#f5f7fb", letterSpacing: "0.06em" }}>FACEBINDER</span>
+          <span style={{
+            fontFamily: "var(--font-archivo)", fontSize: "16px", fontWeight: 900, letterSpacing: "0.02em",
+            background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            backgroundClip: "text", userSelect: "none",
+          }}>FaceBinder</span>
 
           {/* Made by */}
           <a href="https://adxmedialab.com" target="_blank" rel="noopener noreferrer" className="spc-pill" style={{
