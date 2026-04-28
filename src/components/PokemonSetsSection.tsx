@@ -381,7 +381,43 @@ const FILTERS: { id: CardFilter; label: string; authOnly?: boolean }[] = [
   { id: "holofoil",        label: "Holofoil" },
 ];
 
+/* ── Breadcrumb ─────────────────────────────────────────────── */
+function Breadcrumb({ items }: { items: { label: string; onClick?: () => void }[] }) {
+  return (
+    <div style={{
+      display: "flex", alignItems: "center", gap: "8px",
+      fontFamily: MONO, fontSize: "11px", letterSpacing: "0.12em",
+      marginBottom: "28px", flexWrap: "wrap",
+    }}>
+      {items.map((item, i) => (
+        <span key={i} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          {i > 0 && <span style={{ color: INK2 }}>›</span>}
+          {item.onClick ? (
+            <button
+              onClick={item.onClick}
+              style={{
+                background: "none", border: "none", cursor: "pointer",
+                color: COURT, fontFamily: MONO, fontSize: "11px",
+                letterSpacing: "0.12em", textTransform: "uppercase", padding: 0,
+                textDecoration: "underline", textDecorationColor: `${COURT}55`,
+                textUnderlineOffset: "3px",
+              }}
+            >
+              {item.label}
+            </button>
+          ) : (
+            <span style={{ color: INK0, textTransform: "uppercase" }}>{item.label}</span>
+          )}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+type DrillView = "series" | "sets" | "cards";
+
 export function PokemonSetsSection({ userId }: { userId?: string }) {
+  const [view,         setView]        = useState<DrillView>("series");
   const [openSeriesId, setOpenSeriesId] = useState<string | null>(null);
   const [openSetId,    setOpenSetId]    = useState<string | null>(null);
   const [inventory,    setInventory]    = useState<InventoryMap>({});
@@ -391,10 +427,8 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const openSeries = POKEMON_SERIES.find(s => s.id === openSeriesId);
   const openSet    = openSeries?.sets.find(s => s.id === openSetId);
 
-  // Reset filter when set changes
   useEffect(() => { setActiveFilter("todas"); }, [openSetId]);
 
-  // Fetch inventory for the open set when it changes
   useEffect(() => {
     if (!userId || !openSetId) return;
     setLoadingInv(true);
@@ -417,6 +451,23 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const handleInventoryChange = useCallback((cardId: number, qty: number) => {
     setInventory(prev => ({ ...prev, [cardId]: qty }));
   }, []);
+
+  function goToSeries() {
+    setView("series");
+    setOpenSeriesId(null);
+    setOpenSetId(null);
+  }
+
+  function goToSets(seriesId: string) {
+    setOpenSeriesId(seriesId);
+    setOpenSetId(null);
+    setView("sets");
+  }
+
+  function goToCards(setId: string) {
+    setOpenSetId(setId);
+    setView("cards");
+  }
 
   return (
     <section style={{ background: BG0, padding: "0 0 80px" }}>
@@ -446,33 +497,35 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
 
       <div className="pks-body" style={{ padding: "0 80px" }}>
 
-        {/* ── Series grid ── */}
-        <SectionLabel>Series</SectionLabel>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
-          {POKEMON_SERIES.map(series => (
-            <Thumb
-              key={series.id}
-              imgSrc={series.icon}
-              imgW={110} imgH={50}
-              label={series.name}
-              sublabel={`${series.sets.length} sets`}
-              isOpen={openSeriesId === series.id}
-              onClick={() => {
-                setOpenSeriesId(prev => prev === series.id ? null : series.id);
-                setOpenSetId(null);
-              }}
-            />
-          ))}
-        </div>
+        {/* ── VISTA: Series ── */}
+        {view === "series" && (
+          <>
+            <SectionLabel>Series</SectionLabel>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
+              {POKEMON_SERIES.map(series => (
+                <Thumb
+                  key={series.id}
+                  imgSrc={series.icon}
+                  imgW={110} imgH={50}
+                  label={series.name}
+                  sublabel={`${series.sets.length} sets`}
+                  isOpen={false}
+                  onClick={() => goToSets(series.id)}
+                />
+              ))}
+            </div>
+          </>
+        )}
 
-        {/* ── Sets grid ── */}
-        {openSeries && (
-          <div style={{
-            borderTop: "1px solid rgba(255,255,255,0.06)",
-            paddingTop: "32px", marginBottom: "40px",
-          }}>
+        {/* ── VISTA: Sets ── */}
+        {view === "sets" && openSeries && (
+          <>
+            <Breadcrumb items={[
+              { label: "Series", onClick: goToSeries },
+              { label: openSeries.name },
+            ]} />
             <SectionLabel>{openSeries.name} — {openSeries.sets.length} sets</SectionLabel>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
               {openSeries.sets.map(set => {
                 const hasCards = !!SET_CARDS[set.id];
                 return (
@@ -481,22 +534,19 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                     imgSrc={set.logo}
                     imgW={120} imgH={56}
                     label={set.name}
-                    isOpen={openSetId === set.id}
+                    isOpen={false}
                     isGray={!hasCards}
                     badgeText={hasCards ? `${SET_CARDS[set.id].length} cartas` : undefined}
-                    onClick={() => {
-                      if (!hasCards) return;
-                      setOpenSetId(prev => prev === set.id ? null : set.id);
-                    }}
+                    onClick={() => { if (hasCards) goToCards(set.id); }}
                   />
                 );
               })}
             </div>
-          </div>
+          </>
         )}
 
-        {/* ── Cards grid ── */}
-        {openSet && SET_CARDS[openSet.id] && (() => {
+        {/* ── VISTA: Cards ── */}
+        {view === "cards" && openSet && SET_CARDS[openSet.id] && (() => {
           const allCards = SET_CARDS[openSet.id];
           const visibleCards = allCards.filter(card => {
             if (activeFilter === "tengo")           return (inventory[card.id] ?? 0) > 0;
@@ -507,18 +557,19 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
             return true;
           });
           return (
-            <div style={{
-              borderTop: "1px solid rgba(255,255,255,0.06)",
-              paddingTop: "32px", paddingBottom: "40px",
-            }}>
+            <>
+              <Breadcrumb items={[
+                { label: "Series", onClick: goToSeries },
+                { label: openSeries!.name, onClick: () => goToSets(openSeries!.id) },
+                { label: openSet.name },
+              ]} />
+
               <SectionLabel>
                 {openSet.name} — {allCards.length} cartas
                 {loadingInv && <span style={{ color: INK2, fontSize: "10px", marginLeft: "8px" }}>cargando...</span>}
               </SectionLabel>
 
-              {userId && (
-                <SetProgress setId={openSet.id} inventory={inventory} />
-              )}
+              {userId && <SetProgress setId={openSet.id} inventory={inventory} />}
 
               {/* Filter buttons */}
               <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "28px" }}>
@@ -565,7 +616,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                   </div>
                 )}
               </div>
-            </div>
+            </>
           );
         })()}
 
