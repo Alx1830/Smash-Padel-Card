@@ -161,6 +161,7 @@ export const PERFECT_ORDER_CARDS: PokemonCard[] = [
   { id: 35261, name: "Naveen",                     image: `${BASE}079-normal-35261.jpg`,          version: "normal",          card_number: 79 },
   { id: 51874, name: "Naveen",                     image: `${BASE}079-reverseHolofoil-51874.jpg`, version: "reverseHolofoil", card_number: 79 },
   { id: 35236, name: "Poke Ball",                  image: `${BASE}080-normal-35236.jpg`,          version: "normal",          card_number: 80 },
+  { id: 54009, name: "Poke Ball",                  image: `${BASE}080-reverseHolofoil-54009.jpg`, version: "reverseHolofoil", card_number: 80 },
   { id: 35247, name: "Poke Pad",                   image: `${BASE}081-normal-35247.jpg`,          version: "normal",          card_number: 81 },
   { id: 51869, name: "Poke Pad",                   image: `${BASE}081-reverseHolofoil-51869.jpg`, version: "reverseHolofoil", card_number: 81 },
   { id: 35239, name: "Pokemon Catcher",            image: `${BASE}082-normal-35239.jpg`,          version: "normal",          card_number: 82 },
