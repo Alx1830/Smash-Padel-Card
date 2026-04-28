@@ -48,10 +48,14 @@ export default function LandingPage() {
         .ghost-btn { transition: border-color 0.2s, color 0.2s; }
         .ghost-btn:hover { border-color: rgba(255,255,255,0.4) !important; color: ${INK0} !important; }
         @media (max-width: 767px) {
-          .hero-grid   { flex-direction: column !important; align-items: center !important; }
+          .hero-grid   { flex-direction: column !important; align-items: center !important; padding: 60px 24px 64px !important; gap: 40px !important; }
           .hero-text   { max-width: 100% !important; text-align: center !important; }
-          .hero-btns   { justify-content: center !important; }
+          .hero-btns   { justify-content: center !important; flex-direction: column !important; align-items: center !important; }
           .hero-swiper { display: flex; justify-content: center; width: 100%; }
+          .features-section { padding: 64px 20px !important; }
+          .steps-section    { padding: 64px 20px !important; }
+          .cta-section      { padding: 64px 20px !important; }
+          .footer-section   { padding: 28px 20px !important; flex-direction: column !important; align-items: flex-start !important; gap: 20px !important; }
         }
       `}</style>
 
@@ -149,7 +153,7 @@ export default function LandingPage() {
       </section>
 
       {/* ══ FEATURES ══ */}
-      <section style={{ padding: "120px 40px" }}>
+      <section className="features-section" style={{ padding: "120px 40px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "72px" }}>
             <div style={{
@@ -196,7 +200,7 @@ export default function LandingPage() {
       </section>
 
       {/* ══ CÓMO FUNCIONA ══ */}
-      <section style={{
+      <section className="steps-section" style={{
         padding: "120px 40px",
         background: "rgba(255,255,255,0.015)",
         borderTop: "1px solid rgba(255,255,255,0.06)",
@@ -230,7 +234,7 @@ export default function LandingPage() {
       </section>
 
       {/* ══ CTA FINAL ══ */}
-      <section style={{
+      <section className="cta-section" style={{
         padding: "120px 40px", textAlign: "center",
         background: `radial-gradient(ellipse 60% 60% at 50% 50%, rgba(46,230,193,0.08), transparent 70%)`,
         borderTop: "1px solid rgba(255,255,255,0.06)",
@@ -273,7 +277,7 @@ export default function LandingPage() {
       </section>
 
       {/* ══ FOOTER ══ */}
-      <footer style={{
+      <footer className="footer-section" style={{
         borderTop: "1px solid rgba(255,255,255,0.06)",
         padding: "40px", display: "flex", alignItems: "center",
         justifyContent: "space-between", flexWrap: "wrap", gap: "16px",

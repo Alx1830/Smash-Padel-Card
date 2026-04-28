@@ -38,7 +38,7 @@ export default function DashboardHome() {
 
   function handleVerPerfil() {
     if (username) {
-      router.push(`/jugador/${username}`);
+      router.push(`/${username}`);
     }
   }
 
@@ -88,7 +88,7 @@ export default function DashboardHome() {
           </p>
           {!loading && username && (
             <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "4px 0 0", letterSpacing: "0.08em" }}>
-              smashpadelcard.com/jugador/<span style={{ color: COURT }}>{username}</span>
+              facebinder.com/<span style={{ color: COURT }}>{username}</span>
             </p>
           )}
         </div>

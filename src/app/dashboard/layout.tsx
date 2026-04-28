@@ -49,6 +49,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           margin-left: 220px;
           min-height: 100vh;
           background: #05070d;
+          overflow-x: hidden;
+          max-width: calc(100vw - 220px);
         }
         .dash-label { display: inline; }
         .dash-logo-text { display: inline; }
@@ -62,7 +64,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           }
           .dash-main {
             margin-left: ${collapsed ? "56px" : "200px"};
-            transition: margin-left 0.25s ease;
+            max-width: calc(100vw - ${collapsed ? "56px" : "200px"});
+            transition: margin-left 0.25s ease, max-width 0.25s ease;
           }
           .dash-label    { display: ${collapsed ? "none" : "inline"}; }
           .dash-logo-text { display: ${collapsed ? "none" : "inline"}; }

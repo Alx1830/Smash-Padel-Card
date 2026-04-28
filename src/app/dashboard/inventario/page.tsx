@@ -14,7 +14,11 @@ export default async function InventarioPage() {
 
   return (
     <div style={{ minHeight: "100vh" }}>
-      <div style={{ padding: "48px 48px 0" }}>
+      <style>{`
+        .inv-header { padding: 24px 20px 0; }
+        @media (min-width: 768px) { .inv-header { padding: 48px 48px 0; } }
+      `}</style>
+      <div className="inv-header">
         <div style={{
           fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em",
           textTransform: "uppercase", color: COURT,

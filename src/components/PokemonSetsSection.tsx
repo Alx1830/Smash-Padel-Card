@@ -118,13 +118,13 @@ function TcgCard({
       {/* Card with 3D tilt */}
       <div
         ref={ref}
-        style={{ perspective: "800px", cursor: "pointer" }}
+        style={{ perspective: "800px", cursor: "pointer", width: "100%", maxWidth: "240px" }}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
         onMouseEnter={() => setHovered(true)}
       >
         <div style={{
-          width: "240px", height: "336px",
+          width: "100%", aspectRatio: "5 / 7",
           borderRadius: "12px",
           overflow: "hidden",
           position: "relative",
@@ -238,7 +238,7 @@ function TcgCard({
       <span style={{
         fontFamily: MONO, fontSize: "10px", letterSpacing: "0.06em",
         color: INK2, textAlign: "center", lineHeight: 1.3,
-        maxWidth: "240px",
+        maxWidth: "100%",
       }}>
         #{String(card.card_number).padStart(3, "0")} {card.name}
       </span>
@@ -545,8 +545,8 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
 
               <div className="pks-cards-grid" style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(6, 1fr)",
-                gap: "32px 24px",
+                gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+                gap: "32px 16px",
                 justifyItems: "center",
               }}>
                 {visibleCards.map(card => (
@@ -578,9 +578,9 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           100% { opacity: 0.7; filter: hue-rotate(360deg); }
         }
         @media (max-width: 767px) {
-          .pks-header { padding: 48px 24px 32px !important; }
-          .pks-body   { padding: 0 24px !important; }
-          .pks-cards-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .pks-header { padding: 48px 20px 32px !important; }
+          .pks-body   { padding: 0 20px !important; }
+          .pks-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 20px 12px !important; }
         }
       `}</style>
     </section>

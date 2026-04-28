@@ -390,6 +390,11 @@ export default function PerfilPage() {
         @media (min-width: 768px) { .page-container { padding: 48px; } }
         .perfil-sections { display: flex; gap: 48px; align-items: flex-start; flex-wrap: wrap; }
         .perfil-section  { flex: 1; min-width: 280px; }
+        .perfil-grid-2   { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 540px) {
+          .perfil-grid-2 { grid-template-columns: 1fr !important; }
+          .perfil-section { min-width: 100% !important; }
+        }
       `}</style>
 
       {/* Header */}
@@ -464,7 +469,7 @@ export default function PerfilPage() {
           {/* 01 IDENTIDAD */}
           <div className="perfil-section">
             {sectionTitle("01", "Identidad")}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+            <div className="perfil-grid-2">
               <Field label={`Usuario${usernameFixed ? "  🔒" : ""}`}>
                 <div style={{ position: "relative" }}>
                   <input
@@ -516,7 +521,7 @@ export default function PerfilPage() {
           {/* 02 PERFIL POKÉMON */}
           <div className="perfil-section">
             {sectionTitle("02", "Perfil Pokémon")}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+            <div className="perfil-grid-2">
               <Field label="Tipo de Perfil">
                 <CustomSelect
                   value={form.tipo_perfil}

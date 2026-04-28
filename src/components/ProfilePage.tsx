@@ -402,8 +402,17 @@ function ShowcaseCard({ cardId, setId, quantity }: { cardId: number; setId: stri
 /* ── Showcase slider ────────────────────────────────────────── */
 function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
   const [idx, setIdx] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Pick up to 10 owned cards (unique card_ids, highest qty first)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const perPage = isMobile ? 1 : 3;
+
   const owned = inventoryRows
     .filter(r => r.quantity > 0)
     .sort((a, b) => b.quantity - a.quantity)
@@ -412,7 +421,7 @@ function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
   if (owned.length < 3) return null;
 
   const canPrev = idx > 0;
-  const canNext = idx + 3 < owned.length;
+  const canNext = idx + perPage < owned.length;
 
   const btnStyle = (active: boolean): React.CSSProperties => ({
     background: active ? "rgba(46,230,193,0.12)" : "rgba(255,255,255,0.04)",
@@ -424,6 +433,8 @@ function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
     display: "flex", alignItems: "center", justifyContent: "center",
     flexShrink: 0,
   });
+
+  const pages = Math.ceil(owned.length / perPage);
 
   return (
     <div style={{ marginBottom: "64px" }}>
@@ -443,8 +454,8 @@ function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
         <button style={btnStyle(canPrev)} onClick={() => canPrev && setIdx(i => i - 1)} disabled={!canPrev}>‹</button>
 
         <div style={{ display: "flex", gap: "20px", overflow: "hidden", flex: 1 }}>
-          {owned.slice(idx, idx + 3).map(row => (
-            <div key={`${row.card_id}-${row.set_id}`} style={{ flex: "0 0 calc(33.33% - 14px)" }}>
+          {owned.slice(idx, idx + perPage).map(row => (
+            <div key={`${row.card_id}-${row.set_id}`} style={{ flex: `0 0 calc(${100 / perPage}% - ${perPage > 1 ? "14px" : "0px"})` }}>
               <ShowcaseCard cardId={row.card_id} setId={row.set_id} quantity={row.quantity} />
             </div>
           ))}
@@ -453,13 +464,13 @@ function Showcase({ inventoryRows }: { inventoryRows: InvRow[] }) {
         <button style={btnStyle(canNext)} onClick={() => canNext && setIdx(i => i + 1)} disabled={!canNext}>›</button>
       </div>
 
-      {owned.length > 3 && (
+      {owned.length > perPage && (
         <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginTop: "20px" }}>
-          {Array.from({ length: Math.ceil(owned.length / 3) }).map((_, i) => (
-            <button key={i} onClick={() => setIdx(i * 3)} style={{
-              width: i * 3 === idx ? "20px" : "6px", height: "6px",
+          {Array.from({ length: pages }).map((_, i) => (
+            <button key={i} onClick={() => setIdx(i * perPage)} style={{
+              width: i * perPage === idx ? "20px" : "6px", height: "6px",
               borderRadius: "3px", border: "none", cursor: "pointer",
-              background: i * 3 === idx ? COURT_C : "rgba(255,255,255,0.2)",
+              background: i * perPage === idx ? COURT_C : "rgba(255,255,255,0.2)",
               transition: "all 0.2s", padding: 0,
             }} />
           ))}
@@ -506,7 +517,7 @@ function CollectionSection({
         )}
 
         {/* ── Colección (right) ── */}
-        <div style={{ flex: 1, minWidth: "280px" }}>
+        <div style={{ flex: 1, minWidth: "280px", maxWidth: "600px" }}>
           <div style={{
             fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
             textTransform: "uppercase", color: COURT_C,
@@ -595,9 +606,9 @@ function CollectionSection({
 
       <style>{`
         @media (max-width: 767px) {
-          .coll-outer { padding: 48px 24px 0 !important; flex-direction: column !important; }
-          .showcase-col { width: 100% !important; }
-          .prof-cards-grid { grid-template-columns: repeat(3, 1fr) !important; }
+          .coll-outer { padding: 40px 20px 0 !important; flex-direction: column !important; }
+          .showcase-col { width: 100% !important; max-width: 100% !important; }
+          .prof-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px 12px !important; }
         }
       `}</style>
     </section>
