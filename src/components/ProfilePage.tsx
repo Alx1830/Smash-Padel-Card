@@ -446,7 +446,7 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
           }} />
 
           <div style={{
-            position: "absolute", top: "12px", left: "12px",
+            position: "absolute", bottom: "12px", right: "12px",
             fontFamily: MONO_C, fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase",
             color: labelColor, border: `1px solid ${labelColor}80`,
             borderRadius: "5px", padding: "4px 10px",
@@ -455,7 +455,7 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
 
           {quantity > 1 && (
             <div style={{
-              position: "absolute", bottom: "12px", right: "12px",
+              position: "absolute", top: "12px", right: "12px",
               fontFamily: MONO_C, fontSize: "12px", letterSpacing: "0.1em",
               color: COURT_C, border: `1px solid ${COURT_C}60`,
               borderRadius: "5px", padding: "4px 10px",

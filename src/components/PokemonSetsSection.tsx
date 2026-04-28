@@ -552,12 +552,12 @@ function ModalTiltCard({ card }: { card: PokemonCard }) {
 
 /* ── Thumb base ────────────────────────────────────────────── */
 function Thumb({
-  imgSrc, imgW, imgH, label, sublabel, isOpen, isGray, onClick, badgeText,
+  imgSrc, imgW, imgH, label, sublabel, isOpen, isGray, onClick, badgeText, showPronto,
 }: {
   imgSrc: string; imgW: number; imgH: number;
   label: string; sublabel?: string;
   isOpen: boolean; isGray?: boolean;
-  onClick: () => void; badgeText?: string;
+  onClick: () => void; badgeText?: string; showPronto?: boolean;
 }) {
   const clickable = !isGray;
   return (
@@ -585,6 +585,18 @@ function Thumb({
         transition: "filter 0.3s",
       }}>
         <Image src={imgSrc} alt={label} fill style={{ objectFit: "contain" }} loading="lazy" sizes="130px" />
+        {showPronto && (
+          <div style={{
+            position: "absolute", top: "-6px", right: "-6px",
+            fontFamily: MONO, fontSize: "8px", letterSpacing: "0.12em",
+            textTransform: "uppercase", color: "#fff",
+            background: "#e03535", borderRadius: "4px",
+            padding: "2px 6px", pointerEvents: "none",
+            boxShadow: "0 2px 6px rgba(224,53,53,0.5)",
+          }}>
+            Pronto
+          </div>
+        )}
       </div>
       <span style={{
         fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em",
@@ -855,6 +867,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                     isOpen={false}
                     isGray={!cardCount}
                     badgeText={cardCount ? `${cardCount} cartas` : undefined}
+                    showPronto={!cardCount}
                     onClick={() => { if (cardCount) goToCards(set.id); }}
                   />
                 );

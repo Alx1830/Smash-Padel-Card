@@ -147,7 +147,7 @@ export default function LandingPage() {
 
           {/* ImageSwiper */}
           <div className="hero-swiper" style={{ flexShrink: 0, animation: "float 7s ease-in-out infinite" }}>
-            <ImageSwiper images={randomTen} cardWidth={240} cardHeight={336} />
+            <ImageSwiper images={randomTen} cardWidth={264} cardHeight={370} />
           </div>
         </div>
       </section>
@@ -294,7 +294,11 @@ export default function LandingPage() {
           ))}
         </div>
         <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2, letterSpacing: "0.1em" }}>
-          © 2025 Facebinder · Pokémon TCG
+          © 2025 Facebinder · Pokémon TCG · Diseñado por{" "}
+          <a href="https://adxmedialab.com" target="_blank" rel="noopener noreferrer"
+            style={{ color: COURT, textDecoration: "none" }}>
+            AdxMediaLab
+          </a>
         </span>
       </footer>
     </main>
