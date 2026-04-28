@@ -15,8 +15,8 @@ const DISP  = "var(--font-archivo)";
 const NAV_ITEMS = [
   { href: "/dashboard",             label: "Inicio",     icon: "⊞" },
   { href: "/dashboard/perfil",      label: "Perfil",     icon: "◉" },
-  { href: "/dashboard/jugadores",   label: "Amigos",     icon: "⊕" },
-  { href: "/dashboard/clubs",       label: "Inventario", icon: "⬡" },
+  { href: "/dashboard/amigos",      label: "Amigos",     icon: "⊕" },
+  { href: "/dashboard/inventario",  label: "Inventario", icon: "⬡" },
   { href: "/dashboard/mercado",     label: "Mercado",    icon: "◬" },
 ];
 

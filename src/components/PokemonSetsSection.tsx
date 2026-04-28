@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
+import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES, type PokemonSet } from "@/data/pokemon-sets";
 import { SET_CARDS, VERSION_LABEL, type PokemonCard } from "@/data/pokemon-cards";
 
@@ -18,11 +19,71 @@ const VERSION_COLOR: Record<string, string> = {
   H:  "#ffd24f",
 };
 
+type InventoryMap = Record<number, number>; // card_id → quantity
+
+/* ── Inventory controls ─────────────────────────────────────── */
+function QtyControl({
+  cardId, setId, qty, userId, onChange,
+}: {
+  cardId: number; setId: string; qty: number;
+  userId: string; onChange: (cardId: number, qty: number) => void;
+}) {
+  const [loading, setLoading] = useState(false);
+
+  const update = async (delta: number) => {
+    const next = Math.max(0, qty + delta);
+    if (next === qty) return;
+    setLoading(true);
+    const supabase = createClient();
+    if (next === 0) {
+      await supabase.from("card_inventory")
+        .delete()
+        .eq("user_id", userId).eq("card_id", cardId).eq("set_id", setId);
+    } else {
+      await supabase.from("card_inventory")
+        .upsert({ user_id: userId, card_id: cardId, set_id: setId, quantity: next },
+          { onConflict: "user_id,card_id,set_id" });
+    }
+    onChange(cardId, next);
+    setLoading(false);
+  };
+
+  const btnStyle = (disabled: boolean): React.CSSProperties => ({
+    background: "none", border: `1px solid ${disabled ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.2)"}`,
+    color: disabled ? INK2 : INK0, borderRadius: "4px",
+    width: "22px", height: "22px", cursor: disabled ? "default" : "pointer",
+    fontFamily: MONO, fontSize: "13px", lineHeight: 1,
+    display: "flex", alignItems: "center", justifyContent: "center",
+    opacity: loading ? 0.5 : 1, transition: "border-color 0.15s, color 0.15s",
+    flexShrink: 0,
+  });
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+      <button style={btnStyle(qty === 0 || loading)} onClick={() => update(-1)} disabled={qty === 0 || loading}>−</button>
+      <span style={{ fontFamily: MONO, fontSize: "12px", color: qty > 0 ? COURT : INK2, minWidth: "16px", textAlign: "center" }}>
+        {qty}
+      </span>
+      <button style={btnStyle(loading)} onClick={() => update(1)} disabled={loading}>+</button>
+    </div>
+  );
+}
+
 /* ── Tiltable TCG card ─────────────────────────────────────── */
-function TcgCard({ card }: { card: PokemonCard }) {
-  const ref  = useRef<HTMLDivElement>(null);
+function TcgCard({
+  card, userId, setId, inventory, onInventoryChange,
+}: {
+  card: PokemonCard;
+  userId?: string;
+  setId: string;
+  inventory: InventoryMap;
+  onInventoryChange: (cardId: number, qty: number) => void;
+}) {
+  const ref   = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [mouse, setMouse] = useState({ x: 0.5, y: 0.5 });
+
+  const qty = inventory[card.id] ?? 0;
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = ref.current; if (!el) return;
@@ -44,6 +105,7 @@ function TcgCard({ card }: { card: PokemonCard }) {
   const labelColor = VERSION_COLOR[label] ?? INK2;
   const isRH = label === "RH";
   const isH  = label === "H";
+  const isGray = userId ? qty === 0 : false;
 
   const mx = mouse.x * 100;
   const my = mouse.y * 100;
@@ -66,7 +128,10 @@ function TcgCard({ card }: { card: PokemonCard }) {
           transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
           transition: tilt.x === 0 ? "transform 0.6s cubic-bezier(0.2,0.8,0.2,1)" : "transform 0.05s linear",
           willChange: "transform",
-          boxShadow: isH
+          filter: isGray ? "grayscale(1) brightness(0.5)" : "none",
+          boxShadow: isGray
+            ? "0 8px 24px rgba(0,0,0,0.5)"
+            : isH
             ? "0 16px 48px rgba(255,160,80,0.35), 0 4px 16px rgba(0,0,0,0.6)"
             : isRH
             ? "0 16px 48px rgba(180,180,220,0.25), 0 4px 16px rgba(0,0,0,0.6)"
@@ -82,7 +147,7 @@ function TcgCard({ card }: { card: PokemonCard }) {
           />
 
           {/* RH — metallic shimmer */}
-          {isRH && (
+          {isRH && !isGray && (
             <div style={{
               position: "absolute", inset: 0, pointerEvents: "none",
               background: `
@@ -104,7 +169,7 @@ function TcgCard({ card }: { card: PokemonCard }) {
           )}
 
           {/* H — rainbow holographic */}
-          {isH && (
+          {isH && !isGray && (
             <div style={{
               position: "absolute", inset: 0, pointerEvents: "none",
               background: `
@@ -123,7 +188,7 @@ function TcgCard({ card }: { card: PokemonCard }) {
           )}
 
           {/* H — second layer for depth */}
-          {isH && (
+          {isH && !isGray && (
             <div style={{
               position: "absolute", inset: 0, pointerEvents: "none",
               background: `linear-gradient(
@@ -139,14 +204,16 @@ function TcgCard({ card }: { card: PokemonCard }) {
             }} />
           )}
 
-          {/* Base sheen for all */}
-          <div style={{
-            position: "absolute", inset: 0, pointerEvents: "none",
-            background: `linear-gradient(${110 + tilt.y}deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`,
-            mixBlendMode: "screen",
-          }} />
+          {/* Base sheen */}
+          {!isGray && (
+            <div style={{
+              position: "absolute", inset: 0, pointerEvents: "none",
+              background: `linear-gradient(${110 + tilt.y}deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`,
+              mixBlendMode: "screen",
+            }} />
+          )}
 
-          {/* Version badge — bottom right corner overlay */}
+          {/* Version badge */}
           <div style={{
             position: "absolute", bottom: "10px", right: "10px",
             fontFamily: MONO, fontSize: "11px", letterSpacing: "0.15em",
@@ -170,11 +237,22 @@ function TcgCard({ card }: { card: PokemonCard }) {
       }}>
         #{String(card.card_number).padStart(3, "0")} {card.name}
       </span>
+
+      {/* Inventory controls */}
+      {userId && (
+        <QtyControl
+          cardId={card.id}
+          setId={setId}
+          qty={qty}
+          userId={userId}
+          onChange={onInventoryChange}
+        />
+      )}
     </div>
   );
 }
 
-/* ── Thumb base — shared card style ───────────────────────── */
+/* ── Thumb base ────────────────────────────────────────────── */
 function Thumb({
   imgSrc, imgW, imgH, label, sublabel, isOpen, isGray, onClick, badgeText,
 }: {
@@ -248,13 +326,77 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
+/* ── Progress bar ──────────────────────────────────────────── */
+function SetProgress({ setId, inventory }: { setId: string; inventory: InventoryMap }) {
+  const cards = SET_CARDS[setId];
+  if (!cards) return null;
+  const total   = cards.length;
+  const unique  = cards.filter(c => (inventory[c.id] ?? 0) > 0).length;
+  const totalQty = cards.reduce((s, c) => s + (inventory[c.id] ?? 0), 0);
+  const pct = total > 0 ? Math.round((unique / total) * 100) : 0;
+
+  return (
+    <div style={{ marginBottom: "32px", padding: "20px 24px", background: "rgba(255,255,255,0.02)", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", flexWrap: "wrap", gap: "8px" }}>
+        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2 }}>
+          Progreso Master Set
+        </span>
+        <div style={{ display: "flex", gap: "24px" }}>
+          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: COURT }}>
+            {unique}/{total} únicas
+          </span>
+          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: INK2 }}>
+            {totalQty} total
+          </span>
+          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: INK0 }}>
+            {pct}%
+          </span>
+        </div>
+      </div>
+      <div style={{ height: "4px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", overflow: "hidden" }}>
+        <div style={{
+          height: "100%", width: `${pct}%`,
+          background: `linear-gradient(90deg, ${COURT}, #4ff0ff)`,
+          borderRadius: "2px", transition: "width 0.4s ease",
+        }} />
+      </div>
+    </div>
+  );
+}
+
 /* ── Main section ───────────────────────────────────────────── */
-export function PokemonSetsSection() {
+export function PokemonSetsSection({ userId }: { userId?: string }) {
   const [openSeriesId, setOpenSeriesId] = useState<string | null>(null);
   const [openSetId,    setOpenSetId]    = useState<string | null>(null);
+  const [inventory,    setInventory]    = useState<InventoryMap>({});
+  const [loadingInv,   setLoadingInv]   = useState(false);
 
   const openSeries = POKEMON_SERIES.find(s => s.id === openSeriesId);
   const openSet    = openSeries?.sets.find(s => s.id === openSetId);
+
+  // Fetch inventory for the open set when it changes
+  useEffect(() => {
+    if (!userId || !openSetId) return;
+    setLoadingInv(true);
+    const supabase = createClient();
+    supabase
+      .from("card_inventory")
+      .select("card_id, quantity")
+      .eq("user_id", userId)
+      .eq("set_id", openSetId)
+      .then(({ data }) => {
+        if (data) {
+          const map: InventoryMap = {};
+          data.forEach(r => { map[r.card_id] = r.quantity; });
+          setInventory(prev => ({ ...prev, ...map }));
+        }
+        setLoadingInv(false);
+      });
+  }, [userId, openSetId]);
+
+  const handleInventoryChange = useCallback((cardId: number, qty: number) => {
+    setInventory(prev => ({ ...prev, [cardId]: qty }));
+  }, []);
 
   return (
     <section style={{ background: BG0, padding: "0 0 80px" }}>
@@ -303,7 +445,7 @@ export function PokemonSetsSection() {
           ))}
         </div>
 
-        {/* ── Sets grid (visible when a series is open) ── */}
+        {/* ── Sets grid ── */}
         {openSeries && (
           <div style={{
             borderTop: "1px solid rgba(255,255,255,0.06)",
@@ -319,7 +461,6 @@ export function PokemonSetsSection() {
                     imgSrc={set.logo}
                     imgW={120} imgH={56}
                     label={set.name}
-                    sublabel={set.symbol ? undefined : undefined}
                     isOpen={openSetId === set.id}
                     isGray={!hasCards}
                     badgeText={hasCards ? `${SET_CARDS[set.id].length} cartas` : undefined}
@@ -334,7 +475,7 @@ export function PokemonSetsSection() {
           </div>
         )}
 
-        {/* ── Cards grid (visible when a set is open) ── */}
+        {/* ── Cards grid ── */}
         {openSet && SET_CARDS[openSet.id] && (
           <div style={{
             borderTop: "1px solid rgba(255,255,255,0.06)",
@@ -342,7 +483,13 @@ export function PokemonSetsSection() {
           }}>
             <SectionLabel>
               {openSet.name} — {SET_CARDS[openSet.id].length} cartas
+              {loadingInv && <span style={{ color: INK2, fontSize: "10px", marginLeft: "8px" }}>cargando...</span>}
             </SectionLabel>
+
+            {userId && (
+              <SetProgress setId={openSet.id} inventory={inventory} />
+            )}
+
             <div className="pks-cards-grid" style={{
               display: "grid",
               gridTemplateColumns: "repeat(6, 1fr)",
@@ -350,7 +497,14 @@ export function PokemonSetsSection() {
               justifyItems: "center",
             }}>
               {SET_CARDS[openSet.id].map(card => (
-                <TcgCard key={card.id} card={card} />
+                <TcgCard
+                  key={card.id}
+                  card={card}
+                  userId={userId}
+                  setId={openSet.id}
+                  inventory={inventory}
+                  onInventoryChange={handleInventoryChange}
+                />
               ))}
             </div>
           </div>

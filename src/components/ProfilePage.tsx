@@ -1,7 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { PlayerCard3D } from "./PlayerCard3D";
 import { FollowButton } from "./FollowButton";
+import { POKEMON_SERIES } from "@/data/pokemon-sets";
+
+type SetStats = { unique: number; total: number; totalQty: number };
 
 interface PlayerData {
   username:         string;
@@ -19,6 +23,7 @@ interface PlayerData {
   year?:            string;
   profileUserId?:   string;
   currentUserId?:   string | null;
+  setStats?:        Record<string, SetStats>;
 }
 
 const COURT = "#2ee6c1";
@@ -268,6 +273,89 @@ export function ProfilePage({ player }: { player: PlayerData }) {
         `}</style>
       </section>
 
+      {/* ══ COLECCIÓN ══ */}
+      {player.setStats && Object.keys(player.setStats).length > 0 && (
+        <CollectionSection setStats={player.setStats} />
+      )}
+
     </div>
+  );
+}
+
+/* ── Collection stats section ───────────────────────────────── */
+const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
+
+function CollectionSection({ setStats }: { setStats: Record<string, SetStats> }) {
+  const COURT = "#2ee6c1";
+  const INK0  = "#f5f7fb";
+  const INK2  = "#7a8298";
+  const BG0   = "#05070d";
+  const MONO  = "var(--font-jetbrains)";
+  const DISP  = "var(--font-archivo)";
+
+  const entries = Object.entries(setStats).map(([setId, stats]) => {
+    const set = ALL_SETS.find(s => s.id === setId);
+    return set ? { set, stats } : null;
+  }).filter(Boolean) as { set: { id: string; name: string; logo: string }; stats: SetStats }[];
+
+  if (entries.length === 0) return null;
+
+  return (
+    <section style={{ background: BG0, padding: "0 0 80px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="coll-pad" style={{ padding: "64px 80px 0" }}>
+        <div style={{
+          fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em",
+          textTransform: "uppercase", color: COURT,
+          display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
+        }}>
+          <span style={{ width: "22px", height: "1px", background: COURT, display: "inline-block" }} />
+          Colección
+        </div>
+        <h2 style={{ fontFamily: DISP, fontSize: "clamp(24px, 2.5vw, 36px)", letterSpacing: "-0.02em", margin: "0 0 40px", color: INK0 }}>
+          Pokémon TCG
+        </h2>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          {entries.map(({ set, stats }) => {
+            const pct = Math.round((stats.unique / stats.total) * 100);
+            return (
+              <div key={set.id} style={{
+                padding: "20px 24px", background: "rgba(255,255,255,0.02)",
+                borderRadius: "14px", border: "1px solid rgba(255,255,255,0.07)",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "12px", flexWrap: "wrap" }}>
+                  <div style={{ position: "relative", width: "100px", height: "38px", flexShrink: 0 }}>
+                    <Image src={set.logo} alt={set.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} unoptimized />
+                  </div>
+                  <div style={{ flex: 1, display: "flex", justifyContent: "flex-end", gap: "24px", flexWrap: "wrap" }}>
+                    <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: COURT }}>
+                      {stats.unique}/{stats.total} únicas
+                    </span>
+                    <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: INK2 }}>
+                      {stats.totalQty} total
+                    </span>
+                    <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: INK0, minWidth: "36px", textAlign: "right" }}>
+                      {pct}%
+                    </span>
+                  </div>
+                </div>
+                <div style={{ height: "4px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", overflow: "hidden" }}>
+                  <div style={{
+                    height: "100%", width: `${pct}%`,
+                    background: `linear-gradient(90deg, ${COURT}, #4ff0ff)`,
+                    borderRadius: "2px",
+                  }} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <style>{`
+        @media (max-width: 767px) {
+          .coll-pad { padding: 48px 24px 0 !important; }
+        }
+      `}</style>
+    </section>
   );
 }
