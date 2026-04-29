@@ -20,15 +20,19 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
 const VERSION_COLOR: Record<string, string> = {
-  N:  "#7a8298",
-  RH: "#2ee6c1",
-  H:  "#ffd24f",
+  N:   "#f5f7fb",
+  RH:  "#2ee6c1",
+  H:   "#ffd24f",
+  ESP: "#2ee6c1",
+  PB:  "#2ee6c1",
 };
 
 const VERSION_FULL: Record<string, string> = {
-  N:  "Normal",
-  RH: "Reverse Holo",
-  H:  "Holofoil",
+  N:   "Normal",
+  RH:  "Reverse Holo",
+  H:   "Holofoil",
+  ESP: "Energy Symbol",
+  PB:  "Poke Ball",
 };
 
 const ALL_SETS_FLAT = POKEMON_SERIES.flatMap(s => s.sets);
@@ -103,67 +107,125 @@ function TiltCard({
   onInventoryChange: (cardId: number, qty: number) => void;
   onCardClick?: () => void;
 }) {
-  const ref   = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt]       = useState({ x: 0, y: 0 });
-  const [mouse, setMouse]     = useState({ x: 0.5, y: 0.5 });
+  const wrapRef  = useRef<HTMLDivElement>(null);
+  const bodyRef  = useRef<HTMLDivElement>(null);
+  const rhRef    = useRef<HTMLDivElement>(null);
+  const hRef1    = useRef<HTMLDivElement>(null);
+  const hRef2    = useRef<HTMLDivElement>(null);
+  const glRef    = useRef<HTMLDivElement>(null);
+  const rectRef  = useRef<DOMRect | null>(null);
+  const rafId    = useRef(0);
   const [hovered, setHovered] = useState(false);
 
   const qty = inventory[card.id] ?? 0;
 
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current; if (!el) return;
-    const r = el.getBoundingClientRect();
-    const nx = (e.clientX - r.left) / r.width;
-    const ny = (e.clientY - r.top)  / r.height;
-    setMouse({ x: nx, y: ny });
-    setTilt({ x: (-(ny - 0.5)) * 24, y: ((nx - 0.5)) * 24 });
-  };
-  const onLeave = () => {
-    setTilt({ x: 0, y: 0 });
-    setMouse({ x: 0.5, y: 0.5 });
-    setHovered(false);
-  };
-
   const label = VERSION_LABEL[card.version];
   const labelColor = VERSION_COLOR[label] ?? INK2;
-  const isRH = label === "RH";
   const isH  = label === "H";
+  const isRH = label !== "N" && label !== "H";
   const isGray = userId ? (qty === 0 && !hovered) : false;
 
-  const mx = mouse.x * 100;
-  const my = mouse.y * 100;
+  const onEnter = () => {
+    rectRef.current = wrapRef.current?.getBoundingClientRect() ?? null;
+    setHovered(true);
+  };
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    cancelAnimationFrame(rafId.current);
+    const r = rectRef.current; if (!r) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    rafId.current = requestAnimationFrame(() => {
+      const nx = (clientX - r.left) / r.width;
+      const ny = (clientY - r.top)  / r.height;
+      const tx = (-(ny - 0.5)) * 24;
+      const ty = ((nx - 0.5)) * 24;
+      const mx = nx * 100;
+      const my = ny * 100;
+
+      if (bodyRef.current) {
+        bodyRef.current.style.transition = "transform 0.08s ease-out, filter 0.3s ease";
+        bodyRef.current.style.transform  = `rotateX(${tx}deg) rotateY(${ty}deg)`;
+      }
+      if (rhRef.current) {
+        rhRef.current.style.background = `
+          radial-gradient(ellipse 80% 60% at ${mx}% ${my}%,
+            rgba(220,220,240,0.55) 0%, rgba(180,180,210,0.25) 30%, transparent 60%),
+          linear-gradient(${105 + ty * 2}deg,
+            transparent 20%, rgba(200,200,230,0.18) 35%, rgba(255,255,255,0.28) 45%,
+            rgba(200,200,230,0.18) 55%, transparent 70%)`;
+      }
+      if (hRef1.current) {
+        hRef1.current.style.background = `
+          radial-gradient(ellipse 90% 70% at ${mx}% ${my}%,
+            rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%,
+            rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%,
+            rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)`;
+      }
+      if (hRef2.current) {
+        hRef2.current.style.background = `linear-gradient(${120 + ty * 3}deg,
+          transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%,
+          rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`;
+      }
+      if (glRef.current) {
+        glRef.current.style.background = `linear-gradient(${110 + ty}deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`;
+      }
+    });
+  };
+
+  const onLeave = () => {
+    cancelAnimationFrame(rafId.current);
+    rectRef.current = null;
+    setHovered(false);
+    if (bodyRef.current) {
+      bodyRef.current.style.transition = "transform 0.6s cubic-bezier(0.2,0.8,0.2,1), filter 0.3s ease";
+      bodyRef.current.style.transform  = "rotateX(0deg) rotateY(0deg)";
+    }
+    if (rhRef.current) {
+      rhRef.current.style.background = `
+        radial-gradient(ellipse 80% 60% at 50% 50%,
+          rgba(220,220,240,0.3) 0%, rgba(180,180,210,0.1) 30%, transparent 60%),
+        linear-gradient(105deg, transparent 20%, rgba(200,200,230,0.1) 45%, transparent 70%)`;
+    }
+    if (hRef1.current) {
+      hRef1.current.style.background = `
+        radial-gradient(ellipse 90% 70% at 50% 50%,
+          rgba(255,100,100,0.2) 0%, rgba(255,200,50,0.15) 25%,
+          rgba(80,255,120,0.15) 50%, transparent 90%)`;
+    }
+  };
+
+  const shadowStyle = isGray
+    ? "0 8px 24px rgba(0,0,0,0.5)"
+    : isH
+    ? "0 16px 48px rgba(255,160,80,0.35), 0 4px 16px rgba(0,0,0,0.6)"
+    : isRH
+    ? "0 16px 48px rgba(180,180,220,0.25), 0 4px 16px rgba(0,0,0,0.6)"
+    : "0 12px 40px rgba(0,0,0,0.7), 0 4px 12px rgba(0,0,0,0.4)";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px", width: "100%" }}>
 
       {/* Card with 3D tilt */}
       <div
-        ref={ref}
+        ref={wrapRef}
         className="tcg-card-wrap"
-        style={{ perspective: "800px", cursor: "pointer" }}
+        style={{ perspective: "800px", cursor: "pointer", position: "relative" }}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
-        onMouseEnter={() => setHovered(true)}
+        onMouseEnter={onEnter}
         onClick={onCardClick}
         title={VERSION_FULL[label] ?? label}
       >
-        <div className="tcg-card-body" style={{
+        <div ref={bodyRef} className="tcg-card-body" style={{
           borderRadius: "12px",
           overflow: "hidden",
           position: "relative",
-          transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-          transition: tilt.x === 0
-            ? "transform 0.6s cubic-bezier(0.2,0.8,0.2,1), filter 0.3s ease"
-            : "transform 0.05s linear, filter 0.3s ease",
+          transform: "rotateX(0deg) rotateY(0deg)",
+          transition: "transform 0.6s cubic-bezier(0.2,0.8,0.2,1), filter 0.3s ease",
           willChange: "transform",
-          filter: isGray ? "grayscale(1) brightness(0.5)" : "none",
-          boxShadow: isGray
-            ? "0 8px 24px rgba(0,0,0,0.5)"
-            : isH
-            ? "0 16px 48px rgba(255,160,80,0.35), 0 4px 16px rgba(0,0,0,0.6)"
-            : isRH
-            ? "0 16px 48px rgba(180,180,220,0.25), 0 4px 16px rgba(0,0,0,0.6)"
-            : "0 12px 40px rgba(0,0,0,0.7), 0 4px 12px rgba(0,0,0,0.4)",
+          filter: isGray ? "grayscale(1) opacity(0.9)" : "none",
+          boxShadow: shadowStyle,
         }}>
           <Image
             src={card.image}
@@ -176,60 +238,46 @@ function TiltCard({
           />
 
           {isRH && !isGray && (
-            <div style={{
+            <div ref={rhRef} style={{
               position: "absolute", inset: 0, pointerEvents: "none",
-              background: `
-                radial-gradient(ellipse 80% 60% at ${mx}% ${my}%,
-                  rgba(220,220,240,0.55) 0%, rgba(180,180,210,0.25) 30%, transparent 60%),
-                linear-gradient(${105 + tilt.y * 2}deg,
-                  transparent 20%, rgba(200,200,230,0.18) 35%, rgba(255,255,255,0.28) 45%,
-                  rgba(200,200,230,0.18) 55%, transparent 70%)
-              `,
+              background: `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220,220,240,0.3) 0%, transparent 60%)`,
               mixBlendMode: "screen",
             }} />
           )}
 
           {isH && !isGray && (
-            <div style={{
+            <div ref={hRef1} style={{
               position: "absolute", inset: 0, pointerEvents: "none",
-              background: `
-                radial-gradient(ellipse 90% 70% at ${mx}% ${my}%,
-                  rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%,
-                  rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%,
-                  rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)
-              `,
+              background: `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,100,100,0.2) 0%, rgba(80,255,120,0.15) 50%, transparent 90%)`,
               mixBlendMode: "color-dodge",
               animation: "holoShift 4s ease-in-out infinite",
             }} />
           )}
 
           {isH && !isGray && (
-            <div style={{
+            <div ref={hRef2} style={{
               position: "absolute", inset: 0, pointerEvents: "none",
-              background: `linear-gradient(${120 + tilt.y * 3}deg,
-                transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%,
-                rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`,
+              background: `linear-gradient(120deg, transparent 0%, rgba(255,100,150,0.1) 35%, transparent 70%)`,
               mixBlendMode: "screen",
             }} />
           )}
 
           {!isGray && (
-            <div style={{
+            <div ref={glRef} style={{
               position: "absolute", inset: 0, pointerEvents: "none",
-              background: `linear-gradient(${110 + tilt.y}deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`,
+              background: `linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`,
               mixBlendMode: "screen",
             }} />
           )}
-
           <div style={{
-            position: "absolute", bottom: "10px", right: "10px",
-            fontFamily: MONO, fontSize: "11px", letterSpacing: "0.15em",
-            color: labelColor, border: `1px solid ${labelColor}80`,
-            borderRadius: "5px", padding: "3px 9px",
-            background: "rgba(5,7,13,0.75)", backdropFilter: "blur(4px)",
+            position: "absolute", bottom: "10px", right: "10px", zIndex: 10,
+            fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em",
+            color: labelColor, border: `1px solid ${labelColor}60`,
+            borderRadius: "5px", padding: "3px 8px",
+            background: "rgba(5,7,13,0.82)", backdropFilter: "blur(4px)",
             pointerEvents: "none",
           }}>
-            {label}
+            {VERSION_FULL[label] ?? label}
           </div>
         </div>
       </div>
@@ -468,39 +516,93 @@ function CardDetailModal({
 
 /* Static tilt card for inside the modal */
 function ModalTiltCard({ card }: { card: PokemonCard }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt]   = useState({ x: 0, y: 0 });
-  const [mouse, setMouse] = useState({ x: 0.5, y: 0.5 });
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const rhRef   = useRef<HTMLDivElement>(null);
+  const hRef1   = useRef<HTMLDivElement>(null);
+  const hRef2   = useRef<HTMLDivElement>(null);
+  const glRef   = useRef<HTMLDivElement>(null);
+  const rectRef = useRef<DOMRect | null>(null);
+  const rafId   = useRef(0);
 
   const label = VERSION_LABEL[card.version];
   const labelColor = VERSION_COLOR[label] ?? INK2;
-  const isRH = label === "RH";
   const isH  = label === "H";
-  const mx = mouse.x * 100;
-  const my = mouse.y * 100;
+  const isRH = label !== "N" && label !== "H";
+
+  const onEnter = () => { rectRef.current = wrapRef.current?.getBoundingClientRect() ?? null; };
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current; if (!el) return;
-    const r = el.getBoundingClientRect();
-    const nx = (e.clientX - r.left) / r.width;
-    const ny = (e.clientY - r.top)  / r.height;
-    setMouse({ x: nx, y: ny });
-    setTilt({ x: (-(ny - 0.5)) * 20, y: ((nx - 0.5)) * 20 });
+    cancelAnimationFrame(rafId.current);
+    const r = rectRef.current; if (!r) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    rafId.current = requestAnimationFrame(() => {
+      const nx = (clientX - r.left) / r.width;
+      const ny = (clientY - r.top)  / r.height;
+      const tx = (-(ny - 0.5)) * 20;
+      const ty = ((nx - 0.5)) * 20;
+      const mx = nx * 100;
+      const my = ny * 100;
+
+      if (bodyRef.current) {
+        bodyRef.current.style.transition = "transform 0.08s ease-out";
+        bodyRef.current.style.transform  = `rotateX(${tx}deg) rotateY(${ty}deg)`;
+      }
+      if (rhRef.current) {
+        rhRef.current.style.background = `
+          radial-gradient(ellipse 80% 60% at ${mx}% ${my}%,
+            rgba(220,220,240,0.55) 0%, rgba(180,180,210,0.25) 30%, transparent 60%),
+          linear-gradient(${105 + ty * 2}deg,
+            transparent 20%, rgba(200,200,230,0.18) 35%, rgba(255,255,255,0.28) 45%,
+            rgba(200,200,230,0.18) 55%, transparent 70%)`;
+      }
+      if (hRef1.current) {
+        hRef1.current.style.background = `
+          radial-gradient(ellipse 90% 70% at ${mx}% ${my}%,
+            rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%,
+            rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%,
+            rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)`;
+      }
+      if (hRef2.current) {
+        hRef2.current.style.background = `linear-gradient(${120 + ty * 3}deg,
+          transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%,
+          rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`;
+      }
+      if (glRef.current) {
+        glRef.current.style.background = `linear-gradient(${110 + ty}deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`;
+      }
+    });
   };
-  const onLeave = () => { setTilt({ x: 0, y: 0 }); setMouse({ x: 0.5, y: 0.5 }); };
+
+  const onLeave = () => {
+    cancelAnimationFrame(rafId.current);
+    rectRef.current = null;
+    if (bodyRef.current) {
+      bodyRef.current.style.transition = "transform 0.6s cubic-bezier(0.2,0.8,0.2,1)";
+      bodyRef.current.style.transform  = "rotateX(0deg) rotateY(0deg)";
+    }
+    if (rhRef.current) {
+      rhRef.current.style.background = `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220,220,240,0.3) 0%, transparent 60%)`;
+    }
+    if (hRef1.current) {
+      hRef1.current.style.background = `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,100,100,0.2) 0%, rgba(80,255,120,0.15) 50%, transparent 90%)`;
+    }
+  };
 
   return (
     <div
-      ref={ref}
+      ref={wrapRef}
       style={{ perspective: "800px", cursor: "pointer" }}
+      onMouseEnter={onEnter}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
     >
-      <div style={{
+      <div ref={bodyRef} style={{
         width: "100%", aspectRatio: "5 / 7",
         borderRadius: "12px", overflow: "hidden", position: "relative",
-        transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-        transition: tilt.x === 0 ? "transform 0.6s cubic-bezier(0.2,0.8,0.2,1)" : "transform 0.05s linear",
+        transform: "rotateX(0deg) rotateY(0deg)",
+        transition: "transform 0.6s cubic-bezier(0.2,0.8,0.2,1)",
         willChange: "transform",
         boxShadow: isH
           ? "0 16px 48px rgba(255,160,80,0.45), 0 4px 16px rgba(0,0,0,0.5)"
@@ -511,39 +613,38 @@ function ModalTiltCard({ card }: { card: PokemonCard }) {
         <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="220px" unoptimized />
 
         {isRH && (
-          <div style={{
+          <div ref={rhRef} style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
-            background: `radial-gradient(ellipse 80% 60% at ${mx}% ${my}%, rgba(220,220,240,0.55) 0%, rgba(180,180,210,0.25) 30%, transparent 60%),
-              linear-gradient(${105 + tilt.y * 2}deg, transparent 20%, rgba(200,200,230,0.18) 35%, rgba(255,255,255,0.28) 45%, rgba(200,200,230,0.18) 55%, transparent 70%)`,
+            background: `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220,220,240,0.3) 0%, transparent 60%)`,
           }} />
         )}
         {isH && (
-          <div style={{
+          <div ref={hRef1} style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "color-dodge",
-            background: `radial-gradient(ellipse 90% 70% at ${mx}% ${my}%, rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%, rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%, rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)`,
+            background: `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,100,100,0.2) 0%, rgba(80,255,120,0.15) 50%, transparent 90%)`,
             animation: "holoShift 4s ease-in-out infinite",
           }} />
         )}
         {isH && (
-          <div style={{
+          <div ref={hRef2} style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
-            background: `linear-gradient(${120 + tilt.y * 3}deg, transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%, rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`,
+            background: `linear-gradient(120deg, transparent 0%, rgba(255,100,150,0.1) 35%, transparent 70%)`,
           }} />
         )}
-        <div style={{
+        <div ref={glRef} style={{
           position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
-          background: `linear-gradient(${110 + tilt.y}deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`,
+          background: `linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`,
         }} />
 
         <div style={{
-          position: "absolute", bottom: "10px", right: "10px",
-          fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em",
-          color: labelColor, border: `1px solid ${labelColor}80`,
+          position: "absolute", bottom: "10px", right: "10px", zIndex: 10,
+          fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em",
+          color: labelColor, border: `1px solid ${labelColor}60`,
           borderRadius: "5px", padding: "3px 8px",
-          background: "rgba(5,7,13,0.8)", backdropFilter: "blur(4px)",
+          background: "rgba(5,7,13,0.82)", backdropFilter: "blur(4px)",
           pointerEvents: "none",
         }}>
-          {label}
+          {VERSION_FULL[label] ?? label}
         </div>
       </div>
     </div>
@@ -581,7 +682,7 @@ function Thumb({
     >
       <div style={{
         position: "relative", width: `${imgW}px`, height: `${imgH}px`, flexShrink: 0,
-        filter: isGray ? "grayscale(1) brightness(0.45)" : "none",
+        filter: isGray ? "grayscale(1) opacity(0.9)" : "none",
         transition: "filter 0.3s",
       }}>
         <Image src={imgSrc} alt={label} fill style={{ objectFit: "contain" }} loading="lazy" sizes="130px" />
@@ -931,9 +1032,9 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                 gap: "32px 24px",
                 justifyItems: "center",
               }}>
-                {visibleCards.map(card => (
+                {visibleCards.map((card, i) => (
                   <TiltCard
-                    key={card.id}
+                    key={`${card.id}-${card.version}-${i}`}
                     card={card}
                     userId={userId}
                     setId={openSet.id}
