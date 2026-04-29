@@ -500,7 +500,7 @@ function Showcase({ featuredCards, inventoryRows }: { featuredCards: FeaturedCar
   const owned = featuredCards.slice(0, 10).map(f => {
     const row = inventoryRows.find(r => r.card_id === f.card_id && r.set_id === f.set_id);
     return { card_id: f.card_id, set_id: f.set_id, quantity: row?.quantity ?? 1 };
-  });
+  }).filter(f => SET_CARDS[f.set_id]?.some(c => c.id === f.card_id));
 
   const isEmpty = owned.length < 3;
 
