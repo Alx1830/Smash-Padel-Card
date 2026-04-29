@@ -67,7 +67,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, []);
 
   async function handleLogout() {
-    await supabase.auth.signOut();
+    await fetch("/api/auth/signout", { method: "POST" });
     window.location.href = "/";
   }
 
