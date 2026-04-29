@@ -4,7 +4,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES, type PokemonSet } from "@/data/pokemon-sets";
-import { VERSION_LABEL, SET_CARD_COUNT, type PokemonCard } from "@/data/pokemon-cards";
+import { VERSION_LABEL, SET_CARD_COUNT, type PokemonCard, type CardVersion } from "@/data/pokemon-cards-meta";
 
 /* Lazy-load card data only when a set is opened */
 async function fetchSetCards(setId: string): Promise<PokemonCard[]> {
@@ -1028,9 +1028,10 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
 
               <div className="pks-cards-grid" style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(6, 1fr)",
+                gridTemplateColumns: "repeat(auto-fill, 240px)",
                 gap: "32px 24px",
-                justifyItems: "center",
+                justifyContent: "center",
+                width: "100%",
               }}>
                 {visibleCards.map((card, i) => (
                   <TiltCard

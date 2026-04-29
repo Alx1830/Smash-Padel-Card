@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { ImageSwiper } from "@/components/ui/image-swiper";
 import { PERFECT_ORDER_CARDS } from "@/data/pokemon-cards";
@@ -32,9 +32,11 @@ const STEPS = [
 ];
 
 export default function LandingPage() {
-  const randomTen = useMemo(() => {
+  const STABLE_TEN = PERFECT_ORDER_CARDS.slice(0, 10).map(c => c.image).join(",");
+  const [randomTen, setRandomTen] = useState(STABLE_TEN);
+  useEffect(() => {
     const shuffled = [...PERFECT_ORDER_CARDS].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 10).map(c => c.image).join(",");
+    setRandomTen(shuffled.slice(0, 10).map(c => c.image).join(","));
   }, []);
 
   return (

@@ -473,8 +473,8 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
   );
 }
 
-/* 3 cartas placeholder aleatorias con IDs válidos para el estado vacío */
-const PLACEHOLDER_ENTRIES = (() => {
+/* Candidatos estables para placeholder (sin random — compatible con SSR) */
+const PLACEHOLDER_CANDIDATES = (() => {
   const candidates: { card_id: number; set_id: string }[] = [];
   for (const [setId, cards] of Object.entries(SET_CARDS)) {
     const valid = cards.filter(c => c.id > 0);
@@ -487,15 +487,21 @@ const PLACEHOLDER_ENTRIES = (() => {
       if (candidates.length >= 9) break;
     }
   }
-  if (candidates.length < 3) return candidates.slice(0, 3);
-  // Elegir 3 aleatorias distintas
-  const shuffled = candidates.sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, 3);
+  return candidates;
 })();
+const PLACEHOLDER_STABLE = PLACEHOLDER_CANDIDATES.slice(0, 3);
 
 /* ── Showcase slider ────────────────────────────────────────── */
 function Showcase({ featuredCards, inventoryRows }: { featuredCards: FeaturedCard[]; inventoryRows: InvRow[] }) {
   const [idx, setIdx] = useState(0);
+  const [placeholder, setPlaceholder] = useState(PLACEHOLDER_STABLE);
+
+  useEffect(() => {
+    if (PLACEHOLDER_CANDIDATES.length >= 3) {
+      const shuffled = [...PLACEHOLDER_CANDIDATES].sort(() => Math.random() - 0.5);
+      setPlaceholder(shuffled.slice(0, 3));
+    }
+  }, []);
 
   const owned = featuredCards.slice(0, 10).map(f => {
     const row = inventoryRows.find(r => r.card_id === f.card_id && r.set_id === f.set_id);
@@ -504,7 +510,7 @@ function Showcase({ featuredCards, inventoryRows }: { featuredCards: FeaturedCar
 
   const isEmpty = owned.length < 3;
 
-  const displayCards = isEmpty ? PLACEHOLDER_ENTRIES : owned;
+  const displayCards = isEmpty ? placeholder : owned;
   const prevIdx = (idx - 1 + displayCards.length) % displayCards.length;
   const nextIdx = (idx + 1) % displayCards.length;
 
