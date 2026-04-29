@@ -719,15 +719,23 @@ function CollectionSection({
                       border: `1px solid ${COURT_C}44`, borderTop: "none",
                       borderRadius: "0 0 14px 14px",
                     }}>
-                      <div className="prof-cards-grid" style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(3, 1fr)",
-                        gap: "20px 16px",
-                        justifyItems: "center",
+                      <div style={{
+                        maxHeight: "580px",
+                        overflowY: ownedCards.length > 6 ? "auto" : "visible",
+                        paddingRight: ownedCards.length > 6 ? "6px" : "0",
+                        scrollbarWidth: "thin",
+                        scrollbarColor: `${COURT_C}44 transparent`,
                       }}>
-                        {ownedCards.map(({ card, qty }) => (
-                          <MiniCard key={`${card.id}`} cardId={card.id} setId={set.id} quantity={qty} />
-                        ))}
+                        <div className="prof-cards-grid" style={{
+                          display: "grid",
+                          gridTemplateColumns: "repeat(3, 1fr)",
+                          gap: "20px 16px",
+                          justifyItems: "center",
+                        }}>
+                          {ownedCards.map(({ card, qty }) => (
+                            <MiniCard key={`${card.id}`} cardId={card.id} setId={set.id} quantity={qty} />
+                          ))}
+                        </div>
                       </div>
                     </div>
                   )}
