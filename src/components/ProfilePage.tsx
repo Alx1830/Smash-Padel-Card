@@ -473,15 +473,24 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
   );
 }
 
-/* 3 cartas placeholder fijas para el estado vacío */
+/* 3 cartas placeholder aleatorias con IDs válidos para el estado vacío */
 const PLACEHOLDER_ENTRIES = (() => {
+  const candidates: { card_id: number; set_id: string }[] = [];
   for (const [setId, cards] of Object.entries(SET_CARDS)) {
-    if (cards.length >= 3) {
-      return [cards[0], cards[Math.floor(cards.length / 2)], cards[cards.length - 1]]
-        .map(c => ({ card_id: c.id, set_id: setId }));
+    const valid = cards.filter(c => c.id > 0);
+    if (valid.length >= 3) {
+      candidates.push(
+        { card_id: valid[0].id, set_id: setId },
+        { card_id: valid[Math.floor(valid.length / 2)].id, set_id: setId },
+        { card_id: valid[valid.length - 1].id, set_id: setId },
+      );
+      if (candidates.length >= 9) break;
     }
   }
-  return [];
+  if (candidates.length < 3) return candidates.slice(0, 3);
+  // Elegir 3 aleatorias distintas
+  const shuffled = candidates.sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 3);
 })();
 
 /* ── Showcase slider ────────────────────────────────────────── */
