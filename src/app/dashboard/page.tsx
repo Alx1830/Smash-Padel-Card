@@ -26,28 +26,36 @@ interface Follower {
 }
 
 function FollowersPopup({ userId, onClose }: { userId: string; onClose: () => void }) {
-  const supabase = createClient();
+  const supabase  = createClient();
   const [followers, setFollowers] = useState<Follower[]>([]);
   const [loading, setLoading]     = useState(false);
   const [hasMore, setHasMore]     = useState(true);
-  const [offset, setOffset]       = useState(0);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const bottomRef  = useRef<HTMLDivElement>(null);
+  const loadingRef = useRef(false);
+  const offsetRef  = useRef(0);
+  const hasMoreRef = useRef(true);
   const PAGE = 50;
 
-  const loadMore = useCallback(async (off: number) => {
-    if (loading) return;
+  const loadMore = useCallback(async () => {
+    if (loadingRef.current || !hasMoreRef.current) return;
+    loadingRef.current = true;
     setLoading(true);
+
     const { data: followRows } = await supabase
       .from("follows")
       .select("follower_id")
       .eq("following_id", userId)
       .order("created_at", { ascending: false })
-      .range(off, off + PAGE - 1);
+      .range(offsetRef.current, offsetRef.current + PAGE - 1);
 
     if (!followRows || followRows.length === 0) {
-      setHasMore(false); setLoading(false); return;
+      hasMoreRef.current = false;
+      setHasMore(false);
+      loadingRef.current = false;
+      setLoading(false);
+      return;
     }
-    if (followRows.length < PAGE) setHasMore(false);
+    if (followRows.length < PAGE) { hasMoreRef.current = false; setHasMore(false); }
 
     const ids = followRows.map(r => r.follower_id);
     const { data: players } = await supabase
@@ -56,21 +64,22 @@ function FollowersPopup({ userId, onClose }: { userId: string; onClose: () => vo
       .in("user_id", ids);
 
     setFollowers(prev => [...prev, ...(players ?? [])]);
-    setOffset(off + followRows.length);
+    offsetRef.current += followRows.length;
+    loadingRef.current = false;
     setLoading(false);
   }, [userId]);
 
-  useEffect(() => { loadMore(0); }, []);
+  useEffect(() => { loadMore(); }, []);
 
   /* IntersectionObserver para infinite scroll */
   useEffect(() => {
     if (!bottomRef.current) return;
     const obs = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore && !loading) loadMore(offset);
+      if (entries[0].isIntersecting) loadMore();
     }, { threshold: 0.1 });
     obs.observe(bottomRef.current);
     return () => obs.disconnect();
-  }, [hasMore, loading, offset]);
+  }, [loadMore]);
 
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 300, background: "rgba(5,7,13,0.85)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
