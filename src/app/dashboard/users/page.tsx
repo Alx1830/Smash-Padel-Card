@@ -28,7 +28,7 @@ interface AdminUser {
 
 function isOnline(last_seen?: string) {
   if (!last_seen) return false;
-  return Date.now() - new Date(last_seen).getTime() < 10 * 60 * 1000;
+  return Date.now() - new Date(last_seen).getTime() < 3 * 60 * 1000;
 }
 
 function formatDate(iso: string) {

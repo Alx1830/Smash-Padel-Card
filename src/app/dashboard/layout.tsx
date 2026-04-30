@@ -70,7 +70,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (!userId) return;
     const ping = () => fetch("/api/user/ping", { method: "POST" });
     ping();
-    const interval = setInterval(ping, 30 * 1000);
+    const interval = setInterval(ping, 60 * 1000);
     return () => clearInterval(interval);
   }, [userId]);
 
