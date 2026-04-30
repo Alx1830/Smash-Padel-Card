@@ -150,15 +150,14 @@ export default function AdminUsersPage() {
       await fetchUsers();
     })();
 
-    /* Polling cada 20s — refresca last_seen de todos los usuarios */
+    /* Polling cada 20s — refresca last_seen via API admin (service_role, sin RLS) */
     const poll = setInterval(async () => {
-      const supabase = createClient();
-      const { data } = await supabase
-        .from("players")
-        .select("user_id, last_seen, blocked");
-      if (data) {
+      const res = await fetch("/api/admin/players-status");
+      if (!res.ok) return;
+      const { players } = await res.json();
+      if (players) {
         setUsers(prev => prev.map(u => {
-          const p = data.find((d: any) => d.user_id === u.id);
+          const p = players.find((d: any) => d.user_id === u.id);
           return p ? { ...u, last_seen: p.last_seen, blocked: p.blocked } : u;
         }));
       }
