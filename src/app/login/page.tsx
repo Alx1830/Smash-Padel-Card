@@ -20,15 +20,16 @@ function IconGoogle() {
   );
 }
 
-type Mode = "login" | "register";
+type Mode = "login" | "register" | "forgot";
 
 export default function LoginPage() {
-  const [mode, setMode]       = useState<Mode>("login");
-  const [email, setEmail]     = useState("");
+  const [mode, setMode]         = useState<Mode>("login");
+  const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState("");
-  const [done, setDone]       = useState(false);
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState("");
+  const [done, setDone]         = useState(false);
+  const [forgotDone, setForgotDone] = useState(false);
 
   const supabase = createClient();
 
@@ -38,6 +39,18 @@ export default function LoginPage() {
       provider: "google",
       options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
+  }
+
+  async function handleForgot(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/reset-password`,
+    });
+    setLoading(false);
+    if (error) { setError("No se pudo enviar el correo. Verifica el email."); return; }
+    setForgotDone(true);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -136,22 +149,65 @@ export default function LoginPage() {
           /* Registro exitoso */
           <div style={{ textAlign: "center" }}>
             <div style={{ fontSize: "40px", marginBottom: "16px" }}>📬</div>
-            <p style={{ fontFamily: MONO, fontSize: "13px", color: INK0, marginBottom: "8px" }}>
-              ¡Cuenta creada!
-            </p>
+            <p style={{ fontFamily: MONO, fontSize: "13px", color: INK0, marginBottom: "8px" }}>¡Cuenta creada!</p>
             <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, lineHeight: 1.7 }}>
               Revisa tu correo <b style={{ color: COURT }}>{email}</b> para confirmar tu cuenta y luego inicia sesión.
             </p>
-            <button
-              onClick={() => { setDone(false); setMode("login"); }}
-              style={{
-                marginTop: "20px", fontFamily: MONO, fontSize: "12px",
-                color: COURT, background: "none", border: "none",
-                cursor: "pointer", letterSpacing: "0.08em",
-              }}
-            >
+            <button onClick={() => { setDone(false); setMode("login"); }}
+              style={{ marginTop: "20px", fontFamily: MONO, fontSize: "12px", color: COURT, background: "none", border: "none", cursor: "pointer", letterSpacing: "0.08em" }}>
               ← Ir al inicio de sesión
             </button>
+          </div>
+        ) : forgotDone ? (
+          /* Recuperación enviada */
+          <div style={{ textAlign: "center" }}>
+            <div style={{ fontSize: "40px", marginBottom: "16px" }}>🔑</div>
+            <p style={{ fontFamily: MONO, fontSize: "13px", color: INK0, marginBottom: "8px" }}>¡Correo enviado!</p>
+            <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, lineHeight: 1.7 }}>
+              Revisa tu bandeja de entrada en <b style={{ color: COURT }}>{email}</b> y sigue el enlace para restablecer tu contraseña.
+            </p>
+            <button onClick={() => { setForgotDone(false); setMode("login"); setEmail(""); }}
+              style={{ marginTop: "20px", fontFamily: MONO, fontSize: "12px", color: COURT, background: "none", border: "none", cursor: "pointer", letterSpacing: "0.08em" }}>
+              ← Volver al inicio de sesión
+            </button>
+          </div>
+        ) : mode === "forgot" ? (
+          /* Formulario recuperar contraseña */
+          <div>
+            <button onClick={() => { setMode("login"); setError(""); }}
+              style={{ fontFamily: MONO, fontSize: "11px", color: INK2, background: "none", border: "none", cursor: "pointer", letterSpacing: "0.08em", marginBottom: "20px", padding: 0 }}>
+              ← Volver
+            </button>
+            <h2 style={{ fontFamily: DISP, fontSize: "18px", color: INK0, margin: "0 0 8px" }}>Recuperar contraseña</h2>
+            <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, lineHeight: 1.7, margin: "0 0 24px" }}>
+              Ingresa tu correo y te enviaremos un enlace para crear una nueva contraseña.
+            </p>
+            <form onSubmit={handleForgot} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <input
+                className="login-input"
+                type="email"
+                placeholder="Correo electrónico"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                style={inputStyle}
+              />
+              {error && <p style={{ fontFamily: MONO, fontSize: "11px", color: "#ff4f4f", margin: 0 }}>✕ {error}</p>}
+              <button
+                type="submit"
+                disabled={loading || !email}
+                style={{
+                  width: "100%", padding: "12px 20px", borderRadius: "10px",
+                  background: loading || !email ? "rgba(255,255,255,0.08)" : `linear-gradient(90deg, ${BALL}, ${COURT})`,
+                  border: "none", cursor: loading || !email ? "not-allowed" : "pointer",
+                  fontFamily: MONO, fontSize: "13px", fontWeight: 700,
+                  color: loading || !email ? INK2 : BG0,
+                  letterSpacing: "0.05em", transition: "all 0.2s",
+                }}
+              >
+                {loading ? "Enviando..." : "Enviar enlace →"}
+              </button>
+            </form>
           </div>
         ) : (
           <>
@@ -218,16 +274,29 @@ export default function LoginPage() {
                 required
                 style={inputStyle}
               />
-              <input
-                className="login-input"
-                type="password"
-                placeholder="Contraseña"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                minLength={6}
-                style={inputStyle}
-              />
+              <div>
+                <input
+                  className="login-input"
+                  type="password"
+                  placeholder="Contraseña"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  style={inputStyle}
+                />
+                {mode === "login" && (
+                  <button
+                    type="button"
+                    onClick={() => { setMode("forgot"); setError(""); }}
+                    style={{ fontFamily: MONO, fontSize: "10px", color: INK2, background: "none", border: "none", cursor: "pointer", letterSpacing: "0.06em", marginTop: "6px", padding: 0, display: "block" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = COURT)}
+                    onMouseLeave={e => (e.currentTarget.style.color = INK2)}
+                  >
+                    ¿Olvidaste tu contraseña?
+                  </button>
+                )}
+              </div>
 
               {error && (
                 <p style={{ fontFamily: MONO, fontSize: "11px", color: "#ff4f4f", margin: 0 }}>
