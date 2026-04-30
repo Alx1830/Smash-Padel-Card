@@ -70,7 +70,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (!userId) return;
     const ping = () => supabase.from("players").update({ last_seen: new Date().toISOString() }).eq("user_id", userId);
     ping();
-    const interval = setInterval(ping, 2 * 60 * 1000);
+    const interval = setInterval(ping, 30 * 1000);
     return () => clearInterval(interval);
   }, [userId]);
 

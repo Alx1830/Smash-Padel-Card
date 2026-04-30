@@ -137,12 +137,10 @@ export default function AdminUsersPage() {
   const [showCreate, setShowCreate] = useState(false);
   const [confirm,    setConfirm]    = useState<{ message: string; onConfirm: () => void } | null>(null);
   const [busy,       setBusy]       = useState<string | null>(null);
-  const [, setTick] = useState(0);
 
-  /* Verify admin + load + realtime */
+  /* Verify admin + load + polling */
   useEffect(() => {
     const supabase = createClient();
-    let channel: ReturnType<typeof supabase.channel> | null = null;
 
     (async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -150,27 +148,23 @@ export default function AdminUsersPage() {
       const { data: prof } = await supabase.from("players").select("role").eq("user_id", user.id).single();
       if (prof?.role !== "admin") { router.replace("/dashboard"); return; }
       await fetchUsers();
-
-      /* Suscripción realtime — actualiza last_seen y blocked en tiempo real */
-      channel = supabase
-        .channel("admin-players-realtime")
-        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "players" }, (payload) => {
-          setUsers(prev => prev.map(u =>
-            u.id === (payload.new as any).user_id
-              ? { ...u, last_seen: (payload.new as any).last_seen, blocked: (payload.new as any).blocked }
-              : u
-          ));
-        })
-        .subscribe();
     })();
 
-    /* Ticker cada 30s para refrescar el cálculo de isOnline sin esperar un UPDATE */
-    const ticker = setInterval(() => setTick(t => t + 1), 30_000);
+    /* Polling cada 20s — refresca last_seen de todos los usuarios */
+    const poll = setInterval(async () => {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("players")
+        .select("user_id, last_seen, blocked");
+      if (data) {
+        setUsers(prev => prev.map(u => {
+          const p = data.find((d: any) => d.user_id === u.id);
+          return p ? { ...u, last_seen: p.last_seen, blocked: p.blocked } : u;
+        }));
+      }
+    }, 20_000);
 
-    return () => {
-      clearInterval(ticker);
-      if (channel) supabase.removeChannel(channel);
-    };
+    return () => clearInterval(poll);
   }, []);
 
   async function fetchUsers() {
