@@ -65,10 +65,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     load();
   }, []);
 
-  /* last_seen heartbeat — every 2 minutes */
+  /* last_seen heartbeat via API (usa service_role, sin RLS) */
   useEffect(() => {
     if (!userId) return;
-    const ping = () => supabase.from("players").update({ last_seen: new Date().toISOString() }).eq("user_id", userId);
+    const ping = () => fetch("/api/user/ping", { method: "POST" });
     ping();
     const interval = setInterval(ping, 30 * 1000);
     return () => clearInterval(interval);
