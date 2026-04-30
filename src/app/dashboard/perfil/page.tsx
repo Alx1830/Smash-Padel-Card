@@ -5,6 +5,7 @@ import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { CustomSelect } from "@/components/ui/custom-select";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { CITIES_BY_COUNTRY } from "@/data/cities";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -15,18 +16,19 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
 interface PerfilForm {
-  username:         string;
-  first_name:       string;
-  last_name:        string;
-  pais:             string;
-  tipo_perfil:      string;
-  ciudad:           string;
-  edad:             string;
-  energia_favorita: string;
-  pokemon_favorito: string;
-  gimnasio_pokemon: string;
-  set_favorito:     string;
-  photo_url:        string;
+  username:            string;
+  first_name:          string;
+  last_name:           string;
+  pais:                string;
+  tipo_perfil:         string;
+  ciudad:              string;
+  edad:                string;
+  energia_favorita:    string;
+  pokemon_favorito:    string;
+  set_favorito:        string;
+  photo_url:           string;
+  whatsapp_indicativo: string;
+  whatsapp_numero:     string;
 }
 
 const SET_OPTS = POKEMON_SERIES.flatMap(series =>
@@ -95,36 +97,6 @@ const TIPO_PERFIL_OPTS = [
   { value: "Jugador TCG",         label: "Jugador TCG" },
   { value: "Creador de Contenido",label: "Creador de Contenido" },
   { value: "Tienda Pokémon",      label: "Tienda Pokémon" },
-];
-
-const GIMNASIO_OPTS = [
-  { value: "🪨 Ciudad Plateada - Roca - Brock",           label: "🪨 Ciudad Plateada - Roca - Brock" },
-  { value: "💧 Ciudad Celeste - Agua - Misty",            label: "💧 Ciudad Celeste - Agua - Misty" },
-  { value: "⚡ Ciudad Carmín - Eléctrico - Lt Surge",     label: "⚡ Ciudad Carmín - Eléctrico - Lt Surge" },
-  { value: "🌿 Ciudad Azulona - Planta - Erika",          label: "🌿 Ciudad Azulona - Planta - Erika" },
-  { value: "☠️ Ciudad Fucsia - Veneno - Koga",            label: "☠️ Ciudad Fucsia - Veneno - Koga" },
-  { value: "🔮 Ciudad Azafrán - Psíquico - Sabrina",      label: "🔮 Ciudad Azafrán - Psíquico - Sabrina" },
-  { value: "🔥 Isla Canela - Fuego - Blaine",             label: "🔥 Isla Canela - Fuego - Blaine" },
-  { value: "🌍 Ciudad Verde - Tierra - Giovanni",         label: "🌍 Ciudad Verde - Tierra - Giovanni" },
-  { value: "🐛 Pueblo Pirotín - Bicho - Araceli",         label: "🐛 Pueblo Pirotín - Bicho - Araceli" },
-  { value: "🌿 Pueblo Altamía - Planta - Brais",          label: "🌿 Pueblo Altamía - Planta - Brais" },
-  { value: "⚡ Ciudad Leudal - Eléctrico - e Nigma",      label: "⚡ Ciudad Leudal - Eléctrico - e Nigma" },
-  { value: "💧 Ciudad Cántara - Agua - Fuco",             label: "💧 Ciudad Cántara - Agua - Fuco" },
-  { value: "⚪ Pueblo Mezcla - Normal - Larry",           label: "⚪ Pueblo Mezcla - Normal - Larry" },
-  { value: "👻 Pueblo Hozclada - Fantasma - Lima",        label: "👻 Pueblo Hozclada - Fantasma - Lima" },
-  { value: "❄️ Sierra Napada - Hielo - Grusha",           label: "❄️ Sierra Napada - Hielo - Grusha" },
-  { value: "🔮 Pueblo Alforno - Psíquico - Tulipa",       label: "🔮 Pueblo Alforno - Psíquico - Tulipa" },
-  { value: "🌿 Pueblo Hoyuelo - Planta - Milo",           label: "🌿 Pueblo Hoyuelo - Planta - Milo" },
-  { value: "💧 Pueblo Amura - Agua - Nesa",               label: "💧 Pueblo Amura - Agua - Nesa" },
-  { value: "🐉 Ciudad Artejo - Dragón - Rayan",           label: "🐉 Ciudad Artejo - Dragón - Rayan" },
-  { value: "🧚 Pueblo Plié - Hada - Opal",                label: "🧚 Pueblo Plié - Hada - Opal" },
-  { value: "🥊 Pueblo Ladera - Lucha - Bea",              label: "🥊 Pueblo Ladera - Lucha - Bea" },
-  { value: "👻 Pueblo Ladera - Fantasma - Alistair",      label: "👻 Pueblo Ladera - Fantasma - Alistair" },
-  { value: "🪨 Pueblo Auriga - Roca - Gordy",             label: "🪨 Pueblo Auriga - Roca - Gordy" },
-  { value: "❄️ Pueblo Auriga - Hielo - Mel",              label: "❄️ Pueblo Auriga - Hielo - Mel" },
-  { value: "🐛 Ciudad Porcelana - Bicho - Camus",         label: "🐛 Ciudad Porcelana - Bicho - Camus" },
-  { value: "⚡ Ciudad Mayólica - Eléctrico - Camila",     label: "⚡ Ciudad Mayólica - Eléctrico - Camila" },
-  { value: "⚡ Ciudad Luminalia - Eléctrico - Clemont",   label: "⚡ Ciudad Luminalia - Eléctrico - Clemont" },
 ];
 
 const POKEMON_OPTS = [
@@ -250,6 +222,39 @@ const PAISES_OPTS = [
   "Uzbekistán","Vanuatu","Venezuela","Vietnam","Yemen","Yibuti","Zambia","Zimbabue",
 ].map(p => ({ value: p, label: p }));
 
+const INDICATIVOS_OPTS = [
+  { value: "+1",   label: "+1 — EE.UU. / Canadá" },
+  { value: "+52",  label: "+52 — México" },
+  { value: "+57",  label: "+57 — Colombia" },
+  { value: "+54",  label: "+54 — Argentina" },
+  { value: "+56",  label: "+56 — Chile" },
+  { value: "+51",  label: "+51 — Perú" },
+  { value: "+58",  label: "+58 — Venezuela" },
+  { value: "+593", label: "+593 — Ecuador" },
+  { value: "+591", label: "+591 — Bolivia" },
+  { value: "+595", label: "+595 — Paraguay" },
+  { value: "+598", label: "+598 — Uruguay" },
+  { value: "+506", label: "+506 — Costa Rica" },
+  { value: "+507", label: "+507 — Panamá" },
+  { value: "+503", label: "+503 — El Salvador" },
+  { value: "+502", label: "+502 — Guatemala" },
+  { value: "+504", label: "+504 — Honduras" },
+  { value: "+505", label: "+505 — Nicaragua" },
+  { value: "+53",  label: "+53 — Cuba" },
+  { value: "+1809",label: "+1809 — Rep. Dominicana" },
+  { value: "+34",  label: "+34 — España" },
+  { value: "+55",  label: "+55 — Brasil" },
+  { value: "+44",  label: "+44 — Reino Unido" },
+  { value: "+49",  label: "+49 — Alemania" },
+  { value: "+33",  label: "+33 — Francia" },
+  { value: "+39",  label: "+39 — Italia" },
+  { value: "+81",  label: "+81 — Japón" },
+  { value: "+82",  label: "+82 — Corea del Sur" },
+  { value: "+86",  label: "+86 — China" },
+  { value: "+91",  label: "+91 — India" },
+  { value: "+61",  label: "+61 — Australia" },
+];
+
 export default function PerfilPage() {
   const supabase     = createClient();
   const fileRef      = useRef<HTMLInputElement>(null);
@@ -268,8 +273,10 @@ export default function PerfilPage() {
     username: "", first_name: "", last_name: "",
     pais: "", tipo_perfil: "", ciudad: "",
     edad: "", energia_favorita: "",
-    pokemon_favorito: "", gimnasio_pokemon: "",
+    pokemon_favorito: "",
     set_favorito: "", photo_url: "",
+    whatsapp_indicativo: "+57",
+    whatsapp_numero: "",
   });
 
   useEffect(() => {
@@ -283,18 +290,19 @@ export default function PerfilPage() {
       if (data) {
         if (data.username) setUsernameFixed(true);
         setForm({
-          username:         data.username ?? "",
-          first_name:       data.first_name ?? "",
-          last_name:        data.last_name ?? "",
-          pais:             data.pais ?? "",
-          tipo_perfil:      data.tipo_perfil ?? "",
-          ciudad:           data.ciudad ?? "",
-          edad:             data.edad?.toString() ?? "",
-          energia_favorita: data.energia_favorita ?? "",
-          pokemon_favorito: data.pokemon_favorito ?? "",
-          gimnasio_pokemon: data.gimnasio_pokemon?.toString() ?? "",
-          set_favorito:     data.set_favorito ?? "",
-          photo_url:        data.photo_url ?? "",
+          username:            data.username ?? "",
+          first_name:          data.first_name ?? "",
+          last_name:           data.last_name ?? "",
+          pais:                data.pais ?? "",
+          tipo_perfil:         data.tipo_perfil ?? "",
+          ciudad:              data.ciudad ?? "",
+          edad:                data.edad?.toString() ?? "",
+          energia_favorita:    data.energia_favorita ?? "",
+          pokemon_favorito:    data.pokemon_favorito ?? "",
+          set_favorito:        data.set_favorito ?? "",
+          photo_url:           data.photo_url ?? "",
+          whatsapp_indicativo: data.whatsapp_indicativo ?? "+57",
+          whatsapp_numero:     data.whatsapp_numero ?? "",
         });
         if (data.photo_url) setPreview(data.photo_url);
       }
@@ -349,19 +357,20 @@ export default function PerfilPage() {
     setSaving(true);
     setSaveError("");
     const { error } = await supabase.from("players").upsert({
-      user_id:          userId,
-      username:         form.username,
-      first_name:       form.first_name,
-      last_name:        form.last_name,
-      pais:             form.pais,
-      tipo_perfil:      form.tipo_perfil,
-      ciudad:           form.ciudad,
-      edad:             parseInt(form.edad) || null,
-      energia_favorita: form.energia_favorita,
-      pokemon_favorito: form.pokemon_favorito,
-      gimnasio_pokemon: form.gimnasio_pokemon || null,
-      set_favorito:     form.set_favorito || null,
-      photo_url:        form.photo_url,
+      user_id:             userId,
+      username:            form.username,
+      first_name:          form.first_name,
+      last_name:           form.last_name,
+      pais:                form.pais,
+      tipo_perfil:         form.tipo_perfil,
+      ciudad:              form.ciudad,
+      edad:                parseInt(form.edad) || null,
+      energia_favorita:    form.energia_favorita,
+      pokemon_favorito:    form.pokemon_favorito,
+      set_favorito:        form.set_favorito || null,
+      photo_url:           form.photo_url,
+      whatsapp_indicativo: form.whatsapp_indicativo || null,
+      whatsapp_numero:     form.whatsapp_numero || null,
     }, { onConflict: "user_id" });
     setSaving(false);
     if (error) {
@@ -492,8 +501,17 @@ export default function PerfilPage() {
                 {usernameError && <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ff4f4f", margin: "6px 0 0" }}>✕ {usernameError}</p>}
               </Field>
               <Field label="Ciudad">
-                <input style={inputStyle} value={form.ciudad}
-                  onChange={e => set("ciudad", e.target.value)} placeholder="¿En qué ciudad estás?" />
+                {CITIES_BY_COUNTRY[form.pais] ? (
+                  <CustomSelect
+                    value={form.ciudad}
+                    onChange={v => set("ciudad", v)}
+                    options={CITIES_BY_COUNTRY[form.pais].map(c => ({ value: c, label: c }))}
+                    placeholder="Seleccionar ciudad"
+                  />
+                ) : (
+                  <input style={inputStyle} value={form.ciudad}
+                    onChange={e => set("ciudad", e.target.value)} placeholder="¿En qué ciudad estás?" />
+                )}
               </Field>
               <Field label="Nombre">
                 <input style={inputStyle} value={form.first_name}
@@ -510,11 +528,43 @@ export default function PerfilPage() {
               <Field label="País">
                 <CustomSelect
                   value={form.pais}
-                  onChange={v => set("pais", v)}
+                  onChange={v => { set("pais", v); set("ciudad", ""); }}
                   options={PAISES_OPTS}
                   placeholder="Seleccionar país"
                 />
               </Field>
+            </div>
+
+            {/* WhatsApp */}
+            <div style={{
+              marginTop: "8px", padding: "20px", borderRadius: "12px",
+              background: "rgba(46,230,193,0.04)", border: "1px solid rgba(46,230,193,0.15)",
+            }}>
+              <div style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: COURT, marginBottom: "14px", display: "flex", alignItems: "center", gap: "8px" }}>
+                <span>📱</span> WhatsApp
+              </div>
+              <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "0 0 14px", lineHeight: 1.6 }}>
+                Requerido para vender en el Market. Solo lo verán compradores interesados.
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "160px 1fr", gap: "12px" }}>
+                <Field label="Indicativo">
+                  <CustomSelect
+                    value={form.whatsapp_indicativo}
+                    onChange={v => set("whatsapp_indicativo", v)}
+                    options={INDICATIVOS_OPTS}
+                    placeholder="+57"
+                  />
+                </Field>
+                <Field label="Número">
+                  <input
+                    style={inputStyle}
+                    value={form.whatsapp_numero}
+                    onChange={e => set("whatsapp_numero", e.target.value.replace(/\D/g, ""))}
+                    placeholder="3001234567"
+                    maxLength={15}
+                  />
+                </Field>
+              </div>
             </div>
           </div>
 
@@ -544,14 +594,6 @@ export default function PerfilPage() {
                   onChange={v => set("pokemon_favorito", v)}
                   options={POKEMON_OPTS}
                   placeholder="Buscar Pokémon..."
-                />
-              </Field>
-              <Field label="Gimnasio Pokémon">
-                <CustomSelect
-                  value={form.gimnasio_pokemon}
-                  onChange={v => set("gimnasio_pokemon", v)}
-                  options={GIMNASIO_OPTS}
-                  placeholder="Seleccionar gimnasio"
                 />
               </Field>
               <div style={{ gridColumn: "1 / -1" }}>

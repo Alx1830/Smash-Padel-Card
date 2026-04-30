@@ -10,13 +10,13 @@ const NAV_LINKS_GUEST = [
   { label: "INICIO",     href: "/" },
   { label: "AMIGOS",     href: "/dashboard/amigos" },
   { label: "INVENTARIO", href: "/dashboard/inventario" },
-  { label: "MARKET",     href: "/dashboard/market" },
+  { label: "MARKET",     href: "/market" },
 ];
 const NAV_LINKS_AUTH = [
   { label: "INICIO",     href: "/dashboard" },
   { label: "AMIGOS",     href: "/dashboard/amigos" },
   { label: "INVENTARIO", href: "/dashboard/inventario" },
-  { label: "MARKET",     href: "/dashboard/market" },
+  { label: "MARKET",     href: "/market" },
 ];
 
 export function Navbar() {

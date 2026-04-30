@@ -61,7 +61,6 @@ export default async function JugadorPage({
     lastName:        data.last_name ?? "",
     pais:            data.pais ?? "—",
     tipoPerfil:      data.tipo_perfil ?? "—",
-    gimnasioPokemon: data.gimnasio_pokemon?.toString() ?? "—",
     ciudad:          data.ciudad ?? "—",
     pokemonFavorito: data.pokemon_favorito ?? "—",
     edad:            data.edad ?? 0,

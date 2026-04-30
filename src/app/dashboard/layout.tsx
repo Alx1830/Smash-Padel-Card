@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { House, UserRoundPen, HeartHandshake, LayoutGrid, Store, LogOut, User, Pencil } from "lucide-react";
+import { House, UserRoundPen, UserRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BG1   = "#0a0e1a";
@@ -40,8 +40,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef    = useRef<HTMLDivElement>(null);
-  const mobileRef  = useRef<HTMLDivElement>(null);
+  const [marketOpen, setMarketOpen] = useState(false);
+  const [perfilOpen, setPerfilOpen] = useState(false);
+  const menuRef       = useRef<HTMLDivElement>(null);
+  const mobileRef     = useRef<HTMLDivElement>(null);
+  const marketRef     = useRef<HTMLDivElement>(null);
+  const mktMobileRef  = useRef<HTMLDivElement>(null);
+  const perfilRef     = useRef<HTMLDivElement>(null);
+  const perfilMobRef  = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function load() {
@@ -55,12 +61,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     load();
   }, []);
 
-  /* Close dropdown on outside click — checks both desktop and mobile refs */
+  /* Close dropdowns on outside click */
   useEffect(() => {
     function onOutside(e: MouseEvent) {
       const inDesktop = menuRef.current?.contains(e.target as Node);
       const inMobile  = mobileRef.current?.contains(e.target as Node);
       if (!inDesktop && !inMobile) setMenuOpen(false);
+
+      const inMktDesktop = marketRef.current?.contains(e.target as Node);
+      const inMktMobile  = mktMobileRef.current?.contains(e.target as Node);
+      if (!inMktDesktop && !inMktMobile) setMarketOpen(false);
+
+      const inPerfilDesktop = perfilRef.current?.contains(e.target as Node);
+      const inPerfilMobile  = perfilMobRef.current?.contains(e.target as Node);
+      if (!inPerfilDesktop && !inPerfilMobile) setPerfilOpen(false);
     }
     document.addEventListener("mousedown", onOutside);
     return () => document.removeEventListener("mousedown", onOutside);
@@ -125,6 +139,94 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <LogOut size={14} color="#ff4f4f" strokeWidth={1.8} />
         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Cerrar sesión</span>
       </button>
+    </div>
+  );
+
+  /* Market popup menu */
+  const MarketPopup = ({ direction = "up" }: { direction?: "up" | "down" }) => (
+    <div style={{
+      position: "absolute",
+      ...(direction === "up"
+        ? { bottom: "calc(100% + 8px)", left: 0 }
+        : { top: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)" }),
+      width: 180,
+      background: "#0d1520",
+      border: "1px solid rgba(255,255,255,0.1)",
+      borderRadius: "12px", overflow: "hidden",
+      boxShadow: "0 8px 40px rgba(0,0,0,0.6)",
+      zIndex: 200,
+    }}>
+      <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>
+          Market
+        </p>
+      </div>
+      <Link href="/dashboard/market" onClick={() => setMarketOpen(false)} style={{
+        display: "flex", alignItems: "center", gap: "10px",
+        padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)",
+      }}
+        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
+        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+      >
+        <Store size={14} color={COURT} strokeWidth={1.8} />
+        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Mi stock</span>
+      </Link>
+      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
+      <Link href="/market" onClick={() => setMarketOpen(false)} style={{
+        display: "flex", alignItems: "center", gap: "10px",
+        padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)",
+      }}
+        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
+        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+      >
+        <Store size={14} color="#d6ff3d" strokeWidth={1.8} />
+        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Market local</span>
+      </Link>
+    </div>
+  );
+
+  /* Perfil popup menu */
+  const PerfilPopup = ({ direction = "up" }: { direction?: "up" | "down" }) => (
+    <div style={{
+      position: "absolute",
+      ...(direction === "up"
+        ? { bottom: "calc(100% + 8px)", left: 0 }
+        : { top: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)" }),
+      width: 180,
+      background: "#0d1520",
+      border: "1px solid rgba(255,255,255,0.1)",
+      borderRadius: "12px", overflow: "hidden",
+      boxShadow: "0 8px 40px rgba(0,0,0,0.6)",
+      zIndex: 200,
+    }}>
+      <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>
+          Perfil
+        </p>
+      </div>
+      {username && (
+        <Link href={`/${username}`} onClick={() => setPerfilOpen(false)} style={{
+          display: "flex", alignItems: "center", gap: "10px",
+          padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)",
+        }}
+          onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
+          onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+        >
+          <UserRound size={14} color={COURT} strokeWidth={1.8} />
+          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Ver mi perfil</span>
+        </Link>
+      )}
+      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
+      <Link href="/dashboard/perfil" onClick={() => setPerfilOpen(false)} style={{
+        display: "flex", alignItems: "center", gap: "10px",
+        padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)",
+      }}
+        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
+        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+      >
+        <Pencil size={14} color={COURT} strokeWidth={1.8} />
+        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Editar mi perfil</span>
+      </Link>
     </div>
   );
 
@@ -231,7 +333,68 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Nav */}
           <nav style={{ flex: 1, padding: "16px 10px", overflowY: "auto" }}>
             {SIDEBAR_ITEMS.map(({ href, label, Icon }) => {
-              const active = pathname === href;
+              const isMarket = label === "Market";
+              const isPerfil = label === "Perfil";
+              const active = isMarket
+                ? pathname === "/dashboard/market" || pathname === "/market"
+                : pathname === href;
+
+              if (isMarket) {
+                return (
+                  <div key="market" style={{ marginBottom: "4px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 14px 6px" }}>
+                      <Icon size={20} color={active ? COURT : INK2} strokeWidth={1.8} style={{ flexShrink: 0 }} />
+                      <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase", color: active ? COURT : INK2, fontWeight: active ? 600 : 400 }}>{label}</span>
+                    </div>
+                    <div style={{ paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "2px" }}>
+                      <Link href="/dashboard/market" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: pathname === "/dashboard/market" ? `${COURT}18` : "transparent", border: pathname === "/dashboard/market" ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                        onMouseEnter={e => { if (pathname !== "/dashboard/market") e.currentTarget.style.background = `${COURT}10`; }}
+                        onMouseLeave={e => { if (pathname !== "/dashboard/market") e.currentTarget.style.background = "transparent"; }}
+                      >
+                        <Store size={14} color={pathname === "/dashboard/market" ? COURT : INK2} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: pathname === "/dashboard/market" ? COURT : "rgba(245,247,251,0.65)" }}>Mi stock</span>
+                      </Link>
+                      <Link href="/market" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: pathname === "/market" ? `${COURT}18` : "transparent", border: pathname === "/market" ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                        onMouseEnter={e => { if (pathname !== "/market") e.currentTarget.style.background = `${COURT}10`; }}
+                        onMouseLeave={e => { if (pathname !== "/market") e.currentTarget.style.background = "transparent"; }}
+                      >
+                        <Store size={14} color={pathname === "/market" ? COURT : INK2} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: pathname === "/market" ? COURT : "rgba(245,247,251,0.65)" }}>Market local</span>
+                      </Link>
+                    </div>
+                  </div>
+                );
+              }
+
+              if (isPerfil) {
+                return (
+                  <div key="perfil" style={{ marginBottom: "4px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 14px 6px" }}>
+                      <Icon size={20} color={active ? COURT : INK2} strokeWidth={1.8} style={{ flexShrink: 0 }} />
+                      <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase", color: active ? COURT : INK2, fontWeight: active ? 600 : 400 }}>{label}</span>
+                    </div>
+                    <div style={{ paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "2px" }}>
+                      {username && (
+                        <Link href={`/${username}`} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: "transparent", border: "1px solid transparent", transition: "all 0.15s" }}
+                          onMouseEnter={e => (e.currentTarget.style.background = `${COURT}10`)}
+                          onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                        >
+                          <UserRound size={14} color={INK2} strokeWidth={1.8} />
+                          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: "rgba(245,247,251,0.65)" }}>Ver mi perfil</span>
+                        </Link>
+                      )}
+                      <Link href="/dashboard/perfil" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: pathname === "/dashboard/perfil" ? `${COURT}18` : "transparent", border: pathname === "/dashboard/perfil" ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                        onMouseEnter={e => { if (pathname !== "/dashboard/perfil") e.currentTarget.style.background = `${COURT}10`; }}
+                        onMouseLeave={e => { if (pathname !== "/dashboard/perfil") e.currentTarget.style.background = "transparent"; }}
+                      >
+                        <Pencil size={14} color={pathname === "/dashboard/perfil" ? COURT : INK2} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: pathname === "/dashboard/perfil" ? COURT : "rgba(245,247,251,0.65)" }}>Editar mi perfil</span>
+                      </Link>
+                    </div>
+                  </div>
+                );
+              }
+
               return (
                 <Link key={href} href={href} style={{
                   display: "flex", alignItems: "center", gap: "12px",
@@ -242,11 +405,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   transition: "all 0.15s", whiteSpace: "nowrap",
                 }}>
                   <Icon size={20} color={active ? COURT : INK2} strokeWidth={1.8} style={{ flexShrink: 0 }} />
-                  <span style={{
-                    fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                    color: active ? COURT : INK2, fontWeight: active ? 600 : 400,
-                  }}>{label}</span>
+                  <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase", color: active ? COURT : INK2, fontWeight: active ? 600 : 400 }}>{label}</span>
                 </Link>
               );
             })}
@@ -311,9 +470,102 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* ══ MOBILE BOTTOM TAB BAR ══ */}
         <nav className="mob-tabbar">
           {MOBILE_TABS.map(({ href, label, Icon, highlight }) => {
-            const active = pathname === href;
+            const isMarket = label === "Market";
+            const isPerfil = label === "Perfil";
+            const active = isMarket
+              ? pathname === "/dashboard/market" || pathname === "/market"
+              : pathname === href;
             const color  = active ? COURT : highlight ? `${COURT}80` : INK2;
             const iconSz = highlight ? 26 : 22;
+
+            if (isPerfil) {
+              return (
+                <div key="perfil" ref={perfilMobRef} style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {perfilOpen && (
+                    <div style={{
+                      position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)",
+                      width: 180, background: "#0d1520",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: "12px", overflow: "hidden",
+                      boxShadow: "0 8px 40px rgba(0,0,0,0.6)", zIndex: 200,
+                    }}>
+                      <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                        <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>Perfil</p>
+                      </div>
+                      {username && (
+                        <Link href={`/${username}`} onClick={() => setPerfilOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}>
+                          <UserRound size={14} color={COURT} strokeWidth={1.8} />
+                          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Ver mi perfil</span>
+                        </Link>
+                      )}
+                      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
+                      <Link href="/dashboard/perfil" onClick={() => setPerfilOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}>
+                        <Pencil size={14} color={COURT} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Editar mi perfil</span>
+                      </Link>
+                    </div>
+                  )}
+                  <button onClick={() => setPerfilOpen(o => !o)} style={{
+                    flex: 1, width: "100%", height: "100%", display: "flex", flexDirection: "column",
+                    alignItems: "center", justifyContent: "center", gap: "4px",
+                    background: "transparent", border: "none", cursor: "pointer", position: "relative", paddingBottom: "4px",
+                  }}>
+                    {active && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
+                    <Icon size={iconSz} color={color} strokeWidth={active ? 2.2 : 1.7} style={{ position: "relative" }} />
+                    <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color, fontWeight: active ? 600 : 400, position: "relative" }}>
+                      {label}
+                    </span>
+                  </button>
+                </div>
+              );
+            }
+
+            if (isMarket) {
+              return (
+                <div key="market" ref={mktMobileRef} style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {marketOpen && (
+                    <div style={{
+                      position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)",
+                      width: 180, background: "#0d1520",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: "12px", overflow: "hidden",
+                      boxShadow: "0 8px 40px rgba(0,0,0,0.6)", zIndex: 200,
+                    }}>
+                      <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                        <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>Market</p>
+                      </div>
+                      <Link href="/dashboard/market" onClick={() => setMarketOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
+                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                      >
+                        <Store size={14} color={COURT} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Mi stock</span>
+                      </Link>
+                      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
+                      <Link href="/market" onClick={() => setMarketOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
+                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                      >
+                        <Store size={14} color="#d6ff3d" strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Market local</span>
+                      </Link>
+                    </div>
+                  )}
+                  <button onClick={() => setMarketOpen(o => !o)} style={{
+                    flex: 1, width: "100%", height: "100%", display: "flex", flexDirection: "column",
+                    alignItems: "center", justifyContent: "center", gap: "4px",
+                    background: "transparent", border: "none", cursor: "pointer", position: "relative", paddingBottom: "4px",
+                  }}>
+                    {active && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
+                    <Icon size={iconSz} color={color} strokeWidth={active ? 2.2 : 1.7} style={{ position: "relative" }} />
+                    <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color, fontWeight: active ? 600 : 400, position: "relative" }}>
+                      {label}
+                    </span>
+                  </button>
+                </div>
+              );
+            }
+
             return (
               <Link key={href} href={href} style={{
                 flex: 1, display: "flex", flexDirection: "column",
@@ -321,7 +573,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 textDecoration: "none", position: "relative",
                 paddingBottom: "4px",
               }}>
-                {/* Active indicator dot */}
                 {active && (
                   <span style={{
                     position: "absolute", top: 8,

@@ -5,6 +5,12 @@ import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES, type PokemonSet } from "@/data/pokemon-sets";
 import { VERSION_LABEL, SET_CARD_COUNT, type PokemonCard, type CardVersion } from "@/data/pokemon-cards-meta";
+import {
+  COURT, INK0, INK2, BG0, MONO, DISP,
+  VERSION_COLOR, VERSION_FULL,
+  QtyControl, CardDetailModal,
+  type InventoryMap, type FeaturedCard, type UserListing,
+} from "@/components/CardDetailModal";
 
 /* Lazy-load card data only when a set is opened */
 async function fetchSetCards(setId: string): Promise<PokemonCard[]> {
@@ -12,89 +18,6 @@ async function fetchSetCards(setId: string): Promise<PokemonCard[]> {
   return mod.SET_CARDS[setId] ?? [];
 }
 
-const COURT = "#2ee6c1";
-const INK0  = "#f5f7fb";
-const INK2  = "#7a8298";
-const BG0   = "#05070d";
-const MONO  = "var(--font-jetbrains)";
-const DISP  = "var(--font-archivo)";
-
-const VERSION_COLOR: Record<string, string> = {
-  N:   "#f5f7fb",
-  RH:  "#2ee6c1",
-  H:   "#ffd24f",
-  ESP: "#2ee6c1",
-  PB:  "#2ee6c1",
-};
-
-const VERSION_FULL: Record<string, string> = {
-  N:   "Normal",
-  RH:  "Reverse Holo",
-  H:   "Holofoil",
-  ESP: "Energy Symbol",
-  PB:  "Poke Ball",
-};
-
-const ALL_SETS_FLAT = POKEMON_SERIES.flatMap(s => s.sets);
-
-type InventoryMap = Record<number, number>; // card_id → quantity
-type FeaturedCard = { card_id: number; set_id: string };
-
-/* ── Inventory controls ─────────────────────────────────────── */
-function QtyControl({
-  cardId, setId, qty, userId, onChange, dark,
-}: {
-  cardId: number; setId: string; qty: number;
-  userId: string; onChange: (cardId: number, qty: number) => void;
-  dark?: boolean;
-}) {
-  const [loading, setLoading] = useState(false);
-
-  const update = async (delta: number) => {
-    const next = Math.max(0, qty + delta);
-    if (next === qty) return;
-    setLoading(true);
-    const supabase = createClient();
-    if (next === 0) {
-      await supabase.from("card_inventory")
-        .delete()
-        .eq("user_id", userId).eq("card_id", cardId).eq("set_id", setId);
-    } else {
-      await supabase.from("card_inventory")
-        .upsert({ user_id: userId, card_id: cardId, set_id: setId, quantity: next },
-          { onConflict: "user_id,card_id,set_id" });
-    }
-    onChange(cardId, next);
-    setLoading(false);
-  };
-
-  const textColor   = dark ? BG0 : INK0;
-  const borderBase  = dark ? "rgba(5,7,13,0.18)" : "rgba(255,255,255,0.2)";
-  const borderDim   = dark ? "rgba(5,7,13,0.08)" : "rgba(255,255,255,0.1)";
-  const activeQtyColor = dark ? "#15a98e" : COURT;
-
-  const btnStyle = (disabled: boolean): React.CSSProperties => ({
-    background: "none",
-    border: `1px solid ${disabled ? borderDim : borderBase}`,
-    color: disabled ? (dark ? "#aab0c2" : INK2) : textColor,
-    borderRadius: "4px",
-    width: "28px", height: "28px", cursor: disabled ? "default" : "pointer",
-    fontFamily: MONO, fontSize: "16px", lineHeight: 1,
-    display: "flex", alignItems: "center", justifyContent: "center",
-    opacity: loading ? 0.5 : 1, transition: "border-color 0.15s, color 0.15s",
-    flexShrink: 0,
-  });
-
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-      <button style={btnStyle(qty === 0 || loading)} onClick={() => update(-1)} disabled={qty === 0 || loading}>−</button>
-      <span style={{ fontFamily: MONO, fontSize: "14px", color: qty > 0 ? activeQtyColor : (dark ? "#aab0c2" : INK2), minWidth: "20px", textAlign: "center", fontWeight: 600 }}>
-        {qty}
-      </span>
-      <button style={btnStyle(loading)} onClick={() => update(1)} disabled={loading}>+</button>
-    </div>
-  );
-}
 
 /* ── Card image with 3D tilt (reusable) ─────────────────────── */
 function TiltCard({
@@ -299,358 +222,6 @@ function TiltCard({
   );
 }
 
-/* ── Card Detail Modal ──────────────────────────────────────── */
-function CardDetailModal({
-  card, setId, userId, inventory, onInventoryChange,
-  featuredCards, onFeaturedChange, onClose,
-}: {
-  card: PokemonCard; setId: string;
-  userId?: string; inventory: InventoryMap;
-  onInventoryChange: (cardId: number, qty: number) => void;
-  featuredCards: FeaturedCard[];
-  onFeaturedChange: (cards: FeaturedCard[]) => void;
-  onClose: () => void;
-}) {
-  const setInfo    = ALL_SETS_FLAT.find(s => s.id === setId);
-  const label      = VERSION_LABEL[card.version];
-  const versionFull = VERSION_FULL[label] ?? label;
-  const qty        = inventory[card.id] ?? 0;
-  const isFeatured  = featuredCards.some(f => f.card_id === card.id && f.set_id === setId);
-  const featCount   = featuredCards.length;
-  const hasInInv    = qty > 0;
-  const [featuring, setFeaturing] = useState(false);
-  const canFeature  = hasInInv && (isFeatured || featCount < 10);
-
-  const handleToggleFeatured = async () => {
-    if (!userId || featuring) return;
-    setFeaturing(true);
-    const supabase = createClient();
-    if (isFeatured) {
-      await supabase.from("featured_cards")
-        .delete()
-        .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId);
-      onFeaturedChange(featuredCards.filter(f => !(f.card_id === card.id && f.set_id === setId)));
-    } else {
-      if (featCount >= 10) { setFeaturing(false); return; }
-      await supabase.from("featured_cards")
-        .insert({ user_id: userId, card_id: card.id, set_id: setId });
-      onFeaturedChange([...featuredCards, { card_id: card.id, set_id: setId }]);
-    }
-    setFeaturing(false);
-  };
-
-  useEffect(() => {
-    const h = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", h);
-    return () => window.removeEventListener("keydown", h);
-  }, [onClose]);
-
-  // Prevent body scroll while modal is open
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, []);
-
-  const MODAL_BG   = "rgba(245,247,251,0.97)";
-  const DARK       = "#05070d";
-  const DARK2      = "#4a5268";
-  const BORDER_CLR = "rgba(5,7,13,0.1)";
-
-  const tableRows = [
-    { label: "Número", value: `#${String(card.card_number).padStart(3, "0")}` },
-    { label: "Tipo",   value: versionFull },
-    {
-      label: "Set",
-      value: setInfo
-        ? <div style={{ position: "relative", width: "90px", height: "32px" }}>
-            <Image src={setInfo.logo} alt={setInfo.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} unoptimized />
-          </div>
-        : setId,
-    },
-  ];
-
-  return (
-    <div
-      style={{
-        position: "fixed", inset: 0, zIndex: 9999,
-        background: "rgba(5,7,13,0.88)", backdropFilter: "blur(10px)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        padding: "20px",
-      }}
-      onClick={onClose}
-    >
-      <div
-        className="card-modal-inner"
-        style={{
-          background: MODAL_BG,
-          borderRadius: "20px",
-          padding: "36px",
-          maxWidth: "680px", width: "100%",
-          display: "flex", gap: "32px", alignItems: "flex-start",
-          position: "relative",
-          boxShadow: "0 40px 100px rgba(0,0,0,0.9)",
-          maxHeight: "90vh", overflowY: "auto",
-        }}
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Close */}
-        <button
-          onClick={onClose}
-          style={{
-            position: "absolute", top: "14px", right: "16px",
-            background: "none", border: "none", cursor: "pointer",
-            color: DARK2, fontSize: "18px", lineHeight: 1, padding: "6px 8px",
-            borderRadius: "6px",
-          }}
-        >✕</button>
-
-        {/* Left: Card image with tilt */}
-        <div className="modal-card-col" style={{ flexShrink: 0, width: "200px" }}>
-          <ModalTiltCard card={card} />
-        </div>
-
-        {/* Right: Details */}
-        <div className="modal-details-col" style={{ flex: 1, minWidth: 0 }}>
-          <h2 style={{
-            fontFamily: DISP, fontSize: "20px", letterSpacing: "-0.01em",
-            margin: "0 0 20px", color: DARK, lineHeight: 1.1,
-          }}>
-            {card.name}
-          </h2>
-
-          {/* Table rows */}
-          <div style={{ marginBottom: "28px" }}>
-            {tableRows.map((row, i) => (
-              <div key={i} style={{
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-                padding: "10px 0",
-                borderBottom: `1px solid ${BORDER_CLR}`,
-                borderTop: i === 0 ? `1px solid ${BORDER_CLR}` : undefined,
-                gap: "8px",
-              }}>
-                <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: DARK2, flexShrink: 0 }}>
-                  {row.label}
-                </span>
-                <span style={{ fontFamily: MONO, fontSize: "13px", color: DARK, fontWeight: 600 }}>
-                  {row.value}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {/* Inventory controls */}
-          {userId && (
-            <>
-              <div style={{ marginBottom: "14px", display: "flex", alignItems: "center", gap: "8px" }}>
-                <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: DARK2 }}>
-                  Inventario
-                </span>
-                <QtyControl
-                  cardId={card.id} setId={setId} qty={qty}
-                  userId={userId} onChange={onInventoryChange}
-                  dark
-                />
-              </div>
-
-              {/* Destacar */}
-              <button
-                onClick={handleToggleFeatured}
-                disabled={featuring || !canFeature}
-                style={{
-                  width: "100%", padding: "12px 16px",
-                  fontFamily: MONO, fontSize: "11px", letterSpacing: "0.16em",
-                  textTransform: "uppercase", borderRadius: "10px",
-                  cursor: featuring || !canFeature ? "default" : "pointer",
-                  transition: "all 0.2s",
-                  opacity: featuring ? 0.6 : 1,
-                  background: isFeatured ? COURT : canFeature ? "transparent" : "transparent",
-                  color: isFeatured ? BG0 : canFeature ? COURT : "#aab0c2",
-                  border: `1.5px solid ${isFeatured ? COURT : canFeature ? COURT : "rgba(170,176,194,0.4)"}`,
-                }}
-              >
-                {isFeatured ? "✓ Destacada" : "Destacar"}
-              </button>
-
-              {!canFeature && !hasInInv && (
-                <p style={{
-                  fontFamily: MONO, fontSize: "10px", color: "#d95555",
-                  margin: "8px 0 0", letterSpacing: "0.08em", textAlign: "center",
-                }}>
-                  Necesitas tener esta carta en tu inventario para destacarla.
-                </p>
-              )}
-              {!canFeature && hasInInv && featCount >= 10 && (
-                <p style={{
-                  fontFamily: MONO, fontSize: "10px", color: "#d95555",
-                  margin: "8px 0 0", letterSpacing: "0.08em", textAlign: "center",
-                }}>
-                  Máximo 10 cartas destacadas — quita una para agregar esta.
-                </p>
-              )}
-
-              <p style={{
-                fontFamily: MONO, fontSize: "10px", color: DARK2,
-                margin: "10px 0 0", letterSpacing: "0.08em", textAlign: "center",
-              }}>
-                {featCount}/10 cartas destacadas
-              </p>
-            </>
-          )}
-        </div>
-      </div>
-
-      <style>{`
-        @media (max-width: 540px) {
-          .card-modal-inner {
-            flex-direction: column !important;
-            align-items: center !important;
-            padding: 24px 20px !important;
-          }
-          .modal-card-col { width: 160px !important; }
-          .modal-details-col { width: 100% !important; }
-        }
-      `}</style>
-    </div>
-  );
-}
-
-/* Static tilt card for inside the modal */
-function ModalTiltCard({ card }: { card: PokemonCard }) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const bodyRef = useRef<HTMLDivElement>(null);
-  const rhRef   = useRef<HTMLDivElement>(null);
-  const hRef1   = useRef<HTMLDivElement>(null);
-  const hRef2   = useRef<HTMLDivElement>(null);
-  const glRef   = useRef<HTMLDivElement>(null);
-  const rectRef = useRef<DOMRect | null>(null);
-  const rafId   = useRef(0);
-
-  const label = VERSION_LABEL[card.version];
-  const labelColor = VERSION_COLOR[label] ?? INK2;
-  const isH  = label === "H";
-  const isRH = label !== "N" && label !== "H";
-
-  const onEnter = () => { rectRef.current = wrapRef.current?.getBoundingClientRect() ?? null; };
-
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    cancelAnimationFrame(rafId.current);
-    const r = rectRef.current; if (!r) return;
-    const clientX = e.clientX;
-    const clientY = e.clientY;
-    rafId.current = requestAnimationFrame(() => {
-      const nx = (clientX - r.left) / r.width;
-      const ny = (clientY - r.top)  / r.height;
-      const tx = (-(ny - 0.5)) * 20;
-      const ty = ((nx - 0.5)) * 20;
-      const mx = nx * 100;
-      const my = ny * 100;
-
-      if (bodyRef.current) {
-        bodyRef.current.style.transition = "transform 0.08s ease-out";
-        bodyRef.current.style.transform  = `rotateX(${tx}deg) rotateY(${ty}deg)`;
-      }
-      if (rhRef.current) {
-        rhRef.current.style.background = `
-          radial-gradient(ellipse 80% 60% at ${mx}% ${my}%,
-            rgba(220,220,240,0.55) 0%, rgba(180,180,210,0.25) 30%, transparent 60%),
-          linear-gradient(${105 + ty * 2}deg,
-            transparent 20%, rgba(200,200,230,0.18) 35%, rgba(255,255,255,0.28) 45%,
-            rgba(200,200,230,0.18) 55%, transparent 70%)`;
-      }
-      if (hRef1.current) {
-        hRef1.current.style.background = `
-          radial-gradient(ellipse 90% 70% at ${mx}% ${my}%,
-            rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%,
-            rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%,
-            rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)`;
-      }
-      if (hRef2.current) {
-        hRef2.current.style.background = `linear-gradient(${120 + ty * 3}deg,
-          transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%,
-          rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`;
-      }
-      if (glRef.current) {
-        glRef.current.style.background = `linear-gradient(${110 + ty}deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`;
-      }
-    });
-  };
-
-  const onLeave = () => {
-    cancelAnimationFrame(rafId.current);
-    rectRef.current = null;
-    if (bodyRef.current) {
-      bodyRef.current.style.transition = "transform 0.6s cubic-bezier(0.2,0.8,0.2,1)";
-      bodyRef.current.style.transform  = "rotateX(0deg) rotateY(0deg)";
-    }
-    if (rhRef.current) {
-      rhRef.current.style.background = `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220,220,240,0.3) 0%, transparent 60%)`;
-    }
-    if (hRef1.current) {
-      hRef1.current.style.background = `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,100,100,0.2) 0%, rgba(80,255,120,0.15) 50%, transparent 90%)`;
-    }
-  };
-
-  return (
-    <div
-      ref={wrapRef}
-      style={{ perspective: "800px", cursor: "pointer" }}
-      onMouseEnter={onEnter}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-    >
-      <div ref={bodyRef} style={{
-        width: "100%", aspectRatio: "5 / 7",
-        borderRadius: "12px", overflow: "hidden", position: "relative",
-        transform: "rotateX(0deg) rotateY(0deg)",
-        transition: "transform 0.6s cubic-bezier(0.2,0.8,0.2,1)",
-        willChange: "transform",
-        boxShadow: isH
-          ? "0 16px 48px rgba(255,160,80,0.45), 0 4px 16px rgba(0,0,0,0.5)"
-          : isRH
-          ? "0 16px 48px rgba(180,180,220,0.3), 0 4px 16px rgba(0,0,0,0.5)"
-          : "0 12px 40px rgba(0,0,0,0.6)",
-      }}>
-        <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="220px" unoptimized />
-
-        {isRH && (
-          <div ref={rhRef} style={{
-            position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
-            background: `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220,220,240,0.3) 0%, transparent 60%)`,
-          }} />
-        )}
-        {isH && (
-          <div ref={hRef1} style={{
-            position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "color-dodge",
-            background: `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,100,100,0.2) 0%, rgba(80,255,120,0.15) 50%, transparent 90%)`,
-            animation: "holoShift 4s ease-in-out infinite",
-          }} />
-        )}
-        {isH && (
-          <div ref={hRef2} style={{
-            position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
-            background: `linear-gradient(120deg, transparent 0%, rgba(255,100,150,0.1) 35%, transparent 70%)`,
-          }} />
-        )}
-        <div ref={glRef} style={{
-          position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
-          background: `linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`,
-        }} />
-
-        <div style={{
-          position: "absolute", bottom: "10px", right: "10px", zIndex: 10,
-          fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em",
-          color: labelColor, border: `1px solid ${labelColor}60`,
-          borderRadius: "5px", padding: "3px 8px",
-          background: "rgba(5,7,13,0.82)", backdropFilter: "blur(4px)",
-          pointerEvents: "none",
-        }}>
-          {VERSION_FULL[label] ?? label}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ── Thumb base ────────────────────────────────────────────── */
 function Thumb({
   imgSrc, imgW, imgH, label, sublabel, isOpen, isGray, onClick, badgeText, showPronto,
@@ -829,13 +400,14 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const [activeFilter, setActiveFilter] = useState<CardFilter>("todas");
   const [selectedCard, setSelectedCard] = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [featuredCards, setFeaturedCards] = useState<FeaturedCard[]>([]);
+  const [userListings,  setUserListings]  = useState<UserListing[]>([]);
 
   const openSeries = POKEMON_SERIES.find(s => s.id === openSeriesId);
   const openSet    = openSeries?.sets.find(s => s.id === openSetId);
 
   useEffect(() => { setActiveFilter("todas"); }, [openSetId]);
 
-  /* Fetch featured cards for logged-in user */
+  /* Fetch featured cards and active listings for logged-in user */
   useEffect(() => {
     if (!userId) return;
     const supabase = createClient();
@@ -845,6 +417,14 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
       .eq("user_id", userId)
       .then(({ data }) => {
         if (data) setFeaturedCards(data as FeaturedCard[]);
+      });
+    supabase
+      .from("market_listings")
+      .select("id, card_id, set_id, price_cop, version")
+      .eq("user_id", userId)
+      .eq("status", "active")
+      .then(({ data }) => {
+        if (data) setUserListings(data as UserListing[]);
       });
   }, [userId]);
 
@@ -1066,6 +646,8 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           onInventoryChange={handleInventoryChange}
           featuredCards={featuredCards}
           onFeaturedChange={setFeaturedCards}
+          userListings={userListings}
+          onListingsChange={setUserListings}
           onClose={() => setSelectedCard(null)}
         />
       )}

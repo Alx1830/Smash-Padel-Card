@@ -18,7 +18,6 @@ interface PlayerData {
   lastName:         string;
   pais:             string;
   tipoPerfil:       string;
-  gimnasioPokemon:  string;
   ciudad:           string;
   pokemonFavorito:  string;
   edad:             number;
@@ -136,7 +135,7 @@ export function ProfilePage({ player }: { player: PlayerData }) {
             letterSpacing: "0.15em", textTransform: "uppercase", color: INK2, lineHeight: 2.2, zIndex: 20,
           }}>
             <div>Energía Favorita / <b style={{ color: INK0 }}>{player.energiaFavorita || "—"}</b></div>
-            <div>Gimnasio Favorito / <b style={{ color: INK0 }}>{player.gimnasioPokemon || "—"}</b></div>
+            <div>País / <b style={{ color: INK0 }}>{player.pais || "—"}</b></div>
             <div>Ciudad / <b style={{ color: INK0 }}>{player.ciudad || "—"}</b></div>
           </div>
 
@@ -149,7 +148,6 @@ export function ProfilePage({ player }: { player: PlayerData }) {
             textTransform: "uppercase", color: INK2,
           }}>
             <span>POKÉMON CARD COLLECTOR</span>
-            <span>{player.pais || "—"}</span>
           </div>
         </div>
 
@@ -193,7 +191,7 @@ export function ProfilePage({ player }: { player: PlayerData }) {
             textTransform: "uppercase", color: INK2,
           }}>
             <span>Energía Favorita / <b style={{ color: INK0 }}>{player.energiaFavorita || "—"}</b></span>
-            <span>Gimnasio Favorito / <b style={{ color: INK0 }}>{player.gimnasioPokemon || "—"}</b></span>
+            <span>País / <b style={{ color: INK0 }}>{player.pais || "—"}</b></span>
             <span>Ciudad / <b style={{ color: INK0 }}>{player.ciudad || "—"}</b></span>
           </div>
         </div>
@@ -238,10 +236,8 @@ export function ProfilePage({ player }: { player: PlayerData }) {
                 </h3>
                 <Row label="Tipo de Perfil"     value={player.tipoPerfil || "—"} />
                 <Row label="Edad"               value={player.edad ? `${player.edad} años` : "—"} />
-                <Row label="País"               value={player.pais || "—"} />
                 <Row label="Pokémon Favorito"   value={player.pokemonFavorito || "—"} />
                 <Row label="Energía Favorita"   value={player.energiaFavorita || "—"} />
-                <Row label="Gimnasio Favorito"  value={player.gimnasioPokemon || "—"} />
               </div>
             </div>
 
@@ -274,8 +270,6 @@ export function ProfilePage({ player }: { player: PlayerData }) {
           <Row label="Edad"               value={player.edad ? `${player.edad} años` : "—"} />
           <Row label="Energía Favorita"   value={player.energiaFavorita || "—"} />
           <Row label="Tipo de Perfil"     value={player.tipoPerfil || "—"} />
-          <Row label="País"               value={player.pais || "—"} />
-          <Row label="Gimnasio Favorito"  value={player.gimnasioPokemon || "—"} />
           <div style={{ marginTop: "40px" }}>
             <Showcase featuredCards={player.featuredCards ?? []} inventoryRows={player.inventoryRows ?? []} />
           </div>
