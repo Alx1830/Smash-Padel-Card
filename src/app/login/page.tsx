@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { isDisposableEmail } from "@/lib/disposable-emails";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -50,6 +51,11 @@ export default function LoginPage() {
       if (error) { setError("Correo o contraseña incorrectos"); return; }
       window.location.href = "/dashboard";
     } else {
+      if (isDisposableEmail(email)) {
+        setError("No se permiten correos temporales o desechables.");
+        setLoading(false);
+        return;
+      }
       const { error } = await supabase.auth.signUp({
         email, password,
         options: { emailRedirectTo: `${window.location.origin}/auth/callback` },

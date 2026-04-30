@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { isDisposableEmail } from "@/lib/disposable-emails";
 
 async function verifyAdmin() {
   const supabase = await createClient();
@@ -15,6 +16,7 @@ export async function POST(req: NextRequest) {
 
   const { email, password, username, first_name, last_name } = await req.json();
   if (!email || !password) return NextResponse.json({ error: "Email y contraseña requeridos" }, { status: 400 });
+  if (isDisposableEmail(email)) return NextResponse.json({ error: "No se permiten correos temporales o desechables." }, { status: 400 });
 
   const { data, error } = await supabaseAdmin.auth.admin.createUser({
     email,
