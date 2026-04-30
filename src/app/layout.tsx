@@ -20,6 +20,9 @@ const BASE_URL = "https://facebinder.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
+  other: {
+    "google-adsense-account": "ca-pub-7135029542920964",
+  },
   title: {
     default: "FaceBinder — Tu binder digital de Pokémon TCG",
     template: "%s · FaceBinder",
