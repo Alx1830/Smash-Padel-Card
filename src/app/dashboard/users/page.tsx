@@ -53,7 +53,7 @@ function CreateUserModal({ onClose, onCreated }: { onClose: () => void; onCreate
     });
     const data = await res.json();
     if (!res.ok) { setError(data.error ?? "Error al crear usuario"); setSaving(false); return; }
-    onCreated({ id: data.user.id, email: data.user.email, created_at: data.user.created_at, ...form });
+    onCreated({ ...form, id: data.user.id, email: data.user.email, created_at: data.user.created_at });
     onClose();
   }
 
