@@ -40,6 +40,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [marketOpen, setMarketOpen] = useState(false);
   const [perfilOpen, setPerfilOpen] = useState(false);
@@ -56,9 +57,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       if (!user) return;
       setUserId(user.id);
       const { data } = await supabase
-        .from("players").select("photo_url, username").eq("user_id", user.id).single();
+        .from("players").select("photo_url, username, role").eq("user_id", user.id).single();
       if (data?.photo_url) setPhotoUrl(data.photo_url);
       if (data?.username)  setUsername(data.username);
+      if (data?.role === "admin") setIsAdmin(true);
     }
     load();
   }, []);
@@ -401,7 +403,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         <Pencil size={14} color={pathname === "/dashboard/perfil" ? COURT : INK2} strokeWidth={1.8} />
                         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: pathname === "/dashboard/perfil" ? COURT : "rgba(245,247,251,0.65)" }}>Editar mi perfil</span>
                       </Link>
-                      {username?.toLowerCase() === "alx1830" && (
+                      {isAdmin && (
                         <Link href="/dashboard/users" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: pathname === "/dashboard/users" ? "rgba(79,240,255,0.12)" : "transparent", border: pathname === "/dashboard/users" ? "1px solid rgba(79,240,255,0.25)" : "1px solid transparent", transition: "all 0.15s" }}
                           onMouseEnter={e => { if (pathname !== "/dashboard/users") e.currentTarget.style.background = "rgba(79,240,255,0.07)"; }}
                           onMouseLeave={e => { if (pathname !== "/dashboard/users") e.currentTarget.style.background = "transparent"; }}
@@ -523,7 +525,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         <Pencil size={14} color={COURT} strokeWidth={1.8} />
                         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Editar mi perfil</span>
                       </Link>
-                      {username?.toLowerCase() === "alx1830" && (
+                      {isAdmin && (
                         <>
                           <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
                           <Link href="/dashboard/users" onClick={() => setPerfilOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none" }}>

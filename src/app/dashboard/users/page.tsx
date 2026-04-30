@@ -13,7 +13,6 @@ const INK0  = "#f5f7fb";
 const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
-const ADMIN_USERNAME = "Alx1830";
 
 interface AdminUser {
   id: string;
@@ -140,8 +139,8 @@ export default function AdminUsersPage() {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.replace("/dashboard"); return; }
-      const { data: prof } = await supabase.from("players").select("username").eq("user_id", user.id).single();
-      if (prof?.username?.toLowerCase() !== ADMIN_USERNAME.toLowerCase()) { router.replace("/dashboard"); return; }
+      const { data: prof } = await supabase.from("players").select("role").eq("user_id", user.id).single();
+      if (prof?.role !== "admin") { router.replace("/dashboard"); return; }
       fetchUsers();
     })();
   }, []);

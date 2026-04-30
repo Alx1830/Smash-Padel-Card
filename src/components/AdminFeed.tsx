@@ -12,7 +12,6 @@ const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
-const ADMIN_USERNAME = "Alx1830";
 
 interface Post {
   id: string;
@@ -268,19 +267,18 @@ function AdminComposer({ authorId, onPublished }: { authorId: string; onPublishe
 }
 
 /* ── Main component ── */
-export function AdminFeed({ currentUserId, currentUsername }: { currentUserId: string; currentUsername: string | null }) {
+export function AdminFeed({ currentUserId, currentUsername, isAdmin = false }: { currentUserId: string; currentUsername: string | null; isAdmin?: boolean }) {
   const supabase = createClient();
   const [posts,   setPosts]   = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const isAdmin = currentUsername?.toLowerCase() === ADMIN_USERNAME.toLowerCase();
 
   useEffect(() => {
     (async () => {
-      /* Fetch admin user_id */
+      /* Fetch admin user_id (busca el primer usuario con role = 'admin') */
       const { data: adminProf } = await supabase
         .from("players")
         .select("user_id")
-        .eq("username", ADMIN_USERNAME)
+        .eq("role", "admin")
         .single();
 
       if (!adminProf) { setLoading(false); return; }

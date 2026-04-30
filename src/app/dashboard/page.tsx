@@ -203,6 +203,7 @@ export default function DashboardHome() {
   const supabase = createClient();
   const [userId,          setUserId]          = useState<string | null>(null);
   const [username,        setUsername]        = useState<string | null>(null);
+  const [isAdmin,         setIsAdmin]         = useState(false);
   const [followerCount,   setFollowerCount]   = useState<number | null>(null);
   const [stockTotal,      setStockTotal]      = useState<number | null>(null);
   const [cardCount,       setCardCount]       = useState<number | null>(null);
@@ -220,13 +221,14 @@ export default function DashboardHome() {
         { data: listings },
         { data: inv },
       ] = await Promise.all([
-        supabase.from("players").select("username").eq("user_id", user.id).single(),
+        supabase.from("players").select("username, role").eq("user_id", user.id).single(),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("following_id", user.id),
         supabase.from("market_listings").select("price_cop").eq("user_id", user.id).eq("status", "active"),
         supabase.from("card_inventory").select("quantity").eq("user_id", user.id),
       ]);
 
       setUsername(prof?.username ?? null);
+      if (prof?.role === "admin") setIsAdmin(true);
       setFollowerCount(fc ?? 0);
       setStockTotal((listings ?? []).reduce((sum, l) => sum + (l.price_cop ?? 0), 0));
       setCardCount((inv ?? []).reduce((sum, r) => sum + (r.quantity ?? 0), 0));
@@ -322,7 +324,7 @@ export default function DashboardHome() {
       {/* Feed de posts del admin — centrado y angosto */}
       {userId && (
         <div className="feed-wrap">
-          <AdminFeed currentUserId={userId} currentUsername={username} />
+          <AdminFeed currentUserId={userId} currentUsername={username} isAdmin={isAdmin} />
         </div>
       )}
 
