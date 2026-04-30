@@ -65,13 +65,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     load();
   }, []);
 
-  /* last_seen heartbeat directo a Supabase via RPC (sin pasar por Vercel) */
+  /* Presence — trackea al usuario en el canal online-users */
   useEffect(() => {
     if (!userId) return;
-    const ping = () => supabase.rpc("update_last_seen");
-    ping();
-    const interval = setInterval(ping, 60 * 1000);
-    return () => clearInterval(interval);
+    const channel = supabase.channel("online-users");
+    channel.subscribe(async (status) => {
+      if (status === "SUBSCRIBED") {
+        await channel.track({ user_id: userId });
+      }
+    });
+    return () => { supabase.removeChannel(channel); };
   }, [userId]);
 
   /* Close dropdowns on outside click */

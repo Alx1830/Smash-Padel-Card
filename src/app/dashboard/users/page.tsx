@@ -8,6 +8,25 @@ import { UserRoundPlus, X } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
+
+function useOnlineUsers() {
+  const [onlineIds, setOnlineIds] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    const supabase = createClient();
+    const channel = supabase.channel("online-users");
+    channel
+      .on("presence", { event: "sync" }, () => {
+        const state = channel.presenceState<{ user_id: string }>();
+        const ids = new Set(
+          Object.values(state).flat().map((p) => p.user_id)
+        );
+        setOnlineIds(ids);
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+  return onlineIds;
+}
 const BG0   = "#05070d";
 const INK0  = "#f5f7fb";
 const INK2  = "#7a8298";
@@ -26,10 +45,6 @@ interface AdminUser {
   last_seen?: string;
 }
 
-function isOnline(last_seen?: string) {
-  if (!last_seen) return false;
-  return Date.now() - new Date(last_seen).getTime() < 3 * 60 * 1000;
-}
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("es-CO", { day: "2-digit", month: "short", year: "numeric" });
@@ -131,17 +146,17 @@ function ConfirmModal({ message, onConfirm, onCancel }: { message: string; onCon
 
 /* ── Main page ── */
 export default function AdminUsersPage() {
-  const router = useRouter();
+  const router    = useRouter();
+  const onlineIds = useOnlineUsers();
   const [users,      setUsers]      = useState<AdminUser[]>([]);
   const [loading,    setLoading]    = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [confirm,    setConfirm]    = useState<{ message: string; onConfirm: () => void } | null>(null);
   const [busy,       setBusy]       = useState<string | null>(null);
 
-  /* Verify admin + load + polling */
+  /* Verify admin + load */
   useEffect(() => {
     const supabase = createClient();
-
     (async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.replace("/dashboard"); return; }
@@ -149,21 +164,6 @@ export default function AdminUsersPage() {
       if (prof?.role !== "admin") { router.replace("/dashboard"); return; }
       await fetchUsers();
     })();
-
-    /* Polling cada 20s — refresca last_seen via API admin (service_role, sin RLS) */
-    const poll = setInterval(async () => {
-      const res = await fetch("/api/admin/players-status");
-      if (!res.ok) return;
-      const { players } = await res.json();
-      if (players) {
-        setUsers(prev => prev.map(u => {
-          const p = players.find((d: any) => d.user_id === u.id);
-          return p ? { ...u, last_seen: p.last_seen, blocked: p.blocked } : u;
-        }));
-      }
-    }, 20_000);
-
-    return () => clearInterval(poll);
   }, []);
 
   async function fetchUsers() {
@@ -272,7 +272,7 @@ export default function AdminUsersPage() {
             </thead>
             <tbody>
               {users.map(u => {
-                const online = isOnline(u.last_seen);
+                const online = onlineIds.has(u.id);
                 const isBusy = busy === u.id;
                 return (
                   <tr key={u.id} style={{ background: u.blocked ? "rgba(209,53,53,0.04)" : "transparent", transition: "background 0.2s" }}
