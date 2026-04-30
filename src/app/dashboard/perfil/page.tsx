@@ -515,11 +515,11 @@ export default function PerfilPage() {
               </Field>
               <Field label="Nombre">
                 <input style={inputStyle} value={form.first_name}
-                  onChange={e => set("first_name", e.target.value)} placeholder="Tu nombre" />
+                  onChange={e => set("first_name", e.target.value.replace(/[^a-záéíóúàèìòùäëïöüñA-ZÁÉÍÓÚÀÈÌÒÙÄËÏÖÜÑ]/g, ""))} placeholder="Tu nombre" />
               </Field>
               <Field label="Apellido">
                 <input style={inputStyle} value={form.last_name}
-                  onChange={e => set("last_name", e.target.value)} placeholder="Tus apellidos" />
+                  onChange={e => set("last_name", e.target.value.replace(/[^a-záéíóúàèìòùäëïöüñA-ZÁÉÍÓÚÀÈÌÒÙÄËÏÖÜÑ]/g, ""))} placeholder="Tus apellidos" />
               </Field>
               <Field label="Edad">
                 <input style={inputStyle} type="number" min="1" max="99"

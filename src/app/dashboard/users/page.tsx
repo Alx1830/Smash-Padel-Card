@@ -88,7 +88,12 @@ function CreateUserModal({ onClose, onCreated }: { onClose: () => void; onCreate
                 type={f.type}
                 style={inputStyle}
                 value={(form as any)[f.key]}
-                onChange={e => set(f.key, e.target.value)}
+                onChange={e => {
+                  const v = (f.key === "first_name" || f.key === "last_name")
+                    ? e.target.value.replace(/[^a-záéíóúàèìòùäëïöüñA-ZÁÉÍÓÚÀÈÌÒÙÄËÏÖÜÑ]/g, "")
+                    : e.target.value;
+                  set(f.key, v);
+                }}
                 placeholder={f.ph}
               />
             </div>
