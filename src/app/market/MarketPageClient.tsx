@@ -473,7 +473,7 @@ export function MarketPageClient({
             <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: COURT, display: "inline-block", flexShrink: 0 }} />
             Pokémon TCG
           </p>
-          <div style={{ marginTop: "20px", display: "flex", flexWrap: "wrap", gap: "8px 24px", fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", color: INK2 }}>
+          <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", gap: "10px", fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", color: INK2 }}>
             <span>Cartas en venta / <b style={{ color: INK0 }}>{totalListings}</b></span>
             <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               País / <CountrySelect countries={countries} value={selectedPais} onChange={v => setSelectedPais(v)} />

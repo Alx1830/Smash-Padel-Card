@@ -235,6 +235,7 @@ function Thumb({
   return (
     <button
       onClick={onClick}
+      className="pks-thumb"
       style={{
         background: isOpen ? "rgba(46,230,193,0.08)" : "rgba(255,255,255,0.02)",
         border: `1px solid ${isOpen ? `${COURT}55` : "rgba(255,255,255,0.07)"}`,
@@ -242,7 +243,7 @@ function Thumb({
         display: "flex", flexDirection: "column", alignItems: "center", gap: "10px",
         padding: "18px 14px", borderRadius: "14px",
         transition: "background 0.2s, border-color 0.2s",
-        outline: "none",
+        outline: "none", width: "158px", minWidth: "158px",
       }}
       onMouseEnter={e => {
         if (clickable && !isOpen) (e.currentTarget as HTMLButtonElement).style.background = "rgba(46,230,193,0.05)";
@@ -512,7 +513,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
         {view === "series" && (
           <>
             <SectionLabel>Series</SectionLabel>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
+            <div className="pks-thumbs" style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
               {POKEMON_SERIES.map(series => (
                 <Thumb
                   key={series.id}
@@ -536,7 +537,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
               { label: openSeries.name },
             ]} />
             <SectionLabel>{openSeries.name} — {openSeries.sets.length} sets</SectionLabel>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
+            <div className="pks-thumbs" style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
               {openSeries.sets.map(set => {
                 const cardCount = SET_CARD_COUNT[set.id] ?? 0;
                 return (
@@ -670,6 +671,17 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           }
           .tcg-card-wrap { width: 100% !important; max-width: 100% !important; }
           .tcg-card-body { width: 100% !important; height: auto !important; aspect-ratio: 5 / 7 !important; }
+          .pks-thumbs {
+            justify-content: center !important;
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+          }
+          .pks-thumb {
+            width: 100% !important;
+            min-width: unset !important;
+            max-width: unset !important;
+          }
         }
       `}</style>
     </section>
