@@ -137,17 +137,40 @@ export default function AdminUsersPage() {
   const [showCreate, setShowCreate] = useState(false);
   const [confirm,    setConfirm]    = useState<{ message: string; onConfirm: () => void } | null>(null);
   const [busy,       setBusy]       = useState<string | null>(null);
+  const [, setTick] = useState(0);
 
-  /* Verify admin */
+  /* Verify admin + load + realtime */
   useEffect(() => {
+    const supabase = createClient();
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+
     (async () => {
-      const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.replace("/dashboard"); return; }
       const { data: prof } = await supabase.from("players").select("role").eq("user_id", user.id).single();
       if (prof?.role !== "admin") { router.replace("/dashboard"); return; }
-      fetchUsers();
+      await fetchUsers();
+
+      /* Suscripción realtime — actualiza last_seen y blocked en tiempo real */
+      channel = supabase
+        .channel("admin-players-realtime")
+        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "players" }, (payload) => {
+          setUsers(prev => prev.map(u =>
+            u.id === (payload.new as any).user_id
+              ? { ...u, last_seen: (payload.new as any).last_seen, blocked: (payload.new as any).blocked }
+              : u
+          ));
+        })
+        .subscribe();
     })();
+
+    /* Ticker cada 30s para refrescar el cálculo de isOnline sin esperar un UPDATE */
+    const ticker = setInterval(() => setTick(t => t + 1), 30_000);
+
+    return () => {
+      clearInterval(ticker);
+      if (channel) supabase.removeChannel(channel);
+    };
   }, []);
 
   async function fetchUsers() {
