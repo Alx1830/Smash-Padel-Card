@@ -65,10 +65,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     load();
   }, []);
 
-  /* last_seen heartbeat via API (usa service_role, sin RLS) */
+  /* last_seen heartbeat directo a Supabase via RPC (sin pasar por Vercel) */
   useEffect(() => {
     if (!userId) return;
-    const ping = () => fetch("/api/user/ping", { method: "POST" });
+    const ping = () => supabase.rpc("update_last_seen");
     ping();
     const interval = setInterval(ping, 60 * 1000);
     return () => clearInterval(interval);
