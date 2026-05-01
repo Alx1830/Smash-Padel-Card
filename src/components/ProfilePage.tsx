@@ -823,22 +823,20 @@ function CollectionSection({
   return (
     <section style={{ background: BG0_C, padding: "0 0 80px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
 
-      {/* ── Cartas que necesito — ancho completo ── */}
-      {wishlistCards.length > 0 && (
-        <div className="coll-outer" style={{ padding: "64px 80px 0" }}>
+      <div className="coll-outer" style={{ padding: "64px 80px 0", display: "grid", gridTemplateColumns: wishlistCards.length > 0 ? "1fr 1fr" : "1fr", gap: "64px", alignItems: "flex-start" }}>
+
+        {/* ── Cartas que necesito ── */}
+        {wishlistCards.length > 0 && (
           <WishlistSlider
             wishlistCards={wishlistCards}
             inventoryRows={inventoryRows}
             featuredCards={featuredCards}
             profileUserId={profileUserId}
           />
-        </div>
-      )}
-
-      <div className="coll-outer" style={{ padding: wishlistCards.length > 0 ? "0 80px 0" : "64px 80px 0", display: "flex", gap: "64px", alignItems: "flex-start" }}>
+        )}
 
         {/* ── Colección ── */}
-        <div style={{ maxWidth: "600px", flex: 1, margin: "0 auto" }}>
+        <div>
           <div style={{
             fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
             textTransform: "uppercase", color: COURT_C,
@@ -935,7 +933,7 @@ function CollectionSection({
 
       <style>{`
         @media (max-width: 767px) {
-          .coll-outer { padding: 40px 20px 0 !important; flex-direction: column !important; }
+          .coll-outer { padding: 40px 20px 0 !important; grid-template-columns: 1fr !important; }
           .prof-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px 12px !important; }
         }
       `}</style>
