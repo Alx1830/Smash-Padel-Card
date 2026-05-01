@@ -630,13 +630,14 @@ function WishlistSlider({
   featuredCards:  FeaturedCard[];
   profileUserId?: string;
 }) {
-  const [idx,      setIdx]      = useState(0);
+  const [offset,    setOffset]    = useState(0);
+  const [animated,  setAnimated]  = useState(true);
   const [modalCard, setModalCard] = useState<{ card_id: number; set_id: string } | null>(null);
-  const [featLocal,  setFeatLocal]  = useState<FeaturedCardModal[]>(featuredCards as FeaturedCardModal[]);
-  const [wishLocal,  setWishLocal]  = useState<WishlistCardModal[]>(wishlistCards as WishlistCardModal[]);
+  const [featLocal, setFeatLocal] = useState<FeaturedCardModal[]>(featuredCards as FeaturedCardModal[]);
+  const [wishLocal, setWishLocal] = useState<WishlistCardModal[]>(wishlistCards as WishlistCardModal[]);
 
-  // Resolver cartas válidas (max 5, que existan en SET_CARDS)
-  const resolved = wishlistCards.slice(0, 5).map(w => {
+  // Resolver cartas válidas (que existan en SET_CARDS)
+  const resolved = wishlistCards.map(w => {
     const cards = SET_CARDS[w.set_id];
     const card  = cards?.find(c => c.id === w.card_id);
     const set   = ALL_SETS.find(s => s.id === w.set_id);
@@ -647,18 +648,41 @@ function WishlistSlider({
   const inventoryMap: InventoryMap = {};
   inventoryRows.forEach(r => { inventoryMap[r.card_id] = r.quantity; });
 
+  // Loop infinito: duplicamos el array para simular carrusel continuo
+  const looped = resolved.length > 0 ? [...resolved, ...resolved, ...resolved] : [];
+
   useEffect(() => {
     if (resolved.length < 2) return;
-    const t = setInterval(() => setIdx(i => (i + 1) % resolved.length), 2000);
+    const t = setInterval(() => {
+      setAnimated(true);
+      setOffset(prev => {
+        const next = prev + 1;
+        // Cuando llegamos al final del primer bloque, reseteamos sin animación
+        if (next >= resolved.length) {
+          setTimeout(() => {
+            setAnimated(false);
+            setOffset(0);
+          }, 400); // después de que termine la transición
+        }
+        return next;
+      });
+    }, 2000);
     return () => clearInterval(t);
   }, [resolved.length]);
 
   if (resolved.length === 0) return null;
 
-  const current = resolved[idx];
+  const VISIBLE  = 5;
+  const CARD_GAP = 10; // px
 
   return (
     <div style={{ marginBottom: "48px" }}>
+      <style>{`
+        @keyframes wl-fade { from { opacity:0; } to { opacity:1; } }
+        .wl-track { transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); }
+        .wl-track.no-anim { transition: none !important; }
+      `}</style>
+
       {/* Header */}
       <div style={{
         fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
@@ -669,57 +693,65 @@ function WishlistSlider({
         Cartas que necesito
       </div>
 
-      {/* Slide */}
-      <div
-        key={idx}
-        onClick={() => setModalCard({ card_id: current.card_id, set_id: current.set_id })}
-        style={{
-          cursor: "pointer",
-          animation: "wl-in 0.35s cubic-bezier(0.2,0.8,0.2,1) forwards",
-        }}
-      >
-        {/* Imagen */}
-        <div style={{
-          position: "relative", width: "100%", aspectRatio: "5/7",
-          borderRadius: "14px", overflow: "hidden",
-          boxShadow: "0 16px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,210,79,0.15)",
-        }}>
-          <Image src={current.card.image} alt={current.card.name} fill style={{ objectFit: "cover" }} sizes="280px" unoptimized />
-          {/* Badge buscando */}
-          <div style={{
-            position: "absolute", top: "10px", left: "10px",
-            fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.14em", textTransform: "uppercase",
-            color: "#2a2a2a", background: "#ffd24f", borderRadius: "4px", padding: "3px 8px",
-            fontWeight: 700,
-          }}>
-            Buscando
-          </div>
-        </div>
+      {/* Carrusel */}
+      <div style={{ overflow: "hidden", borderRadius: "12px" }}>
+        <div
+          className={`wl-track${animated ? "" : " no-anim"}`}
+          style={{
+            display: "flex",
+            gap: `${CARD_GAP}px`,
+            transform: `translateX(calc(-${offset} * (100% / ${VISIBLE} + ${CARD_GAP / VISIBLE}px)))`,
+          }}
+        >
+          {looped.map((item, i) => (
+            <div
+              key={i}
+              onClick={() => setModalCard({ card_id: item.card_id, set_id: item.set_id })}
+              style={{
+                flexShrink: 0,
+                width: `calc(100% / ${VISIBLE} - ${CARD_GAP * (VISIBLE - 1) / VISIBLE}px)`,
+                cursor: "pointer",
+              }}
+            >
+              {/* Imagen */}
+              <div style={{
+                position: "relative", width: "100%", aspectRatio: "5/7",
+                borderRadius: "10px", overflow: "hidden",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,210,79,0.12)",
+                transition: "transform 0.2s, box-shadow 0.2s",
+              }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLDivElement).style.transform = "scale(1.04)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 32px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,210,79,0.35)";
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 24px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,210,79,0.12)";
+                }}
+              >
+                <Image src={item.card.image} alt={item.card.name} fill style={{ objectFit: "cover" }} sizes="120px" unoptimized />
+              </div>
 
-        {/* Info */}
-        <div style={{ marginTop: "12px", textAlign: "center" }}>
-          <div style={{ fontFamily: MONO_C, fontSize: "13px", color: INK0_C, fontWeight: 600, marginBottom: "4px" }}>
-            #{String(current.card.card_number).padStart(3, "0")} {current.card.name}
-          </div>
-          <div style={{ fontFamily: MONO_C, fontSize: "11px", color: INK2_C, letterSpacing: "0.06em" }}>
-            {current.set.name}
-          </div>
-        </div>
-      </div>
-
-      {/* Dots */}
-      {resolved.length > 1 && (
-        <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginTop: "14px" }}>
-          {resolved.map((_, i) => (
-            <button key={i} onClick={() => setIdx(i)} style={{
-              width: i === idx ? "20px" : "6px", height: "6px",
-              borderRadius: "3px", border: "none", cursor: "pointer",
-              background: i === idx ? "#ffd24f" : "rgba(255,255,255,0.2)",
-              transition: "all 0.2s", padding: 0,
-            }} />
+              {/* Info */}
+              <div style={{ marginTop: "8px", textAlign: "center" }}>
+                <div style={{
+                  fontFamily: MONO_C, fontSize: "10px", color: INK0_C,
+                  fontWeight: 600, marginBottom: "2px",
+                  whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+                }}>
+                  #{String(item.card.card_number).padStart(3, "0")} {item.card.name}
+                </div>
+                <div style={{
+                  fontFamily: MONO_C, fontSize: "9px", color: INK2_C, letterSpacing: "0.04em",
+                  whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+                }}>
+                  {item.set.name}
+                </div>
+              </div>
+            </div>
           ))}
         </div>
-      )}
+      </div>
 
       {/* Ver todas */}
       <div style={{ marginTop: "16px", textAlign: "center" }}>
@@ -756,13 +788,6 @@ function WishlistSlider({
           />
         );
       })()}
-
-      <style>{`
-        @keyframes wl-in {
-          from { opacity: 0; transform: translateY(8px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   );
 }
@@ -797,19 +822,20 @@ function CollectionSection({
 
   return (
     <section style={{ background: BG0_C, padding: "0 0 80px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-      <div className="coll-outer" style={{ padding: "64px 80px 0", display: "flex", gap: "64px", alignItems: "flex-start" }}>
 
-        {/* ── Cartas que necesito (sidebar izquierdo) ── */}
-        {wishlistCards.length > 0 && (
-          <div className="wishlist-col" style={{ flexShrink: 0, width: "220px" }}>
-            <WishlistSlider
-              wishlistCards={wishlistCards}
-              inventoryRows={inventoryRows}
-              featuredCards={featuredCards}
-              profileUserId={profileUserId}
-            />
-          </div>
-        )}
+      {/* ── Cartas que necesito — ancho completo ── */}
+      {wishlistCards.length > 0 && (
+        <div className="coll-outer" style={{ padding: "64px 80px 0" }}>
+          <WishlistSlider
+            wishlistCards={wishlistCards}
+            inventoryRows={inventoryRows}
+            featuredCards={featuredCards}
+            profileUserId={profileUserId}
+          />
+        </div>
+      )}
+
+      <div className="coll-outer" style={{ padding: wishlistCards.length > 0 ? "0 80px 0" : "64px 80px 0", display: "flex", gap: "64px", alignItems: "flex-start" }}>
 
         {/* ── Colección ── */}
         <div style={{ maxWidth: "600px", flex: 1, margin: "0 auto" }}>
@@ -910,7 +936,6 @@ function CollectionSection({
       <style>{`
         @media (max-width: 767px) {
           .coll-outer { padding: 40px 20px 0 !important; flex-direction: column !important; }
-          .wishlist-col { width: 100% !important; }
           .prof-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px 12px !important; }
         }
       `}</style>
