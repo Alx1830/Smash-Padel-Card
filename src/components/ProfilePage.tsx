@@ -6,11 +6,13 @@ import { PlayerCard3D } from "./PlayerCard3D";
 import { FollowButton } from "./FollowButton";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { SET_CARDS, VERSION_LABEL } from "@/data/pokemon-cards";
+import { CardDetailModal, type InventoryMap, type FeaturedCard as FeaturedCardModal, type WishlistCard as WishlistCardModal, type UserListing } from "@/components/CardDetailModal";
 
 type SetStats = { unique: number; total: number; totalQty: number };
 type InvRow   = { card_id: number; set_id: string; quantity: number };
 
-type FeaturedCard = { card_id: number; set_id: string };
+type FeaturedCard  = { card_id: number; set_id: string };
+type WishlistCard  = { card_id: number; set_id: string };
 
 interface PlayerData {
   username:         string;
@@ -30,6 +32,7 @@ interface PlayerData {
   setStats?:        Record<string, SetStats>;
   inventoryRows?:   InvRow[];
   featuredCards?:   FeaturedCard[];
+  wishlistCards?:   WishlistCard[];
 }
 
 const COURT = "#2ee6c1";
@@ -284,12 +287,15 @@ export function ProfilePage({ player }: { player: PlayerData }) {
       </section>
 
       {/* ══ SHOWCASE + COLECCIÓN ══ */}
-      {player.setStats && Object.keys(player.setStats).length > 0 && (
+      {(player.setStats && Object.keys(player.setStats).length > 0) || (player.wishlistCards && player.wishlistCards.length > 0) ? (
         <CollectionSection
-          setStats={player.setStats}
+          setStats={player.setStats ?? {}}
           inventoryRows={player.inventoryRows ?? []}
+          wishlistCards={player.wishlistCards ?? []}
+          featuredCards={player.featuredCards ?? []}
+          profileUserId={player.profileUserId}
         />
-      )}
+      ) : null}
 
     </div>
   );
@@ -615,12 +621,161 @@ function Showcase({ featuredCards, inventoryRows }: { featuredCards: FeaturedCar
   );
 }
 
+/* ── Wishlist Slider ────────────────────────────────────────── */
+function WishlistSlider({
+  wishlistCards, inventoryRows, featuredCards, profileUserId,
+}: {
+  wishlistCards:  WishlistCard[];
+  inventoryRows:  InvRow[];
+  featuredCards:  FeaturedCard[];
+  profileUserId?: string;
+}) {
+  const [idx,      setIdx]      = useState(0);
+  const [modalCard, setModalCard] = useState<{ card_id: number; set_id: string } | null>(null);
+  const [featLocal,  setFeatLocal]  = useState<FeaturedCardModal[]>(featuredCards as FeaturedCardModal[]);
+  const [wishLocal,  setWishLocal]  = useState<WishlistCardModal[]>(wishlistCards as WishlistCardModal[]);
+
+  // Resolver cartas válidas (max 5, que existan en SET_CARDS)
+  const resolved = wishlistCards.slice(0, 5).map(w => {
+    const cards = SET_CARDS[w.set_id];
+    const card  = cards?.find(c => c.id === w.card_id);
+    const set   = ALL_SETS.find(s => s.id === w.set_id);
+    return card && set ? { card, set, card_id: w.card_id, set_id: w.set_id } : null;
+  }).filter(Boolean) as { card: NonNullable<ReturnType<typeof SET_CARDS[string]["find"]>>; set: { id: string; name: string }; card_id: number; set_id: string }[];
+
+  // Inventory map para el modal
+  const inventoryMap: InventoryMap = {};
+  inventoryRows.forEach(r => { inventoryMap[r.card_id] = r.quantity; });
+
+  useEffect(() => {
+    if (resolved.length < 2) return;
+    const t = setInterval(() => setIdx(i => (i + 1) % resolved.length), 2000);
+    return () => clearInterval(t);
+  }, [resolved.length]);
+
+  if (resolved.length === 0) return null;
+
+  const current = resolved[idx];
+
+  return (
+    <div style={{ marginBottom: "48px" }}>
+      {/* Header */}
+      <div style={{
+        fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
+        textTransform: "uppercase", color: "#ffd24f",
+        display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px",
+      }}>
+        <span style={{ width: "22px", height: "1px", background: "#ffd24f", display: "inline-block" }} />
+        Cartas que necesito
+      </div>
+
+      {/* Slide */}
+      <div
+        key={idx}
+        onClick={() => setModalCard({ card_id: current.card_id, set_id: current.set_id })}
+        style={{
+          cursor: "pointer",
+          animation: "wl-in 0.35s cubic-bezier(0.2,0.8,0.2,1) forwards",
+        }}
+      >
+        {/* Imagen */}
+        <div style={{
+          position: "relative", width: "100%", aspectRatio: "5/7",
+          borderRadius: "14px", overflow: "hidden",
+          boxShadow: "0 16px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,210,79,0.15)",
+        }}>
+          <Image src={current.card.image} alt={current.card.name} fill style={{ objectFit: "cover" }} sizes="280px" unoptimized />
+          {/* Badge buscando */}
+          <div style={{
+            position: "absolute", top: "10px", left: "10px",
+            fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.14em", textTransform: "uppercase",
+            color: "#2a2a2a", background: "#ffd24f", borderRadius: "4px", padding: "3px 8px",
+            fontWeight: 700,
+          }}>
+            Buscando
+          </div>
+        </div>
+
+        {/* Info */}
+        <div style={{ marginTop: "12px", textAlign: "center" }}>
+          <div style={{ fontFamily: MONO_C, fontSize: "13px", color: INK0_C, fontWeight: 600, marginBottom: "4px" }}>
+            #{String(current.card.card_number).padStart(3, "0")} {current.card.name}
+          </div>
+          <div style={{ fontFamily: MONO_C, fontSize: "11px", color: INK2_C, letterSpacing: "0.06em" }}>
+            {current.set.name}
+          </div>
+        </div>
+      </div>
+
+      {/* Dots */}
+      {resolved.length > 1 && (
+        <div style={{ display: "flex", justifyContent: "center", gap: "6px", marginTop: "14px" }}>
+          {resolved.map((_, i) => (
+            <button key={i} onClick={() => setIdx(i)} style={{
+              width: i === idx ? "20px" : "6px", height: "6px",
+              borderRadius: "3px", border: "none", cursor: "pointer",
+              background: i === idx ? "#ffd24f" : "rgba(255,255,255,0.2)",
+              transition: "all 0.2s", padding: 0,
+            }} />
+          ))}
+        </div>
+      )}
+
+      {/* Ver todas */}
+      <div style={{ marginTop: "16px", textAlign: "center" }}>
+        <button style={{
+          fontFamily: MONO_C, fontSize: "10px", letterSpacing: "0.14em",
+          textTransform: "uppercase", color: "#ffd24f",
+          background: "rgba(255,210,79,0.08)", border: "1px solid rgba(255,210,79,0.3)",
+          borderRadius: "8px", padding: "8px 20px", cursor: "pointer",
+          transition: "all 0.2s",
+        }}>
+          Ver todas →
+        </button>
+      </div>
+
+      {/* Modal */}
+      {modalCard && (() => {
+        const cards = SET_CARDS[modalCard.set_id];
+        const card  = cards?.find(c => c.id === modalCard.card_id);
+        if (!card) return null;
+        return (
+          <CardDetailModal
+            card={card}
+            setId={modalCard.set_id}
+            userId={profileUserId}
+            inventory={inventoryMap}
+            onInventoryChange={() => {}}
+            featuredCards={featLocal}
+            onFeaturedChange={setFeatLocal}
+            wishlistCards={wishLocal}
+            onWishlistChange={setWishLocal}
+            userListings={[] as UserListing[]}
+            onListingsChange={() => {}}
+            onClose={() => setModalCard(null)}
+          />
+        );
+      })()}
+
+      <style>{`
+        @keyframes wl-in {
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 /* ── Collection stats section ───────────────────────────────── */
 function CollectionSection({
-  setStats, inventoryRows,
+  setStats, inventoryRows, wishlistCards, featuredCards, profileUserId,
 }: {
-  setStats: Record<string, SetStats>;
-  inventoryRows: InvRow[];
+  setStats:       Record<string, SetStats>;
+  inventoryRows:  InvRow[];
+  wishlistCards:  WishlistCard[];
+  featuredCards:  FeaturedCard[];
+  profileUserId?: string;
 }) {
   const [expandedSetId, setExpandedSetId] = useState<string | null>(null);
 
@@ -643,6 +798,18 @@ function CollectionSection({
   return (
     <section style={{ background: BG0_C, padding: "0 0 80px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
       <div className="coll-outer" style={{ padding: "64px 80px 0", display: "flex", gap: "64px", alignItems: "flex-start" }}>
+
+        {/* ── Cartas que necesito (sidebar izquierdo) ── */}
+        {wishlistCards.length > 0 && (
+          <div className="wishlist-col" style={{ flexShrink: 0, width: "220px" }}>
+            <WishlistSlider
+              wishlistCards={wishlistCards}
+              inventoryRows={inventoryRows}
+              featuredCards={featuredCards}
+              profileUserId={profileUserId}
+            />
+          </div>
+        )}
 
         {/* ── Colección ── */}
         <div style={{ maxWidth: "600px", flex: 1, margin: "0 auto" }}>
@@ -742,7 +909,8 @@ function CollectionSection({
 
       <style>{`
         @media (max-width: 767px) {
-          .coll-outer { padding: 40px 20px 0 !important; }
+          .coll-outer { padding: 40px 20px 0 !important; flex-direction: column !important; }
+          .wishlist-col { width: 100% !important; }
           .prof-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px 12px !important; }
         }
       `}</style>
