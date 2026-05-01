@@ -29,10 +29,50 @@ interface Post {
 
 /* ── Rich text toolbar ── */
 function RichToolbar({ editorRef }: { editorRef: React.RefObject<HTMLDivElement> }) {
+  const [clipOpen, setClipOpen] = useState(false);
+  const [clipUrl,  setClipUrl]  = useState("");
+  const clipRef = useRef<HTMLDivElement>(null);
+
   function cmd(command: string, value?: string) {
     editorRef.current?.focus();
     document.execCommand(command, false, value);
   }
+
+  function insertMedia() {
+    const url = clipUrl.trim();
+    if (!url) return;
+
+    const isYouTube = /youtu\.be|youtube\.com/i.test(url);
+    const isImage   = /\.(jpe?g|png|gif|webp|avif|svg)(\?|$)/i.test(url);
+    const isVideo   = /\.(mp4|webm|ogg)(\?|$)/i.test(url);
+
+    let html = "";
+    if (isYouTube) {
+      const id = url.match(/(?:v=|youtu\.be\/)([\w-]{11})/)?.[1];
+      if (id) html = `<div class="post-media-wrap"><iframe src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen style="width:100%;aspect-ratio:16/9;border-radius:10px;display:block;"></iframe></div><p><br></p>`;
+    } else if (isImage) {
+      html = `<div class="post-media-wrap"><img src="${url}" style="max-width:100%;border-radius:10px;display:block;"></div><p><br></p>`;
+    } else if (isVideo) {
+      html = `<div class="post-media-wrap"><video controls style="max-width:100%;border-radius:10px;display:block;"><source src="${url}"></video></div><p><br></p>`;
+    } else {
+      html = `<p><a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#2ee6c1;">${url}</a></p>`;
+    }
+
+    editorRef.current?.focus();
+    document.execCommand("insertHTML", false, html);
+    setClipUrl("");
+    setClipOpen(false);
+  }
+
+  // Cerrar popover al hacer clic fuera
+  useEffect(() => {
+    if (!clipOpen) return;
+    function onOutside(e: MouseEvent) {
+      if (clipRef.current && !clipRef.current.contains(e.target as Node)) setClipOpen(false);
+    }
+    document.addEventListener("mousedown", onOutside);
+    return () => document.removeEventListener("mousedown", onOutside);
+  }, [clipOpen]);
 
   const btnStyle = (title: string, children: React.ReactNode) => (
     <button
@@ -60,17 +100,74 @@ function RichToolbar({ editorRef }: { editorRef: React.RefObject<HTMLDivElement>
   );
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", padding: "8px", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+    <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", padding: "8px", borderBottom: "1px solid rgba(255,255,255,0.07)", alignItems: "center" }}>
       {btnStyle("Bold",           <b>B</b>)}
       {btnStyle("Italic",         <i>I</i>)}
       {btnStyle("Tachado",        <s>S</s>)}
-      <div style={{ width: "1px", background: "rgba(255,255,255,0.1)", margin: "0 4px" }} />
+      <div style={{ width: "1px", background: "rgba(255,255,255,0.1)", margin: "0 4px", alignSelf: "stretch" }} />
       {btnStyle("Izquierda",      "⬛︎ ≡")}
       {btnStyle("Centro",         "≡")}
       {btnStyle("Derecha",        "≡ ⬛︎")}
-      <div style={{ width: "1px", background: "rgba(255,255,255,0.1)", margin: "0 4px" }} />
+      <div style={{ width: "1px", background: "rgba(255,255,255,0.1)", margin: "0 4px", alignSelf: "stretch" }} />
       {btnStyle("Lista",          "• Lista")}
       {btnStyle("Lista numerada", "1. Lista")}
+      <div style={{ width: "1px", background: "rgba(255,255,255,0.1)", margin: "0 4px", alignSelf: "stretch" }} />
+
+      {/* Botón clip — insertar media */}
+      <div ref={clipRef} style={{ position: "relative" }}>
+        <button
+          title="Insertar imagen o video"
+          onMouseDown={e => e.preventDefault()}
+          onClick={() => setClipOpen(v => !v)}
+          style={{
+            padding: "5px 9px", borderRadius: "5px", cursor: "pointer",
+            fontFamily: MONO, fontSize: "13px", lineHeight: 1,
+            border: clipOpen ? `1px solid ${COURT}88` : "1px solid rgba(255,255,255,0.1)",
+            background: clipOpen ? `${COURT}18` : "rgba(255,255,255,0.04)",
+            color: clipOpen ? COURT : INK1,
+            transition: "all 0.15s",
+          }}
+        >
+          📎
+        </button>
+
+        {clipOpen && (
+          <div style={{
+            position: "absolute", top: "calc(100% + 8px)", left: 0, zIndex: 100,
+            background: "#0e1119", border: `1px solid ${COURT}44`,
+            borderRadius: "10px", padding: "12px", width: "280px",
+            boxShadow: "0 12px 40px rgba(0,0,0,0.7)",
+          }}>
+            <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "0 0 8px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+              URL de imagen, video o YouTube
+            </p>
+            <div style={{ display: "flex", gap: "6px" }}>
+              <input
+                autoFocus
+                value={clipUrl}
+                onChange={e => setClipUrl(e.target.value)}
+                onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); insertMedia(); } }}
+                placeholder="https://…"
+                style={{
+                  flex: 1, padding: "8px 10px", borderRadius: "6px",
+                  background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)",
+                  color: INK0, fontFamily: MONO, fontSize: "11px", outline: "none",
+                }}
+              />
+              <button
+                onClick={insertMedia}
+                style={{
+                  padding: "8px 12px", borderRadius: "6px", border: "none", cursor: "pointer",
+                  background: COURT, color: "#05070d",
+                  fontFamily: MONO, fontSize: "11px", fontWeight: 700,
+                }}
+              >
+                ↵
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -317,7 +414,14 @@ export function AdminFeed({ currentUserId, currentUsername, isAdmin = false }: {
         .post-content s { opacity: 0.6; }
         .post-content ul, .post-content ol { padding-left: 20px; margin: 8px 0; }
         .post-content li { margin-bottom: 4px; }
+        .post-content img { max-width: 100%; border-radius: 10px; display: block; margin: 12px 0; }
+        .post-content video { max-width: 100%; border-radius: 10px; display: block; margin: 12px 0; }
+        .post-content iframe { width: 100%; aspect-ratio: 16/9; border-radius: 10px; display: block; margin: 12px 0; border: none; }
+        .post-content .post-media-wrap { margin: 12px 0; }
         [contenteditable]:empty:before { content: attr(data-placeholder); color: #7a8298; pointer-events: none; }
+        [contenteditable] img { max-width: 100%; border-radius: 10px; display: block; margin: 12px 0; }
+        [contenteditable] iframe { width: 100%; aspect-ratio: 16/9; border-radius: 10px; display: block; margin: 12px 0; border: none; }
+        [contenteditable] video { max-width: 100%; border-radius: 10px; display: block; margin: 12px 0; }
       `}</style>
 
       {/* Section header */}
