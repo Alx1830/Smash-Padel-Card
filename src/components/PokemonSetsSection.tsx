@@ -8,7 +8,7 @@ import { VERSION_LABEL, SET_CARD_COUNT, type PokemonCard, type CardVersion } fro
 import {
   COURT, INK0, INK2, BG0, MONO, DISP,
   VERSION_COLOR, VERSION_FULL,
-  QtyControl, CardDetailModal,
+  QtyControl, CardDetailModal, invKey,
   type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing,
 } from "@/components/CardDetailModal";
 
@@ -27,7 +27,7 @@ function TiltCard({
   userId?: string;
   setId: string;
   inventory: InventoryMap;
-  onInventoryChange: (cardId: number, qty: number) => void;
+  onInventoryChange: (key: string, qty: number) => void;
   onCardClick?: () => void;
 }) {
   const wrapRef  = useRef<HTMLDivElement>(null);
@@ -40,7 +40,7 @@ function TiltCard({
   const rafId    = useRef(0);
   const [hovered, setHovered] = useState(false);
 
-  const qty = inventory[card.id] ?? 0;
+  const qty = inventory[invKey(card.id, card.version)] ?? 0;
 
   const label = VERSION_LABEL[card.version];
   const labelColor = VERSION_COLOR[label] ?? INK2;
@@ -214,7 +214,7 @@ function TiltCard({
 
       {userId && (
         <QtyControl
-          cardId={card.id} setId={setId} qty={qty}
+          cardId={card.id} setId={setId} version={card.version} qty={qty}
           userId={userId} onChange={onInventoryChange}
         />
       )}
@@ -455,21 +455,21 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
     const supabase = createClient();
     supabase
       .from("card_inventory")
-      .select("card_id, quantity")
+      .select("card_id, version, quantity")
       .eq("user_id", userId)
       .eq("set_id", openSetId)
       .then(({ data }) => {
         if (data) {
           const map: InventoryMap = {};
-          data.forEach(r => { map[r.card_id] = r.quantity; });
+          data.forEach(r => { map[invKey(r.card_id, r.version ?? "normal")] = r.quantity; });
           setInventory(prev => ({ ...prev, ...map }));
         }
         setLoadingInv(false);
       });
   }, [userId, openSetId]);
 
-  const handleInventoryChange = useCallback((cardId: number, qty: number) => {
-    setInventory(prev => ({ ...prev, [cardId]: qty }));
+  const handleInventoryChange = useCallback((key: string, qty: number) => {
+    setInventory(prev => ({ ...prev, [key]: qty }));
   }, []);
 
   function goToSeries() {
@@ -570,8 +570,8 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
         {view === "cards" && openSet && (() => {
           const allCards = setCards;
           const visibleCards = allCards.filter(card => {
-            if (activeFilter === "tengo")           return (inventory[card.id] ?? 0) > 0;
-            if (activeFilter === "faltan")          return (inventory[card.id] ?? 0) === 0;
+            if (activeFilter === "tengo")           return (inventory[invKey(card.id, card.version)] ?? 0) > 0;
+            if (activeFilter === "faltan")          return (inventory[invKey(card.id, card.version)] ?? 0) === 0;
             if (activeFilter === "normal")          return card.version === "normal";
             if (activeFilter === "holofoil")        return card.version === "holofoil";
             if (activeFilter === "reverseHolofoil") return card.version === "reverseHolofoil";
@@ -609,8 +609,8 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                     }}
                   >
                     {f.label}
-                    {f.id === "tengo"  && userId ? ` (${allCards.filter(c => (inventory[c.id] ?? 0) > 0).length})` : ""}
-                    {f.id === "faltan" && userId ? ` (${allCards.filter(c => (inventory[c.id] ?? 0) === 0).length})` : ""}
+                    {f.id === "tengo"  && userId ? ` (${allCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) > 0).length})` : ""}
+                    {f.id === "faltan" && userId ? ` (${allCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) === 0).length})` : ""}
                   </button>
                 ))}
               </div>

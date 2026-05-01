@@ -31,17 +31,21 @@ export const VERSION_FULL: Record<string, string> = {
 
 export const ALL_SETS_FLAT = POKEMON_SERIES.flatMap(s => s.sets);
 
-export type InventoryMap = Record<number, number>;
+export type InventoryMap = Record<string, number>;
 export type FeaturedCard  = { card_id: number; set_id: string };
 export type WishlistCard  = { card_id: number; set_id: string };
 export type UserListing   = { id: string; card_id: number; set_id: string; price_cop: number; version: string };
 
+export function invKey(cardId: number, version: string): string {
+  return `${cardId}:${version}`;
+}
+
 /* ── Inventory controls ─────────────────────────────────────── */
 export function QtyControl({
-  cardId, setId, qty, userId, onChange, dark,
+  cardId, setId, version, qty, userId, onChange, dark,
 }: {
-  cardId: number; setId: string; qty: number;
-  userId: string; onChange: (cardId: number, qty: number) => void;
+  cardId: number; setId: string; version: string; qty: number;
+  userId: string; onChange: (key: string, qty: number) => void;
   dark?: boolean;
 }) {
   const [loading, setLoading] = useState(false);
@@ -54,13 +58,13 @@ export function QtyControl({
     if (next === 0) {
       await supabase.from("card_inventory")
         .delete()
-        .eq("user_id", userId).eq("card_id", cardId).eq("set_id", setId);
+        .eq("user_id", userId).eq("card_id", cardId).eq("set_id", setId).eq("version", version);
     } else {
       await supabase.from("card_inventory")
-        .upsert({ user_id: userId, card_id: cardId, set_id: setId, quantity: next },
-          { onConflict: "user_id,card_id,set_id" });
+        .upsert({ user_id: userId, card_id: cardId, set_id: setId, version, quantity: next },
+          { onConflict: "user_id,card_id,set_id,version" });
     }
-    onChange(cardId, next);
+    onChange(invKey(cardId, version), next);
     setLoading(false);
   };
 
@@ -239,7 +243,7 @@ export function CardDetailModal({
 }: {
   card: PokemonCard; setId: string;
   userId?: string; inventory: InventoryMap;
-  onInventoryChange: (cardId: number, qty: number) => void;
+  onInventoryChange: (key: string, qty: number) => void;
   featuredCards: FeaturedCard[];
   onFeaturedChange: (cards: FeaturedCard[]) => void;
   wishlistCards: WishlistCard[];
@@ -251,7 +255,7 @@ export function CardDetailModal({
   const setInfo    = ALL_SETS_FLAT.find(s => s.id === setId);
   const label      = VERSION_LABEL[card.version];
   const versionFull = VERSION_FULL[label] ?? label;
-  const qty        = inventory[card.id] ?? 0;
+  const qty        = inventory[invKey(card.id, card.version)] ?? 0;
   const isFeatured  = featuredCards.some(f => f.card_id === card.id && f.set_id === setId);
   const featCount   = featuredCards.length;
   const isWanted    = wishlistCards.some(w => w.card_id === card.id && w.set_id === setId);
@@ -442,7 +446,7 @@ export function CardDetailModal({
                   Inventario
                 </span>
                 <QtyControl
-                  cardId={card.id} setId={setId} qty={qty}
+                  cardId={card.id} setId={setId} version={card.version} qty={qty}
                   userId={userId} onChange={onInventoryChange}
                   dark
                 />

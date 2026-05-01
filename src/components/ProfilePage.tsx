@@ -672,11 +672,11 @@ function WishlistSlider({
 
   if (resolved.length === 0) return null;
 
-  const VISIBLE  = 5;
+  const VISIBLE  = 4;
   const CARD_GAP = 10; // px
 
   return (
-    <div style={{ marginBottom: "48px" }}>
+    <div style={{ marginBottom: "16px", minWidth: 0, overflow: "hidden" }}>
       <style>{`
         @keyframes wl-fade { from { opacity:0; } to { opacity:1; } }
         .wl-track { transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); }
@@ -687,14 +687,15 @@ function WishlistSlider({
       <div style={{
         fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
         textTransform: "uppercase", color: "#ffd24f",
-        display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px",
+        display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
       }}>
         <span style={{ width: "22px", height: "1px", background: "#ffd24f", display: "inline-block" }} />
         Cartas que necesito
       </div>
 
       {/* Carrusel */}
-      <div style={{ overflow: "hidden", borderRadius: "12px" }}>
+      <div style={{ padding: "0 0%" }}>
+      <div style={{ overflow: "hidden", borderRadius: "8px" }}>
         <div
           className={`wl-track${animated ? "" : " no-anim"}`}
           style={{
@@ -714,35 +715,36 @@ function WishlistSlider({
               }}
             >
               {/* Imagen */}
-              <div style={{
-                position: "relative", width: "100%", aspectRatio: "5/7",
-                borderRadius: "10px", overflow: "hidden",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,210,79,0.12)",
-                transition: "transform 0.2s, box-shadow 0.2s",
-              }}
+              <div
+                style={{
+                  position: "relative", width: "100%", aspectRatio: "5/7",
+                  borderRadius: "7px", overflow: "hidden",
+                  boxShadow: "0 4px 14px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,210,79,0.12)",
+                  transition: "transform 0.2s, box-shadow 0.2s",
+                }}
                 onMouseEnter={e => {
                   (e.currentTarget as HTMLDivElement).style.transform = "scale(1.04)";
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 32px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,210,79,0.35)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 20px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,210,79,0.35)";
                 }}
                 onMouseLeave={e => {
                   (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 24px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,210,79,0.12)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 14px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,210,79,0.12)";
                 }}
               >
                 <Image src={item.card.image} alt={item.card.name} fill style={{ objectFit: "cover" }} sizes="120px" unoptimized />
               </div>
 
               {/* Info */}
-              <div style={{ marginTop: "8px", textAlign: "center" }}>
+              <div style={{ marginTop: "6px", textAlign: "center" }}>
                 <div style={{
-                  fontFamily: MONO_C, fontSize: "10px", color: INK0_C,
+                  fontFamily: MONO_C, fontSize: "9px", color: INK0_C,
                   fontWeight: 600, marginBottom: "2px",
                   whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
                 }}>
                   #{String(item.card.card_number).padStart(3, "0")} {item.card.name}
                 </div>
                 <div style={{
-                  fontFamily: MONO_C, fontSize: "9px", color: INK2_C, letterSpacing: "0.04em",
+                  fontFamily: MONO_C, fontSize: "8px", color: INK2_C, letterSpacing: "0.04em",
                   whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
                 }}>
                   {item.set.name}
@@ -752,14 +754,15 @@ function WishlistSlider({
           ))}
         </div>
       </div>
+      </div>
 
       {/* Ver todas */}
-      <div style={{ marginTop: "16px", textAlign: "center" }}>
+      <div style={{ marginTop: "12px", textAlign: "center" }}>
         <button style={{
-          fontFamily: MONO_C, fontSize: "10px", letterSpacing: "0.14em",
+          fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.14em",
           textTransform: "uppercase", color: "#ffd24f",
           background: "rgba(255,210,79,0.08)", border: "1px solid rgba(255,210,79,0.3)",
-          borderRadius: "8px", padding: "8px 20px", cursor: "pointer",
+          borderRadius: "6px", padding: "6px 16px", cursor: "pointer",
           transition: "all 0.2s",
         }}>
           Ver todas →
@@ -823,7 +826,7 @@ function CollectionSection({
   return (
     <section style={{ background: BG0_C, padding: "0 0 80px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
 
-      <div className="coll-outer" style={{ padding: "64px 80px 0", display: "grid", gridTemplateColumns: wishlistCards.length > 0 ? "1fr 1fr" : "1fr", gap: "64px", alignItems: "flex-start" }}>
+      <div className="coll-outer" style={{ padding: "64px 14% 0", display: "grid", gridTemplateColumns: wishlistCards.length > 0 ? "1fr 1fr" : "1fr", gap: "64px", alignItems: "flex-start" }}>
 
         {/* ── Cartas que necesito ── */}
         {wishlistCards.length > 0 && (
@@ -932,8 +935,13 @@ function CollectionSection({
       </div>
 
       <style>{`
+        /* Tablet */
+        @media (max-width: 1023px) and (min-width: 768px) {
+          .coll-outer { padding: 40px 32px 0 !important; gap: 32px !important; }
+        }
+        /* Mobile */
         @media (max-width: 767px) {
-          .coll-outer { padding: 40px 20px 0 !important; grid-template-columns: 1fr !important; }
+          .coll-outer { padding: 32px 16px 0 !important; grid-template-columns: 1fr !important; gap: 40px !important; }
           .prof-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px 12px !important; }
         }
       `}</style>

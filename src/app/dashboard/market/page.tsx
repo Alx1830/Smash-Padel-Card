@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
-import { CardDetailModal, type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing } from "@/components/CardDetailModal";
+import { CardDetailModal, invKey, type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing } from "@/components/CardDetailModal";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 
 const COURT = "#2ee6c1";
@@ -140,18 +140,18 @@ export default function DashboardMarketPage() {
     const supabase = createClient();
     const { data: invData } = await supabase
       .from("card_inventory")
-      .select("card_id, quantity")
+      .select("card_id, version, quantity")
       .eq("user_id", userId)
       .eq("set_id", listing.set_id);
 
     const invMap: InventoryMap = {};
-    (invData ?? []).forEach((r: any) => { invMap[r.card_id] = r.quantity; });
+    (invData ?? []).forEach((r: any) => { invMap[invKey(r.card_id, r.version ?? "normal")] = r.quantity; });
     setModalInventory(invMap);
     setModalTarget({ card, setId: listing.set_id });
   };
 
-  const handleInventoryChange = useCallback((cardId: number, qty: number) => {
-    setModalInventory(prev => ({ ...prev, [cardId]: qty }));
+  const handleInventoryChange = useCallback((key: string, qty: number) => {
+    setModalInventory(prev => ({ ...prev, [key]: qty }));
   }, []);
 
   const handleListingsChange = useCallback((updated: UserListing[]) => {
