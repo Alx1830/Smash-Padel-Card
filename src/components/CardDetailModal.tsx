@@ -463,8 +463,8 @@ export function CardDetailModal({
                         padding: "12px 8px",
                         fontFamily: MONO, fontSize: "11px", letterSpacing: "0.14em", textTransform: "uppercase",
                         borderRadius: "10px", textDecoration: "none", fontWeight: 700,
-                        background: "#ffffff", color: "#05070d",
-                        border: "1.5px solid #ffffff",
+                        background: "rgba(5,7,13,0.05)", color: "#05070d",
+                        border: "1.5px solid rgba(5,7,13,0.2)",
                         transition: "all 0.2s",
                       }}
                     >
@@ -483,10 +483,10 @@ export function CardDetailModal({
                     textTransform: "uppercase", borderRadius: "10px",
                     cursor: featuring || !canFeature ? "default" : "pointer",
                     transition: "all 0.2s",
-                    opacity: featuring ? 0.6 : 1,
-                    background: isFeatured ? "#33ffd6" : canFeature ? "#33ffd6" : "transparent",
-                    color: isFeatured ? "#2a2a2a" : canFeature ? "#2a2a2a" : "#aab0c2",
-                    border: `1.5px solid ${canFeature ? "#33ffd6" : "rgba(170,176,194,0.4)"}`,
+                    opacity: featuring ? 0.6 : !canFeature ? 0.4 : 1,
+                    background: isFeatured ? "#2ee6c1" : "rgba(46,230,193,0.1)",
+                    color: isFeatured ? "#05070d" : "#0d6b5e",
+                    border: "1.5px solid #2ee6c1",
                   }}
                 >
                   {isFeatured ? "✓ Destacada" : "Destacar"}
@@ -505,9 +505,9 @@ export function CardDetailModal({
                     cursor: toggling ? "default" : "pointer",
                     transition: "all 0.2s",
                     opacity: toggling ? 0.6 : 1,
-                    background: isWanted ? "#ffd24f" : "transparent",
-                    color: isWanted ? "#2a2a2a" : "#aab0c2",
-                    border: `1.5px solid ${isWanted ? "#ffd24f" : "rgba(170,176,194,0.4)"}`,
+                    background: isWanted ? "#ffd24f" : "rgba(255,210,79,0.12)",
+                    color: isWanted ? "#2a2a2a" : "#7a5c00",
+                    border: "1.5px solid #ffd24f",
                   }}
                 >
                   {isWanted ? "✓ Buscando" : "Buscando"}
@@ -515,7 +515,17 @@ export function CardDetailModal({
                 <button
                   onClick={() => canSell && setSellingMode(true)}
                   disabled={!canSell}
-                  style={{ flex: 1, padding: "12px 8px", fontFamily: MONO, fontSize: "11px", letterSpacing: "0.16em", textTransform: "uppercase", borderRadius: "10px", cursor: canSell ? "pointer" : "default", background: canSell ? "#2ee696" : "transparent", color: canSell ? "#0a0a0a" : "#aab0c2", border: `1.5px solid ${canSell ? "#2ee696" : "rgba(170,176,194,0.4)"}`, transition: "all 0.2s" }}
+                  style={{
+                    flex: 1, padding: "12px 8px",
+                    fontFamily: MONO, fontSize: "11px", letterSpacing: "0.16em",
+                    textTransform: "uppercase", borderRadius: "10px",
+                    cursor: canSell ? "pointer" : "default",
+                    transition: "all 0.2s",
+                    opacity: canSell ? 1 : 0.4,
+                    background: canSell ? "#2ee696" : "rgba(46,230,150,0.1)",
+                    color: canSell ? "#0a0a0a" : "#0a5c30",
+                    border: "1.5px solid #2ee696",
+                  }}
                 >
                   Vender
                 </button>
