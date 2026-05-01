@@ -13,7 +13,7 @@ function useOnlineUsers() {
   const [onlineIds, setOnlineIds] = useState<Set<string>>(new Set());
   useEffect(() => {
     const supabase = createClient();
-    const channel = supabase.channel("online-users");
+    const channel = supabase.channel("admin-users-presence");
     channel
       .on("presence", { event: "sync" }, () => {
         const state = channel.presenceState<{ user_id: string }>();
