@@ -32,8 +32,9 @@ export const VERSION_FULL: Record<string, string> = {
 export const ALL_SETS_FLAT = POKEMON_SERIES.flatMap(s => s.sets);
 
 export type InventoryMap = Record<number, number>;
-export type FeaturedCard = { card_id: number; set_id: string };
-export type UserListing  = { id: string; card_id: number; set_id: string; price_cop: number; version: string };
+export type FeaturedCard  = { card_id: number; set_id: string };
+export type WishlistCard  = { card_id: number; set_id: string };
+export type UserListing   = { id: string; card_id: number; set_id: string; price_cop: number; version: string };
 
 /* ── Inventory controls ─────────────────────────────────────── */
 export function QtyControl({
@@ -232,6 +233,7 @@ export function ModalTiltCard({ card }: { card: PokemonCard }) {
 export function CardDetailModal({
   card, setId, userId, inventory, onInventoryChange,
   featuredCards, onFeaturedChange,
+  wishlistCards, onWishlistChange,
   userListings, onListingsChange,
   onClose,
 }: {
@@ -240,6 +242,8 @@ export function CardDetailModal({
   onInventoryChange: (cardId: number, qty: number) => void;
   featuredCards: FeaturedCard[];
   onFeaturedChange: (cards: FeaturedCard[]) => void;
+  wishlistCards: WishlistCard[];
+  onWishlistChange: (cards: WishlistCard[]) => void;
   userListings: UserListing[];
   onListingsChange: (listings: UserListing[]) => void;
   onClose: () => void;
@@ -250,8 +254,10 @@ export function CardDetailModal({
   const qty        = inventory[card.id] ?? 0;
   const isFeatured  = featuredCards.some(f => f.card_id === card.id && f.set_id === setId);
   const featCount   = featuredCards.length;
+  const isWanted    = wishlistCards.some(w => w.card_id === card.id && w.set_id === setId);
   const hasInInv    = qty > 0;
-  const [featuring, setFeaturing] = useState(false);
+  const [featuring,  setFeaturing]  = useState(false);
+  const [toggling,   setToggling]   = useState(false);
   const canFeature  = hasInInv && (isFeatured || featCount < 10);
 
   const cardListings = userListings.filter(l => l.card_id === card.id && l.set_id === setId);
@@ -316,6 +322,23 @@ export function CardDetailModal({
       onFeaturedChange([...featuredCards, { card_id: card.id, set_id: setId }]);
     }
     setFeaturing(false);
+  };
+
+  const handleToggleWishlist = async () => {
+    if (!userId || toggling) return;
+    setToggling(true);
+    const supabase = createClient();
+    if (isWanted) {
+      await supabase.from("card_wishlist")
+        .delete()
+        .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId);
+      onWishlistChange(wishlistCards.filter(w => !(w.card_id === card.id && w.set_id === setId)));
+    } else {
+      await supabase.from("card_wishlist")
+        .insert({ user_id: userId, card_id: card.id, set_id: setId });
+      onWishlistChange([...wishlistCards, { card_id: card.id, set_id: setId }]);
+    }
+    setToggling(false);
   };
 
   useEffect(() => {
@@ -425,7 +448,32 @@ export function CardDetailModal({
                 />
               </div>
 
-              <div style={{ display: "flex", gap: "8px" }}>
+              {/* Fila 1: Ver precios | Destacar */}
+              <div style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
+                {/* Ver precios — TCGPlayer */}
+                {(() => {
+                  const tcgQuery = [card.name, setInfo?.name ?? "", VERSION_FULL[label] ?? label].filter(Boolean).join(" ");
+                  return (
+                    <a
+                      href={`https://www.tcgplayer.com/search/pokemon/product?q=${encodeURIComponent(tcgQuery)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "5px",
+                        padding: "12px 8px",
+                        fontFamily: MONO, fontSize: "11px", letterSpacing: "0.14em", textTransform: "uppercase",
+                        borderRadius: "10px", textDecoration: "none", fontWeight: 700,
+                        background: "#ffffff", color: "#05070d",
+                        border: "1.5px solid #ffffff",
+                        transition: "all 0.2s",
+                      }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="https://www.tcgplayer.com/favicon.ico" alt="" width={12} height={12} style={{ flexShrink: 0 }} />
+                      Ver precios
+                    </a>
+                  );
+                })()}
                 <button
                   onClick={handleToggleFeatured}
                   disabled={featuring || !canFeature}
@@ -442,6 +490,27 @@ export function CardDetailModal({
                   }}
                 >
                   {isFeatured ? "✓ Destacada" : "Destacar"}
+                </button>
+              </div>
+
+              {/* Fila 2: Buscando | Vender */}
+              <div style={{ display: "flex", gap: "8px" }}>
+                <button
+                  onClick={handleToggleWishlist}
+                  disabled={toggling}
+                  style={{
+                    flex: 1, padding: "12px 8px",
+                    fontFamily: MONO, fontSize: "11px", letterSpacing: "0.16em",
+                    textTransform: "uppercase", borderRadius: "10px",
+                    cursor: toggling ? "default" : "pointer",
+                    transition: "all 0.2s",
+                    opacity: toggling ? 0.6 : 1,
+                    background: isWanted ? "#ffd24f" : "transparent",
+                    color: isWanted ? "#2a2a2a" : "#aab0c2",
+                    border: `1.5px solid ${isWanted ? "#ffd24f" : "rgba(170,176,194,0.4)"}`,
+                  }}
+                >
+                  {isWanted ? "✓ Buscando" : "Buscando"}
                 </button>
                 <button
                   onClick={() => canSell && setSellingMode(true)}

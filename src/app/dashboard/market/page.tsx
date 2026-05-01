@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
-import { CardDetailModal, type InventoryMap, type FeaturedCard, type UserListing } from "@/components/CardDetailModal";
+import { CardDetailModal, type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing } from "@/components/CardDetailModal";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 
 const COURT = "#2ee6c1";
@@ -54,6 +54,7 @@ export default function DashboardMarketPage() {
   const [modalTarget, setModalTarget] = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [modalInventory, setModalInventory] = useState<InventoryMap>({});
   const [featuredCards, setFeaturedCards]   = useState<FeaturedCard[]>([]);
+  const [wishlistCards, setWishlistCards]   = useState<WishlistCard[]>([]);
   const [userListings, setUserListings]     = useState<UserListing[]>([]);
 
   useEffect(() => {
@@ -63,7 +64,7 @@ export default function DashboardMarketPage() {
       if (!user) return;
       setUserId(user.id);
 
-      const [{ data: rows }, { data: featured }] = await Promise.all([
+      const [{ data: rows }, { data: featured }, { data: wishlist }] = await Promise.all([
         supabase
           .from("market_listings")
           .select("id, card_id, set_id, price_cop, version, created_at")
@@ -74,12 +75,17 @@ export default function DashboardMarketPage() {
           .from("featured_cards")
           .select("card_id, set_id")
           .eq("user_id", user.id),
+        supabase
+          .from("card_wishlist")
+          .select("card_id, set_id")
+          .eq("user_id", user.id),
       ]);
 
       const listingRows = (rows ?? []) as Listing[];
       setListings(listingRows);
       setUserListings(listingRows.map(l => ({ id: l.id, card_id: l.card_id, set_id: l.set_id, price_cop: l.price_cop, version: l.version })));
       if (featured) setFeaturedCards(featured as FeaturedCard[]);
+      if (wishlist) setWishlistCards(wishlist as WishlistCard[]);
 
       const mod = await import("@/data/pokemon-cards");
       const needed: Record<string, any[]> = {};
@@ -306,6 +312,8 @@ export default function DashboardMarketPage() {
           onInventoryChange={handleInventoryChange}
           featuredCards={featuredCards}
           onFeaturedChange={setFeaturedCards}
+          wishlistCards={wishlistCards}
+          onWishlistChange={setWishlistCards}
           userListings={userListings}
           onListingsChange={handleListingsChange}
           onClose={() => setModalTarget(null)}

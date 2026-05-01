@@ -9,7 +9,7 @@ import {
   COURT, INK0, INK2, BG0, MONO, DISP,
   VERSION_COLOR, VERSION_FULL,
   QtyControl, CardDetailModal,
-  type InventoryMap, type FeaturedCard, type UserListing,
+  type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing,
 } from "@/components/CardDetailModal";
 
 /* Lazy-load card data only when a set is opened */
@@ -401,6 +401,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const [activeFilter, setActiveFilter] = useState<CardFilter>("todas");
   const [selectedCard, setSelectedCard] = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [featuredCards, setFeaturedCards] = useState<FeaturedCard[]>([]);
+  const [wishlistCards, setWishlistCards] = useState<WishlistCard[]>([]);
   const [userListings,  setUserListings]  = useState<UserListing[]>([]);
 
   const openSeries = POKEMON_SERIES.find(s => s.id === openSeriesId);
@@ -418,6 +419,13 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
       .eq("user_id", userId)
       .then(({ data }) => {
         if (data) setFeaturedCards(data as FeaturedCard[]);
+      });
+    supabase
+      .from("card_wishlist")
+      .select("card_id, set_id")
+      .eq("user_id", userId)
+      .then(({ data }) => {
+        if (data) setWishlistCards(data as WishlistCard[]);
       });
     supabase
       .from("market_listings")
@@ -647,6 +655,8 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           onInventoryChange={handleInventoryChange}
           featuredCards={featuredCards}
           onFeaturedChange={setFeaturedCards}
+          wishlistCards={wishlistCards}
+          onWishlistChange={setWishlistCards}
           userListings={userListings}
           onListingsChange={setUserListings}
           onClose={() => setSelectedCard(null)}
