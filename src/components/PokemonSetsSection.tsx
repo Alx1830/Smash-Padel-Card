@@ -5,7 +5,7 @@ import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES, type PokemonSet } from "@/data/pokemon-sets";
 import { VERSION_LABEL, getVersionLabel, getVersionEffect, getVersionColor, type PokemonCard, type CardVersion } from "@/data/pokemon-cards-meta";
-import { SET_CARD_COUNT } from "@/data/pokemon-cards";
+import { SET_CARD_COUNT, loadSetCards } from "@/data/pokemon-cards";
 import {
   COURT, INK0, INK2, BG0, MONO, DISP,
   VERSION_COLOR, VERSION_FULL,
@@ -15,8 +15,7 @@ import {
 
 /* Lazy-load card data only when a set is opened */
 async function fetchSetCards(setId: string): Promise<PokemonCard[]> {
-  const mod = await import("@/data/pokemon-cards");
-  return mod.SET_CARDS[setId] ?? [];
+  return loadSetCards(setId);
 }
 
 

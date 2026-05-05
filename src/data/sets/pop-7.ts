@@ -1,0 +1,33 @@
+import type { PokemonCard } from "@/data/pokemon-cards-meta";
+
+const cards: PokemonCard[] = [
+  { id: "001:Ampharos:Holofoil", name: "Ampharos"                                    , image: "https://images.scrydex.com/pokemon/pop7-1/large", version: "holofoil", card_number: 1 },
+  { id: "001:Ampharos:Normal", name: "Ampharos"                                    , image: "https://images.scrydex.com/pokemon/pop7-1/large", version: "normal", card_number: 1 },
+  { id: "002:Gallade:Holofoil", name: "Gallade"                                     , image: "https://images.scrydex.com/pokemon/pop7-2/large", version: "holofoil", card_number: 2 },
+  { id: "002:Gallade:JasonKlaczynski", name: "Gallade"                                     , image: "https://images.scrydex.com/pokemon/pop7-2/large", version: "jasonKlaczynski", card_number: 2 },
+  { id: "002:Gallade:MichaelPramawat", name: "Gallade"                                     , image: "https://images.scrydex.com/pokemon/pop7-2/large", version: "michaelPramawat", card_number: 2 },
+  { id: "002:Gallade:Normal", name: "Gallade"                                     , image: "https://images.scrydex.com/pokemon/pop7-2/large", version: "normal", card_number: 2 },
+  { id: "003:Latias:Holofoil", name: "Latias"                                      , image: "https://images.scrydex.com/pokemon/pop7-3/large", version: "holofoil", card_number: 3 },
+  { id: "003:Latias:Normal", name: "Latias"                                      , image: "https://images.scrydex.com/pokemon/pop7-3/large", version: "normal", card_number: 3 },
+  { id: "004:Latios:Holofoil", name: "Latios"                                      , image: "https://images.scrydex.com/pokemon/pop7-4/large", version: "holofoil", card_number: 4 },
+  { id: "004:Latios:Normal", name: "Latios"                                      , image: "https://images.scrydex.com/pokemon/pop7-4/large", version: "normal", card_number: 4 },
+  { id: "005:Mothim:Holofoil", name: "Mothim"                                      , image: "https://images.scrydex.com/pokemon/pop7-5/large", version: "holofoil", card_number: 5 },
+  { id: "005:Mothim:Normal", name: "Mothim"                                      , image: "https://images.scrydex.com/pokemon/pop7-5/large", version: "normal", card_number: 5 },
+  { id: "006:Delibird:Normal", name: "Delibird"                                    , image: "https://images.scrydex.com/pokemon/pop7-6/large", version: "normal", card_number: 6 },
+  { id: "007:Flaaffy:Normal", name: "Flaaffy"                                     , image: "https://images.scrydex.com/pokemon/pop7-7/large", version: "normal", card_number: 7 },
+  { id: "008:Kirlia:Holofoil", name: "Kirlia"                                      , image: "https://images.scrydex.com/pokemon/pop7-8/large", version: "holofoil", card_number: 8 },
+  { id: "008:Kirlia:JasonKlaczynski", name: "Kirlia"                                      , image: "https://images.scrydex.com/pokemon/pop7-8/large", version: "jasonKlaczynski", card_number: 8 },
+  { id: "008:Kirlia:Normal", name: "Kirlia"                                      , image: "https://images.scrydex.com/pokemon/pop7-8/large", version: "normal", card_number: 8 },
+  { id: "009:Stantler:CosmosHolofoil", name: "Stantler"                                    , image: "https://images.scrydex.com/pokemon/pop7-9/large", version: "cosmosHolofoil", card_number: 9 },
+  { id: "009:Stantler:Normal", name: "Stantler"                                    , image: "https://images.scrydex.com/pokemon/pop7-9/large", version: "normal", card_number: 9 },
+  { id: "010:Wormadam Sandy Cloak:Normal", name: "Wormadam Sandy Cloak"                        , image: "https://images.scrydex.com/pokemon/pop7-10/large", version: "normal", card_number: 10 },
+  { id: "011:Burmy Plant Cloak:Normal", name: "Burmy Plant Cloak"                           , image: "https://images.scrydex.com/pokemon/pop7-11/large", version: "normal", card_number: 11 },
+  { id: "012:Burmy Sandy Cloak:Normal", name: "Burmy Sandy Cloak"                           , image: "https://images.scrydex.com/pokemon/pop7-12/large", version: "normal", card_number: 12 },
+  { id: "013:Corsola:Normal", name: "Corsola"                                     , image: "https://images.scrydex.com/pokemon/pop7-13/large", version: "normal", card_number: 13 },
+  { id: "014:Mareep:Normal", name: "Mareep"                                      , image: "https://images.scrydex.com/pokemon/pop7-14/large", version: "normal", card_number: 14 },
+  { id: "015:Ralts:JasonKlaczynski", name: "Ralts"                                       , image: "https://images.scrydex.com/pokemon/pop7-15/large", version: "jasonKlaczynski", card_number: 15 },
+  { id: "015:Ralts:Normal", name: "Ralts"                                       , image: "https://images.scrydex.com/pokemon/pop7-15/large", version: "normal", card_number: 15 },
+  { id: "016:Sentret:Normal", name: "Sentret"                                     , image: "https://images.scrydex.com/pokemon/pop7-16/large", version: "normal", card_number: 16 },
+  { id: "017:Spinda:Normal", name: "Spinda"                                      , image: "https://images.scrydex.com/pokemon/pop7-17/large", version: "normal", card_number: 17 },
+];
+export default cards;

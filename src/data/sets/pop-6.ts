@@ -1,0 +1,31 @@
+import type { PokemonCard } from "@/data/pokemon-cards-meta";
+
+const cards: PokemonCard[] = [
+  { id: "001:Bastiodon:Normal", name: "Bastiodon"                                   , image: "https://images.scrydex.com/pokemon/pop6-1/large", version: "normal", card_number: 1 },
+  { id: "002:Lucario:Normal", name: "Lucario"                                     , image: "https://images.scrydex.com/pokemon/pop6-2/large", version: "normal", card_number: 2 },
+  { id: "003:Manaphy:Holofoil", name: "Manaphy"                                     , image: "https://images.scrydex.com/pokemon/pop6-3/large", version: "holofoil", card_number: 3 },
+  { id: "003:Manaphy:Normal", name: "Manaphy"                                     , image: "https://images.scrydex.com/pokemon/pop6-3/large", version: "normal", card_number: 3 },
+  { id: "004:Pachirisu:Normal", name: "Pachirisu"                                   , image: "https://images.scrydex.com/pokemon/pop6-4/large", version: "normal", card_number: 4 },
+  { id: "005:Rampardos:Normal", name: "Rampardos"                                   , image: "https://images.scrydex.com/pokemon/pop6-5/large", version: "normal", card_number: 5 },
+  { id: "006:Drifloon:Normal", name: "Drifloon"                                    , image: "https://images.scrydex.com/pokemon/pop6-6/large", version: "normal", card_number: 6 },
+  { id: "007:Gible:Holofoil", name: "Gible"                                       , image: "https://images.scrydex.com/pokemon/pop6-7/large", version: "holofoil", card_number: 7 },
+  { id: "007:Gible:Normal", name: "Gible"                                       , image: "https://images.scrydex.com/pokemon/pop6-7/large", version: "normal", card_number: 7 },
+  { id: "008:Riolu:Holofoil", name: "Riolu"                                       , image: "https://images.scrydex.com/pokemon/pop6-8/large", version: "holofoil", card_number: 8 },
+  { id: "008:Riolu:Normal", name: "Riolu"                                       , image: "https://images.scrydex.com/pokemon/pop6-8/large", version: "normal", card_number: 8 },
+  { id: "009:Pikachu:Holofoil", name: "Pikachu"                                     , image: "https://images.scrydex.com/pokemon/pop6-9/large", version: "holofoil", card_number: 9 },
+  { id: "009:Pikachu:Normal", name: "Pikachu"                                     , image: "https://images.scrydex.com/pokemon/pop6-9/large", version: "normal", card_number: 9 },
+  { id: "009:Pikachu:PokemonDayStamp", name: "Pikachu"                                     , image: "https://images.scrydex.com/pokemon/pop6-9/large", version: "pokemonDayStamp", card_number: 9 },
+  { id: "010:Staravia:Normal", name: "Staravia"                                    , image: "https://images.scrydex.com/pokemon/pop6-10/large", version: "normal", card_number: 10 },
+  { id: "011:Bidoof:Normal", name: "Bidoof"                                      , image: "https://images.scrydex.com/pokemon/pop6-11/large", version: "normal", card_number: 11 },
+  { id: "012:Buneary:Normal", name: "Buneary"                                     , image: "https://images.scrydex.com/pokemon/pop6-12/large", version: "normal", card_number: 12 },
+  { id: "013:Cherubi:Normal", name: "Cherubi"                                     , image: "https://images.scrydex.com/pokemon/pop6-13/large", version: "normal", card_number: 13 },
+  { id: "014:Chimchar:Holofoil", name: "Chimchar"                                    , image: "https://images.scrydex.com/pokemon/pop6-14/large", version: "holofoil", card_number: 14 },
+  { id: "014:Chimchar:Normal", name: "Chimchar"                                    , image: "https://images.scrydex.com/pokemon/pop6-14/large", version: "normal", card_number: 14 },
+  { id: "015:Piplup:DylanLefavour", name: "Piplup"                                      , image: "https://images.scrydex.com/pokemon/pop6-15/large", version: "dylanLefavour", card_number: 15 },
+  { id: "015:Piplup:Holofoil", name: "Piplup"                                      , image: "https://images.scrydex.com/pokemon/pop6-15/large", version: "holofoil", card_number: 15 },
+  { id: "015:Piplup:Normal", name: "Piplup"                                      , image: "https://images.scrydex.com/pokemon/pop6-15/large", version: "normal", card_number: 15 },
+  { id: "016:Starly:Normal", name: "Starly"                                      , image: "https://images.scrydex.com/pokemon/pop6-16/large", version: "normal", card_number: 16 },
+  { id: "017:Turtwig:Holofoil", name: "Turtwig"                                     , image: "https://images.scrydex.com/pokemon/pop6-17/large", version: "holofoil", card_number: 17 },
+  { id: "017:Turtwig:Normal", name: "Turtwig"                                     , image: "https://images.scrydex.com/pokemon/pop6-17/large", version: "normal", card_number: 17 },
+];
+export default cards;

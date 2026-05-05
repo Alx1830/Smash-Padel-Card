@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 import { PlayerCard3D } from "./PlayerCard3D";
 import { FollowButton } from "./FollowButton";
-import { SET_CARDS } from "@/data/pokemon-cards";
+import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionEffect, getVersionColor } from "@/data/pokemon-cards-meta";
 
 const COURT = "#2ee6c1";
@@ -155,6 +155,15 @@ function Showcase({ featuredCards, inventoryRows }: {
 }) {
   const [idx, setIdx] = useState(0);
   const [placeholder, setPlaceholder] = useState(PLACEHOLDER_STABLE);
+  const [, forceUpdate] = useState(0);
+
+  useEffect(() => {
+    const ids = [
+      ...featuredCards.map(f => f.set_id),
+      ...PLACEHOLDER_STABLE.map(p => p.set_id),
+    ];
+    loadManySets([...new Set(ids)]).then(() => forceUpdate(n => n + 1));
+  }, [featuredCards]);
 
   useEffect(() => {
     if (PLACEHOLDER_CANDIDATES.length >= 3) {

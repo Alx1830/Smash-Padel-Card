@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { SET_CARDS } from "@/data/pokemon-cards";
+import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import { ModalTiltCard } from "@/components/CardDetailModal";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
@@ -47,6 +47,12 @@ export function WishlistPageClient({
   const [fVariante,   setFVariante]   = useState("");
   const [previewCard, setPreviewCard] = useState<PokemonCard | null>(null);
   const [authMsg,     setAuthMsg]     = useState<string | null>(null);
+  const [setsLoaded,  setSetsLoaded]  = useState(false);
+
+  useEffect(() => {
+    const ids = [...new Set(wishlistRows.map(w => w.set_id))];
+    loadManySets(ids).then(() => setSetsLoaded(true));
+  }, [wishlistRows]);
 
   const resolved = useMemo(() => {
     return wishlistRows.map(w => {

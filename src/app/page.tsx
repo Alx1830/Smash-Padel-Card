@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { ImageSwiper } from "@/components/ui/image-swiper";
-import { PERFECT_ORDER_CARDS } from "@/data/pokemon-cards";
+import { loadSetCards } from "@/data/pokemon-cards";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -42,11 +42,12 @@ const MARKET_FEATURES = [
 ];
 
 export default function LandingPage() {
-  const STABLE_TEN = PERFECT_ORDER_CARDS.slice(0, 10).map(c => c.image).join(",");
-  const [randomTen, setRandomTen] = useState(STABLE_TEN);
+  const [randomTen, setRandomTen] = useState("");
   useEffect(() => {
-    const shuffled = [...PERFECT_ORDER_CARDS].sort(() => Math.random() - 0.5);
-    setRandomTen(shuffled.slice(0, 10).map(c => c.image).join(","));
+    loadSetCards("perfect-order").then(cards => {
+      const shuffled = [...cards].sort(() => Math.random() - 0.5);
+      setRandomTen(shuffled.slice(0, 10).map((c: { image: string }) => c.image).join(","));
+    });
   }, []);
 
   return (

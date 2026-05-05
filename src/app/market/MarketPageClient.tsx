@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { SET_CARDS } from "@/data/pokemon-cards";
+import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { ModalTiltCard } from "@/components/CardDetailModal";
 import { CITIES_BY_COUNTRY } from "@/data/cities";
@@ -401,7 +401,10 @@ export function MarketPageClient({
       const playerMap: Record<string, any> = {};
       (playerRows ?? []).forEach((p: any) => { playerMap[p.user_id] = p; });
 
-      setListings(rawListings.map((r: any) => ({ ...r, players: playerMap[r.user_id] ?? null })) as Listing[]);
+      const newListings = rawListings.map((r: any) => ({ ...r, players: playerMap[r.user_id] ?? null })) as Listing[];
+      const setIds = [...new Set(newListings.map(l => l.set_id))];
+      await loadManySets(setIds);
+      setListings(newListings);
       setTotal(count ?? 0);
       setLoading(false);
     })();

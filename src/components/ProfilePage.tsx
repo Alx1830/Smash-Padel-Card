@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import { PlayerCard3D } from "./PlayerCard3D";
 import { FollowButton } from "./FollowButton";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
-import { SET_CARDS } from "@/data/pokemon-cards";
+import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionEffect, getVersionColor } from "@/data/pokemon-cards-meta";
 import { CardDetailModal, type InventoryMap, type FeaturedCard as FeaturedCardModal, type WishlistCard as WishlistCardModal, type UserListing } from "@/components/CardDetailModal";
 
@@ -505,13 +505,19 @@ const PLACEHOLDER_STABLE = PLACEHOLDER_CANDIDATES.slice(0, 3);
 function Showcase({ featuredCards, inventoryRows }: { featuredCards: FeaturedCard[]; inventoryRows: InvRow[] }) {
   const [idx, setIdx] = useState(0);
   const [placeholder, setPlaceholder] = useState(PLACEHOLDER_STABLE);
+  const [, forceUpdate] = useState(0);
 
   useEffect(() => {
     if (PLACEHOLDER_CANDIDATES.length >= 3) {
       const shuffled = [...PLACEHOLDER_CANDIDATES].sort(() => Math.random() - 0.5);
       setPlaceholder(shuffled.slice(0, 3));
     }
-  }, []);
+    const ids = [
+      ...featuredCards.map(f => f.set_id),
+      ...PLACEHOLDER_STABLE.map(p => p.set_id as string),
+    ];
+    loadManySets([...new Set(ids)]).then(() => forceUpdate(n => n + 1));
+  }, [featuredCards]);
 
   const owned = featuredCards.slice(0, 10).map(f => {
     const row = inventoryRows.find(r => r.card_id === f.card_id && r.set_id === f.set_id);
@@ -646,6 +652,12 @@ function WishlistSlider({
   const [modalCard, setModalCard] = useState<{ card_id: number | string; set_id: string } | null>(null);
   const [featLocal, setFeatLocal] = useState<FeaturedCardModal[]>(featuredCards as FeaturedCardModal[]);
   const [wishLocal, setWishLocal] = useState<WishlistCardModal[]>(wishlistCards as WishlistCardModal[]);
+  const [, forceUpdate] = useState(0);
+
+  useEffect(() => {
+    const ids = [...new Set(wishlistCards.map(w => w.set_id))];
+    loadManySets(ids).then(() => forceUpdate(n => n + 1));
+  }, [wishlistCards]);
 
   // Resolver cartas válidas (que existan en SET_CARDS)
   const resolved = wishlistCards.map(w => {
@@ -828,7 +840,9 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
         .eq("status", "active")
         .order("created_at", { ascending: false })
         .limit(20);
-      setListings(data ?? []);
+      const rows = data ?? [];
+      await loadManySets([...new Set(rows.map((l: any) => l.set_id))]);
+      setListings(rows);
       setLoaded(true);
     })();
   }, [profileUserId]);

@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { SET_CARDS } from "@/data/pokemon-cards";
+import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import { ModalTiltCard } from "@/components/CardDetailModal";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
@@ -49,6 +49,11 @@ export function UserMarketPageClient({
   const [fPrecioMax,  setFPrecioMax]  = useState("");
   const [previewCard, setPreviewCard] = useState<PokemonCard | null>(null);
   const [authMsg,     setAuthMsg]     = useState<string | null>(null);
+
+  useEffect(() => {
+    const ids = [...new Set(listings.map(l => l.set_id))];
+    loadManySets(ids);
+  }, [listings]);
 
   const resolved = useMemo(() => {
     return listings.map(l => {
