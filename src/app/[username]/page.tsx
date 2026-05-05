@@ -3,7 +3,7 @@ import { ProfilePage } from "@/components/ProfilePage";
 import { Footer } from "@/components/Footer";
 import { MobileTabBar } from "@/components/MobileTabBar";
 import { notFound } from "next/navigation";
-import { SET_CARDS } from "@/data/pokemon-cards";
+import { SET_CARD_COUNT } from "@/data/pokemon-cards";
 
 export const revalidate = 3600;
 export default async function JugadorPage({
@@ -22,14 +22,13 @@ export default async function JugadorPage({
   if (!data) notFound();
 
   // Fetch inventory + featured cards + wishlist in parallel
-  const setIds = Object.keys(SET_CARDS);
+  // NOTE: no .in("set_id", ...) filter — SET_CARDS is a lazy Proxy, empty on server
   const [{ data: invRows }, { data: featuredRows }, { data: wishlistRows }] = data.user_id
     ? await Promise.all([
         supabase
           .from("card_inventory")
           .select("card_id, set_id, quantity")
           .eq("user_id", data.user_id)
-          .in("set_id", setIds)
           .gt("quantity", 0),
         supabase
           .from("featured_cards")
@@ -42,18 +41,22 @@ export default async function JugadorPage({
       ])
     : [{ data: null }, { data: null }, { data: null }];
 
-  // Build per-set stats: { setId → { unique, total, totalQty } }
+  // Build per-set stats using SET_CARD_COUNT (static, available server-side)
   type SetStats = { unique: number; total: number; totalQty: number };
   const setStats: Record<string, SetStats> = {};
   if (invRows && invRows.length > 0) {
-    for (const setId of setIds) {
-      const cards = SET_CARDS[setId];
-      const rows  = invRows.filter(r => r.set_id === setId);
-      if (rows.length === 0) continue;
-      const ownedIds = new Set(rows.map(r => r.card_id));
+    const bySet: Record<string, typeof invRows> = {};
+    for (const row of invRows) {
+      if (!bySet[row.set_id]) bySet[row.set_id] = [];
+      bySet[row.set_id].push(row);
+    }
+    for (const [setId, rows] of Object.entries(bySet)) {
+      const total = SET_CARD_COUNT[setId] ?? 0;
+      if (total === 0) continue;
+      const uniqueIds = new Set(rows.map(r => r.card_id));
       setStats[setId] = {
-        unique:   cards.filter(c => ownedIds.has(c.id)).length,
-        total:    cards.length,
+        unique:   uniqueIds.size,
+        total,
         totalQty: rows.reduce((s, r) => s + r.quantity, 0),
       };
     }
