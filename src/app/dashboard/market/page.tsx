@@ -32,7 +32,7 @@ const VERSION_FULL: Record<string, string> = {
 
 interface Listing {
   id: string;
-  card_id: number;
+  card_id: number | string;
   set_id: string;
   price_cop: number;
   version: string;

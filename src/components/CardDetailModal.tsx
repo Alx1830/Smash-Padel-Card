@@ -32,11 +32,11 @@ export const VERSION_FULL: Record<string, string> = {
 export const ALL_SETS_FLAT = POKEMON_SERIES.flatMap(s => s.sets);
 
 export type InventoryMap = Record<string, number>;
-export type FeaturedCard  = { card_id: number; set_id: string };
-export type WishlistCard  = { card_id: number; set_id: string };
-export type UserListing   = { id: string; card_id: number; set_id: string; price_cop: number; version: string };
+export type FeaturedCard  = { card_id: number | string; set_id: string };
+export type WishlistCard  = { card_id: number | string; set_id: string };
+export type UserListing   = { id: string; card_id: number | string; set_id: string; price_cop: number; version: string };
 
-export function invKey(cardId: number, version: string): string {
+export function invKey(cardId: number | string, version: string): string {
   return `${cardId}:${version}`;
 }
 
@@ -44,7 +44,7 @@ export function invKey(cardId: number, version: string): string {
 export function QtyControl({
   cardId, setId, version, qty, userId, onChange, dark,
 }: {
-  cardId: number; setId: string; version: string; qty: number;
+  cardId: number | string; setId: string; version: string; qty: number;
   userId: string; onChange: (key: string, qty: number) => void;
   dark?: boolean;
 }) {

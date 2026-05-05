@@ -1,7 +1,7 @@
 export type CardVersion = "normal" | "reverseHolofoil" | "holofoil" | "energySymbol" | "pokeBall";
 
 export interface PokemonCard {
-  id: number;
+  id: number | string;
   name: string;
   image: string;
   version: CardVersion;
