@@ -42,7 +42,7 @@ const MARKET_FEATURES = [
 ];
 
 export default function LandingPage() {
-  const [randomTen, setRandomTen] = useState("");
+  const [randomTen, setRandomTen] = useState<string | null>(null);
   useEffect(() => {
     loadSetCards("perfect-order").then(cards => {
       const shuffled = [...cards].sort(() => Math.random() - 0.5);
@@ -118,7 +118,7 @@ export default function LandingPage() {
           </div>
 
           <div className="hero-swiper" style={{ flexShrink: 0, animation: "float 7s ease-in-out infinite" }}>
-            <ImageSwiper images={randomTen} cardWidth={264} cardHeight={370} />
+            {randomTen !== null && <ImageSwiper images={randomTen} cardWidth={264} cardHeight={370} />}
           </div>
         </div>
       </section>

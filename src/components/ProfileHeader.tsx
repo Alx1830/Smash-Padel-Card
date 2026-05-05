@@ -98,7 +98,7 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
           boxShadow: `0 20px 60px rgba(0,0,0,0.75), ${glow}`,
           border: `1px solid ${labelColor}30`,
         }}>
-          <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="420px" unoptimized />
+          <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="420px" />
           {isRH && (
             <div style={{ position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
               background: `radial-gradient(ellipse 80% 60% at ${mx}% ${my}%, rgba(220,220,240,0.55) 0%, rgba(180,180,210,0.25) 30%, transparent 60%), linear-gradient(${105 + tilt.y * 2}deg, transparent 20%, rgba(200,200,230,0.18) 35%, rgba(255,255,255,0.28) 45%, rgba(200,200,230,0.18) 55%, transparent 70%)` }} />

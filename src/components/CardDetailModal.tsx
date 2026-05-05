@@ -203,7 +203,7 @@ export function ModalTiltCard({ card }: { card: PokemonCard }) {
           ? "0 16px 48px rgba(180,180,220,0.3), 0 4px 16px rgba(0,0,0,0.5)"
           : "0 12px 40px rgba(0,0,0,0.6)",
       }}>
-        <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="220px" unoptimized />
+        <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="220px" />
 
         {isRH && (
           <div ref={rhRef} style={{
@@ -383,7 +383,7 @@ export function CardDetailModal({
       label: "Set",
       value: setInfo
         ? <div style={{ position: "relative", width: "90px", height: "32px" }}>
-            <Image src={setInfo.logo} alt={setInfo.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} unoptimized />
+            <Image src={setInfo.logo} alt={setInfo.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} />
           </div>
         : setId,
     },

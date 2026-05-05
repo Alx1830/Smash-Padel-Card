@@ -227,7 +227,7 @@ export default function DashboardMarketPage() {
                     style={{ position: "relative", width: "100%", aspectRatio: "5/7", cursor: card ? "pointer" : "default", background: "rgba(255,255,255,0.03)", flexShrink: 0 }}
                   >
                     {card ? (
-                      <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="220px" unoptimized />
+                      <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="220px" />
                     ) : (
                       <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <span style={{ color: INK2, fontSize: "24px" }}>?</span>
@@ -253,7 +253,7 @@ export default function DashboardMarketPage() {
                       <div style={{ display: "flex", alignItems: "center" }}>
                         {setInfo ? (
                           <div style={{ position: "relative", width: "56px", height: "18px" }}>
-                            <Image src={setInfo.logo} alt={setInfo.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} unoptimized />
+                            <Image src={setInfo.logo} alt={setInfo.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} />
                           </div>
                         ) : (
                           <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2 }}>{listing.set_id}</span>

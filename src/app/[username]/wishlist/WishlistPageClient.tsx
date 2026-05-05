@@ -246,7 +246,7 @@ export function WishlistPageClient({
                         onClick={() => setPreviewCard(item.card as PokemonCard)}
                         style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)", flexShrink: 0, cursor: "pointer" }}
                       >
-                        <Image src={item.card.image} alt={item.card.name} fill style={{ objectFit: "cover" }} sizes="260px" unoptimized />
+                        <Image src={item.card.image} alt={item.card.name} fill style={{ objectFit: "cover" }} sizes="260px" />
                         <div style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>{label}</div>
                       </div>
                       <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
@@ -254,7 +254,7 @@ export function WishlistPageClient({
                           <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2, letterSpacing: "0.08em", whiteSpace: "nowrap" }}>#{String(item.card.card_number).padStart(3, "0")}</span>
                           <span style={{ fontFamily: MONO, fontSize: "11px", color: INK0, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.card.name}</span>
                           <div style={{ position: "relative", width: "56px", height: "18px" }}>
-                            <Image src={item.set.logo} alt={item.set.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} unoptimized />
+                            <Image src={item.set.logo} alt={item.set.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} />
                           </div>
                           <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.set.name}</span>
                         </div>
