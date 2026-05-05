@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { CardDetailModal, invKey, type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing } from "@/components/CardDetailModal";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
+import { getVersionColor, getVersionLabel } from "@/data/pokemon-cards-meta";
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
@@ -15,20 +16,6 @@ const DISP  = "var(--font-archivo)";
 
 const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
 
-const VERSION_COLOR: Record<string, string> = {
-  N:   "#c9cfdd",
-  RH:  "#2ee6c1",
-  H:   "#ffd24f",
-  ESP: "#2ee6c1",
-  PB:  "#2ee6c1",
-};
-const VERSION_FULL: Record<string, string> = {
-  N:   "Normal",
-  RH:  "Reverse Holo",
-  H:   "Holofoil",
-  ESP: "Energy Symbol",
-  PB:  "Poke Ball",
-};
 
 interface Listing {
   id: string;
@@ -134,7 +121,7 @@ export default function DashboardMarketPage() {
 
   const openModal = async (listing: Listing) => {
     const cards = setCards[listing.set_id];
-    const card = cards?.find((c: any) => c.id === listing.card_id);
+    const card = cards?.find((c: any) => c.card_number === listing.card_id && c.version === listing.version);
     if (!card || !userId) return;
 
     const supabase = createClient();
@@ -218,10 +205,10 @@ export default function DashboardMarketPage() {
           }}>
             {listings.map(listing => {
               const cards    = setCards[listing.set_id];
-              const card     = cards?.find((c: any) => c.id === listing.card_id);
+              const card     = cards?.find((c: any) => c.card_number === listing.card_id && c.version === listing.version);
               const setInfo  = ALL_SETS.find(s => s.id === listing.set_id);
-              const verColor = VERSION_COLOR[listing.version] ?? INK2;
-              const verFull  = VERSION_FULL[listing.version] ?? listing.version;
+              const verColor = getVersionColor(listing.version);
+              const verFull  = getVersionLabel(listing.version);
               const busy     = removing === listing.id;
 
               return (
@@ -257,7 +244,7 @@ export default function DashboardMarketPage() {
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px 10px", alignItems: "center" }}>
                       {/* Fila 1: número | nombre */}
                       <div style={{ fontFamily: MONO, fontSize: "10px", color: INK2, letterSpacing: "0.08em" }}>
-                        #{String(listing.card_id).padStart(3, "0")}
+                        #{String(card?.card_number ?? listing.card_id).padStart(3, "0")}
                       </div>
                       <div style={{ fontFamily: MONO, fontSize: "11px", color: INK0, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                         {card?.name ?? `Carta #${listing.card_id}`}
