@@ -55,13 +55,14 @@ export function WishlistPageClient({
   }, [wishlistRows]);
 
   const resolved = useMemo(() => {
+    if (!setsLoaded) return [];
     return wishlistRows.map(w => {
       const cards = SET_CARDS[w.set_id];
       const card  = cards?.find(c => c.id === w.card_id);
       const set   = allSets.find(s => s.id === w.set_id);
       return card && set ? { card, set, card_id: w.card_id, set_id: w.set_id } : null;
     }).filter(Boolean) as { card: NonNullable<ReturnType<typeof SET_CARDS[string]["find"]>>; set: SetInfo; card_id: number | string; set_id: string }[];
-  }, [wishlistRows, allSets]);
+  }, [wishlistRows, allSets, setsLoaded]);
 
   const setVersions = useMemo(() => {
     const versions = new Set<string>();

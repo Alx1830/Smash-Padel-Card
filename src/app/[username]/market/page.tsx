@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
-import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { MobileTabBar } from "@/components/MobileTabBar";
 import { ProfileHeader } from "@/components/ProfileHeader";
@@ -56,7 +55,6 @@ export default async function UserMarketPage({
 
   return (
     <main style={{ background: "#05070d", minHeight: "100vh" }}>
-      <Navbar />
       <ProfileHeader player={profileHeader} />
       <UserMarketPageClient
         username={player.username}

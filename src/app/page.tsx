@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Navbar } from "@/components/Navbar";
 import { ImageSwiper } from "@/components/ui/image-swiper";
 import { loadSetCards } from "@/data/pokemon-cards";
 
@@ -77,7 +76,6 @@ export default function LandingPage() {
         }
       `}</style>
 
-      <Navbar />
 
       {/* ══ HERO ══ */}
       <section style={{ paddingTop: "64px", position: "relative", overflow: "hidden" }}>

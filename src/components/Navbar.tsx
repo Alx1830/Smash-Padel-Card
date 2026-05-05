@@ -19,18 +19,26 @@ const NAV_LINKS_AUTH = [
   { label: "MARKET",     href: "/market" },
 ];
 
-export function Navbar() {
+interface NavbarProps {
+  initialLoggedIn?: boolean;
+  initialPhotoUrl?: string | null;
+  initialUsername?: string | null;
+}
+
+export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: NavbarProps = {}) {
   const supabase      = createClient();
   const router        = useRouter();
   const avatarRef     = useRef<HTMLDivElement>(null);
 
-  const [photoUrl, setPhotoUrl]       = useState<string | null>(null);
-  const [username, setUsername]       = useState<string | null>(null);
+  const [photoUrl, setPhotoUrl]       = useState<string | null>(initialPhotoUrl ?? null);
+  const [username, setUsername]       = useState<string | null>(initialUsername ?? null);
   const [avatarOpen, setAvatarOpen]   = useState(false);
   const [mobileOpen, setMobileOpen]   = useState(false);
-  const [loggedIn, setLoggedIn]       = useState(false);
+  const [loggedIn, setLoggedIn]       = useState(initialLoggedIn ?? false);
 
   useEffect(() => {
+    // Skip client fetch if server already provided the data
+    if (initialLoggedIn !== undefined) return;
     async function load() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;

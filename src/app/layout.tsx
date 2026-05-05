@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, Archivo_Black } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
+import { createClient } from "@/lib/supabase/server";
+import { Navbar } from "@/components/Navbar";
 import "./globals.css";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -76,20 +78,39 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  /* Prefetch user data once at server level — passed to Navbar to avoid client refetch */
+  let navProps: { initialLoggedIn: boolean; initialPhotoUrl: string | null; initialUsername: string | null } = {
+    initialLoggedIn: false, initialPhotoUrl: null, initialUsername: null,
+  };
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data } = await supabase
+        .from("players").select("photo_url, username").eq("user_id", user.id).single();
+      navProps = {
+        initialLoggedIn: true,
+        initialPhotoUrl: data?.photo_url ?? null,
+        initialUsername: data?.username ?? null,
+      };
+    }
+  } catch { /* no-op: Navbar falls back to client fetch */ }
+
   return (
     <html lang="es" className={`${jetbrainsMono.variable} ${archiveBlack.variable} h-full`} style={{ overflowX: "hidden" }} suppressHydrationWarning>
       <body className="min-h-full flex flex-col antialiased" style={{ overflowX: "hidden", maxWidth: "100vw" }} suppressHydrationWarning>
+        <Navbar {...navProps} />
         {children}
         <Analytics />
         <Script
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7135029542920964"
           crossOrigin="anonymous"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
       </body>
     </html>

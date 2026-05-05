@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { ProfilePage } from "@/components/ProfilePage";
-import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { MobileTabBar } from "@/components/MobileTabBar";
 import { notFound } from "next/navigation";
@@ -81,7 +80,6 @@ export default async function JugadorPage({
 
   return (
     <main style={{ background: "#05070d", minHeight: "100vh" }}>
-      <Navbar />
       <ProfilePage player={player} />
       <Footer />
       <MobileTabBar />
