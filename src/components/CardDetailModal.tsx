@@ -607,37 +607,46 @@ export function CardDetailModal({
                   )
                 )}
 
-                {userListings.filter(l => l.card_id === card.card_number && l.set_id === setId && l.version === card.version).length > 0 && (
-                  <div style={{ marginTop: "14px", display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.14em", textTransform: "uppercase", color: DARK2 }}>
-                      Publicaciones activas
-                    </span>
-                    {userListings
-                      .filter(l => l.card_id === card.id && l.set_id === setId)
-                      .map(listing => (
-                        <div key={listing.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", background: "rgba(46,230,193,0.06)", border: "1px solid rgba(46,230,193,0.15)", borderRadius: "8px", gap: "8px" }}>
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ fontFamily: MONO, fontSize: "11px", color: DARK, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                              {card.name}
-                            </div>
-                            <div style={{ fontFamily: MONO, fontSize: "12px", color: "#15a98e", fontWeight: 700, marginTop: "2px" }}>
-                              ${Number(listing.price_cop).toLocaleString("es-CO")} COP
-                            </div>
-                          </div>
-                          <button
-                            onClick={async () => {
-                              const supabase = createClient();
-                              await supabase.from("market_listings").update({ status: "removed" }).eq("id", listing.id);
-                              onListingsChange(userListings.filter(l => l.id !== listing.id));
-                            }}
-                            style={{ flexShrink: 0, background: "none", border: "1px solid rgba(209,53,53,0.35)", borderRadius: "6px", color: "#d95555", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.1em", textTransform: "uppercase", padding: "5px 10px", cursor: "pointer" }}
-                          >
-                            Eliminar
-                          </button>
+                {(() => {
+                  const activeListings = userListings.filter(l => l.card_id === card.card_number && l.set_id === setId && l.version === card.version);
+                  if (activeListings.length === 0) return null;
+                  return (
+                    <div style={{ marginTop: "14px" }}>
+                      <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.14em", textTransform: "uppercase", color: DARK2, display: "block", marginBottom: "8px" }}>
+                        Publicaciones activas
+                      </span>
+                      <div style={{ border: "1px solid rgba(46,230,193,0.15)", borderRadius: "8px", overflow: "hidden" }}>
+                        {/* Header */}
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "8px", padding: "6px 10px", background: "rgba(46,230,193,0.08)", borderBottom: "1px solid rgba(46,230,193,0.12)" }}>
+                          <span style={{ fontFamily: MONO, fontSize: "8px", letterSpacing: "0.14em", textTransform: "uppercase", color: DARK2 }}>Nombre</span>
+                          <span style={{ fontFamily: MONO, fontSize: "8px", letterSpacing: "0.14em", textTransform: "uppercase", color: DARK2 }}>Precio</span>
+                          <span style={{ fontFamily: MONO, fontSize: "8px", letterSpacing: "0.14em", textTransform: "uppercase", color: DARK2 }}></span>
                         </div>
-                      ))}
-                  </div>
-                )}
+                        {/* Rows */}
+                        {activeListings.map((listing, i) => (
+                          <div key={listing.id} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "8px", alignItems: "center", padding: "8px 10px", background: i % 2 === 0 ? "rgba(46,230,193,0.03)" : "transparent", borderTop: i > 0 ? "1px solid rgba(255,255,255,0.04)" : undefined }}>
+                            <span style={{ fontFamily: MONO, fontSize: "10px", color: DARK, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                              {card.name}
+                            </span>
+                            <span style={{ fontFamily: MONO, fontSize: "11px", color: "#15a98e", fontWeight: 700, whiteSpace: "nowrap" }}>
+                              ${Number(listing.price_cop).toLocaleString("es-CO")}
+                            </span>
+                            <button
+                              onClick={async () => {
+                                const supabase = createClient();
+                                await supabase.from("market_listings").update({ status: "removed" }).eq("id", listing.id);
+                                onListingsChange(userListings.filter(l => l.id !== listing.id));
+                              }}
+                              style={{ background: "none", border: "1px solid rgba(209,53,53,0.35)", borderRadius: "5px", color: "#d95555", fontFamily: MONO, fontSize: "8px", letterSpacing: "0.1em", textTransform: "uppercase", padding: "4px 8px", cursor: "pointer", whiteSpace: "nowrap" }}
+                            >
+                              Eliminar
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             </>
           )}
