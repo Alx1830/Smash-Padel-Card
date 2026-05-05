@@ -160,23 +160,12 @@ export function UserMarketPageClient({
 
               <div>
                 <label style={sLabel}>Variante</label>
-                <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-                  {setVersions.map(v => {
-                    const color = getVersionColor(v);
-                    return (
-                      <button key={v} onClick={() => setFVariante(fVariante === v ? "" : v)} style={{
-                        textAlign: "left", padding: "6px 10px", borderRadius: "6px",
-                        fontFamily: MONO, fontSize: "10px", letterSpacing: "0.06em",
-                        background: fVariante === v ? `${color}18` : "rgba(255,255,255,0.03)",
-                        border: `1px solid ${fVariante === v ? color + "55" : "rgba(255,255,255,0.07)"}`,
-                        color: fVariante === v ? color : INK2,
-                        cursor: "pointer", transition: "all 0.15s",
-                      }}>
-                        {getVersionLabel(v)}
-                      </button>
-                    );
-                  })}
-                </div>
+                <select value={fVariante} onChange={e => setFVariante(e.target.value)} style={sSelect}>
+                  <option value="" style={{ background: "#0a0e1a" }}>Todas las variantes</option>
+                  {setVersions.map(v => (
+                    <option key={v} value={v} style={{ background: "#0a0e1a", color: INK0 }}>{getVersionLabel(v)}</option>
+                  ))}
+                </select>
               </div>
 
               <div style={sDivider} />
