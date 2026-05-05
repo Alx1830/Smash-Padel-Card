@@ -273,6 +273,7 @@ export function MarketPageClient({
   const [previewCard, setPreviewCard]   = useState<PokemonCard | null>(null);
   const [filterOpen, setFilterOpen]     = useState(false);
   const [marketOpen, setMarketOpen]     = useState(false);
+  const [authMsg,    setAuthMsg]        = useState<string | null>(null);
 
   /* Filtros */
   const [fNombre,   setFNombre]   = useState("");
@@ -318,6 +319,18 @@ export function MarketPageClient({
   function clearFilters() {
     setFNombre(""); setFVariante(""); setFSet(""); setFCiudad("");
     setFPrecioMin(""); setFPrecioMax("");
+  }
+
+  async function handleComprar(listing: Listing, e: React.MouseEvent) {
+    e.preventDefault();
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { setAuthMsg("Debes registrarte en FaceBinder para poder usar este servicio."); return; }
+    const { data } = await supabase.from("players").select("username, whatsapp_numero").eq("user_id", user.id).single();
+    if (!data?.username) { setAuthMsg("Debes completar tu nombre de usuario en tu perfil para usar este servicio."); return; }
+    if (!data?.whatsapp_numero) { setAuthMsg("Debes agregar tu número de WhatsApp en tu perfil para usar este servicio."); return; }
+    const waLink = buildWhatsApp(listing);
+    if (waLink !== "#") window.open(waLink, "_blank");
   }
 
   /* Close market popup on outside click */
@@ -417,6 +430,25 @@ export function MarketPageClient({
 
   return (
     <div style={{ width: "100%", background: BG0 }}>
+
+      {/* ══ AUTH POPUP ══ */}
+      {authMsg && (
+        <div onClick={() => setAuthMsg(null)} style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(5,7,13,0.88)", backdropFilter: "blur(12px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: "#0d111f", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "20px", padding: "36px 32px", maxWidth: "380px", width: "100%", textAlign: "center" }}>
+            <div style={{ fontSize: "36px", marginBottom: "16px" }}>🔒</div>
+            <h3 style={{ fontFamily: DISP, fontSize: "20px", color: INK0, margin: "0 0 12px", letterSpacing: "-0.01em" }}>Acceso requerido</h3>
+            <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, lineHeight: 1.7, margin: "0 0 24px", letterSpacing: "0.04em" }}>{authMsg}</p>
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+              <Link href="/login" style={{ padding: "10px 24px", borderRadius: "10px", background: COURT, color: "#05070d", fontFamily: MONO, fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", textDecoration: "none" }}>
+                Registrarse
+              </Link>
+              <button onClick={() => setAuthMsg(null)} style={{ padding: "10px 20px", borderRadius: "10px", background: "none", border: "1px solid rgba(255,255,255,0.12)", color: INK2, fontFamily: MONO, fontSize: "11px", cursor: "pointer", letterSpacing: "0.08em" }}>
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ══ COVER ══ */}
       <section style={{ position: "relative", overflow: "hidden", isolation: "isolate" }}>
@@ -684,19 +716,17 @@ export function MarketPageClient({
 
                         {/* Comprar (WhatsApp) */}
                         {hasWA ? (
-                          <a
-                            href={waLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <button
+                            onClick={e => handleComprar(listing, e)}
                             style={{
                               flex: 1, textAlign: "center", padding: "8px 4px",
                               fontFamily: MONO, fontSize: "9px", letterSpacing: "0.08em", textTransform: "uppercase",
                               color: "#fff", background: "#25D366",
-                              borderRadius: "8px", textDecoration: "none", fontWeight: 700,
+                              borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 700,
                             }}
                           >
                             Comprar
-                          </a>
+                          </button>
                         ) : (
                           <div style={{
                             flex: 1, textAlign: "center", padding: "8px 4px",

@@ -3,8 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useMemo } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
+import { ModalTiltCard } from "@/components/CardDetailModal";
+import type { PokemonCard } from "@/data/pokemon-cards-meta";
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
@@ -39,11 +42,13 @@ export function UserMarketPageClient({
   listings:            Listing[];
   allSets:             SetInfo[];
 }) {
-  const [fNombre,    setFNombre]    = useState("");
-  const [fSet,       setFSet]       = useState("");
-  const [fVariante,  setFVariante]  = useState("");
-  const [fPrecioMin, setFPrecioMin] = useState("");
-  const [fPrecioMax, setFPrecioMax] = useState("");
+  const [fNombre,     setFNombre]     = useState("");
+  const [fSet,        setFSet]        = useState("");
+  const [fVariante,   setFVariante]   = useState("");
+  const [fPrecioMin,  setFPrecioMin]  = useState("");
+  const [fPrecioMax,  setFPrecioMax]  = useState("");
+  const [previewCard, setPreviewCard] = useState<PokemonCard | null>(null);
+  const [authMsg,     setAuthMsg]     = useState<string | null>(null);
 
   const resolved = useMemo(() => {
     return listings.map(l => {
@@ -78,6 +83,18 @@ export function UserMarketPageClient({
   const hasFilters = fNombre || fSet || fVariante || fPrecioMin || fPrecioMax;
   function clearFilters() { setFNombre(""); setFSet(""); setFVariante(""); setFPrecioMin(""); setFPrecioMax(""); }
 
+  async function handleComprar(listing: Listing, e: React.MouseEvent) {
+    e.preventDefault();
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { setAuthMsg("Debes registrarte en FaceBinder para poder usar este servicio."); return; }
+    const { data } = await supabase.from("players").select("username, whatsapp_numero").eq("user_id", user.id).single();
+    if (!data?.username) { setAuthMsg("Debes completar tu nombre de usuario en tu perfil para usar este servicio."); return; }
+    if (!data?.whatsapp_numero) { setAuthMsg("Debes agregar tu número de WhatsApp en tu perfil para usar este servicio."); return; }
+    const waLink = buildWA(listing);
+    if (waLink !== "#") window.open(waLink, "_blank");
+  }
+
   function buildWA(listing: Listing) {
     if (!whatsappNumero) return "#";
     const number = whatsappIndicativo.replace(/\D/g, "") + whatsappNumero.replace(/\D/g, "");
@@ -107,6 +124,35 @@ export function UserMarketPageClient({
 
   return (
     <div style={{ width: "100%", background: BG0 }}>
+
+      {/* ══ AUTH POPUP ══ */}
+      {authMsg && (
+        <div onClick={() => setAuthMsg(null)} style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(5,7,13,0.88)", backdropFilter: "blur(12px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: "#0d111f", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "20px", padding: "36px 32px", maxWidth: "380px", width: "100%", textAlign: "center" }}>
+            <div style={{ fontSize: "36px", marginBottom: "16px" }}>🔒</div>
+            <h3 style={{ fontFamily: DISP, fontSize: "20px", color: INK0, margin: "0 0 12px", letterSpacing: "-0.01em" }}>Acceso requerido</h3>
+            <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, lineHeight: 1.7, margin: "0 0 24px", letterSpacing: "0.04em" }}>{authMsg}</p>
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+              <Link href="/login" style={{ padding: "10px 24px", borderRadius: "10px", background: COURT, color: "#05070d", fontFamily: MONO, fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", textDecoration: "none" }}>
+                Registrarse
+              </Link>
+              <button onClick={() => setAuthMsg(null)} style={{ padding: "10px 20px", borderRadius: "10px", background: "none", border: "1px solid rgba(255,255,255,0.12)", color: INK2, fontFamily: MONO, fontSize: "11px", cursor: "pointer", letterSpacing: "0.08em" }}>
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ══ LIGHTBOX ══ */}
+      {previewCard && (
+        <div onClick={() => setPreviewCard(null)} style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(5,7,13,0.92)", backdropFilter: "blur(12px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+          <div onClick={e => e.stopPropagation()} style={{ width: "min(300px, 78vw)" }}>
+            <ModalTiltCard card={previewCard} />
+          </div>
+          <button onClick={() => setPreviewCard(null)} style={{ position: "fixed", top: "20px", right: "24px", background: "none", border: "none", color: INK0, fontSize: "24px", cursor: "pointer", lineHeight: 1 }}>✕</button>
+        </div>
+      )}
 
       {/* ══ HEADER SECTION ══ */}
       <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 24px 16px" }} className="um-section-header">
@@ -224,7 +270,7 @@ export function UserMarketPageClient({
                   const tcgQuery = encodeURIComponent([card.name, set.name, label].filter(Boolean).join(" "));
                   return (
                     <div key={listing.id} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                      <div style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)", flexShrink: 0 }}>
+                      <div onClick={() => setPreviewCard(card as PokemonCard)} style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)", flexShrink: 0, cursor: "pointer" }}>
                         <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="260px" unoptimized />
                         <div style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>
                           {label}
@@ -258,13 +304,12 @@ export function UserMarketPageClient({
                             TCGPlayer
                           </a>
                           {whatsappNumero ? (
-                            <a
-                              href={waLink}
-                              target="_blank" rel="noopener noreferrer"
-                              style={{ flex: 1, textAlign: "center", padding: "8px 4px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#fff", background: "#25D366", borderRadius: "8px", textDecoration: "none", fontWeight: 700 }}
+                            <button
+                              onClick={e => handleComprar(listing, e)}
+                              style={{ flex: 1, textAlign: "center", padding: "8px 4px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#fff", background: "#25D366", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 700 }}
                             >
                               Comprar
-                            </a>
+                            </button>
                           ) : (
                             <div style={{ flex: 1, textAlign: "center", padding: "8px 4px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.08em", textTransform: "uppercase", color: INK2, border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px", opacity: 0.4 }}>
                               Sin contacto
