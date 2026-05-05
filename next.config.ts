@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
         hostname: "vjtxrqwqhwnkscktvgce.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
+      {
+        protocol: "https",
+        hostname: "images.scrydex.com",
+      },
     ],
   },
   async headers() {

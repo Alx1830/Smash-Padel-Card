@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { PlayerCard3D } from "./PlayerCard3D";
 import { FollowButton } from "./FollowButton";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
-import { SET_CARDS, VERSION_LABEL } from "@/data/pokemon-cards";
+import { SET_CARDS } from "@/data/pokemon-cards";
+import { getVersionLabel, getVersionEffect, getVersionColor } from "@/data/pokemon-cards-meta";
 import { CardDetailModal, type InventoryMap, type FeaturedCard as FeaturedCardModal, type WishlistCard as WishlistCardModal, type UserListing } from "@/components/CardDetailModal";
 
 type SetStats = { unique: number; total: number; totalQty: number };
@@ -211,7 +213,7 @@ export function ProfilePage({ player }: { player: PlayerData }) {
       <section id="profile" style={{ position: "relative", background: BG0 }}>
 
         {/* Desktop */}
-        <div className="profile-desktop" style={{ display: "none", padding: "0 80px 80px" }}>
+        <div className="profile-desktop" style={{ display: "none", padding: "0px 80px 30px" }}>
           <div style={{
             display: "flex", alignItems: "flex-start", gap: "64px",
             maxWidth: "1280px", margin: "0 auto",
@@ -294,6 +296,7 @@ export function ProfilePage({ player }: { player: PlayerData }) {
           wishlistCards={player.wishlistCards ?? []}
           featuredCards={player.featuredCards ?? []}
           profileUserId={player.profileUserId}
+          username={player.username}
         />
       ) : null}
 
@@ -333,8 +336,9 @@ function MiniCard({ cardId, setId, quantity }: { cardId: number | string; setId:
   const cards = SET_CARDS[setId];
   const card  = cards?.find(c => c.id === cardId);
   if (!card) return null;
-  const label      = VERSION_LABEL[card.version];
-  const labelColor = VERSION_COLOR_MAP[label] ?? INK2_C;
+  const label      = getVersionLabel(card.version);
+  const effect     = getVersionEffect(card.version);
+  const labelColor = getVersionColor(card.version);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
@@ -385,12 +389,14 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
   const card  = cards?.find(c => c.id === cardId);
   if (!card) return null;
 
-  const label      = VERSION_LABEL[card.version];
-  const labelColor = VERSION_COLOR_MAP[label] ?? INK2_C;
-  const fullLabel  = VERSION_FULL_LABEL[label] ?? label;
-  const glow       = VERSION_GLOW[label] ?? "none";
-  const isRH = label === "RH";
-  const isH  = label === "H";
+  const label      = getVersionLabel(card.version);
+  const effect     = getVersionEffect(card.version);
+  const isH        = effect === "holofoil";
+  const isGold     = effect === "goldBorder";
+  const isRH       = effect === "reverseHolofoil" || effect === "metal";
+  const labelColor = getVersionColor(card.version);
+  const fullLabel  = label;
+  const glow       = isH ? "0 0 20px rgba(255,210,79,0.45)" : isGold ? "0 0 20px rgba(255,200,50,0.5)" : isRH ? "0 0 16px rgba(46,230,193,0.35)" : "none";
   const mx = mouse.x * 100;
   const my = mouse.y * 100;
 
@@ -428,16 +434,20 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
                 linear-gradient(${105 + tilt.y * 2}deg, transparent 20%, rgba(200,200,230,0.18) 35%, rgba(255,255,255,0.28) 45%, rgba(200,200,230,0.18) 55%, transparent 70%)`,
             }} />
           )}
-          {isH && (
+          {(isH || isGold) && (
             <div style={{
               position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "color-dodge",
-              background: `radial-gradient(ellipse 90% 70% at ${mx}% ${my}%, rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%, rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%, rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)`,
+              background: isGold
+                ? `radial-gradient(ellipse 90% 70% at ${mx}% ${my}%, rgba(255,220,80,0.6) 0%, rgba(255,180,30,0.45) 20%, rgba(220,140,0,0.35) 45%, rgba(255,200,80,0.2) 65%, transparent 90%)`
+                : `radial-gradient(ellipse 90% 70% at ${mx}% ${my}%, rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%, rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%, rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)`,
             }} />
           )}
-          {isH && (
+          {(isH || isGold) && (
             <div style={{
               position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
-              background: `linear-gradient(${120 + tilt.y * 3}deg, transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%, rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`,
+              background: isGold
+                ? `linear-gradient(${120 + tilt.y * 3}deg, transparent 0%, rgba(255,200,50,0.2) 25%, rgba(255,160,0,0.25) 45%, rgba(255,220,80,0.2) 65%, transparent 85%)`
+                : `linear-gradient(${120 + tilt.y * 3}deg, transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%, rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`,
             }} />
           )}
           <div style={{
@@ -623,12 +633,13 @@ function Showcase({ featuredCards, inventoryRows }: { featuredCards: FeaturedCar
 
 /* ── Wishlist Slider ────────────────────────────────────────── */
 function WishlistSlider({
-  wishlistCards, inventoryRows, featuredCards, profileUserId,
+  wishlistCards, inventoryRows, featuredCards, profileUserId, username,
 }: {
   wishlistCards:  WishlistCard[];
   inventoryRows:  InvRow[];
   featuredCards:  FeaturedCard[];
   profileUserId?: string;
+  username?:      string;
 }) {
   const [offset,    setOffset]    = useState(0);
   const [animated,  setAnimated]  = useState(true);
@@ -757,17 +768,20 @@ function WishlistSlider({
       </div>
 
       {/* Ver todas */}
-      <div style={{ marginTop: "12px", textAlign: "center" }}>
-        <button style={{
-          fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.14em",
-          textTransform: "uppercase", color: "#ffd24f",
-          background: "rgba(255,210,79,0.08)", border: "1px solid rgba(255,210,79,0.3)",
-          borderRadius: "6px", padding: "6px 16px", cursor: "pointer",
-          transition: "all 0.2s",
-        }}>
-          Ver todas →
-        </button>
-      </div>
+      {username && (
+        <div style={{ marginTop: "12px", textAlign: "center" }}>
+          <Link href={`/${username}/wishlist`} style={{
+            display: "inline-block",
+            fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.14em",
+            textTransform: "uppercase", color: "#ffd24f",
+            background: "rgba(255,210,79,0.08)", border: "1px solid rgba(255,210,79,0.3)",
+            borderRadius: "6px", padding: "6px 16px",
+            textDecoration: "none",
+          }}>
+            Ver todas →
+          </Link>
+        </div>
+      )}
 
       {/* Modal */}
       {modalCard && (() => {
@@ -795,15 +809,170 @@ function WishlistSlider({
   );
 }
 
+/* ── Market Listings Slider ─────────────────────────────────── */
+function MarketListingsSlider({ profileUserId, username }: { profileUserId?: string; username?: string }) {
+  const [listings, setListings] = useState<{ id: string; card_id: number | string; set_id: string; price_cop: number; version: string }[]>([]);
+  const [loaded,   setLoaded]   = useState(false);
+  const [offset,   setOffset]   = useState(0);
+  const [animated, setAnimated] = useState(true);
+
+  useEffect(() => {
+    if (!profileUserId) return;
+    (async () => {
+      const { createClient } = await import("@/lib/supabase/client");
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("market_listings")
+        .select("id, card_id, set_id, price_cop, version")
+        .eq("user_id", profileUserId)
+        .eq("status", "active")
+        .order("created_at", { ascending: false })
+        .limit(20);
+      setListings(data ?? []);
+      setLoaded(true);
+    })();
+  }, [profileUserId]);
+
+  const resolved = listings.map(l => {
+    const cards = SET_CARDS[l.set_id];
+    const card  = cards?.find(c => c.card_number === l.card_id && c.version === l.version);
+    const set   = ALL_SETS.find(s => s.id === l.set_id);
+    return card && set ? { card, set, listing: l } : null;
+  }).filter(Boolean) as { card: NonNullable<ReturnType<typeof SET_CARDS[string]["find"]>>; set: { id: string; name: string }; listing: typeof listings[0] }[];
+
+  const looped = resolved.length > 0 ? [...resolved, ...resolved, ...resolved] : [];
+
+  useEffect(() => {
+    if (resolved.length < 2) return;
+    const t = setInterval(() => {
+      setAnimated(true);
+      setOffset(prev => {
+        const next = prev + 1;
+        if (next >= resolved.length) {
+          setTimeout(() => { setAnimated(false); setOffset(0); }, 400);
+        }
+        return next;
+      });
+    }, 2000);
+    return () => clearInterval(t);
+  }, [resolved.length]);
+
+  function formatCOP(n: number) { return n.toLocaleString("es-CO"); }
+
+  const VISIBLE  = 4;
+  const CARD_GAP = 10;
+  const GREEN    = COURT_C; // "#2ee6c1"
+
+  return (
+    <div style={{ marginBottom: "16px", minWidth: 0, overflow: "hidden", marginTop: "40px" }}>
+      {/* Header */}
+      <div style={{
+        fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
+        textTransform: "uppercase", color: GREEN,
+        display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
+      }}>
+        <span style={{ width: "22px", height: "1px", background: GREEN, display: "inline-block" }} />
+        Cartas en venta
+      </div>
+
+      {/* Slider or empty state */}
+      {!loaded ? null : resolved.length === 0 ? (
+        <div style={{ border: "1px dashed rgba(46,230,193,0.2)", borderRadius: "12px", padding: "32px 24px", textAlign: "center" }}>
+          <div style={{ fontSize: "28px", marginBottom: "12px" }}>🏷️</div>
+          <p style={{ fontFamily: MONO_C, fontSize: "12px", color: GREEN, fontWeight: 600, marginBottom: "6px", letterSpacing: "0.05em" }}>
+            Sin cartas en venta
+          </p>
+          <p style={{ fontFamily: MONO_C, fontSize: "11px", color: INK2_C, lineHeight: 1.6 }}>
+            Abre cualquier carta en tu inventario<br />y presiona{" "}
+            <span style={{ color: GREEN }}>Vender</span> para publicarla aquí.
+          </p>
+        </div>
+      ) : (
+        <div style={{ padding: "0 0%" }}>
+          <div style={{ overflow: "hidden", borderRadius: "8px" }}>
+            <div
+              className={`mls-track${animated ? "" : " no-anim"}`}
+              style={{
+                display: "flex",
+                gap: `${CARD_GAP}px`,
+                transform: `translateX(calc(-${offset} * (100% / ${VISIBLE} + ${CARD_GAP / VISIBLE}px)))`,
+              }}
+            >
+              <style>{`.mls-track { transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); } .mls-track.no-anim { transition: none !important; }`}</style>
+              {looped.map(({ card, listing }, i) => {
+                const color = getVersionColor(listing.version);
+                const label = getVersionLabel(listing.version);
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      flexShrink: 0,
+                      width: `calc(100% / ${VISIBLE} - ${CARD_GAP * (VISIBLE - 1) / VISIBLE}px)`,
+                      cursor: "default",
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: "relative", width: "100%", aspectRatio: "5/7",
+                        borderRadius: "7px", overflow: "hidden",
+                        boxShadow: `0 4px 14px rgba(0,0,0,0.6), 0 0 0 1px ${GREEN}22`,
+                        transition: "transform 0.2s, box-shadow 0.2s",
+                      }}
+                      onMouseEnter={e => {
+                        (e.currentTarget as HTMLDivElement).style.transform = "scale(1.04)";
+                        (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 20px rgba(0,0,0,0.8), 0 0 0 1px ${GREEN}55`;
+                      }}
+                      onMouseLeave={e => {
+                        (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
+                        (e.currentTarget as HTMLDivElement).style.boxShadow = `0 4px 14px rgba(0,0,0,0.6), 0 0 0 1px ${GREEN}22`;
+                      }}
+                    >
+                      <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="120px" unoptimized />
+                      <div style={{ position: "absolute", bottom: "6px", right: "6px", fontFamily: MONO_C, fontSize: "8px", letterSpacing: "0.1em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 5px", background: "rgba(5,7,13,0.85)" }}>{label}</div>
+                    </div>
+                    <div style={{ marginTop: "6px", textAlign: "center" }}>
+                      <div style={{ fontFamily: MONO_C, fontSize: "9px", color: INK0_C, fontWeight: 600, marginBottom: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                        #{String(card.card_number).padStart(3, "0")} {card.name}
+                      </div>
+                      <div style={{ fontFamily: MONO_C, fontSize: "9px", color: GREEN, fontWeight: 700 }}>${formatCOP(listing.price_cop)} COP</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Botón ver todas */}
+      {username && (
+        <div style={{ marginTop: "12px", textAlign: "center" }}>
+          <Link href={`/${username}/market`} style={{
+            display: "inline-block",
+            fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.14em",
+            textTransform: "uppercase", color: GREEN,
+            background: `${GREEN}10`, border: `1px solid ${GREEN}40`,
+            borderRadius: "6px", padding: "6px 16px",
+            textDecoration: "none",
+          }}>
+            Ver todas →
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── Collection stats section ───────────────────────────────── */
 function CollectionSection({
-  setStats, inventoryRows, wishlistCards, featuredCards, profileUserId,
+  setStats, inventoryRows, wishlistCards, featuredCards, profileUserId, username,
 }: {
   setStats:       Record<string, SetStats>;
   inventoryRows:  InvRow[];
   wishlistCards:  WishlistCard[];
   featuredCards:  FeaturedCard[];
   profileUserId?: string;
+  username?:      string;
 }) {
   const [expandedSetId, setExpandedSetId] = useState<string | null>(null);
 
@@ -826,32 +995,36 @@ function CollectionSection({
 
       <div className="coll-outer" style={{ padding: "64px 14% 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "64px", alignItems: "flex-start" }}>
 
-        {/* ── Cartas que necesito ── */}
-        {wishlistCards.length > 0 ? (
-          <WishlistSlider
-            wishlistCards={wishlistCards}
-            inventoryRows={inventoryRows}
-            featuredCards={featuredCards}
-            profileUserId={profileUserId}
-          />
-        ) : (
-          <div style={{ marginBottom: "16px" }}>
-            <div style={{ fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em", textTransform: "uppercase", color: "#ffd24f", display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
-              <span style={{ width: "22px", height: "1px", background: "#ffd24f", display: "inline-block" }} />
-              Cartas que necesito
+        {/* ── Columna izquierda: Wishlist + Market ── */}
+        <div style={{ minWidth: 0, overflow: "hidden" }}>
+          {wishlistCards.length > 0 ? (
+            <WishlistSlider
+              wishlistCards={wishlistCards}
+              inventoryRows={inventoryRows}
+              featuredCards={featuredCards}
+              profileUserId={profileUserId}
+              username={username}
+            />
+          ) : (
+            <div style={{ marginBottom: "16px" }}>
+              <div style={{ fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em", textTransform: "uppercase", color: "#ffd24f", display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
+                <span style={{ width: "22px", height: "1px", background: "#ffd24f", display: "inline-block" }} />
+                Cartas que necesito
+              </div>
+              <div style={{ border: "1px dashed rgba(255,210,79,0.2)", borderRadius: "12px", padding: "32px 24px", textAlign: "center" }}>
+                <div style={{ fontSize: "28px", marginBottom: "12px" }}>🔍</div>
+                <p style={{ fontFamily: MONO_C, fontSize: "12px", color: "#ffd24f", fontWeight: 600, marginBottom: "6px", letterSpacing: "0.05em" }}>
+                  ¿Estás buscando una carta?
+                </p>
+                <p style={{ fontFamily: MONO_C, fontSize: "11px", color: INK2_C, lineHeight: 1.6 }}>
+                  Abre cualquier set en tu inventario,<br />haz clic en una carta y presiona{" "}
+                  <span style={{ color: "#ffd24f" }}>Buscando</span> para agregarla aquí.
+                </p>
+              </div>
             </div>
-            <div style={{ border: "1px dashed rgba(255,210,79,0.2)", borderRadius: "12px", padding: "32px 24px", textAlign: "center" }}>
-              <div style={{ fontSize: "28px", marginBottom: "12px" }}>🔍</div>
-              <p style={{ fontFamily: MONO_C, fontSize: "12px", color: "#ffd24f", fontWeight: 600, marginBottom: "6px", letterSpacing: "0.05em" }}>
-                ¿Estás buscando una carta?
-              </p>
-              <p style={{ fontFamily: MONO_C, fontSize: "11px", color: INK2_C, lineHeight: 1.6 }}>
-                Abre cualquier set en tu inventario,<br />haz clic en una carta y presiona{" "}
-                <span style={{ color: "#ffd24f" }}>Buscando</span> para agregarla aquí.
-              </p>
-            </div>
-          </div>
-        )}
+          )}
+          <MarketListingsSlider profileUserId={profileUserId} username={username} />
+        </div>
 
         {/* ── Colección ── */}
         <div>

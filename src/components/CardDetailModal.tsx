@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
-import { VERSION_LABEL, type PokemonCard } from "@/data/pokemon-cards-meta";
+import { getVersionLabel, getVersionEffect, getVersionColor, type PokemonCard } from "@/data/pokemon-cards-meta";
 
 export const COURT = "#2ee6c1";
 export const INK0  = "#f5f7fb";
@@ -107,10 +107,12 @@ export function ModalTiltCard({ card }: { card: PokemonCard }) {
   const rectRef = useRef<DOMRect | null>(null);
   const rafId   = useRef(0);
 
-  const label = VERSION_LABEL[card.version];
-  const labelColor = VERSION_COLOR[label] ?? INK2;
-  const isH  = label === "H";
-  const isRH = label !== "N" && label !== "H";
+  const label = getVersionLabel(card.version);
+  const effect = getVersionEffect(card.version);
+  const isH    = effect === "holofoil";
+  const isGold = effect === "goldBorder";
+  const isRH   = effect === "reverseHolofoil" || effect === "metal";
+  const labelColor = getVersionColor(card.version);
 
   const onEnter = () => { rectRef.current = wrapRef.current?.getBoundingClientRect() ?? null; };
 
@@ -140,16 +142,23 @@ export function ModalTiltCard({ card }: { card: PokemonCard }) {
             rgba(200,200,230,0.18) 55%, transparent 70%)`;
       }
       if (hRef1.current) {
-        hRef1.current.style.background = `
-          radial-gradient(ellipse 90% 70% at ${mx}% ${my}%,
-            rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%,
-            rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%,
-            rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)`;
+        hRef1.current.style.background = isGold
+          ? `radial-gradient(ellipse 90% 70% at ${mx}% ${my}%,
+              rgba(255,220,80,0.6) 0%, rgba(255,180,30,0.45) 20%,
+              rgba(220,140,0,0.35) 45%, rgba(255,200,80,0.2) 65%, transparent 90%)`
+          : `radial-gradient(ellipse 90% 70% at ${mx}% ${my}%,
+              rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%,
+              rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%,
+              rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)`;
       }
       if (hRef2.current) {
-        hRef2.current.style.background = `linear-gradient(${120 + ty * 3}deg,
-          transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%,
-          rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`;
+        hRef2.current.style.background = isGold
+          ? `linear-gradient(${120 + ty * 3}deg,
+              transparent 0%, rgba(255,200,50,0.2) 25%, rgba(255,160,0,0.25) 45%,
+              rgba(255,220,80,0.2) 65%, transparent 85%)`
+          : `linear-gradient(${120 + ty * 3}deg,
+              transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%,
+              rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`;
       }
       if (glRef.current) {
         glRef.current.style.background = `linear-gradient(${110 + ty}deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`;
@@ -188,6 +197,8 @@ export function ModalTiltCard({ card }: { card: PokemonCard }) {
         willChange: "transform",
         boxShadow: isH
           ? "0 16px 48px rgba(255,160,80,0.45), 0 4px 16px rgba(0,0,0,0.5)"
+          : isGold
+          ? "0 16px 48px rgba(255,200,50,0.5), 0 4px 16px rgba(0,0,0,0.5)"
           : isRH
           ? "0 16px 48px rgba(180,180,220,0.3), 0 4px 16px rgba(0,0,0,0.5)"
           : "0 12px 40px rgba(0,0,0,0.6)",
@@ -200,17 +211,21 @@ export function ModalTiltCard({ card }: { card: PokemonCard }) {
             background: `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220,220,240,0.3) 0%, transparent 60%)`,
           }} />
         )}
-        {isH && (
+        {(isH || isGold) && (
           <div ref={hRef1} style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "color-dodge",
-            background: `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,100,100,0.2) 0%, rgba(80,255,120,0.15) 50%, transparent 90%)`,
-            animation: "holoShift 4s ease-in-out infinite",
+            background: isGold
+              ? `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,220,80,0.35) 0%, rgba(255,160,0,0.2) 50%, transparent 90%)`
+              : `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,100,100,0.2) 0%, rgba(80,255,120,0.15) 50%, transparent 90%)`,
+            animation: isGold ? "goldShift 4s ease-in-out infinite" : "holoShift 4s ease-in-out infinite",
           }} />
         )}
-        {isH && (
+        {(isH || isGold) && (
           <div ref={hRef2} style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
-            background: `linear-gradient(120deg, transparent 0%, rgba(255,100,150,0.1) 35%, transparent 70%)`,
+            background: isGold
+              ? `linear-gradient(120deg, transparent 0%, rgba(255,200,50,0.15) 35%, transparent 70%)`
+              : `linear-gradient(120deg, transparent 0%, rgba(255,100,150,0.1) 35%, transparent 70%)`,
           }} />
         )}
         <div ref={glRef} style={{
@@ -253,10 +268,10 @@ export function CardDetailModal({
   onClose: () => void;
 }) {
   const setInfo    = ALL_SETS_FLAT.find(s => s.id === setId);
-  const label      = VERSION_LABEL[card.version];
-  const versionFull = VERSION_FULL[label] ?? label;
+  const label      = getVersionLabel(card.version);
+  const versionFull = label;
   const qty        = inventory[invKey(card.id, card.version)] ?? 0;
-  const isFeatured  = featuredCards.some(f => f.card_id === card.id && f.set_id === setId);
+  const isFeatured  = featuredCards.some(f => Number(f.card_id) === card.card_number && f.set_id === setId);
   const featCount   = featuredCards.length;
   const isWanted    = wishlistCards.some(w => w.card_id === card.id && w.set_id === setId);
   const hasInInv    = qty > 0;
@@ -264,7 +279,7 @@ export function CardDetailModal({
   const [toggling,   setToggling]   = useState(false);
   const canFeature  = hasInInv && (isFeatured || featCount < 10);
 
-  const cardListings = userListings.filter(l => l.card_id === card.id && l.set_id === setId);
+  const cardListings = userListings.filter(l => l.card_id === card.card_number && l.set_id === setId && l.version === card.version);
   const existingListing = cardListings[0];
   const canSell         = hasInInv && cardListings.length < qty;
 
@@ -286,10 +301,10 @@ export function CardDetailModal({
     const supabase = createClient();
     const { data, error } = await supabase.from("market_listings").insert({
       user_id: userId,
-      card_id: card.id,
+      card_id: card.card_number,
       set_id: setId,
       price_cop: price,
-      version: label,
+      version: card.version,
       status: "active",
     }).select("id, card_id, set_id, price_cop, version").single();
     if (error) {
@@ -299,10 +314,10 @@ export function CardDetailModal({
     }
     const newListing: UserListing = data ?? {
       id: crypto.randomUUID(),
-      card_id: card.id,
+      card_id: card.card_number,
       set_id: setId,
       price_cop: price,
-      version: label,
+      version: card.version,
     };
     onListingsChange([...userListings, newListing]);
     setSavingListing(false);
@@ -317,13 +332,13 @@ export function CardDetailModal({
     if (isFeatured) {
       await supabase.from("featured_cards")
         .delete()
-        .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId);
-      onFeaturedChange(featuredCards.filter(f => !(f.card_id === card.id && f.set_id === setId)));
+        .eq("user_id", userId).eq("card_id", card.card_number).eq("set_id", setId);
+      onFeaturedChange(featuredCards.filter(f => !(Number(f.card_id) === card.card_number && f.set_id === setId)));
     } else {
       if (featCount >= 10) { setFeaturing(false); return; }
       await supabase.from("featured_cards")
-        .insert({ user_id: userId, card_id: card.id, set_id: setId });
-      onFeaturedChange([...featuredCards, { card_id: card.id, set_id: setId }]);
+        .insert({ user_id: userId, card_id: card.card_number, set_id: setId });
+      onFeaturedChange([...featuredCards, { card_id: card.card_number, set_id: setId }]);
     }
     setFeaturing(false);
   };
@@ -592,7 +607,7 @@ export function CardDetailModal({
                   )
                 )}
 
-                {userListings.filter(l => l.card_id === card.id && l.set_id === setId).length > 0 && (
+                {userListings.filter(l => l.card_id === card.card_number && l.set_id === setId && l.version === card.version).length > 0 && (
                   <div style={{ marginTop: "14px", display: "flex", flexDirection: "column", gap: "8px" }}>
                     <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.14em", textTransform: "uppercase", color: DARK2 }}>
                       Publicaciones activas
@@ -634,6 +649,11 @@ export function CardDetailModal({
           0%   { opacity: 0.7; filter: hue-rotate(0deg); }
           50%  { opacity: 1;   filter: hue-rotate(180deg); }
           100% { opacity: 0.7; filter: hue-rotate(360deg); }
+        }
+        @keyframes goldShift {
+          0%   { opacity: 0.6; filter: brightness(0.9) saturate(1.2); }
+          50%  { opacity: 1;   filter: brightness(1.3) saturate(1.6); }
+          100% { opacity: 0.6; filter: brightness(0.9) saturate(1.2); }
         }
         @media (max-width: 540px) {
           .card-modal-inner {

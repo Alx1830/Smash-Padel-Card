@@ -4,7 +4,8 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES, type PokemonSet } from "@/data/pokemon-sets";
-import { VERSION_LABEL, SET_CARD_COUNT, type PokemonCard, type CardVersion } from "@/data/pokemon-cards-meta";
+import { VERSION_LABEL, getVersionLabel, getVersionEffect, getVersionColor, type PokemonCard, type CardVersion } from "@/data/pokemon-cards-meta";
+import { SET_CARD_COUNT } from "@/data/pokemon-cards";
 import {
   COURT, INK0, INK2, BG0, MONO, DISP,
   VERSION_COLOR, VERSION_FULL,
@@ -42,10 +43,12 @@ function TiltCard({
 
   const qty = inventory[invKey(card.id, card.version)] ?? 0;
 
-  const label = VERSION_LABEL[card.version];
-  const labelColor = VERSION_COLOR[label] ?? INK2;
-  const isH  = label === "H";
-  const isRH = label !== "N" && label !== "H";
+  const label = getVersionLabel(card.version);
+  const effect = getVersionEffect(card.version);
+  const isH    = effect === "holofoil";
+  const isGold = effect === "goldBorder";
+  const isRH   = effect === "reverseHolofoil" || effect === "metal";
+  const labelColor = getVersionColor(card.version);
   const isGray = userId ? (qty === 0 && !hovered) : false;
 
   const onEnter = () => {
@@ -79,16 +82,23 @@ function TiltCard({
             rgba(200,200,230,0.18) 55%, transparent 70%)`;
       }
       if (hRef1.current) {
-        hRef1.current.style.background = `
-          radial-gradient(ellipse 90% 70% at ${mx}% ${my}%,
-            rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%,
-            rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%,
-            rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)`;
+        hRef1.current.style.background = isGold
+          ? `radial-gradient(ellipse 90% 70% at ${mx}% ${my}%,
+              rgba(255,220,80,0.6) 0%, rgba(255,180,30,0.45) 20%,
+              rgba(220,140,0,0.35) 45%, rgba(255,200,80,0.2) 65%, transparent 90%)`
+          : `radial-gradient(ellipse 90% 70% at ${mx}% ${my}%,
+              rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%,
+              rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%,
+              rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)`;
       }
       if (hRef2.current) {
-        hRef2.current.style.background = `linear-gradient(${120 + ty * 3}deg,
-          transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%,
-          rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`;
+        hRef2.current.style.background = isGold
+          ? `linear-gradient(${120 + ty * 3}deg,
+              transparent 0%, rgba(255,200,50,0.2) 25%, rgba(255,160,0,0.25) 45%,
+              rgba(255,220,80,0.2) 65%, transparent 85%)`
+          : `linear-gradient(${120 + ty * 3}deg,
+              transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%,
+              rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`;
       }
       if (glRef.current) {
         glRef.current.style.background = `linear-gradient(${110 + ty}deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`;
@@ -122,6 +132,8 @@ function TiltCard({
     ? "0 8px 24px rgba(0,0,0,0.5)"
     : isH
     ? "0 16px 48px rgba(255,160,80,0.35), 0 4px 16px rgba(0,0,0,0.6)"
+    : isGold
+    ? "0 16px 48px rgba(255,200,50,0.45), 0 4px 16px rgba(0,0,0,0.6)"
     : isRH
     ? "0 16px 48px rgba(180,180,220,0.25), 0 4px 16px rgba(0,0,0,0.6)"
     : "0 12px 40px rgba(0,0,0,0.7), 0 4px 12px rgba(0,0,0,0.4)";
@@ -168,19 +180,23 @@ function TiltCard({
             }} />
           )}
 
-          {isH && !isGray && (
+          {(isH || isGold) && !isGray && (
             <div ref={hRef1} style={{
               position: "absolute", inset: 0, pointerEvents: "none",
-              background: `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,100,100,0.2) 0%, rgba(80,255,120,0.15) 50%, transparent 90%)`,
+              background: isGold
+                ? `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,220,80,0.35) 0%, rgba(255,160,0,0.2) 50%, transparent 90%)`
+                : `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,100,100,0.2) 0%, rgba(80,255,120,0.15) 50%, transparent 90%)`,
               mixBlendMode: "color-dodge",
-              animation: "holoShift 4s ease-in-out infinite",
+              animation: isGold ? "goldShift 4s ease-in-out infinite" : "holoShift 4s ease-in-out infinite",
             }} />
           )}
 
-          {isH && !isGray && (
+          {(isH || isGold) && !isGray && (
             <div ref={hRef2} style={{
               position: "absolute", inset: 0, pointerEvents: "none",
-              background: `linear-gradient(120deg, transparent 0%, rgba(255,100,150,0.1) 35%, transparent 70%)`,
+              background: isGold
+                ? `linear-gradient(120deg, transparent 0%, rgba(255,200,50,0.15) 35%, transparent 70%)`
+                : `linear-gradient(120deg, transparent 0%, rgba(255,100,150,0.1) 35%, transparent 70%)`,
               mixBlendMode: "screen",
             }} />
           )}
@@ -313,8 +329,8 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 function SetProgress({ cards, inventory }: { cards: PokemonCard[]; inventory: InventoryMap }) {
   if (!cards.length) return null;
   const total    = cards.length;
-  const unique   = cards.filter(c => (inventory[c.id] ?? 0) > 0).length;
-  const totalQty = cards.reduce((s, c) => s + (inventory[c.id] ?? 0), 0);
+  const unique   = cards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) > 0).length;
+  const totalQty = cards.reduce((s, c) => s + (inventory[invKey(c.id, c.version)] ?? 0), 0);
   const pct = total > 0 ? Math.round((unique / total) * 100) : 0;
 
   return (
@@ -341,16 +357,7 @@ function SetProgress({ cards, inventory }: { cards: PokemonCard[]; inventory: In
 }
 
 /* ── Main section ───────────────────────────────────────────── */
-type CardFilter = "todas" | "tengo" | "faltan" | "normal" | "holofoil" | "reverseHolofoil";
-
-const FILTERS: { id: CardFilter; label: string; authOnly?: boolean }[] = [
-  { id: "todas",           label: "Todas" },
-  { id: "tengo",           label: "Cartas en inventario", authOnly: true },
-  { id: "faltan",          label: "Cartas restantes",     authOnly: true },
-  { id: "normal",          label: "Normales" },
-  { id: "reverseHolofoil", label: "Reverse Holo" },
-  { id: "holofoil",        label: "Holofoil" },
-];
+type InvFilter = "todas" | "tengo" | "faltan";
 
 /* ── Breadcrumb ─────────────────────────────────────────────── */
 function Breadcrumb({ items }: { items: { label: string; onClick?: () => void }[] }) {
@@ -398,7 +405,8 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const [loadingCards, setLoadingCards] = useState(false);
   const [inventory,    setInventory]    = useState<InventoryMap>({});
   const [loadingInv,   setLoadingInv]   = useState(false);
-  const [activeFilter, setActiveFilter] = useState<CardFilter>("todas");
+  const [invFilter,     setInvFilter]     = useState<InvFilter>("todas");
+  const [versionFilter, setVersionFilter] = useState<string>("todas");
   const [selectedCard, setSelectedCard] = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [featuredCards, setFeaturedCards] = useState<FeaturedCard[]>([]);
   const [wishlistCards, setWishlistCards] = useState<WishlistCard[]>([]);
@@ -407,7 +415,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const openSeries = POKEMON_SERIES.find(s => s.id === openSeriesId);
   const openSet    = openSeries?.sets.find(s => s.id === openSetId);
 
-  useEffect(() => { setActiveFilter("todas"); }, [openSetId]);
+  useEffect(() => { setInvFilter("todas"); setVersionFilter("todas"); }, [openSetId]);
 
   /* Fetch featured cards and active listings for logged-in user */
   useEffect(() => {
@@ -569,12 +577,15 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
         {/* ── VISTA: Cards ── */}
         {view === "cards" && openSet && (() => {
           const allCards = setCards;
+
+          // Variantes únicas del set, ordenadas
+          const setVersions = [...new Set(allCards.map(c => c.version))].sort();
+
           const visibleCards = allCards.filter(card => {
-            if (activeFilter === "tengo")           return (inventory[invKey(card.id, card.version)] ?? 0) > 0;
-            if (activeFilter === "faltan")          return (inventory[invKey(card.id, card.version)] ?? 0) === 0;
-            if (activeFilter === "normal")          return card.version === "normal";
-            if (activeFilter === "holofoil")        return card.version === "holofoil";
-            if (activeFilter === "reverseHolofoil") return card.version === "reverseHolofoil";
+            const qty = inventory[invKey(card.id, card.version)] ?? 0;
+            if (invFilter === "tengo"  && qty === 0) return false;
+            if (invFilter === "faltan" && qty  >  0) return false;
+            if (versionFilter !== "todas" && card.version !== versionFilter) return false;
             return true;
           });
           return (
@@ -592,27 +603,64 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
 
               {userId && <SetProgress cards={allCards} inventory={inventory} />}
 
-              {/* Filter buttons */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "28px" }}>
-                {FILTERS.filter(f => !f.authOnly || userId).map(f => (
-                  <button
-                    key={f.id}
-                    onClick={() => setActiveFilter(f.id)}
-                    style={{
-                      fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em",
-                      textTransform: "uppercase",
-                      color: activeFilter === f.id ? BG0 : INK2,
-                      background: activeFilter === f.id ? COURT : "rgba(255,255,255,0.04)",
-                      border: `1px solid ${activeFilter === f.id ? COURT : "rgba(255,255,255,0.1)"}`,
-                      borderRadius: "6px", padding: "5px 12px",
-                      cursor: "pointer", transition: "all 0.15s",
-                    }}
-                  >
-                    {f.label}
-                    {f.id === "tengo"  && userId ? ` (${allCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) > 0).length})` : ""}
-                    {f.id === "faltan" && userId ? ` (${allCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) === 0).length})` : ""}
-                  </button>
-                ))}
+              {/* Filtros */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "28px" }}>
+
+                {/* Fila 1: inventario */}
+                {userId && (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                    {(["todas", "tengo", "faltan"] as InvFilter[]).map(f => {
+                      const label = f === "todas" ? "Todas" : f === "tengo" ? "En inventario" : "Restantes";
+                      const count = f === "tengo"
+                        ? allCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) > 0).length
+                        : f === "faltan"
+                        ? allCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) === 0).length
+                        : null;
+                      const active = invFilter === f;
+                      return (
+                        <button key={f} onClick={() => setInvFilter(f)} style={{
+                          fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em",
+                          textTransform: "uppercase",
+                          color: active ? BG0 : INK2,
+                          background: active ? COURT : "rgba(255,255,255,0.04)",
+                          border: `1px solid ${active ? COURT : "rgba(255,255,255,0.1)"}`,
+                          borderRadius: "6px", padding: "5px 12px",
+                          cursor: "pointer", transition: "all 0.15s",
+                        }}>
+                          {label}{count !== null ? ` (${count})` : ""}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Fila 2: variantes del set */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                  {["todas", ...setVersions].map(v => {
+                    const active = versionFilter === v;
+                    const color = v === "todas" ? INK2 : getVersionColor(v);
+                    const label = v === "todas" ? "Todas las variantes" : getVersionLabel(v);
+                    const count = v === "todas" ? null : allCards.filter(c => {
+                      const qty = inventory[invKey(c.id, c.version)] ?? 0;
+                      if (invFilter === "tengo"  && qty === 0) return false;
+                      if (invFilter === "faltan" && qty  >  0) return false;
+                      return c.version === v;
+                    }).length;
+                    return (
+                      <button key={v} onClick={() => setVersionFilter(v)} style={{
+                        fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: active ? BG0 : color,
+                        background: active ? color : "rgba(255,255,255,0.04)",
+                        border: `1px solid ${active ? color : `${color}55`}`,
+                        borderRadius: "6px", padding: "5px 12px",
+                        cursor: "pointer", transition: "all 0.15s",
+                      }}>
+                        {label}{count !== null ? ` (${count})` : ""}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="pks-cards-grid" style={{
@@ -668,6 +716,11 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           0%   { opacity: 0.7; filter: hue-rotate(0deg); }
           50%  { opacity: 1;   filter: hue-rotate(180deg); }
           100% { opacity: 0.7; filter: hue-rotate(360deg); }
+        }
+        @keyframes goldShift {
+          0%   { opacity: 0.6; filter: brightness(0.9) saturate(1.2); }
+          50%  { opacity: 1;   filter: brightness(1.3) saturate(1.6); }
+          100% { opacity: 0.6; filter: brightness(0.9) saturate(1.2); }
         }
         .tcg-card-wrap { width: 240px; }
         .tcg-card-body { width: 240px; height: 336px; overflow: hidden; position: relative; }

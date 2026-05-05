@@ -11,6 +11,7 @@ import { ModalTiltCard } from "@/components/CardDetailModal";
 import { CITIES_BY_COUNTRY } from "@/data/cities";
 import { House, UserRoundPen, HeartHandshake, LayoutGrid, Store, SlidersHorizontal, X } from "lucide-react";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
+import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
@@ -21,21 +22,6 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
 const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
-
-const VERSION_COLOR: Record<string, string> = {
-  N:   "#f5f7fb",
-  RH:  "#2ee6c1",
-  H:   "#ffd24f",
-  ESP: "#2ee6c1",
-  PB:  "#2ee6c1",
-};
-const VERSION_FULL: Record<string, string> = {
-  N:   "Normal",
-  RH:  "Reverse Holo",
-  H:   "Holofoil",
-  ESP: "Energy Symbol",
-  PB:  "Poke Ball",
-};
 
 function formatCOP(n: number) {
   return n.toLocaleString("es-CO");
@@ -62,11 +48,35 @@ const PAGE_SIZE = 20;
 
 /* ── Filter Sidebar ── */
 const VARIANTES = [
-  { value: "N",   label: "Normal" },
-  { value: "RH",  label: "Reverse Holo" },
-  { value: "H",   label: "Holofoil" },
-  { value: "ESP", label: "Energy Symbol" },
-  { value: "PB",  label: "Poke Ball" },
+  { value: "normal",                    label: "Normal" },
+  { value: "reverseHolofoil",           label: "Reverse Holo" },
+  { value: "holofoil",                  label: "Holofoil" },
+  { value: "cosmosHolofoil",            label: "Cosmos Holo" },
+  { value: "crackedIceHolofoil",        label: "Cracked Ice" },
+  { value: "unlimitedHolofoil",         label: "Unlimited Holo" },
+  { value: "firstEditionHolofoil",      label: "1st Ed. Holo" },
+  { value: "sheenHolofoil",             label: "Sheen Holo" },
+  { value: "sequinHolofoil",            label: "Sequin Holo" },
+  { value: "waterWebHolofoil",          label: "Water Web Holo" },
+  { value: "tinselHolofoil",            label: "Tinsel Holo" },
+  { value: "mirrorReverseHolofoil",     label: "Mirror Reverse Holo" },
+  { value: "cosmosReverseHolofoil",     label: "Cosmos Reverse Holo" },
+  { value: "energyReverseHolofoil",     label: "Energy Reverse Holo" },
+  { value: "pokeBallReverseHolofoil",   label: "Poké Ball Reverse Holo" },
+  { value: "masterBallReverseHolofoil", label: "Master Ball Reverse Holo" },
+  { value: "friendBallReverseHolofoil", label: "Friend Ball Reverse Holo" },
+  { value: "loveBallReverseHolofoil",   label: "Love Ball Reverse Holo" },
+  { value: "quickBallReverseHolofoil",  label: "Quick Ball Reverse Holo" },
+  { value: "rocketReverseHolofoil",     label: "Rocket Reverse Holo" },
+  { value: "duskBallReverseHolofoil",   label: "Dusk Ball Reverse Holo" },
+  { value: "firstEdition",             label: "1st Edition" },
+  { value: "firstEditionShadowless",   label: "1st Ed. Shadowless" },
+  { value: "unlimited",               label: "Unlimited" },
+  { value: "unlimitedShadowless",     label: "Unlimited Shadowless" },
+  { value: "metal",                   label: "Metal" },
+  { value: "nonEreader",              label: "Non E-Reader" },
+  { value: "jumbo",                   label: "Jumbo" },
+  { value: "goldBorder",              label: "Gold Border" },
 ];
 
 function FilterSidebar({
@@ -285,7 +295,7 @@ export function MarketPageClient({
   const filteredListings = useMemo(() => {
     return listings.filter(listing => {
       const cards = SET_CARDS[listing.set_id];
-      const card  = cards?.find(c => c.id === listing.card_id);
+      const card  = cards?.find(c => c.card_number === listing.card_id && c.version === listing.version);
 
       if (fNombre.trim()) {
         const q = fNombre.trim().toLowerCase();
@@ -391,11 +401,11 @@ export function MarketPageClient({
     if (!p?.whatsapp_numero) return "#";
     const number = (p.whatsapp_indicativo ?? "").replace(/\D/g, "") + p.whatsapp_numero.replace(/\D/g, "");
     const cards   = SET_CARDS[listing.set_id];
-    const card    = cards?.find(c => c.id === listing.card_id);
+    const card    = cards?.find(c => c.card_number === listing.card_id && c.version === listing.version);
     const setInfo = ALL_SETS.find(s => s.id === listing.set_id);
     const text = encodeURIComponent(
       `Hola! Vi tu publicación en FaceBinder y me interesa comprar la carta:\n\n` +
-      `• ${card?.name ?? ""} ${VERSION_FULL[listing.version] ?? listing.version}\n` +
+      `• ${card?.name ?? ""} ${getVersionLabel(listing.version)}\n` +
       `• Set ${setInfo?.name ?? listing.set_id}\n` +
       `• $${formatCOP(listing.price_cop)} COP\n\n` +
       `¿Sigue disponible?`
@@ -564,16 +574,16 @@ export function MarketPageClient({
             <div className="mkt-cards-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }}>
               {filteredListings.map(listing => {
                 const cards    = SET_CARDS[listing.set_id];
-                const card     = cards?.find(c => c.id === listing.card_id) as PokemonCard | undefined;
+                const card     = cards?.find(c => c.card_number === listing.card_id && c.version === listing.version) as PokemonCard | undefined;
                 const setInfo  = ALL_SETS.find(s => s.id === listing.set_id);
-                const verColor = VERSION_COLOR[listing.version] ?? INK2;
-                const verFull  = VERSION_FULL[listing.version] ?? listing.version;
+                const verColor = getVersionColor(listing.version);
+                const verFull  = getVersionLabel(listing.version);
                 const waLink   = buildWhatsApp(listing);
                 const hasWA    = listing.players?.whatsapp_numero;
                 const tcgQuery = [
                   card?.name ?? "",
                   setInfo?.name ?? "",
-                  VERSION_FULL[listing.version] ?? listing.version,
+                  getVersionLabel(listing.version),
                 ].filter(Boolean).join(" ");
 
                 return (

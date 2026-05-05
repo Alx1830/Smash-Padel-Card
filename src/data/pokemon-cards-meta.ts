@@ -1,4 +1,4 @@
-export type CardVersion = "normal" | "reverseHolofoil" | "holofoil" | "energySymbol" | "pokeBall";
+export type CardVersion = string;
 
 export interface PokemonCard {
   id: number | string;
@@ -8,13 +8,113 @@ export interface PokemonCard {
   card_number: number;
 }
 
-export const VERSION_LABEL: Record<CardVersion, string> = {
-  normal:          "N",
-  reverseHolofoil: "RH",
-  holofoil:        "H",
-  energySymbol:    "ESP",
-  pokeBall:        "PB",
+export const VERSION_LABEL: Record<string, string> = {
+  // Print types
+  normal:                      "Normal",
+  normalAlternate:             "Normal Alt.",
+  reverseHolofoil:             "Reverse Holo",
+  holofoil:                    "Holofoil",
+  cosmosHolofoil:              "Cosmos Holo",
+  crackedIceHolofoil:          "Cracked Ice",
+  unlimitedHolofoil:           "Unlimited Holo",
+  firstEditionHolofoil:        "1st Ed. Holo",
+  sheenHolofoil:               "Sheen Holo",
+  sequinHolofoil:              "Sequin Holo",
+  waterWebHolofoil:            "Water Web Holo",
+  tinselHolofoil:              "Tinsel Holo",
+  mirrorReverseHolofoil:       "Mirror Reverse Holo",
+  cosmosReverseHolofoil:       "Cosmos Reverse Holo",
+  energyReverseHolofoil:       "Energy Reverse Holo",
+  pokeBallReverseHolofoil:     "Poké Ball Reverse Holo",
+  masterBallReverseHolofoil:   "Master Ball Reverse Holo",
+  friendBallReverseHolofoil:   "Friend Ball Reverse Holo",
+  loveBallReverseHolofoil:     "Love Ball Reverse Holo",
+  quickBallReverseHolofoil:    "Quick Ball Reverse Holo",
+  rocketReverseHolofoil:       "Rocket Reverse Holo",
+  duskBallReverseHolofoil:     "Dusk Ball Reverse Holo",
+  firstEdition:                "1st Edition",
+  firstEditionShadowless:      "1st Ed. Shadowless",
+  unlimited:                   "Unlimited",
+  unlimitedShadowless:         "Unlimited Shadowless",
+  metal:                       "Metal",
+  nonEreader:                  "Non E-Reader",
+  jumbo:                       "Jumbo",
+  jumboAlternate:              "Jumbo Alt.",
+  // Legacy (kept for backwards compat)
+  energySymbol:                "Energy Symbol",
+  pokeBall:                    "Poké Ball",
 };
+
+/** Convierte camelCase a texto legible para variantes sin etiqueta definida */
+export function getVersionLabel(version: string): string {
+  if (VERSION_LABEL[version]) return VERSION_LABEL[version];
+  return version
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, s => s.toUpperCase())
+    .trim();
+}
+
+/** Efecto visual de la carta */
+export function getVersionEffect(version: string): "holofoil" | "reverseHolofoil" | "metal" | "goldBorder" | "normal" {
+  if (version === "metal")      return "metal";
+  if (version === "goldBorder") return "goldBorder";
+  const v = version.toLowerCase();
+  if (v.includes("reverse"))    return "reverseHolofoil";
+  if (v.includes("holo"))       return "holofoil";
+  return "normal";
+}
+
+function isStamp(v: string): boolean {
+  return v.toLowerCase().includes("stamp") ||
+    v.startsWith("league") || v.startsWith("prerelease") || v.startsWith("staff") ||
+    v.startsWith("expansion") || v.startsWith("world") || v.startsWith("national") ||
+    v.startsWith("regional") || v.startsWith("international") || v.startsWith("oceania") ||
+    v.startsWith("asia") || v.startsWith("latin") || v.startsWith("origins") ||
+    v.startsWith("pikachu") || v.startsWith("charizard") || v.startsWith("cinderace") ||
+    v.startsWith("armarouge") || v.startsWith("iono") || v.startsWith("pokemon") ||
+    v.startsWith("play") || v.startsWith("playPokemon") || v.startsWith("pokeTour");
+}
+
+function isPlayer(v: string): boolean {
+  // Nombres de campeones: camelCase sin palabras clave conocidas
+  return !isStamp(v) &&
+    !v.includes("holo") && !v.includes("reverse") &&
+    !["normal","normalAlternate","normalUnnumbered","firstEdition","firstEditionShadowless",
+      "firstEditionShadowlessRedCheeks","unlimited","unlimitedShadowless","unlimitedShadowlessRedCheeks",
+      "metal","nonEreader","jumbo","jumboAlternate","blackStarPromo","peelableDitto",
+      "goldBorder","e3Stamp","e3StampRedCheeks","wStamp","stamp","stamp22",
+      "movieStamp","holidayStamp","snowflakeStamp","gamestopStamp","buildAbearStamp",
+      "toysRusStamp","burgerKingStamp","burgerKingExpansionStamp","ebGamesStamp","ebgamesStamp",
+      "genConStamp","comicConStamp","comicConStaffStamp","gamesExpoStamp","rainCityShowcaseStamp",
+      "inquestGamerStamp","scryeStamp","sevenElevenStamp","gymChallengeStamp","darkraiStamp",
+      "eeveeStamp","mewtwoStamp","legendaryPokemonStamp","anniversaryStamp","winnerStamp",
+      "pokemonDayStamp","pokemonHorizonsStamp","pokemonTogetherStamp","pokemonRocksAmericaStamp",
+      "playPokemonThankYouStamp",
+    ].includes(v);
+}
+
+/** Color del texto/badge de la variante */
+export function getVersionColor(version: string): string {
+  const effect = getVersionEffect(version);
+  if (effect === "holofoil")        return "#ffd24f"; // dorado
+  if (effect === "reverseHolofoil") return "#2ee6c1"; // cian
+
+  // Normal / base prints
+  const normal = ["normal","normalAlternate","normalUnnumbered",
+    "firstEdition","firstEditionShadowless","firstEditionShadowlessRedCheeks",
+    "unlimited","unlimitedShadowless","unlimitedShadowlessRedCheeks",
+    "nonEreader","blackStarPromo","peelableDitto"];
+  if (normal.includes(version)) return "#7a8298"; // gris
+
+  if (version === "metal")          return "#94a3b8"; // plateado
+  if (version === "jumbo" || version === "jumboAlternate") return "#7a8298";
+  if (version === "goldBorder")     return "#fbbf24"; // oro
+
+  if (isStamp(version))             return "#a78bfa"; // violeta
+  if (isPlayer(version))            return "#fb923c"; // naranja
+
+  return "#7a8298"; // gris por defecto
+}
 
 export const SET_CARD_COUNT: Record<string, number> = {
   "ascended-heroes": 613,
