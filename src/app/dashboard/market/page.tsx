@@ -4,7 +4,12 @@ import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
-import { CardDetailModal, invKey, type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing } from "@/components/CardDetailModal";
+import { invKey, type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing } from "@/components/CardDetailModal";
+import dynamic from "next/dynamic";
+const CardDetailModal = dynamic(
+  () => import("@/components/CardDetailModal").then(m => ({ default: m.CardDetailModal })),
+  { ssr: false }
+);
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { getVersionColor, getVersionLabel } from "@/data/pokemon-cards-meta";
 

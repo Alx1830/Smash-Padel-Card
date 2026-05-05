@@ -8,7 +8,12 @@ import { FollowButton } from "./FollowButton";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionEffect, getVersionColor } from "@/data/pokemon-cards-meta";
-import { CardDetailModal, type InventoryMap, type FeaturedCard as FeaturedCardModal, type WishlistCard as WishlistCardModal, type UserListing } from "@/components/CardDetailModal";
+import type { InventoryMap, FeaturedCard as FeaturedCardModal, WishlistCard as WishlistCardModal, UserListing } from "@/components/CardDetailModal";
+import dynamic from "next/dynamic";
+const CardDetailModal = dynamic(
+  () => import("@/components/CardDetailModal").then(m => ({ default: m.CardDetailModal })),
+  { ssr: false }
+);
 
 type SetStats = { unique: number; total: number; totalQty: number };
 type InvRow   = { card_id: number | string; set_id: string; quantity: number };

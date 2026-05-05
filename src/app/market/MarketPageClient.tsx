@@ -7,7 +7,11 @@ import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
-import { ModalTiltCard } from "@/components/CardDetailModal";
+import dynamic from "next/dynamic";
+const ModalTiltCard = dynamic(
+  () => import("@/components/CardDetailModal").then(m => ({ default: m.ModalTiltCard })),
+  { ssr: false }
+);
 import { CITIES_BY_COUNTRY } from "@/data/cities";
 import { House, UserRoundPen, HeartHandshake, LayoutGrid, Store, SlidersHorizontal, X } from "lucide-react";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";

@@ -6,7 +6,11 @@ import { useState, useMemo, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
-import { ModalTiltCard } from "@/components/CardDetailModal";
+import dynamic from "next/dynamic";
+const ModalTiltCard = dynamic(
+  () => import("@/components/CardDetailModal").then(m => ({ default: m.ModalTiltCard })),
+  { ssr: false }
+);
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 
 const COURT = "#ffd24f";

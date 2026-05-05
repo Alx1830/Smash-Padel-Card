@@ -2,12 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 const STYLES = `
 @keyframes spc-breathe {
@@ -91,20 +85,26 @@ export function Footer() {
   const linksRef    = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !wrapperRef.current) return;
-    const ctx = gsap.context(() => {
-      gsap.fromTo(bigTextRef.current,
-        { y: "6vh", opacity: 0 },
-        { y: "0vh", opacity: 1, ease: "power1.out",
-          scrollTrigger: { trigger: wrapperRef.current, start: "top 85%", end: "bottom bottom", scrub: 1 } }
-      );
-      gsap.fromTo([headingRef.current, linksRef.current],
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.12, ease: "power3.out",
-          scrollTrigger: { trigger: wrapperRef.current, start: "top 60%", end: "center bottom", scrub: 1 } }
-      );
-    }, wrapperRef);
-    return () => ctx.revert();
+    if (!wrapperRef.current) return;
+    let ctx: { revert: () => void } | null = null;
+    (async () => {
+      const { gsap } = await import("gsap");
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      gsap.registerPlugin(ScrollTrigger);
+      ctx = gsap.context(() => {
+        gsap.fromTo(bigTextRef.current,
+          { y: "6vh", opacity: 0 },
+          { y: "0vh", opacity: 1, ease: "power1.out",
+            scrollTrigger: { trigger: wrapperRef.current, start: "top 85%", end: "bottom bottom", scrub: 1 } }
+        );
+        gsap.fromTo([headingRef.current, linksRef.current],
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, stagger: 0.12, ease: "power3.out",
+            scrollTrigger: { trigger: wrapperRef.current, start: "top 60%", end: "center bottom", scrub: 1 } }
+        );
+      }, wrapperRef);
+    })();
+    return () => { ctx?.revert(); };
   }, []);
 
   return (
