@@ -6,6 +6,7 @@ import { MobileTabBar } from "@/components/MobileTabBar";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { UserMarketPageClient } from "./UserMarketPageClient";
 
+export const revalidate = 3600;
 export default async function UserMarketPage({
   params,
 }: {

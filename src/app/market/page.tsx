@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { MarketPageClient } from "./MarketPageClient";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export default async function MarketPage() {
   const supabase = await createClient();

@@ -6,6 +6,7 @@ import { MobileTabBar } from "@/components/MobileTabBar";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { WishlistPageClient } from "./WishlistPageClient";
 
+export const revalidate = 3600;
 export default async function WishlistPage({
   params,
 }: {

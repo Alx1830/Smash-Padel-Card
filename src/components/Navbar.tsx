@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const NAV_LINKS_GUEST = [
   { label: "INICIO",     href: "/" },
@@ -28,6 +28,7 @@ interface NavbarProps {
 export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: NavbarProps = {}) {
   const supabase      = createClient();
   const router        = useRouter();
+  const pathname      = usePathname();
   const avatarRef     = useRef<HTMLDivElement>(null);
 
   const [photoUrl, setPhotoUrl]       = useState<string | null>(initialPhotoUrl ?? null);
@@ -84,6 +85,9 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
       )}
     </div>
   );
+
+  // Dashboard has its own sidebar — don't render the public Navbar there
+  if (pathname.startsWith("/dashboard")) return null;
 
   return (
     <>

@@ -5,6 +5,7 @@ import { MobileTabBar } from "@/components/MobileTabBar";
 import { notFound } from "next/navigation";
 import { SET_CARDS } from "@/data/pokemon-cards";
 
+export const revalidate = 3600;
 export default async function JugadorPage({
   params,
 }: {
