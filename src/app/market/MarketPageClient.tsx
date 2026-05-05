@@ -167,24 +167,12 @@ function FilterSidebar({
       {/* Variante */}
       <div>
         <label style={sLabel}>Variante</label>
-        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+        <select value={fVariante} onChange={e => setFVariante(e.target.value)} style={sSelect}>
+          <option value="" style={{ background: "#0a0e1a" }}>Todas las variantes</option>
           {VARIANTES.map(v => (
-            <button
-              key={v.value}
-              onClick={() => setFVariante(fVariante === v.value ? "" : v.value)}
-              style={{
-                textAlign: "left", padding: "7px 10px", borderRadius: "7px",
-                fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em",
-                background: fVariante === v.value ? `${COURT}18` : "rgba(255,255,255,0.03)",
-                border: `1px solid ${fVariante === v.value ? `${COURT}55` : "rgba(255,255,255,0.07)"}`,
-                color: fVariante === v.value ? COURT : INK2,
-                cursor: "pointer", transition: "all 0.15s",
-              }}
-            >
-              {v.label}
-            </button>
+            <option key={v.value} value={v.value} style={{ background: "#0a0e1a", color: INK0 }}>{v.label}</option>
           ))}
-        </div>
+        </select>
       </div>
 
       <div style={sDivider} />
