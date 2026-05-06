@@ -91,7 +91,7 @@ export default async function UserMarketPage({
 
   return (
     <main style={{ background: "#05070d", minHeight: "100vh" }}>
-      <ProfileHeader player={profileHeader} />
+      <ProfileHeader player={profileHeader} hideMobileDetails showProfileLink />
       <UserMarketPageClient
         username={player.username}
         pais={player.pais ?? ""}

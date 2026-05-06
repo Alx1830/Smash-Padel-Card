@@ -91,7 +91,7 @@ export default async function WishlistPage({
 
   return (
     <main style={{ background: "#05070d", minHeight: "100vh" }}>
-      <ProfileHeader player={profileHeader} />
+      <ProfileHeader player={profileHeader} hideMobileDetails showProfileLink />
       <WishlistPageClient
         username={player.username}
         wishlistRows={(wishlistRows ?? []) as { card_id: number | string; set_id: string }[]}

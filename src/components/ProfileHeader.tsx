@@ -236,7 +236,7 @@ function Showcase({ featuredCards, inventoryRows }: {
 }
 
 /* ══ ProfileHeader ══ */
-export function ProfileHeader({ player }: { player: ProfileHeaderData }) {
+export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { player: ProfileHeaderData; hideMobileDetails?: boolean; showProfileLink?: boolean }) {
   const CARD_H     = 416 * 1.2;
   const COVER_H    = 460;
   const NEG_MARGIN = Math.round(CARD_H / 2);
@@ -270,6 +270,11 @@ export function ProfileHeader({ player }: { player: ProfileHeaderData }) {
                   <FollowButton profileUserId={player.profileUserId} currentUserId={player.currentUserId ?? null} />
                 </span>
               )}
+              {showProfileLink && (
+                <a href={`/${player.username}`} className="ver-perfil-btn" style={{ flexShrink: 0 }}>
+                  <span>Ver Perfil</span>
+                </a>
+              )}
             </h1>
             <p style={{ margin: "14px 0 0", color: INK1, fontFamily: MONO, fontSize: "13px", letterSpacing: "0.2em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "10px" }}>
               <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: COURT, display: "inline-block", flexShrink: 0 }} />
@@ -298,11 +303,16 @@ export function ProfileHeader({ player }: { player: ProfileHeaderData }) {
               {player.lastName}
             </em>
           </h1>
-          {player.profileUserId && (
-            <div style={{ marginTop: "14px" }}>
+          <div style={{ marginTop: "14px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+            {player.profileUserId && (
               <FollowButton profileUserId={player.profileUserId} currentUserId={player.currentUserId ?? null} />
-            </div>
-          )}
+            )}
+            {showProfileLink && (
+              <a href={`/${player.username}`} className="ver-perfil-btn">
+                <span>Ver Perfil</span>
+              </a>
+            )}
+          </div>
           <p style={{ margin: "12px 0 0", color: INK1, fontFamily: MONO, fontSize: "12px", letterSpacing: "0.2em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "8px" }}>
             <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: COURT, display: "inline-block", flexShrink: 0 }} />
             {player.tipoPerfil || "Maestro Pokémon"}
@@ -316,6 +326,43 @@ export function ProfileHeader({ player }: { player: ProfileHeaderData }) {
 
         <style>{`
           @keyframes gridPan { 0% { background-position: 0 0; } 100% { background-position: 80px 80px; } }
+          @keyframes holoMove {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          .ver-perfil-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            padding: 9px 19px;
+            border-radius: 10px;
+            color: #f5f7fb;
+            font-family: var(--font-jetbrains);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-weight: 600;
+            white-space: nowrap;
+            background: linear-gradient(90deg, #ff4fd8, #4ff0ff, #d6ff3d, #2ee6c1, #ff9a3d, #ff4fd8);
+            background-size: 300% 300%;
+            animation: holoMove 2.5s ease infinite;
+            z-index: 0;
+          }
+          .ver-perfil-btn::after {
+            content: "";
+            position: absolute;
+            inset: 2px;
+            border-radius: 8px;
+            background: #0a0e1a;
+            z-index: 1;
+          }
+          .ver-perfil-btn span {
+            position: relative;
+            z-index: 2;
+          }
+          .ver-perfil-btn:hover { animation-duration: 1s; }
           @media (min-width: 768px) { .ph-cover-desktop { display: block !important; } .ph-cover-mobile { display: none !important; } }
         `}</style>
       </section>
@@ -359,17 +406,21 @@ export function ProfileHeader({ player }: { player: ProfileHeaderData }) {
               photoUrl={player.photoUrl} setFavoritoId={player.setFavoritoId}
             />
           </div>
-          <div style={{ width: "100%", height: "1px", marginBottom: "40px", background: "rgba(255,255,255,0.06)" }} />
-          <h3 style={{ fontFamily: DISP, fontSize: "22px", letterSpacing: "-0.01em", margin: "0 0 16px", color: INK0 }}>
-            Perfil Maestro Pokémon
-          </h3>
-          <Row label="Pokémon Favorito" value={player.pokemonFavorito || "—"} />
-          <Row label="Edad"             value={player.edad ? `${player.edad} años` : "—"} />
-          <Row label="Energía Favorita" value={player.energiaFavorita || "—"} />
-          <Row label="Tipo de Perfil"   value={player.tipoPerfil || "—"} />
-          <div style={{ marginTop: "40px" }}>
-            <Showcase featuredCards={featuredCards} inventoryRows={inventoryRows} />
-          </div>
+          {!hideMobileDetails && (
+            <>
+              <div style={{ width: "100%", height: "1px", marginBottom: "40px", background: "rgba(255,255,255,0.06)" }} />
+              <h3 style={{ fontFamily: DISP, fontSize: "22px", letterSpacing: "-0.01em", margin: "0 0 16px", color: INK0 }}>
+                Perfil Maestro Pokémon
+              </h3>
+              <Row label="Pokémon Favorito" value={player.pokemonFavorito || "—"} />
+              <Row label="Edad"             value={player.edad ? `${player.edad} años` : "—"} />
+              <Row label="Energía Favorita" value={player.energiaFavorita || "—"} />
+              <Row label="Tipo de Perfil"   value={player.tipoPerfil || "—"} />
+              <div style={{ marginTop: "40px" }}>
+                <Showcase featuredCards={featuredCards} inventoryRows={inventoryRows} />
+              </div>
+            </>
+          )}
         </div>
 
         <style>{`
