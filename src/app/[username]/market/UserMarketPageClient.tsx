@@ -51,12 +51,15 @@ export function UserMarketPageClient({
   const [fVariante,   setFVariante]   = useState("");
   const [fPrecioMin,  setFPrecioMin]  = useState("");
   const [fPrecioMax,  setFPrecioMax]  = useState("");
-  const [previewCard, setPreviewCard] = useState<PokemonCard | null>(null);
-  const [authMsg,     setAuthMsg]     = useState<string | null>(null);
+  const [previewCard,  setPreviewCard]  = useState<PokemonCard | null>(null);
+  const [authMsg,      setAuthMsg]      = useState<string | null>(null);
+  const [loadedSets,   setLoadedSets]   = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const ids = [...new Set(listings.map(l => l.set_id))];
-    loadManySets(ids);
+    loadManySets(ids).then(() => {
+      setLoadedSets(new Set(ids));
+    });
   }, [listings]);
 
   const resolved = useMemo(() => {
@@ -66,7 +69,8 @@ export function UserMarketPageClient({
       const set   = allSets.find(s => s.id === l.set_id);
       return card && set ? { card, set, listing: l } : null;
     }).filter(Boolean) as { card: NonNullable<ReturnType<typeof SET_CARDS[string]["find"]>>; set: SetInfo; listing: Listing }[];
-  }, [listings, allSets]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listings, allSets, loadedSets]);
 
   const setVersions = useMemo(() => {
     const versions = new Set<string>();

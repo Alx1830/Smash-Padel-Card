@@ -7,7 +7,7 @@ import { MobileTabBar } from "@/components/MobileTabBar";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { UserMarketPageClient } from "./UserMarketPageClient";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
