@@ -472,16 +472,20 @@ export function CardDetailModal({
                 {/* Ver precios — TCGPlayer */}
                 {(() => {
                   const tcgQuery = [card.name, setInfo?.name ?? "", VERSION_FULL[label] ?? label].filter(Boolean).join(" ");
+                  const tcgUrl   = `https://www.tcgplayer.com/search/pokemon/product?q=${encodeURIComponent(tcgQuery)}`;
                   return (
-                    <a
-                      href={`https://www.tcgplayer.com/search/pokemon/product?q=${encodeURIComponent(tcgQuery)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button
+                      onClick={() => {
+                        const w = 430, h = 600;
+                        const left = screen.availWidth - w - 16;
+                        const top  = 16;
+                        window.open(tcgUrl, "tcgplayer", `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`);
+                      }}
                       style={{
                         flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "5px",
                         padding: "12px 8px",
                         fontFamily: MONO, fontSize: "11px", letterSpacing: "0.14em", textTransform: "uppercase",
-                        borderRadius: "10px", textDecoration: "none", fontWeight: 700,
+                        borderRadius: "10px", fontWeight: 700, cursor: "pointer",
                         background: "rgba(5,7,13,0.05)", color: "#05070d",
                         border: "1.5px solid rgba(5,7,13,0.2)",
                         transition: "all 0.2s",
@@ -490,7 +494,7 @@ export function CardDetailModal({
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src="https://www.tcgplayer.com/favicon.ico" alt="" width={12} height={12} style={{ flexShrink: 0 }} />
                       Ver precios
-                    </a>
+                    </button>
                   );
                 })()}
                 <button

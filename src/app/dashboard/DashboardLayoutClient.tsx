@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { House, UserRoundPen, UserRound, UsersRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil } from "lucide-react";
+import { House, UserRoundPen, UserRound, UsersRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil, BookSearch } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BG1   = "#0a0e1a";
@@ -173,6 +173,17 @@ export function DashboardLayoutClient({
           Market
         </p>
       </div>
+      <Link href="/dashboard/market" onClick={() => setMarketOpen(false)} style={{
+        display: "flex", alignItems: "center", gap: "10px",
+        padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)",
+      }}
+        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
+        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+      >
+        <BookSearch size={14} color={COURT} strokeWidth={1.8} />
+        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Mi Wishlist</span>
+      </Link>
+      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
       <Link href="/dashboard/market" onClick={() => setMarketOpen(false)} style={{
         display: "flex", alignItems: "center", gap: "10px",
         padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)",
@@ -359,6 +370,13 @@ export function DashboardLayoutClient({
                       <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase", color: active ? COURT : INK2, fontWeight: active ? 600 : 400 }}>{label}</span>
                     </div>
                     <div style={{ paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "2px" }}>
+                      <Link href="/dashboard/market/wishlist" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: pathname === "/dashboard/market/wishlist" ? `${COURT}18` : "transparent", border: pathname === "/dashboard/market/wishlist" ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                        onMouseEnter={e => { if (pathname !== "/dashboard/market/wishlist") e.currentTarget.style.background = `${COURT}10`; }}
+                        onMouseLeave={e => { if (pathname !== "/dashboard/market/wishlist") e.currentTarget.style.background = "transparent"; }}
+                      >
+                        <BookSearch size={14} color={pathname === "/dashboard/market/wishlist" ? COURT : INK2} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: pathname === "/dashboard/market/wishlist" ? COURT : "rgba(245,247,251,0.65)" }}>Mi Wishlist</span>
+                      </Link>
                       <Link href="/dashboard/market" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: pathname === "/dashboard/market" ? `${COURT}18` : "transparent", border: pathname === "/dashboard/market" ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
                         onMouseEnter={e => { if (pathname !== "/dashboard/market") e.currentTarget.style.background = `${COURT}10`; }}
                         onMouseLeave={e => { if (pathname !== "/dashboard/market") e.currentTarget.style.background = "transparent"; }}
@@ -564,6 +582,14 @@ export function DashboardLayoutClient({
                       <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
                         <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>Market</p>
                       </div>
+                      <Link href="/dashboard/market/wishlist" onClick={() => setMarketOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
+                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                      >
+                        <BookSearch size={14} color={COURT} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Mi Wishlist</span>
+                      </Link>
+                      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
                       <Link href="/dashboard/market" onClick={() => setMarketOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}
                         onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
                         onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
