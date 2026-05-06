@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { House, UserRoundPen, UserRound, UsersRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil, BookSearch } from "lucide-react";
+import { House, UserRoundPen, UserRound, UsersRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil, BookSearch, Search } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BG1   = "#0a0e1a";
@@ -52,14 +52,16 @@ export function DashboardLayoutClient({
   const [userId,   setUserId]   = useState<string | null>(initialUserId);
   const [isAdmin,  setIsAdmin]  = useState(initialIsAdmin);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [marketOpen, setMarketOpen] = useState(false);
-  const [perfilOpen, setPerfilOpen] = useState(false);
-  const menuRef       = useRef<HTMLDivElement>(null);
-  const mobileRef     = useRef<HTMLDivElement>(null);
-  const marketRef     = useRef<HTMLDivElement>(null);
-  const mktMobileRef  = useRef<HTMLDivElement>(null);
-  const perfilRef     = useRef<HTMLDivElement>(null);
-  const perfilMobRef  = useRef<HTMLDivElement>(null);
+  const [marketOpen, setMarketOpen]       = useState(false);
+  const [perfilOpen, setPerfilOpen]       = useState(false);
+  const [inventarioOpen, setInventarioOpen] = useState(false);
+  const menuRef        = useRef<HTMLDivElement>(null);
+  const mobileRef      = useRef<HTMLDivElement>(null);
+  const marketRef      = useRef<HTMLDivElement>(null);
+  const mktMobileRef   = useRef<HTMLDivElement>(null);
+  const perfilRef      = useRef<HTMLDivElement>(null);
+  const perfilMobRef   = useRef<HTMLDivElement>(null);
+  const invMobRef      = useRef<HTMLDivElement>(null);
 
   /* Presence — trackea al usuario en el canal online-users */
   useEffect(() => {
@@ -87,6 +89,9 @@ export function DashboardLayoutClient({
       const inPerfilDesktop = perfilRef.current?.contains(e.target as Node);
       const inPerfilMobile  = perfilMobRef.current?.contains(e.target as Node);
       if (!inPerfilDesktop && !inPerfilMobile) setPerfilOpen(false);
+
+      const inInvMobile = invMobRef.current?.contains(e.target as Node);
+      if (!inInvMobile) setInventarioOpen(false);
     }
     document.addEventListener("mousedown", onOutside);
     return () => document.removeEventListener("mousedown", onOutside);
@@ -362,6 +367,36 @@ export function DashboardLayoutClient({
                 ? pathname === "/dashboard/market" || pathname === "/market"
                 : pathname === href;
 
+              const isInventario = label === "Inventario";
+
+              if (isInventario) {
+                const invActive = pathname === "/dashboard/inventario" || pathname === "/dashboard/inventario/cards";
+                return (
+                  <div key="inventario" style={{ marginBottom: "4px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 14px 6px" }}>
+                      <Icon size={20} color={invActive ? COURT : INK2} strokeWidth={1.8} style={{ flexShrink: 0 }} />
+                      <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase", color: invActive ? COURT : INK2, fontWeight: invActive ? 600 : 400 }}>{label}</span>
+                    </div>
+                    <div style={{ paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "2px" }}>
+                      <Link href="/dashboard/inventario" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: pathname === "/dashboard/inventario" ? `${COURT}18` : "transparent", border: pathname === "/dashboard/inventario" ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                        onMouseEnter={e => { if (pathname !== "/dashboard/inventario") e.currentTarget.style.background = `${COURT}10`; }}
+                        onMouseLeave={e => { if (pathname !== "/dashboard/inventario") e.currentTarget.style.background = "transparent"; }}
+                      >
+                        <LayoutGrid size={14} color={pathname === "/dashboard/inventario" ? COURT : INK2} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: pathname === "/dashboard/inventario" ? COURT : "rgba(245,247,251,0.65)" }}>Inventario</span>
+                      </Link>
+                      <Link href="/dashboard/inventario/cards" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: pathname === "/dashboard/inventario/cards" ? `${COURT}18` : "transparent", border: pathname === "/dashboard/inventario/cards" ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                        onMouseEnter={e => { if (pathname !== "/dashboard/inventario/cards") e.currentTarget.style.background = `${COURT}10`; }}
+                        onMouseLeave={e => { if (pathname !== "/dashboard/inventario/cards") e.currentTarget.style.background = "transparent"; }}
+                      >
+                        <Search size={14} color={pathname === "/dashboard/inventario/cards" ? COURT : INK2} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: pathname === "/dashboard/inventario/cards" ? COURT : "rgba(245,247,251,0.65)" }}>Buscar Carta</span>
+                      </Link>
+                    </div>
+                  </div>
+                );
+              }
+
               if (isMarket) {
                 return (
                   <div key="market" style={{ marginBottom: "4px" }}>
@@ -561,6 +596,39 @@ export function DashboardLayoutClient({
                     {active && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
                     <Icon size={iconSz} color={color} strokeWidth={active ? 2.2 : 1.7} style={{ position: "relative" }} />
                     <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color, fontWeight: active ? 600 : 400, position: "relative" }}>
+                      {label}
+                    </span>
+                  </button>
+                </div>
+              );
+            }
+
+            const isInventario = label === "Inventario";
+            if (isInventario) {
+              const invActive = pathname === "/dashboard/inventario" || pathname === "/dashboard/inventario/cards";
+              const color = invActive ? COURT : highlight ? `${COURT}80` : INK2;
+              return (
+                <div key="inventario" ref={invMobRef} style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {inventarioOpen && (
+                    <div style={{ position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)", width: 180, background: "#0d1520", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", overflow: "hidden", boxShadow: "0 8px 40px rgba(0,0,0,0.6)", zIndex: 200 }}>
+                      <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                        <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>Inventario</p>
+                      </div>
+                      <Link href="/dashboard/inventario" onClick={() => setInventarioOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}>
+                        <LayoutGrid size={14} color={COURT} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Inventario</span>
+                      </Link>
+                      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
+                      <Link href="/dashboard/inventario/cards" onClick={() => setInventarioOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}>
+                        <Search size={14} color={COURT} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Buscar Carta</span>
+                      </Link>
+                    </div>
+                  )}
+                  <button onClick={() => setInventarioOpen(o => !o)} style={{ flex: 1, width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "4px", background: "transparent", border: "none", cursor: "pointer", position: "relative", paddingBottom: "4px" }}>
+                    {invActive && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
+                    <Icon size={highlight ? 26 : 22} color={color} strokeWidth={invActive ? 2.2 : 1.7} style={{ position: "relative" }} />
+                    <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color, fontWeight: invActive ? 600 : 400, position: "relative" }}>
                       {label}
                     </span>
                   </button>
