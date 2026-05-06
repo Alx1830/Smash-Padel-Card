@@ -691,23 +691,21 @@ export function MarketPageClient({
                       {/* Botones */}
                       <div style={{ display: "flex", gap: "6px", marginTop: "auto", paddingTop: "2px" }}>
                         {/* TCGPlayer */}
-                        <a
-                          href={`https://www.tcgplayer.com/search/pokemon/product?q=${encodeURIComponent(tcgQuery)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <button
+                          onClick={() => { const w=430,h=600,left=screen.availWidth-w-16,top=screen.availHeight-h-16; window.open(`https://www.tcgplayer.com/search/pokemon/product?q=${encodeURIComponent(tcgQuery)}`,"tcgplayer",`width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`); }}
                           style={{
                             flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "5px",
                             padding: "8px 4px",
                             fontFamily: MONO, fontSize: "9px", letterSpacing: "0.08em", textTransform: "uppercase",
                             color: "#2ee696", background: "#ffffff",
-                            borderRadius: "8px", textDecoration: "none", fontWeight: 700,
-                            border: "none",
+                            borderRadius: "8px", fontWeight: 700,
+                            border: "none", cursor: "pointer",
                           }}
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src="https://www.tcgplayer.com/favicon.ico" alt="TCGPlayer" width={12} height={12} style={{ flexShrink: 0 }} />
                           TCGPlayer
-                        </a>
+                        </button>
 
                         {/* Comprar (WhatsApp) */}
                         {hasWA ? (
