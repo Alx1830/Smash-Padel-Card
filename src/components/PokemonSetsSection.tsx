@@ -512,13 +512,13 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           fontFamily: DISP, fontSize: "clamp(28px, 3vw, 42px)",
           letterSpacing: "-0.02em", margin: 0, color: INK0,
         }}>
-          Pokémon TCG Sets
+          Pokémon Master Set's
         </h2>
         <p style={{
           fontFamily: MONO, fontSize: "12px", letterSpacing: "0.1em",
           color: INK2, marginTop: "10px", textTransform: "uppercase",
         }}>
-          {POKEMON_SERIES.length} series · {POKEMON_SERIES.reduce((a, s) => a + s.sets.length, 0)} sets
+          {POKEMON_SERIES.length} expansiones · {POKEMON_SERIES.reduce((a, s) => a + s.sets.length, 0)} sets
         </p>
       </div>
 
@@ -527,7 +527,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
         {/* ── VISTA: Series ── */}
         {view === "series" && (
           <>
-            <SectionLabel>Series</SectionLabel>
+            <SectionLabel>Expansiones</SectionLabel>
             <div className="pks-thumbs" style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
               {POKEMON_SERIES.map(series => (
                 <Thumb
@@ -548,7 +548,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
         {view === "sets" && openSeries && (
           <>
             <Breadcrumb items={[
-              { label: "Series", onClick: goToSeries },
+              { label: "Expansiones", onClick: goToSeries },
               { label: openSeries.name },
             ]} />
             <SectionLabel>{openSeries.name} — {openSeries.sets.length} sets</SectionLabel>
@@ -590,7 +590,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           return (
             <>
               <Breadcrumb items={[
-                { label: "Series", onClick: goToSeries },
+                { label: "Expansiones", onClick: goToSeries },
                 { label: openSeries!.name, onClick: () => goToSets(openSeries!.id) },
                 { label: openSet.name },
               ]} />

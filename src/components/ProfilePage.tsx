@@ -1056,7 +1056,7 @@ function CollectionSection({
             Colección
           </div>
           <h2 style={{ fontFamily: DISP_C, fontSize: "clamp(24px, 2.5vw, 36px)", letterSpacing: "-0.02em", margin: "0 0 32px", color: INK0_C }}>
-            Pokémon TCG
+            Pokémon Master Set's
           </h2>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
