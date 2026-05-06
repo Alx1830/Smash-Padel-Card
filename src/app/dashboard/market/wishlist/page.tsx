@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
@@ -33,6 +33,35 @@ export default function DashboardWishlistPage() {
   const [setCards, setSetCards]         = useState<Record<string, any[]>>({});
   const [removing, setRemoving]         = useState<string | null>(null);
   const [userId, setUserId]             = useState<string | null>(null);
+
+  const [fNombre,   setFNombre]   = useState("");
+  const [fSet,      setFSet]      = useState("");
+  const [fVariante, setFVariante] = useState("");
+
+  const resolved = useMemo(() =>
+    wishlistRows.map(w => {
+      const cards = setCards[w.set_id];
+      const card  = cards?.find((c: any) => c.id === w.card_id);
+      const set   = ALL_SETS.find(s => s.id === w.set_id);
+      return card && set ? { card, set, row: w } : null;
+    }).filter(Boolean) as { card: any; set: any; row: WishlistRow }[]
+  , [wishlistRows, setCards]);
+
+  const setVersions = useMemo(() => {
+    const vs = new Set<string>();
+    resolved.forEach(r => vs.add(r.card.version));
+    return [...vs].sort();
+  }, [resolved]);
+
+  const filtered = useMemo(() => resolved.filter(r => {
+    if (fNombre.trim() && !r.card.name.toLowerCase().includes(fNombre.trim().toLowerCase())) return false;
+    if (fSet && r.row.set_id !== fSet) return false;
+    if (fVariante && r.card.version !== fVariante) return false;
+    return true;
+  }), [resolved, fNombre, fSet, fVariante]);
+
+  const hasFilters = fNombre || fSet || fVariante;
+  function clearFilters() { setFNombre(""); setFSet(""); setFVariante(""); }
 
   /* Modal state */
   const [modalTarget, setModalTarget]       = useState<{ card: PokemonCard; setId: string } | null>(null);
@@ -160,32 +189,79 @@ export default function DashboardWishlistPage() {
         </p>
       </div>
 
+      <style>{`
+        .dwish-layout { display: flex; gap: 32px; align-items: flex-start; }
+        .dwish-sidebar { width: 220px; flex-shrink: 0; }
+        .dwish-grid-area { flex: 1; min-width: 0; }
+        @media (max-width: 1023px) { .dwish-layout { flex-direction: column; } .dwish-sidebar { display: none; } }
+      `}</style>
+
       <div className="dwish-body">
         {loading ? (
           <div style={{ padding: "80px 0", textAlign: "center", fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em" }}>
             Cargando...
           </div>
-        ) : wishlistRows.length === 0 ? (
-          <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "80px 40px", textAlign: "center", marginTop: "32px" }}>
-            <div style={{ marginBottom: "16px", opacity: 0.3 }}><BookSearch size={40} color={INK2} /></div>
-            <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>
-              Tu wishlist está vacía
-            </p>
-            <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.08em", margin: "10px 0 0", opacity: 0.7 }}>
-              Agrega cartas desde el inventario para hacer seguimiento
-            </p>
-          </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px", marginTop: "28px" }}>
-            {wishlistRows.map(row => {
-              const cards   = setCards[row.set_id];
-              const card    = cards?.find((c: any) => c.id === row.card_id);
-              const setInfo = ALL_SETS.find(s => s.id === row.set_id);
-              const version = card?.version ?? "normal";
-              const verColor = getVersionColor(version);
-              const verFull  = getVersionLabel(version);
-              const busyKey  = `${row.card_id}::${row.set_id}`;
-              const busy     = removing === busyKey;
+          <div className="dwish-layout" style={{ marginTop: "28px" }}>
+
+            {/* ── Sidebar filtros ── */}
+            <aside className="dwish-sidebar">
+              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", padding: "20px", position: "sticky", top: "80px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+                  <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", color: COURT }}>Filtros</span>
+                  {hasFilters && (
+                    <button onClick={clearFilters} style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#d95555", background: "none", border: "1px solid rgba(209,53,53,0.3)", borderRadius: "5px", padding: "3px 10px", cursor: "pointer" }}>
+                      Limpiar
+                    </button>
+                  )}
+                </div>
+                <div>
+                  <label style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px" }}>Nombre de carta</label>
+                  <input value={fNombre} onChange={e => setFNombre(e.target.value)} placeholder="Ej: Pikachu..." style={{ width: "100%", padding: "8px 10px", borderRadius: "7px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: INK0, fontFamily: MONO, fontSize: "12px", outline: "none", boxSizing: "border-box" }} />
+                </div>
+                <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "18px 0" }} />
+                <div>
+                  <label style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px" }}>Variante</label>
+                  <select value={fVariante} onChange={e => setFVariante(e.target.value)} style={{ width: "100%", padding: "8px 10px", borderRadius: "7px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: INK0, fontFamily: MONO, fontSize: "12px", outline: "none", boxSizing: "border-box", cursor: "pointer", appearance: "none" }}>
+                    <option value="" style={{ background: "#0a0e1a" }}>Todas las variantes</option>
+                    {setVersions.map(v => <option key={v} value={v} style={{ background: "#0a0e1a", color: INK0 }}>{getVersionLabel(v)}</option>)}
+                  </select>
+                </div>
+                <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "18px 0" }} />
+                <div>
+                  <label style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px" }}>Set</label>
+                  <select value={fSet} onChange={e => setFSet(e.target.value)} style={{ width: "100%", padding: "8px 10px", borderRadius: "7px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: INK0, fontFamily: MONO, fontSize: "12px", outline: "none", boxSizing: "border-box", cursor: "pointer", appearance: "none" }}>
+                    <option value="" style={{ background: "#0a0e1a" }}>Todos los sets</option>
+                    {ALL_SETS.filter(s => resolved.some(r => r.row.set_id === s.id)).map(s => (
+                      <option key={s.id} value={s.id} style={{ background: "#0a0e1a", color: INK0 }}>{s.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </aside>
+
+            {/* ── Grid ── */}
+            <div className="dwish-grid-area">
+              {wishlistRows.length === 0 ? (
+                <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "80px 40px", textAlign: "center" }}>
+                  <div style={{ marginBottom: "16px", opacity: 0.3 }}><BookSearch size={40} color={INK2} /></div>
+                  <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>Tu wishlist está vacía</p>
+                  <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.08em", margin: "10px 0 0", opacity: 0.7 }}>Agrega cartas desde el inventario para hacer seguimiento</p>
+                </div>
+              ) : filtered.length === 0 ? (
+                <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "60px 40px", textAlign: "center" }}>
+                  <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: "0 0 12px" }}>Ningún resultado</p>
+                  <button onClick={clearFilters} style={{ fontFamily: MONO, fontSize: "10px", color: COURT, background: "none", border: `1px solid ${COURT}44`, borderRadius: "6px", padding: "6px 16px", cursor: "pointer" }}>Limpiar filtros</button>
+                </div>
+              ) : (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="dwish-cards-grid">
+                <style>{`@media (max-width: 767px) { .dwish-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; } }`}</style>
+                {filtered.map(({ card, set, row }) => {
+                  const version = card?.version ?? "normal";
+                  const verColor = getVersionColor(version);
+                  const verFull  = getVersionLabel(version);
+                  const busyKey  = `${row.card_id}::${row.set_id}`;
+                  const busy     = removing === busyKey;
 
               return (
                 <div key={busyKey} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "14px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
@@ -211,9 +287,9 @@ export default function DashboardWishlistPage() {
                         {card?.name ?? "Carta desconocida"}
                       </div>
                       <div style={{ display: "flex", alignItems: "center" }}>
-                        {setInfo ? (
+                        {set ? (
                           <div style={{ position: "relative", width: "56px", height: "18px" }}>
-                            <Image src={setInfo.logo} alt={setInfo.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} />
+                            <Image src={set.logo} alt={set.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} />
                           </div>
                         ) : (
                           <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2 }}>—</span>
@@ -242,6 +318,9 @@ export default function DashboardWishlistPage() {
                 </div>
               );
             })}
+              </div>
+              )}
+            </div>
           </div>
         )}
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
@@ -40,6 +40,28 @@ export default function DashboardMarketPage() {
   const [setCards, setSetCards]   = useState<Record<string, any[]>>({});
   const [removing, setRemoving]   = useState<string | null>(null);
   const [userId, setUserId]       = useState<string | null>(null);
+
+  const [fNombre,   setFNombre]   = useState("");
+  const [fSet,      setFSet]      = useState("");
+  const [fVariante, setFVariante] = useState("");
+
+  const setVersions = useMemo(() => {
+    const vs = new Set<string>();
+    listings.forEach(l => vs.add(l.version));
+    return [...vs].sort();
+  }, [listings]);
+
+  const filtered = useMemo(() => listings.filter(l => {
+    const cards = setCards[l.set_id];
+    const card  = cards?.find((c: any) => c.card_number === l.card_id && c.version === l.version);
+    if (fNombre.trim() && !card?.name?.toLowerCase().includes(fNombre.trim().toLowerCase())) return false;
+    if (fSet && l.set_id !== fSet) return false;
+    if (fVariante && l.version !== fVariante) return false;
+    return true;
+  }), [listings, setCards, fNombre, fSet, fVariante]);
+
+  const hasFilters = fNombre || fSet || fVariante;
+  function clearFilters() { setFNombre(""); setFSet(""); setFVariante(""); }
 
   /* Modal state */
   const [modalTarget, setModalTarget]       = useState<{ card: PokemonCard; setId: string } | null>(null);
@@ -169,24 +191,74 @@ export default function DashboardMarketPage() {
         </p>
       </div>
 
+      <style>{`
+        .dmkt-layout { display: flex; gap: 32px; align-items: flex-start; }
+        .dmkt-sidebar { width: 220px; flex-shrink: 0; }
+        .dmkt-grid-area { flex: 1; min-width: 0; }
+        @media (max-width: 1023px) { .dmkt-layout { flex-direction: column; } .dmkt-sidebar { display: none; } }
+      `}</style>
+
       <div className="dmkt-body">
         {loading ? (
           <div style={{ padding: "80px 0", textAlign: "center", fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em" }}>
             Cargando...
           </div>
-        ) : listings.length === 0 ? (
-          <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "80px 40px", textAlign: "center", marginTop: "32px" }}>
-            <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.3 }}>◬</div>
-            <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>
-              No tienes cartas publicadas
-            </p>
-            <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.08em", margin: "10px 0 0", opacity: 0.7 }}>
-              Abre una carta en tu inventario y usa el botón Vender
-            </p>
-          </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px", marginTop: "28px" }}>
-            {listings.map(listing => {
+          <div className="dmkt-layout" style={{ marginTop: "28px" }}>
+
+            {/* ── Sidebar filtros ── */}
+            <aside className="dmkt-sidebar">
+              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", padding: "20px", position: "sticky", top: "80px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+                  <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", color: COURT }}>Filtros</span>
+                  {hasFilters && (
+                    <button onClick={clearFilters} style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#d95555", background: "none", border: "1px solid rgba(209,53,53,0.3)", borderRadius: "5px", padding: "3px 10px", cursor: "pointer" }}>
+                      Limpiar
+                    </button>
+                  )}
+                </div>
+                <div>
+                  <label style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px" }}>Nombre de carta</label>
+                  <input value={fNombre} onChange={e => setFNombre(e.target.value)} placeholder="Ej: Pikachu..." style={{ width: "100%", padding: "8px 10px", borderRadius: "7px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: INK0, fontFamily: MONO, fontSize: "12px", outline: "none", boxSizing: "border-box" }} />
+                </div>
+                <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "18px 0" }} />
+                <div>
+                  <label style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px" }}>Variante</label>
+                  <select value={fVariante} onChange={e => setFVariante(e.target.value)} style={{ width: "100%", padding: "8px 10px", borderRadius: "7px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: INK0, fontFamily: MONO, fontSize: "12px", outline: "none", boxSizing: "border-box", cursor: "pointer", appearance: "none" }}>
+                    <option value="" style={{ background: "#0a0e1a" }}>Todas las variantes</option>
+                    {setVersions.map(v => <option key={v} value={v} style={{ background: "#0a0e1a", color: INK0 }}>{getVersionLabel(v)}</option>)}
+                  </select>
+                </div>
+                <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "18px 0" }} />
+                <div>
+                  <label style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px" }}>Set</label>
+                  <select value={fSet} onChange={e => setFSet(e.target.value)} style={{ width: "100%", padding: "8px 10px", borderRadius: "7px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: INK0, fontFamily: MONO, fontSize: "12px", outline: "none", boxSizing: "border-box", cursor: "pointer", appearance: "none" }}>
+                    <option value="" style={{ background: "#0a0e1a" }}>Todos los sets</option>
+                    {ALL_SETS.filter(s => listings.some(l => l.set_id === s.id)).map(s => (
+                      <option key={s.id} value={s.id} style={{ background: "#0a0e1a", color: INK0 }}>{s.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </aside>
+
+            {/* ── Grid ── */}
+            <div className="dmkt-grid-area">
+              {listings.length === 0 ? (
+                <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "80px 40px", textAlign: "center" }}>
+                  <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.3 }}>◬</div>
+                  <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>No tienes cartas publicadas</p>
+                  <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.08em", margin: "10px 0 0", opacity: 0.7 }}>Abre una carta en tu inventario y usa el botón Vender</p>
+                </div>
+              ) : filtered.length === 0 ? (
+                <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "60px 40px", textAlign: "center" }}>
+                  <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: "0 0 12px" }}>Ningún resultado</p>
+                  <button onClick={clearFilters} style={{ fontFamily: MONO, fontSize: "10px", color: COURT, background: "none", border: `1px solid ${COURT}44`, borderRadius: "6px", padding: "6px 16px", cursor: "pointer" }}>Limpiar filtros</button>
+                </div>
+              ) : (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="dmkt-cards-grid">
+                <style>{`@media (max-width: 767px) { .dmkt-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; } }`}</style>
+                {filtered.map(listing => {
               const cards   = setCards[listing.set_id];
               const card    = cards?.find((c: any) => c.card_number === listing.card_id && c.version === listing.version);
               const setInfo = ALL_SETS.find(s => s.id === listing.set_id);
@@ -252,6 +324,9 @@ export default function DashboardMarketPage() {
                 </div>
               );
             })}
+              </div>
+              )}
+            </div>
           </div>
         )}
       </div>
