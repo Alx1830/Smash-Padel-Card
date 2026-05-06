@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
@@ -7,6 +8,41 @@ import { ProfileHeader } from "@/components/ProfileHeader";
 import { UserMarketPageClient } from "./UserMarketPageClient";
 
 export const revalidate = 3600;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}): Promise<Metadata> {
+  const { username } = await params;
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("players")
+    .select("username, first_name, last_name, photo_url")
+    .ilike("username", username)
+    .single();
+
+  const display = data?.first_name
+    ? `${data.first_name}${data.last_name ? " " + data.last_name : ""}`
+    : data?.username ?? username;
+
+  const image = data?.photo_url ?? "/og-image.png";
+  const title = `Cartas en venta de ${display} · FaceBinder`;
+  const description = `${display} tiene cartas Pokémon TCG disponibles para venta o intercambio. Revisa su catálogo y contáctalo en FaceBinder.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://facebinder.vercel.app/${username}/market`,
+      images: [{ url: image, width: 400, height: 400, alt: title }],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
+  };
+}
+
 export default async function UserMarketPage({
   params,
 }: {

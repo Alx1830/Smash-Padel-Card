@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { ProfilePage } from "@/components/ProfilePage";
 import { Footer } from "@/components/Footer";
@@ -6,6 +7,41 @@ import { notFound } from "next/navigation";
 import { SET_CARD_COUNT } from "@/data/pokemon-cards";
 
 export const revalidate = 3600;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}): Promise<Metadata> {
+  const { username } = await params;
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("players")
+    .select("username, first_name, last_name, photo_url")
+    .ilike("username", username)
+    .single();
+
+  const display = data?.first_name
+    ? `${data.first_name}${data.last_name ? " " + data.last_name : ""}`
+    : data?.username ?? username;
+
+  const image = data?.photo_url ?? "/og-image.png";
+  const title = `Colección de ${display} · FaceBinder`;
+  const description = `Mira la colección de cartas Pokémon TCG de ${display}. Descubre sus sets completados, cartas Normal, Reverse Holo y Holofoil en FaceBinder.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://facebinder.vercel.app/${username}`,
+      images: [{ url: image, width: 400, height: 400, alt: title }],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
+  };
+}
+
 export default async function JugadorPage({
   params,
 }: {
