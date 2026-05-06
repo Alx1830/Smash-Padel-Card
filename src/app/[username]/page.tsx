@@ -35,9 +35,9 @@ export async function generateMetadata({
       title,
       description,
       url: `https://facebinder.vercel.app/${username}`,
-      images: [{ url: "/og-image.png", width: 1200, height: 1200, alt: title }],
+      images: [{ url: "/og-brand.png", width: 1200, height: 1200, alt: title }],
     },
-    twitter: { card: "summary_large_image", title, description, images: ["/og-image.png"] },
+    twitter: { card: "summary_large_image", title, description, images: ["/og-brand.png"] },
   };
 }
 
