@@ -18,7 +18,7 @@ export async function generateMetadata({
   const supabase = await createClient();
   const { data } = await supabase
     .from("players")
-    .select("username, first_name, last_name, photo_url")
+    .select("username, first_name, last_name")
     .ilike("username", username)
     .single();
 
@@ -26,7 +26,6 @@ export async function generateMetadata({
     ? `${data.first_name}${data.last_name ? " " + data.last_name : ""}`
     : data?.username ?? username;
 
-  const image = data?.photo_url ?? "/og-image.png";
   const title = `Wishlist de ${display} · FaceBinder`;
   const description = `Descubre las cartas Pokémon TCG que ${display} está buscando. Contacta y ayúdalo a completar su colección en FaceBinder.`;
 
@@ -37,9 +36,9 @@ export async function generateMetadata({
       title,
       description,
       url: `https://facebinder.vercel.app/${username}/wishlist`,
-      images: [{ url: image, width: 400, height: 400, alt: title }],
+      images: [{ url: "/og-image.png", width: 1200, height: 1200, alt: title }],
     },
-    twitter: { card: "summary_large_image", title, description, images: [image] },
+    twitter: { card: "summary_large_image", title, description, images: ["/og-image.png"] },
   };
 }
 
