@@ -478,7 +478,7 @@ export function CardDetailModal({
                       onClick={() => {
                         const w = 430, h = 600;
                         const left = screen.availWidth - w - 16;
-                        const top  = 16;
+                        const top  = screen.availHeight - h - 16;
                         window.open(tcgUrl, "tcgplayer", `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`);
                       }}
                       style={{
