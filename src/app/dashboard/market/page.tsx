@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { loadManySets, SET_CARDS } from "@/data/pokemon-cards";
 import { invKey, type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing } from "@/components/CardDetailModal";
 import dynamic from "next/dynamic";
 const CardDetailModal = dynamic(
@@ -94,13 +95,14 @@ export default function DashboardMarketPage() {
       if (featured) setFeaturedCards(featured as FeaturedCard[]);
       if (wishlist) setWishlistCards(wishlist as WishlistCard[]);
 
-      const mod = await import("@/data/pokemon-cards");
-      const setIds = [...new Set(listingRows.map(l => l.set_id))];
-      await mod.loadManySets(setIds);
-      const needed: Record<string, any[]> = {};
-      setIds.forEach(id => { needed[id] = mod.SET_CARDS[id] ?? []; });
-      setSetCards(needed);
+      // Mostrar grid inmediatamente — sets cargan en background
       setLoading(false);
+
+      const setIds = [...new Set(listingRows.map(l => l.set_id))];
+      for (const setId of setIds) {
+        await loadManySets([setId]);
+        setSetCards(prev => ({ ...prev, [setId]: SET_CARDS[setId] ?? [] }));
+      }
     })();
   }, []);
 
@@ -176,6 +178,7 @@ export default function DashboardMarketPage() {
           .dmkt-header { padding: 48px 48px 0; }
           .dmkt-body   { padding: 32px 48px 80px; }
         }
+        @keyframes dmkt-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
       `}</style>
 
       <div className="dmkt-header">
@@ -270,11 +273,9 @@ export default function DashboardMarketPage() {
                 <div key={listing.id} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "14px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
                   <div onClick={() => openModal(listing)} style={{ position: "relative", width: "100%", aspectRatio: "5/7", cursor: card ? "pointer" : "default", background: "rgba(255,255,255,0.03)", flexShrink: 0 }}>
                     {card ? (
-                      <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="220px" />
+                      <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="220px" loading="lazy" />
                     ) : (
-                      <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <span style={{ color: INK2, fontSize: "24px" }}>?</span>
-                      </div>
+                      <div style={{ width: "100%", height: "100%", background: "linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%)", backgroundSize: "200% 100%", animation: "dmkt-shimmer 1.4s ease-in-out infinite" }} />
                     )}
                     <div style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color: verColor, border: `1px solid ${verColor}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>
                       {verFull}
