@@ -1,9 +1,10 @@
-"use client";
-
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { ImageSwiper } from "@/components/ui/image-swiper";
-import { loadSetCards } from "@/data/pokemon-cards";
+import dynamic from "next/dynamic";
+
+const HeroSwiper = dynamic(
+  () => import("@/components/HeroSwiper").then(m => ({ default: m.HeroSwiper })),
+  { ssr: false, loading: () => <div style={{ width: 264, height: 370 }} /> }
+);
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -41,14 +42,6 @@ const MARKET_FEATURES = [
 ];
 
 export default function LandingPage() {
-  const [randomTen, setRandomTen] = useState<string | null>(null);
-  useEffect(() => {
-    loadSetCards("perfect-order").then(cards => {
-      const shuffled = [...cards].sort(() => Math.random() - 0.5);
-      setRandomTen(shuffled.slice(0, 10).map((c: { image: string }) => c.image).join(","));
-    });
-  }, []);
-
   return (
     <main style={{ background: BG0, color: INK0, overflowX: "hidden" }}>
       <style>{`
@@ -75,7 +68,6 @@ export default function LandingPage() {
           .steps-grid       { grid-template-columns: 1fr 1fr !important; }
         }
       `}</style>
-
 
       {/* ══ HERO ══ */}
       <section style={{ paddingTop: "64px", position: "relative", overflow: "hidden" }}>
@@ -116,7 +108,7 @@ export default function LandingPage() {
           </div>
 
           <div className="hero-swiper" style={{ flexShrink: 0, animation: "float 7s ease-in-out infinite" }}>
-            {randomTen !== null && <ImageSwiper images={randomTen} cardWidth={264} cardHeight={370} />}
+            <HeroSwiper />
           </div>
         </div>
       </section>
@@ -174,7 +166,6 @@ export default function LandingPage() {
         </div>
 
         <div style={{ maxWidth: "1100px", margin: "0 auto", position: "relative" }}>
-          {/* Header */}
           <div style={{ marginBottom: "64px" }}>
             <div style={{ fontFamily: MONO, fontSize: "11px", color: COURT, letterSpacing: "0.22em", textTransform: "uppercase", marginBottom: "16px", display: "flex", alignItems: "center", gap: "10px" }}>
               <span style={{ width: "24px", height: "1px", background: COURT, display: "inline-block" }} />
@@ -194,7 +185,6 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* Grid de características del market */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px" }}>
             {MARKET_FEATURES.map(f => (
               <div key={f.label} className="mkt-feat" style={{ padding: "22px 24px", borderRadius: "14px", border: "1px solid rgba(46,230,193,0.1)", background: "rgba(46,230,193,0.03)", transition: "all 0.2s" }}>
