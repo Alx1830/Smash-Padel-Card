@@ -85,26 +85,27 @@ export function Footer() {
   const linksRef    = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!wrapperRef.current) return;
-    let ctx: { revert: () => void } | null = null;
-    (async () => {
-      const { gsap } = await import("gsap");
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-      ctx = gsap.context(() => {
-        gsap.fromTo(bigTextRef.current,
-          { y: "6vh", opacity: 0 },
-          { y: "0vh", opacity: 1, ease: "power1.out",
-            scrollTrigger: { trigger: wrapperRef.current, start: "top 85%", end: "bottom bottom", scrub: 1 } }
-        );
-        gsap.fromTo([headingRef.current, linksRef.current],
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, stagger: 0.12, ease: "power3.out",
-            scrollTrigger: { trigger: wrapperRef.current, start: "top 60%", end: "center bottom", scrub: 1 } }
-        );
-      }, wrapperRef);
-    })();
-    return () => { ctx?.revert(); };
+    const targets = [
+      { el: bigTextRef.current, delay: "0ms" },
+      { el: headingRef.current, delay: "0ms" },
+      { el: linksRef.current,   delay: "120ms" },
+    ];
+    targets.forEach(({ el, delay }) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      el.style.transform = "translateY(32px)";
+      el.style.transition = `opacity 0.7s ease ${delay}, transform 0.7s ease ${delay}`;
+    });
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        (entry.target as HTMLElement).style.opacity = "1";
+        (entry.target as HTMLElement).style.transform = "translateY(0)";
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.15 });
+    targets.forEach(({ el }) => { if (el) obs.observe(el); });
+    return () => obs.disconnect();
   }, []);
 
   return (

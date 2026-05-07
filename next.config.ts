@@ -74,6 +74,15 @@ export default withPWA({
         expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 7 },
       },
     },
+    /* Imágenes de cartas Scrydex — StaleWhileRevalidate para resilencia offline */
+    {
+      urlPattern: /^https:\/\/images\.scrydex\.com\/.*/i,
+      handler: "StaleWhileRevalidate",
+      options: {
+        cacheName: "scrydex-cards",
+        expiration: { maxEntries: 500, maxAgeSeconds: 60 * 60 * 24 * 30 },
+      },
+    },
     /* Google Fonts */
     {
       urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
