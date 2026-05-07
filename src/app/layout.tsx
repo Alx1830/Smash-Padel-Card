@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Archivo_Black } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/Navbar";
@@ -107,6 +108,7 @@ export default async function RootLayout({
         <Navbar {...navProps} />
         {children}
         <Analytics />
+        <SpeedInsights />
         <Script
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7135029542920964"
           crossOrigin="anonymous"
