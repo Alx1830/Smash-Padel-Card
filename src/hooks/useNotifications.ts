@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { AppNotification } from "@/types/notifications";
 
@@ -15,7 +15,7 @@ interface UseNotificationsReturn {
 export function useNotifications(userId: string | null): UseNotificationsReturn {
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [loading, setLoading] = useState(false);
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
     if (!userId) return;
