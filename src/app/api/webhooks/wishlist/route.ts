@@ -116,11 +116,13 @@ export async function POST(request: NextRequest) {
       try {
         await webpush.sendNotification(
           { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
-          pushPayload
+          pushPayload,
+          { ttl: 86400, urgency: 'high' }
         );
       } catch (err: unknown) {
         const pushError = err as webpushLib.WebPushError;
-        if (pushError?.statusCode === 410) {
+        console.error('[Webhook] Push failed:', { statusCode: pushError?.statusCode, body: pushError?.body, endpoint: sub.endpoint.slice(0, 50) });
+        if (pushError?.statusCode === 410 || pushError?.statusCode === 404) {
           await supabaseAdmin
             .from('push_subscriptions')
             .delete()

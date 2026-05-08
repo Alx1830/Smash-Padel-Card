@@ -84,6 +84,30 @@ export function DashboardLayoutClient({
     setNotifDrawerOpen(true);
   }
 
+  /* Verificar suscripción push al montar — iOS revoca silenciosamente */
+  useEffect(() => {
+    if (!userId || typeof window === "undefined") return;
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
+    async function checkPushSubscription() {
+      try {
+        const reg = await navigator.serviceWorker.ready;
+        const existing = await reg.pushManager.getSubscription();
+        if (!existing && Notification.permission === "granted") {
+          const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+          if (!vapidKey) return;
+          const padding = "=".repeat((4 - (vapidKey.length % 4)) % 4);
+          const base64 = (vapidKey + padding).replace(/-/g, "+").replace(/_/g, "/");
+          const raw = window.atob(base64);
+          const key = new Uint8Array(raw.length);
+          for (let i = 0; i < raw.length; i++) key[i] = raw.charCodeAt(i);
+          const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key.buffer as ArrayBuffer });
+          await fetch("/api/push/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(sub) });
+        }
+      } catch {}
+    }
+    checkPushSubscription();
+  }, [userId]);
+
   /* Presence — trackea al usuario en el canal online-users */
   useEffect(() => {
     if (!userId) return;
