@@ -127,11 +127,15 @@ function InstallWidget() {
   const [isIOS, setIsIOS]                   = useState(false);
   const [isInstalled, setIsInstalled]       = useState(false);
   const [showIOSGuide, setShowIOSGuide]     = useState(false);
+  const [notifState, setNotifState]         = useState<NotificationPermission | "unsupported">("unsupported");
+  const [subscribing, setSubscribing]       = useState(false);
+  const [subscribed, setSubscribed]         = useState(false);
 
   useEffect(() => {
     const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
     setIsIOS(ios);
     if (window.matchMedia("(display-mode: standalone)").matches) setIsInstalled(true);
+    if ("Notification" in window) setNotifState(Notification.permission);
     const handler = (e: Event) => { e.preventDefault(); setDeferredPrompt(e); };
     window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("beforeinstallprompt", handler);
@@ -147,6 +151,53 @@ function InstallWidget() {
     }
   }
 
+  async function handleActivarNotifs() {
+    if (!("Notification" in window) || !("serviceWorker" in navigator)) return;
+    setSubscribing(true);
+    try {
+      // Limpiar dismiss anterior
+      localStorage.removeItem("push_permission_dismissed");
+
+      const result = await Notification.requestPermission();
+      setNotifState(result);
+
+      if (result === "granted") {
+        const registration = await navigator.serviceWorker.ready;
+        const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+        if (!vapidKey) return;
+
+        // Cancelar suscripción anterior si existe
+        const existingSub = await registration.pushManager.getSubscription();
+        if (existingSub) await existingSub.unsubscribe();
+
+        const padding = "=".repeat((4 - (vapidKey.length % 4)) % 4);
+        const base64 = (vapidKey + padding).replace(/-/g, "+").replace(/_/g, "/");
+        const raw = window.atob(base64);
+        const key = new Uint8Array(raw.length);
+        for (let i = 0; i < raw.length; i++) key[i] = raw.charCodeAt(i);
+
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: key.buffer as ArrayBuffer,
+        });
+
+        await fetch("/api/push/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(subscription),
+        });
+
+        setSubscribed(true);
+      }
+    } catch (e) {
+      console.error("[Push]", e);
+    } finally {
+      setSubscribing(false);
+    }
+  }
+
+  const showNotifButton = isInstalled && notifState !== "unsupported" && notifState !== "denied";
+
   return (
     <>
       <div style={{ display: "flex", flexDirection: "column", height: "100%", gap: "12px" }}>
@@ -158,20 +209,35 @@ function InstallWidget() {
             {isIOS ? "Guardar en iOS" : "Instalar en Android"}
           </p>
           <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: 0, lineHeight: 1.5 }}>
-            {isInstalled ? "Ya tienes FaceBinder instalado" : "Accede como app nativa desde tu inicio"}
+            {isInstalled ? "App instalada correctamente" : "Accede como app nativa desde tu inicio"}
           </p>
         </div>
-        {!isInstalled && (
-          <button onClick={handleInstall} style={{
-            marginTop: "auto", padding: "9px 16px", borderRadius: "9px",
-            background: `linear-gradient(90deg, ${COURT}, #d6ff3d)`,
-            border: "none", cursor: "pointer",
-            fontFamily: MONO, fontSize: "11px", fontWeight: 700, color: BG0,
-            letterSpacing: "0.08em", alignSelf: "flex-start",
-          }}>
-            {isIOS ? "Ver instrucciones" : "Instalar →"}
-          </button>
-        )}
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: "auto" }}>
+          {!isInstalled && (
+            <button onClick={handleInstall} style={{
+              padding: "9px 16px", borderRadius: "9px",
+              background: `linear-gradient(90deg, ${COURT}, #d6ff3d)`,
+              border: "none", cursor: "pointer",
+              fontFamily: MONO, fontSize: "11px", fontWeight: 700, color: BG0,
+              letterSpacing: "0.08em",
+            }}>
+              {isIOS ? "Ver instrucciones" : "Instalar →"}
+            </button>
+          )}
+          {showNotifButton && (
+            <button onClick={handleActivarNotifs} disabled={subscribing || subscribed || notifState === "granted"} style={{
+              padding: "9px 16px", borderRadius: "9px",
+              background: subscribed || notifState === "granted" ? "rgba(46,230,193,0.1)" : "rgba(46,230,193,0.15)",
+              border: `1px solid ${subscribed || notifState === "granted" ? "rgba(46,230,193,0.4)" : "rgba(46,230,193,0.3)"}`,
+              cursor: subscribing || subscribed || notifState === "granted" ? "default" : "pointer",
+              fontFamily: MONO, fontSize: "11px", fontWeight: 600, color: COURT,
+              letterSpacing: "0.06em", transition: "opacity 0.2s",
+              opacity: subscribing ? 0.6 : 1,
+            }}>
+              {subscribing ? "Activando..." : subscribed || notifState === "granted" ? "✓ Notificaciones activas" : "Activar notificaciones"}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* iOS guide modal */}
