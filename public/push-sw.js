@@ -1,11 +1,8 @@
-// Push notification handlers
-// Este archivo se fusiona con el service worker generado por next-pwa
-// cuando se configure customWorkerDir en next.config.ts
-
+// Push notification handlers — importado por el service worker via usePushPermission
 self.addEventListener('push', function (event) {
   if (!event.data) return;
   try {
-    var data = event.data.json();
+    const data = event.data.json();
     event.waitUntil(
       self.registration.showNotification(data.title || 'FaceBinder', {
         body: data.body || '',
@@ -15,16 +12,21 @@ self.addEventListener('push', function (event) {
         vibrate: [200, 100, 200],
       })
     );
-  } catch (e) {}
+  } catch (e) {
+    // payload no era JSON válido
+  }
 });
 
 self.addEventListener('notificationclick', function (event) {
   event.notification.close();
-  var url = (event.notification.data && event.notification.data.url) || '/dashboard';
+  const url = (event.notification.data && event.notification.data.url) || '/dashboard';
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (list) {
-      for (var i = 0; i < list.length; i++) {
-        if (list[i].url.indexOf(url) !== -1 && 'focus' in list[i]) return list[i].focus();
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (clientList) {
+      for (var i = 0; i < clientList.length; i++) {
+        var client = clientList[i];
+        if (client.url.indexOf(url) !== -1 && 'focus' in client) {
+          return client.focus();
+        }
       }
       if (clients.openWindow) return clients.openWindow(url);
     })
