@@ -63,7 +63,7 @@ export function DashboardLayoutClient({
   const [notifDrawerOpen, setNotifDrawerOpen] = useState(false);
   const [pushBannerDismissed, setPushBannerDismissed] = useState(false);
 
-  const { unreadCount } = useNotifications(userId);
+  const { unreadCount, notifications, markAllRead, markRead, loading: notifLoading } = useNotifications(userId);
   const { permissionState } = usePushPermission();
 
   // Mostrar banner de push solo si: hay userId, permiso default, no dismisseado
@@ -636,7 +636,11 @@ export function DashboardLayoutClient({
       {/* ══ NOTIFICATIONS DRAWER ══ */}
       {notifDrawerOpen && userId && (
         <NotificationsDrawer
-          userId={userId}
+          notifications={notifications}
+          unreadCount={unreadCount}
+          loading={notifLoading}
+          markAllRead={markAllRead}
+          markRead={markRead}
           onClose={() => setNotifDrawerOpen(false)}
         />
       )}

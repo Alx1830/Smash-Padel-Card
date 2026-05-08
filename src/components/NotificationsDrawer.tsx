@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { X, Bell } from "lucide-react";
-import { useNotifications } from "@/hooks/useNotifications";
+import type { AppNotification } from "@/types/notifications";
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
@@ -12,7 +12,11 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
 interface NotificationsDrawerProps {
-  userId: string;
+  notifications: AppNotification[];
+  unreadCount: number;
+  loading: boolean;
+  markAllRead: () => Promise<void>;
+  markRead: (id: string) => Promise<void>;
   onClose: () => void;
 }
 
@@ -47,10 +51,9 @@ function SkeletonRow() {
   );
 }
 
-export function NotificationsDrawer({ userId, onClose }: NotificationsDrawerProps) {
+export function NotificationsDrawer({ notifications, unreadCount, loading, markAllRead, markRead, onClose }: NotificationsDrawerProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const { notifications, unreadCount, markAllRead, markRead, loading } = useNotifications(userId);
 
   /* Lock body scroll */
   useEffect(() => {
