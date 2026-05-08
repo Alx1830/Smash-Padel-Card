@@ -76,8 +76,8 @@ export async function POST(request: NextRequest) {
   const notificationRows = userIds.map((uid: string) => ({
     user_id: uid,
     type: 'wishlist_available',
-    title: '¡Carta disponible!',
-    body: `${parsedCardName} está disponible en el market`,
+    title: `¡${parsedCardName} está disponible!`,
+    body: `${parsedCardName} de tu wishlist está disponible en el market`,
     data: { card_id: String(card_id), set_id, card_name: parsedCardName, url: marketUrl },
   }));
 
@@ -103,8 +103,8 @@ export async function POST(request: NextRequest) {
   }
 
   const pushPayload = JSON.stringify({
-    title: '¡Carta disponible!',
-    body: `${cardLabel} está en el market`,
+    title: `¡${parsedCardName} está disponible!`,
+    body: `${parsedCardName} de tu wishlist está disponible en el market`,
     icon: '/icon-512.webp',
     badge: '/favicon-32.png',
     data: { url: marketUrl },
