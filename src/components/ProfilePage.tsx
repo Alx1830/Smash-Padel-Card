@@ -544,7 +544,7 @@ function Showcase({ featuredCards, inventoryRows }: { featuredCards: FeaturedCar
   if (displayCards.length < 3) return null;
 
   return (
-    <div style={{ marginBottom: "64px" }}>
+    <div className="showcase-wrap" style={{ marginBottom: "64px" }}>
       <style>{`
         @keyframes sc-in {
           from { opacity: 0; transform: scale(0.88) translateY(10px); }
@@ -1160,8 +1160,9 @@ function CollectionSection({
         }
         /* Mobile */
         @media (max-width: 767px) {
-          .coll-outer { padding: 32px 16px 0 !important; grid-template-columns: 1fr !important; gap: 40px !important; }
+          .coll-outer { padding: 16px 16px 0 !important; grid-template-columns: 1fr !important; gap: 16px !important; }
           .prof-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px 12px !important; }
+          .showcase-wrap { margin-bottom: 16px !important; }
         }
       `}</style>
     </section>

@@ -108,6 +108,18 @@ export function DashboardLayoutClient({
     checkPushSubscription();
   }, [userId]);
 
+  /* Client-side admin check — fallback if server didn't hydrate isAdmin */
+  useEffect(() => {
+    if (isAdmin) return;
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data } = await supabase.from("players").select("role").eq("user_id", user.id).single();
+      if (data?.role === "admin") setIsAdmin(true);
+    })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   /* Presence — trackea al usuario en el canal online-users */
   useEffect(() => {
     if (!userId) return;

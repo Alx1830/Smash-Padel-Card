@@ -48,12 +48,12 @@ export default async function AmigosPage() {
       <style>{`
         .page-container { padding: 24px; }
         @media (min-width: 768px) { .page-container { padding: 48px; } }
-        .amigos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .amigos-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
         .amigos-grid a { display: flex; justify-content: center; }
-        .amigos-card-wrap { transition: transform 0.2s; }
+        .amigos-card-wrap { transform: scale(0.52); transform-origin: top center; margin-bottom: -200px; }
         @media (max-width: 1023px) {
           .amigos-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-          .amigos-card-wrap { transform: scale(0.6); transform-origin: top center; margin-bottom: -168px; }
+          .amigos-card-wrap { transform: scale(0.63); transform-origin: top center; margin-bottom: -154px; }
         }
       `}</style>
 

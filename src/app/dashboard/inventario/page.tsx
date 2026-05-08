@@ -12,7 +12,7 @@ import {
   invKey,
   type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing,
 } from "@/components/CardDetailModal";
-import { Plus, Search, ChevronDown, ChevronUp, BadgeDollarSign, Star, Bookmark } from "lucide-react";
+import { Plus, Search, ChevronDown, ChevronUp, BadgeDollarSign, Star } from "lucide-react";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 
 const CardDetailModal = dynamic(
@@ -350,34 +350,38 @@ export default function InventarioPage() {
   const [drawerOpen,     setDrawerOpen]     = useState(false);
   const [buscarOpen,     setBuscarOpen]     = useState(false);
 
+  const userIdRef = useRef<string | null>(null);
+
+  async function loadData(uid: string) {
+    const [invRes, featRes, wishRes, listRes] = await Promise.all([
+      supabase.from("card_inventory").select("card_id, set_id, version, quantity").eq("user_id", uid).gt("quantity", 0),
+      supabase.from("featured_cards").select("card_id, set_id").eq("user_id", uid),
+      supabase.from("card_wishlist").select("card_id, set_id").eq("user_id", uid),
+      supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", uid).eq("status", "active"),
+    ]);
+    const invMap: InventoryMap = {};
+    const setMap: Record<string, number> = {};
+    for (const row of (invRes.data ?? [])) {
+      invMap[invKey(row.card_id, row.version ?? "normal")] = row.quantity;
+      if (row.set_id) setMap[row.set_id] = (setMap[row.set_id] ?? 0) + 1;
+    }
+    setInventory(invMap);
+    setFeaturedCards((featRes.data ?? []) as FeaturedCard[]);
+    setWishlistCards((wishRes.data ?? []) as WishlistCard[]);
+    setListings((listRes.data ?? []) as UserListing[]);
+    setSets(Object.entries(setMap).map(([setId, count]) => ({ setId, count })).sort((a, b) => b.count - a.count));
+    setLoading(false);
+  }
+
   useEffect(() => {
-    async function load() {
+    async function init() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { setLoading(false); return; }
       setUserId(user.id);
-
-      const [invRes, featRes, wishRes, listRes] = await Promise.all([
-        supabase.from("card_inventory").select("card_id, set_id, version, quantity").eq("user_id", user.id).gt("quantity", 0),
-        supabase.from("featured_cards").select("card_id, set_id").eq("user_id", user.id),
-        supabase.from("card_wishlist").select("card_id, set_id").eq("user_id", user.id),
-        supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", user.id).eq("status", "active"),
-      ]);
-
-      const invMap: InventoryMap = {};
-      const setMap: Record<string, number> = {};
-      for (const row of (invRes.data ?? [])) {
-        invMap[invKey(row.card_id, row.version ?? "normal")] = row.quantity;
-        if (row.set_id) setMap[row.set_id] = (setMap[row.set_id] ?? 0) + 1;
-      }
-
-      setInventory(invMap);
-      setFeaturedCards((featRes.data ?? []) as FeaturedCard[]);
-      setWishlistCards((wishRes.data ?? []) as WishlistCard[]);
-      setListings((listRes.data ?? []) as UserListing[]);
-      setSets(Object.entries(setMap).map(([setId, count]) => ({ setId, count })).sort((a, b) => b.count - a.count));
-      setLoading(false);
+      userIdRef.current = user.id;
+      await loadData(user.id);
     }
-    load();
+    init();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -635,17 +639,6 @@ export default function InventarioPage() {
                                       </span>
                                     </button>
 
-                                    {/* Wishlist */}
-                                    <button
-                                      className={`inv-act-btn${isWanted ? " active" : ""}`}
-                                      onClick={() => toggleWishlist(card, setId)}
-                                      title={isWanted ? "Quitar de wishlist" : "Agregar a wishlist"}
-                                    >
-                                      <span className="inv-act-icon" style={{ display:"flex", alignItems:"center", justifyContent:"center" }}>
-                                        <Bookmark size="100%" color={isWanted ? COURT : INK2} strokeWidth={isWanted ? 2.2 : 1.7} fill={isWanted ? COURT : "none"} />
-                                      </span>
-                                    </button>
-
                                     {/* Vender */}
                                     <button
                                       className={`inv-act-btn${isListed ? " active" : ""}`}
@@ -698,7 +691,7 @@ export default function InventarioPage() {
       {drawerOpen && userId && (
         <AgregarDrawer
           userId={userId}
-          onClose={() => setDrawerOpen(false)}
+          onClose={() => { setDrawerOpen(false); if (userIdRef.current) loadData(userIdRef.current); }}
         />
       )}
 
