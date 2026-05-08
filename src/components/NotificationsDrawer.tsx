@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { X, Bell } from "lucide-react";
+import { X, Bell, CheckCheck } from "lucide-react";
 import type { AppNotification } from "@/types/notifications";
 
 const COURT = "#2ee6c1";
@@ -18,9 +18,10 @@ interface NotificationsDrawerProps {
   markAllRead: () => Promise<void>;
   markRead: (id: string) => Promise<void>;
   onClose: () => void;
+  anchorRect?: DOMRect | null;
+  isMobile?: boolean;
 }
 
-/** Devuelve timestamp relativo en español */
 function relativeTime(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime();
   const mins = Math.floor(diff / 60_000);
@@ -35,246 +36,211 @@ function relativeTime(iso: string): string {
 
 function SkeletonRow() {
   return (
-    <div style={{
-      display: "flex", alignItems: "flex-start", gap: "12px",
-      padding: "14px 20px",
-      borderBottom: "1px solid rgba(255,255,255,0.04)",
-    }}>
-      <div className="notif-skeleton" style={{
-        width: 8, height: 8, borderRadius: "50%", marginTop: 4, flexShrink: 0,
-      }} />
+    <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "14px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+      <div className="np-skeleton" style={{ width: 8, height: 8, borderRadius: "50%", marginTop: 4, flexShrink: 0 }} />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
-        <div className="notif-skeleton" style={{ height: 12, borderRadius: 6, width: "60%" }} />
-        <div className="notif-skeleton" style={{ height: 10, borderRadius: 6, width: "85%" }} />
+        <div className="np-skeleton" style={{ height: 11, borderRadius: 6, width: "55%" }} />
+        <div className="np-skeleton" style={{ height: 10, borderRadius: 6, width: "80%" }} />
       </div>
     </div>
   );
 }
 
-export function NotificationsDrawer({ notifications, unreadCount, loading, markAllRead, markRead, onClose }: NotificationsDrawerProps) {
+export function NotificationsDrawer({
+  notifications, unreadCount, loading, markAllRead, markRead, onClose, anchorRect, isMobile,
+}: NotificationsDrawerProps) {
   const panelRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
+  const router   = useRouter();
 
-  /* Lock body scroll */
-  useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
-  }, []);
+  /* Compute popup position */
+  const popupStyle: React.CSSProperties = (() => {
+    if (isMobile) {
+      return {
+        position: "fixed",
+        top: (anchorRect ? anchorRect.bottom + 8 : 60),
+        right: 8,
+        left: 8,
+        zIndex: 200,
+      };
+    }
+    if (anchorRect) {
+      return {
+        position: "fixed",
+        top: anchorRect.bottom + 8,
+        left: anchorRect.left,
+        width: 380,
+        zIndex: 200,
+      };
+    }
+    return { position: "fixed", top: 64, left: 250, width: 380, zIndex: 200 };
+  })();
 
   /* Animate in */
   useEffect(() => {
     const el = panelRef.current;
     if (!el) return;
-    el.style.transform = "translateY(100%)";
+    el.style.opacity = "0";
+    el.style.transform = "translateY(-8px) scale(0.97)";
     el.style.transition = "none";
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        el.style.transition = "transform 0.38s cubic-bezier(0.22, 1, 0.36, 1)";
-        el.style.transform  = "translateY(0%)";
+        el.style.transition = "opacity 0.18s ease, transform 0.18s cubic-bezier(0.22, 1, 0.36, 1)";
+        el.style.opacity    = "1";
+        el.style.transform  = "translateY(0) scale(1)";
       });
     });
   }, []);
 
-  function handleClose() {
-    const el = panelRef.current;
-    if (!el) { onClose(); return; }
-    el.style.transition = "transform 0.28s cubic-bezier(0.4, 0, 1, 1)";
-    el.style.transform  = "translateY(100%)";
-    setTimeout(onClose, 280);
-  }
+  /* Click outside to close */
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [onClose]);
 
   async function handleNotifClick(id: string, data: Record<string, unknown>) {
     await markRead(id);
     const url = data?.url as string | undefined;
     if (url) {
-      handleClose();
-      setTimeout(() => router.push(url), 300);
+      onClose();
+      router.push(url);
     }
   }
 
   return (
     <>
       <style>{`
-        .notif-drawer-backdrop {
-          animation: notif-fadeIn 0.22s ease forwards;
-        }
-        @keyframes notif-fadeIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
-        }
-        .notif-drawer-close {
-          background: rgba(255,255,255,0.06);
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 10px;
-          color: ${INK2};
-          cursor: pointer;
-          display: flex; align-items: center; justify-content: center;
-          width: 40px; height: 40px;
-          transition: background 0.15s, color 0.15s, border-color 0.15s;
-          flex-shrink: 0;
-        }
-        .notif-drawer-close:hover {
-          background: rgba(255,255,255,0.11);
-          border-color: rgba(255,255,255,0.2);
-          color: ${INK0};
-        }
-        .notif-pill {
-          width: 40px; height: 4px; border-radius: 2px;
-          background: rgba(255,255,255,0.18);
-          margin: 0 auto;
-          flex-shrink: 0;
-        }
-        .notif-item {
-          display: flex; align-items: flex-start; gap: 12px;
-          padding: 14px 20px;
-          border-bottom: 1px solid rgba(255,255,255,0.04);
-          cursor: pointer;
-          transition: background 0.15s;
-        }
-        .notif-item:hover {
-          background: rgba(255,255,255,0.03);
-        }
-        .notif-item:last-child {
-          border-bottom: none;
-        }
-        .notif-mark-all {
-          background: transparent;
-          border: 1px solid rgba(46,230,193,0.3);
-          border-radius: 8px;
-          color: ${COURT};
-          cursor: pointer;
-          font-family: ${MONO};
-          font-size: 10px;
-          letter-spacing: 0.08em;
-          padding: 6px 12px;
-          transition: background 0.15s, border-color 0.15s;
-          white-space: nowrap;
-        }
-        .notif-mark-all:hover {
-          background: rgba(46,230,193,0.08);
-          border-color: rgba(46,230,193,0.5);
-        }
-        @keyframes notif-shimmer {
+        @keyframes np-shimmer {
           0%   { background-position: -200% 0; }
           100% { background-position:  200% 0; }
         }
-        .notif-skeleton {
+        .np-skeleton {
           background: linear-gradient(90deg,
             rgba(255,255,255,0.04) 25%,
             rgba(255,255,255,0.09) 50%,
             rgba(255,255,255,0.04) 75%
           );
           background-size: 200% 100%;
-          animation: notif-shimmer 1.4s infinite;
+          animation: np-shimmer 1.4s infinite;
         }
-        .notif-list {
+        .np-item {
+          display: flex; align-items: flex-start; gap: 12px;
+          padding: 12px 16px;
+          border-bottom: 1px solid rgba(255,255,255,0.04);
+          cursor: pointer;
+          transition: background 0.13s;
+        }
+        .np-item:hover { background: rgba(255,255,255,0.04); }
+        .np-item:last-child { border-bottom: none; }
+        .np-mark-all {
+          background: transparent;
+          border: none;
+          color: ${COURT};
+          cursor: pointer;
+          font-family: ${MONO};
+          font-size: 10px;
+          letter-spacing: 0.06em;
+          padding: 4px 8px;
+          border-radius: 6px;
+          transition: background 0.13s;
+          display: flex; align-items: center; gap: 5px;
+          white-space: nowrap;
+        }
+        .np-mark-all:hover { background: rgba(46,230,193,0.1); }
+        .np-list {
           overflow-y: auto;
-          flex: 1;
+          max-height: 420px;
         }
-        .notif-list::-webkit-scrollbar { width: 4px; }
-        .notif-list::-webkit-scrollbar-track { background: transparent; }
-        .notif-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+        .np-list::-webkit-scrollbar { width: 3px; }
+        .np-list::-webkit-scrollbar-track { background: transparent; }
+        .np-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
       `}</style>
-
-      {/* Backdrop */}
-      <div
-        className="notif-drawer-backdrop"
-        onClick={handleClose}
-        style={{
-          position: "fixed", inset: 0, zIndex: 100,
-          background: "rgba(0,0,0,0.55)",
-          backdropFilter: "blur(6px)",
-          WebkitBackdropFilter: "blur(6px)",
-        }}
-      />
 
       {/* Panel */}
       <div
         ref={panelRef}
         style={{
-          position: "fixed", left: 0, right: 0, bottom: 0,
-          zIndex: 101,
-          height: "92dvh",
-          background: "#080f18",
-          borderRadius: "20px 20px 0 0",
-          display: "flex", flexDirection: "column",
-          boxShadow: "0 -8px 60px rgba(0,0,0,0.7)",
+          ...popupStyle,
+          background: "#0d1221",
+          borderRadius: 14,
+          border: "1px solid rgba(255,255,255,0.09)",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.4)",
           overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        {/* Pill */}
-        <div style={{ padding: "12px 20px 0" }}>
-          <div className="notif-pill" />
-        </div>
-
         {/* Header */}
         <div style={{
           display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "16px 20px 12px",
+          padding: "14px 16px 10px",
           borderBottom: "1px solid rgba(255,255,255,0.07)",
           flexShrink: 0,
         }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <p style={{
-              fontFamily: MONO, fontSize: "9px", color: INK2,
-              textTransform: "uppercase", letterSpacing: "0.18em",
-              margin: 0,
-            }}>
-              Centro de
-            </p>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <Bell size={18} color={COURT} strokeWidth={1.8} />
-              <h2 style={{
-                fontFamily: DISP, fontSize: "18px", fontWeight: 700,
-                color: INK0, margin: 0, letterSpacing: "0.01em",
-              }}>
-                Notificaciones
-              </h2>
-            </div>
-          </div>
-
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Bell size={15} color={COURT} strokeWidth={2} />
+            <span style={{ fontFamily: DISP, fontSize: "15px", fontWeight: 700, color: INK0 }}>
+              Notificaciones
+            </span>
             {unreadCount > 0 && (
-              <button className="notif-mark-all" onClick={markAllRead}>
-                Marcar todo leído
+              <span style={{
+                background: "#ef4444", color: "#fff",
+                fontFamily: MONO, fontSize: "10px", fontWeight: 700,
+                borderRadius: 10, padding: "1px 6px", lineHeight: 1.4,
+              }}>
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            {unreadCount > 0 && (
+              <button className="np-mark-all" onClick={markAllRead} title="Marcar todo como leído">
+                <CheckCheck size={13} />
+                Todo leído
               </button>
             )}
-            <button className="notif-drawer-close" onClick={handleClose}>
-              <X size={18} strokeWidth={2} />
+            <button
+              onClick={onClose}
+              style={{
+                background: "transparent", border: "none", cursor: "pointer",
+                color: INK2, display: "flex", alignItems: "center", justifyContent: "center",
+                width: 28, height: 28, borderRadius: 7, transition: "background 0.13s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+            >
+              <X size={15} strokeWidth={2} />
             </button>
           </div>
         </div>
 
         {/* Lista */}
-        <div className="notif-list">
+        <div className="np-list">
           {loading ? (
-            <>
-              <SkeletonRow />
-              <SkeletonRow />
-              <SkeletonRow />
-            </>
+            <><SkeletonRow /><SkeletonRow /><SkeletonRow /></>
           ) : notifications.length === 0 ? (
-            /* Estado vacío */
             <div style={{
               display: "flex", flexDirection: "column", alignItems: "center",
-              justifyContent: "center", gap: 16, padding: "60px 20px",
-              color: INK2,
+              gap: 12, padding: "32px 20px", color: INK2,
             }}>
               <div style={{
-                width: 64, height: 64, borderRadius: "50%",
+                width: 48, height: 48, borderRadius: "50%",
                 background: "rgba(46,230,193,0.07)",
                 border: "1px solid rgba(46,230,193,0.15)",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
-                <Bell size={28} color={`${COURT}80`} strokeWidth={1.5} />
+                <Bell size={22} color={`${COURT}80`} strokeWidth={1.5} />
               </div>
               <div style={{ textAlign: "center" }}>
-                <p style={{ fontFamily: DISP, fontSize: "15px", color: INK0, margin: "0 0 6px", fontWeight: 600 }}>
+                <p style={{ fontFamily: DISP, fontSize: "14px", color: INK0, margin: "0 0 4px", fontWeight: 600 }}>
                   Sin notificaciones
                 </p>
-                <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, margin: 0, letterSpacing: "0.05em" }}>
-                  Aquí aparecerán tus alertas de wishlist y más
+                <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: 0, letterSpacing: "0.05em" }}>
+                  Aquí aparecerán tus alertas de wishlist
                 </p>
               </div>
             </div>
@@ -282,42 +248,38 @@ export function NotificationsDrawer({ notifications, unreadCount, loading, markA
             notifications.map((notif) => (
               <div
                 key={notif.id}
-                className="notif-item"
+                className="np-item"
                 onClick={() => handleNotifClick(notif.id, notif.data)}
-                style={{
-                  background: notif.read ? "transparent" : "rgba(46,230,193,0.04)",
-                }}
+                style={{ background: notif.read ? "transparent" : "rgba(46,230,193,0.04)" }}
               >
-                {/* Indicador leída/no leída */}
                 <div style={{
-                  width: 8, height: 8, borderRadius: "50%", marginTop: 5, flexShrink: 0,
+                  width: 7, height: 7, borderRadius: "50%", marginTop: 5, flexShrink: 0,
                   background: notif.read ? INK2 : COURT,
-                  opacity: notif.read ? 0.4 : 1,
-                  boxShadow: notif.read ? "none" : `0 0 6px ${COURT}80`,
+                  opacity: notif.read ? 0.35 : 1,
+                  boxShadow: notif.read ? "none" : `0 0 5px ${COURT}90`,
                 }} />
-
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{
                     display: "flex", alignItems: "baseline",
-                    justifyContent: "space-between", gap: 8, marginBottom: 4,
+                    justifyContent: "space-between", gap: 8, marginBottom: 2,
                   }}>
                     <p style={{
-                      fontFamily: DISP, fontSize: "13px", fontWeight: notif.read ? 400 : 600,
-                      color: notif.read ? "rgba(245,247,251,0.75)" : INK0,
+                      fontFamily: DISP, fontSize: "12px", fontWeight: notif.read ? 400 : 600,
+                      color: notif.read ? "rgba(245,247,251,0.7)" : INK0,
                       margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                     }}>
                       {notif.title}
                     </p>
                     <span style={{
                       fontFamily: MONO, fontSize: "9px", color: INK2,
-                      letterSpacing: "0.06em", flexShrink: 0,
+                      letterSpacing: "0.05em", flexShrink: 0,
                     }}>
                       {relativeTime(notif.created_at)}
                     </span>
                   </div>
                   <p style={{
-                    fontFamily: MONO, fontSize: "11px", color: INK2,
-                    margin: 0, letterSpacing: "0.04em", lineHeight: 1.5,
+                    fontFamily: MONO, fontSize: "10px", color: INK2,
+                    margin: 0, letterSpacing: "0.03em", lineHeight: 1.5,
                     overflow: "hidden", display: "-webkit-box",
                     WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
                   }}>

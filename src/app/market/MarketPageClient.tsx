@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useMemo, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
@@ -255,6 +255,7 @@ export function MarketPageClient({
   currentUserId: string | null;
 }) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const mktMobileRef = useRef<HTMLDivElement>(null);
 
   const [selectedPais, setSelectedPais] = useState(defaultPais);
@@ -268,7 +269,7 @@ export function MarketPageClient({
   const [authMsg,    setAuthMsg]        = useState<string | null>(null);
 
   /* Filtros */
-  const [fNombre,   setFNombre]   = useState("");
+  const [fNombre,   setFNombre]   = useState(() => searchParams.get("card") ?? "");
   const [fVariante, setFVariante] = useState("");
   const [fSet,      setFSet]      = useState("");
   const [fPrecioMin, setFPrecioMin] = useState("");

@@ -49,9 +49,9 @@ export async function POST(request: NextRequest) {
 
   console.log('[Webhook] Looking for wishlist matches:', { cardIdPrefix, set_id, sellerId });
 
-  const { data: wishlistUsers, error: wishlistError } = await supabaseAdmin
+  const { data: wishlistRows, error: wishlistError } = await supabaseAdmin
     .from('card_wishlist')
-    .select('user_id')
+    .select('user_id, card_id')
     .eq('set_id', set_id)
     .like('card_id', `${cardIdPrefix}%`)
     .neq('user_id', sellerId);
@@ -61,20 +61,24 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: wishlistError.message }, { status: 500 });
   }
 
-  console.log('[Webhook] Wishlist users found:', wishlistUsers?.length ?? 0);
+  console.log('[Webhook] Wishlist users found:', wishlistRows?.length ?? 0);
 
-  if (!wishlistUsers?.length) {
+  if (!wishlistRows?.length) {
     return NextResponse.json({ ok: true, notified: 0, reason: 'no_wishlist_matches' });
   }
 
-  const userIds = wishlistUsers.map((r: { user_id: string }) => r.user_id);
+  // Extraer nombre de carta del card_id de wishlist: "012:Decidueye ex:Holofoil" → "Decidueye ex"
+  const parsedCardName = wishlistRows[0].card_id.split(':')[1] ?? card_name ?? 'Una carta de tu wishlist';
+  const marketUrl = `/market?card=${encodeURIComponent(parsedCardName)}`;
+
+  const userIds = wishlistRows.map((r: { user_id: string }) => r.user_id);
 
   const notificationRows = userIds.map((uid: string) => ({
     user_id: uid,
     type: 'wishlist_available',
     title: '¡Carta disponible!',
-    body: `${cardLabel} está en el market`,
-    data: { card_id: String(card_id), set_id, url: '/dashboard/inventario' },
+    body: `${parsedCardName} está disponible en el market`,
+    data: { card_id: String(card_id), set_id, card_name: parsedCardName, url: marketUrl },
   }));
 
   const { error: insertError } = await supabaseAdmin
@@ -103,7 +107,7 @@ export async function POST(request: NextRequest) {
     body: `${cardLabel} está en el market`,
     icon: '/icon-512.webp',
     badge: '/favicon-32.png',
-    data: { url: '/dashboard/inventario' },
+    data: { url: marketUrl },
   });
 
   // No awaiting — respond fast, push runs in background

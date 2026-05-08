@@ -61,6 +61,8 @@ export function DashboardLayoutClient({
   const [menuOpen, setMenuOpen] = useState(false);
   const [marketOpen, setMarketOpen] = useState(false);
   const [notifDrawerOpen, setNotifDrawerOpen] = useState(false);
+  const [notifAnchorRect, setNotifAnchorRect] = useState<DOMRect | null>(null);
+  const [notifIsMobile, setNotifIsMobile]     = useState(false);
   const [pushBannerDismissed, setPushBannerDismissed] = useState(false);
 
   const { unreadCount, notifications, markAllRead, markRead, loading: notifLoading } = useNotifications(userId);
@@ -68,10 +70,19 @@ export function DashboardLayoutClient({
 
   // Mostrar banner de push solo si: hay userId, permiso default, no dismisseado
   const showPushBanner = !!userId && permissionState === "default" && !pushBannerDismissed;
-  const menuRef      = useRef<HTMLDivElement>(null);
-  const mobileRef    = useRef<HTMLDivElement>(null);
-  const marketRef    = useRef<HTMLDivElement>(null);
-  const mktMobileRef = useRef<HTMLDivElement>(null);
+  const menuRef        = useRef<HTMLDivElement>(null);
+  const mobileRef      = useRef<HTMLDivElement>(null);
+  const marketRef      = useRef<HTMLDivElement>(null);
+  const mktMobileRef   = useRef<HTMLDivElement>(null);
+  const desktopBellRef = useRef<HTMLDivElement>(null);
+  const mobileBellRef  = useRef<HTMLDivElement>(null);
+
+  function openNotifPopup(isMobile: boolean, bellRef: React.RefObject<HTMLDivElement | null>) {
+    const rect = bellRef.current?.getBoundingClientRect() ?? null;
+    setNotifAnchorRect(rect);
+    setNotifIsMobile(isMobile);
+    setNotifDrawerOpen(true);
+  }
 
   /* Presence — trackea al usuario en el canal online-users */
   useEffect(() => {
@@ -330,11 +341,13 @@ export function DashboardLayoutClient({
               FaceBinder
             </span>
             {userId && (
-              <NotificationBell
-                userId={userId}
-                unreadCount={unreadCount}
-                onOpen={() => setNotifDrawerOpen(true)}
-              />
+              <div ref={desktopBellRef}>
+                <NotificationBell
+                  userId={userId}
+                  unreadCount={unreadCount}
+                  onOpen={() => openNotifPopup(false, desktopBellRef)}
+                />
+              </div>
             )}
           </div>
 
@@ -473,11 +486,13 @@ export function DashboardLayoutClient({
           {/* Campana + Avatar */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             {userId && (
-              <NotificationBell
-                userId={userId}
-                unreadCount={unreadCount}
-                onOpen={() => setNotifDrawerOpen(true)}
-              />
+              <div ref={mobileBellRef}>
+                <NotificationBell
+                  userId={userId}
+                  unreadCount={unreadCount}
+                  onOpen={() => openNotifPopup(true, mobileBellRef)}
+                />
+              </div>
             )}
 
           {/* Avatar button — top right */}
@@ -642,6 +657,8 @@ export function DashboardLayoutClient({
           markAllRead={markAllRead}
           markRead={markRead}
           onClose={() => setNotifDrawerOpen(false)}
+          anchorRect={notifAnchorRect}
+          isMobile={notifIsMobile}
         />
       )}
 
