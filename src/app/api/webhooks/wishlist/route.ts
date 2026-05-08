@@ -110,8 +110,7 @@ export async function POST(request: NextRequest) {
     data: { url: marketUrl },
   });
 
-  // No awaiting — respond fast, push runs in background
-  Promise.allSettled(
+  const results = await Promise.allSettled(
     subscriptions.map(async (sub: { user_id: string; endpoint: string; p256dh: string; auth: string }) => {
       try {
         await webpush.sendNotification(
@@ -119,18 +118,20 @@ export async function POST(request: NextRequest) {
           pushPayload,
           { TTL: 86400, urgency: 'high' }
         );
+        console.log('[Webhook] Push sent to:', sub.endpoint.slice(0, 60));
       } catch (err: unknown) {
         const pushError = err as webpushLib.WebPushError;
-        console.error('[Webhook] Push failed:', { statusCode: pushError?.statusCode, body: pushError?.body, endpoint: sub.endpoint.slice(0, 50) });
+        console.error('[Webhook] Push failed:', { statusCode: pushError?.statusCode, body: pushError?.body, endpoint: sub.endpoint.slice(0, 60) });
         if (pushError?.statusCode === 410 || pushError?.statusCode === 404) {
-          await supabaseAdmin
-            .from('push_subscriptions')
-            .delete()
-            .eq('endpoint', sub.endpoint);
+          await supabaseAdmin.from('push_subscriptions').delete().eq('endpoint', sub.endpoint);
         }
+        throw err;
       }
     })
-  ).catch((err) => console.error('[Webhook] Push error:', err));
+  );
 
-  return NextResponse.json({ ok: true, notified: userIds.length, pushed: subscriptions.length });
+  const pushed = results.filter(r => r.status === 'fulfilled').length;
+  console.log('[Webhook] Push results:', pushed, '/', subscriptions.length, 'sent');
+
+  return NextResponse.json({ ok: true, notified: userIds.length, pushed });
 }
