@@ -4,11 +4,10 @@ const CACHE = 'fb-v1';
 const PRECACHE = ['/', '/dashboard', '/market'];
 
 self.addEventListener('install', function(event) {
-  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE).then(function(cache) {
       return cache.addAll(PRECACHE).catch(function() {});
-    })
+    }).then(function() { return self.skipWaiting(); })
   );
 });
 
