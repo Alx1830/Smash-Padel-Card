@@ -5,16 +5,10 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, usePathname } from "next/navigation";
+import { Bell } from "lucide-react";
 
 const NAV_LINKS_GUEST = [
   { label: "INICIO",     href: "/" },
-  { label: "AMIGOS",     href: "/dashboard/amigos" },
-  { label: "INVENTARIO", href: "/dashboard/inventario" },
-  { label: "MARKET",     href: "/market" },
-];
-const NAV_LINKS_AUTH = [
-  { label: "INICIO",     href: "/dashboard" },
-  { label: "AMIGOS",     href: "/dashboard/amigos" },
   { label: "INVENTARIO", href: "/dashboard/inventario" },
   { label: "MARKET",     href: "/market" },
 ];
@@ -31,23 +25,31 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
   const pathname      = usePathname();
   const avatarRef     = useRef<HTMLDivElement>(null);
 
-  const [photoUrl, setPhotoUrl]       = useState<string | null>(initialPhotoUrl ?? null);
-  const [username, setUsername]       = useState<string | null>(initialUsername ?? null);
-  const [avatarOpen, setAvatarOpen]   = useState(false);
-  const [mobileOpen, setMobileOpen]   = useState(false);
-  const [loggedIn, setLoggedIn]       = useState(initialLoggedIn ?? false);
+  const [photoUrl, setPhotoUrl]         = useState<string | null>(initialPhotoUrl ?? null);
+  const [username, setUsername]         = useState<string | null>(initialUsername ?? null);
+  const [userId, setUserId]             = useState<string | null>(null);
+  const [avatarOpen, setAvatarOpen]     = useState(false);
+  const [mobileOpen, setMobileOpen]     = useState(false);
+  const [loggedIn, setLoggedIn]         = useState(initialLoggedIn ?? false);
+  const [unreadCount, setUnreadCount]   = useState(0);
 
   useEffect(() => {
     if (initialLoggedIn) {
       router.prefetch("/dashboard");
       router.prefetch("/dashboard/inventario");
     }
-    // Skip client fetch if server already provided the data
-    if (initialLoggedIn !== undefined) return;
+    if (initialLoggedIn !== undefined) {
+      // Still need userId for notifications
+      supabase.auth.getUser().then(({ data: { user } }) => {
+        if (user) setUserId(user.id);
+      });
+      return;
+    }
     async function load() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
       setLoggedIn(true);
+      setUserId(user.id);
       router.prefetch("/dashboard");
       router.prefetch("/dashboard/inventario");
       const { data } = await supabase
@@ -57,6 +59,20 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
     }
     load();
   }, []);
+
+  // Fetch unread notification count
+  useEffect(() => {
+    if (!userId) return;
+    async function fetchUnread() {
+      const { count } = await supabase
+        .from("notifications")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", userId!)
+        .eq("read", false);
+      setUnreadCount(count ?? 0);
+    }
+    fetchUnread();
+  }, [userId]);
 
   // Close desktop avatar dropdown on outside click
   useEffect(() => {
@@ -75,7 +91,6 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
     router.push("/");
   }
 
-  /* Avatar circle — shared across mobile trigger and mobile menu header */
   const AvatarCircle = ({ size = 36 }: { size?: number }) => (
     <div
       className="rounded-full overflow-hidden border-2 border-[#2ee6c1]/40 hover:border-[#2ee6c1]/80 transition-colors"
@@ -95,9 +110,20 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
   // Dashboard has its own sidebar — don't render the public Navbar there
   if (pathname.startsWith("/dashboard")) return null;
 
+  // Build auth nav links dynamically (needs username for Perfil)
+  const NAV_LINKS_AUTH = [
+    { label: "INICIO",     href: "/dashboard" },
+    { label: "PERFIL",     href: username ? `/${username}` : "/dashboard/perfil" },
+    { label: "INVENTARIO", href: "/dashboard/inventario" },
+    { label: "AMIGOS",     href: "/dashboard/amigos" },
+    { label: "WISHLIST",   href: "/dashboard/market/wishlist" },
+    { label: "MARKET",     href: "/market" },
+  ];
+
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b border-[#2ee6c1]/10 bg-[#05070d]/90 backdrop-blur-md">
+      {/* Hidden below lg (1024px) — dashboard mobile layout handles navigation there */}
+      <nav className="hidden lg:flex fixed top-0 left-0 right-0 z-50 items-center justify-between px-6 py-4 border-b border-[#2ee6c1]/10 bg-[#05070d]/90 backdrop-blur-md">
 
         {/* Logo */}
         <Link href={loggedIn ? "/dashboard" : "/"} className="flex items-center shrink-0">
@@ -112,8 +138,8 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
           </span>
         </Link>
 
-        {/* Desktop links — hidden on mobile */}
-        <div className="hidden md:flex items-center gap-8">
+        {/* Desktop links */}
+        <div className="flex items-center gap-8">
           {(loggedIn ? NAV_LINKS_AUTH : NAV_LINKS_GUEST).map(({ label, href }) => (
             <Link key={label} href={href}
               className="text-xs font-medium tracking-[0.15em] text-white/60 hover:text-[#2ee6c1] transition-colors duration-200"
@@ -126,9 +152,22 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
         {/* Right side */}
         <div className="flex items-center gap-4">
 
-          {/* ── DESKTOP: avatar dropdown (logged in) or CTA button ── */}
+          {/* Bell — only when logged in */}
+          {loggedIn && (
+            <Link href="/dashboard" className="relative p-1.5 text-white/50 hover:text-[#2ee6c1] transition-colors">
+              <Bell size={18} strokeWidth={1.8} />
+              {unreadCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 rounded-full bg-[#2ee6c1] text-[#05070d] text-[9px] font-bold flex items-center justify-center px-0.5"
+                  style={{ fontFamily: "var(--font-jetbrains)" }}>
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </Link>
+          )}
+
+          {/* Avatar dropdown (logged in) or CTA button */}
           {loggedIn ? (
-            <div ref={avatarRef} className="hidden md:block relative">
+            <div ref={avatarRef} className="relative">
               <button onClick={() => setAvatarOpen(o => !o)}
                 className="relative cursor-pointer focus:outline-none"
                 aria-label="Menú de usuario">
@@ -175,37 +214,16 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
             </div>
           ) : (
             <Link href="/login"
-              className="hidden md:inline-flex px-4 py-2 rounded-full border border-white/30 text-white text-xs font-medium tracking-wider hover:bg-white hover:text-[#05070d] transition-all duration-200"
+              className="inline-flex px-4 py-2 rounded-full border border-white/30 text-white text-xs font-medium tracking-wider hover:bg-white hover:text-[#05070d] transition-all duration-200"
               style={{ fontFamily: "var(--font-jetbrains)" }}>
               Crear mi Facebinder
             </Link>
           )}
-
-          {/* ── MOBILE: avatar button (always visible, opens full-screen menu) ── */}
-          <button
-            onClick={() => setMobileOpen(o => !o)}
-            className="md:hidden relative cursor-pointer focus:outline-none"
-            aria-label="Menú"
-          >
-            <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#2ee6c1]/40 hover:border-[#2ee6c1]/80 transition-colors">
-              {photoUrl ? (
-                <Image src={photoUrl} alt="Avatar" width={36} height={36}
-                  className="object-cover w-full h-full" unoptimized />
-              ) : (
-                <div className="w-full h-full bg-[#2ee6c1]/10 flex items-center justify-center text-[#2ee6c1] text-sm font-bold">
-                  ?
-                </div>
-              )}
-            </div>
-            {loggedIn && (
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-[#05070d]" />
-            )}
-          </button>
         </div>
       </nav>
 
-      {/* ── Mobile full-screen menu ── */}
-      <div className={`fixed inset-0 z-40 bg-[#05070d]/98 backdrop-blur-lg transition-all duration-300 flex flex-col md:hidden ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
+      {/* Mobile full-screen menu — only for non-dashboard pages on small screens */}
+      <div className={`fixed inset-0 z-40 bg-[#05070d]/98 backdrop-blur-lg transition-all duration-300 flex flex-col lg:hidden ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/6">
