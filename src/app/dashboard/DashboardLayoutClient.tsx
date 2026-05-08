@@ -2,10 +2,17 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { House, UserRoundPen, UsersRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil, BookSearch } from "lucide-react";
+import { useNotifications } from "@/hooks/useNotifications";
+import { usePushPermission } from "@/hooks/usePushPermission";
+
+const NotificationBell     = dynamic(() => import("@/components/NotificationBell").then(m => ({ default: m.NotificationBell })), { ssr: false });
+const NotificationsDrawer  = dynamic(() => import("@/components/NotificationsDrawer").then(m => ({ default: m.NotificationsDrawer })), { ssr: false });
+const PushPermissionBanner = dynamic(() => import("@/components/PushPermissionBanner").then(m => ({ default: m.PushPermissionBanner })), { ssr: false });
 
 const COURT = "#2ee6c1";
 const BG1   = "#0a0e1a";
@@ -53,6 +60,14 @@ export function DashboardLayoutClient({
   const [isAdmin,  setIsAdmin]  = useState(initialIsAdmin);
   const [menuOpen, setMenuOpen] = useState(false);
   const [marketOpen, setMarketOpen] = useState(false);
+  const [notifDrawerOpen, setNotifDrawerOpen] = useState(false);
+  const [pushBannerDismissed, setPushBannerDismissed] = useState(false);
+
+  const { unreadCount } = useNotifications(userId);
+  const { permissionState } = usePushPermission();
+
+  // Mostrar banner de push solo si: hay userId, permiso default, no dismisseado
+  const showPushBanner = !!userId && permissionState === "default" && !pushBannerDismissed;
   const menuRef      = useRef<HTMLDivElement>(null);
   const mobileRef    = useRef<HTMLDivElement>(null);
   const marketRef    = useRef<HTMLDivElement>(null);
@@ -304,7 +319,7 @@ export function DashboardLayoutClient({
           <div style={{
             padding: "20px 18px",
             borderBottom: "1px solid rgba(255,255,255,0.06)",
-            display: "flex", alignItems: "center",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
           }}>
             <span style={{
               fontFamily: DISP, fontSize: "17px", fontWeight: 900, letterSpacing: "0.02em",
@@ -314,6 +329,13 @@ export function DashboardLayoutClient({
             }}>
               FaceBinder
             </span>
+            {userId && (
+              <NotificationBell
+                userId={userId}
+                unreadCount={unreadCount}
+                onOpen={() => setNotifDrawerOpen(true)}
+              />
+            )}
           </div>
 
           {/* Nav */}
@@ -448,6 +470,16 @@ export function DashboardLayoutClient({
             FaceBinder
           </span>
 
+          {/* Campana + Avatar */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            {userId && (
+              <NotificationBell
+                userId={userId}
+                unreadCount={unreadCount}
+                onOpen={() => setNotifDrawerOpen(true)}
+              />
+            )}
+
           {/* Avatar button — top right */}
           <div ref={mobileRef} style={{ position: "relative" }}>
             <button onClick={() => setMenuOpen(o => !o)} style={{
@@ -465,6 +497,7 @@ export function DashboardLayoutClient({
             </button>
             {menuOpen && <AvatarDropdown direction="down" />}
           </div>
+          </div>{/* end Campana + Avatar wrapper */}
         </div>
 
         {/* ══ MOBILE BOTTOM TAB BAR ══ */}
@@ -599,6 +632,19 @@ export function DashboardLayoutClient({
         {/* ══ MAIN CONTENT ══ */}
         <main className="dash-main" style={{ flex: 1 }}>{children}</main>
       </div>
+
+      {/* ══ NOTIFICATIONS DRAWER ══ */}
+      {notifDrawerOpen && userId && (
+        <NotificationsDrawer
+          userId={userId}
+          onClose={() => setNotifDrawerOpen(false)}
+        />
+      )}
+
+      {/* ══ PUSH PERMISSION BANNER ══ */}
+      {showPushBanner && (
+        <PushPermissionBanner onDismiss={() => setPushBannerDismissed(true)} />
+      )}
     </>
   );
 }
