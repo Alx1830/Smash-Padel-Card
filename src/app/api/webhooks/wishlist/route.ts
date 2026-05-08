@@ -35,10 +35,15 @@ export async function POST(request: NextRequest) {
 
   const cardLabel = card_name ?? 'Una carta de tu wishlist';
 
+  // market_listings.card_id = card_number (ej: 53)
+  // card_wishlist.card_id   = card.id (ej: "neo1-53")
+  // Construimos el wishlist_card_id combinando set_id + card_number
+  const wishlistCardId = `${set_id}-${card_id}`;
+
   const { data: wishlistUsers, error: wishlistError } = await supabaseAdmin
     .from('card_wishlist')
     .select('user_id')
-    .eq('card_id', card_id)
+    .eq('card_id', wishlistCardId)
     .eq('set_id', set_id)
     .neq('user_id', sellerId);
 
@@ -56,10 +61,7 @@ export async function POST(request: NextRequest) {
     data: { card_id, set_id, url: '/dashboard/inventario' },
   }));
 
-  await supabaseAdmin.from('notifications').upsert(notificationRows, {
-    onConflict: 'user_id,type,data',
-    ignoreDuplicates: true,
-  });
+  await supabaseAdmin.from('notifications').insert(notificationRows);
 
   const { data: subscriptions } = await supabaseAdmin
     .from('push_subscriptions')
