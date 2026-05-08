@@ -3,14 +3,18 @@ import { createClient } from '@supabase/supabase-js';
 import { webpush } from '@/lib/web-push';
 import webpushLib from 'web-push';
 
+if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  console.error('[Webhook] SUPABASE_SERVICE_ROLE_KEY is not set — notifications will fail RLS');
+}
+
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
 interface WebhookPayload {
   record: {
-    card_id: string;
+    card_id: string | number;
     set_id: string;
     version?: string;
     user_id: string;
@@ -31,24 +35,33 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
+  console.log('[Webhook] Payload received:', JSON.stringify(payload.record));
+
   const { card_id, set_id, user_id: sellerId, card_name } = payload.record;
 
   const cardLabel = card_name ?? 'Una carta de tu wishlist';
 
-  // market_listings.card_id = card_number (ej: 53)
+  // market_listings.card_id = card_number (ej: 53, puede venir como number)
   // card_wishlist.card_id   = card.id (ej: "neo1-53")
-  // Construimos el wishlist_card_id combinando set_id + card_number
   const wishlistCardId = `${set_id}-${card_id}`;
+
+  console.log('[Webhook] Looking for wishlist matches:', { wishlistCardId, set_id, sellerId });
 
   const { data: wishlistUsers, error: wishlistError } = await supabaseAdmin
     .from('card_wishlist')
     .select('user_id')
     .eq('card_id', wishlistCardId)
-    .eq('set_id', set_id)
     .neq('user_id', sellerId);
 
-  if (wishlistError || !wishlistUsers?.length) {
-    return NextResponse.json({ ok: true, notified: 0 });
+  if (wishlistError) {
+    console.error('[Webhook] Wishlist query error:', wishlistError);
+    return NextResponse.json({ error: wishlistError.message }, { status: 500 });
+  }
+
+  console.log('[Webhook] Wishlist users found:', wishlistUsers?.length ?? 0);
+
+  if (!wishlistUsers?.length) {
+    return NextResponse.json({ ok: true, notified: 0, reason: 'no_wishlist_matches' });
   }
 
   const userIds = wishlistUsers.map((r: { user_id: string }) => r.user_id);
@@ -58,18 +71,28 @@ export async function POST(request: NextRequest) {
     type: 'wishlist_available',
     title: '¡Carta disponible!',
     body: `${cardLabel} está en el market`,
-    data: { card_id, set_id, url: '/dashboard/inventario' },
+    data: { card_id: String(card_id), set_id, url: '/dashboard/inventario' },
   }));
 
-  await supabaseAdmin.from('notifications').insert(notificationRows);
+  const { error: insertError } = await supabaseAdmin
+    .from('notifications')
+    .insert(notificationRows);
 
+  if (insertError) {
+    console.error('[Webhook] Insert notifications error:', insertError);
+    return NextResponse.json({ error: insertError.message }, { status: 500 });
+  }
+
+  console.log('[Webhook] Notifications inserted for', userIds.length, 'users');
+
+  // Push notifications — fire and forget to avoid webhook timeout
   const { data: subscriptions } = await supabaseAdmin
     .from('push_subscriptions')
     .select('user_id, endpoint, p256dh, auth')
     .in('user_id', userIds);
 
   if (!subscriptions?.length) {
-    return NextResponse.json({ ok: true, notified: 0 });
+    return NextResponse.json({ ok: true, notified: userIds.length, pushed: 0 });
   }
 
   const pushPayload = JSON.stringify({
@@ -80,14 +103,12 @@ export async function POST(request: NextRequest) {
     data: { url: '/dashboard/inventario' },
   });
 
-  const results = await Promise.allSettled(
+  // No awaiting — respond fast, push runs in background
+  Promise.allSettled(
     subscriptions.map(async (sub: { user_id: string; endpoint: string; p256dh: string; auth: string }) => {
       try {
         await webpush.sendNotification(
-          {
-            endpoint: sub.endpoint,
-            keys: { p256dh: sub.p256dh, auth: sub.auth },
-          },
+          { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
           pushPayload
         );
       } catch (err: unknown) {
@@ -98,12 +119,9 @@ export async function POST(request: NextRequest) {
             .delete()
             .eq('endpoint', sub.endpoint);
         }
-        throw err;
       }
     })
-  );
+  ).catch((err) => console.error('[Webhook] Push error:', err));
 
-  const notified = results.filter((r) => r.status === 'fulfilled').length;
-
-  return NextResponse.json({ ok: true, notified });
+  return NextResponse.json({ ok: true, notified: userIds.length, pushed: subscriptions.length });
 }
