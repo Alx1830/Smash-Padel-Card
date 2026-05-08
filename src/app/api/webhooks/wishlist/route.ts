@@ -41,16 +41,19 @@ export async function POST(request: NextRequest) {
 
   const cardLabel = card_name ?? 'Una carta de tu wishlist';
 
-  // market_listings.card_id = card_number (ej: 53, puede venir como number)
-  // card_wishlist.card_id   = card.id (ej: "neo1-53")
-  const wishlistCardId = `${set_id}-${card_id}`;
+  // market_listings.card_id = número (ej: 12)
+  // card_wishlist.card_id   = "012:Decidueye ex:Holofoil" (número con ceros + nombre + versión)
+  // Buscamos todas las filas del set cuyo card_id empiece con el número formateado
+  const cardNumPadded = String(card_id).padStart(3, '0');
+  const cardIdPrefix = `${cardNumPadded}:`;
 
-  console.log('[Webhook] Looking for wishlist matches:', { wishlistCardId, set_id, sellerId });
+  console.log('[Webhook] Looking for wishlist matches:', { cardIdPrefix, set_id, sellerId });
 
   const { data: wishlistUsers, error: wishlistError } = await supabaseAdmin
     .from('card_wishlist')
     .select('user_id')
-    .eq('card_id', wishlistCardId)
+    .eq('set_id', set_id)
+    .like('card_id', `${cardIdPrefix}%`)
     .neq('user_id', sellerId);
 
   if (wishlistError) {
