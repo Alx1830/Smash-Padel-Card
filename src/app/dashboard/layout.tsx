@@ -2,13 +2,15 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { DashboardLayoutClient } from "./DashboardLayoutClient";
 
+export const revalidate = 60;
+
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) redirect("/login");
 
-  const { data } = await supabase
+  const { data: profile } = await supabase
     .from("players")
     .select("photo_url, username, role")
     .eq("user_id", user.id)
@@ -16,10 +18,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <DashboardLayoutClient
-      initialPhotoUrl={data?.photo_url ?? null}
-      initialUsername={data?.username ?? null}
+      initialPhotoUrl={profile?.photo_url ?? null}
+      initialUsername={profile?.username ?? null}
       initialUserId={user.id}
-      initialIsAdmin={data?.role === "admin"}
+      initialIsAdmin={profile?.role === "admin"}
     >
       {children}
     </DashboardLayoutClient>

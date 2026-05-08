@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { House, UserRoundPen, UserRound, UsersRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil, BookSearch, Search } from "lucide-react";
+import { House, UserRoundPen, UsersRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil, BookSearch } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BG1   = "#0a0e1a";
@@ -52,16 +52,11 @@ export function DashboardLayoutClient({
   const [userId,   setUserId]   = useState<string | null>(initialUserId);
   const [isAdmin,  setIsAdmin]  = useState(initialIsAdmin);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [marketOpen, setMarketOpen]       = useState(false);
-  const [perfilOpen, setPerfilOpen]       = useState(false);
-  const [inventarioOpen, setInventarioOpen] = useState(false);
-  const menuRef        = useRef<HTMLDivElement>(null);
-  const mobileRef      = useRef<HTMLDivElement>(null);
-  const marketRef      = useRef<HTMLDivElement>(null);
-  const mktMobileRef   = useRef<HTMLDivElement>(null);
-  const perfilRef      = useRef<HTMLDivElement>(null);
-  const perfilMobRef   = useRef<HTMLDivElement>(null);
-  const invMobRef      = useRef<HTMLDivElement>(null);
+  const [marketOpen, setMarketOpen] = useState(false);
+  const menuRef      = useRef<HTMLDivElement>(null);
+  const mobileRef    = useRef<HTMLDivElement>(null);
+  const marketRef    = useRef<HTMLDivElement>(null);
+  const mktMobileRef = useRef<HTMLDivElement>(null);
 
   /* Presence — trackea al usuario en el canal online-users */
   useEffect(() => {
@@ -85,13 +80,6 @@ export function DashboardLayoutClient({
       const inMktDesktop = marketRef.current?.contains(e.target as Node);
       const inMktMobile  = mktMobileRef.current?.contains(e.target as Node);
       if (!inMktDesktop && !inMktMobile) setMarketOpen(false);
-
-      const inPerfilDesktop = perfilRef.current?.contains(e.target as Node);
-      const inPerfilMobile  = perfilMobRef.current?.contains(e.target as Node);
-      if (!inPerfilDesktop && !inPerfilMobile) setPerfilOpen(false);
-
-      const inInvMobile = invMobRef.current?.contains(e.target as Node);
-      if (!inInvMobile) setInventarioOpen(false);
     }
     document.addEventListener("mousedown", onOutside);
     return () => document.removeEventListener("mousedown", onOutside);
@@ -144,6 +132,21 @@ export function DashboardLayoutClient({
         <Pencil size={14} color={COURT} strokeWidth={1.8} />
         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Editar perfil</span>
       </a>
+      {isAdmin && (
+        <>
+          <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
+          <a href="/dashboard/users" style={{
+            display: "flex", alignItems: "center", gap: "10px",
+            padding: "10px 14px", textDecoration: "none",
+          }}
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(79,240,255,0.07)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+          >
+            <UsersRound size={14} color="#4ff0ff" strokeWidth={1.8} />
+            <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Usuarios</span>
+          </a>
+        </>
+      )}
       <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
       <button onClick={handleLogout} style={{
         width: "100%", display: "flex", alignItems: "center", gap: "10px",
@@ -209,51 +212,6 @@ export function DashboardLayoutClient({
       >
         <Store size={14} color="#d6ff3d" strokeWidth={1.8} />
         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Market local</span>
-      </Link>
-    </div>
-  );
-
-  /* Perfil popup menu */
-  const PerfilPopup = ({ direction = "up" }: { direction?: "up" | "down" }) => (
-    <div style={{
-      position: "absolute",
-      ...(direction === "up"
-        ? { bottom: "calc(100% + 8px)", left: 0 }
-        : { top: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)" }),
-      width: 180,
-      background: "#0d1520",
-      border: "1px solid rgba(255,255,255,0.1)",
-      borderRadius: "12px", overflow: "hidden",
-      boxShadow: "0 8px 40px rgba(0,0,0,0.6)",
-      zIndex: 200,
-    }}>
-      <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>
-          Perfil
-        </p>
-      </div>
-      {username && (
-        <Link href={`/${username}`} onClick={() => setPerfilOpen(false)} style={{
-          display: "flex", alignItems: "center", gap: "10px",
-          padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)",
-        }}
-          onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
-          onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-        >
-          <UserRound size={14} color={COURT} strokeWidth={1.8} />
-          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Ver mi perfil</span>
-        </Link>
-      )}
-      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-      <Link href="/dashboard/perfil" onClick={() => setPerfilOpen(false)} style={{
-        display: "flex", alignItems: "center", gap: "10px",
-        padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)",
-      }}
-        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
-        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-      >
-        <Pencil size={14} color={COURT} strokeWidth={1.8} />
-        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Editar mi perfil</span>
       </Link>
     </div>
   );
@@ -370,30 +328,19 @@ export function DashboardLayoutClient({
               const isInventario = label === "Inventario";
 
               if (isInventario) {
-                const invActive = pathname === "/dashboard/inventario" || pathname === "/dashboard/inventario/cards";
+                const invActive = pathname === "/dashboard/inventario" || pathname === "/dashboard/inventario/cards" || pathname === "/dashboard/inventario/agregar";
                 return (
-                  <div key="inventario" style={{ marginBottom: "4px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 14px 6px" }}>
-                      <Icon size={20} color={invActive ? COURT : INK2} strokeWidth={1.8} style={{ flexShrink: 0 }} />
-                      <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase", color: invActive ? COURT : INK2, fontWeight: invActive ? 600 : 400 }}>{label}</span>
-                    </div>
-                    <div style={{ paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "2px" }}>
-                      <Link href="/dashboard/inventario" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: pathname === "/dashboard/inventario" ? `${COURT}18` : "transparent", border: pathname === "/dashboard/inventario" ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
-                        onMouseEnter={e => { if (pathname !== "/dashboard/inventario") e.currentTarget.style.background = `${COURT}10`; }}
-                        onMouseLeave={e => { if (pathname !== "/dashboard/inventario") e.currentTarget.style.background = "transparent"; }}
-                      >
-                        <LayoutGrid size={14} color={pathname === "/dashboard/inventario" ? COURT : INK2} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: pathname === "/dashboard/inventario" ? COURT : "rgba(245,247,251,0.65)" }}>Inventario</span>
-                      </Link>
-                      <Link href="/dashboard/inventario/cards" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: pathname === "/dashboard/inventario/cards" ? `${COURT}18` : "transparent", border: pathname === "/dashboard/inventario/cards" ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
-                        onMouseEnter={e => { if (pathname !== "/dashboard/inventario/cards") e.currentTarget.style.background = `${COURT}10`; }}
-                        onMouseLeave={e => { if (pathname !== "/dashboard/inventario/cards") e.currentTarget.style.background = "transparent"; }}
-                      >
-                        <Search size={14} color={pathname === "/dashboard/inventario/cards" ? COURT : INK2} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: pathname === "/dashboard/inventario/cards" ? COURT : "rgba(245,247,251,0.65)" }}>Buscar Carta</span>
-                      </Link>
-                    </div>
-                  </div>
+                  <Link key="inventario" href="/dashboard/inventario" style={{
+                    display: "flex", alignItems: "center", gap: "12px",
+                    padding: "11px 14px", borderRadius: "10px", marginBottom: "4px",
+                    textDecoration: "none",
+                    background: invActive ? `${COURT}18` : "transparent",
+                    border: invActive ? `1px solid ${COURT}33` : "1px solid transparent",
+                    transition: "all 0.15s", whiteSpace: "nowrap",
+                  }}>
+                    <Icon size={20} color={invActive ? COURT : INK2} strokeWidth={1.8} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase", color: invActive ? COURT : INK2, fontWeight: invActive ? 600 : 400 }}>{label}</span>
+                  </Link>
                 );
               }
 
@@ -432,40 +379,19 @@ export function DashboardLayoutClient({
               }
 
               if (isPerfil) {
+                const perfilHref = username ? `/${username}` : "/dashboard/perfil";
                 return (
-                  <div key="perfil" style={{ marginBottom: "4px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 14px 6px" }}>
-                      <Icon size={20} color={active ? COURT : INK2} strokeWidth={1.8} style={{ flexShrink: 0 }} />
-                      <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase", color: active ? COURT : INK2, fontWeight: active ? 600 : 400 }}>{label}</span>
-                    </div>
-                    <div style={{ paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "2px" }}>
-                      {username && (
-                        <Link href={`/${username}`} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: "transparent", border: "1px solid transparent", transition: "all 0.15s" }}
-                          onMouseEnter={e => (e.currentTarget.style.background = `${COURT}10`)}
-                          onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                        >
-                          <UserRound size={14} color={INK2} strokeWidth={1.8} />
-                          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: "rgba(245,247,251,0.65)" }}>Ver mi perfil</span>
-                        </Link>
-                      )}
-                      <Link href="/dashboard/perfil" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: pathname === "/dashboard/perfil" ? `${COURT}18` : "transparent", border: pathname === "/dashboard/perfil" ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
-                        onMouseEnter={e => { if (pathname !== "/dashboard/perfil") e.currentTarget.style.background = `${COURT}10`; }}
-                        onMouseLeave={e => { if (pathname !== "/dashboard/perfil") e.currentTarget.style.background = "transparent"; }}
-                      >
-                        <Pencil size={14} color={pathname === "/dashboard/perfil" ? COURT : INK2} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: pathname === "/dashboard/perfil" ? COURT : "rgba(245,247,251,0.65)" }}>Editar mi perfil</span>
-                      </Link>
-                      {isAdmin && (
-                        <Link href="/dashboard/users" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: pathname === "/dashboard/users" ? "rgba(79,240,255,0.12)" : "transparent", border: pathname === "/dashboard/users" ? "1px solid rgba(79,240,255,0.25)" : "1px solid transparent", transition: "all 0.15s" }}
-                          onMouseEnter={e => { if (pathname !== "/dashboard/users") e.currentTarget.style.background = "rgba(79,240,255,0.07)"; }}
-                          onMouseLeave={e => { if (pathname !== "/dashboard/users") e.currentTarget.style.background = "transparent"; }}
-                        >
-                          <UsersRound size={14} color="#4ff0ff" strokeWidth={1.8} style={{ flexShrink: 0 }} />
-                          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Usuarios</span>
-                        </Link>
-                      )}
-                    </div>
-                  </div>
+                  <Link key="perfil" href={perfilHref} style={{
+                    display: "flex", alignItems: "center", gap: "12px",
+                    padding: "11px 14px", borderRadius: "10px", marginBottom: "4px",
+                    textDecoration: "none",
+                    background: active ? `${COURT}18` : "transparent",
+                    border: active ? `1px solid ${COURT}33` : "1px solid transparent",
+                    transition: "all 0.15s", whiteSpace: "nowrap",
+                  }}>
+                    <Icon size={20} color={active ? COURT : INK2} strokeWidth={1.8} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase", color: active ? COURT : INK2, fontWeight: active ? 600 : 400 }}>{label}</span>
+                  </Link>
                 );
               }
 
@@ -553,86 +479,38 @@ export function DashboardLayoutClient({
             const iconSz = highlight ? 26 : 22;
 
             if (isPerfil) {
+              const perfilHref = username ? `/${username}` : "/dashboard/perfil";
               return (
-                <div key="perfil" ref={perfilMobRef} style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {perfilOpen && (
-                    <div style={{
-                      position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)",
-                      width: 180, background: "#0d1520",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      borderRadius: "12px", overflow: "hidden",
-                      boxShadow: "0 8px 40px rgba(0,0,0,0.6)", zIndex: 200,
-                    }}>
-                      <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                        <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>Perfil</p>
-                      </div>
-                      {username && (
-                        <Link href={`/${username}`} onClick={() => setPerfilOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}>
-                          <UserRound size={14} color={COURT} strokeWidth={1.8} />
-                          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Ver mi perfil</span>
-                        </Link>
-                      )}
-                      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-                      <Link href="/dashboard/perfil" onClick={() => setPerfilOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}>
-                        <Pencil size={14} color={COURT} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Editar mi perfil</span>
-                      </Link>
-                      {isAdmin && (
-                        <>
-                          <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-                          <Link href="/dashboard/users" onClick={() => setPerfilOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none" }}>
-                            <UsersRound size={14} color="#4ff0ff" strokeWidth={1.8} />
-                            <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Usuarios</span>
-                          </Link>
-                        </>
-                      )}
-                    </div>
-                  )}
-                  <button onClick={() => setPerfilOpen(o => !o)} style={{
-                    flex: 1, width: "100%", height: "100%", display: "flex", flexDirection: "column",
-                    alignItems: "center", justifyContent: "center", gap: "4px",
-                    background: "transparent", border: "none", cursor: "pointer", position: "relative", paddingBottom: "4px",
-                  }}>
-                    {active && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
-                    <Icon size={iconSz} color={color} strokeWidth={active ? 2.2 : 1.7} style={{ position: "relative" }} />
-                    <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color, fontWeight: active ? 600 : 400, position: "relative" }}>
-                      {label}
-                    </span>
-                  </button>
-                </div>
+                <Link key="perfil" href={perfilHref} style={{
+                  flex: 1, display: "flex", flexDirection: "column",
+                  alignItems: "center", justifyContent: "center", gap: "4px",
+                  textDecoration: "none", position: "relative", paddingBottom: "4px",
+                }}>
+                  {active && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
+                  <Icon size={iconSz} color={color} strokeWidth={active ? 2.2 : 1.7} style={{ position: "relative" }} />
+                  <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color, fontWeight: active ? 600 : 400, position: "relative" }}>
+                    {label}
+                  </span>
+                </Link>
               );
             }
 
             const isInventario = label === "Inventario";
             if (isInventario) {
-              const invActive = pathname === "/dashboard/inventario" || pathname === "/dashboard/inventario/cards";
-              const color = invActive ? COURT : highlight ? `${COURT}80` : INK2;
+              const invActive = pathname === "/dashboard/inventario" || pathname === "/dashboard/inventario/cards" || pathname === "/dashboard/inventario/agregar";
+              const invColor = invActive ? COURT : highlight ? `${COURT}80` : INK2;
               return (
-                <div key="inventario" ref={invMobRef} style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {inventarioOpen && (
-                    <div style={{ position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)", width: 180, background: "#0d1520", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", overflow: "hidden", boxShadow: "0 8px 40px rgba(0,0,0,0.6)", zIndex: 200 }}>
-                      <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                        <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>Inventario</p>
-                      </div>
-                      <Link href="/dashboard/inventario" onClick={() => setInventarioOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}>
-                        <LayoutGrid size={14} color={COURT} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Inventario</span>
-                      </Link>
-                      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-                      <Link href="/dashboard/inventario/cards" onClick={() => setInventarioOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}>
-                        <Search size={14} color={COURT} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Buscar Carta</span>
-                      </Link>
-                    </div>
-                  )}
-                  <button onClick={() => setInventarioOpen(o => !o)} style={{ flex: 1, width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "4px", background: "transparent", border: "none", cursor: "pointer", position: "relative", paddingBottom: "4px" }}>
-                    {invActive && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
-                    <Icon size={highlight ? 26 : 22} color={color} strokeWidth={invActive ? 2.2 : 1.7} style={{ position: "relative" }} />
-                    <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color, fontWeight: invActive ? 600 : 400, position: "relative" }}>
-                      {label}
-                    </span>
-                  </button>
-                </div>
+                <Link key="inventario" href="/dashboard/inventario" style={{
+                  flex: 1, display: "flex", flexDirection: "column",
+                  alignItems: "center", justifyContent: "center", gap: "4px",
+                  textDecoration: "none", position: "relative", paddingBottom: "4px",
+                }}>
+                  {invActive && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
+                  <Icon size={highlight ? 26 : 22} color={invColor} strokeWidth={invActive ? 2.2 : 1.7} style={{ position: "relative" }} />
+                  <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color: invColor, fontWeight: invActive ? 600 : 400, position: "relative" }}>
+                    {label}
+                  </span>
+                </Link>
               );
             }
 

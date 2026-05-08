@@ -21,18 +21,18 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  const { data: { user } } = await supabase.auth.getUser();
+  // getSession() es local (lee cookie, sin round-trip a Supabase) — suficiente para proteger rutas
+  // getUser() queda en el layout del dashboard para verificación criptográfica real
+  const { data: { session } } = await supabase.auth.getSession();
 
-  // Redirigir a login si accede al dashboard o admin sin sesión
-  if (!user && (
+  if (!session && (
     request.nextUrl.pathname.startsWith("/dashboard") ||
     request.nextUrl.pathname.startsWith("/admin")
   )) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Redirigir al dashboard si ya tiene sesión y va al login
-  if (user && request.nextUrl.pathname === "/login") {
+  if (session && request.nextUrl.pathname === "/login") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

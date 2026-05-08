@@ -38,12 +38,18 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
   const [loggedIn, setLoggedIn]       = useState(initialLoggedIn ?? false);
 
   useEffect(() => {
+    if (initialLoggedIn) {
+      router.prefetch("/dashboard");
+      router.prefetch("/dashboard/inventario");
+    }
     // Skip client fetch if server already provided the data
     if (initialLoggedIn !== undefined) return;
     async function load() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
       setLoggedIn(true);
+      router.prefetch("/dashboard");
+      router.prefetch("/dashboard/inventario");
       const { data } = await supabase
         .from("players").select("photo_url, username").eq("user_id", user.id).single();
       if (data?.photo_url) setPhotoUrl(data.photo_url);

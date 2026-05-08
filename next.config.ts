@@ -3,6 +3,9 @@ import withPWA from "next-pwa";
 
 const nextConfig: NextConfig = {
   turbopack: {},
+  experimental: {
+    staleTimes: { dynamic: 30, static: 180 },
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 7,
@@ -15,6 +18,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "images.scrydex.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.pokemontcg.io",
       },
     ],
   },

@@ -1,8 +1,13 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
-import { ImageSwiper } from "@/components/ui/image-swiper";
 import { loadSetCards } from "@/data/pokemon-cards";
+
+const ImageSwiper = dynamic(
+  () => import("@/components/ui/image-swiper").then(m => ({ default: m.ImageSwiper })),
+  { ssr: false, loading: () => <div style={{ width: 264, height: 370 }} /> }
+);
 
 export function HeroSwiper() {
   const [images, setImages] = useState<string | null>(null);

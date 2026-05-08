@@ -1,10 +1,5 @@
 import Link from "next/link";
-import dynamic from "next/dynamic";
-
-const HeroSwiper = dynamic(
-  () => import("@/components/HeroSwiper").then(m => ({ default: m.HeroSwiper })),
-  { ssr: false, loading: () => <div style={{ width: 264, height: 370 }} /> }
-);
+import { HeroSwiper } from "@/components/HeroSwiper";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
