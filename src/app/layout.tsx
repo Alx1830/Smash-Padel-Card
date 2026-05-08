@@ -109,6 +109,11 @@ export default async function RootLayout({
         {children}
         <Analytics />
         <SpeedInsights />
+        <Script id="sw-register" strategy="afterInteractive">{`
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(function() {});
+          }
+        `}</Script>
         <Script
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7135029542920964"
           crossOrigin="anonymous"
