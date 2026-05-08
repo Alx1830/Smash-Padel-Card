@@ -21,41 +21,59 @@ export function useNotifications(userId: string | null): UseNotificationsReturn 
     if (!userId) return;
 
     setLoading(true);
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
 
-    // Fetch inicial
-    supabase
-      .from("notifications")
-      .select("*")
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false })
-      .limit(30)
-      .then(({ data }) => {
-        if (data) setNotifications(data as AppNotification[]);
-        setLoading(false);
-      });
+    async function init() {
+      // Asegurar que el JWT esté fresco antes de suscribirse a Realtime
+      await supabase.auth.getSession();
+      if (cancelled) return;
 
-    // Suscripción Realtime para INSERTs
-    const channel = supabase
-      .channel(`notifications:${userId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "notifications",
-          filter: `user_id=eq.${userId}`,
-        },
-        (payload) => {
-          const newNotif = payload.new as AppNotification;
-          setNotifications((prev) => [newNotif, ...prev]);
-        }
-      )
-      .subscribe();
+      // Fetch inicial
+      const { data } = await supabase
+        .from("notifications")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false })
+        .limit(30);
+
+      if (!cancelled && data) {
+        setNotifications(data as AppNotification[]);
+      }
+      setLoading(false);
+
+      if (cancelled) return;
+
+      // Suscripción Realtime
+      channel = supabase
+        .channel(`notifications:${userId}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "notifications",
+            filter: `user_id=eq.${userId}`,
+          },
+          (payload) => {
+            const newNotif = payload.new as AppNotification;
+            setNotifications((prev) => [newNotif, ...prev]);
+          }
+        )
+        .subscribe((status) => {
+          if (status === "CHANNEL_ERROR") {
+            console.warn("[Notifications] Realtime channel error, retrying...");
+          }
+        });
+    }
+
+    init();
 
     return () => {
-      supabase.removeChannel(channel);
+      cancelled = true;
+      if (channel) supabase.removeChannel(channel);
     };
-  }, [userId]);
+  }, [userId, supabase]);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -67,7 +85,7 @@ export function useNotifications(userId: string | null): UseNotificationsReturn 
       .eq("user_id", userId)
       .eq("read", false);
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  }, [userId]);
+  }, [userId, supabase]);
 
   const markRead = useCallback(async (id: string) => {
     await supabase
@@ -77,7 +95,7 @@ export function useNotifications(userId: string | null): UseNotificationsReturn 
     setNotifications((prev) =>
       prev.map((n) => (n.id === id ? { ...n, read: true } : n))
     );
-  }, []);
+  }, [supabase]);
 
   return { notifications, unreadCount, markAllRead, markRead, loading };
 }
