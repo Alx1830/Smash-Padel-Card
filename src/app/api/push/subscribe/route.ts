@@ -11,22 +11,22 @@ export async function POST(request: NextRequest) {
 
   interface RawSubscription {
     endpoint: string;
-    keys: { p256dh: string; auth: string };
+    keys?: { p256dh: string; auth: string };
+    expirationTime?: number | null;
   }
 
-  let body: { subscription: RawSubscription };
+  let subscription: RawSubscription;
   try {
-    body = await request.json();
+    subscription = await request.json();
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  const { subscription } = body;
   if (!subscription?.endpoint || !subscription?.keys) {
     return NextResponse.json({ error: 'Invalid subscription' }, { status: 400 });
   }
 
-  const { keys } = subscription;
+  const { keys } = subscription as { endpoint: string; keys: { p256dh: string; auth: string } };
 
   const { error } = await supabase
     .from('push_subscriptions')
