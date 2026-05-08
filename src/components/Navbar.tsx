@@ -122,8 +122,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
 
   return (
     <>
-      {/* Hidden below lg (1024px) — dashboard mobile layout handles navigation there */}
-      <nav className="hidden lg:flex fixed top-0 left-0 right-0 z-50 items-center justify-between px-6 py-4 border-b border-[#2ee6c1]/10 bg-[#05070d]/90 backdrop-blur-md">
+      <nav className="flex fixed top-0 left-0 right-0 z-50 items-center justify-between px-6 py-4 border-b border-[#2ee6c1]/10 bg-[#05070d]/90 backdrop-blur-md">
 
         {/* Logo */}
         <Link href={loggedIn ? "/dashboard" : "/"} className="flex items-center shrink-0">
@@ -138,8 +137,8 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
           </span>
         </Link>
 
-        {/* Desktop links */}
-        <div className="flex items-center gap-8">
+        {/* Links — hidden on mobile/tablet, visible on desktop */}
+        <div className="hidden lg:flex items-center gap-8">
           {(loggedIn ? NAV_LINKS_AUTH : NAV_LINKS_GUEST).map(({ label, href }) => (
             <Link key={label} href={href}
               className="text-xs font-medium tracking-[0.15em] text-white/60 hover:text-[#2ee6c1] transition-colors duration-200"
