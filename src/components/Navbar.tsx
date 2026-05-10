@@ -2,10 +2,17 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, usePathname } from "next/navigation";
 import { Bell } from "lucide-react";
+import { useNotifications } from "@/hooks/useNotifications";
+
+const NotificationsDrawer = dynamic(
+  () => import("@/components/NotificationsDrawer").then(m => ({ default: m.NotificationsDrawer })),
+  { ssr: false }
+);
 
 const NAV_LINKS_GUEST = [
   { label: "INICIO",     href: "/" },
@@ -25,13 +32,17 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
   const pathname      = usePathname();
   const avatarRef     = useRef<HTMLDivElement>(null);
 
-  const [photoUrl, setPhotoUrl]         = useState<string | null>(initialPhotoUrl ?? null);
-  const [username, setUsername]         = useState<string | null>(initialUsername ?? null);
-  const [userId, setUserId]             = useState<string | null>(null);
-  const [avatarOpen, setAvatarOpen]     = useState(false);
-  const [mobileOpen, setMobileOpen]     = useState(false);
-  const [loggedIn, setLoggedIn]         = useState(initialLoggedIn ?? false);
-  const [unreadCount, setUnreadCount]   = useState(0);
+  const [photoUrl, setPhotoUrl]     = useState<string | null>(initialPhotoUrl ?? null);
+  const [username, setUsername]     = useState<string | null>(initialUsername ?? null);
+  const [userId, setUserId]         = useState<string | null>(null);
+  const [avatarOpen, setAvatarOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [loggedIn, setLoggedIn]     = useState(initialLoggedIn ?? false);
+  const [notifOpen, setNotifOpen]   = useState(false);
+  const [notifAnchor, setNotifAnchor] = useState<DOMRect | null>(null);
+  const bellRef = useRef<HTMLButtonElement>(null);
+
+  const { unreadCount, notifications, markAllRead, markRead, loading: notifLoading } = useNotifications(userId);
 
   useEffect(() => {
     if (initialLoggedIn) {
@@ -60,32 +71,6 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
     load();
   }, []);
 
-  // Fetch unread count + realtime subscription
-  useEffect(() => {
-    if (!userId) return;
-
-    async function fetchUnread() {
-      const { count } = await supabase
-        .from("notifications")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", userId!)
-        .eq("read", false);
-      setUnreadCount(count ?? 0);
-    }
-
-    fetchUnread();
-
-    const channel = supabase
-      .channel(`navbar-notif:${userId}`)
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "notifications", filter: `user_id=eq.${userId}` },
-        () => { setUnreadCount(c => c + 1); }
-      )
-      .subscribe();
-
-    return () => { supabase.removeChannel(channel); };
-  }, [userId]);
 
   // Close desktop avatar dropdown on outside click
   useEffect(() => {
@@ -166,7 +151,15 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
 
           {/* Bell — only when logged in */}
           {loggedIn && (
-            <Link href="/dashboard" className="relative p-1.5 text-white/50 hover:text-[#2ee6c1] transition-colors">
+            <button
+              ref={bellRef}
+              onClick={() => {
+                setNotifAnchor(bellRef.current?.getBoundingClientRect() ?? null);
+                setNotifOpen(o => !o);
+              }}
+              className="relative p-1.5 text-white/50 hover:text-[#2ee6c1] transition-colors"
+              style={{ background: "transparent", border: "none", cursor: "pointer" }}
+            >
               <Bell size={18} strokeWidth={1.8} />
               {unreadCount > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 rounded-full bg-[#2ee6c1] text-[#05070d] text-[9px] font-bold flex items-center justify-center px-0.5"
@@ -174,7 +167,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </span>
               )}
-            </Link>
+            </button>
           )}
 
           {/* Avatar dropdown (logged in) or CTA button */}
@@ -233,6 +226,20 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
           )}
         </div>
       </nav>
+
+      {/* Notifications drawer */}
+      {notifOpen && userId && (
+        <NotificationsDrawer
+          notifications={notifications}
+          unreadCount={unreadCount}
+          loading={notifLoading}
+          markAllRead={markAllRead}
+          markRead={markRead}
+          onClose={() => setNotifOpen(false)}
+          anchorRect={notifAnchor}
+          isMobile={typeof window !== "undefined" && window.innerWidth < 768}
+        />
+      )}
 
       {/* Mobile full-screen menu — only for non-dashboard pages on small screens */}
       <div className={`fixed inset-0 z-40 bg-[#05070d]/98 backdrop-blur-lg transition-all duration-300 flex flex-col lg:hidden ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
