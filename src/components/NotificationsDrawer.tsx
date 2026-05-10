@@ -70,15 +70,21 @@ export function NotificationsDrawer({
       };
     }
     if (anchorRect) {
+      const width = 380;
+      const rightEdge = anchorRect.right;
+      const viewportWidth = typeof window !== "undefined" ? window.innerWidth : 1200;
+      // Align right edge of drawer with right edge of bell button,
+      // but clamp so it never goes off-screen left
+      const right = viewportWidth - rightEdge;
       return {
         position: "fixed",
         top: anchorRect.bottom + 8,
-        left: anchorRect.left,
-        width: 380,
+        right: Math.max(8, right),
+        width: Math.min(width, viewportWidth - 16),
         zIndex: 200,
       };
     }
-    return { position: "fixed", top: 64, left: 250, width: 380, zIndex: 200 };
+    return { position: "fixed", top: 64, right: 16, width: 380, zIndex: 200 };
   })();
 
   /* Animate in */
