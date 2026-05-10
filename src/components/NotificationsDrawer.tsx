@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { X, Bell, CheckCheck } from "lucide-react";
+import { X, Bell, CheckCheck, UserPlus, UserCheck, ShoppingBag } from "lucide-react";
 import type { AppNotification } from "@/types/notifications";
 
 const COURT = "#2ee6c1";
@@ -20,6 +20,12 @@ interface NotificationsDrawerProps {
   onClose: () => void;
   anchorRect?: DOMRect | null;
   isMobile?: boolean;
+}
+
+function notifMeta(type: string): { color: string; Icon: React.ComponentType<{ size?: number; color?: string; strokeWidth?: number }> } {
+  if (type === "new_follower")        return { color: "#818cf8", Icon: UserPlus };
+  if (type === "new_user_registered") return { color: "#f59e0b", Icon: UserCheck };
+  return { color: COURT, Icon: ShoppingBag };
 }
 
 function relativeTime(iso: string): string {
@@ -240,24 +246,29 @@ export function NotificationsDrawer({
                   Sin notificaciones
                 </p>
                 <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: 0, letterSpacing: "0.05em" }}>
-                  Aquí aparecerán tus alertas de wishlist
+                  Aquí aparecerán tus notificaciones
                 </p>
               </div>
             </div>
           ) : (
-            notifications.map((notif) => (
+            notifications.map((notif) => {
+              const { color, Icon } = notifMeta(notif.type);
+              return (
               <div
                 key={notif.id}
                 className="np-item"
                 onClick={() => handleNotifClick(notif.id, notif.data)}
-                style={{ background: notif.read ? "transparent" : "rgba(46,230,193,0.04)" }}
+                style={{ background: notif.read ? "transparent" : `${color}08` }}
               >
                 <div style={{
-                  width: 7, height: 7, borderRadius: "50%", marginTop: 5, flexShrink: 0,
-                  background: notif.read ? INK2 : COURT,
-                  opacity: notif.read ? 0.35 : 1,
-                  boxShadow: notif.read ? "none" : `0 0 5px ${COURT}90`,
-                }} />
+                  width: 28, height: 28, borderRadius: "50%", flexShrink: 0,
+                  background: notif.read ? "rgba(255,255,255,0.04)" : `${color}18`,
+                  border: `1px solid ${notif.read ? "rgba(255,255,255,0.06)" : color + "40"}`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  opacity: notif.read ? 0.5 : 1,
+                }}>
+                  <Icon size={13} color={notif.read ? INK2 : color} strokeWidth={2} />
+                </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{
                     display: "flex", alignItems: "baseline",
@@ -287,7 +298,7 @@ export function NotificationsDrawer({
                   </p>
                 </div>
               </div>
-            ))
+            );})
           )}
         </div>
       </div>

@@ -33,7 +33,6 @@ interface Listing {
   version: string;
   created_at: string;
 }
-}
 
 export default function DashboardMarketPage() {
   const [listings, setListings]   = useState<Listing[]>([]);
@@ -165,7 +164,7 @@ export default function DashboardMarketPage() {
       prev.filter(l => updated.some(u => u.id === l.id))
         .map(l => { const u = updated.find(u => u.id === l.id); return u ? { ...l, price_cop: u.price_cop } : l; })
         .concat(updated.filter(u => !prev.some(l => l.id === u.id))
-          .map(u => ({ id: u.id, card_id: u.card_id, set_id: u.set_id, price_cop: u.price_cop, version: u.version, created_at: new Date().toISOString() })))
+          .map(u => ({ id: u.id, card_id: u.card_id, set_id: u.set_id, price_cop: u.price_cop, currency: (u as Listing).currency ?? "COP", version: u.version, created_at: new Date().toISOString() })))
     );
   }, []);
 
