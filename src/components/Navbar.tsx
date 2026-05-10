@@ -60,9 +60,10 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
     load();
   }, []);
 
-  // Fetch unread notification count
+  // Fetch unread count + realtime subscription
   useEffect(() => {
     if (!userId) return;
+
     async function fetchUnread() {
       const { count } = await supabase
         .from("notifications")
@@ -71,7 +72,19 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
         .eq("read", false);
       setUnreadCount(count ?? 0);
     }
+
     fetchUnread();
+
+    const channel = supabase
+      .channel(`navbar-notif:${userId}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "notifications", filter: `user_id=eq.${userId}` },
+        () => { setUnreadCount(c => c + 1); }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
   }, [userId]);
 
   // Close desktop avatar dropdown on outside click
