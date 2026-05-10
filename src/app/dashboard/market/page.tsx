@@ -22,17 +22,17 @@ const DISP  = "var(--font-archivo)";
 
 const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
 
+import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
+
 interface Listing {
   id: string;
   card_id: number | string;
   set_id: string;
   price_cop: number;
+  currency: string;
   version: string;
   created_at: string;
 }
-
-function formatCOP(n: number) {
-  return n.toLocaleString("es-CO");
 }
 
 export default function DashboardMarketPage() {
@@ -81,7 +81,7 @@ export default function DashboardMarketPage() {
       const [{ data: rows }, { data: featured }, { data: wishlist }] = await Promise.all([
         supabase
           .from("market_listings")
-          .select("id, card_id, set_id, price_cop, version, created_at")
+          .select("id, card_id, set_id, price_cop, currency, version, created_at")
           .eq("user_id", user.id)
           .eq("status", "active")
           .order("created_at", { ascending: false }),
@@ -91,7 +91,7 @@ export default function DashboardMarketPage() {
 
       const listingRows = (rows ?? []) as Listing[];
       setListings(listingRows);
-      setUserListings(listingRows.map(l => ({ id: l.id, card_id: l.card_id, set_id: l.set_id, price_cop: l.price_cop, version: l.version })));
+      setUserListings(listingRows.map(l => ({ id: l.id, card_id: l.card_id, set_id: l.set_id, price_cop: l.price_cop, currency: l.currency, version: l.version })));
       if (featured) setFeaturedCards(featured as FeaturedCard[]);
       if (wishlist) setWishlistCards(wishlist as WishlistCard[]);
 
@@ -300,8 +300,8 @@ export default function DashboardMarketPage() {
                         )}
                       </div>
                       <div style={{ display: "flex", alignItems: "baseline", gap: "3px" }}>
-                        <span style={{ fontFamily: MONO, fontSize: "13px", color: COURT, fontWeight: 700 }}>${formatCOP(listing.price_cop)}</span>
-                        <span style={{ fontFamily: MONO, fontSize: "8px", color: INK2, letterSpacing: "0.08em" }}>COP</span>
+                        <span style={{ fontFamily: MONO, fontSize: "13px", color: COURT, fontWeight: 700 }}>{CURRENCY_SYMBOL[listing.currency] ?? "$"}{formatPrice(listing.price_cop, listing.currency)}</span>
+                        <span style={{ fontFamily: MONO, fontSize: "8px", color: INK2, letterSpacing: "0.08em" }}>{listing.currency}</span>
                       </div>
                     </div>
 

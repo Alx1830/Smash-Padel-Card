@@ -14,6 +14,7 @@ import {
 } from "@/components/CardDetailModal";
 import { Plus, Search, ChevronDown, ChevronUp, BadgeDollarSign, Star } from "lucide-react";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
+import { getCurrencyForCountry } from "@/lib/currency";
 
 const CardDetailModal = dynamic(
   () => import("@/components/CardDetailModal").then(m => ({ default: m.CardDetailModal })),
@@ -248,8 +249,14 @@ function SellPopup({ card, setId, userId, onPublished, onClose }: {
   const supabase = createClient();
   const [price, setPrice] = useState("");
   const [state, setState] = useState<"idle" | "saving" | "done">("idle");
+  const [userCurrency, setUserCurrency] = useState("COP");
   const vColor = getVersionColor(card.version);
   const vLabel = getVersionLabel(card.version);
+
+  useEffect(() => {
+    supabase.from("players").select("pais").eq("user_id", userId).single()
+      .then(({ data }) => { if (data?.pais) setUserCurrency(getCurrencyForCountry(data.pais)); });
+  }, [userId]);
 
   async function publish() {
     const p = parseInt(price.replace(/\D/g, ""), 10);
@@ -257,8 +264,8 @@ function SellPopup({ card, setId, userId, onPublished, onClose }: {
     setState("saving");
     const { data, error } = await supabase.from("market_listings").insert({
       user_id: userId, card_id: card.card_number, set_id: setId,
-      price_cop: p, version: card.version, status: "active",
-    }).select("id, card_id, set_id, price_cop, version").single();
+      price_cop: p, version: card.version, status: "active", currency: userCurrency,
+    }).select("id, card_id, set_id, price_cop, version, currency").single();
     if (!error && data) onPublished(data as UserListing);
     setState("done");
     setTimeout(onClose, 1500);
@@ -290,7 +297,7 @@ function SellPopup({ card, setId, userId, onPublished, onClose }: {
             <p style={{ fontFamily: DISP, fontSize: "16px", color: INK0, fontWeight: 700, margin: "0 0 4px" }}>{card.name}</p>
             <p style={{ fontFamily: MONO, fontSize: "10px", color: vColor, margin: "0 0 20px", letterSpacing: "0.1em" }}>{vLabel}</p>
             <label style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px" }}>
-              Precio en COP
+              Precio en {userCurrency}
             </label>
             <input
               type="text" inputMode="numeric" placeholder="Ej: 15000"

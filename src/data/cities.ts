@@ -108,6 +108,30 @@ export const CITIES_BY_COUNTRY: Record<string, string[]> = {
     "San Cristóbal","Cumaná","Barinas","Ciudad Bolívar","Mérida","Cabimas","Los Teques",
     "Coro","Punto Fijo","Guanare","Acarigua","El Tigre","La Victoria","Turmero","Petare",
   ],
+  "Belice": [
+    "Ciudad de Belice","San Ignacio","Belmopán","Orange Walk","Dangriga","Corozal","Punta Gorda",
+  ],
+  "Bahamas": [
+    "Nassau","Freeport","West End","Cooper's Town","Marsh Harbour","Andros Town",
+  ],
+  "Guyana": [
+    "Georgetown","Linden","New Amsterdam","Anna Regina","Bartica","Lethem","Mabaruma",
+  ],
+  "Haití": [
+    "Puerto Príncipe","Cap-Haïtien","Gonaïves","Les Cayes","Delmas","Pétionville","Saint-Marc",
+  ],
+  "Jamaica": [
+    "Kingston","Spanish Town","Portmore","Montego Bay","Mandeville","May Pen","Old Harbour",
+  ],
+  "Puerto Rico": [
+    "San Juan","Bayamón","Carolina","Ponce","Guaynabo","Caguas","Arecibo","Toa Baja","Mayagüez",
+  ],
+  "Surinam": [
+    "Paramaribo","Lelydorp","Nieuw Nickerie","Moengo","Nieuw Amsterdam","Mariënburg",
+  ],
+  "Trinidad y Tobago": [
+    "Puerto España","San Fernando","Chaguanas","Arima","Point Fortin","Scarborough",
+  ],
   "Alemania": [
     "Berlín","Hamburgo","Múnich","Colonia","Fráncfort","Stuttgart","Düsseldorf","Dortmund",
     "Essen","Leipzig","Bremen","Dresde","Hannover","Núremberg","Duisburgo",

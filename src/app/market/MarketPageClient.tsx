@@ -27,15 +27,14 @@ const DISP  = "var(--font-archivo)";
 
 const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
 
-function formatCOP(n: number) {
-  return n.toLocaleString("es-CO");
-}
+import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 
 interface Listing {
   id: string;
   card_id: number;
   set_id: string;
   price_cop: number;
+  currency: string;
   version: string;
   created_at: string;
   user_id: string;
@@ -374,7 +373,7 @@ export function MarketPageClient({
 
       let q = supabase
         .from("market_listings")
-        .select("id, card_id, set_id, price_cop, version, created_at, user_id", { count: "exact" })
+        .select("id, card_id, set_id, price_cop, currency, version, created_at, user_id", { count: "exact" })
         .eq("status", "active")
         .order("created_at", { ascending: false })
         .range(from, to);
@@ -416,7 +415,7 @@ export function MarketPageClient({
       `Hola! Vi tu publicación en FaceBinder y me interesa comprar la carta:\n\n` +
       `• ${card?.name ?? ""} ${getVersionLabel(listing.version)}\n` +
       `• Set ${setInfo?.name ?? listing.set_id}\n` +
-      `• $${formatCOP(listing.price_cop)} COP\n\n` +
+      `• ${CURRENCY_SYMBOL[listing.currency] ?? "$"}${formatPrice(listing.price_cop, listing.currency)} ${listing.currency}\n\n` +
       `¿Sigue disponible?`
     );
     return `https://wa.me/${number}?text=${text}`;
@@ -671,8 +670,8 @@ export function MarketPageClient({
                           )}
                         </div>
                         <div style={{ display: "flex", alignItems: "baseline", gap: "3px" }}>
-                          <span style={{ fontFamily: MONO, fontSize: "15px", color: COURT, fontWeight: 700 }}>${formatCOP(listing.price_cop)}</span>
-                          <span style={{ fontFamily: MONO, fontSize: "8px", color: INK2, letterSpacing: "0.08em" }}>COP</span>
+                          <span style={{ fontFamily: MONO, fontSize: "15px", color: COURT, fontWeight: 700 }}>{CURRENCY_SYMBOL[listing.currency] ?? "$"}{formatPrice(listing.price_cop, listing.currency)}</span>
+                          <span style={{ fontFamily: MONO, fontSize: "8px", color: INK2, letterSpacing: "0.08em" }}>{listing.currency}</span>
                         </div>
                       </div>
 

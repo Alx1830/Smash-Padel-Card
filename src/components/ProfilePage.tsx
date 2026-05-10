@@ -9,6 +9,7 @@ import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionEffect, getVersionColor } from "@/data/pokemon-cards-meta";
 import type { InventoryMap, FeaturedCard as FeaturedCardModal, WishlistCard as WishlistCardModal, UserListing } from "@/components/CardDetailModal";
+import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import dynamic from "next/dynamic";
 const CardDetailModal = dynamic(
   () => import("@/components/CardDetailModal").then(m => ({ default: m.CardDetailModal })),
@@ -828,7 +829,7 @@ function WishlistSlider({
 
 /* ── Market Listings Slider ─────────────────────────────────── */
 function MarketListingsSlider({ profileUserId, username }: { profileUserId?: string; username?: string }) {
-  const [listings, setListings] = useState<{ id: string; card_id: number | string; set_id: string; price_cop: number; version: string }[]>([]);
+  const [listings, setListings] = useState<{ id: string; card_id: number | string; set_id: string; price_cop: number; currency: string; version: string }[]>([]);
   const [loaded,   setLoaded]   = useState(false);
   const [offset,   setOffset]   = useState(0);
   const [animated, setAnimated] = useState(true);
@@ -840,7 +841,7 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
       const supabase = createClient();
       const { data } = await supabase
         .from("market_listings")
-        .select("id, card_id, set_id, price_cop, version")
+        .select("id, card_id, set_id, price_cop, currency, version")
         .eq("user_id", profileUserId)
         .eq("status", "active")
         .order("created_at", { ascending: false })
@@ -876,7 +877,6 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
     return () => clearInterval(t);
   }, [resolved.length]);
 
-  function formatCOP(n: number) { return n.toLocaleString("es-CO"); }
 
   const VISIBLE  = 4;
   const CARD_GAP = 10;
@@ -953,7 +953,7 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
                       <div style={{ fontFamily: MONO_C, fontSize: "9px", color: INK0_C, fontWeight: 600, marginBottom: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                         #{String(card.card_number).padStart(3, "0")} {card.name}
                       </div>
-                      <div style={{ fontFamily: MONO_C, fontSize: "9px", color: GREEN, fontWeight: 700 }}>${formatCOP(listing.price_cop)} COP</div>
+                      <div style={{ fontFamily: MONO_C, fontSize: "9px", color: GREEN, fontWeight: 700 }}>{CURRENCY_SYMBOL[listing.currency] ?? "$"}{formatPrice(listing.price_cop, listing.currency)} {listing.currency}</div>
                     </div>
                   </div>
                 );

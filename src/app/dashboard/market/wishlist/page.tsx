@@ -81,7 +81,7 @@ export default function DashboardWishlistPage() {
       const [{ data: wishlist }, { data: featured }, { data: listings }] = await Promise.all([
         supabase.from("card_wishlist").select("card_id, set_id").eq("user_id", user.id),
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", user.id),
-        supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", user.id).eq("status", "active"),
+        supabase.from("market_listings").select("id, card_id, set_id, price_cop, currency, version").eq("user_id", user.id).eq("status", "active"),
       ]);
 
       const wishRows = (wishlist ?? []) as WishlistRow[];

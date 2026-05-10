@@ -21,17 +21,18 @@ const BG0   = "#05070d";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
+import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
+
 interface Listing {
   id: string;
   card_id: number | string;
   set_id: string;
   price_cop: number;
+  currency: string;
   version: string;
   created_at: string;
 }
 interface SetInfo { id: string; name: string; logo: string; }
-
-function formatCOP(n: number) { return n.toLocaleString("es-CO"); }
 
 export function UserMarketPageClient({
   username, pais, ciudad,
@@ -118,7 +119,7 @@ export function UserMarketPageClient({
       `Hola! Vi tu perfil en FaceBinder y me interesa comprar:\n\n` +
       `• ${card?.name ?? ""} ${getVersionLabel(listing.version)}\n` +
       `• Set: ${set?.name ?? listing.set_id}\n` +
-      `• $${formatCOP(listing.price_cop)} COP\n\n¿Sigue disponible?`
+      `• ${CURRENCY_SYMBOL[listing.currency] ?? "$"}${formatPrice(listing.price_cop, listing.currency)} ${listing.currency}\n\n¿Sigue disponible?`
     );
     return `https://wa.me/${number}?text=${text}`;
   }
@@ -301,8 +302,8 @@ export function UserMarketPageClient({
                             <Image src={set.logo} alt={set.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} />
                           </div>
                           <div style={{ display: "flex", alignItems: "baseline", gap: "3px" }}>
-                            <span style={{ fontFamily: MONO, fontSize: "15px", color: COURT, fontWeight: 700 }}>${formatCOP(listing.price_cop)}</span>
-                            <span style={{ fontFamily: MONO, fontSize: "8px", color: INK2, letterSpacing: "0.08em" }}>COP</span>
+                            <span style={{ fontFamily: MONO, fontSize: "15px", color: COURT, fontWeight: 700 }}>{CURRENCY_SYMBOL[listing.currency] ?? "$"}{formatPrice(listing.price_cop, listing.currency)}</span>
+                            <span style={{ fontFamily: MONO, fontSize: "8px", color: INK2, letterSpacing: "0.08em" }}>{listing.currency}</span>
                           </div>
                         </div>
 

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { getVersionLabel, getVersionEffect, getVersionColor, type PokemonCard } from "@/data/pokemon-cards-meta";
+import { getCurrencyForCountry, formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 
 export const COURT = "#2ee6c1";
 export const INK0  = "#f5f7fb";
@@ -34,7 +35,7 @@ export const ALL_SETS_FLAT = POKEMON_SERIES.flatMap(s => s.sets);
 export type InventoryMap = Record<string, number>;
 export type FeaturedCard  = { card_id: number | string; set_id: string };
 export type WishlistCard  = { card_id: number | string; set_id: string };
-export type UserListing   = { id: string; card_id: number | string; set_id: string; price_cop: number; version: string };
+export type UserListing   = { id: string; card_id: number | string; set_id: string; price_cop: number; version: string; currency?: string };
 
 export function invKey(cardId: number | string, version: string): string {
   return `${cardId}:${version}`;
@@ -286,8 +287,15 @@ export function CardDetailModal({
   const [sellingMode, setSellingMode] = useState(false);
   const [priceInput, setPriceInput]   = useState("");
   const [savingListing, setSavingListing] = useState(false);
+  const [userCurrency, setUserCurrency] = useState("COP");
 
-  function formatCOP(raw: string): string {
+  useEffect(() => {
+    if (!userId) return;
+    createClient().from("players").select("pais").eq("user_id", userId).single()
+      .then(({ data }) => { if (data?.pais) setUserCurrency(getCurrencyForCountry(data.pais)); });
+  }, [userId]);
+
+  function formatInput(raw: string): string {
     const digits = raw.replace(/\D/g, "");
     if (!digits) return "";
     return Number(digits).toLocaleString("es-CO");
@@ -304,9 +312,10 @@ export function CardDetailModal({
       card_id: card.card_number,
       set_id: setId,
       price_cop: price,
+      currency: userCurrency,
       version: card.version,
       status: "active",
-    }).select("id, card_id, set_id, price_cop, version").single();
+    }).select("id, card_id, set_id, price_cop, version, currency").single();
     if (error) {
       console.error("[sell] insert error:", error.message);
       setSavingListing(false);
@@ -573,19 +582,19 @@ export function CardDetailModal({
                 {sellingMode ? (
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                     <label style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: DARK2 }}>
-                      Precio en COP
+                      Precio en {userCurrency}
                     </label>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "rgba(5,7,13,0.06)", border: `1px solid ${BORDER_CLR}`, borderRadius: "8px", padding: "8px 12px" }}>
-                      <span style={{ fontFamily: MONO, fontSize: "12px", color: DARK2, flexShrink: 0 }}>$</span>
+                      <span style={{ fontFamily: MONO, fontSize: "12px", color: DARK2, flexShrink: 0 }}>{CURRENCY_SYMBOL[userCurrency] ?? "$"}</span>
                       <input
                         type="text"
                         inputMode="numeric"
                         value={priceInput}
-                        onChange={e => setPriceInput(formatCOP(e.target.value))}
+                        onChange={e => setPriceInput(formatInput(e.target.value))}
                         placeholder="0"
                         style={{ flex: 1, background: "none", border: "none", outline: "none", fontFamily: MONO, fontSize: "14px", color: DARK, fontWeight: 600 }}
                       />
-                      <span style={{ fontFamily: MONO, fontSize: "10px", color: DARK2, flexShrink: 0 }}>COP</span>
+                      <span style={{ fontFamily: MONO, fontSize: "10px", color: DARK2, flexShrink: 0 }}>{userCurrency}</span>
                     </div>
                     <div style={{ display: "flex", gap: "8px" }}>
                       <button
@@ -633,7 +642,7 @@ export function CardDetailModal({
                               {card.name}
                             </span>
                             <span style={{ fontFamily: MONO, fontSize: "11px", color: "#15a98e", fontWeight: 700, whiteSpace: "nowrap" }}>
-                              ${Number(listing.price_cop).toLocaleString("es-CO")}
+                              {CURRENCY_SYMBOL[listing.currency ?? userCurrency] ?? "$"}{formatPrice(listing.price_cop, listing.currency ?? userCurrency)} {listing.currency ?? userCurrency}
                             </span>
                             <button
                               onClick={async () => {
