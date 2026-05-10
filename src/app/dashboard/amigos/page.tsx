@@ -48,12 +48,41 @@ export default async function AmigosPage() {
       <style>{`
         .page-container { padding: 24px; }
         @media (min-width: 768px) { .page-container { padding: 48px; } }
-        .amigos-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
-        .amigos-grid a { display: flex; justify-content: center; }
-        .amigos-card-wrap { transform: scale(0.52); transform-origin: top center; margin-bottom: -200px; }
+
+        .amigos-grid {
+          display: grid;
+          grid-template-columns: repeat(6, 1fr);
+          gap: 12px;
+        }
+        /* Each cell controls the real layout dimensions */
+        .amigos-item {
+          width: 100%;
+          aspect-ratio: 260 / 416;
+          position: relative;
+          overflow: hidden;
+          border-radius: 16px;
+          text-decoration: none;
+          display: block;
+        }
+        /* Card sits at top-left and scales to fill the cell */
+        .amigos-card-wrap {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 260px;
+          height: 416px;
+          transform-origin: top left;
+          transform: scale(0.82);
+        }
+        @media (min-width: 1024px) and (max-width: 1279px) {
+          .amigos-card-wrap { transform: scale(0.68); }
+        }
         @media (max-width: 1023px) {
           .amigos-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-          .amigos-card-wrap { transform: scale(0.63); transform-origin: top center; margin-bottom: -154px; }
+          .amigos-card-wrap { transform: scale(0.64); }
+        }
+        @media (max-width: 390px) {
+          .amigos-card-wrap { transform: scale(0.57); }
         }
       `}</style>
 
@@ -87,7 +116,7 @@ export default async function AmigosPage() {
       ) : (
         <div className="amigos-grid">
           {players.map(p => (
-            <Link key={p.username} href={`/${p.username}`} style={{ textDecoration: "none" }}>
+            <Link key={p.username} href={`/${p.username}`} className="amigos-item">
               <div className="amigos-card-wrap">
                 <PlayerCard3D
                   username={p.username}
