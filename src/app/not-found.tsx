@@ -103,8 +103,13 @@ export default function NotFound() {
             display: "inline-block",
             animation: "dot-pulse 2s ease-in-out infinite",
           }} />
-          <span style={{ fontFamily: DISP, fontSize: "13px", letterSpacing: "0.1em", color: INK0, textTransform: "uppercase" }}>
-            SMASH PADEL CARD
+          <span style={{
+            fontFamily: DISP, fontSize: "17px", fontWeight: 900, letterSpacing: "0.02em",
+            background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}>
+            FaceBinder
           </span>
         </div>
 
@@ -164,7 +169,7 @@ export default function NotFound() {
           transition={{ duration: 0.5, delay: 0.3 }}
           style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}
         >
-          <Link href="/" style={{
+          <Link href="/dashboard" style={{
             display: "inline-flex", alignItems: "center", gap: "8px",
             padding: "11px 24px", borderRadius: "10px",
             background: `linear-gradient(90deg, ${COURT}, ${BALL})`,
@@ -175,10 +180,10 @@ export default function NotFound() {
             transition: "opacity 0.2s",
           }}>
             <Home size={15} />
-            Ir al inicio
+            Ir al dashboard
           </Link>
 
-          <Link href="/login" style={{
+          <Link href="/market" style={{
             display: "inline-flex", alignItems: "center", gap: "8px",
             padding: "11px 24px", borderRadius: "10px",
             background: "transparent",
@@ -189,7 +194,7 @@ export default function NotFound() {
             transition: "border-color 0.2s, color 0.2s",
           }}>
             <Compass size={15} />
-            Iniciar sesión
+            Ver market
           </Link>
         </motion.div>
 

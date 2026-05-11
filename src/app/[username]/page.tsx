@@ -6,7 +6,8 @@ import { MobileTabBar } from "@/components/MobileTabBar";
 import { notFound } from "next/navigation";
 import { SET_CARD_COUNT } from "@/data/pokemon-cards";
 
-export const revalidate = 3600;
+export const revalidate = 300;
+export const dynamicParams = true;
 
 export async function generateMetadata({
   params,
