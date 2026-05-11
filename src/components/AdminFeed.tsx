@@ -368,23 +368,8 @@ export function AdminFeed({ currentUserId, currentUsername, isAdmin = false }: {
   const supabase = createClient();
   const [posts,   setPosts]   = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    if (sessionStorage.getItem("last_news_dismissed") === "1") {
-      setVisible(false);
-      setLoading(false);
-      return;
-    }
-  }, []);
-
-  function handleDismiss() {
-    sessionStorage.setItem("last_news_dismissed", "1");
-    setVisible(false);
-  }
-
-  useEffect(() => {
-    if (!visible && !isAdmin) return;
     (async () => {
       /* Fetch admin user_id (busca el primer usuario con role = 'admin') */
       const { data: adminProf } = await supabase
@@ -421,9 +406,6 @@ export function AdminFeed({ currentUserId, currentUsername, isAdmin = false }: {
     setPosts(prev => prev.filter(p => p.id !== id));
   }
 
-  // Si no es admin y fue cerrado, no renderizar nada
-  if (!isAdmin && !visible) return null;
-
   return (
     <section>
       <style>{`
@@ -441,36 +423,6 @@ export function AdminFeed({ currentUserId, currentUsername, isAdmin = false }: {
         [contenteditable] iframe { width: 100%; aspect-ratio: 16/9; border-radius: 10px; display: block; margin: 12px 0; border: none; }
         [contenteditable] video { max-width: 100%; border-radius: 10px; display: block; margin: 12px 0; }
       `}</style>
-
-      {/* Section header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <span style={{ width: "20px", height: "1px", background: COURT, display: "inline-block" }} />
-          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em", textTransform: "uppercase", color: COURT }}>Last News</span>
-        </div>
-        {!isAdmin && (
-          <button
-            onClick={handleDismiss}
-            title="Cerrar"
-            style={{
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "8px",
-              color: INK2,
-              cursor: "pointer",
-              fontFamily: MONO,
-              fontSize: "14px",
-              lineHeight: 1,
-              padding: "4px 9px",
-              transition: "all 0.15s",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,79,79,0.12)"; e.currentTarget.style.color = "#ff6b6b"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.color = INK2; }}
-          >
-            ✕
-          </button>
-        )}
-      </div>
 
       {/* Composer (solo admin) */}
       {isAdmin && (

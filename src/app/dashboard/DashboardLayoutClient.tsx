@@ -148,7 +148,8 @@ export function DashboardLayoutClient({
   }, []);
 
   async function handleLogout() {
-    await fetch("/api/auth/signout", { method: "POST" });
+    const supabase = createClient();
+    await supabase.auth.signOut();
     window.location.href = "/";
   }
 
