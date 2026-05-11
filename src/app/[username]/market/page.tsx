@@ -61,7 +61,7 @@ export default async function UserMarketPage({
   const [{ data: player }, { data: { user } }] = await Promise.all([
     adminClient2
       .from("players")
-      .select("user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, energia_favorita, pokemon_favorito, edad, set_favorito, whatsapp_indicativo, whatsapp_numero")
+      .select("user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, energia_favorita, pokemon_favorito, edad, set_favorito, whatsapp_indicativo, whatsapp_numero, activo")
       .ilike("username", username)
       .single(),
     supabase.auth.getUser(),
