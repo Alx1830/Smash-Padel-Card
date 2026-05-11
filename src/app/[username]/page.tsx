@@ -50,10 +50,12 @@ export default async function JugadorPage({
   const { username } = await params;
   const supabase = await createClient();
 
-  const [{ data }, { data: { user } }] = await Promise.all([
+  const [{ data, error: playerError }, { data: { user } }] = await Promise.all([
     supabase.from("players").select("*").ilike("username", username).single(),
     supabase.auth.getUser(),
   ]);
+
+  console.log(`[profile] username="${username}" data=${JSON.stringify(data?.username)} error=${JSON.stringify(playerError)}`);
 
   if (!data) notFound();
 
