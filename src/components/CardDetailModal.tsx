@@ -288,11 +288,15 @@ export function CardDetailModal({
   const [priceInput, setPriceInput]   = useState("");
   const [savingListing, setSavingListing] = useState(false);
   const [userCurrency, setUserCurrency] = useState("COP");
+  const [hasPhoto, setHasPhoto] = useState(true);
 
   useEffect(() => {
     if (!userId) return;
-    createClient().from("players").select("pais").eq("user_id", userId).single()
-      .then(({ data }) => { if (data?.pais) setUserCurrency(getCurrencyForCountry(data.pais)); });
+    createClient().from("players").select("pais, photo_url").eq("user_id", userId).single()
+      .then(({ data }) => {
+        if (data?.pais) setUserCurrency(getCurrencyForCountry(data.pais));
+        setHasPhoto(!!data?.photo_url);
+      });
   }, [userId]);
 
   function formatInput(raw: string): string {
@@ -508,14 +512,14 @@ export function CardDetailModal({
                 })()}
                 <button
                   onClick={handleToggleFeatured}
-                  disabled={featuring || !canFeature}
+                  disabled={featuring || !canFeature || !hasPhoto}
                   style={{
                     flex: 1, padding: "12px 8px",
                     fontFamily: MONO, fontSize: "11px", letterSpacing: "0.16em",
                     textTransform: "uppercase", borderRadius: "10px",
-                    cursor: featuring || !canFeature ? "default" : "pointer",
+                    cursor: featuring || !canFeature || !hasPhoto ? "default" : "pointer",
                     transition: "all 0.2s",
-                    opacity: featuring ? 0.6 : !canFeature ? 0.4 : 1,
+                    opacity: featuring ? 0.6 : (!canFeature || !hasPhoto) ? 0.4 : 1,
                     background: isFeatured ? "#2ee6c1" : "rgba(46,230,193,0.1)",
                     color: isFeatured ? "#05070d" : "#0d6b5e",
                     border: "1.5px solid #2ee6c1",
@@ -545,17 +549,17 @@ export function CardDetailModal({
                   {isWanted ? "✓ Buscando" : "Buscando"}
                 </button>
                 <button
-                  onClick={() => canSell && setSellingMode(true)}
-                  disabled={!canSell}
+                  onClick={() => canSell && hasPhoto && setSellingMode(true)}
+                  disabled={!canSell || !hasPhoto}
                   style={{
                     flex: 1, padding: "12px 8px",
                     fontFamily: MONO, fontSize: "11px", letterSpacing: "0.16em",
                     textTransform: "uppercase", borderRadius: "10px",
-                    cursor: canSell ? "pointer" : "default",
+                    cursor: canSell && hasPhoto ? "pointer" : "default",
                     transition: "all 0.2s",
-                    opacity: canSell ? 1 : 0.4,
-                    background: canSell ? "#2ee696" : "rgba(46,230,150,0.1)",
-                    color: canSell ? "#0a0a0a" : "#0a5c30",
+                    opacity: canSell && hasPhoto ? 1 : 0.4,
+                    background: canSell && hasPhoto ? "#2ee696" : "rgba(46,230,150,0.1)",
+                    color: canSell && hasPhoto ? "#0a0a0a" : "#0a5c30",
                     border: "1.5px solid #2ee696",
                   }}
                 >
@@ -563,6 +567,11 @@ export function CardDetailModal({
                 </button>
               </div>
 
+              {!hasPhoto && (
+                <p style={{ fontFamily: MONO, fontSize: "10px", color: "#f59e0b", margin: "8px 0 0", letterSpacing: "0.08em", textAlign: "center" }}>
+                  Necesitas una <a href="/dashboard/perfil" style={{ color: "#f59e0b", textDecoration: "underline" }}>foto de perfil</a> para destacar cartas o publicarlas en venta.
+                </p>
+              )}
               {!canFeature && !hasInInv && (
                 <p style={{ fontFamily: MONO, fontSize: "10px", color: "#d95555", margin: "8px 0 0", letterSpacing: "0.08em", textAlign: "center" }}>
                   Necesitas tener esta carta en tu inventario para destacarla.
