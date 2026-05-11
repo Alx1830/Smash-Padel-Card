@@ -331,9 +331,16 @@ export default function DashboardHome() {
           .stats-grid { grid-template-columns: 1fr 1fr; }
         }
         .feed-wrap {
-          max-width: 620px;
-          margin: 0 auto;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 24px;
           width: 100%;
+          align-items: start;
+        }
+        @media (max-width: 767px) {
+          .feed-wrap {
+            grid-template-columns: 1fr;
+          }
         }
       `}</style>
 

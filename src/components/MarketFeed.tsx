@@ -85,7 +85,7 @@ function SkeletonPost() {
         </div>
       </div>
       <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
-        <div className="mf-sk" style={{ width: 56, height: 90, borderRadius: 8, flexShrink: 0 }} />
+        <div className="mf-sk" style={{ width: 112, height: 180, borderRadius: 8, flexShrink: 0 }} />
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
           <div className="mf-sk" style={{ height: 10, width: "50%", borderRadius: 6 }} />
           <div className="mf-sk" style={{ height: 10, width: "35%", borderRadius: 6 }} />
@@ -157,7 +157,7 @@ function PostCard({ item }: { item: FeedItem }) {
       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
         {/* Card image */}
         <div style={{
-          width: 56, height: 90, borderRadius: 8, overflow: "hidden",
+          width: 112, height: 180, borderRadius: 8, overflow: "hidden",
           flexShrink: 0, position: "relative", background: "rgba(255,255,255,0.04)",
           border: "1px solid rgba(255,255,255,0.08)",
         }}>
