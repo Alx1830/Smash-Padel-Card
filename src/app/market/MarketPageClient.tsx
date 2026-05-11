@@ -261,8 +261,9 @@ export function MarketPageClient({
   const [listings, setListings]         = useState<Listing[]>([]);
   const [loading, setLoading]           = useState(false);
   const [page, setPage]                 = useState(1);
-  const [total, setTotal]               = useState(0);
+  const [hasMore, setHasMore]           = useState(true);
   const [previewCard, setPreviewCard]   = useState<PokemonCard | null>(null);
+  const sentinelRef                     = useRef<HTMLDivElement>(null);
   const [filterOpen, setFilterOpen]     = useState(false);
   const [marketOpen, setMarketOpen]     = useState(false);
   const [authMsg,    setAuthMsg]        = useState<string | null>(null);
@@ -350,7 +351,8 @@ export function MarketPageClient({
     })();
   }, [defaultPais]);
 
-  useEffect(() => { setPage(1); }, [selectedPais]);
+  // Reset on country change
+  useEffect(() => { setPage(1); setListings([]); setHasMore(true); }, [selectedPais]);
 
   useEffect(() => {
     (async () => {
@@ -367,22 +369,23 @@ export function MarketPageClient({
           .eq("pais", selectedPais);
         userIds = (profRows ?? []).map((r: any) => r.user_id);
         if (userIds.length === 0) {
-          setListings([]); setTotal(0); setLoading(false); return;
+          setListings([]); setHasMore(false); setLoading(false); return;
         }
       }
 
       let q = supabase
         .from("market_listings")
-        .select("id, card_id, set_id, price_cop, currency, version, created_at, user_id", { count: "exact" })
+        .select("id, card_id, set_id, price_cop, currency, version, created_at, user_id")
         .eq("status", "active")
         .order("created_at", { ascending: false })
         .range(from, to);
 
       if (userIds) q = (q as any).in("user_id", userIds);
 
-      const { data: rawListings, count } = await q;
+      const { data: rawListings } = await q;
       if (!rawListings || rawListings.length === 0) {
-        setListings([]); setTotal(count ?? 0); setLoading(false); return;
+        if (page === 1) setListings([]);
+        setHasMore(false); setLoading(false); return;
       }
 
       const uids = [...new Set(rawListings.map((r: any) => r.user_id))];
@@ -396,13 +399,24 @@ export function MarketPageClient({
       const newListings = rawListings.map((r: any) => ({ ...r, players: playerMap[r.user_id] ?? null })) as Listing[];
       const setIds = [...new Set(newListings.map(l => l.set_id))];
       await loadManySets(setIds);
-      setListings(newListings);
-      setTotal(count ?? 0);
+      setListings(prev => page === 1 ? newListings : [...prev, ...newListings]);
+      setHasMore(newListings.length === PAGE_SIZE);
       setLoading(false);
     })();
   }, [selectedPais, page]);
 
-  const totalPages = Math.ceil(total / PAGE_SIZE);
+  // Infinite scroll — observe sentinel
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && !loading && hasMore) {
+        setPage(p => p + 1);
+      }
+    }, { rootMargin: "200px" });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [loading, hasMore]);
 
   function buildWhatsApp(listing: Listing): string {
     const p = listing.players;
@@ -577,7 +591,7 @@ export function MarketPageClient({
 
           {/* ── GRID CARDS ── */}
           <div className="mkt-grid-area">
-        {loading ? (
+        {loading && listings.length === 0 ? (
           <div style={{ padding: "80px 0", textAlign: "center", fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em" }}>Cargando...</div>
         ) : listings.length === 0 ? (
           <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "80px 40px", textAlign: "center" }}>
@@ -737,20 +751,16 @@ export function MarketPageClient({
               })}
             </div>
 
-            {/* Paginación */}
-            {totalPages > 1 && (
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", marginTop: "48px" }}>
-                <button onClick={() => setPage(p => p - 1)} disabled={page <= 1}
-                  style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.12em", padding: "8px 16px", borderRadius: "8px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: page <= 1 ? INK2 : INK0, cursor: page <= 1 ? "default" : "pointer", opacity: page <= 1 ? 0.4 : 1 }}>
-                  ← Anterior
-                </button>
-                <span style={{ fontFamily: MONO, fontSize: "11px", color: INK2, padding: "8px 12px", letterSpacing: "0.1em" }}>
-                  {page} / {totalPages}
-                </span>
-                <button onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}
-                  style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.12em", padding: "8px 16px", borderRadius: "8px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: page >= totalPages ? INK2 : INK0, cursor: page >= totalPages ? "default" : "pointer", opacity: page >= totalPages ? 0.4 : 1 }}>
-                  Siguiente →
-                </button>
+            {/* Sentinel para infinite scroll */}
+            <div ref={sentinelRef} style={{ height: "1px" }} />
+            {loading && (
+              <div style={{ padding: "32px 0", textAlign: "center", fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.1em" }}>
+                Cargando más...
+              </div>
+            )}
+            {!hasMore && listings.length > 0 && (
+              <div style={{ padding: "32px 0", textAlign: "center", fontFamily: MONO, fontSize: "10px", color: "rgba(122,130,152,0.4)", letterSpacing: "0.12em" }}>
+                · FIN DEL MARKET ·
               </div>
             )}
           </>
