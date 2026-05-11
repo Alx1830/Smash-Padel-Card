@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -12,7 +12,7 @@ const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const router       = useRouter();
   const searchParams = useSearchParams();
   const supabase     = createClient();
@@ -67,6 +67,77 @@ export default function ResetPasswordPage() {
   };
 
   return (
+    <>
+      {done ? (
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: "40px", marginBottom: "16px" }}>✅</div>
+          <p style={{ fontFamily: MONO, fontSize: "13px", color: INK0, marginBottom: "8px" }}>¡Contraseña actualizada!</p>
+          <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, lineHeight: 1.7 }}>
+            Redirigiendo a tu dashboard...
+          </p>
+        </div>
+      ) : !ready ? (
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: "40px", marginBottom: "16px" }}>⏳</div>
+          <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, lineHeight: 1.7 }}>
+            {error || "Verificando enlace... Si llevas más de 10 segundos aquí, el enlace puede haber expirado."}
+          </p>
+          <button onClick={() => router.push("/login")}
+            style={{ marginTop: "16px", fontFamily: MONO, fontSize: "12px", color: COURT, background: "none", border: "none", cursor: "pointer", letterSpacing: "0.08em" }}>
+            ← Volver al login
+          </button>
+        </div>
+      ) : (
+        <>
+          <h2 style={{ fontFamily: DISP, fontSize: "18px", color: INK0, margin: "0 0 8px", textAlign: "center" }}>Nueva contraseña</h2>
+          <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, lineHeight: 1.7, margin: "0 0 24px", textAlign: "center" }}>
+            Elige una contraseña segura para tu cuenta.
+          </p>
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <input
+              className="rp-input"
+              type="password"
+              placeholder="Nueva contraseña"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              minLength={6}
+              style={inputStyle}
+            />
+            <input
+              className="rp-input"
+              type="password"
+              placeholder="Confirmar contraseña"
+              value={confirm}
+              onChange={e => setConfirm(e.target.value)}
+              required
+              minLength={6}
+              style={inputStyle}
+            />
+            {error && <p style={{ fontFamily: MONO, fontSize: "11px", color: "#ff4f4f", margin: 0 }}>✕ {error}</p>}
+            <button
+              type="submit"
+              disabled={loading || !password || !confirm}
+              style={{
+                width: "100%", padding: "12px 20px", borderRadius: "10px",
+                background: loading || !password || !confirm ? "rgba(255,255,255,0.08)" : `linear-gradient(90deg, ${COURT}, ${BALL})`,
+                border: "none", cursor: loading || !password || !confirm ? "not-allowed" : "pointer",
+                fontFamily: MONO, fontSize: "13px", fontWeight: 700,
+                color: loading || !password || !confirm ? INK2 : BG0,
+                letterSpacing: "0.05em", transition: "all 0.2s", marginTop: "4px",
+              }}
+            >
+              {loading ? "Guardando..." : "Guardar contraseña →"}
+            </button>
+          </form>
+        </>
+      )}
+    </>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
     <main style={{ minHeight: "100vh", background: BG0, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
       <style>{`.rp-input:focus { border-color: ${COURT}80 !important; }`}</style>
 
@@ -83,7 +154,6 @@ export default function ResetPasswordPage() {
         backdropFilter: "blur(20px)",
         boxShadow: "0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(46,230,193,0.1)",
       }}>
-
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: "28px" }}>
           <span style={{ fontFamily: DISP, fontSize: "22px", background: `linear-gradient(135deg, #4ff0ff, ${COURT}, ${BALL})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", userSelect: "none" }}>
@@ -91,70 +161,14 @@ export default function ResetPasswordPage() {
           </span>
         </div>
 
-        {done ? (
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "40px", marginBottom: "16px" }}>✅</div>
-            <p style={{ fontFamily: MONO, fontSize: "13px", color: INK0, marginBottom: "8px" }}>¡Contraseña actualizada!</p>
-            <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, lineHeight: 1.7 }}>
-              Redirigiendo a tu dashboard...
-            </p>
-          </div>
-        ) : !ready ? (
+        <Suspense fallback={
           <div style={{ textAlign: "center" }}>
             <div style={{ fontSize: "40px", marginBottom: "16px" }}>⏳</div>
-            <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, lineHeight: 1.7 }}>
-              Verificando enlace... Si llevas más de 10 segundos aquí, el enlace puede haber expirado.
-            </p>
-            <button onClick={() => router.push("/login")}
-              style={{ marginTop: "16px", fontFamily: MONO, fontSize: "12px", color: COURT, background: "none", border: "none", cursor: "pointer", letterSpacing: "0.08em" }}>
-              ← Volver al login
-            </button>
+            <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2 }}>Cargando...</p>
           </div>
-        ) : (
-          <>
-            <h2 style={{ fontFamily: DISP, fontSize: "18px", color: INK0, margin: "0 0 8px", textAlign: "center" }}>Nueva contraseña</h2>
-            <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, lineHeight: 1.7, margin: "0 0 24px", textAlign: "center" }}>
-              Elige una contraseña segura para tu cuenta.
-            </p>
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              <input
-                className="rp-input"
-                type="password"
-                placeholder="Nueva contraseña"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                minLength={6}
-                style={inputStyle}
-              />
-              <input
-                className="rp-input"
-                type="password"
-                placeholder="Confirmar contraseña"
-                value={confirm}
-                onChange={e => setConfirm(e.target.value)}
-                required
-                minLength={6}
-                style={inputStyle}
-              />
-              {error && <p style={{ fontFamily: MONO, fontSize: "11px", color: "#ff4f4f", margin: 0 }}>✕ {error}</p>}
-              <button
-                type="submit"
-                disabled={loading || !password || !confirm}
-                style={{
-                  width: "100%", padding: "12px 20px", borderRadius: "10px",
-                  background: loading || !password || !confirm ? "rgba(255,255,255,0.08)" : `linear-gradient(90deg, ${COURT}, ${BALL})`,
-                  border: "none", cursor: loading || !password || !confirm ? "not-allowed" : "pointer",
-                  fontFamily: MONO, fontSize: "13px", fontWeight: 700,
-                  color: loading || !password || !confirm ? INK2 : BG0,
-                  letterSpacing: "0.05em", transition: "all 0.2s", marginTop: "4px",
-                }}
-              >
-                {loading ? "Guardando..." : "Guardar contraseña →"}
-              </button>
-            </form>
-          </>
-        )}
+        }>
+          <ResetPasswordForm />
+        </Suspense>
       </div>
     </main>
   );
