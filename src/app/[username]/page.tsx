@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { ProfilePage } from "@/components/ProfilePage";
 import { Footer } from "@/components/Footer";
 import { MobileTabBar } from "@/components/MobileTabBar";
@@ -15,8 +16,11 @@ export async function generateMetadata({
   params: Promise<{ username: string }>;
 }): Promise<Metadata> {
   const { username } = await params;
-  const supabase = await createClient();
-  const { data } = await supabase
+  const adminClient = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+  const { data } = await adminClient
     .from("players")
     .select("username, first_name, last_name")
     .ilike("username", username)
@@ -50,8 +54,13 @@ export default async function JugadorPage({
   const { username } = await params;
   const supabase = await createClient();
 
+  const adminClient = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+
   const [{ data, error: playerError }, { data: { user } }] = await Promise.all([
-    supabase.from("players").select("*").ilike("username", username).single(),
+    adminClient.from("players").select("*").ilike("username", username).single(),
     supabase.auth.getUser(),
   ]);
 

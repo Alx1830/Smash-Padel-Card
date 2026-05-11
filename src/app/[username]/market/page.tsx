@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { notFound } from "next/navigation";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { Footer } from "@/components/Footer";
@@ -15,8 +16,11 @@ export async function generateMetadata({
   params: Promise<{ username: string }>;
 }): Promise<Metadata> {
   const { username } = await params;
-  const supabase = await createClient();
-  const { data } = await supabase
+  const adminClient = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+  const { data } = await adminClient
     .from("players")
     .select("username, first_name, last_name")
     .ilike("username", username)
@@ -49,9 +53,13 @@ export default async function UserMarketPage({
 }) {
   const { username } = await params;
   const supabase = await createClient();
+  const adminClient2 = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
 
   const [{ data: player }, { data: { user } }] = await Promise.all([
-    supabase
+    adminClient2
       .from("players")
       .select("user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, energia_favorita, pokemon_favorito, edad, set_favorito, whatsapp_indicativo, whatsapp_numero")
       .ilike("username", username)
