@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 const COURT = "#2ee6c1";
@@ -13,8 +13,9 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
 export default function ResetPasswordPage() {
-  const router   = useRouter();
-  const supabase = createClient();
+  const router       = useRouter();
+  const searchParams = useSearchParams();
+  const supabase     = createClient();
 
   const [password, setPassword]   = useState("");
   const [confirm,  setConfirm]    = useState("");
@@ -24,7 +25,19 @@ export default function ResetPasswordPage() {
   const [ready,    setReady]      = useState(false);
 
   useEffect(() => {
-    /* Supabase emite el evento PASSWORD_RECOVERY cuando el usuario llega desde el enlace */
+    const tokenHash = searchParams.get("token_hash");
+    const type      = searchParams.get("type");
+
+    if (tokenHash && type === "recovery") {
+      supabase.auth.verifyOtp({ token_hash: tokenHash, type: "recovery" })
+        .then(({ error }) => {
+          if (!error) setReady(true);
+          else setError("El enlace es inválido o ha expirado.");
+        });
+      return;
+    }
+
+    // Fallback: flujo antiguo con hash en URL (#access_token)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === "PASSWORD_RECOVERY") setReady(true);
     });

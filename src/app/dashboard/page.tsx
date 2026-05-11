@@ -4,6 +4,8 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { AdminFeed } from "@/components/AdminFeed";
+import dynamic from "next/dynamic";
+const MarketFeed = dynamic(() => import("@/components/MarketFeed").then(m => m.MarketFeed), { ssr: false });
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
@@ -391,6 +393,7 @@ export default function DashboardHome() {
       {userId && (
         <div className="feed-wrap">
           <AdminFeed currentUserId={userId} currentUsername={username} isAdmin={isAdmin} />
+          {isAdmin && <MarketFeed />}
         </div>
       )}
 
