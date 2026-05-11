@@ -484,7 +484,7 @@ export default function PerfilPage() {
                   <input
                     style={{ ...inputStyle, opacity: usernameFixed ? 0.6 : 1, cursor: usernameFixed ? "not-allowed" : "text" }}
                     value={form.username}
-                    onChange={e => !usernameFixed && set("username", e.target.value)}
+                    onChange={e => !usernameFixed && set("username", e.target.value.replace(/\s/g, ""))}
                     placeholder="Crea tu nombre de usuario"
                     readOnly={usernameFixed}
                   />
