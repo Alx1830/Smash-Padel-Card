@@ -59,12 +59,10 @@ export default async function JugadorPage({
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
-  const [{ data, error: playerError }, { data: { user } }] = await Promise.all([
+  const [{ data }, { data: { user } }] = await Promise.all([
     adminClient.from("players").select("*").ilike("username", username).single(),
     supabase.auth.getUser(),
   ]);
-
-  console.log(`[profile] username="${username}" data=${JSON.stringify(data?.username)} error=${JSON.stringify(playerError)}`);
 
   if (!data) notFound();
 
