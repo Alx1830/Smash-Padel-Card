@@ -994,6 +994,17 @@ function CollectionSection({
   username?:      string;
 }) {
   const [expandedSetId, setExpandedSetId] = useState<string | null>(null);
+  const [loadedSets, setLoadedSets] = useState<Set<string>>(new Set());
+
+  // Load card data when a set is expanded
+  useEffect(() => {
+    if (!expandedSetId || loadedSets.has(expandedSetId)) return;
+    import("@/data/pokemon-cards").then(({ loadSetCards }) => {
+      loadSetCards(expandedSetId).then(() => {
+        setLoadedSets(prev => new Set([...prev, expandedSetId]));
+      });
+    });
+  }, [expandedSetId, loadedSets]);
 
   const entries = Object.entries(setStats).map(([setId, stats]) => {
     const set = ALL_SETS.find(s => s.id === setId);
@@ -1005,7 +1016,11 @@ function CollectionSection({
     const cards = SET_CARDS[setId] ?? [];
     return inventoryRows
       .filter(r => r.set_id === setId && r.quantity > 0)
-      .map(r => ({ card: cards.find(c => c.id === r.card_id), qty: r.quantity }))
+      .map(r => ({
+        card: cards.find(c => String(c.id) === String(r.card_id))
+           ?? cards.find(c => String(c.card_number) === String(r.card_id)),
+        qty: r.quantity,
+      }))
       .filter(x => x.card) as { card: NonNullable<typeof cards[0]>; qty: number }[];
   };
 
