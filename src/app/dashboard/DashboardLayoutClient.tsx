@@ -114,8 +114,11 @@ export function DashboardLayoutClient({
     (async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
-      const { data } = await supabase.from("players").select("role").eq("user_id", user.id).single();
+      const { data } = await supabase.from("players").select("role, activo").eq("user_id", user.id).single();
       if (data?.role === "admin") setIsAdmin(true);
+      if (data && data.activo === false) {
+        await supabase.from("players").update({ activo: true }).eq("user_id", user.id);
+      }
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -150,6 +153,7 @@ export function DashboardLayoutClient({
   async function handleLogout() {
     const supabase = createClient();
     await supabase.auth.signOut();
+    sessionStorage.removeItem("last_news_dismissed");
     window.location.href = "/";
   }
 

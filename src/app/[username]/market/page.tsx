@@ -67,7 +67,7 @@ export default async function UserMarketPage({
     supabase.auth.getUser(),
   ]);
 
-  if (!player) notFound();
+  if (!player || player.activo === false) notFound();
 
   const [{ data: listings }, { data: featuredRows }, { data: invRows }] = player.user_id
     ? await Promise.all([

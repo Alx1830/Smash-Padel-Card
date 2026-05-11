@@ -5,6 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/Navbar";
+import { MarketTickerWrapper } from "@/components/MarketTickerWrapper";
 import "./globals.css";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -105,6 +106,7 @@ export default async function RootLayout({
   return (
     <html lang="es" className={`${jetbrainsMono.variable} ${archiveBlack.variable} h-full`} style={{ overflowX: "hidden" }} suppressHydrationWarning>
       <body className="min-h-full flex flex-col antialiased" style={{ overflowX: "hidden", maxWidth: "100vw" }} suppressHydrationWarning>
+        <MarketTickerWrapper />
         <Navbar {...navProps} />
         {children}
         <Analytics />

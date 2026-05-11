@@ -483,10 +483,16 @@ export default function DashboardHome() {
       </div>
 
       {/* Market feed */}
-      {userId && isAdmin && (
-        <div className="feed-wrap">
-          <MarketFeed />
-        </div>
+      {userId && (
+        <>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, fontFamily: MONO, fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: COURT }}>
+            <span style={{ width: 20, height: 1, background: COURT, display: "inline-block" }} />
+            Market · Feed en vivo
+          </div>
+          <div className="feed-wrap">
+            <MarketFeed />
+          </div>
+        </>
       )}
 
       {/* Last News popup */}

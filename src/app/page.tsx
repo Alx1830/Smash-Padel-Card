@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HeroSwiper } from "@/components/HeroSwiper";
+import { Footer } from "@/components/Footer";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -108,24 +109,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ══ MARQUEE STRIP ══ */}
-      <div style={{ overflow: "hidden", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "14px 0", background: "rgba(255,255,255,0.015)" }}>
-        <div style={{ display: "flex", width: "max-content", animation: "marquee 30s linear infinite" }}>
-          {[...Array(4)].map((_, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: "40px", padding: "0 32px", whiteSpace: "nowrap", fontFamily: MONO, fontSize: "11px", letterSpacing: "0.2em", color: INK2, textTransform: "uppercase" }}>
-              <span style={{ color: COURT }}>✦</span><span>Pokémon TCG</span>
-              <span style={{ color: COURT }}>✦</span><span>Binder Digital</span>
-              <span style={{ color: COURT }}>✦</span><span>Market de cartas</span>
-              <span style={{ color: COURT }}>✦</span><span>+30 países</span>
-              <span style={{ color: COURT }}>✦</span><span>Comunidad TCG</span>
-              <span style={{ color: COURT }}>✦</span><span>Vende tus cartas</span>
-              <span style={{ color: COURT }}>✦</span><span>Reverse Holo</span>
-              <span style={{ color: COURT }}>✦</span><span>Holofoil</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* ══ FEATURES ══ */}
       <section className="features-section" style={{ padding: "120px 40px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
@@ -222,52 +205,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ══ CTA FINAL ══ */}
-      <section className="cta-section" style={{ padding: "120px 40px", textAlign: "center", background: `radial-gradient(ellipse 60% 60% at 50% 50%, rgba(46,230,193,0.08), transparent 70%)` }}>
-        <div style={{ maxWidth: "640px", margin: "0 auto" }}>
-          <div style={{ fontFamily: MONO, fontSize: "11px", color: COURT, letterSpacing: "0.22em", textTransform: "uppercase", marginBottom: "24px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-            <span style={{ width: "24px", height: "1px", background: COURT, display: "inline-block" }} />
-            Únete ahora
-            <span style={{ width: "24px", height: "1px", background: COURT, display: "inline-block" }} />
-          </div>
-          <h2 style={{ fontFamily: DISP, fontSize: "clamp(36px, 6vw, 64px)", color: INK0, margin: "0 0 24px", letterSpacing: "-0.02em", lineHeight: 1 }}>
-            ¿Listo para armar<br />tu colección?
-          </h2>
-          <p style={{ fontFamily: MONO, fontSize: "13px", color: INK2, lineHeight: 1.8, margin: "0 0 16px", letterSpacing: "0.04em" }}>
-            Regístrate gratis, crea tu Facebinder y empieza a conectar con la comunidad de coleccionistas Pokémon TCG.
-          </p>
-          <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, lineHeight: 1.8, margin: "0 0 48px", letterSpacing: "0.04em" }}>
-            ¿Tienes cartas que no usas?{" "}
-            <Link href="/market" style={{ color: COURT, textDecoration: "none" }}>Mira el Market →</Link>
-          </p>
-          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-            <Link href="/login" className="cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: "12px", padding: "16px 48px", borderRadius: "14px", background: `linear-gradient(90deg, ${COURT}, ${BALL})`, color: BG0, fontFamily: MONO, fontSize: "14px", fontWeight: 700, letterSpacing: "0.08em", textDecoration: "none", boxShadow: `0 0 60px ${COURT}44` }}>
-              Crear mi Facebinder gratis →
-            </Link>
-            <Link href="/market" className="ghost-btn" style={{ display: "inline-flex", alignItems: "center", padding: "16px 28px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.15)", color: INK2, fontFamily: MONO, fontSize: "13px", letterSpacing: "0.08em", textDecoration: "none" }}>
-              Ver el Market
-            </Link>
-          </div>
-          <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, marginTop: "20px", letterSpacing: "0.08em" }}>
-            ¿Ya tienes cuenta?{" "}
-            <Link href="/login" style={{ color: COURT, textDecoration: "none" }}>Inicia sesión</Link>
-          </p>
-        </div>
-      </section>
-
-      {/* ══ FOOTER ══ */}
-      <footer className="footer-section" style={{ borderTop: "1px solid rgba(255,255,255,0.06)", padding: "40px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
-        <span style={{ fontFamily: DISP, fontSize: "13px", letterSpacing: "0.1em", color: INK0, textTransform: "uppercase" }}>FACEBINDER</span>
-        <div style={{ display: "flex", gap: "32px", flexWrap: "wrap" }}>
-          {[["Market", "/market"], ["Inventario", "/dashboard/inventario"], ["Amigos", "/dashboard/amigos"], ["Mi perfil", "/dashboard"]].map(([label, href]) => (
-            <Link key={href} href={href} style={{ fontFamily: MONO, fontSize: "10px", color: INK2, letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none" }}>{label}</Link>
-          ))}
-        </div>
-        <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2, letterSpacing: "0.1em" }}>
-          © 2025 Facebinder · Pokémon TCG · Diseñado por{" "}
-          <a href="https://adxmedialab.com" target="_blank" rel="noopener noreferrer" style={{ color: COURT, textDecoration: "none" }}>AdxMediaLab</a>
-        </span>
-      </footer>
+      <Footer />
     </main>
   );
 }

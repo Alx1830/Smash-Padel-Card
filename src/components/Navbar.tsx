@@ -35,6 +35,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
   const [photoUrl, setPhotoUrl]     = useState<string | null>(initialPhotoUrl ?? null);
   const [username, setUsername]     = useState<string | null>(initialUsername ?? null);
   const [userId, setUserId]         = useState<string | null>(null);
+  const [isAdmin, setIsAdmin]       = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loggedIn, setLoggedIn]     = useState(initialLoggedIn ?? false);
@@ -64,9 +65,10 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
       router.prefetch("/dashboard");
       router.prefetch("/dashboard/inventario");
       const { data } = await supabase
-        .from("players").select("photo_url, username").eq("user_id", user.id).single();
+        .from("players").select("photo_url, username, role").eq("user_id", user.id).single();
       if (data?.photo_url) setPhotoUrl(data.photo_url);
       if (data?.username)  setUsername(data.username);
+      if (data?.role === "admin") setIsAdmin(true);
     }
     load();
   }, []);
@@ -84,6 +86,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
 
   async function handleLogout() {
     await supabase.auth.signOut();
+    sessionStorage.removeItem("last_news_dismissed");
     setLoggedIn(false); setPhotoUrl(null);
     setAvatarOpen(false); setMobileOpen(false);
     router.push("/");
@@ -120,7 +123,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
 
   return (
     <>
-      <nav className="flex fixed top-0 left-0 right-0 z-50 items-center justify-between px-6 py-4 border-b border-[#2ee6c1]/10 bg-[#05070d]/90 backdrop-blur-md">
+      <nav className={`flex fixed left-0 right-0 z-50 items-center justify-between px-6 py-4 border-b border-[#2ee6c1]/10 bg-[#05070d]/90 backdrop-blur-md ${pathname === "/" ? "top-8" : "top-0"}`}>
 
         {/* Logo */}
         <Link href={loggedIn ? "/dashboard" : "/"} className="flex items-center shrink-0">
@@ -208,6 +211,16 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
                     style={{ fontFamily: "var(--font-jetbrains)", letterSpacing: "0.08em" }}>
                     <span>✎</span> Editar mi perfil
                   </Link>
+                  {isAdmin && (
+                    <>
+                      <div className="h-px bg-white/8" />
+                      <Link href="/dashboard/admin/usuarios" onClick={() => setAvatarOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-xs hover:bg-[#2ee6c1]/10 hover:text-[#2ee6c1] transition-colors"
+                        style={{ fontFamily: "var(--font-jetbrains)", letterSpacing: "0.08em", color: "#f59e0b" }}>
+                        <span>⚙</span> Ver usuarios
+                      </Link>
+                    </>
+                  )}
                   <div className="h-px bg-white/8" />
                   <button onClick={handleLogout}
                     className="w-full flex items-center gap-3 px-4 py-3 text-xs text-white/50 hover:bg-red-500/10 hover:text-red-400 transition-colors"

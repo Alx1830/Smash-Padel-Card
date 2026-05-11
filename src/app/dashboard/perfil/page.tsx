@@ -269,6 +269,9 @@ export default function PerfilPage() {
   const [preview, setPreview]         = useState<string>("");
   const [usernameFixed, setUsernameFixed] = useState(false);
   const [usernameError, setUsernameError] = useState("");
+  const [deleteOpen, setDeleteOpen]       = useState(false);
+  const [deleteText, setDeleteText]       = useState("");
+  const [deleting, setDeleting]           = useState(false);
   const [form, setForm] = useState<PerfilForm>({
     username: "", first_name: "", last_name: "",
     pais: "", tipo_perfil: "", ciudad: "",
@@ -392,6 +395,16 @@ export default function PerfilPage() {
     </div>
   );
 
+  async function handleDeleteProfile() {
+    if (!userId) return;
+    setDeleting(true);
+    const supabase = createClient();
+    await supabase.from("players").update({ activo: false }).eq("user_id", userId);
+    await supabase.auth.signOut();
+    sessionStorage.removeItem("last_news_dismissed");
+    window.location.href = "/";
+  }
+
   return (
     <div className="page-container" style={{ maxWidth: "1100px" }}>
       <style>{`
@@ -470,7 +483,7 @@ export default function PerfilPage() {
               {photoSaved && <p style={{ fontFamily: MONO, fontSize: "10px", color: COURT, margin: "6px 0 0" }}>✓ Foto guardada correctamente</p>}
               {photoError && <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ff4f4f", margin: "6px 0 0" }}>✕ {photoError}</p>}
             </div>
-            <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" style={{ display: "none" }} onChange={handlePhoto} />
+            <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" style={{ display: "none" }} onChange={handlePhoto} suppressHydrationWarning />
           </div>
         </div>
 
@@ -500,6 +513,22 @@ export default function PerfilPage() {
                 )}
                 {usernameError && <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ff4f4f", margin: "6px 0 0" }}>✕ {usernameError}</p>}
               </Field>
+              <Field label="Nombre">
+                <input style={inputStyle} value={form.first_name}
+                  onChange={e => set("first_name", e.target.value.replace(/[^a-záéíóúàèìòùäëïöüñA-ZÁÉÍÓÚÀÈÌÒÙÄËÏÖÜÑ]/g, ""))} placeholder="Tu nombre" />
+              </Field>
+              <Field label="Apellido">
+                <input style={inputStyle} value={form.last_name}
+                  onChange={e => set("last_name", e.target.value.replace(/[^a-záéíóúàèìòùäëïöüñA-ZÁÉÍÓÚÀÈÌÒÙÄËÏÖÜÑ]/g, ""))} placeholder="Tus apellidos" />
+              </Field>
+              <Field label="País">
+                <CustomSelect
+                  value={form.pais}
+                  onChange={v => { set("pais", v); set("ciudad", ""); }}
+                  options={PAISES_OPTS}
+                  placeholder="Seleccionar país"
+                />
+              </Field>
               <Field label="Ciudad">
                 {CITIES_BY_COUNTRY[form.pais] ? (
                   <CustomSelect
@@ -513,25 +542,9 @@ export default function PerfilPage() {
                     onChange={e => set("ciudad", e.target.value)} placeholder="¿En qué ciudad estás?" />
                 )}
               </Field>
-              <Field label="Nombre">
-                <input style={inputStyle} value={form.first_name}
-                  onChange={e => set("first_name", e.target.value.replace(/[^a-záéíóúàèìòùäëïöüñA-ZÁÉÍÓÚÀÈÌÒÙÄËÏÖÜÑ]/g, ""))} placeholder="Tu nombre" />
-              </Field>
-              <Field label="Apellido">
-                <input style={inputStyle} value={form.last_name}
-                  onChange={e => set("last_name", e.target.value.replace(/[^a-záéíóúàèìòùäëïöüñA-ZÁÉÍÓÚÀÈÌÒÙÄËÏÖÜÑ]/g, ""))} placeholder="Tus apellidos" />
-              </Field>
               <Field label="Edad">
                 <input style={inputStyle} type="number" min="1" max="99"
                   value={form.edad} onChange={e => set("edad", e.target.value)} placeholder="Tu edad" />
-              </Field>
-              <Field label="País">
-                <CustomSelect
-                  value={form.pais}
-                  onChange={v => { set("pais", v); set("ciudad", ""); }}
-                  options={PAISES_OPTS}
-                  placeholder="Seleccionar país"
-                />
               </Field>
             </div>
 
@@ -626,7 +639,77 @@ export default function PerfilPage() {
           {saveError && <span style={{ fontFamily: MONO, fontSize: "12px", color: "#ff4f4f" }}>✕ {saveError}</span>}
         </div>
 
+        {/* ELIMINAR PERFIL */}
+        <div style={{ marginTop: "40px", paddingTop: "32px", borderTop: "1px solid rgba(255,79,79,0.15)" }}>
+          <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: "#ff4f4f", marginBottom: "8px" }}>Zona de peligro</p>
+          <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, marginBottom: "16px", lineHeight: 1.6 }}>
+            Tu perfil será eliminado y no será visible para nadie. Si vuelves a iniciar sesión dentro de 1 año, tu perfil será restaurado automáticamente.
+          </p>
+          <button
+            type="button"
+            onClick={() => setDeleteOpen(true)}
+            style={{
+              padding: "10px 24px", borderRadius: "10px",
+              background: "rgba(255,79,79,0.08)", border: "1px solid rgba(255,79,79,0.3)",
+              color: "#ff4f4f", fontFamily: MONO, fontSize: "12px", fontWeight: 700,
+              letterSpacing: "0.08em", cursor: "pointer", transition: "all 0.15s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,79,79,0.16)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,79,79,0.08)"; }}
+          >
+            Eliminar perfil
+          </button>
+        </div>
+
       </form>
+
+      {/* MODAL ELIMINAR */}
+      {deleteOpen && (
+        <div onClick={() => { setDeleteOpen(false); setDeleteText(""); }} style={{ position: "fixed", inset: 0, zIndex: 500, background: "rgba(5,7,13,0.88)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+          <div onClick={e => e.stopPropagation()} style={{ width: "min(440px, 96vw)", background: "#0a0e1a", border: "1px solid rgba(255,79,79,0.25)", borderRadius: "20px", padding: "36px 32px" }}>
+            <div style={{ fontSize: "36px", textAlign: "center", marginBottom: "16px" }}>⚠️</div>
+            <h3 style={{ fontFamily: DISP, fontSize: "20px", color: INK0, margin: "0 0 12px", textAlign: "center" }}>Eliminar perfil</h3>
+            <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, lineHeight: 1.7, margin: "0 0 24px", textAlign: "center" }}>
+              Tu perfil será eliminado y no será visible para nadie. Si vuelves a iniciar sesión dentro de 1 año, tu perfil será restaurado automáticamente. Para confirmar, escribe exactamente:
+            </p>
+            <p style={{ fontFamily: MONO, fontSize: "12px", color: "#ff4f4f", textAlign: "center", marginBottom: "16px", letterSpacing: "0.04em" }}>
+              Deseo eliminar mi perfil
+            </p>
+            <input
+              value={deleteText}
+              onChange={e => setDeleteText(e.target.value)}
+              placeholder="Escribe la frase de confirmación..."
+              style={{
+                width: "100%", padding: "10px 14px", borderRadius: "8px", boxSizing: "border-box",
+                background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)",
+                color: INK0, fontFamily: MONO, fontSize: "12px", outline: "none", marginBottom: "20px",
+              }}
+            />
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button
+                onClick={() => { setDeleteOpen(false); setDeleteText(""); }}
+                style={{ flex: 1, padding: "11px", borderRadius: "10px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: INK2, fontFamily: MONO, fontSize: "12px", cursor: "pointer" }}
+              >
+                Cancelar
+              </button>
+              <button
+                disabled={deleteText !== "Deseo eliminar mi perfil" || deleting}
+                onClick={handleDeleteProfile}
+                style={{
+                  flex: 1, padding: "11px", borderRadius: "10px", border: "none",
+                  background: deleteText === "Deseo eliminar mi perfil" ? "#ff4f4f" : "rgba(255,79,79,0.2)",
+                  color: deleteText === "Deseo eliminar mi perfil" ? "#fff" : "rgba(255,79,79,0.4)",
+                  fontFamily: MONO, fontSize: "12px", fontWeight: 700, cursor: deleteText === "Deseo eliminar mi perfil" ? "pointer" : "not-allowed",
+                  transition: "all 0.15s",
+                }}
+              >
+                {deleting ? "Eliminando..." : "Confirmar"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

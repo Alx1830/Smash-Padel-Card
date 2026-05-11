@@ -64,7 +64,7 @@ export default async function JugadorPage({
     supabase.auth.getUser(),
   ]);
 
-  if (!data) notFound();
+  if (!data || data.activo === false) notFound();
 
   // Fetch inventory + featured cards + wishlist in parallel
   // NOTE: no .in("set_id", ...) filter — SET_CARDS is a lazy Proxy, empty on server
