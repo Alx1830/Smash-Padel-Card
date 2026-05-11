@@ -358,7 +358,7 @@ export default function PerfilPage() {
     setSaveError("");
     const { error } = await supabase.from("players").upsert({
       user_id:             userId,
-      username:            form.username,
+      username:            form.username.trim(),
       first_name:          form.first_name,
       last_name:           form.last_name,
       pais:                form.pais,
