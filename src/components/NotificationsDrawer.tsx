@@ -71,16 +71,24 @@ export function NotificationsDrawer({
     }
     if (anchorRect) {
       const width = 380;
-      const rightEdge = anchorRect.right;
       const viewportWidth = typeof window !== "undefined" ? window.innerWidth : 1200;
-      // Align right edge of drawer with right edge of bell button,
-      // but clamp so it never goes off-screen left
-      const right = viewportWidth - rightEdge;
+      const top = anchorRect.bottom + 8;
+      const w   = Math.min(width, viewportWidth - 16);
+      // Bell on left side → align drawer from left; Bell on right side → align from right
+      if (anchorRect.left < viewportWidth / 2) {
+        return {
+          position: "fixed",
+          top,
+          left: Math.max(8, Math.min(anchorRect.left, viewportWidth - w - 8)),
+          width: w,
+          zIndex: 200,
+        };
+      }
       return {
         position: "fixed",
-        top: anchorRect.bottom + 8,
-        right: Math.max(8, right),
-        width: Math.min(width, viewportWidth - 16),
+        top,
+        right: Math.max(8, viewportWidth - anchorRect.right),
+        width: w,
         zIndex: 200,
       };
     }
