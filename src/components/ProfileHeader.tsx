@@ -130,23 +130,9 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
   );
 }
 
-/* ── Placeholder candidates (SSR-safe) ── */
-const PLACEHOLDER_CANDIDATES = (() => {
-  const candidates: { card_id: number | string; set_id: string }[] = [];
-  for (const [setId, cards] of Object.entries(SET_CARDS)) {
-    const valid = cards.filter(c => c.id !== 0);
-    if (valid.length >= 3) {
-      candidates.push(
-        { card_id: valid[0].id, set_id: setId },
-        { card_id: valid[Math.floor(valid.length / 2)].id, set_id: setId },
-        { card_id: valid[valid.length - 1].id, set_id: setId },
-      );
-      if (candidates.length >= 9) break;
-    }
-  }
-  return candidates;
-})();
-const PLACEHOLDER_STABLE = PLACEHOLDER_CANDIDATES.slice(0, 3);
+/* Placeholder set: always use prismatic-evolutions (known to have many cards) */
+const PLACEHOLDER_SET_ID = "prismatic-evolutions";
+const PLACEHOLDER_STABLE: { card_id: number | string; set_id: string }[] = [];
 
 /* ── Showcase slider ── */
 function Showcase({ featuredCards, inventoryRows }: {
@@ -158,19 +144,21 @@ function Showcase({ featuredCards, inventoryRows }: {
   const [, forceUpdate] = useState(0);
 
   useEffect(() => {
-    const ids = [
-      ...featuredCards.map(f => f.set_id),
-      ...PLACEHOLDER_STABLE.map(p => p.set_id),
-    ];
-    loadManySets([...new Set(ids)]).then(() => forceUpdate(n => n + 1));
+    const ids = [...new Set([...featuredCards.map(f => f.set_id), PLACEHOLDER_SET_ID])];
+    loadManySets(ids).then(() => {
+      const cards = SET_CARDS[PLACEHOLDER_SET_ID] ?? [];
+      const valid = cards.filter(c => c.id !== 0);
+      if (valid.length >= 3) {
+        const mid = Math.floor(valid.length / 2);
+        setPlaceholder([
+          { card_id: valid[0].id, set_id: PLACEHOLDER_SET_ID },
+          { card_id: valid[mid].id, set_id: PLACEHOLDER_SET_ID },
+          { card_id: valid[valid.length - 1].id, set_id: PLACEHOLDER_SET_ID },
+        ]);
+      }
+      forceUpdate(n => n + 1);
+    });
   }, [featuredCards]);
-
-  useEffect(() => {
-    if (PLACEHOLDER_CANDIDATES.length >= 3) {
-      const shuffled = [...PLACEHOLDER_CANDIDATES].sort(() => Math.random() - 0.5);
-      setPlaceholder(shuffled.slice(0, 3));
-    }
-  }, []);
 
   const owned = featuredCards.slice(0, 10).map(f => {
     const row = inventoryRows.find(r => r.card_id === f.card_id && r.set_id === f.set_id);
