@@ -251,7 +251,7 @@ export function WishlistPageClient({
                         onClick={() => setPreviewCard(item.card as PokemonCard)}
                         style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)", flexShrink: 0, cursor: "pointer" }}
                       >
-                        <Image src={item.card.image} alt={item.card.name} fill style={{ objectFit: "cover" }} sizes="260px" />
+                        <img src={item.card.image} alt={item.card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
                         <div style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>{label}</div>
                       </div>
                       <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>

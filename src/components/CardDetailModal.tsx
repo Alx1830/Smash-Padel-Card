@@ -204,7 +204,7 @@ export function ModalTiltCard({ card }: { card: PokemonCard }) {
           ? "0 16px 48px rgba(180,180,220,0.3), 0 4px 16px rgba(0,0,0,0.5)"
           : "0 12px 40px rgba(0,0,0,0.6)",
       }}>
-        <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="220px" />
+        <img src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
 
         {isRH && (
           <div ref={rhRef} style={{

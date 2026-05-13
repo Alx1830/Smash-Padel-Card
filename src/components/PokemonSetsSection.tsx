@@ -161,14 +161,7 @@ function TiltCard({
           filter: isGray ? "grayscale(1) opacity(0.9)" : "none",
           boxShadow: shadowStyle,
         }}>
-          <Image
-            src={card.image}
-            alt={card.name}
-            fill
-            style={{ objectFit: "cover" }}
-            sizes="(max-width: 767px) 45vw, 240px"
-            loading="lazy"
-          />
+          <img src={card.image} alt={card.name} loading="lazy" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
 
           {isRH && !isGray && (
             <div ref={rhRef} style={{

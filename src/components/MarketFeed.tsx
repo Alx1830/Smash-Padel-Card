@@ -179,7 +179,7 @@ function PostCard({ item }: { item: FeedItem }) {
       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
         <div style={{ width: 112, height: 180, borderRadius: 8, overflow: "hidden", flexShrink: 0, position: "relative", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
           {item.cardImage ? (
-            <Image src={item.cardImage} alt={item.cardName} fill style={{ objectFit: "cover" }} unoptimized />
+            <img src={item.cardImage} alt={item.cardName} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
           ) : (
             <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <span style={{ fontSize: 20 }}>🃏</span>

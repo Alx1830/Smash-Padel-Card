@@ -643,7 +643,7 @@ export function MarketPageClient({
                       style={{ position: "relative", width: "100%", aspectRatio: "5/7", cursor: card ? "pointer" : "default", background: "rgba(255,255,255,0.03)", flexShrink: 0 }}
                     >
                       {card ? (
-                        <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="260px" />
+                        <img src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
                       ) : (
                         <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                           <span style={{ color: INK2, fontSize: "24px" }}>?</span>

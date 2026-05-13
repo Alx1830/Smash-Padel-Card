@@ -270,7 +270,7 @@ export default function DashboardWishlistPage() {
                 <div key={busyKey} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "14px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
                   <div onClick={() => openModal(row)} style={{ position: "relative", width: "100%", aspectRatio: "5/7", cursor: card ? "pointer" : "default", background: "rgba(255,255,255,0.03)", flexShrink: 0 }}>
                     {card ? (
-                      <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="220px" loading="lazy" />
+                      <img src={card.image} alt={card.name} loading="lazy" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
                     ) : (
                       <div style={{ width: "100%", height: "100%", background: "linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%)", backgroundSize: "200% 100%", animation: "dwish-shimmer 1.4s ease-in-out infinite" }} />
                     )}

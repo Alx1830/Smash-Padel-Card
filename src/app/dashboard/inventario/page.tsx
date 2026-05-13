@@ -158,7 +158,7 @@ function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () => void
         transition: "transform 0.6s cubic-bezier(0.2,0.8,0.2,1), box-shadow 0.3s",
         willChange: "transform", boxShadow: shadowStyle,
       }}>
-        <Image src={card.image} alt={card.name} fill style={{ objectFit: "cover" }} sizes="(max-width:639px) 44vw, (max-width:1023px) 28vw, 14vw" loading="lazy" />
+        <img src={card.image} alt={card.name} loading="lazy" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
 
         {/* Reverse holo shimmer */}
         {isRH && (
