@@ -1,46 +1,103 @@
 export default function AmigosLoading() {
   return (
-    <div style={{ minHeight: "100vh", padding: "24px" }}>
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "#05070d",
+      gap: "32px",
+    }}>
       <style>{`
-        @media (min-width: 768px) { .amigos-load-wrap { padding: 48px; } }
-        @keyframes fb-spin { to { transform: rotate(360deg); } }
-        @keyframes amigos-shimmer {
-          0%   { background-position: -200% 0; }
-          100% { background-position:  200% 0; }
+        @keyframes fb-spin {
+          to { transform: rotate(360deg); }
         }
-        .amigos-skel {
-          background: linear-gradient(90deg,
-            rgba(255,255,255,0.04) 25%,
-            rgba(255,255,255,0.08) 50%,
-            rgba(255,255,255,0.04) 75%
-          );
-          background-size: 200% 100%;
-          animation: amigos-shimmer 1.4s infinite;
-          border-radius: 8px;
+        @keyframes fb-pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.4; }
         }
-        .amigos-skel-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 24px;
-        }
-        @media (max-width: 1023px) {
-          .amigos-skel-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        @keyframes fb-bar {
+          0%   { width: 0%; }
+          30%  { width: 45%; }
+          60%  { width: 72%; }
+          85%  { width: 88%; }
+          100% { width: 95%; }
         }
       `}</style>
 
-      <div className="amigos-load-wrap">
-        {/* Header skeleton */}
-        <div style={{ marginBottom: 48 }}>
-          <div className="amigos-skel" style={{ width: 120, height: 11, marginBottom: 14 }} />
-          <div className="amigos-skel" style={{ width: 200, height: 36 }} />
-        </div>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+        <span style={{
+          fontFamily: "var(--font-archivo)",
+          fontSize: "28px",
+          fontWeight: 800,
+          letterSpacing: "-0.02em",
+          background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+          animation: "fb-pulse 2s ease-in-out infinite",
+        }}>
+          FaceBinder
+        </span>
+        <span style={{
+          fontFamily: "var(--font-jetbrains)",
+          fontSize: "9px",
+          letterSpacing: "0.28em",
+          textTransform: "uppercase",
+          color: "#7a8298",
+        }}>
+          Pokémon Card Collector
+        </span>
+      </div>
 
-        {/* Cards skeleton */}
-        <div className="amigos-skel-grid">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="amigos-skel" style={{ height: 320, borderRadius: 16 }} />
-          ))}
+      <div style={{ position: "relative", width: "56px", height: "56px" }}>
+        <div style={{
+          position: "absolute", inset: 0,
+          border: "2px solid rgba(46,230,193,0.08)",
+          borderRadius: "50%",
+        }} />
+        <div style={{
+          position: "absolute", inset: 0,
+          border: "2px solid transparent",
+          borderTopColor: "#2ee6c1",
+          borderRightColor: "#4ff0ff",
+          borderRadius: "50%",
+          animation: "fb-spin 0.9s linear infinite",
+        }} />
+        <div style={{
+          position: "absolute", inset: "10px",
+          border: "2px solid transparent",
+          borderTopColor: "#d6ff3d",
+          borderRadius: "50%",
+          animation: "fb-spin 0.6s linear infinite reverse",
+        }} />
+      </div>
+
+      <div style={{ width: "160px", display: "flex", flexDirection: "column", gap: "8px", alignItems: "center" }}>
+        <div style={{
+          width: "100%", height: "2px",
+          background: "rgba(255,255,255,0.06)",
+          borderRadius: "2px",
+          overflow: "hidden",
+        }}>
+          <div style={{
+            height: "100%",
+            background: "linear-gradient(90deg, #2ee6c1, #4ff0ff)",
+            borderRadius: "2px",
+            animation: "fb-bar 3s ease-out forwards",
+          }} />
         </div>
+        <p style={{
+          fontFamily: "var(--font-jetbrains)",
+          fontSize: "10px",
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          color: "#7a8298",
+          margin: 0,
+        }}>
+          Cargando...
+        </p>
       </div>
     </div>
   );
