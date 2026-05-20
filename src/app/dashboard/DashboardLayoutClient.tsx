@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { House, UserRoundPen, UsersRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil, BookSearch } from "lucide-react";
+import { House, UserRoundPen, UsersRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { usePushPermission } from "@/hooks/usePushPermission";
 
@@ -211,6 +211,16 @@ export function DashboardLayoutClient({
           >
             <UsersRound size={14} color="#4ff0ff" strokeWidth={1.8} />
             <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Usuarios</span>
+          </a>
+          <a href="/dashboard/admin/feed" style={{
+            display: "flex", alignItems: "center", gap: "10px",
+            padding: "10px 14px", textDecoration: "none",
+          }}
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(79,240,255,0.07)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+          >
+            <Newspaper size={14} color="#4ff0ff" strokeWidth={1.8} />
+            <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Feed post</span>
           </a>
         </>
       )}
