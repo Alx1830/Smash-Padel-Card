@@ -1,6 +1,34 @@
 import type { NextConfig } from "next";
 import withPWA from "next-pwa";
 
+const SUPABASE_HOST = "vjtxrqwqhwnkscktvgce.supabase.co";
+
+const securityHeaders = [
+  { key: "X-Frame-Options",           value: "SAMEORIGIN" },
+  { key: "X-Content-Type-Options",    value: "nosniff" },
+  { key: "Referrer-Policy",           value: "strict-origin-when-cross-origin" },
+  { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
+  { key: "Permissions-Policy",        value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
+  { key: "Cross-Origin-Opener-Policy",   value: "same-origin-allow-popups" },
+  { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+  {
+    key: "Content-Security-Policy",
+    value: [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com",
+      `img-src 'self' data: blob: https://${SUPABASE_HOST} https://images.scrydex.com https://images.pokemontcg.io https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev`,
+      `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://www.google-analytics.com`,
+      "worker-src 'self' blob:",
+      "manifest-src 'self'",
+      "frame-src https://www.youtube.com",
+      "object-src 'none'",
+      "upgrade-insecure-requests",
+    ].join("; "),
+  },
+];
+
 const nextConfig: NextConfig = {
   turbopack: {},
   experimental: {
@@ -27,6 +55,10 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      {
+        source: "/(.*)",
+        headers: securityHeaders,
+      },
       {
         source: "/pokemon-cards/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],

@@ -39,12 +39,21 @@ export async function POST(request: NextRequest) {
 
   const { card_id, set_id, user_id: sellerId, card_name } = payload.record;
 
-  const cardLabel = card_name ?? 'Una carta de tu wishlist';
+  // Validar inputs para evitar inyección de queries LIKE
+  const cardIdNum = parseInt(String(card_id), 10);
+  if (isNaN(cardIdNum) || cardIdNum < 1 || cardIdNum > 99999) {
+    return NextResponse.json({ error: 'Invalid card_id' }, { status: 400 });
+  }
+  if (set_id && !/^[a-z0-9-]+$/.test(String(set_id))) {
+    return NextResponse.json({ error: 'Invalid set_id' }, { status: 400 });
+  }
+  // Sanitizar card_name para notificaciones push (solo texto plano)
+  const safeCardName = String(card_name ?? '').replace(/[<>"'&]/g, '').slice(0, 100);
+  const cardLabel = safeCardName || 'Una carta de tu wishlist';
 
   // market_listings.card_id = número (ej: 12)
   // card_wishlist.card_id   = "012:Decidueye ex:Holofoil" (número con ceros + nombre + versión)
-  // Buscamos todas las filas del set cuyo card_id empiece con el número formateado
-  const cardNumPadded = String(card_id).padStart(3, '0');
+  const cardNumPadded = String(cardIdNum).padStart(3, '0');
   const cardIdPrefix = `${cardNumPadded}:`;
 
   console.log('[Webhook] Looking for wishlist matches:', { cardIdPrefix, set_id, sellerId });

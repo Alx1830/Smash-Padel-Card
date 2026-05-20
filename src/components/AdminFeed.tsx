@@ -2,7 +2,19 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
+import DOMPurify from "dompurify";
 import { createClient } from "@/lib/supabase/client";
+
+function sanitizeUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    if (!["https:", "http:"].includes(parsed.protocol)) return "";
+    return parsed.href;
+  } catch { return ""; }
+}
+
+const PURIFY_TAGS = ["p","b","i","s","ul","ol","li","a","br","div","span","iframe","img","video","source","h1","h2","h3","strong","em"];
+const PURIFY_ATTR = ["href","src","style","class","frameborder","allowfullscreen","controls","target","rel"];
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
@@ -51,7 +63,7 @@ function RichToolbar({ editorRef }: { editorRef: React.RefObject<HTMLDivElement>
       const id = url.match(/(?:v=|youtu\.be\/)([\w-]{11})/)?.[1];
       if (id) html = `<div class="post-media-wrap"><iframe src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen style="width:100%;aspect-ratio:16/9;border-radius:10px;display:block;"></iframe></div><p><br></p>`;
     } else if (isImage) {
-      html = `<div class="post-media-wrap"><img src="${url}" style="max-width:100%;border-radius:10px;display:block;"></div><p><br></p>`;
+      html = `<div class="post-media-wrap"><img src="${sanitizeUrl(url)}" style="max-width:100%;border-radius:10px;display:block;"></div><p><br></p>`;
     } else if (isVideo) {
       html = `<div class="post-media-wrap"><video controls style="max-width:100%;border-radius:10px;display:block;"><source src="${url}"></video></div><p><br></p>`;
     } else {
@@ -261,7 +273,7 @@ function PostCard({ post, isAdmin, onDelete }: { post: Post; isAdmin: boolean; o
         {post.content && (
           <div
             className="post-content"
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content ?? "", { ALLOWED_TAGS: PURIFY_TAGS, ALLOWED_ATTR: PURIFY_ATTR, FORCE_BODY: true }) }}
             style={{ fontFamily: MONO, fontSize: "13px", color: INK1, lineHeight: 1.75, letterSpacing: "0.02em" }}
           />
         )}
@@ -279,7 +291,7 @@ function AdminComposer({ authorId, onPublished }: { authorId: string; onPublishe
   const [saving,   setSaving]   = useState(false);
 
   async function handlePublish() {
-    const content = editorRef.current?.innerHTML ?? "";
+    const content = DOMPurify.sanitize(editorRef.current?.innerHTML ?? "", { ALLOWED_TAGS: PURIFY_TAGS, ALLOWED_ATTR: PURIFY_ATTR, FORCE_BODY: true });
     if (!title.trim() && !content.trim()) return;
     setSaving(true);
 
