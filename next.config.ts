@@ -10,7 +10,7 @@ const securityHeaders = [
   { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
   { key: "Permissions-Policy",        value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
   { key: "Cross-Origin-Opener-Policy",   value: "same-origin-allow-popups" },
-  { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+  { key: "Cross-Origin-Resource-Policy", value: "cross-origin" },
   {
     key: "Content-Security-Policy",
     value: [
@@ -18,11 +18,11 @@ const securityHeaders = [
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
-      `img-src 'self' data: blob: https://${SUPABASE_HOST} https://images.scrydex.com https://images.pokemontcg.io https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev`,
+      `img-src 'self' data: blob: https://${SUPABASE_HOST} https://images.scrydex.com https://images.pokemontcg.io https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev https://www.tcgplayer.com`,
       `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://www.google-analytics.com`,
       "worker-src 'self' blob:",
       "manifest-src 'self'",
-      "frame-src https://www.youtube.com",
+      "frame-src https://www.youtube.com https://www.tcgplayer.com",
       "object-src 'none'",
       "upgrade-insecure-requests",
     ].join("; "),
