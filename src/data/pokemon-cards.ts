@@ -4,6 +4,7 @@ export type CardVersion = string;
 
 // Per-set dynamic loaders — only load what's needed
 const SET_LOADERS: Record<string, () => Promise<{ default: PokemonCard[] }>> = {
+  "chaos-rising": () => import("./sets/chaos-rising"),
   "prismatic-evolutions": () => import("./sets/prismatic-evolutions"),
   "surging-sparks": () => import("./sets/surging-sparks"),
   "shrouded-fable": () => import("./sets/shrouded-fable"),
@@ -327,6 +328,7 @@ export async function loadManySets(setIds: string[]): Promise<void> {
 
 export const SET_CARD_COUNT: Record<string, number> = {
   "prismatic-evolutions": 475,
+  "chaos-rising":       198,
   "surging-sparks": 417,
   "shrouded-fable": 162,
   "stellar-crown": 331,
