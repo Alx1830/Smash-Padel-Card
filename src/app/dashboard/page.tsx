@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { AdminFeed } from "@/components/AdminFeed";
+import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import dynamic from "next/dynamic";
 const MarketFeed = dynamic(() => import("@/components/MarketFeed").then(m => m.MarketFeed), { ssr: false });
 
@@ -103,6 +104,10 @@ const DISP  = "var(--font-archivo)";
 
 function formatCOP(n: number) {
   return "$" + n.toLocaleString("es-CO") + " COP";
+}
+
+function formatUSD(n: number) {
+  return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " USD";
 }
 
 /* ── Followers popup with infinite scroll ── */
@@ -372,20 +377,57 @@ export default function DashboardHome() {
       const [
         { data: prof },
         { count: fc },
-        { data: listings },
         { data: inv },
       ] = await Promise.all([
         supabase.from("players").select("username, role").eq("user_id", user.id).single(),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("following_id", user.id),
-        supabase.from("market_listings").select("price_cop").eq("user_id", user.id).eq("status", "active"),
-        supabase.from("card_inventory").select("quantity").eq("user_id", user.id),
+        supabase.from("card_inventory").select("card_id, set_id, version, quantity").eq("user_id", user.id).gt("quantity", 0),
       ]);
 
       setUsername(prof?.username ?? null);
       if (prof?.role === "admin") setIsAdmin(true);
       setFollowerCount(fc ?? 0);
-      setStockTotal((listings ?? []).reduce((sum, l) => sum + (l.price_cop ?? 0), 0));
       setCardCount((inv ?? []).reduce((sum, r) => sum + (r.quantity ?? 0), 0));
+
+      // Calcular valor total del inventario en USD usando card_prices
+      const invRows = inv ?? [];
+      const priceIds = invRows
+        .map(r => {
+          const sc = SCRYDEX_SET_CODES[r.set_id ?? ""];
+          return sc ? `${sc}-${r.card_id}` : null;
+        })
+        .filter((id): id is string => id !== null);
+
+      if (priceIds.length > 0) {
+        const { data: priceRows } = await supabase
+          .from("card_prices")
+          .select("card_id, prices")
+          .in("card_id", [...new Set(priceIds)]);
+
+        const priceMap: Record<string, Record<string, number>> = {};
+        for (const row of priceRows ?? []) {
+          priceMap[row.card_id] = row.prices as Record<string, number>;
+        }
+
+        let total = 0;
+        for (const r of invRows) {
+          const sc = SCRYDEX_SET_CODES[r.set_id ?? ""];
+          if (!sc) continue;
+          const pid = `${sc}-${r.card_id}`;
+          const prices = priceMap[pid];
+          if (!prices) continue;
+          const version = r.version ?? "normal";
+          const price =
+            prices[version] ??
+            prices[version.charAt(0).toUpperCase() + version.slice(1)] ??
+            prices["normal"] ??
+            0;
+          total += price * (r.quantity ?? 1);
+        }
+        setStockTotal(total);
+      } else {
+        setStockTotal(0);
+      }
     })();
   }, []);
 
@@ -457,10 +499,10 @@ export default function DashboardHome() {
         <div style={CARD_STYLE}>
           <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: 0 }}>Dinero en stock</p>
           <p style={{ fontFamily: DISP, fontSize: "clamp(22px, 4vw, 32px)", color: COURT, margin: 0, lineHeight: 1.1 }}>
-            {stockTotal === null ? "—" : stockTotal === 0 ? "$0 COP" : formatCOP(stockTotal)}
+            {stockTotal === null ? "—" : stockTotal === 0 ? "$0.00 USD" : formatUSD(stockTotal)}
           </p>
           <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: 0, lineHeight: 1.5 }}>
-            Valor total de tus cartas en venta
+            Valor total de tus cartas
           </p>
         </div>
 
