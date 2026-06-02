@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { getVersionLabel, getVersionEffect, getVersionColor, type PokemonCard } from "@/data/pokemon-cards-meta";
 import { getCurrencyForCountry, formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
+import { useScrydexPrice, SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 
 export const COURT = "#2ee6c1";
 export const INK0  = "#f5f7fb";
@@ -272,6 +273,24 @@ export function CardDetailModal({
   const label      = getVersionLabel(card.version);
   const versionFull = label;
   const qty        = inventory[invKey(card.id, card.version)] ?? 0;
+
+  const scrydexCode = SCRYDEX_SET_CODES[setId];
+  const { prices: scrydexPrices, loading: pricesLoading } = useScrydexPrice({
+    setSlug:    setId,
+    setCode:    scrydexCode ?? "",
+    cardName:   card.name,
+    cardNumber: card.card_number,
+    enabled:    !!scrydexCode,
+  });
+
+  // Normaliza la versión de nuestra carta al key que devuelve la API
+  const versionKey = card.version.toLowerCase().replace(/\s+/g, "");
+  const scrydexPrice: number | null = scrydexPrices
+    ? (scrydexPrices[versionKey] ??
+       scrydexPrices[card.version] ??
+       scrydexPrices[card.version.charAt(0).toUpperCase() + card.version.slice(1)] ??
+       null)
+    : null;
   const isFeatured  = featuredCards.some(f => Number(f.card_id) === card.card_number && f.set_id === setId);
   const featCount   = featuredCards.length;
   const isWanted    = wishlistCards.some(w => w.card_id === card.id && w.set_id === setId);
@@ -402,7 +421,15 @@ export function CardDetailModal({
   const DARK2      = "#4a5268";
   const BORDER_CLR = "rgba(5,7,13,0.1)";
 
-  const tableRows = [
+  const priceDisplay = scrydexCode
+    ? pricesLoading
+      ? "Cargando..."
+      : scrydexPrice !== null
+        ? `$${scrydexPrice.toFixed(2)} USD`
+        : "—"
+    : null;
+
+  const tableRows: { label: string; value: React.ReactNode }[] = [
     { label: "Número", value: `#${String(card.card_number).padStart(3, "0")}` },
     { label: "Tipo",   value: versionFull },
     {
@@ -413,6 +440,14 @@ export function CardDetailModal({
           </div>
         : setId,
     },
+    ...(priceDisplay !== null ? [{
+      label: "Precio",
+      value: (
+        <span style={{ color: pricesLoading ? DARK2 : scrydexPrice !== null ? "#15a98e" : DARK2 }}>
+          {priceDisplay}
+        </span>
+      ),
+    }] : []),
   ];
 
   return (
