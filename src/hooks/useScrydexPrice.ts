@@ -60,8 +60,6 @@ export function useScrydexPrice({
         } else {
           setPrices(data.prices as ScrydexPrices);
         }
-      })
-      .finally(() => {
         if (!cancelled) setLoading(false);
       });
 
