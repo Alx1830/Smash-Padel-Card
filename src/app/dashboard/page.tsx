@@ -390,11 +390,19 @@ export default function DashboardHome() {
       setCardCount((inv ?? []).reduce((sum, r) => sum + (r.quantity ?? 0), 0));
 
       // Calcular valor total del inventario en USD usando card_prices
+      // card_inventory.card_id tiene formato "001:Name:Version", card_prices.card_id es "setCode-number"
       const invRows = inv ?? [];
+
+      function extractCardNumber(cardId: string | number): number {
+        if (typeof cardId === "number") return cardId;
+        return parseInt(String(cardId).split(":")[0], 10);
+      }
+
       const priceIds = invRows
         .map(r => {
           const sc = SCRYDEX_SET_CODES[r.set_id ?? ""];
-          return sc ? `${sc}-${r.card_id}` : null;
+          const num = extractCardNumber(r.card_id);
+          return sc && !isNaN(num) ? `${sc}-${num}` : null;
         })
         .filter((id): id is string => id !== null);
 
@@ -413,7 +421,9 @@ export default function DashboardHome() {
         for (const r of invRows) {
           const sc = SCRYDEX_SET_CODES[r.set_id ?? ""];
           if (!sc) continue;
-          const pid = `${sc}-${r.card_id}`;
+          const num = extractCardNumber(r.card_id);
+          if (isNaN(num)) continue;
+          const pid = `${sc}-${num}`;
           const prices = priceMap[pid];
           if (!prices) continue;
           const version = r.version ?? "normal";
