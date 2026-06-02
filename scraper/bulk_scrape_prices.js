@@ -14,192 +14,212 @@
 
 const { chromium } = require("playwright");
 const { createClient } = require("@supabase/supabase-js");
-const ws = require("ws");
 const fs = require("fs");
 const path = require("path");
 
-// ── Mapa completo de sets → códigos Scrydex ───────────────────────────────────
-const ALL_SET_CODES = {
-  // Mega Evolution Series
-  "mega-evolution":       "me1",
-  "phantasmal-flames":    "me2",
-  "ascended-heroes":      "me2pt5",
-  "perfect-order":        "me3",
-  "chaos-rising":         "me4",
+// ── Mapeo completo slug local → código Scrydex ────────────────────────────────
+const ALL_SETS = [
+  // Mega Evolution
+  { slug: "chaos-rising",            code: "me4"        },
+  { slug: "perfect-order",           code: "me3"        },
+  { slug: "ascended-heroes",         code: "me2pt5"     },
+  { slug: "phantasmal-flames",       code: "me2"        },
+  { slug: "mega-evolution",          code: "me1"        },
+  { slug: "mega-evo-promos",         code: "mep"        },
   // Scarlet & Violet
-  "scarlet-violet":       "sv1",
-  "paldea-evolved":       "sv2",
-  "obsidian-flames":      "sv3",
-  "sv-151":               "sv3pt5",
-  "paradox-rift":         "sv4",
-  "paldean-fates":        "sv4pt5",
-  "temporal-forces":      "sv5",
-  "twilight-masquerade":  "sv6",
-  "shrouded-fable":       "sv6pt5",
-  "stellar-crown":        "sv7",
-  "surging-sparks":       "sv8",
-  "prismatic-evolutions": "sv8pt5",
-  "journey-together":     "sv9",
-  "destined-rivals":      "sv10",
-  "sv-promos":            "svp",
-  "mcd-2021":             "mcd21",
-  "mcd-2022":             "mcd22",
-  "mcd-2023":             "mcd23",
-  "mcd-2024":             "mcd24",
-  "tcg-classic-venusaur":  "clv",
-  "tcg-classic-charizard": "clc",
-  "tcg-classic-blastoise": "clb",
-  "poke-card-creator":    "wb1",
+  { slug: "white-flare",             code: "rsv10pt5"   },
+  { slug: "black-bolt",              code: "zsv10pt5"   },
+  { slug: "destined-rivals",         code: "sv10"       },
+  { slug: "journey-together",        code: "sv9"        },
+  { slug: "prismatic-evolutions",    code: "sv8pt5"     },
+  { slug: "surging-sparks",          code: "sv8"        },
+  { slug: "stellar-crown",           code: "sv7"        },
+  { slug: "shrouded-fable",          code: "sv6pt5"     },
+  { slug: "twilight-masquerade",     code: "sv6"        },
+  { slug: "temporal-forces",         code: "sv5"        },
+  { slug: "paldean-fates",           code: "sv4pt5"     },
+  { slug: "paradox-rift",            code: "sv4"        },
+  { slug: "sv-151",                  code: "sv3pt5"     },
+  { slug: "obsidian-flames",         code: "sv3"        },
+  { slug: "paldea-evolved",          code: "sv2"        },
+  { slug: "scarlet-violet",          code: "sv1"        },
+  { slug: "sv-energies",             code: "sve"        },
+  { slug: "sv-promos",               code: "svp"        },
+  // Other
+  { slug: "mcd-2024",                code: "mcd24"      },
+  { slug: "tcg-classic-venusaur",    code: "clv"        },
+  { slug: "tcg-classic-charizard",   code: "clc"        },
+  { slug: "tcg-classic-blastoise",   code: "clb"        },
+  { slug: "mcd-2023",                code: "mcd23"      },
+  { slug: "mcd-2022",                code: "mcd22"      },
+  { slug: "mcd-2021",                code: "mcd21"      },
+  { slug: "futsal-promos",           code: "fut20"      },
+  { slug: "mcd-2019",                code: "mcd19"      },
+  { slug: "mcd-2018",                code: "mcd18"      },
+  { slug: "mcd-2017",                code: "mcd17"      },
+  { slug: "mcd-2016",                code: "mcd16"      },
+  { slug: "mcd-2015",                code: "mcd15"      },
+  { slug: "mcd-2014",                code: "mcd14"      },
+  { slug: "mcd-2012",                code: "mcd12"      },
+  { slug: "mcd-2011",                code: "mcd11"      },
+  { slug: "pokemon-rumble",          code: "ru1"        },
+  { slug: "poke-card-creator",       code: "wb1"        },
+  { slug: "best-of-game",            code: "bp"         },
+  { slug: "legendary-collection",    code: "base6"      },
+  { slug: "southern-islands",        code: "si1"        },
   // Sword & Shield
-  "sword-shield":         "swsh1",
-  "rebel-clash":          "swsh2",
-  "darkness-ablaze":      "swsh3",
-  "vivid-voltage":        "swsh4",
-  "battle-styles":        "swsh5",
-  "chilling-reign":       "swsh6",
-  "evolving-skies":       "swsh7",
-  "fusion-strike":        "swsh8",
-  "brilliant-stars":      "swsh9",
-  "astral-radiance":      "swsh10",
-  "lost-origin":          "swsh11",
-  "silver-tempest":       "swsh12",
-  "crown-zenith":         "swsh12pt5",
-  "champions-path":       "cpa",
-  "shining-fates":        "shf",
-  "celebrations":         "cel25",
-  "pokemon-go":           "pgo",
-  "ss-promos":            "swshp",
-  "mcd-25th":             "mcd25",
+  { slug: "crown-zenith-gg",         code: "swsh12pt5gg"},
+  { slug: "crown-zenith",            code: "swsh12pt5"  },
+  { slug: "silver-tempest-tg",       code: "swsh12tg"   },
+  { slug: "silver-tempest",          code: "swsh12"     },
+  { slug: "lost-origin-tg",          code: "swsh11tg"   },
+  { slug: "lost-origin",             code: "swsh11"     },
+  { slug: "pokemon-go",              code: "pgo"        },
+  { slug: "astral-radiance-tg",      code: "swsh10tg"   },
+  { slug: "astral-radiance",         code: "swsh10"     },
+  { slug: "brilliant-stars-tg",      code: "swsh9tg"    },
+  { slug: "brilliant-stars",         code: "swsh9"      },
+  { slug: "fusion-strike",           code: "swsh8"      },
+  { slug: "celebrations",            code: "cel25"      },
+  { slug: "evolving-skies",          code: "swsh7"      },
+  { slug: "chilling-reign",          code: "swsh6"      },
+  { slug: "battle-styles",           code: "swsh5"      },
+  { slug: "shining-fates",           code: "swsh45"     },
+  { slug: "vivid-voltage",           code: "swsh4"      },
+  { slug: "champions-path",          code: "swsh35"     },
+  { slug: "darkness-ablaze",         code: "swsh3"      },
+  { slug: "rebel-clash",             code: "swsh2"      },
+  { slug: "sword-shield",            code: "swsh1"      },
+  { slug: "ss-promos",               code: "swshp"      },
   // Sun & Moon
-  "sun-moon":             "sm1",
-  "guardians-rising":     "sm2",
-  "burning-shadows":      "sm3",
-  "crimson-invasion":     "sm4",
-  "ultra-prism":          "sm5",
-  "forbidden-light":      "sm6",
-  "celestial-storm":      "sm7",
-  "lost-thunder":         "sm8",
-  "team-up":              "sm9",
-  "unbroken-bonds":       "sm10",
-  "unified-minds":        "sm11",
-  "cosmic-eclipse":       "sm12",
-  "shining-legends":      "sm35",
-  "dragon-majesty":       "sm75",
-  "hidden-fates":         "sm115",
-  "detective-pikachu":    "det1",
-  "sm-promos":            "smp",
-  "mcd-2017":             "mcd17",
-  "mcd-2018":             "mcd18",
-  "mcd-2019":             "mcd19",
+  { slug: "cosmic-eclipse",          code: "sm12"       },
+  { slug: "hidden-fates",            code: "sm115"      },
+  { slug: "unified-minds",           code: "sm11"       },
+  { slug: "unbroken-bonds",          code: "sm10"       },
+  { slug: "detective-pikachu",       code: "det1"       },
+  { slug: "team-up",                 code: "sm9"        },
+  { slug: "lost-thunder",            code: "sm8"        },
+  { slug: "dragon-majesty",          code: "sm75"       },
+  { slug: "celestial-storm",         code: "sm7"        },
+  { slug: "forbidden-light",         code: "sm6"        },
+  { slug: "ultra-prism",             code: "sm5"        },
+  { slug: "crimson-invasion",        code: "sm4"        },
+  { slug: "shining-legends",         code: "sm35"       },
+  { slug: "burning-shadows",         code: "sm3"        },
+  { slug: "guardians-rising",        code: "sm2"        },
+  { slug: "sm-promos",               code: "smp"        },
+  { slug: "sun-moon",                code: "sm1"        },
   // XY
-  "xy":                   "xy1",
-  "xy-flashfire":         "xy2",
-  "furious-fists":        "xy3",
-  "phantom-forces":       "xy4",
-  "primal-clash":         "xy5",
-  "roaring-skies":        "xy6",
-  "ancient-origins":      "xy7",
-  "xy-breakthrough":      "xy8",
-  "breakpoint":           "xy9",
-  "fates-collide":        "xy10",
-  "steam-siege":          "xy11",
-  "evolutions":           "xy12",
-  "double-crisis":        "dc1",
-  "generations":          "g1",
-  "kalos-starter":        "xy0",
-  "xy-promos":            "xyp",
-  "mcd-2014":             "mcd14",
-  "mcd-2015":             "mcd15",
-  "mcd-2016":             "mcd16",
+  { slug: "evolutions",              code: "xy12"       },
+  { slug: "steam-siege",             code: "xy11"       },
+  { slug: "fates-collide",           code: "xy10"       },
+  { slug: "generations",             code: "g1"         },
+  { slug: "breakpoint",              code: "xy9"        },
+  { slug: "xy-breakthrough",         code: "xy8"        },
+  { slug: "ancient-origins",         code: "xy7"        },
+  { slug: "roaring-skies",           code: "xy6"        },
+  { slug: "double-crisis",           code: "dc1"        },
+  { slug: "primal-clash",            code: "xy5"        },
+  { slug: "phantom-forces",          code: "xy4"        },
+  { slug: "furious-fists",           code: "xy3"        },
+  { slug: "xy-flashfire",            code: "xy2"        },
+  { slug: "xy",                      code: "xy1"        },
+  { slug: "kalos-starter",           code: "xy0"        },
+  { slug: "xy-promos",               code: "xyp"        },
   // Black & White
-  "black-white":          "bw1",
-  "emerging-powers":      "bw2",
-  "noble-victories":      "bw3",
-  "next-destinies":       "bw4",
-  "dark-explorers":       "bw5",
-  "dragons-exalted":      "bw6",
-  "boundaries-crossed":   "bw7",
-  "plasma-storm":         "bw8",
-  "plasma-freeze":        "bw9",
-  "plasma-blast":         "bw10",
-  "legendary-treasures":  "bw11",
-  "radiant-collection":   "rc1",
-  "dragon-vault":         "dv1",
-  "bw-promos":            "bwp",
-  "mcd-2011":             "mcd11",
-  "mcd-2012":             "mcd12",
-  "mcd-2013":             "mcd13",
-  // HeartGold SoulSilver
-  "heartgold-soulsilver": "hgss1",
-  "hs-unleashed":         "hgss2",
-  "hs-undaunted":         "hgss3",
-  "hs-triumphant":        "hgss4",
-  "call-of-legends":      "col1",
-  "hgss-promos":          "hsp",
+  { slug: "legendary-treasures",     code: "bw11"       },
+  { slug: "plasma-blast",            code: "bw10"       },
+  { slug: "plasma-freeze",           code: "bw9"        },
+  { slug: "plasma-storm",            code: "bw8"        },
+  { slug: "boundaries-crossed",      code: "bw7"        },
+  { slug: "dragon-vault",            code: "dv1"        },
+  { slug: "dragons-exalted",         code: "bw6"        },
+  { slug: "dark-explorers",          code: "bw5"        },
+  { slug: "next-destinies",          code: "bw4"        },
+  { slug: "noble-victories",         code: "bw3"        },
+  { slug: "emerging-powers",         code: "bw2"        },
+  { slug: "black-white",             code: "bw1"        },
+  { slug: "bw-promos",               code: "bwp"        },
+  // HeartGold & SoulSilver
+  { slug: "call-of-legends",         code: "col1"       },
+  { slug: "hs-triumphant",           code: "hgss4"      },
+  { slug: "hs-undaunted",            code: "hgss3"      },
+  { slug: "hs-unleashed",            code: "hgss2"      },
+  { slug: "hgss-promos",             code: "hsp"        },
+  { slug: "heartgold-soulsilver",    code: "hgss1"      },
   // Platinum
-  "platinum":             "pl1",
-  "platinum-rr":          "pl2",
-  "platinum-sv":          "pl3",
-  "platinum-arceus":      "pl4",
+  { slug: "platinum-arceus",         code: "pl4"        },
+  { slug: "platinum-sv",             code: "pl3"        },
+  { slug: "platinum-rr",             code: "pl2"        },
+  { slug: "platinum",                code: "pl1"        },
+  // POP
+  { slug: "pop-9",                   code: "pop9"       },
+  { slug: "pop-8",                   code: "pop8"       },
+  { slug: "pop-7",                   code: "pop7"       },
+  { slug: "pop-6",                   code: "pop6"       },
+  { slug: "pop-5",                   code: "pop5"       },
+  { slug: "pop-4",                   code: "pop4"       },
+  { slug: "pop-3",                   code: "pop3"       },
+  { slug: "pop-2",                   code: "pop2"       },
+  { slug: "pop-1",                   code: "pop1"       },
   // Diamond & Pearl
-  "diamond-pearl":        "dp1",
-  "mysterious-treasures": "dp2",
-  "secret-wonders":       "dp3",
-  "great-encounters":     "dp4",
-  "majestic-dawn":        "dp5",
-  "legends-awakened":     "dp6",
-  "stormfront":           "dp7",
-  "dp-promos":            "dpp",
-  // EX Ruby & Sapphire
-  "ex-ruby-sapphire":       "ex1",
-  "ex-sandstorm":           "ex2",
-  "ex-dragon":              "ex3",
-  "ex-team-magma-aqua":     "ex4",
-  "ex-hidden-legends":      "ex5",
-  "ex-firered-leafgreen":   "ex6",
-  "ex-team-rocket-returns": "ex7",
-  "ex-deoxys":              "ex8",
-  "ex-emerald":             "ex9",
-  "ex-unseen-forces":       "ex10",
-  "ex-delta-species":       "ex11",
-  "ex-legend-maker":        "ex12",
-  "ex-holon-phantoms":      "ex13",
-  "ex-crystal-guardians":   "ex14",
-  "ex-dragon-frontiers":    "ex15",
-  "ex-power-keepers":       "ex16",
-  "ex-trainer-kit-latias":  "tk1a",
-  "ex-trainer-kit-latios":  "tk1b",
-  "ex-trainer-kit-plusle":  "tk2a",
-  "ex-trainer-kit-minun":   "tk2b",
-  // e-Card
-  "expedition":           "ecard1",
-  "aquapolis":            "ecard2",
-  "skyridge":             "ecard3",
-  // Legendary / Neo / Gym / Base
-  "legendary-collection": "lc",
-  "neo-genesis":          "neo1",
-  "neo-discovery":        "neo2",
-  "neo-revelation":       "neo3",
-  "neo-destiny":          "neo4",
-  "southern-islands":     "si1",
-  "gym-heroes":           "gym1",
-  "gym-challenge":        "gym2",
-  "base-set":             "base1",
-  "jungle":               "base2",
-  "fossil":               "base3",
-  "base-set-2":           "base4",
-  "team-rocket":          "base5",
-  // POP Series
-  "pop-1": "pop1", "pop-2": "pop2", "pop-3": "pop3",
-  "pop-4": "pop4", "pop-5": "pop5", "pop-6": "pop6",
-  "pop-7": "pop7", "pop-8": "pop8", "pop-9": "pop9",
-};
+  { slug: "stormfront",              code: "dp7"        },
+  { slug: "legends-awakened",        code: "dp6"        },
+  { slug: "majestic-dawn",           code: "dp5"        },
+  { slug: "great-encounters",        code: "dp4"        },
+  { slug: "secret-wonders",          code: "dp3"        },
+  { slug: "mysterious-treasures",    code: "dp2"        },
+  { slug: "dp-promos",               code: "dpp"        },
+  { slug: "diamond-pearl",           code: "dp1"        },
+  // EX
+  { slug: "ex-power-keepers",        code: "ex16"       },
+  { slug: "ex-dragon-frontiers",     code: "ex15"       },
+  { slug: "ex-crystal-guardians",    code: "ex14"       },
+  { slug: "ex-holon-phantoms",       code: "ex13"       },
+  { slug: "ex-trainer-kit-minun",    code: "tk2b"       },
+  { slug: "ex-trainer-kit-plusle",   code: "tk2a"       },
+  { slug: "ex-legend-maker",         code: "ex12"       },
+  { slug: "ex-delta-species",        code: "ex11"       },
+  { slug: "ex-unseen-forces",        code: "ex10"       },
+  { slug: "ex-emerald",              code: "ex9"        },
+  { slug: "ex-deoxys",               code: "ex8"        },
+  { slug: "ex-team-rocket-returns",  code: "ex7"        },
+  { slug: "ex-firered-leafgreen",    code: "ex6"        },
+  { slug: "ex-hidden-legends",       code: "ex5"        },
+  { slug: "ex-trainer-kit-latios",   code: "tk1b"       },
+  { slug: "ex-trainer-kit-latias",   code: "tk1a"       },
+  { slug: "ex-team-magma-aqua",      code: "ex4"        },
+  { slug: "ex-dragon",               code: "ex3"        },
+  { slug: "ex-sandstorm",            code: "ex2"        },
+  { slug: "ex-ruby-sapphire",        code: "ex1"        },
+  // NP
+  { slug: "nintendo-promos",         code: "np"         },
+  // E-Card
+  { slug: "skyridge",                code: "ecard3"     },
+  { slug: "aquapolis",               code: "ecard2"     },
+  { slug: "expedition",              code: "ecard1"     },
+  // Neo
+  { slug: "neo-destiny",             code: "neo4"       },
+  { slug: "neo-revelation",          code: "neo3"       },
+  { slug: "neo-discovery",           code: "neo2"       },
+  { slug: "neo-genesis",             code: "neo1"       },
+  // Gym
+  { slug: "gym-challenge",           code: "gym2"       },
+  { slug: "gym-heroes",              code: "gym1"       },
+  // Base
+  { slug: "team-rocket",             code: "base5"      },
+  { slug: "base-set-2",              code: "base4"      },
+  { slug: "fossil",                  code: "base3"      },
+  { slug: "wotc-promos",             code: "basep"      },
+  { slug: "jungle",                  code: "base2"      },
+  { slug: "base-set",                code: "base1"      },
+];
 
 // ── Args ─────────────────────────────────────────────────────────────────────
 const args = process.argv.slice(2);
 const getArg = (flag) => { const i = args.indexOf(flag); return i !== -1 ? args[i + 1] : null; };
-const RUN_ALL = args.includes("--all");
 
+const RUN_ALL  = args.includes("--all");
 const SET_SLUG = getArg("--set");
 const SET_CODE = getArg("--code");
 
@@ -218,16 +238,16 @@ if (!SUPABASE_URL || !SUPABASE_KEY) {
   process.exit(1);
 }
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
-  global: { fetch: globalThis.fetch },
-  realtime: { transport: ws },
-});
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 function toCardSlug(name) {
-  return name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return name.trim().toLowerCase()
+    .replace(/'/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
 const VARIANT_MAP = {
@@ -255,7 +275,7 @@ function normalizeVariantKey(raw) {
 function loadSetCards(setSlug) {
   const filePath = path.join(
     __dirname,
-    `../src/data/sets/${setSlug}.ts`
+    `../facebinder/src/data/sets/${setSlug}.ts`
   );
   if (!fs.existsSync(filePath)) {
     console.error(`No existe el archivo: ${filePath}`);
@@ -282,9 +302,10 @@ function loadSetCards(setSlug) {
 }
 
 // ── Scraping de una carta ─────────────────────────────────────────────────────
-async function scrapeCard(page, cardName, cardNumber, setCode) {
+async function scrapeCard(page, cardName, cardNumber) {
+  const activeCode = global._SET_CODE || SET_CODE;
   const cardSlug = toCardSlug(cardName);
-  const cardId   = `${setCode}-${cardNumber}`;
+  const cardId   = `${activeCode}-${cardNumber}`;
   const baseUrl  = `https://scrydex.com/pokemon/cards/${cardSlug}/${cardId}`;
 
   // Cargar página base para detectar variantes disponibles
@@ -346,21 +367,21 @@ async function scrapeCard(page, cardName, cardNumber, setCode) {
   return { cardId, prices: Object.keys(prices).length > 0 ? prices : null };
 }
 
-// ── Scrape de un set completo ─────────────────────────────────────────────────
+// ── Scraping de un set completo ───────────────────────────────────────────────
 async function scrapeSet(page, setSlug, setCode) {
-  const setFilePath = path.join(__dirname, `../src/data/sets/${setSlug}.ts`);
+  const setFilePath = path.join(__dirname, `../facebinder/src/data/sets/${setSlug}.ts`);
   if (!fs.existsSync(setFilePath)) {
-    console.log(`  ⏭️  Sin archivo de cartas: ${setSlug}.ts — omitido`);
+    console.log(`⏭️  Saltando ${setSlug} — archivo .ts no encontrado`);
     return { ok: 0, failed: 0, skipped: 0 };
   }
+
+  // Reasignar SET_CODE para que scrapeCard lo use
+  global._SET_CODE = setCode;
 
   const cards = loadSetCards(setSlug);
-  if (cards.length === 0) {
-    console.log(`  ⏭️  Sin cartas encontradas en ${setSlug}.ts — omitido`);
-    return { ok: 0, failed: 0, skipped: 0 };
-  }
-
-  console.log(`\n  📋 ${cards.length} cartas en ${setSlug} (${setCode})`);
+  console.log(`\n${"─".repeat(55)}`);
+  console.log(`  Set: ${setSlug} (${setCode}) — ${cards.length} cartas`);
+  console.log(`${"─".repeat(55)}`);
 
   const results = { ok: 0, failed: 0, skipped: 0 };
   const upsertBatch = [];
@@ -368,10 +389,10 @@ async function scrapeSet(page, setSlug, setCode) {
 
   for (let i = 0; i < cards.length; i++) {
     const { name, number } = cards[i];
-    process.stdout.write(`  [${i + 1}/${cards.length}] ${name} #${number}... `);
+    process.stdout.write(`[${i + 1}/${cards.length}] ${name} #${number}... `);
 
     try {
-      const { cardId, prices, error } = await scrapeCard(page, name, number, setCode);
+      const { cardId, prices, error } = await scrapeCard(page, name, number);
 
       if (error) {
         console.log(`⚠️  ${error}`);
@@ -394,7 +415,8 @@ async function scrapeSet(page, setSlug, setCode) {
       const { error: dbErr } = await supabase
         .from("card_prices")
         .upsert(batch, { onConflict: "card_id" });
-      if (dbErr) console.error("\n  ⚠️  Error guardando lote:", dbErr.message);
+      if (dbErr) console.error("\n⚠️  Error guardando lote en Supabase:", dbErr.message);
+      else process.stdout.write(`   💾 Lote de 20 guardado\n`);
     }
 
     await sleep(400);
@@ -404,7 +426,8 @@ async function scrapeSet(page, setSlug, setCode) {
     const { error: dbErr } = await supabase
       .from("card_prices")
       .upsert(upsertBatch, { onConflict: "card_id" });
-    if (dbErr) console.error(`  ⚠️  Error guardando último lote de ${setSlug}:`, dbErr.message);
+    if (dbErr) console.error("⚠️  Error guardando último lote:", dbErr.message);
+    else console.log(`\n💾 Último lote de ${upsertBatch.length} guardado`);
   }
 
   return results;
@@ -412,13 +435,11 @@ async function scrapeSet(page, setSlug, setCode) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 (async () => {
-  const setsToRun = RUN_ALL
-    ? Object.entries(ALL_SET_CODES)
-    : [[SET_SLUG, SET_CODE]];
+  const setsToRun = RUN_ALL ? ALL_SETS : [{ slug: SET_SLUG, code: SET_CODE }];
 
   console.log(`\n${"═".repeat(55)}`);
   console.log(`  FaceBinder — Bulk Price Scraper`);
-  if (RUN_ALL) console.log(`  Modo: TODOS LOS SETS (${setsToRun.length} sets)`);
+  if (RUN_ALL) console.log(`  Modo: TODOS los sets (${setsToRun.length})`);
   else         console.log(`  Set: ${SET_SLUG} (${SET_CODE})`);
   console.log(`${"═".repeat(55)}\n`);
 
@@ -429,11 +450,11 @@ async function scrapeSet(page, setSlug, setCode) {
 
   const totals = { ok: 0, failed: 0, skipped: 0 };
 
-  for (const [slug, code] of setsToRun) {
-    const r = await scrapeSet(page, slug, code);
-    totals.ok      += r.ok;
-    totals.failed  += r.failed;
-    totals.skipped += r.skipped;
+  for (const { slug, code } of setsToRun) {
+    const res = await scrapeSet(page, slug, code);
+    totals.ok      += res.ok;
+    totals.failed  += res.failed;
+    totals.skipped += res.skipped;
   }
 
   await browser.close();
