@@ -24,8 +24,7 @@ jobs:
       - name: Install scraper dependencies
         working-directory: scraper
         run: |
-          npm init -y
-          npm install playwright @supabase/supabase-js ws
+          npm install
           npx playwright install chromium --with-deps
 
       - name: Scrape all set prices

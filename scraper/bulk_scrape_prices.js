@@ -275,7 +275,7 @@ function normalizeVariantKey(raw) {
 function loadSetCards(setSlug) {
   const filePath = path.join(
     __dirname,
-    `../facebinder/src/data/sets/${setSlug}.ts`
+    `../src/data/sets/${setSlug}.ts`
   );
   if (!fs.existsSync(filePath)) {
     console.error(`No existe el archivo: ${filePath}`);
@@ -369,7 +369,7 @@ async function scrapeCard(page, cardName, cardNumber) {
 
 // ── Scraping de un set completo ───────────────────────────────────────────────
 async function scrapeSet(page, setSlug, setCode) {
-  const setFilePath = path.join(__dirname, `../facebinder/src/data/sets/${setSlug}.ts`);
+  const setFilePath = path.join(__dirname, `../src/data/sets/${setSlug}.ts`);
   if (!fs.existsSync(setFilePath)) {
     console.log(`⏭️  Saltando ${setSlug} — archivo .ts no encontrado`);
     return { ok: 0, failed: 0, skipped: 0 };
