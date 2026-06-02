@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createClient } from "@supabase/supabase-js";
 
 export type ScrydexPrices = Record<string, number>; // { normal: 0.25, reverseHolofoil: 0.50 }
 
@@ -9,7 +10,7 @@ interface UseScrydexPriceOptions {
   setCode: string;   // "me4"
   cardName: string;  // "Weedle"
   cardNumber: number;
-  enabled?: boolean; // false para no hacer el fetch (carta de otro set sin soporte)
+  enabled?: boolean;
 }
 
 interface UseScrydexPriceResult {
@@ -23,10 +24,13 @@ export const SCRYDEX_SET_CODES: Record<string, string> = {
   "chaos-rising": "me4",
 };
 
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
 export function useScrydexPrice({
-  setSlug,
   setCode,
-  cardName,
   cardNumber,
   enabled = true,
 }: UseScrydexPriceOptions): UseScrydexPriceResult {
@@ -42,32 +46,27 @@ export function useScrydexPrice({
     setPrices(null);
     setError(null);
 
-    const params = new URLSearchParams({
-      set:    setSlug,
-      code:   setCode,
-      name:   cardName.trim(),
-      number: String(cardNumber),
-    });
+    const cardId = `${setCode}-${cardNumber}`;
 
-    fetch(`/api/prices?${params}`)
-      .then(r => r.json())
-      .then(data => {
+    supabase
+      .from("card_prices")
+      .select("prices")
+      .eq("card_id", cardId)
+      .single()
+      .then(({ data, error: dbErr }) => {
         if (cancelled) return;
-        if (data.error && !data.prices) {
-          setError(data.error);
+        if (dbErr || !data) {
+          setError("Sin precio");
         } else {
-          setPrices(data.prices ?? null);
+          setPrices(data.prices as ScrydexPrices);
         }
-      })
-      .catch(e => {
-        if (!cancelled) setError(String(e));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
 
     return () => { cancelled = true; };
-  }, [setSlug, setCode, cardName, cardNumber, enabled]);
+  }, [setCode, cardNumber, enabled]);
 
   return { prices, loading, error };
 }
