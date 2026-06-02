@@ -23,9 +23,8 @@ const ALL_SET_CODES = {
   // Mega Evolution Series
   "mega-evolution":       "me1",
   "phantasmal-flames":    "me2",
-  "ascended-heroes":      "me3",
+  "perfect-order":        "me3",
   "chaos-rising":         "me4",
-  "perfect-order":        "me5",
   // Scarlet & Violet
   "scarlet-violet":       "sv1",
   "paldea-evolved":       "sv2",
