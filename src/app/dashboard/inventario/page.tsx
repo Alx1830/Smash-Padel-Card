@@ -7,6 +7,7 @@ import { useRef, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { getVersionLabel, getVersionColor, getVersionEffect } from "@/data/pokemon-cards-meta";
 import {
   invKey,
@@ -41,14 +42,6 @@ const SET_LOGO: Record<string, string> = Object.fromEntries(
   POKEMON_SERIES.flatMap(s => s.sets).map(s => [s.id, s.logo])
 );
 
-function openTCG(card: PokemonCard) {
-  const q   = encodeURIComponent(card.name);
-  const url = `https://www.tcgplayer.com/search/pokemon/product?q=${q}`;
-  const w = 430, h = 600;
-  const left = screen.availWidth - w - 16;
-  const top  = screen.availHeight - h - 16;
-  window.open(url, "tcgplayer", `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`);
-}
 
 /* ── Cosmos stars (static positions, animated via CSS) ──────── */
 const COSMOS_STARS = Array.from({ length: 18 }, (_, i) => ({
@@ -351,6 +344,8 @@ export default function InventarioPage() {
   const [expanded,    setExpanded]    = useState<string | null>(null);
   const [loadingSet,  setLoadingSet]  = useState<string | null>(null);
   const [setCards,    setSetCards]    = useState<Record<string, PokemonCard[]>>({});
+  // card_prices por set: { [setId]: { [scrydexCardId]: { normal: 0.25, ... } } }
+  const [setCardPrices, setSetCardPrices] = useState<Record<string, Record<string, Record<string, number>>>>({});
 
   const [modalCard,      setModalCard]      = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [sellTarget,     setSellTarget]     = useState<{ card: PokemonCard; setId: string } | null>(null);
@@ -399,6 +394,23 @@ export default function InventarioPage() {
     setLoadingSet(setId);
     await loadManySets([setId]);
     setSetCards(prev => ({ ...prev, [setId]: SET_CARDS[setId] ?? [] }));
+
+    // Cargar precios Scrydex del set en un solo query
+    const sc = SCRYDEX_SET_CODES[setId];
+    if (sc && !setCardPrices[setId]) {
+      const { data: priceRows } = await supabase
+        .from("card_prices")
+        .select("card_id, prices")
+        .like("card_id", `${sc}-%`);
+      if (priceRows) {
+        const map: Record<string, Record<string, number>> = {};
+        for (const row of priceRows) {
+          map[row.card_id] = row.prices as Record<string, number>;
+        }
+        setSetCardPrices(prev => ({ ...prev, [setId]: map }));
+      }
+    }
+
     setLoadingSet(null);
   }
 
@@ -604,6 +616,15 @@ export default function InventarioPage() {
                             const isWanted = wishlistCards.some(w => w.card_id === card.id && w.set_id === setId);
                             const isListed = listings.some(l => String(l.card_id) === String(card.card_number) && l.set_id === setId && l.version === card.version);
 
+                            // Precio Scrydex para esta carta/versión
+                            const sc = SCRYDEX_SET_CODES[setId];
+                            const pricesForSet = sc ? (setCardPrices[setId] ?? {}) : {};
+                            const cardPriceMap = pricesForSet[`${sc}-${card.card_number}`];
+                            const vk = card.version.toLowerCase().replace(/\s+/g, "");
+                            const cardPrice: number | null = cardPriceMap
+                              ? (cardPriceMap[vk] ?? cardPriceMap[card.version] ?? cardPriceMap["normal"] ?? null)
+                              : null;
+
                             return (
                               <div key={`${card.id}-${card.version}`} style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
 
@@ -629,11 +650,13 @@ export default function InventarioPage() {
                                 {/* Action buttons */}
                                 {userId && (
                                   <div className="inv-act-row">
-                                    {/* TCGPlayer */}
-                                    <button className="inv-act-btn" onClick={() => openTCG(card)} title="Ver en TCGPlayer">
-                                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                                      <img src="https://www.tcgplayer.com/favicon.ico" alt="TCG" className="inv-act-icon" />
-                                    </button>
+                                    {/* Precio */}
+                                    <div className="inv-act-btn" title="Precio de mercado" style={{ cursor: "default", flexDirection: "column", gap: "1px", padding: "2px 4px" }}>
+                                      <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.08em" }}>USD</span>
+                                      <span style={{ fontFamily: MONO, fontSize: "11px", color: cardPrice !== null ? COURT : INK2, fontWeight: 700, lineHeight: 1 }}>
+                                        {cardPrice !== null ? `$${cardPrice.toFixed(2)}` : "—"}
+                                      </span>
+                                    </div>
 
                                     {/* Destacar */}
                                     <button
