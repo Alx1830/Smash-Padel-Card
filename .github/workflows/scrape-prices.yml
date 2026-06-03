@@ -2,15 +2,20 @@ name: Scrape Card Prices
 
 on:
   schedule:
-    # Corre todos los días a las 2am UTC (10pm Argentina)
-    - cron: "0 2 * * *"
+    # 1am Colombia (UTC-5) = 6am UTC
+    - cron: "0 6 * * *"
+    # 1pm Colombia (UTC-5) = 6pm UTC
+    - cron: "0 18 * * *"
   workflow_dispatch:
-    # También permite correrlo manualmente desde GitHub
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 300
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        chunk: ["1", "2", "3", "4", "5"]
 
     steps:
       - name: Checkout repo
@@ -27,9 +32,9 @@ jobs:
           npm install
           npx playwright install chromium --with-deps
 
-      - name: Scrape all set prices
+      - name: Scrape chunk ${{ matrix.chunk }}
         working-directory: scraper
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-        run: node bulk_scrape_prices.js --all
+        run: node bulk_scrape_prices.js --chunk ${{ matrix.chunk }}
