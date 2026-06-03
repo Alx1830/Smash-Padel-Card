@@ -224,128 +224,139 @@ const SET_SLUG  = getArg("--set");
 const SET_CODE  = getArg("--code");
 const CHUNK_ARG = getArg("--chunk"); // formato "N/TOTAL", ej: "1/5"
 
-// Chunks predefinidos (177 sets divididos en 5 grupos)
+// Chunks predefinidos (177 sets divididos en 19 grupos de ~9-10 sets)
 const CHUNKS = {
-  "1": [
-    // Mega Evolution
+  "1": [ // 10 sets — ME + SV inicio
     { slug: "chaos-rising", code: "me4" }, { slug: "perfect-order", code: "me3" },
     { slug: "ascended-heroes", code: "me2pt5" }, { slug: "phantasmal-flames", code: "me2" },
     { slug: "mega-evolution", code: "me1" }, { slug: "mega-evo-promos", code: "mep" },
-    // Scarlet & Violet
     { slug: "white-flare", code: "rsv10pt5" }, { slug: "black-bolt", code: "zsv10pt5" },
     { slug: "destined-rivals", code: "sv10" }, { slug: "journey-together", code: "sv9" },
+  ],
+  "2": [ // 10 sets — SV medio
     { slug: "prismatic-evolutions", code: "sv8pt5" }, { slug: "surging-sparks", code: "sv8" },
     { slug: "stellar-crown", code: "sv7" }, { slug: "shrouded-fable", code: "sv6pt5" },
     { slug: "twilight-masquerade", code: "sv6" }, { slug: "temporal-forces", code: "sv5" },
     { slug: "paldean-fates", code: "sv4pt5" }, { slug: "paradox-rift", code: "sv4" },
     { slug: "sv-151", code: "sv3pt5" }, { slug: "obsidian-flames", code: "sv3" },
+  ],
+  "3": [ // 10 sets — SV fin + Other inicio
     { slug: "paldea-evolved", code: "sv2" }, { slug: "scarlet-violet", code: "sv1" },
     { slug: "sv-energies", code: "sve" }, { slug: "sv-promos", code: "svp" },
-    // Other (parcial)
     { slug: "mcd-2024", code: "mcd24" }, { slug: "tcg-classic-venusaur", code: "clv" },
     { slug: "tcg-classic-charizard", code: "clc" }, { slug: "tcg-classic-blastoise", code: "clb" },
     { slug: "mcd-2023", code: "mcd23" }, { slug: "mcd-2022", code: "mcd22" },
+  ],
+  "4": [ // 10 sets — Other resto
     { slug: "mcd-2021", code: "mcd21" }, { slug: "futsal-promos", code: "fut20" },
     { slug: "mcd-2019", code: "mcd19" }, { slug: "mcd-2018", code: "mcd18" },
-    { slug: "mcd-2017", code: "mcd17" },
+    { slug: "mcd-2017", code: "mcd17" }, { slug: "mcd-2016", code: "mcd16" },
+    { slug: "mcd-2015", code: "mcd15" }, { slug: "mcd-2014", code: "mcd14" },
+    { slug: "mcd-2012", code: "mcd12" }, { slug: "mcd-2011", code: "mcd11" },
   ],
-  "2": [
-    // Other (resto)
-    { slug: "mcd-2016", code: "mcd16" }, { slug: "mcd-2015", code: "mcd15" },
-    { slug: "mcd-2014", code: "mcd14" }, { slug: "mcd-2012", code: "mcd12" },
-    { slug: "mcd-2011", code: "mcd11" }, { slug: "pokemon-rumble", code: "ru1" },
-    { slug: "poke-card-creator", code: "wb1" }, { slug: "best-of-game", code: "bp" },
-    { slug: "legendary-collection", code: "base6" }, { slug: "southern-islands", code: "si1" },
-    // Sword & Shield
+  "5": [ // 10 sets — Other fin + SWSH inicio
+    { slug: "pokemon-rumble", code: "ru1" }, { slug: "poke-card-creator", code: "wb1" },
+    { slug: "best-of-game", code: "bp" }, { slug: "legendary-collection", code: "base6" },
+    { slug: "southern-islands", code: "si1" },
     { slug: "crown-zenith-gg", code: "swsh12pt5gg" }, { slug: "crown-zenith", code: "swsh12pt5" },
     { slug: "silver-tempest-tg", code: "swsh12tg" }, { slug: "silver-tempest", code: "swsh12" },
-    { slug: "lost-origin-tg", code: "swsh11tg" }, { slug: "lost-origin", code: "swsh11" },
-    { slug: "pokemon-go", code: "pgo" }, { slug: "astral-radiance-tg", code: "swsh10tg" },
-    { slug: "astral-radiance", code: "swsh10" }, { slug: "brilliant-stars-tg", code: "swsh9tg" },
-    { slug: "brilliant-stars", code: "swsh9" }, { slug: "fusion-strike", code: "swsh8" },
-    { slug: "celebrations", code: "cel25" }, { slug: "evolving-skies", code: "swsh7" },
-    { slug: "chilling-reign", code: "swsh6" }, { slug: "battle-styles", code: "swsh5" },
-    { slug: "shining-fates", code: "swsh45" }, { slug: "vivid-voltage", code: "swsh4" },
-    { slug: "champions-path", code: "swsh35" }, { slug: "darkness-ablaze", code: "swsh3" },
-    { slug: "rebel-clash", code: "swsh2" }, { slug: "sword-shield", code: "swsh1" },
-    { slug: "ss-promos", code: "swshp" },
-    // Sun & Moon (inicio)
-    { slug: "cosmic-eclipse", code: "sm12" }, { slug: "hidden-fates", code: "sm115" },
-    { slug: "unified-minds", code: "sm11" },
+    { slug: "lost-origin-tg", code: "swsh11tg" },
   ],
-  "3": [
-    // Sun & Moon (resto)
+  "6": [ // 10 sets — SWSH medio
+    { slug: "lost-origin", code: "swsh11" }, { slug: "pokemon-go", code: "pgo" },
+    { slug: "astral-radiance-tg", code: "swsh10tg" }, { slug: "astral-radiance", code: "swsh10" },
+    { slug: "brilliant-stars-tg", code: "swsh9tg" }, { slug: "brilliant-stars", code: "swsh9" },
+    { slug: "fusion-strike", code: "swsh8" }, { slug: "celebrations", code: "cel25" },
+    { slug: "evolving-skies", code: "swsh7" }, { slug: "chilling-reign", code: "swsh6" },
+  ],
+  "7": [ // 9 sets — SWSH fin + SM inicio
+    { slug: "battle-styles", code: "swsh5" }, { slug: "shining-fates", code: "swsh45" },
+    { slug: "vivid-voltage", code: "swsh4" }, { slug: "champions-path", code: "swsh35" },
+    { slug: "darkness-ablaze", code: "swsh3" }, { slug: "rebel-clash", code: "swsh2" },
+    { slug: "sword-shield", code: "swsh1" }, { slug: "ss-promos", code: "swshp" },
+    { slug: "cosmic-eclipse", code: "sm12" },
+  ],
+  "8": [ // 9 sets — SM medio
+    { slug: "hidden-fates", code: "sm115" }, { slug: "unified-minds", code: "sm11" },
     { slug: "unbroken-bonds", code: "sm10" }, { slug: "detective-pikachu", code: "det1" },
     { slug: "team-up", code: "sm9" }, { slug: "lost-thunder", code: "sm8" },
     { slug: "dragon-majesty", code: "sm75" }, { slug: "celestial-storm", code: "sm7" },
-    { slug: "forbidden-light", code: "sm6" }, { slug: "ultra-prism", code: "sm5" },
-    { slug: "crimson-invasion", code: "sm4" }, { slug: "shining-legends", code: "sm35" },
-    { slug: "burning-shadows", code: "sm3" }, { slug: "guardians-rising", code: "sm2" },
-    { slug: "sm-promos", code: "smp" }, { slug: "sun-moon", code: "sm1" },
-    // XY
+    { slug: "forbidden-light", code: "sm6" },
+  ],
+  "9": [ // 9 sets — SM fin + XY inicio
+    { slug: "ultra-prism", code: "sm5" }, { slug: "crimson-invasion", code: "sm4" },
+    { slug: "shining-legends", code: "sm35" }, { slug: "burning-shadows", code: "sm3" },
+    { slug: "guardians-rising", code: "sm2" }, { slug: "sm-promos", code: "smp" },
+    { slug: "sun-moon", code: "sm1" },
     { slug: "evolutions", code: "xy12" }, { slug: "steam-siege", code: "xy11" },
+  ],
+  "10": [ // 9 sets — XY medio
     { slug: "fates-collide", code: "xy10" }, { slug: "generations", code: "g1" },
     { slug: "breakpoint", code: "xy9" }, { slug: "xy-breakthrough", code: "xy8" },
     { slug: "ancient-origins", code: "xy7" }, { slug: "roaring-skies", code: "xy6" },
     { slug: "double-crisis", code: "dc1" }, { slug: "primal-clash", code: "xy5" },
-    { slug: "phantom-forces", code: "xy4" }, { slug: "furious-fists", code: "xy3" },
-    { slug: "xy-flashfire", code: "xy2" }, { slug: "xy", code: "xy1" },
-    { slug: "kalos-starter", code: "xy0" }, { slug: "xy-promos", code: "xyp" },
-    // Black & White (inicio)
+    { slug: "phantom-forces", code: "xy4" },
+  ],
+  "11": [ // 9 sets — XY fin + BW inicio
+    { slug: "furious-fists", code: "xy3" }, { slug: "xy-flashfire", code: "xy2" },
+    { slug: "xy", code: "xy1" }, { slug: "kalos-starter", code: "xy0" },
+    { slug: "xy-promos", code: "xyp" },
     { slug: "legendary-treasures", code: "bw11" }, { slug: "plasma-blast", code: "bw10" },
     { slug: "plasma-freeze", code: "bw9" }, { slug: "plasma-storm", code: "bw8" },
-    { slug: "boundaries-crossed", code: "bw7" },
   ],
-  "4": [
-    // Black & White (resto)
-    { slug: "dragon-vault", code: "dv1" }, { slug: "dragons-exalted", code: "bw6" },
-    { slug: "dark-explorers", code: "bw5" }, { slug: "next-destinies", code: "bw4" },
-    { slug: "noble-victories", code: "bw3" }, { slug: "emerging-powers", code: "bw2" },
-    { slug: "black-white", code: "bw1" }, { slug: "bw-promos", code: "bwp" },
-    // HeartGold & SoulSilver
+  "12": [ // 9 sets — BW fin
+    { slug: "boundaries-crossed", code: "bw7" }, { slug: "dragon-vault", code: "dv1" },
+    { slug: "dragons-exalted", code: "bw6" }, { slug: "dark-explorers", code: "bw5" },
+    { slug: "next-destinies", code: "bw4" }, { slug: "noble-victories", code: "bw3" },
+    { slug: "emerging-powers", code: "bw2" }, { slug: "black-white", code: "bw1" },
+    { slug: "bw-promos", code: "bwp" },
+  ],
+  "13": [ // 9 sets — HGSS + PL inicio
     { slug: "call-of-legends", code: "col1" }, { slug: "hs-triumphant", code: "hgss4" },
     { slug: "hs-undaunted", code: "hgss3" }, { slug: "hs-unleashed", code: "hgss2" },
     { slug: "hgss-promos", code: "hsp" }, { slug: "heartgold-soulsilver", code: "hgss1" },
-    // Platinum
     { slug: "platinum-arceus", code: "pl4" }, { slug: "platinum-sv", code: "pl3" },
-    { slug: "platinum-rr", code: "pl2" }, { slug: "platinum", code: "pl1" },
-    // POP
+    { slug: "platinum-rr", code: "pl2" },
+  ],
+  "14": [ // 9 sets — PL fin + POP
+    { slug: "platinum", code: "pl1" },
     { slug: "pop-9", code: "pop9" }, { slug: "pop-8", code: "pop8" },
     { slug: "pop-7", code: "pop7" }, { slug: "pop-6", code: "pop6" },
     { slug: "pop-5", code: "pop5" }, { slug: "pop-4", code: "pop4" },
     { slug: "pop-3", code: "pop3" }, { slug: "pop-2", code: "pop2" },
+  ],
+  "15": [ // 9 sets — POP fin + DP
     { slug: "pop-1", code: "pop1" },
-    // Diamond & Pearl
     { slug: "stormfront", code: "dp7" }, { slug: "legends-awakened", code: "dp6" },
     { slug: "majestic-dawn", code: "dp5" }, { slug: "great-encounters", code: "dp4" },
     { slug: "secret-wonders", code: "dp3" }, { slug: "mysterious-treasures", code: "dp2" },
     { slug: "dp-promos", code: "dpp" }, { slug: "diamond-pearl", code: "dp1" },
-    // EX (inicio)
-    { slug: "ex-power-keepers", code: "ex16" },
   ],
-  "5": [
-    // EX (resto)
-    { slug: "ex-dragon-frontiers", code: "ex15" }, { slug: "ex-crystal-guardians", code: "ex14" },
-    { slug: "ex-holon-phantoms", code: "ex13" }, { slug: "ex-trainer-kit-minun", code: "tk2b" },
-    { slug: "ex-trainer-kit-plusle", code: "tk2a" }, { slug: "ex-legend-maker", code: "ex12" },
-    { slug: "ex-delta-species", code: "ex11" }, { slug: "ex-unseen-forces", code: "ex10" },
+  "16": [ // 9 sets — EX inicio
+    { slug: "ex-power-keepers", code: "ex16" }, { slug: "ex-dragon-frontiers", code: "ex15" },
+    { slug: "ex-crystal-guardians", code: "ex14" }, { slug: "ex-holon-phantoms", code: "ex13" },
+    { slug: "ex-trainer-kit-minun", code: "tk2b" }, { slug: "ex-trainer-kit-plusle", code: "tk2a" },
+    { slug: "ex-legend-maker", code: "ex12" }, { slug: "ex-delta-species", code: "ex11" },
+    { slug: "ex-unseen-forces", code: "ex10" },
+  ],
+  "17": [ // 9 sets — EX medio
     { slug: "ex-emerald", code: "ex9" }, { slug: "ex-deoxys", code: "ex8" },
     { slug: "ex-team-rocket-returns", code: "ex7" }, { slug: "ex-firered-leafgreen", code: "ex6" },
     { slug: "ex-hidden-legends", code: "ex5" }, { slug: "ex-trainer-kit-latios", code: "tk1b" },
     { slug: "ex-trainer-kit-latias", code: "tk1a" }, { slug: "ex-team-magma-aqua", code: "ex4" },
-    { slug: "ex-dragon", code: "ex3" }, { slug: "ex-sandstorm", code: "ex2" },
-    { slug: "ex-ruby-sapphire", code: "ex1" },
-    // Nintendo Promos
+    { slug: "ex-dragon", code: "ex3" },
+  ],
+  "18": [ // 9 sets — EX fin + NP + E-Card + Neo inicio
+    { slug: "ex-sandstorm", code: "ex2" }, { slug: "ex-ruby-sapphire", code: "ex1" },
     { slug: "nintendo-promos", code: "np" },
-    // E-Card
     { slug: "skyridge", code: "ecard3" }, { slug: "aquapolis", code: "ecard2" },
     { slug: "expedition", code: "ecard1" },
-    // Neo
     { slug: "neo-destiny", code: "neo4" }, { slug: "neo-revelation", code: "neo3" },
-    { slug: "neo-discovery", code: "neo2" }, { slug: "neo-genesis", code: "neo1" },
-    // Gym
+    { slug: "neo-discovery", code: "neo2" },
+  ],
+  "19": [ // 9 sets — Neo fin + Gym + Base
+    { slug: "neo-genesis", code: "neo1" },
     { slug: "gym-challenge", code: "gym2" }, { slug: "gym-heroes", code: "gym1" },
-    // Base
     { slug: "team-rocket", code: "base5" }, { slug: "base-set-2", code: "base4" },
     { slug: "fossil", code: "base3" }, { slug: "wotc-promos", code: "basep" },
     { slug: "jungle", code: "base2" }, { slug: "base-set", code: "base1" },
