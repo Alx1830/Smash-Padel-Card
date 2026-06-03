@@ -9,29 +9,73 @@ on:
   workflow_dispatch:
 
 jobs:
-  scrape:
+  lote1:
     runs-on: ubuntu-latest
     timeout-minutes: 360
     strategy:
       fail-fast: false
       matrix:
-        chunk: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19"]
-
+        chunk: ["1","2","3","4","5","6","7"]
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "22"
-
-      - name: Install scraper dependencies
+      - name: Install dependencies
         working-directory: scraper
         run: |
           npm install
           npx playwright install chromium --with-deps
+      - name: Scrape chunk ${{ matrix.chunk }}
+        working-directory: scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node bulk_scrape_prices.js --chunk ${{ matrix.chunk }}
 
+  lote2:
+    needs: lote1
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        chunk: ["8","9","10","11","12","13","14"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        working-directory: scraper
+        run: |
+          npm install
+          npx playwright install chromium --with-deps
+      - name: Scrape chunk ${{ matrix.chunk }}
+        working-directory: scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node bulk_scrape_prices.js --chunk ${{ matrix.chunk }}
+
+  lote3:
+    needs: lote2
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        chunk: ["15","16","17","18","19"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        working-directory: scraper
+        run: |
+          npm install
+          npx playwright install chromium --with-deps
       - name: Scrape chunk ${{ matrix.chunk }}
         working-directory: scraper
         env:
