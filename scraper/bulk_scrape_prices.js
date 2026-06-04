@@ -458,26 +458,38 @@ async function scrapeCard(page, cardName, cardNumber) {
     return { cardId, prices: null, error: "404" };
   }
 
-  // Detectar variantes leyendo los links con ?variant= en el DOM
-  // (más confiable que parsear innerText)
+  // ── Paso 1: detectar variantes via DOM (tabs con href ?variant=) ──────────
+  // Filtramos: el slug debe ser corto, empezar con letra, sin espacios
+  // para descartar links de navegación/canonical que también usen ?variant=
   let variantSlugs = await page.$$eval(
     'a[href*="?variant="]',
     els => [...new Set(
       els.map(el => {
         try { return new URL(el.href).searchParams.get("variant"); } catch { return null; }
-      }).filter(Boolean)
+      }).filter(v => v && /^[a-zA-Z][a-zA-Z0-9]{1,30}$/.test(v))
     )]
   );
 
-  // Fallback: si no hay links de variante, leer el ?variant= de la URL actual
-  // (carta de una sola variante — Scrydex puede redirigir con el param en la URL)
+  // ── Paso 2: fallback texto — igual al código original que funcionaba ───────
   if (variantSlugs.length === 0) {
-    const currentUrl = page.url();
-    const currentVariant = new URL(currentUrl).searchParams.get("variant");
-    if (currentVariant) {
-      variantSlugs = [currentVariant];
+    // Buscar bloque "SELECT VARIANT" en innerText (cartas multi-variante)
+    const textVariants = await page.evaluate(() => {
+      const lines = document.body.innerText
+        .split("\n").map(l => l.trim()).filter(l => l);
+      const idx = lines.findIndex(l => l.toUpperCase() === "SELECT VARIANT");
+      if (idx === -1) return [];
+      const variants = [];
+      for (let i = idx + 1; i < lines.length && i < idx + 10; i++) {
+        if (lines[i].toUpperCase().includes("DATA SOURCE")) break;
+        variants.push(lines[i]);
+      }
+      return variants;
+    });
+
+    if (textVariants.length > 0) {
+      variantSlugs = textVariants.map(normalizeVariantKey);
     } else {
-      // Último recurso: leer la variante activa desde el texto
+      // Carta de una sola variante: leer la variante activa (línea antes de NEAR MINT)
       const activeVariant = await page.evaluate(() => {
         const lines = document.body.innerText
           .split("\n").map(l => l.trim()).filter(l => l);
@@ -493,8 +505,8 @@ async function scrapeCard(page, cardName, cardNumber) {
   for (const variantSlug of variantSlugs) {
     const url = `${baseUrl}?variant=${variantSlug}`;
 
-    // Si la variante es la que ya está cargada, no navegar de nuevo
-    if (page.url() !== url) {
+    // Si ya estamos en esa URL (ej: Scrydex redirigió), no navegar de nuevo
+    if (!page.url().includes(`variant=${variantSlug}`)) {
       await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
       await page.waitForTimeout(600);
     }
