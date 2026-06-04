@@ -178,7 +178,11 @@ export function WishlistPageClient({
           .wl-layout { display: flex; gap: 32px; align-items: flex-start; }
           .wl-sidebar { width: 240px; flex-shrink: 0; }
           .wl-grid-area { flex: 1; min-width: 0; }
-          @media (max-width: 1023px) { .wl-layout { flex-direction: column; } .wl-sidebar { display: none; } }
+          @media (max-width: 1023px) {
+            .wl-layout { flex-direction: column; }
+            .wl-sidebar { width: 100% !important; }
+            .wl-sidebar > div { position: static !important; }
+          }
         `}</style>
 
         <div className="wl-layout">
