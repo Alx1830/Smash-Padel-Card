@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { AdminFeed } from "@/components/AdminFeed";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
+import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import dynamic from "next/dynamic";
 const MarketFeed = dynamic(() => import("@/components/MarketFeed").then(m => m.MarketFeed), { ssr: false });
 
@@ -101,6 +103,238 @@ const INK1  = "#c9cfdd";
 const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
+
+// Mapa rápido set_id → nombre legible
+const SET_NAME_MAP: Record<string, string> = Object.fromEntries(
+  POKEMON_SERIES.flatMap(s => s.sets).map(s => [s.id, s.name])
+);
+
+const R2_BASE = "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon";
+
+interface InvRow {
+  cardId: string;       // raw card_id del DB
+  name: string;
+  cardNum: number;
+  setId: string;
+  setName: string;
+  version: string;
+  quantity: number;
+  price: number | null;
+  imageUrl: string;
+}
+
+/* ── Tabla de inventario ──────────────────────────────────────── */
+function InventoryTable({ rows }: { rows: InvRow[] }) {
+  const [search,        setSearch]        = useState("");
+  const [filterSet,     setFilterSet]     = useState("");
+  const [filterVariant, setFilterVariant] = useState("");
+  const [sortPrice,     setSortPrice]     = useState<"none" | "asc" | "desc">("none");
+
+  const uniqueSets     = useMemo(() => [...new Set(rows.map(r => r.setId))].sort(), [rows]);
+  const uniqueVariants = useMemo(() => [...new Set(rows.map(r => r.version))].sort(), [rows]);
+
+  const filtered = useMemo(() => {
+    let list = rows;
+    if (search.trim())    list = list.filter(r => r.name.toLowerCase().includes(search.trim().toLowerCase()));
+    if (filterSet)        list = list.filter(r => r.setId === filterSet);
+    if (filterVariant)    list = list.filter(r => r.version === filterVariant);
+    if (sortPrice === "asc")  list = [...list].sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
+    if (sortPrice === "desc") list = [...list].sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
+    return list;
+  }, [rows, search, filterSet, filterVariant, sortPrice]);
+
+  const inputStyle: React.CSSProperties = {
+    background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.1)",
+    borderRadius: "8px",
+    color: INK0,
+    fontFamily: MONO,
+    fontSize: "11px",
+    padding: "8px 12px",
+    outline: "none",
+    transition: "border-color 0.15s",
+  };
+
+  const selStyle: React.CSSProperties = {
+    ...inputStyle,
+    cursor: "pointer",
+    appearance: "none" as const,
+    WebkitAppearance: "none" as const,
+    paddingRight: "28px",
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a8298'/%3E%3C/svg%3E")`,
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "right 10px center",
+  };
+
+  return (
+    <div>
+      <style>{`
+        .inv-table-wrap { overflow-x: auto; }
+        .inv-table {
+          width: 100%; border-collapse: collapse; min-width: 560px;
+        }
+        .inv-table th {
+          fontFamily: var(--font-jetbrains); font-size: 9px;
+          letter-spacing: 0.18em; text-transform: uppercase;
+          color: #7a8298; padding: 10px 14px; text-align: left;
+          border-bottom: 1px solid rgba(255,255,255,0.07); white-space: nowrap;
+        }
+        .inv-table td {
+          padding: 10px 14px; vertical-align: middle;
+          border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .inv-table tr:hover td { background: rgba(255,255,255,0.02); }
+        .inv-table tr:last-child td { border-bottom: none; }
+        .inv-sort-btn {
+          background: none; border: none; cursor: pointer;
+          display: inline-flex; align-items: center; gap: 4px;
+          fontFamily: var(--font-jetbrains); font-size: 9px;
+          letter-spacing: 0.18em; text-transform: uppercase;
+          color: #7a8298; padding: 0; transition: color 0.15s;
+        }
+        .inv-sort-btn:hover { color: #f5f7fb; }
+        .inv-sort-btn.active { color: #2ee6c1; }
+        .inv-filter-bar {
+          display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
+        }
+        .inv-filter-bar input, .inv-filter-bar select {
+          flex: 1; min-width: 120px; max-width: 220px;
+        }
+        @media (max-width: 480px) {
+          .inv-filter-bar input, .inv-filter-bar select { max-width: 100%; }
+        }
+        .inv-price-btn {
+          padding: 7px 14px; border-radius: 8px; cursor: pointer;
+          fontFamily: var(--font-jetbrains); font-size: 11px;
+          letter-spacing: 0.08em; transition: all 0.15s; white-space: nowrap;
+          display: inline-flex; align-items: center; gap: 6px;
+        }
+      `}</style>
+
+      {/* Filtros */}
+      <div className="inv-filter-bar">
+        <input
+          type="text"
+          placeholder="Buscar por nombre…"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          style={inputStyle}
+          onFocus={e => (e.currentTarget.style.borderColor = "rgba(46,230,193,0.4)")}
+          onBlur={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)")}
+        />
+        <select
+          value={filterSet}
+          onChange={e => setFilterSet(e.target.value)}
+          style={selStyle}
+        >
+          <option value="">Todos los sets</option>
+          {uniqueSets.map(s => (
+            <option key={s} value={s}>{SET_NAME_MAP[s] ?? s}</option>
+          ))}
+        </select>
+        <select
+          value={filterVariant}
+          onChange={e => setFilterVariant(e.target.value)}
+          style={selStyle}
+        >
+          <option value="">Todas las variantes</option>
+          {uniqueVariants.map(v => (
+            <option key={v} value={v}>{getVersionLabel(v)}</option>
+          ))}
+        </select>
+        <button
+          className={`inv-price-btn${sortPrice !== "none" ? " active" : ""}`}
+          onClick={() => setSortPrice(p => p === "none" ? "desc" : p === "desc" ? "asc" : "none")}
+          style={{
+            background: sortPrice !== "none" ? "rgba(46,230,193,0.1)" : "rgba(255,255,255,0.04)",
+            border: `1px solid ${sortPrice !== "none" ? "rgba(46,230,193,0.35)" : "rgba(255,255,255,0.1)"}`,
+            color: sortPrice !== "none" ? COURT : INK2,
+            fontFamily: MONO, fontSize: "11px",
+          }}
+        >
+          Precio {sortPrice === "desc" ? "↓" : sortPrice === "asc" ? "↑" : "↕"}
+        </button>
+      </div>
+
+      {/* Contador */}
+      <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, marginBottom: "12px", letterSpacing: "0.12em" }}>
+        {filtered.length} {filtered.length === 1 ? "carta" : "cartas"}
+        {filtered.length !== rows.length && ` de ${rows.length}`}
+      </p>
+
+      {/* Tabla */}
+      <div className="inv-table-wrap">
+        <table className="inv-table">
+          <thead>
+            <tr>
+              <th style={{ width: 40 }} />
+              <th>Nombre</th>
+              <th>Set</th>
+              <th>Variante</th>
+              <th style={{ textAlign: "center" }}>Cant.</th>
+              <th>
+                <button
+                  className={`inv-sort-btn${sortPrice !== "none" ? " active" : ""}`}
+                  onClick={() => setSortPrice(p => p === "none" ? "desc" : p === "desc" ? "asc" : "none")}
+                >
+                  Precio USD {sortPrice === "desc" ? "↓" : sortPrice === "asc" ? "↑" : "↕"}
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((r, i) => (
+              <tr key={`${r.cardId}-${i}`}>
+                <td>
+                  <div style={{ width: 32, height: 44, borderRadius: "4px", overflow: "hidden", flexShrink: 0 }}>
+                    {r.imageUrl
+                      ? <img src={r.imageUrl} alt={r.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
+                      : <div style={{ width: "100%", height: "100%", background: "rgba(255,255,255,0.04)" }} />
+                    }
+                  </div>
+                </td>
+                <td>
+                  <span style={{ fontFamily: MONO, fontSize: "12px", color: INK0, fontWeight: 600 }}>{r.name}</span>
+                  <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2, marginLeft: 6 }}>#{String(r.cardNum).padStart(3, "0")}</span>
+                </td>
+                <td>
+                  <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2 }}>{r.setName}</span>
+                </td>
+                <td>
+                  <span style={{
+                    fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em",
+                    color: getVersionColor(r.version),
+                    border: `1px solid ${getVersionColor(r.version)}55`,
+                    borderRadius: "4px", padding: "2px 6px",
+                    background: `${getVersionColor(r.version)}11`,
+                  }}>
+                    {getVersionLabel(r.version)}
+                  </span>
+                </td>
+                <td style={{ textAlign: "center" }}>
+                  <span style={{ fontFamily: MONO, fontSize: "12px", color: INK0 }}>{r.quantity}</span>
+                </td>
+                <td>
+                  {r.price !== null
+                    ? <span style={{ fontFamily: MONO, fontSize: "12px", color: COURT, fontWeight: 700 }}>${r.price.toFixed(2)}</span>
+                    : <span style={{ fontFamily: MONO, fontSize: "11px", color: INK2 }}>—</span>
+                  }
+                </td>
+              </tr>
+            ))}
+            {filtered.length === 0 && (
+              <tr>
+                <td colSpan={6} style={{ textAlign: "center", padding: "32px", fontFamily: MONO, fontSize: "11px", color: INK2 }}>
+                  No hay cartas que coincidan con los filtros
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
 
 function formatCOP(n: number) {
   return "$" + n.toLocaleString("es-CO") + " COP";
@@ -367,6 +601,8 @@ export default function DashboardHome() {
   const [stockTotal,      setStockTotal]      = useState<number | null>(null);
   const [cardCount,       setCardCount]       = useState<number | null>(null);
   const [showFollowers,   setShowFollowers]   = useState(false);
+  const [invTableRows,    setInvTableRows]    = useState<InvRow[]>([]);
+  const [invLoading,      setInvLoading]      = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -389,13 +625,17 @@ export default function DashboardHome() {
       setFollowerCount(fc ?? 0);
       setCardCount((inv ?? []).reduce((sum, r) => sum + (r.quantity ?? 0), 0));
 
-      // Calcular valor total del inventario en USD usando card_prices
-      // card_inventory.card_id tiene formato "001:Name:Version", card_prices.card_id es "setCode-number"
       const invRows = inv ?? [];
 
       function extractCardNumber(cardId: string | number): number {
         if (typeof cardId === "number") return cardId;
         return parseInt(String(cardId).split(":")[0], 10);
+      }
+
+      function extractCardName(cardId: string | number): string {
+        if (typeof cardId === "number") return String(cardId);
+        const parts = String(cardId).split(":");
+        return parts[1]?.trim() ?? parts[0];
       }
 
       const priceIds = invRows
@@ -406,38 +646,50 @@ export default function DashboardHome() {
         })
         .filter((id): id is string => id !== null);
 
+      let priceMap: Record<string, Record<string, number>> = {};
+
       if (priceIds.length > 0) {
         const { data: priceRows } = await supabase
           .from("card_prices")
           .select("card_id, prices")
           .in("card_id", [...new Set(priceIds)]);
 
-        const priceMap: Record<string, Record<string, number>> = {};
         for (const row of priceRows ?? []) {
           priceMap[row.card_id] = row.prices as Record<string, number>;
         }
-
-        let total = 0;
-        for (const r of invRows) {
-          const sc = SCRYDEX_SET_CODES[r.set_id ?? ""];
-          if (!sc) continue;
-          const num = extractCardNumber(r.card_id);
-          if (isNaN(num)) continue;
-          const pid = `${sc}-${num}`;
-          const prices = priceMap[pid];
-          if (!prices) continue;
-          const version = r.version ?? "normal";
-          const price =
-            prices[version] ??
-            prices[version.charAt(0).toUpperCase() + version.slice(1)] ??
-            prices["normal"] ??
-            0;
-          total += price * (r.quantity ?? 1);
-        }
-        setStockTotal(total);
-      } else {
-        setStockTotal(0);
       }
+
+      let total = 0;
+      const tableRows: InvRow[] = [];
+
+      for (const r of invRows) {
+        const sc  = SCRYDEX_SET_CODES[r.set_id ?? ""];
+        const num = extractCardNumber(r.card_id);
+        const pid = sc && !isNaN(num) ? `${sc}-${num}` : null;
+        const prices = pid ? priceMap[pid] : null;
+        const version = r.version ?? "normal";
+        const price: number | null = prices
+          ? (prices[version] ?? prices[version.charAt(0).toUpperCase() + version.slice(1)] ?? prices["normal"] ?? null)
+          : null;
+
+        if (price !== null) total += price * (r.quantity ?? 1);
+
+        tableRows.push({
+          cardId:   String(r.card_id),
+          name:     extractCardName(r.card_id),
+          cardNum:  num,
+          setId:    r.set_id ?? "",
+          setName:  SET_NAME_MAP[r.set_id ?? ""] ?? r.set_id ?? "",
+          version,
+          quantity: r.quantity ?? 1,
+          price,
+          imageUrl: sc && !isNaN(num) ? `${R2_BASE}/${sc}-${num}/large` : "",
+        });
+      }
+
+      setStockTotal(total);
+      setInvTableRows(tableRows);
+      setInvLoading(false);
     })();
   }, []);
 
@@ -545,6 +797,41 @@ export default function DashboardHome() {
             <MarketFeed />
           </div>
         </>
+      )}
+
+      {/* ── Inventario completo ── */}
+      {userId && (
+        <div style={{ marginTop: 56 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, fontFamily: MONO, fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: COURT }}>
+            <span style={{ width: 20, height: 1, background: COURT, display: "inline-block" }} />
+            Mi inventario
+          </div>
+
+          {invLoading ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} style={{
+                  height: 52, borderRadius: 10,
+                  background: "linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 75%)",
+                  backgroundSize: "200% 100%",
+                  animation: "inv-shimmer 1.4s ease-in-out infinite",
+                }} />
+              ))}
+              <style>{`@keyframes inv-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }`}</style>
+            </div>
+          ) : invTableRows.length === 0 ? (
+            <p style={{ fontFamily: MONO, fontSize: 12, color: INK2 }}>Tu inventario está vacío.</p>
+          ) : (
+            <div style={{
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(255,255,255,0.07)",
+              borderRadius: 16,
+              padding: "20px 20px 4px",
+            }}>
+              <InventoryTable rows={invTableRows} />
+            </div>
+          )}
+        </div>
       )}
 
       {/* Last News popup */}
