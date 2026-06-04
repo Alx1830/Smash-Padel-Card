@@ -991,26 +991,52 @@ function SetExpandedPanel({
   isLoaded: boolean;
 }) {
   const [activeTab, setActiveTab] = useState<"inventario" | "restantes">("inventario");
+  // Guardamos las cartas del set en estado local para garantizar re-render al cargar
+  const [allSetCards, setAllSetCards] = useState<NonNullable<typeof SET_CARDS[string]>>([]);
 
-  const allSetCards = SET_CARDS[set.id] ?? [];
+  useEffect(() => {
+    if (isLoaded) {
+      setAllSetCards(SET_CARDS[set.id] ?? []);
+    }
+  }, [isLoaded, set.id]);
 
-  // Owned cards: same matching logic as ownedBySet
-  const ownedCards = (() => {
-    return inventoryRows
-      .filter(r => r.set_id === set.id && r.quantity > 0)
-      .map(r => ({
-        card: allSetCards.find(c => String(c.id) === String(r.card_id))
-           ?? allSetCards.find(c => String(c.card_number) === String(r.card_id)),
-        qty: r.quantity,
-      }))
-      .filter(x => x.card) as { card: NonNullable<typeof allSetCards[0]>; qty: number }[];
-  })();
+  // Construir set de IDs poseídos: prueba coincidencia exacta primero, luego por número
+  const ownedIdSet = new Set<string>();
+  const setRows = inventoryRows.filter(r => r.set_id === set.id && r.quantity > 0);
+  setRows.forEach(r => {
+    const cardIdStr = String(r.card_id);
+    // 1. Coincidencia exacta por card_id
+    const exact = allSetCards.find(c => String(c.id) === cardIdStr);
+    if (exact) { ownedIdSet.add(String(exact.id)); return; }
+    // 2. Coincidencia por número + versión (maneja "002", 2, "2" todos igual)
+    const num = Number(r.card_id);
+    if (!isNaN(num) && num > 0) {
+      const byNumVer = r.version
+        ? allSetCards.find(c => c.card_number === num && c.version === r.version)
+        : null;
+      const byNum = byNumVer ?? allSetCards.find(c => c.card_number === num);
+      if (byNum) ownedIdSet.add(String(byNum.id));
+    }
+  });
 
-  // Missing = all cards NOT in ownedCards (using same IDs)
-  const ownedIdSet = new Set(ownedCards.map(({ card }) => String(card.id)));
+  const ownedCards = setRows
+    .map(r => {
+      const cardIdStr = String(r.card_id);
+      const exact = allSetCards.find(c => String(c.id) === cardIdStr);
+      if (exact) return { card: exact, qty: r.quantity };
+      const num = Number(r.card_id);
+      if (!isNaN(num) && num > 0) {
+        const byNumVer = r.version
+          ? allSetCards.find(c => c.card_number === num && c.version === r.version)
+          : null;
+        const byNum = byNumVer ?? allSetCards.find(c => c.card_number === num);
+        if (byNum) return { card: byNum, qty: r.quantity };
+      }
+      return null;
+    })
+    .filter(Boolean) as { card: NonNullable<typeof allSetCards[0]>; qty: number }[];
+
   const missingCards = allSetCards.filter(c => !ownedIdSet.has(String(c.id)));
-
-  const displayCount = activeTab === "inventario" ? ownedCards.length : missingCards.length;
 
   return (
     <div style={{ background: "rgba(46,230,193,0.03)", border: `1px solid ${COURT_C}44`, borderTop: "none", borderRadius: "0 0 14px 14px" }}>
@@ -1031,7 +1057,7 @@ function SetExpandedPanel({
                 background: isActive ? `${COURT_C}10` : "transparent",
                 border: "none",
                 borderBottom: `2px solid ${isActive ? COURT_C : "transparent"}`,
-                cursor: "pointer", transition: "all 0.15s",
+                cursor: "pointer",
               }}
             >
               {tab === "inventario" ? "Inventario" : "Restantes"} ({count})
@@ -1041,35 +1067,53 @@ function SetExpandedPanel({
       </div>
 
       <div style={{ padding: "20px 24px" }}>
-        {!isLoaded && activeTab === "restantes" ? (
-          <div style={{ textAlign: "center", padding: "24px 0", fontFamily: MONO_C, fontSize: "11px", color: INK2_C }}>
-            Cargando cartas...
-          </div>
-        ) : displayCount === 0 ? (
-          <div style={{ textAlign: "center", padding: "24px 0", fontFamily: MONO_C, fontSize: "11px", color: INK2_C }}>
-            {activeTab === "inventario" ? "No tienes cartas de este set" : "¡Tienes el set completo! 🎉"}
-          </div>
-        ) : (
-          <div style={{ maxHeight: "580px", overflowY: displayCount > 6 ? "auto" : "visible", paddingRight: displayCount > 6 ? "6px" : "0", scrollbarWidth: "thin", scrollbarColor: `${COURT_C}44 transparent` }}>
-            <div className="prof-cards-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px 16px", justifyItems: "center" }}>
-              {activeTab === "inventario"
-                ? ownedCards.map(({ card, qty }) => (
-                    <MiniCard key={String(card.id)} cardId={card.id} setId={set.id} quantity={qty} />
-                  ))
-                : missingCards.map(card => (
-                    <div key={`${card.id}-${card.version}`} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                      <div style={{ position: "relative", width: "160px", height: "224px", borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 24px rgba(0,0,0,0.6)", filter: "grayscale(1) opacity(0.5)" }}>
-                        <img src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
-                      </div>
-                      <span style={{ fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.06em", color: INK2_C, textAlign: "center" }}>
-                        #{String(card.card_number).padStart(3, "0")} {card.name}
-                      </span>
-                    </div>
-                  ))
-              }
+        {/* Inventario grid */}
+        <div style={{ display: activeTab === "inventario" ? "block" : "none" }}>
+          {ownedCards.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "24px 0", fontFamily: MONO_C, fontSize: "11px", color: INK2_C }}>
+              No tienes cartas de este set
             </div>
-          </div>
-        )}
+          ) : (
+            <div style={{ maxHeight: "580px", overflowY: ownedCards.length > 6 ? "auto" : "visible", paddingRight: ownedCards.length > 6 ? "6px" : "0", scrollbarWidth: "thin", scrollbarColor: `${COURT_C}44 transparent` }}>
+              <div className="prof-cards-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px 16px", justifyItems: "center" }}>
+                {ownedCards.map(({ card, qty }) => (
+                  <MiniCard key={String(card.id)} cardId={card.id} setId={set.id} quantity={qty} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Restantes grid */}
+        <div style={{ display: activeTab === "restantes" ? "block" : "none" }}>
+          {!isLoaded ? (
+            <div style={{ textAlign: "center", padding: "24px 0", fontFamily: MONO_C, fontSize: "11px", color: INK2_C }}>
+              Cargando cartas...
+            </div>
+          ) : missingCards.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "24px 0", fontFamily: MONO_C, fontSize: "11px", color: INK2_C }}>
+              ¡Tienes el set completo! 🎉
+            </div>
+          ) : (
+            <div style={{ maxHeight: "580px", overflowY: missingCards.length > 6 ? "auto" : "visible", paddingRight: missingCards.length > 6 ? "6px" : "0", scrollbarWidth: "thin", scrollbarColor: `${COURT_C}44 transparent` }}>
+              <div className="prof-cards-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px 16px", justifyItems: "center" }}>
+                {missingCards.map(card => (
+                  <div key={`${card.id}`} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                    <div style={{ position: "relative", width: "160px", height: "224px", borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 24px rgba(0,0,0,0.6)", filter: "grayscale(1) opacity(0.45)" }}>
+                      <img src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+                    </div>
+                    <span style={{ fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.06em", color: INK2_C, textAlign: "center" }}>
+                      #{String(card.card_number).padStart(3, "0")} {card.name}
+                    </span>
+                    <span style={{ fontFamily: MONO_C, fontSize: "9px", color: INK2_C, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                      {getVersionLabel(card.version)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
