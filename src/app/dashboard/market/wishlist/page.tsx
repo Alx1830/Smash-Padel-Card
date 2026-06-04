@@ -196,7 +196,11 @@ export default function DashboardWishlistPage() {
         .dwish-layout { display: flex; gap: 32px; align-items: flex-start; }
         .dwish-sidebar { width: 220px; flex-shrink: 0; }
         .dwish-grid-area { flex: 1; min-width: 0; }
-        @media (max-width: 1023px) { .dwish-layout { flex-direction: column; } .dwish-sidebar { display: none; } }
+        @media (max-width: 1023px) {
+          .dwish-layout { flex-direction: column; }
+          .dwish-sidebar { width: 100% !important; }
+          .dwish-sidebar > div { position: static !important; }
+        }
       `}</style>
 
       <div className="dwish-body">
