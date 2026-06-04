@@ -449,7 +449,7 @@ async function scrapeCard(page, cardName, cardNumber) {
   const cardId   = `${activeCode}-${cardNumber}`;
   const baseUrl  = `https://scrydex.com/pokemon/cards/${cardSlug}/${cardId}`;
 
-  // Cargar página base para detectar variantes disponibles
+  // Cargar página base
   await page.goto(baseUrl, { waitUntil: "networkidle", timeout: 30000 });
   await page.waitForTimeout(800);
 
@@ -458,37 +458,46 @@ async function scrapeCard(page, cardName, cardNumber) {
     return { cardId, prices: null, error: "404" };
   }
 
-  // Leer variantes disponibles
-  const availableVariants = await page.evaluate(() => {
-    const lines = document.body.innerText
-      .split("\n").map(l => l.trim()).filter(l => l);
-    const idx = lines.findIndex(l => l.toUpperCase() === "SELECT VARIANT");
-    if (idx === -1) return [];
-    const variants = [];
-    for (let i = idx + 1; i < lines.length && i < idx + 10; i++) {
-      if (lines[i].toUpperCase().includes("DATA SOURCE")) break;
-      variants.push(lines[i]);
-    }
-    return variants;
-  });
+  // Detectar variantes leyendo los links con ?variant= en el DOM
+  // (más confiable que parsear innerText)
+  let variantSlugs = await page.$$eval(
+    'a[href*="?variant="]',
+    els => [...new Set(
+      els.map(el => {
+        try { return new URL(el.href).searchParams.get("variant"); } catch { return null; }
+      }).filter(Boolean)
+    )]
+  );
 
-  // Si no hay bloque SELECT VARIANT, asumir variante activa
-  const variantsToFetch = availableVariants.length > 0
-    ? availableVariants
-    : await page.evaluate(() => {
+  // Fallback: si no hay links de variante, leer el ?variant= de la URL actual
+  // (carta de una sola variante — Scrydex puede redirigir con el param en la URL)
+  if (variantSlugs.length === 0) {
+    const currentUrl = page.url();
+    const currentVariant = new URL(currentUrl).searchParams.get("variant");
+    if (currentVariant) {
+      variantSlugs = [currentVariant];
+    } else {
+      // Último recurso: leer la variante activa desde el texto
+      const activeVariant = await page.evaluate(() => {
         const lines = document.body.innerText
           .split("\n").map(l => l.trim()).filter(l => l);
         const nmIdx = lines.findIndex(l => l.toUpperCase() === "NEAR MINT");
-        return nmIdx > 0 ? [lines[nmIdx - 1]] : [];
+        return nmIdx > 0 ? lines[nmIdx - 1] : null;
       });
+      if (activeVariant) variantSlugs = [normalizeVariantKey(activeVariant)];
+    }
+  }
 
   const prices = {};
 
-  for (const variantRaw of variantsToFetch) {
-    const variantKey = normalizeVariantKey(variantRaw);
-    const url = `${baseUrl}?variant=${variantKey}`;
-    await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
-    await page.waitForTimeout(600);
+  for (const variantSlug of variantSlugs) {
+    const url = `${baseUrl}?variant=${variantSlug}`;
+
+    // Si la variante es la que ya está cargada, no navegar de nuevo
+    if (page.url() !== url) {
+      await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
+      await page.waitForTimeout(600);
+    }
 
     const price = await page.evaluate(() => {
       const lines = document.body.innerText
@@ -502,7 +511,7 @@ async function scrapeCard(page, cardName, cardNumber) {
       return null;
     });
 
-    if (price !== null) prices[variantKey] = price;
+    if (price !== null) prices[variantSlug] = price;
   }
 
   return { cardId, prices: Object.keys(prices).length > 0 ? prices : null };
