@@ -413,11 +413,10 @@ function normalizeVariantKey(raw) {
 }
 
 // ── Leer cartas del set desde el archivo .ts ──────────────────────────────────
+// Devuelve una entrada por número de carta con TODAS sus variantes agrupadas.
+// Fuente de verdad: el propio archivo .ts del set (mismo que usa la app).
 function loadSetCards(setSlug) {
-  const filePath = path.join(
-    __dirname,
-    `../src/data/sets/${setSlug}.ts`
-  );
+  const filePath = path.join(__dirname, `../src/data/sets/${setSlug}.ts`);
   if (!fs.existsSync(filePath)) {
     console.error(`No existe el archivo: ${filePath}`);
     process.exit(1);
@@ -425,105 +424,62 @@ function loadSetCards(setSlug) {
 
   const content = fs.readFileSync(filePath, "utf8");
 
-  // Extraer card_number y name únicos (una entrada por número de carta)
-  const seen = new Set();
-  const cards = [];
-  const regex = /name:\s*"([^"]+)"[^}]+card_number:\s*(\d+)/g;
+  // Captura id, name, version y card_number de cada objeto en el array
+  // Formato id: "024:Ethan's Magcargo:Holofoil"
+  // version en el campo version: "holofoil" | "normal" | "reverseHolofoil" …
+  const regex = /id:\s*"([^"]+)"[^}]+?name:\s*"([^"]+)"[^}]+?version:\s*"([^"]+)"[^}]+?card_number:\s*(\d+)/gs;
+  const byNumber = new Map(); // number → { name, versions: Set }
   let match;
   while ((match = regex.exec(content)) !== null) {
-    const name = match[1].trim();
-    const number = parseInt(match[2], 10);
-    if (!seen.has(number)) {
-      seen.add(number);
-      cards.push({ name, number });
-    }
+    const name    = match[2].trim();
+    const version = match[3].trim();
+    const number  = parseInt(match[4], 10);
+    if (!byNumber.has(number)) byNumber.set(number, { name, versions: new Set() });
+    byNumber.get(number).versions.add(version);
   }
 
-  return cards;
+  return [...byNumber.entries()]
+    .sort(([a], [b]) => a - b)
+    .map(([number, { name, versions }]) => ({ name, number, versions: [...versions] }));
 }
 
-// ── Scraping de una carta ─────────────────────────────────────────────────────
-async function scrapeCard(page, cardName, cardNumber) {
+// ── Scraping de una carta (todas sus variantes conocidas) ─────────────────────
+async function scrapeCard(page, cardName, cardNumber, knownVersions) {
   const activeCode = global._SET_CODE || SET_CODE;
   const cardSlug = toCardSlug(cardName);
   const cardId   = `${activeCode}-${cardNumber}`;
   const baseUrl  = `https://scrydex.com/pokemon/cards/${cardSlug}/${cardId}`;
 
-  // Cargar página base
-  await page.goto(baseUrl, { waitUntil: "networkidle", timeout: 30000 });
-  await page.waitForTimeout(800);
-
-  const title = await page.title();
-  if (title.includes("Not Found") || title.includes("404")) {
-    return { cardId, prices: null, error: "404" };
-  }
-
-  // ── Paso 1: detectar variantes via DOM (tabs con href ?variant=) ──────────
-  // Filtramos: el slug debe ser corto, empezar con letra, sin espacios
-  // para descartar links de navegación/canonical que también usen ?variant=
-  let variantSlugs = await page.$$eval(
-    'a[href*="?variant="]',
-    els => [...new Set(
-      els.map(el => {
-        try { return new URL(el.href).searchParams.get("variant"); } catch { return null; }
-      }).filter(v => v && /^[a-zA-Z][a-zA-Z0-9]{1,30}$/.test(v))
-    )]
-  );
-
-  // ── Paso 2: fallback texto — igual al código original que funcionaba ───────
-  if (variantSlugs.length === 0) {
-    // Buscar bloque "SELECT VARIANT" en innerText (cartas multi-variante)
-    const textVariants = await page.evaluate(() => {
-      const lines = document.body.innerText
-        .split("\n").map(l => l.trim()).filter(l => l);
-      const idx = lines.findIndex(l => l.toUpperCase() === "SELECT VARIANT");
-      if (idx === -1) return [];
-      const variants = [];
-      for (let i = idx + 1; i < lines.length && i < idx + 10; i++) {
-        if (lines[i].toUpperCase().includes("DATA SOURCE")) break;
-        variants.push(lines[i]);
-      }
-      return variants;
-    });
-
-    if (textVariants.length > 0) {
-      variantSlugs = textVariants.map(normalizeVariantKey);
-    } else {
-      // Carta de una sola variante: leer la variante activa (línea antes de NEAR MINT)
-      const activeVariant = await page.evaluate(() => {
-        const lines = document.body.innerText
-          .split("\n").map(l => l.trim()).filter(l => l);
-        const nmIdx = lines.findIndex(l => l.toUpperCase() === "NEAR MINT");
-        return nmIdx > 0 ? lines[nmIdx - 1] : null;
-      });
-      if (activeVariant) variantSlugs = [normalizeVariantKey(activeVariant)];
-    }
-  }
-
   const prices = {};
 
-  for (const variantSlug of variantSlugs) {
-    const url = `${baseUrl}?variant=${variantSlug}`;
+  for (let i = 0; i < knownVersions.length; i++) {
+    const version = knownVersions[i];
+    const url = `${baseUrl}?variant=${version}`;
 
-    // Si ya estamos en esa URL (ej: Scrydex redirigió), no navegar de nuevo
-    if (!page.url().includes(`variant=${variantSlug}`)) {
-      await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
-      await page.waitForTimeout(600);
+    await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
+    await page.waitForTimeout(i === 0 ? 800 : 600);
+
+    // 404 solo lo chequeamos en la primera variante
+    if (i === 0) {
+      const title = await page.title();
+      if (title.includes("Not Found") || title.includes("404")) {
+        return { cardId, prices: null, error: "404" };
+      }
     }
 
     const price = await page.evaluate(() => {
       const lines = document.body.innerText
         .split("\n").map(l => l.trim()).filter(l => l);
-      for (let i = 0; i < lines.length; i++) {
-        if (lines[i].toUpperCase() === "NEAR MINT" && i + 1 < lines.length) {
-          const match = lines[i + 1].replace(/,/g, "").match(/\$?([\d.]+)/);
-          if (match) return parseFloat(match[1]);
+      for (let j = 0; j < lines.length; j++) {
+        if (lines[j].toUpperCase() === "NEAR MINT" && j + 1 < lines.length) {
+          const m = lines[j + 1].replace(/,/g, "").match(/\$?([\d.]+)/);
+          if (m) return parseFloat(m[1]);
         }
       }
       return null;
     });
 
-    if (price !== null) prices[variantSlug] = price;
+    if (price !== null) prices[version] = price;
   }
 
   return { cardId, prices: Object.keys(prices).length > 0 ? prices : null };
@@ -550,11 +506,11 @@ async function scrapeSet(page, setSlug, setCode) {
   const now = new Date().toISOString();
 
   for (let i = 0; i < cards.length; i++) {
-    const { name, number } = cards[i];
+    const { name, number, versions } = cards[i];
     process.stdout.write(`[${i + 1}/${cards.length}] ${name} #${number}... `);
 
     try {
-      const { cardId, prices, error } = await scrapeCard(page, name, number);
+      const { cardId, prices, error } = await scrapeCard(page, name, number, versions);
 
       if (error) {
         console.log(`⚠️  ${error}`);
