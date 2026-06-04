@@ -995,6 +995,7 @@ function CollectionSection({
 }) {
   const [expandedSetId, setExpandedSetId] = useState<string | null>(null);
   const [loadedSets, setLoadedSets] = useState<Set<string>>(new Set());
+  const [activeTab, setActiveTab] = useState<"inventario" | "restantes">("inventario");
 
   // Load card data when a set is expanded
   useEffect(() => {
@@ -1006,10 +1007,14 @@ function CollectionSection({
     });
   }, [expandedSetId, loadedSets]);
 
+  // Reset tab when changing set
+  useEffect(() => { setActiveTab("inventario"); }, [expandedSetId]);
+
   const entries = Object.entries(setStats).map(([setId, stats]) => {
     const set = ALL_SETS.find(s => s.id === setId);
     return set ? { set, stats } : null;
-  }).filter(Boolean) as { set: { id: string; name: string; logo: string }; stats: SetStats }[];
+  }).filter(Boolean)
+    .sort((a, b) => b!.stats.unique - a!.stats.unique) as { set: { id: string; name: string; logo: string }; stats: SetStats }[];
 
   // Cards owned per set for expand view
   const ownedBySet = (setId: string) => {
@@ -1135,32 +1140,95 @@ function CollectionSection({
                   </button>
 
                   {/* Expanded card grid */}
-                  {isOpen && (
-                    <div style={{
-                      padding: "24px", background: "rgba(46,230,193,0.03)",
-                      border: `1px solid ${COURT_C}44`, borderTop: "none",
-                      borderRadius: "0 0 14px 14px",
-                    }}>
+                  {isOpen && (() => {
+                    const allSetCards = SET_CARDS[set.id] ?? [];
+                    const missingCards = allSetCards.filter(c => {
+                      const owned = inventoryRows.find(r => r.set_id === set.id && (String(r.card_id) === String(c.id) || String(r.card_id) === String(c.card_number)));
+                      return !owned || owned.quantity === 0;
+                    });
+                    const displayCards = activeTab === "inventario" ? ownedCards : missingCards;
+                    return (
                       <div style={{
-                        maxHeight: "580px",
-                        overflowY: ownedCards.length > 6 ? "auto" : "visible",
-                        paddingRight: ownedCards.length > 6 ? "6px" : "0",
-                        scrollbarWidth: "thin",
-                        scrollbarColor: `${COURT_C}44 transparent`,
+                        background: "rgba(46,230,193,0.03)",
+                        border: `1px solid ${COURT_C}44`, borderTop: "none",
+                        borderRadius: "0 0 14px 14px",
                       }}>
-                        <div className="prof-cards-grid" style={{
-                          display: "grid",
-                          gridTemplateColumns: "repeat(3, 1fr)",
-                          gap: "20px 16px",
-                          justifyItems: "center",
-                        }}>
-                          {ownedCards.map(({ card, qty }) => (
-                            <MiniCard key={`${card.id}`} cardId={card.id} setId={set.id} quantity={qty} />
-                          ))}
+                        {/* Tabs */}
+                        <div style={{ display: "flex", borderBottom: `1px solid ${COURT_C}22` }}>
+                          {(["inventario", "restantes"] as const).map(tab => {
+                            const count = tab === "inventario" ? ownedCards.length : missingCards.length;
+                            const isActive = activeTab === tab;
+                            return (
+                              <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab)}
+                                style={{
+                                  flex: 1, padding: "12px 16px",
+                                  fontFamily: MONO_C, fontSize: "10px", letterSpacing: "0.14em",
+                                  textTransform: "uppercase",
+                                  color: isActive ? COURT_C : INK2_C,
+                                  background: isActive ? `${COURT_C}10` : "transparent",
+                                  border: "none",
+                                  borderBottom: `2px solid ${isActive ? COURT_C : "transparent"}`,
+                                  cursor: "pointer", transition: "all 0.15s",
+                                }}
+                              >
+                                {tab === "inventario" ? "Inventario" : "Restantes"} ({count})
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        <div style={{ padding: "20px 24px" }}>
+                          {!loadedSets.has(set.id) && activeTab === "restantes" ? (
+                            <div style={{ textAlign: "center", padding: "24px 0", fontFamily: MONO_C, fontSize: "11px", color: INK2_C }}>
+                              Cargando cartas...
+                            </div>
+                          ) : displayCards.length === 0 ? (
+                            <div style={{ textAlign: "center", padding: "24px 0", fontFamily: MONO_C, fontSize: "11px", color: INK2_C }}>
+                              {activeTab === "inventario" ? "No tienes cartas de este set" : "¡Tienes el set completo! 🎉"}
+                            </div>
+                          ) : (
+                            <div style={{
+                              maxHeight: "580px",
+                              overflowY: displayCards.length > 6 ? "auto" : "visible",
+                              paddingRight: displayCards.length > 6 ? "6px" : "0",
+                              scrollbarWidth: "thin",
+                              scrollbarColor: `${COURT_C}44 transparent`,
+                            }}>
+                              <div className="prof-cards-grid" style={{
+                                display: "grid",
+                                gridTemplateColumns: "repeat(3, 1fr)",
+                                gap: "20px 16px",
+                                justifyItems: "center",
+                              }}>
+                                {activeTab === "inventario"
+                                  ? ownedCards.map(({ card, qty }) => (
+                                      <MiniCard key={`${card.id}`} cardId={card.id} setId={set.id} quantity={qty} />
+                                    ))
+                                  : missingCards.map(card => (
+                                      <div key={`${card.id}-${card.version}`} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                                        <div style={{
+                                          position: "relative", width: "160px", height: "224px",
+                                          borderRadius: "8px", overflow: "hidden",
+                                          boxShadow: "0 8px 24px rgba(0,0,0,0.6)",
+                                          filter: "grayscale(1) opacity(0.5)",
+                                        }}>
+                                          <img src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+                                        </div>
+                                        <span style={{ fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.06em", color: INK2_C, textAlign: "center" }}>
+                                          #{String(card.card_number).padStart(3, "0")} {card.name}
+                                        </span>
+                                      </div>
+                                    ))
+                                }
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                  )}
+                    );
+                  })()}
                 </div>
               );
             })}
