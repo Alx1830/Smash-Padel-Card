@@ -17,7 +17,7 @@ const CardDetailModal = dynamic(
 );
 
 type SetStats = { unique: number; total: number; totalQty: number };
-type InvRow   = { card_id: number | string; set_id: string; quantity: number };
+type InvRow   = { card_id: number | string; set_id: string; quantity: number; version?: string };
 
 type FeaturedCard  = { card_id: number | string; set_id: string };
 type WishlistCard  = { card_id: number | string; set_id: string };
@@ -1142,10 +1142,22 @@ function CollectionSection({
                   {/* Expanded card grid */}
                   {isOpen && (() => {
                     const allSetCards = SET_CARDS[set.id] ?? [];
-                    const missingCards = allSetCards.filter(c => {
-                      const owned = inventoryRows.find(r => r.set_id === set.id && (String(r.card_id) === String(c.id) || String(r.card_id) === String(c.card_number)));
-                      return !owned || owned.quantity === 0;
-                    });
+                    // Build the set of owned card IDs using the same matching as ownedBySet
+                    const ownedCardIds = new Set<string>();
+                    inventoryRows
+                      .filter(r => r.set_id === set.id && r.quantity > 0)
+                      .forEach(r => {
+                        const exact = allSetCards.find(c => String(c.id) === String(r.card_id));
+                        if (exact) {
+                          ownedCardIds.add(String(exact.id));
+                        } else {
+                          // legacy: card_id stored as number only — mark all versions of that number
+                          allSetCards
+                            .filter(c => String(c.card_number) === String(r.card_id))
+                            .forEach(c => ownedCardIds.add(String(c.id)));
+                        }
+                      });
+                    const missingCards = allSetCards.filter(c => !ownedCardIds.has(String(c.id)));
                     const displayCards = activeTab === "inventario" ? ownedCards : missingCards;
                     return (
                       <div style={{

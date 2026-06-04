@@ -72,7 +72,7 @@ export default async function JugadorPage({
     ? await Promise.all([
         supabase
           .from("card_inventory")
-          .select("card_id, set_id, quantity")
+          .select("card_id, set_id, quantity, version")
           .eq("user_id", data.user_id)
           .gt("quantity", 0),
         supabase
