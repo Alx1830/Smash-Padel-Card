@@ -22,6 +22,7 @@ async function fetchSetCards(setId: string): Promise<PokemonCard[]> {
 /* ── Card image with 3D tilt (reusable) ─────────────────────── */
 function TiltCard({
   card, userId, setId, inventory, onInventoryChange, onCardClick,
+  wishlistCards, onWishlistChange,
 }: {
   card: PokemonCard;
   userId?: string;
@@ -29,6 +30,8 @@ function TiltCard({
   inventory: InventoryMap;
   onInventoryChange: (key: string, qty: number) => void;
   onCardClick?: () => void;
+  wishlistCards: WishlistCard[];
+  onWishlistChange: (cards: WishlistCard[]) => void;
 }) {
   const wrapRef  = useRef<HTMLDivElement>(null);
   const bodyRef  = useRef<HTMLDivElement>(null);
@@ -49,6 +52,23 @@ function TiltCard({
   const isRH   = effect === "reverseHolofoil" || effect === "metal";
   const labelColor = getVersionColor(card.version);
   const isGray = userId ? (qty === 0 && !hovered) : false;
+  const isWanted = wishlistCards.some(w => w.card_id === card.id && w.set_id === setId);
+  const [togglingWish, setTogglingWish] = useState(false);
+
+  async function handleWishlistToggle(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (!userId || togglingWish) return;
+    setTogglingWish(true);
+    const supabase = createClient();
+    if (isWanted) {
+      await supabase.from("card_wishlist").delete().eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId);
+      onWishlistChange(wishlistCards.filter(w => !(w.card_id === card.id && w.set_id === setId)));
+    } else {
+      await supabase.from("card_wishlist").insert({ user_id: userId, card_id: card.id, set_id: setId });
+      onWishlistChange([...wishlistCards, { card_id: card.id, set_id: setId }]);
+    }
+    setTogglingWish(false);
+  }
 
   const onEnter = () => {
     rectRef.current = wrapRef.current?.getBoundingClientRect() ?? null;
@@ -220,10 +240,31 @@ function TiltCard({
       </span>
 
       {userId && (
-        <QtyControl
-          cardId={card.id} setId={setId} version={card.version} qty={qty}
-          userId={userId} onChange={onInventoryChange}
-        />
+        <>
+          <QtyControl
+            cardId={card.id} setId={setId} version={card.version} qty={qty}
+            userId={userId} onChange={onInventoryChange}
+          />
+          <button
+            onClick={handleWishlistToggle}
+            disabled={togglingWish}
+            title={isWanted ? "Quitar de wishlist" : "Agregar a wishlist"}
+            style={{
+              display: "flex", alignItems: "center", gap: "6px",
+              fontFamily: MONO, fontSize: "10px", letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: isWanted ? "#e05580" : INK2,
+              background: isWanted ? "rgba(224,85,128,0.12)" : "rgba(255,255,255,0.04)",
+              border: `1px solid ${isWanted ? "rgba(224,85,128,0.45)" : "rgba(255,255,255,0.1)"}`,
+              borderRadius: "6px", padding: "5px 12px",
+              cursor: togglingWish ? "wait" : "pointer",
+              transition: "all 0.15s", width: "100%", justifyContent: "center",
+            }}
+          >
+            <span style={{ fontSize: "12px" }}>{isWanted ? "♥" : "♡"}</span>
+            {isWanted ? "En wishlist" : "Wishlist"}
+          </button>
+        </>
       )}
     </div>
   );
@@ -670,6 +711,8 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                     inventory={inventory}
                     onInventoryChange={handleInventoryChange}
                     onCardClick={() => setSelectedCard({ card, setId: openSet.id })}
+                    wishlistCards={wishlistCards}
+                    onWishlistChange={setWishlistCards}
                   />
                 ))}
                 {visibleCards.length === 0 && (
