@@ -214,7 +214,9 @@ export function WishlistPageClient({
           <em style={{ fontStyle: "normal", background: "linear-gradient(135deg, #ffd24f, #ff9a3d)", WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent", color: "transparent" }}>necesito</em>
         </h2>
         <p style={{ margin: "8px 0 0", fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.1em" }}>
-          {resolved.length} {resolved.length === 1 ? "carta" : "cartas"} en la lista de deseos
+          {!setsLoaded && wishlistRows.length > 0
+            ? "Cargando cartas..."
+            : `${resolved.length} ${resolved.length === 1 ? "carta" : "cartas"} en la lista de deseos`}
         </p>
       </section>
 
@@ -279,7 +281,39 @@ export function WishlistPageClient({
 
           {/* ── Grid ── */}
           <div className="wl-grid-area">
-            {resolved.length === 0 ? (
+            <style>{`
+              @keyframes wl-shimmer {
+                0%   { background-position: 200% 0; }
+                100% { background-position: -200% 0; }
+              }
+              .wl-skeleton {
+                background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.04) 75%);
+                background-size: 200% 100%;
+                animation: wl-shimmer 1.4s ease-in-out infinite;
+                border-radius: 8px;
+              }
+            `}</style>
+
+            {!setsLoaded && wishlistRows.length > 0 ? (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="wl-cards-grid">
+                {Array.from({ length: Math.min(wishlistRows.length, 12) }).map((_, i) => (
+                  <div key={i} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                    <div className="wl-skeleton" style={{ width: "100%", aspectRatio: "5/7", flexShrink: 0 }} />
+                    <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                        <div className="wl-skeleton" style={{ height: "10px", width: "40%" }} />
+                        <div className="wl-skeleton" style={{ height: "12px", width: "75%" }} />
+                        <div className="wl-skeleton" style={{ height: "18px", width: "56px" }} />
+                      </div>
+                      <div style={{ display: "flex", gap: "6px", marginTop: "auto" }}>
+                        <div className="wl-skeleton" style={{ flex: 1, height: "32px", borderRadius: "8px" }} />
+                        <div className="wl-skeleton" style={{ flex: 1, height: "32px", borderRadius: "8px" }} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : resolved.length === 0 ? (
               <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "80px 40px", textAlign: "center" }}>
                 <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.3 }}>🔍</div>
                 <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>La wishlist está vacía</p>
