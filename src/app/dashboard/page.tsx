@@ -1,100 +1,11 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback, useMemo } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
-import { AdminFeed } from "@/components/AdminFeed";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
-import { POKEMON_SERIES } from "@/data/pokemon-sets";
-import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 
 const COURT = "#2ee6c1";
-const BG_POPUP = "rgba(5,7,13,0.88)";
-
-function LastNewsPopup({ currentUserId, currentUsername, isAdmin }: { currentUserId: string; currentUsername: string | null; isAdmin: boolean }) {
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (sessionStorage.getItem("last_news_dismissed") !== "1") {
-      setOpen(true);
-    }
-  }, []);
-
-  function handleClose() {
-    sessionStorage.setItem("last_news_dismissed", "1");
-    setOpen(false);
-  }
-
-  if (!open) return null;
-
-  return (
-    <div
-      onClick={handleClose}
-      style={{
-        position: "fixed", inset: 0, zIndex: 400,
-        background: BG_POPUP,
-        backdropFilter: "blur(8px)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        padding: "20px",
-      }}
-    >
-      <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          width: "min(600px, 96vw)",
-          maxHeight: "80vh",
-          background: "#0a0e1a",
-          border: "1px solid rgba(255,255,255,0.1)",
-          borderRadius: "20px",
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
-          boxShadow: "0 40px 80px rgba(0,0,0,0.6)",
-        }}
-      >
-        {/* Header */}
-        <div style={{
-          padding: "18px 24px",
-          borderBottom: "1px solid rgba(255,255,255,0.07)",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          flexShrink: 0,
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <span style={{ width: 20, height: 1, background: COURT, display: "inline-block" }} />
-            <span style={{ fontFamily: "var(--font-jetbrains)", fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: COURT }}>
-              Last News
-            </span>
-          </div>
-          {!isAdmin && (
-            <button
-              onClick={handleClose}
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                borderRadius: "8px",
-                color: "#7a8298",
-                cursor: "pointer",
-                fontSize: "14px",
-                lineHeight: 1,
-                padding: "4px 9px",
-                transition: "all 0.15s",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,79,79,0.12)"; e.currentTarget.style.color = "#ff6b6b"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.color = "#7a8298"; }}
-            >
-              ✕
-            </button>
-          )}
-        </div>
-
-        {/* Scrollable content */}
-        <div style={{ overflowY: "auto", flex: 1, padding: "24px" }}>
-          <AdminFeed currentUserId={currentUserId} currentUsername={currentUsername} isAdmin={isAdmin} />
-        </div>
-      </div>
-    </div>
-  );
-}
 const BG0   = "#05070d";
 const INK0  = "#f5f7fb";
 const INK1  = "#c9cfdd";
@@ -362,8 +273,6 @@ function InstallWidget() {
 export default function DashboardHome() {
   const supabase = createClient();
   const [userId,          setUserId]          = useState<string | null>(null);
-  const [username,        setUsername]        = useState<string | null>(null);
-  const [isAdmin,         setIsAdmin]         = useState(false);
   const [followerCount,   setFollowerCount]   = useState<number | null>(null);
   const [stockTotal,      setStockTotal]      = useState<number | null>(null);
   const [cardCount,       setCardCount]       = useState<number | null>(null);
@@ -380,13 +289,11 @@ export default function DashboardHome() {
         { count: fc },
         { data: inv },
       ] = await Promise.all([
-        supabase.from("players").select("username, role").eq("user_id", user.id).single(),
+        supabase.from("players").select("username").eq("user_id", user.id).single(),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("following_id", user.id),
         supabase.from("card_inventory").select("card_id, set_id, version, quantity").eq("user_id", user.id).gt("quantity", 0),
       ]);
 
-      setUsername(prof?.username ?? null);
-      if (prof?.role === "admin") setIsAdmin(true);
       setFollowerCount(fc ?? 0);
       setCardCount((inv ?? []).reduce((sum, r) => sum + (r.quantity ?? 0), 0));
 
@@ -517,9 +424,6 @@ export default function DashboardHome() {
         </div>
 
       </div>
-
-      {/* Last News popup */}
-      {userId && <LastNewsPopup currentUserId={userId} currentUsername={username} isAdmin={isAdmin} />}
 
       {/* Popup seguidores */}
       {showFollowers && userId && (
