@@ -523,7 +523,16 @@ export function CardDetailModal({
                 </span>
                 <QtyControl
                   cardId={card.id} setId={setId} version={card.version} qty={qty}
-                  userId={userId} onChange={onInventoryChange}
+                  userId={userId}
+                  onChange={async (key, newQty) => {
+                    onInventoryChange(key, newQty);
+                    if (qty === 0 && newQty > 0 && isWanted && userId) {
+                      const supabase = createClient();
+                      await supabase.from("card_wishlist").delete()
+                        .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId);
+                      onWishlistChange(wishlistCards.filter(w => !(w.card_id === card.id && w.set_id === setId)));
+                    }
+                  }}
                   dark
                 />
               </div>

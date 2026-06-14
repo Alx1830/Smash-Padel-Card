@@ -107,21 +107,20 @@ export default function DashboardWishlistPage() {
     setRemoving(key);
     const supabase = createClient();
 
-    const cards      = setCards[row.set_id] ?? [];
-    const card       = cards.find((c: any) => c.id === row.card_id);
-    const cardNumber = card?.card_number ?? row.card_id;
+    const cards   = setCards[row.set_id] ?? [];
+    const card    = cards.find((c: any) => c.id === row.card_id);
+    const version = card?.version ?? "N";
 
     const { data: inv } = await supabase
       .from("card_inventory").select("quantity")
-      .eq("user_id", userId).eq("card_id", cardNumber).eq("set_id", row.set_id)
-      .single();
-    if (inv) {
-      await supabase.from("card_inventory").update({ quantity: inv.quantity + 1 })
-        .eq("user_id", userId).eq("card_id", cardNumber).eq("set_id", row.set_id);
-    } else {
-      await supabase.from("card_inventory")
-        .insert({ user_id: userId, card_id: cardNumber, set_id: row.set_id, quantity: 1 });
-    }
+      .eq("user_id", userId).eq("card_id", row.card_id).eq("set_id", row.set_id).eq("version", version)
+      .maybeSingle();
+
+    await supabase.from("card_inventory")
+      .upsert(
+        { user_id: userId, card_id: row.card_id, set_id: row.set_id, version, quantity: (inv?.quantity ?? 0) + 1 },
+        { onConflict: "user_id,card_id,set_id,version" }
+      );
 
     await supabase.from("card_wishlist").delete()
       .eq("user_id", userId).eq("card_id", row.card_id).eq("set_id", row.set_id);
