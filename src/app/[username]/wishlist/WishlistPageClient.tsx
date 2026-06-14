@@ -336,7 +336,21 @@ export function WishlistPageClient({
                         onClick={() => setPreviewCard(item.card as PokemonCard)}
                         style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)", flexShrink: 0, cursor: "pointer" }}
                       >
-                        <img src={item.card.image} alt={item.card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+                        <img
+                          src={item.card.image}
+                          alt={item.card.name}
+                          style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }}
+                          onError={e => {
+                            const t = e.currentTarget;
+                            t.style.display = "none";
+                            const ph = t.parentElement?.querySelector(".wl-img-ph") as HTMLElement | null;
+                            if (ph) ph.style.display = "flex";
+                          }}
+                        />
+                        <div className="wl-img-ph" style={{ display: "none", position: "absolute", inset: 0, flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "8px", background: "rgba(255,255,255,0.03)" }}>
+                          <span style={{ fontSize: "28px", opacity: 0.3 }}>🃏</span>
+                          <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", textAlign: "center", padding: "0 8px" }}>{item.card.name}</span>
+                        </div>
                         <div style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>{label}</div>
                       </div>
                       <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
