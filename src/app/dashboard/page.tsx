@@ -7,8 +7,6 @@ import { AdminFeed } from "@/components/AdminFeed";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
-import dynamic from "next/dynamic";
-const MarketFeed = dynamic(() => import("@/components/MarketFeed").then(m => m.MarketFeed), { ssr: false });
 
 const COURT = "#2ee6c1";
 const BG_POPUP = "rgba(5,7,13,0.88)";
@@ -466,18 +464,6 @@ export default function DashboardHome() {
         @media (max-width: 480px) {
           .stats-grid { grid-template-columns: 1fr 1fr; }
         }
-        .feed-wrap {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 24px;
-          width: 100%;
-          align-items: start;
-        }
-        @media (max-width: 767px) {
-          .feed-wrap {
-            grid-template-columns: 1fr;
-          }
-        }
       `}</style>
 
       {/* Header dentro del área del grid */}
@@ -532,21 +518,7 @@ export default function DashboardHome() {
 
       </div>
 
-      {/* Market feed */}
-      {userId && (
-        <>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, fontFamily: MONO, fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: COURT }}>
-            <span style={{ width: 20, height: 1, background: COURT, display: "inline-block" }} />
-            Market · Feed en vivo
-          </div>
-          <div className="feed-wrap">
-            <MarketFeed />
-          </div>
-        </>
-      )}
-
-
-{/* Last News popup */}
+      {/* Last News popup */}
       {userId && <LastNewsPopup currentUserId={userId} currentUsername={username} isAdmin={isAdmin} />}
 
       {/* Popup seguidores */}
