@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
@@ -46,12 +47,29 @@ export function WishlistPageClient({
   whatsappIndicativo:  string;
   whatsappNumero:      string;
 }) {
-  const [fNombre,     setFNombre]     = useState("");
-  const [fSet,        setFSet]        = useState("");
-  const [fVariante,   setFVariante]   = useState("");
+  const router       = useRouter();
+  const pathname     = usePathname();
+  const searchParams = useSearchParams();
+
+  const [fNombre,     setFNombreRaw]  = useState(() => searchParams.get("nombre") ?? "");
+  const [fSet,        setFSetRaw]     = useState(() => searchParams.get("set") ?? "");
+  const [fVariante,   setFVarianteRaw]= useState(() => searchParams.get("variante") ?? "");
   const [previewCard, setPreviewCard] = useState<PokemonCard | null>(null);
   const [authMsg,     setAuthMsg]     = useState<string | null>(null);
   const [setsLoaded,  setSetsLoaded]  = useState(false);
+
+  const updateURL = useCallback((nombre: string, set: string, variante: string) => {
+    const params = new URLSearchParams();
+    if (nombre)   params.set("nombre",   nombre);
+    if (set)      params.set("set",      set);
+    if (variante) params.set("variante", variante);
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  }, [router, pathname]);
+
+  function setFNombre(v: string)   { setFNombreRaw(v);   updateURL(v,       fSet,      fVariante); }
+  function setFSet(v: string)      { setFSetRaw(v);       updateURL(fNombre, v,         fVariante); }
+  function setFVariante(v: string) { setFVarianteRaw(v);  updateURL(fNombre, fSet,      v); }
 
   useEffect(() => {
     const ids = [...new Set(wishlistRows.map(w => w.set_id))];
@@ -84,7 +102,12 @@ export function WishlistPageClient({
   }, [resolved, fNombre, fSet, fVariante]);
 
   const hasFilters = fNombre || fSet || fVariante;
-  function clearFilters() { setFNombre(""); setFSet(""); setFVariante(""); }
+  function clearFilters() {
+    setFNombreRaw("");
+    setFSetRaw("");
+    setFVarianteRaw("");
+    router.replace(pathname, { scroll: false });
+  }
 
   async function handleVender(card: { name: string; version: string }, set: SetInfo, e: React.MouseEvent) {
     e.preventDefault();
