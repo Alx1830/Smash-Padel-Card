@@ -443,11 +443,12 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const [featuredCards, setFeaturedCards] = useState<FeaturedCard[]>([]);
   const [wishlistCards, setWishlistCards] = useState<WishlistCard[]>([]);
   const [userListings,  setUserListings]  = useState<UserListing[]>([]);
+  const [addingWish,    setAddingWish]    = useState<"idle" | "loading" | "done">("idle");
 
   const openSeries = POKEMON_SERIES.find(s => s.id === openSeriesId);
   const openSet    = openSeries?.sets.find(s => s.id === openSetId);
 
-  useEffect(() => { setInvFilter("todas"); setVersionFilter("todas"); }, [openSetId]);
+  useEffect(() => { setInvFilter("todas"); setVersionFilter("todas"); setAddingWish("idle"); }, [openSetId]);
 
   /* Fetch featured cards and active listings for logged-in user */
   useEffect(() => {
@@ -511,6 +512,22 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const handleInventoryChange = useCallback((key: string, qty: number) => {
     setInventory(prev => ({ ...prev, [key]: qty }));
   }, []);
+
+  async function handleAddAllMissingToWishlist() {
+    if (!userId || !openSetId || addingWish === "loading") return;
+    setAddingWish("loading");
+    const missing = setCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) === 0);
+    const toAdd   = missing.filter(c => !wishlistCards.some(w => w.card_id === c.id && w.set_id === openSetId));
+    if (toAdd.length > 0) {
+      const supabase = createClient();
+      await supabase.from("card_wishlist").insert(
+        toAdd.map(c => ({ user_id: userId, card_id: c.id, set_id: openSetId }))
+      );
+      setWishlistCards(prev => [...prev, ...toAdd.map(c => ({ card_id: c.id, set_id: openSetId! }))]);
+    }
+    setAddingWish("done");
+    setTimeout(() => setAddingWish("idle"), 2500);
+  }
 
   function goToSeries() {
     setView("series");
@@ -636,64 +653,63 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
               {userId && <SetProgress cards={allCards} inventory={inventory} />}
 
               {/* Filtros */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "28px" }}>
-
-                {/* Fila 1: inventario */}
-                {userId && (
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                    {(["todas", "tengo", "faltan"] as InvFilter[]).map(f => {
-                      const label = f === "todas" ? "Todas" : f === "tengo" ? "En inventario" : "Restantes";
-                      const count = f === "tengo"
-                        ? allCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) > 0).length
-                        : f === "faltan"
-                        ? allCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) === 0).length
-                        : null;
-                      const active = invFilter === f;
-                      return (
-                        <button key={f} onClick={() => setInvFilter(f)} style={{
-                          fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em",
-                          textTransform: "uppercase",
-                          color: active ? BG0 : INK2,
-                          background: active ? COURT : "rgba(255,255,255,0.04)",
-                          border: `1px solid ${active ? COURT : "rgba(255,255,255,0.1)"}`,
-                          borderRadius: "6px", padding: "5px 12px",
-                          cursor: "pointer", transition: "all 0.15s",
-                        }}>
-                          {label}{count !== null ? ` (${count})` : ""}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-
-                {/* Fila 2: variantes del set */}
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                  {["todas", ...setVersions].map(v => {
-                    const active = versionFilter === v;
-                    const color = v === "todas" ? INK2 : getVersionColor(v);
-                    const label = v === "todas" ? "Todas las variantes" : getVersionLabel(v);
-                    const count = v === "todas" ? null : allCards.filter(c => {
-                      const qty = inventory[invKey(c.id, c.version)] ?? 0;
-                      if (invFilter === "tengo"  && qty === 0) return false;
-                      if (invFilter === "faltan" && qty  >  0) return false;
-                      return c.version === v;
-                    }).length;
-                    return (
-                      <button key={v} onClick={() => setVersionFilter(v)} style={{
-                        fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em",
-                        textTransform: "uppercase",
-                        color: active ? BG0 : color,
-                        background: active ? color : "rgba(255,255,255,0.04)",
-                        border: `1px solid ${active ? color : `${color}55`}`,
-                        borderRadius: "6px", padding: "5px 12px",
-                        cursor: "pointer", transition: "all 0.15s",
-                      }}>
-                        {label}{count !== null ? ` (${count})` : ""}
+              {(() => {
+                const tengoCount  = allCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) > 0).length;
+                const faltanCount = allCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) === 0).length;
+                const sSelect: React.CSSProperties = {
+                  fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em",
+                  color: INK0, background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px",
+                  padding: "8px 12px", cursor: "pointer", outline: "none",
+                  appearance: "none", WebkitAppearance: "none",
+                  minWidth: "180px",
+                };
+                return (
+                  <div style={{ display: "flex", gap: "10px", marginBottom: "28px", flexWrap: "wrap", alignItems: "center" }}>
+                    {userId && (
+                      <select value={invFilter} onChange={e => setInvFilter(e.target.value as InvFilter)} style={sSelect}>
+                        <option value="todas" style={{ background: "#0a0e1a" }}>Todas ({allCards.length})</option>
+                        <option value="tengo" style={{ background: "#0a0e1a" }}>En inventario ({tengoCount})</option>
+                        <option value="faltan" style={{ background: "#0a0e1a" }}>Restantes ({faltanCount})</option>
+                      </select>
+                    )}
+                    <select value={versionFilter} onChange={e => setVersionFilter(e.target.value)} style={sSelect}>
+                      <option value="todas" style={{ background: "#0a0e1a" }}>Todas las variantes</option>
+                      {setVersions.map(v => {
+                        const cnt = allCards.filter(c => {
+                          const qty = inventory[invKey(c.id, c.version)] ?? 0;
+                          if (invFilter === "tengo"  && qty === 0) return false;
+                          if (invFilter === "faltan" && qty  >  0) return false;
+                          return c.version === v;
+                        }).length;
+                        return (
+                          <option key={v} value={v} style={{ background: "#0a0e1a" }}>
+                            {getVersionLabel(v)} ({cnt})
+                          </option>
+                        );
+                      })}
+                    </select>
+                    {userId && (
+                      <button
+                        onClick={handleAddAllMissingToWishlist}
+                        disabled={addingWish === "loading" || setCards.length === 0}
+                        style={{
+                          fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em",
+                          color: addingWish === "done" ? BG0 : COURT,
+                          background: addingWish === "done" ? COURT : "rgba(46,230,193,0.08)",
+                          border: `1px solid ${COURT}55`,
+                          borderRadius: "8px", padding: "8px 16px",
+                          cursor: addingWish === "loading" || setCards.length === 0 ? "default" : "pointer",
+                          opacity: addingWish === "loading" ? 0.6 : 1,
+                          transition: "all 0.2s", whiteSpace: "nowrap",
+                        }}
+                      >
+                        {addingWish === "done" ? "Listo ✓" : addingWish === "loading" ? "Agregando..." : `+ Wishlist restantes (${faltanCount})`}
                       </button>
-                    );
-                  })}
-                </div>
-              </div>
+                    )}
+                  </div>
+                );
+              })()}
 
               <div className="pks-cards-grid" style={{
                 display: "grid",
