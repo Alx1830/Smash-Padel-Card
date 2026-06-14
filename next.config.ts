@@ -19,7 +19,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       `img-src 'self' data: blob: https://${SUPABASE_HOST} https://images.scrydex.com https://images.pokemontcg.io https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev https://www.tcgplayer.com`,
-      `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://www.google-analytics.com`,
+      `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://www.google-analytics.com https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev`,
       "worker-src 'self' blob:",
       "manifest-src 'self'",
       "frame-src https://www.youtube.com https://www.tcgplayer.com",
@@ -119,6 +119,15 @@ export default withPWA({
       handler: "StaleWhileRevalidate",
       options: {
         cacheName: "scrydex-cards",
+        expiration: { maxEntries: 500, maxAgeSeconds: 60 * 60 * 24 * 30 },
+      },
+    },
+    /* Imágenes de cartas R2 (Cloudflare) */
+    {
+      urlPattern: /^https:\/\/pub-01b8e296fe944e688fd2100376d4af4a\.r2\.dev\/.*/i,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "r2-card-images",
         expiration: { maxEntries: 500, maxAgeSeconds: 60 * 60 * 24 * 30 },
       },
     },
