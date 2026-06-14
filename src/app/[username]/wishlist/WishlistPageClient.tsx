@@ -13,6 +13,7 @@ const ModalTiltCard = dynamic(
   { ssr: false }
 );
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
+import { useScrydexPrice, SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 
 const COURT = "#ffd24f";
 const INK0  = "#f5f7fb";
@@ -23,6 +24,29 @@ const DISP  = "var(--font-archivo)";
 
 interface WishlistRow { card_id: number | string; set_id: string; }
 interface SetInfo     { id: string; name: string; logo: string; }
+
+function CardPriceTag({ card, setId }: { card: PokemonCard; setId: string }) {
+  const scrydexCode = SCRYDEX_SET_CODES[setId];
+  const { prices, loading } = useScrydexPrice({
+    setSlug: setId, setCode: scrydexCode ?? "",
+    cardName: card.name, cardNumber: card.card_number,
+    enabled: !!scrydexCode,
+  });
+  if (!scrydexCode) return null;
+  const vKey = card.version.toLowerCase().replace(/\s+/g, "");
+  const price: number | null = prices
+    ? (prices[vKey] ?? prices[card.version] ?? prices[card.version.charAt(0).toUpperCase() + card.version.slice(1)] ?? null)
+    : null;
+  if (loading) return (
+    <span style={{ fontFamily: "var(--font-jetbrains)", fontSize: "9px", color: INK2, letterSpacing: "0.06em" }}>…</span>
+  );
+  if (price === null) return null;
+  return (
+    <span style={{ fontFamily: "var(--font-jetbrains)", fontSize: "10px", color: "#2ee6c1", fontWeight: 700, letterSpacing: "0.04em", whiteSpace: "nowrap" }}>
+      ${price.toFixed(2)}
+    </span>
+  );
+}
 
 async function checkUserReady(): Promise<{ ok: boolean; reason?: string }> {
   const supabase = createClient();
@@ -290,7 +314,8 @@ export function WishlistPageClient({
                           </div>
                           <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.set.name}</span>
                         </div>
-                        <div style={{ display: "flex", gap: "6px", marginTop: "auto", paddingTop: "2px" }}>
+                        <div style={{ display: "flex", gap: "6px", marginTop: "auto", paddingTop: "2px", alignItems: "center" }}>
+                          <CardPriceTag card={item.card as PokemonCard} setId={item.set_id} />
                           <button
                             onClick={() => { const w=430,h=600,left=screen.availWidth-w-16,top=screen.availHeight-h-16; window.open(`https://www.tcgplayer.com/search/pokemon/product?q=${tcgQuery}`,"tcgplayer",`width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`); }}
                             style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", padding: "8px 4px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#2ee696", background: "#ffffff", borderRadius: "8px", fontWeight: 700, border: "none", cursor: "pointer" }}
