@@ -175,11 +175,12 @@ export default function DeckEditorPage() {
         @media (min-width: 1200px) { .deck-cards-grid { grid-template-columns: repeat(6, 1fr); } }
         .picker-grid {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 10px;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
         }
-        @media (min-width: 480px)  { .picker-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (min-width: 768px)  { .picker-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 480px)  { .picker-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 768px)  { .picker-grid { grid-template-columns: repeat(6, 1fr); } }
+        @media (min-width: 1200px) { .picker-grid { grid-template-columns: repeat(8, 1fr); } }
       `}</style>
 
       {/* Header */}
@@ -313,7 +314,7 @@ export default function DeckEditorPage() {
                       <div style={{ position: "relative", aspectRatio: "5/7", borderRadius: "8px", overflow: "hidden", background: "rgba(255,255,255,0.03)", cursor: canAdd ? "pointer" : "default" }} onClick={() => canAdd && addCard(r.card, r.setId)}>
                         <img src={r.card.image} alt={r.card.name} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0 }} />
                         <div style={{ position: "absolute", bottom: 4, right: 4, fontFamily: MONO, fontSize: "8px", color: vColor, border: `1px solid ${vColor}55`, borderRadius: "4px", padding: "1px 5px", background: "rgba(5,7,13,0.85)" }}>{vLabel}</div>
-                        {inDeck && <div style={{ position: "absolute", top: 4, right: 4, background: "rgba(46,230,193,0.9)", borderRadius: "6px", padding: "2px 7px", fontFamily: MONO, fontSize: "11px", color: "#05070d", fontWeight: 700 }}>×{inDeck.quantity}</div>}
+                        {inDeck && <div style={{ position: "absolute", top: 6, right: 6, background: "#00e676", borderRadius: "8px", padding: "3px 9px", fontFamily: MONO, fontSize: "14px", color: "#05070d", fontWeight: 800, letterSpacing: "0.02em", boxShadow: "0 0 10px rgba(0,230,118,0.6)" }}>×{inDeck.quantity}</div>}
                         {canAdd && (
                           <div style={{ position: "absolute", inset: 0, background: "rgba(46,230,193,0.0)", display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.15s" }}
                             onMouseEnter={e => (e.currentTarget.style.background = "rgba(46,230,193,0.15)")}
@@ -328,8 +329,8 @@ export default function DeckEditorPage() {
                           </div>
                         )}
                       </div>
-                      <p style={{ fontFamily: MONO, fontSize: "10px", color: INK0, margin: 0, textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{r.card.name}</p>
-                      <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, margin: 0, textAlign: "center" }}>#{String(r.card.card_number).padStart(3,"0")} · {r.setName}</p>
+                      <p style={{ fontFamily: MONO, fontSize: "12px", color: INK0, margin: 0, textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontWeight: 600 }}>{r.card.name}</p>
+                      <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: 0, textAlign: "center" }}>#{String(r.card.card_number).padStart(3,"0")} · {r.setName}</p>
                     </div>
                   );
                 })}
