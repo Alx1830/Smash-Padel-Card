@@ -137,7 +137,7 @@ function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () => void
   return (
     <div
       ref={wrapRef}
-      style={{ width: "100%", aspectRatio: "2/3", position: "relative", perspective: "700px", cursor: "pointer" }}
+      style={{ width: "100%", aspectRatio: "5/7", position: "relative", perspective: "700px", cursor: "pointer" }}
       onMouseEnter={onEnter}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
@@ -149,7 +149,7 @@ function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () => void
         transition: "transform 0.6s cubic-bezier(0.2,0.8,0.2,1), box-shadow 0.3s",
         willChange: "transform", boxShadow: shadowStyle,
       }}>
-        <img src={card.image} alt={card.name} loading="lazy" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+        <img src={card.image} alt={card.name} loading="lazy" style={{ objectFit: "contain", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
 
         {isRH && (
           <div ref={rhRef} style={{
@@ -339,9 +339,11 @@ export default function InventarioPage() {
   const [setCardPrices,   setSetCardPrices]   = useState<Record<string, Record<string, Record<string, number>>>>({});
 
   // Filters (local state — no URL params needed)
-  const [fNombre,   setFNombre]   = useState("");
-  const [fVariante, setFVariante] = useState("");
-  const [fSet,      setFSet]      = useState("");
+  const [fNombre,     setFNombre]     = useState("");
+  const [fVariante,   setFVariante]   = useState("");
+  const [fSet,        setFSet]        = useState("");
+  const [fDestacados, setFDestacados] = useState(false);
+  const [fBulk,       setFBulk]       = useState(false);
 
   const [modalCard,  setModalCard]  = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [sellTarget, setSellTarget] = useState<{ card: PokemonCard; setId: string } | null>(null);
@@ -505,12 +507,14 @@ export default function InventarioPage() {
       if (fNombre.trim() && !card.name.toLowerCase().includes(fNombre.trim().toLowerCase())) return false;
       if (fVariante && card.version !== fVariante) return false;
       if (fSet && setId !== fSet) return false;
+      if (fDestacados && !featuredCards.some(f => Number(f.card_id) === card.card_number && f.set_id === setId)) return false;
+      if (fBulk && (inventory[invKey(card.id, card.version)] ?? 0) < 2) return false;
       return true;
     });
-  }, [allInventoryCards, fNombre, fVariante, fSet]);
+  }, [allInventoryCards, fNombre, fVariante, fSet, fDestacados, fBulk, featuredCards, inventory]);
 
-  const hasFilters = fNombre || fVariante || fSet;
-  function clearFilters() { setFNombre(""); setFVariante(""); setFSet(""); }
+  const hasFilters = fNombre || fVariante || fSet || fDestacados || fBulk;
+  function clearFilters() { setFNombre(""); setFVariante(""); setFSet(""); setFDestacados(false); setFBulk(false); }
 
   const totalCards = Object.values(inventory).reduce((a, b) => a + b, 0);
 
@@ -728,6 +732,36 @@ export default function InventarioPage() {
                       ))}
                     </select>
                   </div>
+
+                  <div style={sDivider} />
+
+                  {/* Checkbox Destacados */}
+                  <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      checked={fDestacados}
+                      onChange={e => setFDestacados(e.target.checked)}
+                      style={{ width: "15px", height: "15px", accentColor: COURT, cursor: "pointer", flexShrink: 0 }}
+                    />
+                    <span style={{ fontFamily: MONO, fontSize: "11px", color: fDestacados ? COURT : INK0, letterSpacing: "0.06em", userSelect: "none" }}>
+                      Destacados
+                    </span>
+                  </label>
+
+                  <div style={{ height: "10px" }} />
+
+                  {/* Checkbox Bulk */}
+                  <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      checked={fBulk}
+                      onChange={e => setFBulk(e.target.checked)}
+                      style={{ width: "15px", height: "15px", accentColor: COURT, cursor: "pointer", flexShrink: 0 }}
+                    />
+                    <span style={{ fontFamily: MONO, fontSize: "11px", color: fBulk ? COURT : INK0, letterSpacing: "0.06em", userSelect: "none" }}>
+                      Bulk
+                    </span>
+                  </label>
                 </div>
               </aside>
 
@@ -815,7 +849,7 @@ export default function InventarioPage() {
                           </div>
 
                           {/* Line 1: #090 Rowlet */}
-                          <div style={{ display: "flex", alignItems: "center", gap: "5px", overflow: "hidden" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "5px", overflow: "hidden", justifyContent: "center", textAlign: "center" }}>
                             <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2, flexShrink: 0, letterSpacing: "0.04em" }}>
                               {numStr}
                             </span>
@@ -825,7 +859,7 @@ export default function InventarioPage() {
                           </div>
 
                           {/* Line 2: precio + qty controls */}
-                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "4px" }}>
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
                             <span style={{ fontFamily: MONO, fontSize: "11px", color: cardPrice !== null ? COURT : INK2, fontWeight: 700, flexShrink: 0 }}>
                               {cardPrice !== null ? `$${cardPrice.toFixed(2)}` : "—"}
                             </span>
