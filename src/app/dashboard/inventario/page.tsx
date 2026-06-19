@@ -775,7 +775,7 @@ export default function InventarioPage() {
 
                     {setDropdownOpen && (
                       <div
-                        onMouseDown={e => e.stopPropagation()}
+                        onMouseDown={e => { e.stopPropagation(); e.nativeEvent.stopImmediatePropagation(); }}
                         style={{
                           position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, zIndex: 100,
                           background: "#0d1520", border: "1px solid rgba(255,255,255,0.12)",
