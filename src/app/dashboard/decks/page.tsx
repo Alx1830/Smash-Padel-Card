@@ -193,7 +193,7 @@ export default function DecksPage() {
             <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2, marginBottom: "16px" }}>
               {decks.length} {decks.length === 1 ? "deck" : "decks"}
             </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))", gap: "16px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(560px, 1fr))", gap: "16px" }}>
             {decks.map(deck => (
               <div key={deck.id} style={{ display: "flex", gap: "0", borderRadius: "16px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)", transition: "border-color 0.2s" }}
                 onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(46,230,193,0.25)")}
@@ -201,21 +201,21 @@ export default function DecksPage() {
               >
                 {/* Carta portada */}
                 <Link href={`/dashboard/decks/${deck.id}`} style={{ textDecoration: "none", display: "flex", flexShrink: 0 }}>
-                  <div style={{ width: 110, padding: "14px 0 14px 14px", display: "flex", alignItems: "center" }}>
+                  <div style={{ width: 302, padding: "14px 0 14px 14px", display: "flex", alignItems: "center" }}>
                     {deck.cover_card_image ? (
                       <img
                         src={deck.cover_card_image}
                         alt={deck.name}
                         style={{
-                          width: 96, aspectRatio: "5/7", objectFit: "contain",
-                          borderRadius: "8px",
-                          boxShadow: "0 6px 24px rgba(0,0,0,0.7), 0 2px 6px rgba(0,0,0,0.5)",
+                          width: 288, aspectRatio: "5/7", objectFit: "contain",
+                          borderRadius: "12px",
+                          boxShadow: "0 12px 40px rgba(0,0,0,0.7), 0 4px 12px rgba(0,0,0,0.5)",
                           display: "block",
                         }}
                       />
                     ) : (
-                      <div style={{ width: 96, aspectRatio: "5/7", borderRadius: "8px", background: "rgba(46,230,193,0.06)", border: "1px solid rgba(46,230,193,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <Layers size={28} color={COURT} strokeWidth={1.2} />
+                      <div style={{ width: 288, aspectRatio: "5/7", borderRadius: "12px", background: "rgba(46,230,193,0.06)", border: "1px solid rgba(46,230,193,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Layers size={60} color={COURT} strokeWidth={1.2} />
                       </div>
                     )}
                   </div>
