@@ -344,6 +344,7 @@ export default function InventarioPage() {
   const [fSet,        setFSet]        = useState("");
   const [fDestacados, setFDestacados] = useState(false);
   const [fBulk,       setFBulk]       = useState(false);
+  const [setDropdownOpen, setSetDropdownOpen] = useState(false);
 
   const [modalCard,  setModalCard]  = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [sellTarget, setSellTarget] = useState<{ card: PokemonCard; setId: string } | null>(null);
@@ -405,6 +406,13 @@ export default function InventarioPage() {
     await Promise.all(pricePromises);
     setAllCardsLoaded(true);
   }
+
+  useEffect(() => {
+    if (!setDropdownOpen) return;
+    function handleClick() { setSetDropdownOpen(false); }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [setDropdownOpen]);
 
   useEffect(() => {
     async function init() {
@@ -507,7 +515,10 @@ export default function InventarioPage() {
       if (fNombre.trim() && !card.name.toLowerCase().includes(fNombre.trim().toLowerCase())) return false;
       if (fVariante && card.version !== fVariante) return false;
       if (fSet && setId !== fSet) return false;
-      if (fDestacados && !featuredCards.some(f => Number(f.card_id) === card.card_number && f.set_id === setId)) return false;
+      if (fDestacados && !featuredCards.some(f =>
+        (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) &&
+        f.set_id === setId
+      )) return false;
       if (fBulk && (inventory[invKey(card.id, card.version)] ?? 0) < 2) return false;
       return true;
     });
@@ -721,16 +732,72 @@ export default function InventarioPage() {
 
                   <div style={sDivider} />
 
-                  <div>
+                  <div style={{ position: "relative" }}>
                     <label style={sLabel}>Set</label>
-                    <select value={fSet} onChange={e => setFSet(e.target.value)} style={sSelect}>
-                      <option value="" style={{ background: "#0a0e1a" }}>Todos los sets</option>
-                      {availableSets.map(({ setId }) => (
-                        <option key={setId} value={setId} style={{ background: "#0a0e1a", color: INK0 }}>
-                          {SET_META[setId]?.name ?? setId}
-                        </option>
-                      ))}
-                    </select>
+                    <button
+                      onClick={() => setSetDropdownOpen(p => !p)}
+                      style={{
+                        ...sInput,
+                        display: "flex", alignItems: "center", gap: "8px",
+                        cursor: "pointer", background: "rgba(255,255,255,0.04)",
+                        border: `1px solid ${setDropdownOpen ? COURT + "66" : "rgba(255,255,255,0.1)"}`,
+                        width: "100%", textAlign: "left", justifyContent: "space-between",
+                      }}
+                    >
+                      <span style={{ display: "flex", alignItems: "center", gap: "8px", overflow: "hidden" }}>
+                        {fSet && SET_META[fSet]?.logo && (
+                          <img src={SET_META[fSet].logo} alt="" style={{ width: 28, height: 20, objectFit: "contain", flexShrink: 0 }} />
+                        )}
+                        <span style={{ color: INK0, fontSize: "12px", fontFamily: MONO, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {fSet ? (SET_META[fSet]?.name ?? fSet) : "Todos los sets"}
+                        </span>
+                      </span>
+                      <span style={{ color: INK2, fontSize: "10px", flexShrink: 0 }}>▾</span>
+                    </button>
+
+                    {setDropdownOpen && (
+                      <div
+                        onMouseDown={e => e.stopPropagation()}
+                        style={{
+                          position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, zIndex: 100,
+                          background: "#0d1520", border: "1px solid rgba(255,255,255,0.12)",
+                          borderRadius: "10px", overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.6)",
+                          maxHeight: "240px", overflowY: "auto",
+                        }}
+                      >
+                        {/* Opción "Todos los sets" */}
+                        <button
+                          onClick={() => { setFSet(""); setSetDropdownOpen(false); }}
+                          style={{
+                            display: "flex", alignItems: "center", gap: "8px", width: "100%",
+                            padding: "9px 12px", background: fSet === "" ? "rgba(46,230,193,0.1)" : "none",
+                            border: "none", cursor: "pointer", textAlign: "left",
+                          }}
+                        >
+                          <span style={{ fontFamily: MONO, fontSize: "11px", color: fSet === "" ? COURT : INK0 }}>Todos los sets</span>
+                        </button>
+
+                        {availableSets.map(({ setId }) => (
+                          <button
+                            key={setId}
+                            onClick={() => { setFSet(setId); setSetDropdownOpen(false); }}
+                            style={{
+                              display: "flex", alignItems: "center", gap: "8px", width: "100%",
+                              padding: "7px 12px", background: fSet === setId ? "rgba(46,230,193,0.1)" : "none",
+                              border: "none", cursor: "pointer", textAlign: "left",
+                              borderTop: "1px solid rgba(255,255,255,0.05)",
+                            }}
+                          >
+                            {SET_META[setId]?.logo && (
+                              <img src={SET_META[setId].logo} alt="" style={{ width: 32, height: 22, objectFit: "contain", flexShrink: 0 }} />
+                            )}
+                            <span style={{ fontFamily: MONO, fontSize: "11px", color: fSet === setId ? COURT : INK0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                              {SET_META[setId]?.name ?? setId}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   <div style={sDivider} />
@@ -849,11 +916,11 @@ export default function InventarioPage() {
                           </div>
 
                           {/* Line 1: #090 Rowlet */}
-                          <div style={{ display: "flex", alignItems: "center", gap: "5px", overflow: "hidden", justifyContent: "center", textAlign: "center" }}>
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "4px", overflow: "hidden", textAlign: "center" }}>
                             <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2, flexShrink: 0, letterSpacing: "0.04em" }}>
                               {numStr}
                             </span>
-                            <span style={{ fontFamily: MONO, fontSize: "11px", color: INK0, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1, minWidth: 0 }}>
+                            <span style={{ fontFamily: MONO, fontSize: "11px", color: INK0, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                               {card.name}
                             </span>
                           </div>

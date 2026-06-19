@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { House, UserRoundPen, UsersRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper } from "lucide-react";
+import { House, UserRoundPen, UsersRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Layers } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { usePushPermission } from "@/hooks/usePushPermission";
 
@@ -27,6 +27,7 @@ const SIDEBAR_ITEMS = [
   { href: "/dashboard/perfil",     label: "Perfil",     Icon: UserRoundPen },
   { href: "/dashboard/amigos",     label: "Amigos",     Icon: HeartHandshake },
   { href: "/dashboard/inventario", label: "Inventario", Icon: LayoutGrid },
+  { href: "/dashboard/decks",      label: "Decks",      Icon: Layers },
   { href: "/dashboard/market",     label: "Market",     Icon: Store },
 ];
 
