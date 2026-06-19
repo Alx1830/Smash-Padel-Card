@@ -858,7 +858,7 @@ export default function InventarioPage() {
                 ) : (
                   <div className="inv-card-grid">
                     {filteredCards.map(({ card, setId }) => {
-                      const isFeat   = featuredCards.some(f => Number(f.card_id) === card.card_number && f.set_id === setId);
+                      const isFeat   = featuredCards.some(f => (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId);
                       const isListed = listings.some(l => String(l.card_id) === String(card.card_number) && l.set_id === setId && l.version === card.version);
                       const qty      = inventory[invKey(card.id, card.version)] ?? 0;
 
