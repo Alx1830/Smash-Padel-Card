@@ -189,41 +189,42 @@ export default function DecksPage() {
             <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, opacity: 0.5, margin: 0 }}>Crea tu primer deck y empieza a construir tu estrategia.</p>
           </div>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2, marginBottom: "8px" }}>
+          <div>
+            <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2, marginBottom: "16px" }}>
               {decks.length} {decks.length === 1 ? "deck" : "decks"}
             </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))", gap: "16px" }}>
             {decks.map(deck => (
-              <div key={deck.id} style={{ display: "flex", gap: "0", borderRadius: "20px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)", transition: "border-color 0.2s" }}
+              <div key={deck.id} style={{ display: "flex", gap: "0", borderRadius: "16px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)", transition: "border-color 0.2s" }}
                 onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(46,230,193,0.25)")}
                 onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
               >
-                {/* Carta portada grande */}
+                {/* Carta portada */}
                 <Link href={`/dashboard/decks/${deck.id}`} style={{ textDecoration: "none", display: "flex", flexShrink: 0 }}>
-                  <div style={{ width: 140, padding: "16px 0 16px 16px", display: "flex", alignItems: "center" }}>
+                  <div style={{ width: 110, padding: "14px 0 14px 14px", display: "flex", alignItems: "center" }}>
                     {deck.cover_card_image ? (
                       <img
                         src={deck.cover_card_image}
                         alt={deck.name}
                         style={{
-                          width: 124, aspectRatio: "5/7", objectFit: "contain",
-                          borderRadius: "10px",
-                          boxShadow: "0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)",
+                          width: 96, aspectRatio: "5/7", objectFit: "contain",
+                          borderRadius: "8px",
+                          boxShadow: "0 6px 24px rgba(0,0,0,0.7), 0 2px 6px rgba(0,0,0,0.5)",
                           display: "block",
                         }}
                       />
                     ) : (
-                      <div style={{ width: 124, aspectRatio: "5/7", borderRadius: "10px", background: "rgba(46,230,193,0.06)", border: "1px solid rgba(46,230,193,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <Layers size={32} color={COURT} strokeWidth={1.2} />
+                      <div style={{ width: 96, aspectRatio: "5/7", borderRadius: "8px", background: "rgba(46,230,193,0.06)", border: "1px solid rgba(46,230,193,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Layers size={28} color={COURT} strokeWidth={1.2} />
                       </div>
                     )}
                   </div>
                 </Link>
 
                 {/* Info lateral */}
-                <Link href={`/dashboard/decks/${deck.id}`} style={{ textDecoration: "none", flex: 1, minWidth: 0, padding: "20px 16px 20px 20px", display: "flex", flexDirection: "column", gap: "10px" }}>
+                <Link href={`/dashboard/decks/${deck.id}`} style={{ textDecoration: "none", flex: 1, minWidth: 0, padding: "14px 10px 14px 14px", display: "flex", flexDirection: "column", gap: "8px" }}>
                   <div>
-                    <p style={{ fontFamily: DISP, fontSize: "20px", color: INK0, fontWeight: 700, margin: "0 0 4px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{deck.name}</p>
+                    <p style={{ fontFamily: DISP, fontSize: "16px", color: INK0, fontWeight: 700, margin: "0 0 3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{deck.name}</p>
                     {deck.description && <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "0 0 8px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{deck.description}</p>}
                     <p style={{ fontFamily: MONO, fontSize: "11px", color: deck.card_count >= 60 ? COURT : INK2, margin: 0, letterSpacing: "0.06em" }}>
                       {deck.card_count} / 60 cartas{deck.card_count >= 60 && <span style={{ marginLeft: "8px", color: COURT }}>✓ Completo</span>}
@@ -247,7 +248,7 @@ export default function DecksPage() {
                 </Link>
 
                 {/* Botón eliminar */}
-                <div style={{ display: "flex", alignItems: "center", padding: "0 16px" }}>
+                <div style={{ display: "flex", alignItems: "center", padding: "0 10px" }}>
                   <button
                     onClick={() => deleteDeck(deck.id)}
                     title="Eliminar deck"
@@ -260,6 +261,7 @@ export default function DecksPage() {
                 </div>
               </div>
             ))}
+            </div>
           </div>
         )}
       </div>
