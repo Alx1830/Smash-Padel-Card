@@ -367,7 +367,17 @@ export default function InventarioPage() {
       if (row.set_id) setMap[row.set_id] = (setMap[row.set_id] ?? 0) + 1;
     }
     setInventory(invMap);
-    setFeaturedCards((featRes.data ?? []) as FeaturedCard[]);
+
+    // Limpiar registros fantasma: featured_cards con card_id en formato string (NaN al convertir)
+    const allFeat = (featRes.data ?? []) as FeaturedCard[];
+    const ghostFeat = allFeat.filter(f => isNaN(Number(f.card_id)));
+    if (ghostFeat.length > 0) {
+      await Promise.all(ghostFeat.map(f =>
+        supabase.from("featured_cards").delete().eq("user_id", uid).eq("card_id", f.card_id).eq("set_id", f.set_id)
+      ));
+    }
+    setFeaturedCards(allFeat.filter(f => !isNaN(Number(f.card_id))));
+
     setWishlistCards((wishRes.data ?? []) as WishlistCard[]);
     setListings((listRes.data ?? []) as UserListing[]);
     const newSets = Object.entries(setMap).map(([setId, count]) => ({ setId, count })).sort((a, b) => b.count - a.count);
