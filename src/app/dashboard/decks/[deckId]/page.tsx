@@ -159,6 +159,11 @@ export default function DeckEditorPage() {
     }).eq("id", deckId);
   }
 
+  async function deleteDeck() {
+    await supabase.from("decks").delete().eq("id", deckId);
+    router.push("/dashboard/decks");
+  }
+
   async function changeQty(deckCardId: string, delta: number) {
     const entry = deckCards.find(c => c.id === deckCardId);
     if (!entry) return;
@@ -229,21 +234,39 @@ export default function DeckEditorPage() {
               </span>
             </div>
           </div>
-          <button
-            onClick={() => { setPickerOpen(true); startLoadingAllSets(); }}
-            disabled={totalCards >= MAX_CARDS}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: "8px",
-              padding: "11px 22px", borderRadius: "10px", background: totalCards >= MAX_CARDS ? "rgba(255,255,255,0.05)" : COURT,
-              color: totalCards >= MAX_CARDS ? INK2 : "#05070d",
-              fontFamily: MONO, fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em",
-              textTransform: "uppercase", border: "none",
-              cursor: totalCards >= MAX_CARDS ? "default" : "pointer",
-            }}
-          >
-            <Plus size={14} strokeWidth={2.5} />
-            Agregar Carta
-          </button>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <button
+              onClick={() => { setPickerOpen(true); startLoadingAllSets(); }}
+              disabled={totalCards >= MAX_CARDS}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "8px",
+                padding: "11px 22px", borderRadius: "10px", background: totalCards >= MAX_CARDS ? "rgba(255,255,255,0.05)" : COURT,
+                color: totalCards >= MAX_CARDS ? INK2 : "#05070d",
+                fontFamily: MONO, fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em",
+                textTransform: "uppercase", border: "none",
+                cursor: totalCards >= MAX_CARDS ? "default" : "pointer",
+              }}
+            >
+              <Plus size={14} strokeWidth={2.5} />
+              Agregar Carta
+            </button>
+            <button
+              onClick={deleteDeck}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "8px",
+                padding: "11px 22px", borderRadius: "10px",
+                background: "rgba(209,53,53,0.08)", color: "#d95555",
+                border: "1px solid rgba(209,53,53,0.25)",
+                fontFamily: MONO, fontSize: "12px", fontWeight: 600, letterSpacing: "0.08em",
+                textTransform: "uppercase", cursor: "pointer", transition: "background 0.15s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(209,53,53,0.18)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "rgba(209,53,53,0.08)")}
+            >
+              <Trash2 size={14} strokeWidth={1.8} />
+              Eliminar Deck
+            </button>
+          </div>
         </div>
       </div>
 

@@ -231,34 +231,21 @@ export default function DecksPage() {
                     </p>
                   </div>
 
-                  {/* Lista de cartas */}
+                  {/* Lista de cartas sin scroll */}
                   {deck.cards.length > 0 && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "2px", maxHeight: "120px", overflowY: "auto" }}>
-                      {deck.cards.slice(0, 12).map((c, i) => (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                      {deck.cards.slice(0, 10).map((c, i) => (
                         <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                           <span style={{ fontFamily: MONO, fontSize: "10px", color: COURT, fontWeight: 700, minWidth: "20px" }}>×{c.quantity}</span>
                           <span style={{ fontFamily: MONO, fontSize: "10px", color: INK0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.name}</span>
                         </div>
                       ))}
-                      {deck.cards.length > 12 && (
-                        <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, marginTop: "2px" }}>+{deck.cards.length - 12} más…</span>
+                      {deck.cards.length > 10 && (
+                        <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, marginTop: "2px" }}>+{deck.cards.length - 10} más…</span>
                       )}
                     </div>
                   )}
                 </Link>
-
-                {/* Botón eliminar */}
-                <div style={{ display: "flex", alignItems: "center", padding: "0 10px" }}>
-                  <button
-                    onClick={() => deleteDeck(deck.id)}
-                    title="Eliminar deck"
-                    style={{ width: 36, height: 36, borderRadius: "10px", background: "rgba(209,53,53,0.08)", border: "1px solid rgba(209,53,53,0.2)", color: "#d95555", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "background 0.15s" }}
-                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(209,53,53,0.18)")}
-                    onMouseLeave={e => (e.currentTarget.style.background = "rgba(209,53,53,0.08)")}
-                  >
-                    <Trash2 size={15} strokeWidth={1.8} />
-                  </button>
-                </div>
               </div>
             ))}
             </div>
