@@ -427,12 +427,20 @@ export default function InventarioPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function matchesFeatured(f: FeaturedCard, card: PokemonCard, setId: string) {
+    return (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId;
+  }
+
   async function toggleFeatured(card: PokemonCard, setId: string) {
     if (!userId) return;
-    const isFeat = featuredCards.some(f => Number(f.card_id) === card.card_number && f.set_id === setId);
+    const isFeat = featuredCards.some(f => matchesFeatured(f, card, setId));
     if (isFeat) {
-      await supabase.from("featured_cards").delete().eq("user_id", userId).eq("card_id", card.card_number).eq("set_id", setId);
-      setFeaturedCards(prev => prev.filter(f => !(Number(f.card_id) === card.card_number && f.set_id === setId)));
+      // Intentar borrar por card_number y por card.id para cubrir ambos formatos
+      await Promise.all([
+        supabase.from("featured_cards").delete().eq("user_id", userId).eq("card_id", card.card_number).eq("set_id", setId),
+        supabase.from("featured_cards").delete().eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId),
+      ]);
+      setFeaturedCards(prev => prev.filter(f => !matchesFeatured(f, card, setId)));
     } else {
       if (featuredCards.length >= 10) return;
       await supabase.from("featured_cards").insert({ user_id: userId, card_id: card.card_number, set_id: setId });
