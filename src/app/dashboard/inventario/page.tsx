@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import dynamic from "next/dynamic";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
@@ -13,7 +12,7 @@ import {
   invKey,
   type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing,
 } from "@/components/CardDetailModal";
-import { Plus, Search, ChevronDown, ChevronUp, BadgeDollarSign, Star } from "lucide-react";
+import { Plus, Search, BadgeDollarSign, Star } from "lucide-react";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { getCurrencyForCountry } from "@/lib/currency";
 
@@ -38,12 +37,11 @@ const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
-const SET_LOGO: Record<string, string> = Object.fromEntries(
-  POKEMON_SERIES.flatMap(s => s.sets).map(s => [s.id, s.logo])
+const SET_META: Record<string, { name: string; logo: string }> = Object.fromEntries(
+  POKEMON_SERIES.flatMap(s => s.sets).map(s => [s.id, { name: s.name, logo: s.logo }])
 );
 
-
-/* ── Cosmos stars (static positions, animated via CSS) ──────── */
+/* ── Cosmos stars ────────────────────────────────────────────── */
 const COSMOS_STARS = Array.from({ length: 18 }, (_, i) => ({
   x:   (i * 37 + 11) % 95,
   y:   (i * 53 +  7) % 93,
@@ -52,7 +50,7 @@ const COSMOS_STARS = Array.from({ length: 18 }, (_, i) => ({
   dur:  parseFloat((1.1 + (i % 5) * 0.35).toFixed(2)),
 }));
 
-/* ── Tilt card with holo effects ────────────────────────────── */
+/* ── Tilt card with holo effects ─────────────────────────────── */
 function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () => void }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -153,7 +151,6 @@ function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () => void
       }}>
         <img src={card.image} alt={card.name} loading="lazy" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
 
-        {/* Reverse holo shimmer */}
         {isRH && (
           <div ref={rhRef} style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
@@ -161,7 +158,6 @@ function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () => void
           }} />
         )}
 
-        {/* Holo / gold layer 1 */}
         {(isH || isGold) && (
           <div ref={hRef1} style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "color-dodge",
@@ -172,7 +168,6 @@ function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () => void
           }} />
         )}
 
-        {/* Holo / gold layer 2 */}
         {(isH || isGold) && (
           <div ref={hRef2} style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
@@ -182,7 +177,6 @@ function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () => void
           }} />
         )}
 
-        {/* Cosmos Holo: rainbow + estrellas */}
         {isCosmos && (
           <>
             <div style={{
@@ -211,7 +205,6 @@ function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () => void
           </>
         )}
 
-        {/* Gloss reflection */}
         <div ref={glRef} style={{
           position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
           background: `linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`,
@@ -339,18 +332,21 @@ export default function InventarioPage() {
   const [wishlistCards, setWishlistCards] = useState<WishlistCard[]>([]);
   const [listings,      setListings]      = useState<UserListing[]>([]);
 
-  const [sets,        setSets]        = useState<{ setId: string; count: number }[]>([]);
-  const [loading,     setLoading]     = useState(true);
-  const [expanded,    setExpanded]    = useState<string | null>(null);
-  const [loadingSet,  setLoadingSet]  = useState<string | null>(null);
-  const [setCards,    setSetCards]    = useState<Record<string, PokemonCard[]>>({});
-  // card_prices por set: { [setId]: { [scrydexCardId]: { normal: 0.25, ... } } }
-  const [setCardPrices, setSetCardPrices] = useState<Record<string, Record<string, Record<string, number>>>>({});
+  const [sets,            setSets]            = useState<{ setId: string; count: number }[]>([]);
+  const [loading,         setLoading]         = useState(true);
+  const [allCardsLoaded,  setAllCardsLoaded]  = useState(false);
+  const [setCards,        setSetCards]        = useState<Record<string, PokemonCard[]>>({});
+  const [setCardPrices,   setSetCardPrices]   = useState<Record<string, Record<string, Record<string, number>>>>({});
 
-  const [modalCard,      setModalCard]      = useState<{ card: PokemonCard; setId: string } | null>(null);
-  const [sellTarget,     setSellTarget]     = useState<{ card: PokemonCard; setId: string } | null>(null);
-  const [drawerOpen,     setDrawerOpen]     = useState(false);
-  const [buscarOpen,     setBuscarOpen]     = useState(false);
+  // Filters (local state — no URL params needed)
+  const [fNombre,   setFNombre]   = useState("");
+  const [fVariante, setFVariante] = useState("");
+  const [fSet,      setFSet]      = useState("");
+
+  const [modalCard,  setModalCard]  = useState<{ card: PokemonCard; setId: string } | null>(null);
+  const [sellTarget, setSellTarget] = useState<{ card: PokemonCard; setId: string } | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [buscarOpen, setBuscarOpen] = useState(false);
 
   const userIdRef = useRef<string | null>(null);
 
@@ -371,33 +367,27 @@ export default function InventarioPage() {
     setFeaturedCards((featRes.data ?? []) as FeaturedCard[]);
     setWishlistCards((wishRes.data ?? []) as WishlistCard[]);
     setListings((listRes.data ?? []) as UserListing[]);
-    setSets(Object.entries(setMap).map(([setId, count]) => ({ setId, count })).sort((a, b) => b.count - a.count));
+    const newSets = Object.entries(setMap).map(([setId, count]) => ({ setId, count })).sort((a, b) => b.count - a.count);
+    setSets(newSets);
     setLoading(false);
+    return { newSets, invMap };
   }
 
-  useEffect(() => {
-    async function init() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { setLoading(false); return; }
-      setUserId(user.id);
-      userIdRef.current = user.id;
-      await loadData(user.id);
+  async function loadAllSetsData(setIds: string[]) {
+    if (setIds.length === 0) { setAllCardsLoaded(true); return; }
+
+    // Load card data for all sets
+    await loadManySets(setIds);
+    const newSetCards: Record<string, PokemonCard[]> = {};
+    for (const sid of setIds) {
+      newSetCards[sid] = SET_CARDS[sid] ?? [];
     }
-    init();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setSetCards(newSetCards);
 
-  async function toggleSet(setId: string) {
-    if (expanded === setId) { setExpanded(null); return; }
-    setExpanded(setId);
-    if (setCards[setId]) return;
-    setLoadingSet(setId);
-    await loadManySets([setId]);
-    setSetCards(prev => ({ ...prev, [setId]: SET_CARDS[setId] ?? [] }));
-
-    // Cargar precios Scrydex del set en un solo query
-    const sc = SCRYDEX_SET_CODES[setId];
-    if (sc && !setCardPrices[setId]) {
+    // Load prices for all sets in parallel
+    const pricePromises = setIds.map(async (setId) => {
+      const sc = SCRYDEX_SET_CODES[setId];
+      if (!sc) return;
       const { data: priceRows } = await supabase
         .from("card_prices")
         .select("card_id, prices")
@@ -409,10 +399,23 @@ export default function InventarioPage() {
         }
         setSetCardPrices(prev => ({ ...prev, [setId]: map }));
       }
-    }
-
-    setLoadingSet(null);
+    });
+    await Promise.all(pricePromises);
+    setAllCardsLoaded(true);
   }
+
+  useEffect(() => {
+    async function init() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { setLoading(false); return; }
+      setUserId(user.id);
+      userIdRef.current = user.id;
+      const { newSets } = await loadData(user.id);
+      await loadAllSetsData(newSets.map(s => s.setId));
+    }
+    init();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function toggleFeatured(card: PokemonCard, setId: string) {
     if (!userId) return;
@@ -427,58 +430,106 @@ export default function InventarioPage() {
     }
   }
 
-  async function toggleWishlist(card: PokemonCard, setId: string) {
+  async function incrementQty(card: PokemonCard, setId: string) {
     if (!userId) return;
-    const isWanted = wishlistCards.some(w => w.card_id === card.id && w.set_id === setId);
-    if (isWanted) {
-      await supabase.from("card_wishlist").delete().eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId);
-      setWishlistCards(prev => prev.filter(w => !(w.card_id === card.id && w.set_id === setId)));
+    const key = invKey(card.id, card.version);
+    const current = inventory[key] ?? 0;
+    const next = current + 1;
+    await supabase.from("card_inventory").upsert({
+      user_id: userId, card_id: card.id, set_id: setId,
+      version: card.version, quantity: next,
+    }, { onConflict: "user_id,card_id,set_id,version" });
+    setInventory(prev => ({ ...prev, [key]: next }));
+  }
+
+  async function decrementQty(card: PokemonCard, setId: string) {
+    if (!userId) return;
+    const key = invKey(card.id, card.version);
+    const current = inventory[key] ?? 0;
+    if (current <= 0) return;
+    const next = current - 1;
+    if (next === 0) {
+      await supabase.from("card_inventory")
+        .delete()
+        .eq("user_id", userId)
+        .eq("card_id", card.id)
+        .eq("set_id", setId)
+        .eq("version", card.version);
+      setInventory(prev => {
+        const updated = { ...prev };
+        delete updated[key];
+        return updated;
+      });
     } else {
-      await supabase.from("card_wishlist").insert({ user_id: userId, card_id: card.id, set_id: setId });
-      setWishlistCards(prev => [...prev, { card_id: card.id, set_id: setId }]);
+      await supabase.from("card_inventory").update({ quantity: next })
+        .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId).eq("version", card.version);
+      setInventory(prev => ({ ...prev, [key]: next }));
     }
   }
+
+  // Build flat list of all cards in inventory
+  const allInventoryCards = useMemo(() => {
+    if (!allCardsLoaded) return [];
+    const result: { card: PokemonCard; setId: string }[] = [];
+    for (const { setId } of sets) {
+      const cards = setCards[setId] ?? [];
+      for (const card of cards) {
+        if ((inventory[invKey(card.id, card.version)] ?? 0) > 0) {
+          result.push({ card, setId });
+        }
+      }
+    }
+    return result;
+  }, [allCardsLoaded, sets, setCards, inventory]);
+
+  // Unique versions from inventory
+  const availableVersions = useMemo(() => {
+    const vs = new Set<string>();
+    allInventoryCards.forEach(({ card }) => vs.add(card.version));
+    return [...vs].sort();
+  }, [allInventoryCards]);
+
+  // Unique sets from inventory
+  const availableSets = useMemo(() => {
+    const seen = new Set<string>();
+    return sets.filter(({ setId }) => {
+      if (seen.has(setId)) return false;
+      seen.add(setId);
+      return true;
+    });
+  }, [sets]);
+
+  // Filtered cards
+  const filteredCards = useMemo(() => {
+    return allInventoryCards.filter(({ card, setId }) => {
+      if (fNombre.trim() && !card.name.toLowerCase().includes(fNombre.trim().toLowerCase())) return false;
+      if (fVariante && card.version !== fVariante) return false;
+      if (fSet && setId !== fSet) return false;
+      return true;
+    });
+  }, [allInventoryCards, fNombre, fVariante, fSet]);
+
+  const hasFilters = fNombre || fVariante || fSet;
+  function clearFilters() { setFNombre(""); setFVariante(""); setFSet(""); }
+
+  const totalCards = Object.values(inventory).reduce((a, b) => a + b, 0);
+
+  const sInput: React.CSSProperties = {
+    width: "100%", padding: "8px 10px", borderRadius: "7px",
+    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+    color: INK0, fontFamily: MONO, fontSize: "12px", outline: "none", boxSizing: "border-box",
+  };
+  const sLabel: React.CSSProperties = {
+    fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em",
+    textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px",
+  };
+  const sDivider: React.CSSProperties = { height: "1px", background: "rgba(255,255,255,0.06)", margin: "18px 0" };
+  const sSelect: React.CSSProperties = { ...sInput, cursor: "pointer", appearance: "none", WebkitAppearance: "none" };
 
   return (
     <div style={{ minHeight: "100vh" }}>
       <style>{`
-        .inv-header { padding: 24px 20px 0; }
-        @media (min-width: 768px) { .inv-header { padding: 48px 48px 0; } }
-        .inv-body { padding: 0 20px 60px; }
-        @media (min-width: 768px) { .inv-body { padding: 0 48px 80px; } }
-
-        .inv-card-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 14px;
-        }
-        @media (min-width: 640px)  { .inv-card-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (min-width: 1280px) { .inv-card-grid { grid-template-columns: repeat(6, 1fr); } }
-
-        .inv-act-row {
-          display: flex; align-items: center; gap: 2px;
-          flex-wrap: nowrap; justify-content: center; overflow: hidden;
-        }
-        .inv-act-btn {
-          background: none; border: none; cursor: pointer; padding: 0;
-          display: flex; align-items: center; justify-content: center;
-          width: 28px; height: 28px; border-radius: 6px;
-          transition: background 0.15s; flex-shrink: 0;
-        }
-        .inv-act-btn:hover { background: rgba(255,255,255,0.08); }
-        .inv-act-btn.active { background: rgba(46,230,193,0.15); }
-        .inv-act-icon { width: 14px; height: 14px; }
-        @media (min-width: 640px) {
-          .inv-act-row { gap: 3px; }
-          .inv-act-btn { width: 34px; height: 34px; border-radius: 7px; }
-          .inv-act-icon { width: 18px; height: 18px; }
-        }
-        @media (min-width: 1280px) {
-          .inv-act-row { gap: 4px; }
-          .inv-act-btn { width: 40px; height: 40px; border-radius: 8px; }
-          .inv-act-icon { width: 22px; height: 22px; }
-        }
-
+        /* ── Animations ── */
         @keyframes inv-shimmer {
           0%   { background-position: 200% 0; }
           100% { background-position: -200% 0; }
@@ -501,13 +552,65 @@ export default function InventarioPage() {
           100% { filter: hue-rotate(360deg) brightness(1); }
         }
         @keyframes inv-cosmosStar {
-          0%,100% { opacity: 0;   transform: translate(-50%,-50%) scale(0.2) rotate(0deg); }
+          0%,100% { opacity: 0;    transform: translate(-50%,-50%) scale(0.2) rotate(0deg); }
           50%     { opacity: 0.95; transform: translate(-50%,-50%) scale(1.1) rotate(20deg); }
+        }
+
+        /* ── Layout ── */
+        .inv-page-padding { padding: 24px 20px 0; }
+        @media (min-width: 768px) { .inv-page-padding { padding: 48px 48px 0; } }
+
+        .inv-body { padding: 0 20px 80px; }
+        @media (min-width: 768px) { .inv-body { padding: 0 48px 80px; } }
+
+        .inv-layout { display: flex; gap: 32px; align-items: flex-start; }
+        .inv-sidebar { width: 220px; flex-shrink: 0; }
+        .inv-grid-area { flex: 1; min-width: 0; }
+        @media (max-width: 1023px) {
+          .inv-layout { flex-direction: column; }
+          .inv-sidebar { width: 100% !important; }
+          .inv-sidebar > div { position: static !important; }
+        }
+
+        /* ── Card grid ── */
+        .inv-card-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+        @media (min-width: 640px)  { .inv-card-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; } }
+        @media (min-width: 1280px) { .inv-card-grid { grid-template-columns: repeat(6, 1fr); gap: 12px; } }
+
+        /* ── Icon overlay buttons ── */
+        .inv-icon-btn {
+          width: 26px; height: 26px;
+          display: flex; align-items: center; justify-content: center;
+          background: rgba(5,7,13,0.75); border: none; border-radius: 6px;
+          cursor: pointer; transition: background 0.15s; padding: 0;
+          backdrop-filter: blur(4px);
+        }
+        .inv-icon-btn:hover { background: rgba(5,7,13,0.92); }
+        .inv-icon-btn.active { background: rgba(46,230,193,0.2); }
+
+        /* ── Qty controls ── */
+        .inv-qty-btn {
+          width: 28px; height: 28px; border-radius: 6px;
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer; border: 1px solid rgba(255,255,255,0.12);
+          background: none; transition: background 0.15s; padding: 0;
+          font-size: 16px; font-weight: 600; line-height: 1;
+          flex-shrink: 0;
+        }
+        .inv-qty-btn:hover { background: rgba(255,255,255,0.07); }
+        .inv-qty-num {
+          width: 24px; text-align: center;
+          font-family: var(--font-jetbrains); font-size: 13px;
+          font-weight: 700; color: #f5f7fb; flex-shrink: 0;
         }
       `}</style>
 
       {/* ── Header ── */}
-      <div className="inv-header">
+      <div className="inv-page-padding">
         <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
           <span style={{ width: "20px", height: "1px", background: COURT, display: "inline-block" }} />
           Mi Colección
@@ -548,7 +651,7 @@ export default function InventarioPage() {
         </div>
       </div>
 
-      {/* ── Sets list ── */}
+      {/* ── Body ── */}
       <div className="inv-body">
         {loading ? (
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -564,138 +667,203 @@ export default function InventarioPage() {
             </Link>
           </div>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2, marginBottom: "8px" }}>
-              {sets.length} {sets.length === 1 ? "set" : "sets"} · {Object.values(inventory).reduce((a, b) => a + b, 0)} cartas
+          <>
+            <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2, marginBottom: "24px" }}>
+              {sets.length} {sets.length === 1 ? "set" : "sets"} · {totalCards} cartas
             </p>
 
-            {sets.map(({ setId, count }) => {
-              const isOpen = expanded === setId;
-              const isLoadingThis = loadingSet === setId;
-              const loadedCards = setCards[setId] ?? [];
-              const userCards = isOpen && loadedCards.length > 0
-                ? loadedCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) > 0)
-                : [];
+            <div className="inv-layout">
 
-              return (
-                <div key={setId} style={{ borderRadius: "12px", overflow: "hidden", border: `1px solid ${isOpen ? "rgba(46,230,193,0.25)" : "rgba(255,255,255,0.07)"}`, transition: "border-color 0.2s" }}>
+              {/* ── Sidebar ── */}
+              <aside className="inv-sidebar">
+                <div style={{
+                  background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)",
+                  borderRadius: "16px", padding: "20px", position: "sticky", top: "80px",
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+                    <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", color: COURT }}>Filtros</span>
+                    {hasFilters && (
+                      <button onClick={clearFilters} style={{
+                        fontFamily: MONO, fontSize: "9px", letterSpacing: "0.1em", textTransform: "uppercase",
+                        color: "#d95555", background: "none", border: "1px solid rgba(209,53,53,0.3)",
+                        borderRadius: "5px", padding: "3px 10px", cursor: "pointer",
+                      }}>
+                        Limpiar
+                      </button>
+                    )}
+                  </div>
 
-                  {/* Set row button */}
-                  <button onClick={() => toggleSet(setId)} style={{
-                    width: "100%", display: "flex", alignItems: "center", gap: "14px",
-                    padding: "14px 18px",
-                    background: isOpen ? "rgba(46,230,193,0.06)" : "rgba(255,255,255,0.02)",
-                    border: "none", cursor: "pointer", transition: "background 0.15s",
-                  }}>
-                    {SET_LOGO[setId]
-                      ? <img src={SET_LOGO[setId]} alt={setId} style={{ width: 56, height: 40, objectFit: "contain", flexShrink: 0 }} />
-                      : <div style={{ width: 56, height: 40, flexShrink: 0 }} />
-                    }
-                    <div style={{ textAlign: "left", flex: 1, minWidth: 0 }}>
-                      <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: INK2, margin: "0 0 3px" }}>{setId}</p>
-                      <p style={{ fontFamily: MONO, fontSize: "15px", color: isOpen ? COURT : INK0, fontWeight: 700, margin: 0 }}>
-                        {count} {count === 1 ? "carta" : "cartas"}
-                      </p>
-                    </div>
-                    {isOpen ? <ChevronUp size={18} color={COURT} /> : <ChevronDown size={18} color={INK2} />}
-                  </button>
+                  <div>
+                    <label style={sLabel}>Nombre de carta</label>
+                    <input
+                      style={sInput}
+                      value={fNombre}
+                      onChange={e => setFNombre(e.target.value)}
+                      placeholder="Ej: Pikachu..."
+                    />
+                  </div>
 
-                  {/* Expanded card grid */}
-                  {isOpen && (
-                    <div style={{ padding: "18px 18px 24px", background: "rgba(0,0,0,0.15)" }}>
-                      {isLoadingThis ? (
-                        <div className="inv-card-grid">
-                          {Array.from({ length: count }).map((_, i) => (
-                            <div key={i} style={{ aspectRatio: "2/3", borderRadius: "8px", background: "linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.03) 75%)", backgroundSize: "200% 100%", animation: "inv-shimmer 1.4s ease-in-out infinite" }} />
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="inv-card-grid">
-                          {userCards.map(card => {
-                            const isFeat   = featuredCards.some(f => Number(f.card_id) === card.card_number && f.set_id === setId);
-                            const isWanted = wishlistCards.some(w => w.card_id === card.id && w.set_id === setId);
-                            const isListed = listings.some(l => String(l.card_id) === String(card.card_number) && l.set_id === setId && l.version === card.version);
+                  <div style={sDivider} />
 
-                            // Precio Scrydex para esta carta/versión
-                            const sc = SCRYDEX_SET_CODES[setId];
-                            const pricesForSet = sc ? (setCardPrices[setId] ?? {}) : {};
-                            const cardPriceMap = pricesForSet[`${sc}-${card.card_number}`];
-                            const vk = card.version.toLowerCase().replace(/\s+/g, "");
-                            const cardPrice: number | null = cardPriceMap
-                              ? (cardPriceMap[vk] ?? cardPriceMap[card.version] ?? cardPriceMap["normal"] ?? null)
-                              : null;
+                  <div>
+                    <label style={sLabel}>Variante</label>
+                    <select value={fVariante} onChange={e => setFVariante(e.target.value)} style={sSelect}>
+                      <option value="" style={{ background: "#0a0e1a" }}>Todas las variantes</option>
+                      {availableVersions.map(v => (
+                        <option key={v} value={v} style={{ background: "#0a0e1a", color: INK0 }}>{getVersionLabel(v)}</option>
+                      ))}
+                    </select>
+                  </div>
 
-                            return (
-                              <div key={`${card.id}-${card.version}`} style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  <div style={sDivider} />
 
-                                {/* Card with 3D tilt + overlays container */}
-                                <div style={{ position: "relative" }}>
-                                  <InvTiltCard card={card} onClick={() => setModalCard({ card, setId })} />
-
-                                  {/* Badge "En venta" */}
-                                  {isListed && (
-                                    <div title="En venta" style={{
-                                      position: "absolute", top: 8, right: 8,
-                                      width: 33, height: 33, borderRadius: "50%",
-                                      background: "rgba(5,7,13,0.85)",
-                                      display: "flex", alignItems: "center", justifyContent: "center",
-                                      animation: "inv-salePulse 2s ease-in-out infinite",
-                                      zIndex: 10, pointerEvents: "none",
-                                    }}>
-                                      <BadgeDollarSign size={20} color="#d6ff3d" strokeWidth={1.8} />
-                                    </div>
-                                  )}
-                                </div>
-
-                                {/* Action buttons */}
-                                {userId && (
-                                  <div className="inv-act-row">
-                                    {/* Precio */}
-                                    <div className="inv-act-btn" title="Precio de mercado" style={{ cursor: "default", flexDirection: "column", gap: "1px", padding: "2px 4px" }}>
-                                      <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.08em" }}>USD</span>
-                                      <span style={{ fontFamily: MONO, fontSize: "11px", color: cardPrice !== null ? COURT : INK2, fontWeight: 700, lineHeight: 1 }}>
-                                        {cardPrice !== null ? `$${cardPrice.toFixed(2)}` : "—"}
-                                      </span>
-                                    </div>
-
-                                    {/* Destacar */}
-                                    <button
-                                      className={`inv-act-btn${isFeat ? " active" : ""}`}
-                                      onClick={() => toggleFeatured(card, setId)}
-                                      title={isFeat ? "Quitar de destacadas" : "Destacar en perfil"}
-                                    >
-                                      <span className="inv-act-icon" style={{ display:"flex", alignItems:"center", justifyContent:"center" }}>
-                                        <Star size="100%" color={isFeat ? COURT : INK2} strokeWidth={isFeat ? 2.2 : 1.7} fill={isFeat ? COURT : "none"} />
-                                      </span>
-                                    </button>
-
-                                    {/* Vender */}
-                                    <button
-                                      className={`inv-act-btn${isListed ? " active" : ""}`}
-                                      onClick={() => setSellTarget({ card, setId })}
-                                      title="Poner en venta"
-                                    >
-                                      <span className="inv-act-icon" style={{ display:"flex", alignItems:"center", justifyContent:"center" }}>
-                                        <BadgeDollarSign size="100%" color={isListed ? "#d6ff3d" : INK2} strokeWidth={1.8} />
-                                      </span>
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  )}
+                  <div>
+                    <label style={sLabel}>Set</label>
+                    <select value={fSet} onChange={e => setFSet(e.target.value)} style={sSelect}>
+                      <option value="" style={{ background: "#0a0e1a" }}>Todos los sets</option>
+                      {availableSets.map(({ setId }) => (
+                        <option key={setId} value={setId} style={{ background: "#0a0e1a", color: INK0 }}>
+                          {SET_META[setId]?.name ?? setId}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              );
-            })}
-          </div>
+              </aside>
+
+              {/* ── Grid area ── */}
+              <div className="inv-grid-area">
+                {!allCardsLoaded ? (
+                  <div className="inv-card-grid">
+                    {Array.from({ length: Math.min(totalCards, 18) }).map((_, i) => (
+                      <div key={i} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                        <div style={{ aspectRatio: "2/3", borderRadius: "8px", background: "linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.03) 75%)", backgroundSize: "200% 100%", animation: "inv-shimmer 1.4s ease-in-out infinite" }} />
+                        <div style={{ height: "14px", borderRadius: "4px", background: "rgba(255,255,255,0.04)" }} />
+                        <div style={{ height: "28px", borderRadius: "6px", background: "rgba(255,255,255,0.03)" }} />
+                      </div>
+                    ))}
+                  </div>
+                ) : filteredCards.length === 0 ? (
+                  <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "60px 40px", textAlign: "center" }}>
+                    {hasFilters ? (
+                      <>
+                        <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: "0 0 12px" }}>Ningún resultado</p>
+                        <button onClick={clearFilters} style={{ fontFamily: MONO, fontSize: "10px", color: COURT, background: "none", border: `1px solid ${COURT}44`, borderRadius: "6px", padding: "6px 16px", cursor: "pointer" }}>Limpiar filtros</button>
+                      </>
+                    ) : (
+                      <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>No hay cartas en el inventario</p>
+                    )}
+                  </div>
+                ) : (
+                  <div className="inv-card-grid">
+                    {filteredCards.map(({ card, setId }) => {
+                      const isFeat   = featuredCards.some(f => Number(f.card_id) === card.card_number && f.set_id === setId);
+                      const isListed = listings.some(l => String(l.card_id) === String(card.card_number) && l.set_id === setId && l.version === card.version);
+                      const qty      = inventory[invKey(card.id, card.version)] ?? 0;
+
+                      // Scrydex price
+                      const sc = SCRYDEX_SET_CODES[setId];
+                      const pricesForSet = sc ? (setCardPrices[setId] ?? {}) : {};
+                      const cardPriceMap = pricesForSet[`${sc}-${card.card_number}`];
+                      const vk = card.version.toLowerCase().replace(/\s+/g, "");
+                      const cardPrice: number | null = cardPriceMap
+                        ? (cardPriceMap[vk] ?? cardPriceMap[card.version] ?? cardPriceMap["normal"] ?? null)
+                        : null;
+
+                      const numStr = `#${String(card.card_number).padStart(3, "0")}`;
+
+                      return (
+                        <div key={`${setId}-${card.id}-${card.version}`} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+
+                          {/* Card image area */}
+                          <div style={{ position: "relative" }}>
+                            <InvTiltCard card={card} onClick={() => setModalCard({ card, setId })} />
+
+                            {/* En venta badge */}
+                            {isListed && (
+                              <div title="En venta" style={{
+                                position: "absolute", top: 6, right: 6,
+                                width: 30, height: 30, borderRadius: "50%",
+                                background: "rgba(5,7,13,0.85)",
+                                display: "flex", alignItems: "center", justifyContent: "center",
+                                animation: "inv-salePulse 2s ease-in-out infinite",
+                                zIndex: 10, pointerEvents: "none",
+                              }}>
+                                <BadgeDollarSign size={18} color="#d6ff3d" strokeWidth={1.8} />
+                              </div>
+                            )}
+
+                            {/* Estrella + vender (top-left) */}
+                            {userId && (
+                              <div style={{ position: "absolute", top: 6, left: 6, display: "flex", flexDirection: "column", gap: "4px", zIndex: 10 }}>
+                                <button
+                                  className={`inv-icon-btn${isFeat ? " active" : ""}`}
+                                  onClick={e => { e.stopPropagation(); toggleFeatured(card, setId); }}
+                                  title={isFeat ? "Quitar de destacadas" : "Destacar en perfil"}
+                                >
+                                  <Star size={13} color={isFeat ? COURT : INK2} strokeWidth={isFeat ? 2.2 : 1.7} fill={isFeat ? COURT : "none"} />
+                                </button>
+                                <button
+                                  className={`inv-icon-btn${isListed ? " active" : ""}`}
+                                  onClick={e => { e.stopPropagation(); setSellTarget({ card, setId }); }}
+                                  title="Poner en venta"
+                                >
+                                  <BadgeDollarSign size={13} color={isListed ? "#d6ff3d" : INK2} strokeWidth={1.8} />
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Line 1: #090 Rowlet */}
+                          <div style={{ display: "flex", alignItems: "center", gap: "5px", overflow: "hidden" }}>
+                            <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2, flexShrink: 0, letterSpacing: "0.04em" }}>
+                              {numStr}
+                            </span>
+                            <span style={{ fontFamily: MONO, fontSize: "11px", color: INK0, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1, minWidth: 0 }}>
+                              {card.name}
+                            </span>
+                          </div>
+
+                          {/* Line 2: precio + qty controls */}
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "4px" }}>
+                            <span style={{ fontFamily: MONO, fontSize: "11px", color: cardPrice !== null ? COURT : INK2, fontWeight: 700, flexShrink: 0 }}>
+                              {cardPrice !== null ? `$${cardPrice.toFixed(2)}` : "—"}
+                            </span>
+
+                            {userId && (
+                              <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+                                <button
+                                  className="inv-qty-btn"
+                                  onClick={() => decrementQty(card, setId)}
+                                  style={{ color: INK0 }}
+                                  title="Quitar uno"
+                                >
+                                  −
+                                </button>
+                                <span className="inv-qty-num">{qty}</span>
+                                <button
+                                  className="inv-qty-btn"
+                                  onClick={() => incrementQty(card, setId)}
+                                  style={{ color: COURT, borderColor: `${COURT}44` }}
+                                  title="Agregar uno"
+                                >
+                                  +
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
         )}
       </div>
 
-      {/* CardDetailModal */}
+      {/* Modals */}
       {modalCard && userId && (
         <CardDetailModal
           card={modalCard.card} setId={modalCard.setId} userId={userId}
@@ -708,7 +876,6 @@ export default function InventarioPage() {
         />
       )}
 
-      {/* Sell popup */}
       {sellTarget && userId && (
         <SellPopup
           card={sellTarget.card} setId={sellTarget.setId} userId={userId}
@@ -717,15 +884,20 @@ export default function InventarioPage() {
         />
       )}
 
-      {/* Agregar drawer */}
       {drawerOpen && userId && (
         <AgregarDrawer
           userId={userId}
-          onClose={() => { setDrawerOpen(false); if (userIdRef.current) loadData(userIdRef.current); }}
+          onClose={async () => {
+            setDrawerOpen(false);
+            if (userIdRef.current) {
+              setAllCardsLoaded(false);
+              const { newSets } = await loadData(userIdRef.current);
+              await loadAllSetsData(newSets.map(s => s.setId));
+            }
+          }}
         />
       )}
 
-      {/* Buscar carta drawer */}
       {buscarOpen && userId && (
         <BuscarCartaDrawer
           userId={userId}

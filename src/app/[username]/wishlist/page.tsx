@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
@@ -92,13 +93,15 @@ export default async function WishlistPage({
   return (
     <main style={{ background: "#05070d", minHeight: "100vh" }}>
       <ProfileHeader player={profileHeader} hideMobileDetails showProfileLink />
-      <WishlistPageClient
-        username={player.username}
-        wishlistRows={(wishlistRows ?? []) as { card_id: number | string; set_id: string }[]}
-        allSets={allSets.map(s => ({ id: s.id, name: s.name, logo: s.logo }))}
-        whatsappIndicativo={player.whatsapp_indicativo ?? ""}
-        whatsappNumero={player.whatsapp_numero ?? ""}
-      />
+      <Suspense>
+        <WishlistPageClient
+          username={player.username}
+          wishlistRows={(wishlistRows ?? []) as { card_id: number | string; set_id: string }[]}
+          allSets={allSets.map(s => ({ id: s.id, name: s.name, logo: s.logo }))}
+          whatsappIndicativo={player.whatsapp_indicativo ?? ""}
+          whatsappNumero={player.whatsapp_numero ?? ""}
+        />
+      </Suspense>
       <Footer />
       <MobileTabBar />
     </main>
