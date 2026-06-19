@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Plus, Layers, Trash2, ChevronRight } from "lucide-react";
+import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
+import { Plus, Layers, Trash2 } from "lucide-react";
 import Link from "next/link";
 
 const COURT = "#2ee6c1";
@@ -11,13 +12,19 @@ const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
+interface DeckCardSummary {
+  name: string;
+  quantity: number;
+}
+
 interface Deck {
   id: string;
   name: string;
   description: string | null;
   cover_card_image: string | null;
   created_at: string;
-  card_count?: number;
+  card_count: number;
+  cards: DeckCardSummary[];
 }
 
 export default function DecksPage() {
@@ -43,16 +50,28 @@ export default function DecksPage() {
         .order("created_at", { ascending: false });
 
       if (data) {
-        // Fetch card counts for each deck
-        const decksWithCount = await Promise.all(data.map(async (deck) => {
-          const { data: cards } = await supabase
-            .from("deck_cards")
-            .select("quantity")
-            .eq("deck_id", deck.id);
-          const count = (cards ?? []).reduce((s, r) => s + r.quantity, 0);
-          return { ...deck, card_count: count };
-        }));
-        setDecks(decksWithCount);
+        const cardQueries = await Promise.all(data.map(deck =>
+          supabase.from("deck_cards")
+            .select("card_id, set_id, version, quantity, position")
+            .eq("deck_id", deck.id)
+            .order("position", { ascending: true })
+            .then(r => r.data ?? [])
+        ));
+
+        const allSetIds = [...new Set(cardQueries.flatMap(c => c.map(r => r.set_id)))];
+        if (allSetIds.length > 0) await loadManySets(allSetIds);
+
+        const decksWithCards = data.map((deck, i) => {
+          const deckCardRows = cardQueries[i] ?? [];
+          const resolved: DeckCardSummary[] = deckCardRows.map(r => {
+            const setCards = SET_CARDS[r.set_id] ?? [];
+            const card = setCards.find(c => c.id === r.card_id && c.version === r.version);
+            return { name: card?.name ?? r.card_id, quantity: r.quantity };
+          });
+          const card_count = deckCardRows.reduce((s, r) => s + r.quantity, 0);
+          return { ...deck, card_count, cards: resolved };
+        });
+        setDecks(decksWithCards);
       }
       setLoading(false);
     })();
@@ -67,7 +86,7 @@ export default function DecksPage() {
       description: newDesc.trim() || null,
     }).select("id, name, description, cover_card_image, created_at").single();
     if (!error && data) {
-      setDecks(prev => [{ ...data, card_count: 0 }, ...prev]);
+      setDecks(prev => [{ ...data, card_count: 0, cards: [] }, ...prev]);
       setCreating(false);
       setNewName("");
       setNewDesc("");
@@ -90,19 +109,6 @@ export default function DecksPage() {
         @keyframes deck-shimmer {
           0%   { background-position: 200% 0; }
           100% { background-position: -200% 0; }
-        }
-        .deck-card-link { text-decoration: none; }
-        .deck-card-item {
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 16px; padding: 20px 24px;
-          display: flex; align-items: center; gap: 16px;
-          transition: border-color 0.2s, background 0.2s;
-          cursor: pointer;
-        }
-        .deck-card-item:hover {
-          border-color: rgba(46,230,193,0.3);
-          background: rgba(46,230,193,0.04);
         }
       `}</style>
 
@@ -188,36 +194,70 @@ export default function DecksPage() {
               {decks.length} {decks.length === 1 ? "deck" : "decks"}
             </p>
             {decks.map(deck => (
-              <div key={deck.id} style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <Link href={`/dashboard/decks/${deck.id}`} className="deck-card-link" style={{ flex: 1 }}>
-                  <div className="deck-card-item">
+              <div key={deck.id} style={{ display: "flex", gap: "0", borderRadius: "20px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)", transition: "border-color 0.2s" }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(46,230,193,0.25)")}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
+              >
+                {/* Carta portada grande */}
+                <Link href={`/dashboard/decks/${deck.id}`} style={{ textDecoration: "none", display: "flex", flexShrink: 0 }}>
+                  <div style={{ width: 140, padding: "16px 0 16px 16px", display: "flex", alignItems: "center" }}>
                     {deck.cover_card_image ? (
-                      <img src={deck.cover_card_image} alt="" style={{ width: 44, height: 62, objectFit: "contain", borderRadius: "6px", flexShrink: 0 }} />
+                      <img
+                        src={deck.cover_card_image}
+                        alt={deck.name}
+                        style={{
+                          width: 124, aspectRatio: "5/7", objectFit: "contain",
+                          borderRadius: "10px",
+                          boxShadow: "0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)",
+                          display: "block",
+                        }}
+                      />
                     ) : (
-                      <div style={{ width: 44, height: 62, borderRadius: "6px", background: "rgba(46,230,193,0.08)", border: "1px solid rgba(46,230,193,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <Layers size={20} color={COURT} strokeWidth={1.5} />
+                      <div style={{ width: 124, aspectRatio: "5/7", borderRadius: "10px", background: "rgba(46,230,193,0.06)", border: "1px solid rgba(46,230,193,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Layers size={32} color={COURT} strokeWidth={1.2} />
                       </div>
                     )}
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontFamily: DISP, fontSize: "15px", color: INK0, fontWeight: 700, margin: "0 0 4px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{deck.name}</p>
-                      {deck.description && <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "0 0 6px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{deck.description}</p>}
-                      <p style={{ fontFamily: MONO, fontSize: "10px", color: (deck.card_count ?? 0) >= 60 ? COURT : INK2, margin: 0, letterSpacing: "0.06em" }}>
-                        {deck.card_count ?? 0} / 60 cartas
-                        {(deck.card_count ?? 0) >= 60 && <span style={{ marginLeft: "6px", color: COURT }}>✓ Completo</span>}
-                      </p>
-                    </div>
-                    <ChevronRight size={16} color={INK2} />
                   </div>
                 </Link>
-                <button
-                  onClick={() => deleteDeck(deck.id)}
-                  title="Eliminar deck"
-                  style={{ width: 36, height: 36, borderRadius: "10px", background: "rgba(209,53,53,0.08)", border: "1px solid rgba(209,53,53,0.2)", color: "#d95555", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0, transition: "background 0.15s" }}
-                  onMouseEnter={e => (e.currentTarget.style.background = "rgba(209,53,53,0.18)")}
-                  onMouseLeave={e => (e.currentTarget.style.background = "rgba(209,53,53,0.08)")}
-                >
-                  <Trash2 size={15} strokeWidth={1.8} />
-                </button>
+
+                {/* Info lateral */}
+                <Link href={`/dashboard/decks/${deck.id}`} style={{ textDecoration: "none", flex: 1, minWidth: 0, padding: "20px 16px 20px 20px", display: "flex", flexDirection: "column", gap: "10px" }}>
+                  <div>
+                    <p style={{ fontFamily: DISP, fontSize: "20px", color: INK0, fontWeight: 700, margin: "0 0 4px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{deck.name}</p>
+                    {deck.description && <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "0 0 8px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{deck.description}</p>}
+                    <p style={{ fontFamily: MONO, fontSize: "11px", color: deck.card_count >= 60 ? COURT : INK2, margin: 0, letterSpacing: "0.06em" }}>
+                      {deck.card_count} / 60 cartas{deck.card_count >= 60 && <span style={{ marginLeft: "8px", color: COURT }}>✓ Completo</span>}
+                    </p>
+                  </div>
+
+                  {/* Lista de cartas */}
+                  {deck.cards.length > 0 && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "2px", maxHeight: "120px", overflowY: "auto" }}>
+                      {deck.cards.slice(0, 12).map((c, i) => (
+                        <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <span style={{ fontFamily: MONO, fontSize: "10px", color: COURT, fontWeight: 700, minWidth: "20px" }}>×{c.quantity}</span>
+                          <span style={{ fontFamily: MONO, fontSize: "10px", color: INK0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.name}</span>
+                        </div>
+                      ))}
+                      {deck.cards.length > 12 && (
+                        <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, marginTop: "2px" }}>+{deck.cards.length - 12} más…</span>
+                      )}
+                    </div>
+                  )}
+                </Link>
+
+                {/* Botón eliminar */}
+                <div style={{ display: "flex", alignItems: "center", padding: "0 16px" }}>
+                  <button
+                    onClick={() => deleteDeck(deck.id)}
+                    title="Eliminar deck"
+                    style={{ width: 36, height: 36, borderRadius: "10px", background: "rgba(209,53,53,0.08)", border: "1px solid rgba(209,53,53,0.2)", color: "#d95555", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "background 0.15s" }}
+                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(209,53,53,0.18)")}
+                    onMouseLeave={e => (e.currentTarget.style.background = "rgba(209,53,53,0.08)")}
+                  >
+                    <Trash2 size={15} strokeWidth={1.8} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>

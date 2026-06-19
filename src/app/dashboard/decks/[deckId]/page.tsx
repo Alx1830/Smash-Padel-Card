@@ -26,6 +26,7 @@ interface DeckCard {
   set_id: string;
   version: string;
   quantity: number;
+  position: number;
   card?: PokemonCard;
 }
 
@@ -40,6 +41,8 @@ export default function DeckEditorPage() {
   const [userId,     setUserId]     = useState<string | null>(null);
   const [loading,    setLoading]    = useState(true);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [dragIdx,    setDragIdx]    = useState<number | null>(null);
+  const [dragOver,   setDragOver]   = useState<number | null>(null);
   const [query,      setQuery]      = useState("");
   const [loadedSets, setLoadedSets] = useState<Set<string>>(new Set());
   const [isLoadingCards, setIsLoadingCards] = useState(false);
@@ -56,7 +59,7 @@ export default function DeckEditorPage() {
 
       const [{ data: deck }, { data: cards }] = await Promise.all([
         supabase.from("decks").select("name").eq("id", deckId).eq("user_id", user.id).single(),
-        supabase.from("deck_cards").select("id, card_id, set_id, version, quantity").eq("deck_id", deckId),
+        supabase.from("deck_cards").select("id, card_id, set_id, version, quantity, position").eq("deck_id", deckId).order("position", { ascending: true }),
       ]);
 
       if (!deck) { router.push("/dashboard/decks"); return; }
@@ -68,7 +71,7 @@ export default function DeckEditorPage() {
         const resolved = cards.map(c => {
           const setCards = SET_CARDS[c.set_id] ?? [];
           const card = setCards.find(sc => sc.id === c.card_id && sc.version === c.version);
-          return { ...c, card };
+          return { ...c, position: c.position ?? 0, card };
         });
         setDeckCards(resolved);
       }
@@ -112,6 +115,19 @@ export default function DeckEditorPage() {
     return out.slice(0, 80).sort((a, b) => a.card.name.localeCompare(b.card.name));
   }, [query, loadedSets]);
 
+  async function saveOrder(newCards: DeckCard[]) {
+    setDeckCards(newCards);
+    await Promise.all(
+      newCards.map((c, i) =>
+        supabase.from("deck_cards").update({ position: i }).eq("id", c.id)
+      )
+    );
+    // Actualizar portada con la primera carta
+    if (newCards[0]?.card?.image) {
+      await supabase.from("decks").update({ cover_card_image: newCards[0].card.image }).eq("id", deckId);
+    }
+  }
+
   function isEnergy(card: PokemonCard) {
     return card.name.toLowerCase().includes("energy");
   }
@@ -130,12 +146,15 @@ export default function DeckEditorPage() {
       const { data } = await supabase.from("deck_cards").insert({
         deck_id: deckId, card_id: card.id, set_id: setId, version: card.version, quantity: 1,
       }).select("id, card_id, set_id, version, quantity").single();
-      if (data) setDeckCards(prev => [...prev, { ...data, card }]);
+      if (data) {
+        setDeckCards(prev => [...prev, { ...data, position: data.position ?? 0, card }]);
+        if (deckCards.length === 0 && card.image) {
+          await supabase.from("decks").update({ cover_card_image: card.image }).eq("id", deckId);
+        }
+      }
     }
 
-    // Update cover with first card image
     await supabase.from("decks").update({
-      cover_card_image: card.image,
       updated_at: new Date().toISOString(),
     }).eq("id", deckId);
   }
@@ -146,8 +165,12 @@ export default function DeckEditorPage() {
     const newQty = entry.quantity + delta;
     if (newQty <= 0) {
       await supabase.from("deck_cards").delete().eq("id", deckCardId);
-      setDeckCards(prev => prev.filter(c => c.id !== deckCardId));
-    } else if (newQty > 4) {
+      const remaining = deckCards.filter(c => c.id !== deckCardId);
+      setDeckCards(remaining);
+      if (deckCards[0]?.id === deckCardId && remaining[0]?.card?.image) {
+        await supabase.from("decks").update({ cover_card_image: remaining[0].card.image }).eq("id", deckId);
+      }
+    } else if (!isEnergy(entry.card!) && newQty > 4) {
       return;
     } else {
       await supabase.from("deck_cards").update({ quantity: newQty }).eq("id", deckCardId);
@@ -234,11 +257,36 @@ export default function DeckEditorPage() {
           </div>
         ) : (
           <div className="deck-cards-grid">
-            {deckCards.map(dc => {
+            {deckCards.map((dc, index) => {
               const vColor = dc.card ? getVersionColor(dc.card.version) : INK2;
               const vLabel = dc.card ? getVersionLabel(dc.card.version) : dc.version;
               return (
-                <div key={dc.id} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                <div
+                  key={dc.id}
+                  draggable
+                  onDragStart={() => setDragIdx(index)}
+                  onDragOver={e => { e.preventDefault(); setDragOver(index); }}
+                  onDragLeave={() => setDragOver(null)}
+                  onDrop={e => {
+                    e.preventDefault();
+                    if (dragIdx === null || dragIdx === index) { setDragIdx(null); setDragOver(null); return; }
+                    const next = [...deckCards];
+                    const [moved] = next.splice(dragIdx, 1);
+                    next.splice(index, 0, moved);
+                    setDragIdx(null);
+                    setDragOver(null);
+                    saveOrder(next);
+                  }}
+                  style={{
+                    display: "flex", flexDirection: "column", gap: "6px",
+                    cursor: "grab",
+                    opacity: dragIdx === index ? 0.4 : 1,
+                    outline: dragOver === index && dragIdx !== index ? `2px solid #2ee6c1` : "none",
+                    outlineOffset: "3px",
+                    borderRadius: "10px",
+                    transition: "opacity 0.15s, outline 0.1s",
+                  }}
+                >
                   <div style={{ position: "relative", aspectRatio: "5/7", borderRadius: "8px", overflow: "hidden", background: "rgba(255,255,255,0.03)" }}>
                     {dc.card?.image && <img src={dc.card.image} alt={dc.card?.name ?? dc.card_id} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0 }} />}
                     <div style={{ position: "absolute", bottom: 4, right: 4, fontFamily: MONO, fontSize: "8px", color: vColor, border: `1px solid ${vColor}55`, borderRadius: "4px", padding: "1px 5px", background: "rgba(5,7,13,0.85)" }}>{vLabel}</div>
