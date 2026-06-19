@@ -117,7 +117,7 @@ export default function DeckEditorPage() {
     const existing = deckCards.find(c => c.card_id === card.id && c.set_id === setId && c.version === card.version);
 
     if (existing) {
-      if (existing.quantity >= 4) return; // max 4 copies same card
+      if (totalCards >= MAX_CARDS) return;
       const newQty = existing.quantity + 1;
       await supabase.from("deck_cards").update({ quantity: newQty }).eq("id", existing.id);
       setDeckCards(prev => prev.map(c => c.id === existing.id ? { ...c, quantity: newQty } : c));
@@ -245,7 +245,7 @@ export default function DeckEditorPage() {
                       <Minus size={12} />
                     </button>
                     <span style={{ fontFamily: MONO, fontSize: "13px", color: INK0, fontWeight: 700, width: "20px", textAlign: "center" }}>{dc.quantity}</span>
-                    <button onClick={() => changeQty(dc.id, 1)} disabled={dc.quantity >= 4 || totalCards >= MAX_CARDS} style={{ width: 28, height: 28, borderRadius: "6px", border: `1px solid ${COURT}44`, background: "none", color: COURT, cursor: dc.quantity >= 4 || totalCards >= MAX_CARDS ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", opacity: dc.quantity >= 4 || totalCards >= MAX_CARDS ? 0.4 : 1 }}>
+                    <button onClick={() => changeQty(dc.id, 1)} disabled={totalCards >= MAX_CARDS} style={{ width: 28, height: 28, borderRadius: "6px", border: `1px solid ${COURT}44`, background: "none", color: COURT, cursor: totalCards >= MAX_CARDS ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", opacity: totalCards >= MAX_CARDS ? 0.4 : 1 }}>
                       <Plus size={12} />
                     </button>
                   </div>
@@ -308,7 +308,7 @@ export default function DeckEditorPage() {
                   const vColor = getVersionColor(r.card.version);
                   const vLabel = getVersionLabel(r.card.version);
                   const inDeck = deckCards.find(c => c.card_id === r.card.id && c.set_id === r.setId && c.version === r.card.version);
-                  const canAdd = totalCards < MAX_CARDS && (inDeck?.quantity ?? 0) < 4;
+                  const canAdd = totalCards < MAX_CARDS;
                   return (
                     <div key={`${r.setId}-${r.card.id}-${i}`} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                       <div style={{ position: "relative", aspectRatio: "5/7", borderRadius: "8px", overflow: "hidden", background: "rgba(255,255,255,0.03)", cursor: canAdd ? "pointer" : "default" }} onClick={() => canAdd && addCard(r.card, r.setId)}>
