@@ -145,7 +145,7 @@ export default function DeckEditorPage() {
     } else {
       const { data } = await supabase.from("deck_cards").insert({
         deck_id: deckId, card_id: card.id, set_id: setId, version: card.version, quantity: 1,
-      }).select("id, card_id, set_id, version, quantity").single();
+      }).select("id, card_id, set_id, version, quantity, position").single();
       if (data) {
         setDeckCards(prev => [...prev, { ...data, position: data.position ?? 0, card }]);
         if (deckCards.length === 0 && card.image) {
