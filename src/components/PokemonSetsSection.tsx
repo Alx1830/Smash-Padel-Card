@@ -176,14 +176,14 @@ function TiltCard({
           overflow: "hidden",
           position: "relative",
           transform: "rotateX(0deg) rotateY(0deg)",
-          transition: "transform 0.6s cubic-bezier(0.2,0.8,0.2,1), filter 0.3s ease",
-          willChange: "transform",
-          filter: isGray ? "grayscale(1) opacity(0.9)" : "none",
+          transition: "transform 0.6s cubic-bezier(0.2,0.8,0.2,1)",
+          willChange: hovered ? "transform" : "auto",
+          opacity: isGray ? 0.45 : 1,
           boxShadow: shadowStyle,
         }}>
           <img src={card.image} alt={card.name} loading="lazy" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
 
-          {isRH && !isGray && (
+          {hovered && isRH && !isGray && (
             <div ref={rhRef} style={{
               position: "absolute", inset: 0, pointerEvents: "none",
               background: `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220,220,240,0.3) 0%, transparent 60%)`,
@@ -191,18 +191,18 @@ function TiltCard({
             }} />
           )}
 
-          {(isH || isGold) && !isGray && (
+          {hovered && (isH || isGold) && !isGray && (
             <div ref={hRef1} style={{
               position: "absolute", inset: 0, pointerEvents: "none",
               background: isGold
                 ? `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,220,80,0.35) 0%, rgba(255,160,0,0.2) 50%, transparent 90%)`
                 : `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,100,100,0.2) 0%, rgba(80,255,120,0.15) 50%, transparent 90%)`,
               mixBlendMode: "color-dodge",
-              animation: hovered ? (isGold ? "goldShift 4s ease-in-out infinite" : "holoShift 4s ease-in-out infinite") : undefined,
+              animation: isGold ? "goldShift 4s ease-in-out infinite" : "holoShift 4s ease-in-out infinite",
             }} />
           )}
 
-          {(isH || isGold) && !isGray && (
+          {hovered && (isH || isGold) && !isGray && (
             <div ref={hRef2} style={{
               position: "absolute", inset: 0, pointerEvents: "none",
               background: isGold
@@ -212,7 +212,7 @@ function TiltCard({
             }} />
           )}
 
-          {!isGray && (
+          {hovered && !isGray && (
             <div ref={glRef} style={{
               position: "absolute", inset: 0, pointerEvents: "none",
               background: `linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`,
@@ -224,7 +224,7 @@ function TiltCard({
             fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em",
             color: labelColor, border: `1px solid ${labelColor}60`,
             borderRadius: "5px", padding: "3px 8px",
-            background: "rgba(5,7,13,0.82)", backdropFilter: "blur(4px)",
+            background: "rgba(5,7,13,0.88)",
             pointerEvents: "none",
           }}>
             {VERSION_FULL[label] ?? label}
