@@ -87,9 +87,7 @@ export function AgregarDrawer({ userId, onClose }: AgregarDrawerProps) {
         onClick={handleClose}
         style={{
           position: "fixed", inset: 0, zIndex: 1100,
-          background: "rgba(5,7,13,0.72)",
-          backdropFilter: "blur(6px)",
-          WebkitBackdropFilter: "blur(6px)",
+          background: "rgba(5,7,13,0.8)",
         }}
       />
 

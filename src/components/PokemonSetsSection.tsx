@@ -198,7 +198,7 @@ function TiltCard({
                 ? `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,220,80,0.35) 0%, rgba(255,160,0,0.2) 50%, transparent 90%)`
                 : `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,100,100,0.2) 0%, rgba(80,255,120,0.15) 50%, transparent 90%)`,
               mixBlendMode: "color-dodge",
-              animation: isGold ? "goldShift 4s ease-in-out infinite" : "holoShift 4s ease-in-out infinite",
+              animation: hovered ? (isGold ? "goldShift 4s ease-in-out infinite" : "holoShift 4s ease-in-out infinite") : undefined,
             }} />
           )}
 
@@ -283,7 +283,7 @@ function Thumb({
   return (
     <button
       onClick={onClick}
-      className="pks-thumb"
+      className={`pks-thumb${isOpen ? " pks-thumb--open" : ""}${!clickable ? " pks-thumb--gray" : ""}`}
       style={{
         background: isOpen ? "rgba(46,230,193,0.08)" : "rgba(255,255,255,0.02)",
         border: `1px solid ${isOpen ? `${COURT}55` : "rgba(255,255,255,0.07)"}`,
@@ -292,12 +292,6 @@ function Thumb({
         padding: "18px 14px", borderRadius: "14px",
         transition: "background 0.2s, border-color 0.2s",
         outline: "none", width: "158px", minWidth: "158px",
-      }}
-      onMouseEnter={e => {
-        if (clickable && !isOpen) (e.currentTarget as HTMLButtonElement).style.background = "rgba(46,230,193,0.05)";
-      }}
-      onMouseLeave={e => {
-        if (!isOpen) (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.02)";
       }}
     >
       <div style={{
@@ -774,6 +768,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
         }
         .tcg-card-wrap { width: 240px; }
         .tcg-card-body { width: 240px; height: 336px; overflow: hidden; position: relative; }
+        .pks-thumb:not(.pks-thumb--open):not(.pks-thumb--gray):hover { background: rgba(46,230,193,0.05) !important; }
         @media (max-width: 767px) {
           .pks-header { padding: 48px 12px 32px !important; }
           .pks-body   { padding: 0 12px !important; }
