@@ -427,6 +427,8 @@ type DrillView = "series" | "sets" | "cards";
 /* Cache loaded card arrays in memory so re-opening a set is instant */
 const cardCache: Record<string, PokemonCard[]> = {};
 
+const PAGE_SIZE = 40;
+
 export function PokemonSetsSection({ userId }: { userId?: string }) {
   const [view,         setView]        = useState<DrillView>("series");
   const [openSeriesId, setOpenSeriesId] = useState<string | null>(null);
@@ -437,6 +439,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const [loadingInv,   setLoadingInv]   = useState(false);
   const [invFilter,     setInvFilter]     = useState<InvFilter>("todas");
   const [versionFilter, setVersionFilter] = useState<string>("todas");
+  const [visibleCount,  setVisibleCount]  = useState<number>(PAGE_SIZE);
   const [selectedCard, setSelectedCard] = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [featuredCards, setFeaturedCards] = useState<FeaturedCard[]>([]);
   const [wishlistCards, setWishlistCards] = useState<WishlistCard[]>([]);
@@ -446,7 +449,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const openSeries = POKEMON_SERIES.find(s => s.id === openSeriesId);
   const openSet    = openSeries?.sets.find(s => s.id === openSetId);
 
-  useEffect(() => { setInvFilter("todas"); setVersionFilter("todas"); setAddingWish("idle"); }, [openSetId]);
+  useEffect(() => { setInvFilter("todas"); setVersionFilter("todas"); setAddingWish("idle"); setVisibleCount(PAGE_SIZE); }, [openSetId]);
 
   /* Fetch featured cards and active listings for logged-in user */
   useEffect(() => {
@@ -631,13 +634,15 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           // Variantes únicas del set, ordenadas
           const setVersions = [...new Set(allCards.map(c => c.version))].sort();
 
-          const visibleCards = allCards.filter(card => {
+          const filteredCards = allCards.filter(card => {
             const qty = inventory[invKey(card.id, card.version)] ?? 0;
             if (invFilter === "tengo"  && qty === 0) return false;
             if (invFilter === "faltan" && qty  >  0) return false;
             if (versionFilter !== "todas" && card.version !== versionFilter) return false;
             return true;
           });
+          const visibleCards = filteredCards.slice(0, visibleCount);
+          const hasMore = filteredCards.length > visibleCount;
           return (
             <>
               <Breadcrumb items={[
@@ -668,13 +673,13 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                 return (
                   <div style={{ display: "flex", gap: "10px", marginBottom: "28px", flexWrap: "wrap", alignItems: "center" }}>
                     {userId && (
-                      <select value={invFilter} onChange={e => setInvFilter(e.target.value as InvFilter)} style={sSelect}>
+                      <select value={invFilter} onChange={e => { setInvFilter(e.target.value as InvFilter); setVisibleCount(PAGE_SIZE); }} style={sSelect}>
                         <option value="todas" style={{ background: "#0a0e1a" }}>Todas ({allCards.length})</option>
                         <option value="tengo" style={{ background: "#0a0e1a" }}>En inventario ({tengoCount})</option>
                         <option value="faltan" style={{ background: "#0a0e1a" }}>Restantes ({faltanCount})</option>
                       </select>
                     )}
-                    <select value={versionFilter} onChange={e => setVersionFilter(e.target.value)} style={sSelect}>
+                    <select value={versionFilter} onChange={e => { setVersionFilter(e.target.value); setVisibleCount(PAGE_SIZE); }} style={sSelect}>
                       <option value="todas" style={{ background: "#0a0e1a" }}>Todas las variantes</option>
                       {setVersions.map(v => {
                         const cnt = allCards.filter(c => {
@@ -733,12 +738,30 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                     onWishlistChange={setWishlistCards}
                   />
                 ))}
-                {visibleCards.length === 0 && (
+                {filteredCards.length === 0 && (
                   <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "60px 0", color: INK2, fontFamily: MONO, fontSize: "12px", letterSpacing: "0.1em" }}>
                     No hay cartas en este filtro
                   </div>
                 )}
               </div>
+              {hasMore && (
+                <div style={{ display: "flex", justifyContent: "center", marginTop: "32px" }}>
+                  <button
+                    type="button"
+                    onClick={() => setVisibleCount(c => c + PAGE_SIZE)}
+                    style={{
+                      fontFamily: MONO, fontSize: "11px", letterSpacing: "0.12em",
+                      textTransform: "uppercase", color: COURT,
+                      background: "rgba(46,230,193,0.06)",
+                      border: `1px solid ${COURT}55`,
+                      borderRadius: "10px", padding: "12px 32px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Cargar más ({filteredCards.length - visibleCount} restantes)
+                  </button>
+                </div>
+              )}
             </>
           );
         })()}
