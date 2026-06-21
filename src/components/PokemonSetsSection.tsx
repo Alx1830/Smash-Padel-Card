@@ -246,6 +246,7 @@ function TiltCard({
             userId={userId} onChange={onInventoryChange}
           />
           <button
+            type="button"
             onClick={handleWishlistToggle}
             disabled={togglingWish}
             title={isWanted ? "Quitar de wishlist" : "Agregar a wishlist"}
@@ -282,7 +283,9 @@ function Thumb({
   const clickable = !isGray;
   return (
     <button
+      type="button"
       onClick={onClick}
+      onTouchEnd={(e) => { if (clickable) { e.preventDefault(); onClick(); } }}
       className={`pks-thumb${isOpen ? " pks-thumb--open" : ""}${!clickable ? " pks-thumb--gray" : ""}`}
       style={{
         background: isOpen ? "rgba(46,230,193,0.08)" : "rgba(255,255,255,0.02)",
@@ -398,6 +401,7 @@ function Breadcrumb({ items }: { items: { label: string; onClick?: () => void }[
           {i > 0 && <span style={{ color: INK2 }}>›</span>}
           {item.onClick ? (
             <button
+              type="button"
               onClick={item.onClick}
               style={{
                 background: "none", border: "none", cursor: "pointer",
@@ -524,23 +528,23 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   }
 
   function goToSeries() {
-    window.scrollTo(0, 0);
     setView("series");
     setOpenSeriesId(null);
     setOpenSetId(null);
+    setTimeout(() => window.scrollTo(0, 0), 50);
   }
 
   function goToSets(seriesId: string) {
-    window.scrollTo(0, 0);
     setOpenSeriesId(seriesId);
     setOpenSetId(null);
     setView("sets");
+    setTimeout(() => window.scrollTo(0, 0), 50);
   }
 
   function goToCards(setId: string) {
-    window.scrollTo(0, 0);
     setOpenSetId(setId);
     setView("cards");
+    setTimeout(() => window.scrollTo(0, 0), 50);
   }
 
   return (
@@ -688,6 +692,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                     </select>
                     {userId && (
                       <button
+                        type="button"
                         onClick={handleAddAllMissingToWishlist}
                         disabled={addingWish === "loading" || setCards.length === 0}
                         style={{
