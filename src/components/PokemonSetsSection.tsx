@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES, type PokemonSet } from "@/data/pokemon-sets";
@@ -340,6 +340,21 @@ const cardCache: Record<string, PokemonCard[]> = {};
 
 const PAGE_SIZE = 40;
 
+function InfiniteScrollSentinel({ onVisible }: { onVisible: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) onVisible(); },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [onVisible]);
+  return <div ref={ref} style={{ height: "1px", marginTop: "40px" }} />;
+}
+
 export function PokemonSetsSection({ userId }: { userId?: string }) {
   const [view,         setView]        = useState<DrillView>("series");
   const [openSeriesId, setOpenSeriesId] = useState<string | null>(null);
@@ -655,24 +670,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                   </div>
                 )}
               </div>
-              {hasMore && (
-                <div style={{ display: "flex", justifyContent: "center", marginTop: "32px" }}>
-                  <button
-                    type="button"
-                    onClick={() => setVisibleCount(c => c + PAGE_SIZE)}
-                    style={{
-                      fontFamily: MONO, fontSize: "11px", letterSpacing: "0.12em",
-                      textTransform: "uppercase", color: COURT,
-                      background: "rgba(46,230,193,0.06)",
-                      border: `1px solid ${COURT}55`,
-                      borderRadius: "10px", padding: "12px 32px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Cargar más ({filteredCards.length - visibleCount} restantes)
-                  </button>
-                </div>
-              )}
+              {hasMore && <InfiniteScrollSentinel onVisible={() => setVisibleCount(c => c + PAGE_SIZE)} />}
             </>
           );
         })()}
