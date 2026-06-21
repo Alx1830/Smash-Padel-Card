@@ -43,7 +43,7 @@ function TiltCard({
   const isGold = effect === "goldBorder";
   const isRH   = effect === "reverseHolofoil" || effect === "metal";
   const labelColor = getVersionColor(card.version);
-  const isGray = userId ? (qty === 0 && !hovered) : false;
+  const isGray = userId ? (qty === 0) : false;
   const isWanted = wishlistCards.some(w => w.card_id === card.id && w.set_id === setId);
   const [togglingWish, setTogglingWish] = useState(false);
 
@@ -93,7 +93,7 @@ function TiltCard({
         }}>
           <img src={card.image} alt={card.name} loading="lazy" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
 
-          {hovered && isRH && !isGray && (
+          {isRH && !isGray && (
             <div style={{
               position: "absolute", inset: 0, pointerEvents: "none",
               background: `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220,220,240,0.3) 0%, transparent 60%), linear-gradient(105deg, transparent 20%, rgba(200,200,230,0.1) 45%, transparent 70%)`,
@@ -101,7 +101,7 @@ function TiltCard({
             }} />
           )}
 
-          {hovered && (isH || isGold) && !isGray && (
+          {(isH || isGold) && !isGray && (
             <div style={{
               position: "absolute", inset: 0, pointerEvents: "none",
               background: isGold
@@ -112,7 +112,7 @@ function TiltCard({
             }} />
           )}
 
-          {hovered && (isH || isGold) && !isGray && (
+          {(isH || isGold) && !isGray && (
             <div style={{
               position: "absolute", inset: 0, pointerEvents: "none",
               background: isGold
@@ -122,7 +122,7 @@ function TiltCard({
             }} />
           )}
 
-          {hovered && !isGray && (
+          {!isGray && (
             <div style={{
               position: "absolute", inset: 0, pointerEvents: "none",
               background: `linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`,

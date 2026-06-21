@@ -98,17 +98,8 @@ export function QtyControl({
   );
 }
 
-/* ── Static tilt card for inside the modal ─────────────────── */
+/* ── Card con efectos holo (sin tilt 3D) ────────────────────── */
 export function ModalTiltCard({ card }: { card: PokemonCard }) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const bodyRef = useRef<HTMLDivElement>(null);
-  const rhRef   = useRef<HTMLDivElement>(null);
-  const hRef1   = useRef<HTMLDivElement>(null);
-  const hRef2   = useRef<HTMLDivElement>(null);
-  const glRef   = useRef<HTMLDivElement>(null);
-  const rectRef = useRef<DOMRect | null>(null);
-  const rafId   = useRef(0);
-
   const label = getVersionLabel(card.version);
   const effect = getVersionEffect(card.version);
   const isH    = effect === "holofoil";
@@ -116,87 +107,11 @@ export function ModalTiltCard({ card }: { card: PokemonCard }) {
   const isRH   = effect === "reverseHolofoil" || effect === "metal";
   const labelColor = getVersionColor(card.version);
 
-  const onEnter = () => { rectRef.current = wrapRef.current?.getBoundingClientRect() ?? null; };
-
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    cancelAnimationFrame(rafId.current);
-    const r = rectRef.current; if (!r) return;
-    const clientX = e.clientX;
-    const clientY = e.clientY;
-    rafId.current = requestAnimationFrame(() => {
-      const nx = (clientX - r.left) / r.width;
-      const ny = (clientY - r.top)  / r.height;
-      const tx = (-(ny - 0.5)) * 20;
-      const ty = ((nx - 0.5)) * 20;
-      const mx = nx * 100;
-      const my = ny * 100;
-
-      if (bodyRef.current) {
-        bodyRef.current.style.transition = "transform 0.08s ease-out";
-        bodyRef.current.style.transform  = `rotateX(${tx}deg) rotateY(${ty}deg)`;
-      }
-      if (rhRef.current) {
-        rhRef.current.style.background = `
-          radial-gradient(ellipse 80% 60% at ${mx}% ${my}%,
-            rgba(220,220,240,0.55) 0%, rgba(180,180,210,0.25) 30%, transparent 60%),
-          linear-gradient(${105 + ty * 2}deg,
-            transparent 20%, rgba(200,200,230,0.18) 35%, rgba(255,255,255,0.28) 45%,
-            rgba(200,200,230,0.18) 55%, transparent 70%)`;
-      }
-      if (hRef1.current) {
-        hRef1.current.style.background = isGold
-          ? `radial-gradient(ellipse 90% 70% at ${mx}% ${my}%,
-              rgba(255,220,80,0.6) 0%, rgba(255,180,30,0.45) 20%,
-              rgba(220,140,0,0.35) 45%, rgba(255,200,80,0.2) 65%, transparent 90%)`
-          : `radial-gradient(ellipse 90% 70% at ${mx}% ${my}%,
-              rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%,
-              rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%,
-              rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)`;
-      }
-      if (hRef2.current) {
-        hRef2.current.style.background = isGold
-          ? `linear-gradient(${120 + ty * 3}deg,
-              transparent 0%, rgba(255,200,50,0.2) 25%, rgba(255,160,0,0.25) 45%,
-              rgba(255,220,80,0.2) 65%, transparent 85%)`
-          : `linear-gradient(${120 + ty * 3}deg,
-              transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%,
-              rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`;
-      }
-      if (glRef.current) {
-        glRef.current.style.background = `linear-gradient(${110 + ty}deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`;
-      }
-    });
-  };
-
-  const onLeave = () => {
-    cancelAnimationFrame(rafId.current);
-    rectRef.current = null;
-    if (bodyRef.current) {
-      bodyRef.current.style.transition = "transform 0.6s cubic-bezier(0.2,0.8,0.2,1)";
-      bodyRef.current.style.transform  = "rotateX(0deg) rotateY(0deg)";
-    }
-    if (rhRef.current) {
-      rhRef.current.style.background = `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220,220,240,0.3) 0%, transparent 60%)`;
-    }
-    if (hRef1.current) {
-      hRef1.current.style.background = `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,100,100,0.2) 0%, rgba(80,255,120,0.15) 50%, transparent 90%)`;
-    }
-  };
-
   return (
-    <div
-      ref={wrapRef}
-      style={{ perspective: "800px", cursor: "pointer" }}
-      onMouseEnter={onEnter}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-    >
-      <div ref={bodyRef} style={{
+    <div style={{ cursor: "pointer" }}>
+      <div style={{
         width: "100%", aspectRatio: "5 / 7",
         borderRadius: "12px", overflow: "hidden", position: "relative",
-        transform: "rotateX(0deg) rotateY(0deg)",
-        transition: "transform 0.6s cubic-bezier(0.2,0.8,0.2,1)",
-        willChange: "transform",
         boxShadow: isH
           ? "0 16px 48px rgba(255,160,80,0.45), 0 4px 16px rgba(0,0,0,0.5)"
           : isGold
@@ -208,13 +123,13 @@ export function ModalTiltCard({ card }: { card: PokemonCard }) {
         <img src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
 
         {isRH && (
-          <div ref={rhRef} style={{
+          <div style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
             background: `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220,220,240,0.3) 0%, transparent 60%)`,
           }} />
         )}
         {(isH || isGold) && (
-          <div ref={hRef1} style={{
+          <div style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "color-dodge",
             background: isGold
               ? `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,220,80,0.35) 0%, rgba(255,160,0,0.2) 50%, transparent 90%)`
@@ -223,14 +138,14 @@ export function ModalTiltCard({ card }: { card: PokemonCard }) {
           }} />
         )}
         {(isH || isGold) && (
-          <div ref={hRef2} style={{
+          <div style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
             background: isGold
               ? `linear-gradient(120deg, transparent 0%, rgba(255,200,50,0.15) 35%, transparent 70%)`
               : `linear-gradient(120deg, transparent 0%, rgba(255,100,150,0.1) 35%, transparent 70%)`,
           }} />
         )}
-        <div ref={glRef} style={{
+        <div style={{
           position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
           background: `linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`,
         }} />

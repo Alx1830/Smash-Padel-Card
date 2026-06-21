@@ -48,7 +48,6 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
   cardId: number | string; setId: string; quantity: number; autoAnimate?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [tilt,  setTilt]  = useState({ x: 0, y: 0 });
   const [mouse, setMouse] = useState({ x: 0.5, y: 0.5 });
 
   useEffect(() => {
@@ -58,7 +57,6 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
     const loop = () => {
       t += 0.016;
       setMouse({ x: 0.5 + Math.cos(t) * 0.42, y: 0.5 + Math.sin(t * 0.65) * 0.38 });
-      setTilt({ x: Math.sin(t * 0.7) * 7, y: Math.cos(t) * 7 });
       frame = requestAnimationFrame(loop);
     };
     frame = requestAnimationFrame(loop);
@@ -83,25 +81,21 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
     const el = ref.current; if (!el) return;
     const r = el.getBoundingClientRect();
     setMouse({ x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height });
-    setTilt({ x: (-((e.clientY - r.top) / r.height - 0.5)) * 24, y: (((e.clientX - r.left) / r.width - 0.5)) * 24 });
   };
-  const onLeave = () => { setTilt({ x: 0, y: 0 }); setMouse({ x: 0.5, y: 0.5 }); };
+  const onLeave = () => { setMouse({ x: 0.5, y: 0.5 }); };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", width: "100%" }}>
-      <div ref={ref} style={{ perspective: "800px", cursor: "pointer", width: "100%" }} onMouseMove={onMove} onMouseLeave={onLeave}>
+      <div ref={ref} style={{ cursor: "pointer", width: "100%" }} onMouseMove={onMove} onMouseLeave={onLeave}>
         <div style={{
           width: "100%", aspectRatio: "5 / 7", borderRadius: "14px", overflow: "hidden", position: "relative",
-          transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-          transition: tilt.x === 0 ? "transform 0.6s cubic-bezier(0.2,0.8,0.2,1)" : "transform 0.05s linear",
-          willChange: "transform",
           boxShadow: `0 20px 60px rgba(0,0,0,0.75), ${glow}`,
           border: `1px solid ${labelColor}30`,
         }}>
           <img src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
           {isRH && (
             <div style={{ position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
-              background: `radial-gradient(ellipse 80% 60% at ${mx}% ${my}%, rgba(220,220,240,0.55) 0%, rgba(180,180,210,0.25) 30%, transparent 60%), linear-gradient(${105 + tilt.y * 2}deg, transparent 20%, rgba(200,200,230,0.18) 35%, rgba(255,255,255,0.28) 45%, rgba(200,200,230,0.18) 55%, transparent 70%)` }} />
+              background: `radial-gradient(ellipse 80% 60% at ${mx}% ${my}%, rgba(220,220,240,0.55) 0%, rgba(180,180,210,0.25) 30%, transparent 60%), linear-gradient(105deg, transparent 20%, rgba(200,200,230,0.18) 35%, rgba(255,255,255,0.28) 45%, rgba(200,200,230,0.18) 55%, transparent 70%)` }} />
           )}
           {(isH || isGold) && (
             <div style={{ position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "color-dodge",
@@ -112,10 +106,10 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
           {(isH || isGold) && (
             <div style={{ position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
               background: isGold
-                ? `linear-gradient(${120 + tilt.y * 3}deg, transparent 0%, rgba(255,200,50,0.2) 25%, rgba(255,160,0,0.25) 45%, rgba(255,220,80,0.2) 65%, transparent 85%)`
-                : `linear-gradient(${120 + tilt.y * 3}deg, transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%, rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)` }} />
+                ? `linear-gradient(120deg, transparent 0%, rgba(255,200,50,0.2) 25%, rgba(255,160,0,0.25) 45%, rgba(255,220,80,0.2) 65%, transparent 85%)`
+                : `linear-gradient(120deg, transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%, rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)` }} />
           )}
-          <div style={{ position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen", background: `linear-gradient(${110 + tilt.y}deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)` }} />
+          <div style={{ position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen", background: `linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)` }} />
           <div style={{ position: "absolute", bottom: "12px", right: "12px", fontFamily: MONO, fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: labelColor, border: `1px solid ${labelColor}80`, borderRadius: "5px", padding: "4px 10px", background: "rgba(5,7,13,0.85)", backdropFilter: "blur(6px)" }}>{label}</div>
           {quantity > 1 && (
             <div style={{ position: "absolute", top: "12px", right: "12px", fontFamily: MONO, fontSize: "12px", letterSpacing: "0.1em", color: COURT, border: `1px solid ${COURT}60`, borderRadius: "5px", padding: "4px 10px", background: "rgba(5,7,13,0.85)", backdropFilter: "blur(6px)" }}>×{quantity}</div>

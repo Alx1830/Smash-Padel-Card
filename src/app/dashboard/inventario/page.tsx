@@ -50,17 +50,8 @@ const COSMOS_STARS = Array.from({ length: 18 }, (_, i) => ({
   dur:  parseFloat((1.1 + (i % 5) * 0.35).toFixed(2)),
 }));
 
-/* ── Tilt card with holo effects ─────────────────────────────── */
+/* ── Card con efectos holo (sin tilt 3D) ─────────────────────── */
 function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () => void }) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const bodyRef = useRef<HTMLDivElement>(null);
-  const rhRef   = useRef<HTMLDivElement>(null);
-  const hRef1   = useRef<HTMLDivElement>(null);
-  const hRef2   = useRef<HTMLDivElement>(null);
-  const glRef   = useRef<HTMLDivElement>(null);
-  const rectRef = useRef<DOMRect | null>(null);
-  const rafId   = useRef(0);
-
   const effect   = getVersionEffect(card.version);
   const isH      = effect === "holofoil";
   const isGold   = effect === "goldBorder";
@@ -77,89 +68,26 @@ function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () => void
     ? "0 16px 48px rgba(180,180,220,0.3), 0 4px 16px rgba(0,0,0,0.6)"
     : "0 8px 24px rgba(0,0,0,0.7)";
 
-  const onEnter = () => { rectRef.current = wrapRef.current?.getBoundingClientRect() ?? null; };
-
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    cancelAnimationFrame(rafId.current);
-    const r = rectRef.current; if (!r) return;
-    const nx = (e.clientX - r.left) / r.width;
-    const ny = (e.clientY - r.top)  / r.height;
-    const tx = -(ny - 0.5) * 24;
-    const ty =  (nx - 0.5) * 24;
-    const mx = nx * 100;
-    const my = ny * 100;
-    rafId.current = requestAnimationFrame(() => {
-      if (bodyRef.current) {
-        bodyRef.current.style.transition = "transform 0.08s ease-out, box-shadow 0.3s";
-        bodyRef.current.style.transform  = `rotateX(${tx}deg) rotateY(${ty}deg)`;
-      }
-      if (rhRef.current) {
-        rhRef.current.style.background = `
-          radial-gradient(ellipse 80% 60% at ${mx}% ${my}%,
-            rgba(220,220,240,0.55) 0%, rgba(180,180,210,0.25) 30%, transparent 60%),
-          linear-gradient(${105 + ty * 2}deg,
-            transparent 20%, rgba(200,200,230,0.18) 35%,
-            rgba(255,255,255,0.28) 45%, rgba(200,200,230,0.18) 55%, transparent 70%)`;
-      }
-      if (hRef1.current) {
-        hRef1.current.style.background = isGold
-          ? `radial-gradient(ellipse 90% 70% at ${mx}% ${my}%, rgba(255,220,80,0.6) 0%, rgba(255,180,30,0.45) 20%, rgba(220,140,0,0.35) 45%, rgba(255,200,80,0.2) 65%, transparent 90%)`
-          : `radial-gradient(ellipse 90% 70% at ${mx}% ${my}%, rgba(255,100,100,0.5) 0%, rgba(255,200,50,0.4) 15%, rgba(80,255,120,0.4) 30%, rgba(50,180,255,0.4) 45%, rgba(180,80,255,0.4) 60%, rgba(255,80,200,0.35) 75%, transparent 90%)`;
-      }
-      if (hRef2.current) {
-        hRef2.current.style.background = isGold
-          ? `linear-gradient(${120 + ty * 3}deg, transparent 0%, rgba(255,200,50,0.2) 25%, rgba(255,160,0,0.25) 45%, rgba(255,220,80,0.2) 65%, transparent 85%)`
-          : `linear-gradient(${120 + ty * 3}deg, transparent 0%, rgba(255,100,150,0.15) 20%, rgba(80,200,255,0.2) 35%, rgba(200,80,255,0.15) 50%, rgba(255,200,80,0.15) 65%, transparent 80%)`;
-      }
-      if (glRef.current) {
-        glRef.current.style.background = `linear-gradient(${110 + ty}deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`;
-      }
-    });
-  };
-
-  const onLeave = () => {
-    cancelAnimationFrame(rafId.current);
-    rectRef.current = null;
-    if (bodyRef.current) {
-      bodyRef.current.style.transition = "transform 0.6s cubic-bezier(0.2,0.8,0.2,1), box-shadow 0.3s";
-      bodyRef.current.style.transform  = "rotateX(0deg) rotateY(0deg)";
-    }
-    if (rhRef.current) {
-      rhRef.current.style.background = `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220,220,240,0.3) 0%, transparent 60%), linear-gradient(105deg, transparent 20%, rgba(200,200,230,0.1) 45%, transparent 70%)`;
-    }
-    if (hRef1.current) {
-      hRef1.current.style.background = isGold
-        ? `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,220,80,0.35) 0%, rgba(255,160,0,0.2) 50%, transparent 90%)`
-        : `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,100,100,0.2) 0%, rgba(80,255,120,0.15) 50%, transparent 90%)`;
-    }
-  };
-
   return (
     <div
-      ref={wrapRef}
-      style={{ width: "100%", aspectRatio: "5/7", position: "relative", perspective: "700px", cursor: "pointer" }}
-      onMouseEnter={onEnter}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
+      style={{ width: "100%", aspectRatio: "5/7", position: "relative", cursor: "pointer" }}
       onClick={onClick}
     >
-      <div ref={bodyRef} style={{
+      <div style={{
         position: "absolute", inset: 0, borderRadius: "8px", overflow: "hidden",
-        transform: "rotateX(0deg) rotateY(0deg)",
-        transition: "transform 0.6s cubic-bezier(0.2,0.8,0.2,1), box-shadow 0.3s",
-        willChange: "transform", boxShadow: shadowStyle,
+        boxShadow: shadowStyle,
       }}>
         <img src={card.image} alt={card.name} loading="lazy" style={{ objectFit: "contain", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
 
         {isRH && (
-          <div ref={rhRef} style={{
+          <div style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
             background: `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(220,220,240,0.3) 0%, transparent 60%)`,
           }} />
         )}
 
         {(isH || isGold) && (
-          <div ref={hRef1} style={{
+          <div style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "color-dodge",
             background: isGold
               ? `radial-gradient(ellipse 90% 70% at 50% 50%, rgba(255,220,80,0.35) 0%, rgba(255,160,0,0.2) 50%, transparent 90%)`
@@ -205,7 +133,7 @@ function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () => void
           </>
         )}
 
-        <div ref={glRef} style={{
+        <div style={{
           position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
           background: `linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%)`,
         }} />
