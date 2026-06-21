@@ -524,18 +524,21 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   }
 
   function goToSeries() {
+    window.scrollTo(0, 0);
     setView("series");
     setOpenSeriesId(null);
     setOpenSetId(null);
   }
 
   function goToSets(seriesId: string) {
+    window.scrollTo(0, 0);
     setOpenSeriesId(seriesId);
     setOpenSetId(null);
     setView("sets");
   }
 
   function goToCards(setId: string) {
+    window.scrollTo(0, 0);
     setOpenSetId(setId);
     setView("cards");
   }
