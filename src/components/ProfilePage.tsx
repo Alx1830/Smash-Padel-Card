@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import { PlayerCard3D } from "./PlayerCard3D";
 import { FollowButton } from "./FollowButton";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
-import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
+import { SET_CARDS, loadManySets, FOSSIL_CARDS } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionEffect, getVersionColor } from "@/data/pokemon-cards-meta";
 import type { InventoryMap, FeaturedCard as FeaturedCardModal, WishlistCard as WishlistCardModal, UserListing } from "@/components/CardDetailModal";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
@@ -392,7 +392,7 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
   }, [autoAnimate]);
 
   const cards = SET_CARDS[setId];
-  const card  = cards?.find(c => c.id === cardId || c.card_number === cardId);
+  const card  = cards?.find(c => c.id === cardId || c.card_number === Number(cardId));
   if (!card) return null;
 
   const label      = getVersionLabel(card.version);
@@ -490,22 +490,13 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
 }
 
 /* Candidatos estables para placeholder (sin random — compatible con SSR) */
-const PLACEHOLDER_CANDIDATES = (() => {
-  const candidates: { card_id: number | string; set_id: string }[] = [];
-  for (const [setId, cards] of Object.entries(SET_CARDS)) {
-    const valid = cards.filter(c => c.id !== 0);
-    if (valid.length >= 3) {
-      candidates.push(
-        { card_id: valid[0].id, set_id: setId },
-        { card_id: valid[Math.floor(valid.length / 2)].id, set_id: setId },
-        { card_id: valid[valid.length - 1].id, set_id: setId },
-      );
-      if (candidates.length >= 9) break;
-    }
-  }
-  return candidates;
-})();
-const PLACEHOLDER_STABLE = PLACEHOLDER_CANDIDATES.slice(0, 3);
+// Fossil cards are statically bundled — always available before any lazy set loads
+const FOSSIL_SET_ID = "fossil";
+const PLACEHOLDER_STABLE: { card_id: number | string; set_id: string }[] = [
+  { card_id: FOSSIL_CARDS[0].id, set_id: FOSSIL_SET_ID },
+  { card_id: FOSSIL_CARDS[Math.floor(FOSSIL_CARDS.length / 2)].id, set_id: FOSSIL_SET_ID },
+  { card_id: FOSSIL_CARDS[FOSSIL_CARDS.length - 1].id, set_id: FOSSIL_SET_ID },
+];
 
 /* ── Showcase slider ────────────────────────────────────────── */
 function Showcase({ featuredCards, inventoryRows }: { featuredCards: FeaturedCard[]; inventoryRows: InvRow[] }) {
@@ -514,10 +505,6 @@ function Showcase({ featuredCards, inventoryRows }: { featuredCards: FeaturedCar
   const [, forceUpdate] = useState(0);
 
   useEffect(() => {
-    if (PLACEHOLDER_CANDIDATES.length >= 3) {
-      const shuffled = [...PLACEHOLDER_CANDIDATES].sort(() => Math.random() - 0.5);
-      setPlaceholder(shuffled.slice(0, 3));
-    }
     const ids = [
       ...featuredCards.map(f => f.set_id),
       ...PLACEHOLDER_STABLE.map(p => p.set_id as string),
@@ -528,7 +515,7 @@ function Showcase({ featuredCards, inventoryRows }: { featuredCards: FeaturedCar
   const owned = featuredCards.slice(0, 10).map(f => {
     const row = inventoryRows.find(r => r.card_id === f.card_id && r.set_id === f.set_id);
     return { card_id: f.card_id, set_id: f.set_id, quantity: row?.quantity ?? 1 };
-  }).filter(f => SET_CARDS[f.set_id]?.some(c => c.id === f.card_id || c.card_number === f.card_id));
+  }).filter(f => SET_CARDS[f.set_id]?.some(c => c.id === f.card_id || c.card_number === Number(f.card_id)));
 
   const isEmpty = owned.length < 3;
 
