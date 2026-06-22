@@ -97,7 +97,7 @@ function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () => void
         )}
 
         {(isH || isGold) && (
-          <div ref={hRef2} style={{
+          <div style={{
             position: "absolute", inset: 0, pointerEvents: "none", mixBlendMode: "screen",
             background: isGold
               ? `linear-gradient(120deg, transparent 0%, rgba(255,200,50,0.15) 35%, transparent 70%)`

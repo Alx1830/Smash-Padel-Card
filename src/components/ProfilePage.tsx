@@ -392,7 +392,7 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
   }, [autoAnimate]);
 
   const cards = SET_CARDS[setId];
-  const card  = cards?.find(c => c.id === cardId);
+  const card  = cards?.find(c => c.id === cardId || c.card_number === cardId);
   if (!card) return null;
 
   const label      = getVersionLabel(card.version);
@@ -528,7 +528,7 @@ function Showcase({ featuredCards, inventoryRows }: { featuredCards: FeaturedCar
   const owned = featuredCards.slice(0, 10).map(f => {
     const row = inventoryRows.find(r => r.card_id === f.card_id && r.set_id === f.set_id);
     return { card_id: f.card_id, set_id: f.set_id, quantity: row?.quantity ?? 1 };
-  }).filter(f => SET_CARDS[f.set_id]?.some(c => c.id === f.card_id));
+  }).filter(f => SET_CARDS[f.set_id]?.some(c => c.id === f.card_id || c.card_number === f.card_id));
 
   const isEmpty = owned.length < 3;
 
