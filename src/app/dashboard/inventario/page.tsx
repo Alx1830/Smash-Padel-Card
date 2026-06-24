@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useRef, useEffect, useState, useMemo, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
@@ -279,6 +279,10 @@ export default function InventarioPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [buscarOpen, setBuscarOpen] = useState(false);
 
+  const PAGE_SIZE = 50;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
   const userIdRef = useRef<string | null>(null);
 
   async function loadData(uid: string) {
@@ -472,6 +476,32 @@ export default function InventarioPage() {
 
   const hasFilters = fNombre || fVariante || fSet || fDestacados || fBulk;
   function clearFilters() { setFNombre(""); setFVariante(""); setFSet(""); setFDestacados(false); setFBulk(false); }
+
+  // Resetear paginación cuando cambian los filtros
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [fNombre, fVariante, fSet, fDestacados, fBulk]);
+
+  // IntersectionObserver para cargar más cartas al hacer scroll
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setVisibleCount(prev => prev + PAGE_SIZE);
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [filteredCards.length]);
+
+  const visibleCards = useMemo(
+    () => filteredCards.slice(0, visibleCount),
+    [filteredCards, visibleCount]
+  );
 
   const totalCards = Object.values(inventory).reduce((a, b) => a + b, 0);
 
@@ -803,7 +833,7 @@ export default function InventarioPage() {
                   </div>
                 ) : (
                   <div className="inv-card-grid">
-                    {filteredCards.map(({ card, setId }) => {
+                    {visibleCards.map(({ card, setId }) => {
                       const isFeat   = featuredCards.some(f => (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId);
                       const isListed = listings.some(l => String(l.card_id) === String(card.card_number) && l.set_id === setId && l.version === card.version);
                       const qty      = inventory[invKey(card.id, card.version)] ?? 0;
@@ -902,6 +932,21 @@ export default function InventarioPage() {
                         </div>
                       );
                     })}
+                  </div>
+                )}
+
+                {/* Sentinel para infinite scroll */}
+                {visibleCount < filteredCards.length && (
+                  <>
+                    <div ref={sentinelRef} style={{ height: 1 }} />
+                    <div style={{ textAlign: "center", padding: "24px 0", fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2 }}>
+                      Cargando más cartas…
+                    </div>
+                  </>
+                )}
+                {allCardsLoaded && visibleCount >= filteredCards.length && filteredCards.length > 0 && (
+                  <div style={{ textAlign: "center", padding: "24px 0", fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2 }}>
+                    {filteredCards.length} cartas en total
                   </div>
                 )}
               </div>
