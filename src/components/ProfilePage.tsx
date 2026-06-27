@@ -431,7 +431,7 @@ function ShowcaseCard({ cardId, setId, quantity, autoAnimate = false }: {
           boxShadow: `0 20px 60px rgba(0,0,0,0.75), ${glow}`,
           border: `1px solid ${labelColor}30`,
         }}>
-          <img src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+          <img src={card.image} alt={card.name} loading="eager" fetchPriority="high" decoding="async" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
 
           {isRH && (
             <div style={{
@@ -933,7 +933,7 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
                         (e.currentTarget as HTMLDivElement).style.boxShadow = `0 4px 14px rgba(0,0,0,0.6), 0 0 0 1px ${GREEN}22`;
                       }}
                     >
-                      <img src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+                      <img src={card.image} alt={card.name} loading="eager" fetchPriority="high" decoding="async" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
                       <div style={{ position: "absolute", bottom: "6px", right: "6px", fontFamily: MONO_C, fontSize: "8px", letterSpacing: "0.1em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 5px", background: "rgba(5,7,13,0.85)" }}>{label}</div>
                     </div>
                     <div style={{ marginTop: "6px", textAlign: "center" }}>
@@ -1087,7 +1087,7 @@ function SetExpandedPanel({
                 {missingCards.map(card => (
                   <div key={`${card.id}`} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
                     <div style={{ position: "relative", width: "160px", height: "224px", borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 24px rgba(0,0,0,0.6)", filter: "grayscale(1) opacity(0.45)" }}>
-                      <img src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+                      <img src={card.image} alt={card.name} loading="eager" fetchPriority="high" decoding="async" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
                     </div>
                     <span style={{ fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.06em", color: INK2_C, textAlign: "center" }}>
                       #{String(card.card_number).padStart(3, "0")} {card.name}
