@@ -426,7 +426,7 @@ export default function DashboardHome() {
         { data: snaps },
       ] = await Promise.all([
         supabase.from("players").select("username").eq("user_id", user.id).single(),
-        supabase.from("follows").select("*", { count: "exact", head: true }).eq("following_id", user.id),
+        supabase.from("follows").select("players!inner(username)", { count: "exact", head: true }).eq("following_id", user.id),
         supabase.from("card_inventory").select("card_id, set_id, version, quantity").eq("user_id", user.id).gt("quantity", 0),
         supabase.from("portfolio_snapshots").select("date, total_usd, card_count").eq("user_id", user.id).order("date", { ascending: false }).limit(366),
       ]);
