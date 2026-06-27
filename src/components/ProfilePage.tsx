@@ -1047,7 +1047,7 @@ function SetExpandedPanel({
                 cursor: "pointer",
               }}
             >
-              {tab === "inventario" ? "Inventario" : "Restantes"} ({count})
+              {tab === "inventario" ? "Inventario" : "Restantes"} ({isLoaded ? count : "..."})
             </button>
           );
         })}
@@ -1056,7 +1056,11 @@ function SetExpandedPanel({
       <div style={{ padding: "20px 24px" }}>
         {/* Inventario grid */}
         <div style={{ display: activeTab === "inventario" ? "block" : "none" }}>
-          {ownedCards.length === 0 ? (
+          {!isLoaded ? (
+            <div style={{ textAlign: "center", padding: "24px 0", fontFamily: MONO_C, fontSize: "11px", color: INK2_C }}>
+              Cargando cartas...
+            </div>
+          ) : ownedCards.length === 0 ? (
             <div style={{ textAlign: "center", padding: "24px 0", fontFamily: MONO_C, fontSize: "11px", color: INK2_C }}>
               No tienes cartas de este set
             </div>
