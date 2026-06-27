@@ -271,11 +271,96 @@ function InstallWidget() {
 
 /* ── Portfolio History Chart ── */
 type Snapshot = { date: string; total_usd: number; card_count: number };
-type Range = "1M" | "3M" | "6M" | "1Y";
+type HourlySnapshot = { hour_bucket: string; total_usd: number; card_count: number };
+type Range = "1D" | "1M" | "3M" | "6M" | "1Y";
 
-function PortfolioChart({ snapshots }: { snapshots: Snapshot[] }) {
-  const [range, setRange] = useState<Range>("3M");
+function ChartSVG({ chartData, xLabel }: {
+  chartData: { label: string; value: number }[];
+  xLabel?: (d: { label: string; value: number }, idx: number, arr: { label: string; value: number }[]) => string;
+}) {
+  const vals   = chartData.map(s => s.value);
+  const minVal = Math.min(...vals);
+  const maxVal = Math.max(...vals);
+  const range_ = maxVal - minVal || 1;
 
+  const W = 600, H = 160, PAD = { t: 16, r: 16, b: 32, l: 64 };
+  const iW = W - PAD.l - PAD.r;
+  const iH = H - PAD.t - PAD.b;
+
+  const px = (i: number) => PAD.l + (i / (chartData.length - 1 || 1)) * iW;
+  const py = (v: number) => PAD.t + iH - ((v - minVal) / range_) * iH;
+
+  const polyline = chartData.map((s, i) => `${px(i)},${py(s.value)}`).join(" ");
+  const area = `M${px(0)},${py(chartData[0].value)} ` +
+    chartData.slice(1).map((s, i) => `L${px(i + 1)},${py(s.value)}`).join(" ") +
+    ` L${px(chartData.length - 1)},${PAD.t + iH} L${px(0)},${PAD.t + iH} Z`;
+
+  const yTicks = 4;
+  const xTicks = Math.min(chartData.length, 6);
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", overflow: "visible" }}>
+      <defs>
+        <linearGradient id="chart-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={COURT} stopOpacity="0.25" />
+          <stop offset="100%" stopColor={COURT} stopOpacity="0.01" />
+        </linearGradient>
+      </defs>
+
+      {/* Grid lines y ticks Y */}
+      {Array.from({ length: yTicks + 1 }, (_, i) => {
+        const v = minVal + (range_ * i) / yTicks;
+        const y = py(v);
+        return (
+          <g key={i}>
+            <line x1={PAD.l} y1={y} x2={W - PAD.r} y2={y} stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+            <text x={PAD.l - 8} y={y + 4} textAnchor="end" fontSize="9" fontFamily="monospace" fill={INK2}>
+              ${v.toFixed(0)}
+            </text>
+          </g>
+        );
+      })}
+
+      {/* Ticks X */}
+      {Array.from({ length: xTicks }, (_, i) => {
+        const idx = Math.round((i / (xTicks - 1 || 1)) * (chartData.length - 1));
+        const d = chartData[idx];
+        const x = px(idx);
+        const label = xLabel ? xLabel(d, idx, chartData) : d.label;
+        return (
+          <text key={i} x={x} y={H - 4} textAnchor="middle" fontSize="9" fontFamily="monospace" fill={INK2}>
+            {label}
+          </text>
+        );
+      })}
+
+      {/* Área rellena */}
+      <path d={area} fill="url(#chart-grad)" />
+
+      {/* Línea */}
+      <polyline points={polyline} fill="none" stroke={COURT} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+
+      {/* Punto final */}
+      <circle cx={px(chartData.length - 1)} cy={py(chartData[chartData.length - 1].value)} r="4" fill={COURT} />
+      <circle cx={px(chartData.length - 1)} cy={py(chartData[chartData.length - 1].value)} r="8" fill={COURT} fillOpacity="0.2" />
+    </svg>
+  );
+}
+
+function PortfolioChart({ snapshots, hourlySnapshots }: { snapshots: Snapshot[]; hourlySnapshots: HourlySnapshot[] }) {
+  const [range, setRange] = useState<Range>("1D");
+
+  // Vista diaria: datos horarios de hoy en hora Colombia
+  const todayUTC = new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" });
+  const hourlyData = hourlySnapshots
+    .filter(h => h.hour_bucket.slice(0, 10) === todayUTC)
+    .sort((a, b) => a.hour_bucket.localeCompare(b.hour_bucket))
+    .map(h => ({
+      label: h.hour_bucket,
+      value: h.total_usd,
+    }));
+
+  // Vista histórica: filtrada por rango
   const cutoff = (() => {
     const d = new Date();
     if (range === "1M") d.setMonth(d.getMonth() - 1);
@@ -285,41 +370,56 @@ function PortfolioChart({ snapshots }: { snapshots: Snapshot[] }) {
     return d.toISOString().slice(0, 10);
   })();
 
-  const data = snapshots.filter(s => s.date >= cutoff).sort((a, b) => a.date.localeCompare(b.date));
+  const historicData = snapshots
+    .filter(s => s.date >= cutoff)
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map(s => ({ label: s.date, value: s.total_usd }));
+
+  const isDay = range === "1D";
+  const data  = isDay ? hourlyData : historicData;
+
+  const emptyMsg = isDay
+    ? "Aún no hay datos de hoy. Vuelve en unos minutos."
+    : "El historial se irá construyendo día a día con tus visitas";
 
   if (data.length === 0) return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "180px" }}>
-      <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.1em" }}>
-        El historial se irá construyendo día a día con tus visitas
-      </p>
+    <div>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "20px", flexWrap: "wrap", gap: "10px" }}>
+        <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: 0 }}>
+          Historial de valor del inventario
+        </p>
+        <div style={{ display: "flex", gap: "6px" }}>
+          {(["1D", "1M", "3M", "6M", "1Y"] as Range[]).map(r => (
+            <button key={r} onClick={() => setRange(r)} style={{
+              padding: "6px 14px", borderRadius: "8px", cursor: "pointer",
+              fontFamily: MONO, fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em",
+              background: range === r ? COURT : "rgba(255,255,255,0.04)",
+              color: range === r ? BG0 : INK2,
+              border: range === r ? "none" : "1px solid rgba(255,255,255,0.08)",
+              transition: "all 0.15s",
+            }}>{r}</button>
+          ))}
+        </div>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "160px" }}>
+        <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.1em" }}>{emptyMsg}</p>
+      </div>
     </div>
   );
 
-  const vals   = data.map(s => s.total_usd);
-  const minVal = Math.min(...vals);
-  const maxVal = Math.max(...vals);
-  const range_ = maxVal - minVal || 1;
+  const last  = data[data.length - 1];
+  const first = data[0];
+  const delta = last.value - first.value;
+  const pct   = first.value > 0 ? (delta / first.value) * 100 : 0;
+  const isUp  = delta >= 0;
 
-  const W = 600, H = 160, PAD = { t: 16, r: 16, b: 32, l: 64 };
-  const iW = W - PAD.l - PAD.r;
-  const iH = H - PAD.t - PAD.b;
-
-  const px = (i: number) => PAD.l + (i / (data.length - 1 || 1)) * iW;
-  const py = (v: number) => PAD.t + iH - ((v - minVal) / range_) * iH;
-
-  const polyline = data.map((s, i) => `${px(i)},${py(s.total_usd)}`).join(" ");
-  const area = `M${px(0)},${py(data[0].total_usd)} ` +
-    data.slice(1).map((s, i) => `L${px(i + 1)},${py(s.total_usd)}`).join(" ") +
-    ` L${px(data.length - 1)},${PAD.t + iH} L${px(0)},${PAD.t + iH} Z`;
-
-  const last   = data[data.length - 1];
-  const first  = data[0];
-  const delta  = last.total_usd - first.total_usd;
-  const pct    = first.total_usd > 0 ? (delta / first.total_usd) * 100 : 0;
-  const isUp   = delta >= 0;
-
-  const yTicks = 4;
-  const xTicks = Math.min(data.length, 6);
+  const xLabel = isDay
+    ? (d: { label: string }) => {
+        const h = new Date(d.label);
+        const hh = h.getUTCHours().toString().padStart(2, "0");
+        return `${hh}:00`;
+      }
+    : (d: { label: string }) => d.label.slice(5); // MM-DD
 
   return (
     <div>
@@ -327,11 +427,11 @@ function PortfolioChart({ snapshots }: { snapshots: Snapshot[] }) {
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "20px", flexWrap: "wrap", gap: "10px" }}>
         <div>
           <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: "0 0 6px" }}>
-            Historial de valor del inventario
+            {isDay ? `Hoy ${todayUTC} — por hora` : "Historial de valor del inventario"}
           </p>
           <div style={{ display: "flex", alignItems: "baseline", gap: "12px" }}>
             <span style={{ fontFamily: DISP, fontSize: "clamp(22px, 4vw, 30px)", color: COURT }}>
-              {formatUSD(last.total_usd)}
+              {formatUSD(last.value)}
             </span>
             <span style={{ fontFamily: MONO, fontSize: "12px", color: isUp ? "#4ade80" : "#f87171", letterSpacing: "0.06em" }}>
               {isUp ? "▲" : "▼"} {isUp ? "+" : ""}{formatUSD(Math.abs(delta))} ({isUp ? "+" : ""}{pct.toFixed(1)}%)
@@ -340,7 +440,7 @@ function PortfolioChart({ snapshots }: { snapshots: Snapshot[] }) {
         </div>
         {/* Filtros */}
         <div style={{ display: "flex", gap: "6px" }}>
-          {(["1M", "3M", "6M", "1Y"] as Range[]).map(r => (
+          {(["1D", "1M", "3M", "6M", "1Y"] as Range[]).map(r => (
             <button key={r} onClick={() => setRange(r)} style={{
               padding: "6px 14px", borderRadius: "8px", cursor: "pointer",
               fontFamily: MONO, fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em",
@@ -353,52 +453,7 @@ function PortfolioChart({ snapshots }: { snapshots: Snapshot[] }) {
         </div>
       </div>
 
-      {/* SVG Chart */}
-      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", overflow: "visible" }}>
-        <defs>
-          <linearGradient id="chart-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={COURT} stopOpacity="0.25" />
-            <stop offset="100%" stopColor={COURT} stopOpacity="0.01" />
-          </linearGradient>
-        </defs>
-
-        {/* Grid lines y ticks Y */}
-        {Array.from({ length: yTicks + 1 }, (_, i) => {
-          const v = minVal + (range_ * i) / yTicks;
-          const y = py(v);
-          return (
-            <g key={i}>
-              <line x1={PAD.l} y1={y} x2={W - PAD.r} y2={y} stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-              <text x={PAD.l - 8} y={y + 4} textAnchor="end" fontSize="9" fontFamily="monospace" fill={INK2}>
-                ${v.toFixed(0)}
-              </text>
-            </g>
-          );
-        })}
-
-        {/* Ticks X */}
-        {Array.from({ length: xTicks }, (_, i) => {
-          const idx = Math.round((i / (xTicks - 1 || 1)) * (data.length - 1));
-          const d = data[idx];
-          const x = px(idx);
-          const label = d.date.slice(5); // MM-DD
-          return (
-            <text key={i} x={x} y={H - 4} textAnchor="middle" fontSize="9" fontFamily="monospace" fill={INK2}>
-              {label}
-            </text>
-          );
-        })}
-
-        {/* Área rellena */}
-        <path d={area} fill="url(#chart-grad)" />
-
-        {/* Línea */}
-        <polyline points={polyline} fill="none" stroke={COURT} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
-
-        {/* Punto final */}
-        <circle cx={px(data.length - 1)} cy={py(last.total_usd)} r="4" fill={COURT} />
-        <circle cx={px(data.length - 1)} cy={py(last.total_usd)} r="8" fill={COURT} fillOpacity="0.2" />
-      </svg>
+      <ChartSVG chartData={data} xLabel={xLabel} />
     </div>
   );
 }
@@ -412,6 +467,7 @@ export default function DashboardHome() {
   const [cardCount,       setCardCount]       = useState<number | null>(null);
   const [showFollowers,   setShowFollowers]   = useState(false);
   const [snapshots,       setSnapshots]       = useState<Snapshot[]>([]);
+  const [hourlySnapshots, setHourlySnapshots] = useState<HourlySnapshot[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -424,15 +480,47 @@ export default function DashboardHome() {
         { count: fc },
         { data: inv },
         { data: snaps },
+        { data: hourly },
       ] = await Promise.all([
         supabase.from("players").select("username").eq("user_id", user.id).single(),
         supabase.from("follows").select("players!inner(username)", { count: "exact", head: true }).eq("following_id", user.id),
         supabase.from("card_inventory").select("card_id, set_id, version, quantity").eq("user_id", user.id).gt("quantity", 0),
         supabase.from("portfolio_snapshots").select("date, total_usd, card_count").eq("user_id", user.id).order("date", { ascending: false }).limit(366),
+        supabase.from("portfolio_hourly_snapshots").select("hour_bucket, total_usd, card_count").eq("user_id", user.id).order("hour_bucket", { ascending: true }),
       ]);
 
       setFollowerCount(fc ?? 0);
       setSnapshots(snaps ?? []);
+
+      const todayUTC = new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" }); // YYYY-MM-DD en hora Colombia
+      const hourlyRows = hourly ?? [];
+
+      // Consolidar snapshots horarios de días anteriores en portfolio_snapshots y eliminarlos
+      const pastHourly = hourlyRows.filter(h => h.hour_bucket.slice(0, 10) < todayUTC);
+      if (pastHourly.length > 0) {
+        const byDay: Record<string, typeof pastHourly> = {};
+        for (const h of pastHourly) {
+          const day = h.hour_bucket.slice(0, 10);
+          if (!byDay[day]) byDay[day] = [];
+          byDay[day].push(h);
+        }
+        for (const [day, rows] of Object.entries(byDay)) {
+          const lastRow = rows[rows.length - 1];
+          const existingSnap = (snaps ?? []).find(s => s.date === day);
+          if (!existingSnap) {
+            await supabase.from("portfolio_snapshots").insert({ user_id: user.id, date: day, total_usd: lastRow.total_usd, card_count: lastRow.card_count });
+          }
+        }
+        // Borrar todos los horarios de días anteriores
+        const pastBuckets = pastHourly.map(h => h.hour_bucket);
+        await supabase.from("portfolio_hourly_snapshots").delete().eq("user_id", user.id).in("hour_bucket", pastBuckets);
+        // Recargar snapshots diarios actualizados
+        const { data: freshSnaps } = await supabase.from("portfolio_snapshots").select("date, total_usd, card_count").eq("user_id", user.id).order("date", { ascending: false }).limit(366);
+        setSnapshots(freshSnaps ?? []);
+      }
+
+      const todayHourly = hourlyRows.filter(h => h.hour_bucket.slice(0, 10) === todayUTC);
+      setHourlySnapshots(todayHourly);
       setCardCount((inv ?? []).reduce((sum, r) => sum + (r.quantity ?? 0), 0));
 
       const invRows = inv ?? [];
@@ -480,17 +568,32 @@ export default function DashboardHome() {
 
       setStockTotal(total);
 
-      // Guardar snapshot de hoy si no existe aún
       if (total > 0) {
-        const today = new Date().toISOString().slice(0, 10);
-        const todaySnap = (snaps ?? []).find(s => s.date === today);
         const cards = (inv ?? []).reduce((sum, r) => sum + (r.quantity ?? 0), 0);
+
+        // Snapshot diario: upsert del día de hoy
+        const todaySnap = (snaps ?? []).find(s => s.date === todayUTC);
         if (!todaySnap) {
-          const { data: inserted } = await supabase.from("portfolio_snapshots").insert({ user_id: user.id, date: today, total_usd: total, card_count: cards }).select("date, total_usd, card_count").single();
+          const { data: inserted } = await supabase.from("portfolio_snapshots").insert({ user_id: user.id, date: todayUTC, total_usd: total, card_count: cards }).select("date, total_usd, card_count").single();
           if (inserted) setSnapshots(prev => [inserted, ...prev]);
         } else if (Math.abs(todaySnap.total_usd - total) > 0.01) {
-          await supabase.from("portfolio_snapshots").update({ total_usd: total, card_count: cards }).eq("user_id", user.id).eq("date", today);
-          setSnapshots(prev => prev.map(s => s.date === today ? { ...s, total_usd: total, card_count: cards } : s));
+          await supabase.from("portfolio_snapshots").update({ total_usd: total, card_count: cards }).eq("user_id", user.id).eq("date", todayUTC);
+          setSnapshots(prev => prev.map(s => s.date === todayUTC ? { ...s, total_usd: total, card_count: cards } : s));
+        }
+
+        // Snapshot horario: upsert de la hora actual en zona Colombia (UTC-5)
+        const now = new Date();
+        const bogotaHour = parseInt(now.toLocaleString("en-US", { timeZone: "America/Bogota", hour: "numeric", hour12: false }), 10);
+        const bogotaDate = now.toLocaleDateString("en-CA", { timeZone: "America/Bogota" }); // YYYY-MM-DD
+        const [bogY, bogM, bogD] = bogotaDate.split("-").map(Number);
+        const hourBucket = new Date(Date.UTC(bogY, bogM - 1, bogD, bogotaHour)).toISOString();
+        const thisHourSnap = todayHourly.find(h => h.hour_bucket === hourBucket);
+        if (!thisHourSnap) {
+          const { data: insertedH } = await supabase.from("portfolio_hourly_snapshots").insert({ user_id: user.id, hour_bucket: hourBucket, total_usd: total, card_count: cards }).select("hour_bucket, total_usd, card_count").single();
+          if (insertedH) setHourlySnapshots(prev => [...prev, insertedH].sort((a, b) => a.hour_bucket.localeCompare(b.hour_bucket)));
+        } else if (Math.abs(thisHourSnap.total_usd - total) > 0.01) {
+          await supabase.from("portfolio_hourly_snapshots").update({ total_usd: total, card_count: cards }).eq("user_id", user.id).eq("hour_bucket", hourBucket);
+          setHourlySnapshots(prev => prev.map(h => h.hour_bucket === hourBucket ? { ...h, total_usd: total, card_count: cards } : h));
         }
       }
     })();
@@ -585,7 +688,7 @@ export default function DashboardHome() {
         padding: "24px",
         marginBottom: "40px",
       }}>
-        <PortfolioChart snapshots={snapshots} />
+        <PortfolioChart snapshots={snapshots} hourlySnapshots={hourlySnapshots} />
       </div>
 
       {/* Popup seguidores */}
