@@ -91,7 +91,7 @@ function TiltCard({
           boxShadow: shadowStyle,
           transition: "opacity 0.3s ease",
         }}>
-          <img src={card.image} alt={card.name} loading="lazy" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+          <img src={card.image} alt={card.name} loading="lazy" decoding="async" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
 
           {isRH && !isGray && (
             <div style={{
@@ -707,7 +707,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           100% { opacity: 0.6; filter: brightness(0.9) saturate(1.2); }
         }
         .tcg-card-wrap { width: 240px; }
-        .tcg-card-body { width: 240px; height: 336px; overflow: hidden; position: relative; }
+        .tcg-card-body { width: 240px; height: 336px; overflow: hidden; position: relative; background: linear-gradient(135deg, #0e1420 0%, #161d2e 50%, #0e1420 100%); }
         .pks-thumb:not(.pks-thumb--open):not(.pks-thumb--gray):hover { background: rgba(46,230,193,0.05) !important; }
         @media (max-width: 767px) {
           .pks-header { padding: 48px 12px 32px !important; }
