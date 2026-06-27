@@ -233,10 +233,12 @@ interface WizardForm {
   last_name:  string;
   username:   string;
   // Step 2
-  pais:        string;
-  ciudad:      string;
-  edad:        string;
-  tipo_perfil: string;
+  pais:                string;
+  ciudad:              string;
+  edad:                string;
+  tipo_perfil:         string;
+  whatsapp_indicativo: string;
+  whatsapp_numero:     string;
   // Step 3
   pokemon_favorito: string;
   energia_favorita: string;
@@ -247,6 +249,7 @@ interface WizardForm {
 const EMPTY: WizardForm = {
   first_name: "", last_name: "", username: "",
   pais: "", ciudad: "", edad: "", tipo_perfil: "",
+  whatsapp_indicativo: "", whatsapp_numero: "",
   pokemon_favorito: "", energia_favorita: "", set_favorito: "", photo_url: "",
 };
 
@@ -360,8 +363,11 @@ export default function OnboardingPage() {
 
   function validateStep2(): boolean {
     const errs: typeof errors = {};
-    if (!form.pais)       errs.pais       = "El país es requerido.";
+    if (!form.pais)        errs.pais       = "El país es requerido.";
     if (!form.tipo_perfil) errs.tipo_perfil = "El tipo de perfil es requerido.";
+    if (!form.whatsapp_indicativo.trim()) errs.whatsapp_indicativo = "El indicativo es requerido.";
+    if (!form.whatsapp_numero.trim())     errs.whatsapp_numero     = "El número es requerido.";
+    else if (!/^\d{6,15}$/.test(form.whatsapp_numero.trim())) errs.whatsapp_numero = "Solo números, entre 6 y 15 dígitos.";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -400,7 +406,9 @@ export default function OnboardingPage() {
       pokemon_favorito: form.pokemon_favorito || null,
       energia_favorita: form.energia_favorita || null,
       set_favorito:     form.set_favorito     || null,
-      photo_url:        form.photo_url        || null,
+      photo_url:           form.photo_url        || null,
+      whatsapp_indicativo: form.whatsapp_indicativo.trim() || null,
+      whatsapp_numero:     form.whatsapp_numero.trim()     || null,
     }, { onConflict: "user_id" });
     setSubmitting(false);
     if (error) {
@@ -584,6 +592,38 @@ export default function OnboardingPage() {
                 />
               </Field>
             </div>
+            <Field label="WhatsApp">
+              <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: "10px" }}>
+                <div>
+                  <input
+                    style={inputStyle}
+                    value={form.whatsapp_indicativo}
+                    onChange={e => set("whatsapp_indicativo", e.target.value.replace(/[^\d+]/g, ""))}
+                    placeholder="+57"
+                    maxLength={5}
+                  />
+                  {errors.whatsapp_indicativo && (
+                    <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ff4f4f", margin: "4px 0 0" }}>
+                      {errors.whatsapp_indicativo}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    style={inputStyle}
+                    value={form.whatsapp_numero}
+                    onChange={e => set("whatsapp_numero", e.target.value.replace(/\D/g, ""))}
+                    placeholder="3001234567"
+                    maxLength={15}
+                  />
+                  {errors.whatsapp_numero && (
+                    <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ff4f4f", margin: "4px 0 0" }}>
+                      {errors.whatsapp_numero}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </Field>
           </div>
         )}
 
