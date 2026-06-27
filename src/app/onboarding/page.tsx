@@ -411,7 +411,7 @@ export default function OnboardingPage() {
         setGlobalError(`Error al guardar: ${error.message}`);
       }
     } else {
-      router.replace("/dashboard");
+      window.location.replace("/dashboard");
     }
   }
 
