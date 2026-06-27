@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { DashboardLayoutClient } from "./DashboardLayoutClient";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -12,9 +12,19 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   const { data: profile } = await supabase
     .from("players")
-    .select("photo_url, username, role")
+    .select("photo_url, username, first_name, last_name, pais, tipo_perfil, role")
     .eq("user_id", user.id)
-    .single();
+    .maybeSingle();
+
+  // Guard: profile must be complete before accessing the dashboard
+  const profileComplete =
+    profile?.username    && profile.username.trim()    !== "" &&
+    profile?.first_name  && profile.first_name.trim()  !== "" &&
+    profile?.last_name   && profile.last_name.trim()   !== "" &&
+    profile?.pais        && profile.pais.trim()        !== "" &&
+    profile?.tipo_perfil && profile.tipo_perfil.trim() !== "";
+
+  if (!profileComplete) redirect("/onboarding");
 
   return (
     <DashboardLayoutClient

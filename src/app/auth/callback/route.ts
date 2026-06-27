@@ -32,7 +32,26 @@ export async function GET(request: NextRequest) {
         },
       }
     );
-    await supabase.auth.exchangeCodeForSession(code);
+    const { data: { session } } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (session?.user) {
+      const { data: player } = await supabase
+        .from("players")
+        .select("username, first_name, last_name, pais, tipo_perfil")
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+
+      const profileComplete =
+        player?.username    && player.username.trim()    !== "" &&
+        player?.first_name  && player.first_name.trim()  !== "" &&
+        player?.last_name   && player.last_name.trim()   !== "" &&
+        player?.pais        && player.pais.trim()        !== "" &&
+        player?.tipo_perfil && player.tipo_perfil.trim() !== "";
+
+      if (!profileComplete) {
+        return NextResponse.redirect(`${safeOrigin}/onboarding`);
+      }
+    }
   }
 
   return NextResponse.redirect(`${safeOrigin}/dashboard`);

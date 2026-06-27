@@ -103,6 +103,48 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
+  // 4b. If user arrives at /onboarding but profile is already complete, send to dashboard
+  if (user && pathname === "/onboarding") {
+    const { data: player } = await supabase
+      .from("players")
+      .select("username, first_name, last_name, pais, tipo_perfil")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    const profileComplete =
+      player?.username   && player.username.trim()    !== "" &&
+      player?.first_name && player.first_name.trim()  !== "" &&
+      player?.last_name  && player.last_name.trim()   !== "" &&
+      player?.pais       && player.pais.trim()        !== "" &&
+      player?.tipo_perfil && player.tipo_perfil.trim() !== "";
+
+    if (profileComplete) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+    return supabaseResponse; // let them stay on /onboarding
+  }
+
+  // 5. Enforce onboarding: users accessing /dashboard without a complete profile
+  //    must complete the wizard first.
+  if (user && pathname.startsWith("/dashboard")) {
+    const { data: player } = await supabase
+      .from("players")
+      .select("username, first_name, last_name, pais, tipo_perfil")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    const profileComplete =
+      player?.username   && player.username.trim()   !== "" &&
+      player?.first_name && player.first_name.trim() !== "" &&
+      player?.last_name  && player.last_name.trim()  !== "" &&
+      player?.pais       && player.pais.trim()       !== "" &&
+      player?.tipo_perfil && player.tipo_perfil.trim() !== "";
+
+    if (!profileComplete) {
+      return NextResponse.redirect(new URL("/onboarding", request.url));
+    }
+  }
+
   return supabaseResponse;
 }
 
@@ -111,6 +153,7 @@ export const config = {
     "/dashboard/:path*",
     "/admin/:path*",
     "/login",
+    "/onboarding",
     "/api/auth/:path*",
     "/api/push/:path*",
     "/api/webhooks/:path*",
