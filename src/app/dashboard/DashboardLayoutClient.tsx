@@ -278,7 +278,7 @@ export function DashboardLayoutClient({
         onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
       >
         <Store size={14} color={COURT} strokeWidth={1.8} />
-        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Mi stock</span>
+        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>En venta</span>
       </Link>
       <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
       <Link href="/market" onClick={() => setMarketOpen(false)} style={{
@@ -451,7 +451,7 @@ export function DashboardLayoutClient({
                         onMouseLeave={e => { if (pathname !== "/dashboard/market") e.currentTarget.style.background = "transparent"; }}
                       >
                         <Store size={14} color={pathname === "/dashboard/market" ? COURT : INK2} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: pathname === "/dashboard/market" ? COURT : "rgba(245,247,251,0.65)" }}>Mi stock</span>
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: pathname === "/dashboard/market" ? COURT : "rgba(245,247,251,0.65)" }}>En venta</span>
                       </Link>
                       <Link href="/market" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: pathname === "/market" ? `${COURT}18` : "transparent", border: pathname === "/market" ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
                         onMouseEnter={e => { if (pathname !== "/market") e.currentTarget.style.background = `${COURT}10`; }}
@@ -641,7 +641,7 @@ export function DashboardLayoutClient({
                         onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
                       >
                         <Store size={14} color={COURT} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Mi stock</span>
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>En venta</span>
                       </Link>
                       <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
                       <Link href="/market" onClick={() => setMarketOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}

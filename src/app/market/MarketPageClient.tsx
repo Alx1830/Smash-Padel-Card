@@ -885,7 +885,7 @@ export function MarketPageClient({
                     </div>
                     <Link href="/dashboard/market" onClick={() => setMarketOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}>
                       <Store size={14} color={COURT} strokeWidth={1.8} />
-                      <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Mi stock</span>
+                      <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>En venta</span>
                     </Link>
                     <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
                     <Link href="/market" onClick={() => setMarketOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}>
