@@ -347,7 +347,7 @@ function ChartSVG({ chartData, xLabel }: {
   );
 }
 
-function PortfolioChart({ snapshots, hourlySnapshots }: { snapshots: Snapshot[]; hourlySnapshots: HourlySnapshot[] }) {
+function PortfolioChart({ snapshots, hourlySnapshots, loading }: { snapshots: Snapshot[]; hourlySnapshots: HourlySnapshot[]; loading?: boolean }) {
   const [range, setRange] = useState<Range>("1D");
 
   // Vista diaria: datos horarios de hoy en hora Colombia
@@ -402,7 +402,15 @@ function PortfolioChart({ snapshots, hourlySnapshots }: { snapshots: Snapshot[];
         </div>
       </div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "160px" }}>
-        <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.1em" }}>{emptyMsg}</p>
+        {loading ? (
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+            <style>{`@keyframes fb-pulse{0%,100%{opacity:.3}50%{opacity:.7}}`}</style>
+            <div style={{ width: "180px", height: "60px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", animation: "fb-pulse 1.4s ease-in-out infinite" }} />
+            <div style={{ width: "100px", height: "8px", borderRadius: "4px", background: "rgba(255,255,255,0.04)", animation: "fb-pulse 1.4s ease-in-out infinite 0.2s" }} />
+          </div>
+        ) : (
+          <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.1em" }}>{emptyMsg}</p>
+        )}
       </div>
     </div>
   );
@@ -468,6 +476,7 @@ export default function DashboardHome() {
   const [showFollowers,   setShowFollowers]   = useState(false);
   const [snapshots,       setSnapshots]       = useState<Snapshot[]>([]);
   const [hourlySnapshots, setHourlySnapshots] = useState<HourlySnapshot[]>([]);
+  const [chartLoading,    setChartLoading]    = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -596,6 +605,7 @@ export default function DashboardHome() {
           setHourlySnapshots(prev => prev.map(h => h.hour_bucket === hourBucket ? { ...h, total_usd: total, card_count: cards } : h));
         }
       }
+      setChartLoading(false);
     })();
   }, []);
 
@@ -688,7 +698,7 @@ export default function DashboardHome() {
         padding: "24px",
         marginBottom: "40px",
       }}>
-        <PortfolioChart snapshots={snapshots} hourlySnapshots={hourlySnapshots} />
+        <PortfolioChart snapshots={snapshots} hourlySnapshots={hourlySnapshots} loading={chartLoading} />
       </div>
 
       {/* Popup seguidores */}
