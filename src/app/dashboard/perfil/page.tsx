@@ -268,6 +268,7 @@ export default function PerfilPage() {
   const userIdRef = useRef<string | null>(null);
   const [preview, setPreview]         = useState<string>("");
   const [usernameFixed, setUsernameFixed] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [usernameError, setUsernameError] = useState("");
   const [deleteOpen, setDeleteOpen]       = useState(false);
   const [deleteText, setDeleteText]       = useState("");
@@ -291,7 +292,9 @@ export default function PerfilPage() {
       const { data } = await supabase
         .from("players").select("*").eq("user_id", user.id).single();
       if (data) {
-        if (data.username) setUsernameFixed(true);
+        const admin = data.role === "admin";
+        setIsAdmin(admin);
+        if (data.username && !admin) setUsernameFixed(true);
         setForm({
           username:            data.username ?? "",
           first_name:          data.first_name ?? "",
@@ -502,7 +505,11 @@ export default function PerfilPage() {
                     readOnly={usernameFixed}
                   />
                 </div>
-                {usernameFixed ? (
+                {isAdmin ? (
+                  <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "6px 0 0", lineHeight: 1.5 }}>
+                    Cuenta admin — puedes cambiar tu usuario las veces que quieras.
+                  </p>
+                ) : usernameFixed ? (
                   <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "6px 0 0", lineHeight: 1.5 }}>
                     El usuario es permanente — es tu identificador único en la plataforma.
                   </p>
