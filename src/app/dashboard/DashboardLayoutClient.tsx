@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/client";
 import { House, UserRoundPen, UsersRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Layers } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { usePushPermission } from "@/hooks/usePushPermission";
+import { DashboardUserProvider } from "./DashboardUserContext";
 
 const NotificationBell     = dynamic(() => import("@/components/NotificationBell").then(m => ({ default: m.NotificationBell })), { ssr: false });
 const NotificationsDrawer  = dynamic(() => import("@/components/NotificationsDrawer").then(m => ({ default: m.NotificationsDrawer })), { ssr: false });
@@ -697,7 +698,9 @@ export function DashboardLayoutClient({
         </nav>
 
         {/* ══ MAIN CONTENT ══ */}
-        <main className="dash-main" style={{ flex: 1 }}>{children}</main>
+        <main className="dash-main" style={{ flex: 1 }}>
+          <DashboardUserProvider userId={userId} isAdmin={isAdmin}>{children}</DashboardUserProvider>
+        </main>
       </div>
 
       {/* ══ NOTIFICATIONS DRAWER ══ */}

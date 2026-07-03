@@ -1,20 +1,13 @@
-import { createClient } from "@/lib/supabase/server";
+import { getAuthedPlayer } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { DashboardLayoutClient } from "./DashboardLayoutClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { user, profile } = await getAuthedPlayer();
 
   if (!user) redirect("/login");
-
-  const { data: profile } = await supabase
-    .from("players")
-    .select("photo_url, username, first_name, last_name, pais, tipo_perfil, role")
-    .eq("user_id", user.id)
-    .maybeSingle();
 
   // Guard: profile must be complete before accessing the dashboard
   const profileComplete =

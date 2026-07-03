@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
+import { useDashboardUser } from "./DashboardUserContext";
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
@@ -469,6 +470,7 @@ function PortfolioChart({ snapshots, hourlySnapshots, loading }: { snapshots: Sn
 /* ── Main page ── */
 export default function DashboardHome() {
   const supabase = createClient();
+  const { userId: ctxUserId } = useDashboardUser();
   const [userId,          setUserId]          = useState<string | null>(null);
   const [followerCount,   setFollowerCount]   = useState<number | null>(null);
   const [stockTotal,      setStockTotal]      = useState<number | null>(null);
@@ -479,9 +481,9 @@ export default function DashboardHome() {
   const [chartLoading,    setChartLoading]    = useState(true);
 
   useEffect(() => {
+    if (!ctxUserId) return;
     (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      const user = { id: ctxUserId };
       setUserId(user.id);
 
       const [
@@ -576,6 +578,7 @@ export default function DashboardHome() {
       }
 
       setStockTotal(total);
+      setChartLoading(false);
 
       if (total > 0) {
         const cards = (inv ?? []).reduce((sum, r) => sum + (r.quantity ?? 0), 0);
@@ -605,9 +608,9 @@ export default function DashboardHome() {
           setHourlySnapshots(prev => prev.map(h => h.hour_bucket === hourBucket ? { ...h, total_usd: total, card_count: cards } : h));
         }
       }
-      setChartLoading(false);
     })();
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ctxUserId]);
 
   const CARD_STYLE: React.CSSProperties = {
     background: "rgba(255,255,255,0.02)",

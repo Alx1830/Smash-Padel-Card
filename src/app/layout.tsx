@@ -3,7 +3,7 @@ import { JetBrains_Mono, Archivo_Black } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthedPlayer } from "@/lib/supabase/server";
 import { Navbar } from "@/components/Navbar";
 import { MarketTickerWrapper } from "@/components/MarketTickerWrapper";
 import "./globals.css";
@@ -90,15 +90,12 @@ export default async function RootLayout({
     initialLoggedIn: false, initialPhotoUrl: null, initialUsername: null,
   };
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const { user, profile } = await getAuthedPlayer();
     if (user) {
-      const { data } = await supabase
-        .from("players").select("photo_url, username").eq("user_id", user.id).single();
       navProps = {
         initialLoggedIn: true,
-        initialPhotoUrl: data?.photo_url ?? null,
-        initialUsername: data?.username ?? null,
+        initialPhotoUrl: profile?.photo_url ?? null,
+        initialUsername: profile?.username ?? null,
       };
     }
   } catch { /* no-op: Navbar falls back to client fetch */ }

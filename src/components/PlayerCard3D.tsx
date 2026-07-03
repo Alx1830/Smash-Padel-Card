@@ -122,7 +122,7 @@ export function PlayerCard3D({
                 filter: "drop-shadow(0 20px 20px rgba(0,0,0,0.5))",
               }}>
                 <Image src={photoUrl} alt={`${firstName} ${lastName}`} fill
-                  className="object-cover object-top" sizes="260px" priority unoptimized />
+                  className="object-cover object-top" sizes="260px" priority />
               </div>
             )}
           </div>

@@ -15,6 +15,7 @@ import {
 import { Plus, Search, BadgeDollarSign, Star } from "lucide-react";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { getCurrencyForCountry } from "@/lib/currency";
+import { useDashboardUser } from "../DashboardUserContext";
 
 const CardDetailModal = dynamic(
   () => import("@/components/CardDetailModal").then(m => ({ default: m.CardDetailModal })),
@@ -253,6 +254,7 @@ function SellPopup({ card, setId, userId, onPublished, onClose }: {
 /* ── Main page ───────────────────────────────────────────────── */
 export default function InventarioPage() {
   const supabase = createClient();
+  const { userId: ctxUserId } = useDashboardUser();
 
   const [userId,        setUserId]        = useState<string | null>(null);
   const [inventory,     setInventory]     = useState<InventoryMap>({});
@@ -357,17 +359,16 @@ export default function InventarioPage() {
   }, [setDropdownOpen]);
 
   useEffect(() => {
+    if (!ctxUserId) return;
     async function init() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { setLoading(false); return; }
-      setUserId(user.id);
-      userIdRef.current = user.id;
-      const { newSets } = await loadData(user.id);
+      setUserId(ctxUserId!);
+      userIdRef.current = ctxUserId!;
+      const { newSets } = await loadData(ctxUserId!);
       await loadAllSetsData(newSets.map(s => s.setId));
     }
     init();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [ctxUserId]);
 
   function matchesFeatured(f: FeaturedCard, card: PokemonCard, setId: string) {
     return (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId;
