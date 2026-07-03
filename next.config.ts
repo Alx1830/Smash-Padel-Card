@@ -79,7 +79,7 @@ export default withPWA({
   runtimeCaching: [
     /* App shell — JS/CSS del sitio: red primero, caché como fallback */
     {
-      urlPattern: /^https:\/\/facebinder\.vercel\.app\/_next\/.*/i,
+      urlPattern: /^https:\/\/(www\.)?facebinder\.(com|vercel\.app)\/_next\/.*/i,
       handler: "StaleWhileRevalidate",
       options: {
         cacheName: "next-static",

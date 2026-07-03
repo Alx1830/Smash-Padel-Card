@@ -20,7 +20,7 @@ const archiveBlack = Archivo_Black({
   weight: "400",
 });
 
-const BASE_URL = "https://facebinder.vercel.app";
+const BASE_URL = "https://facebinder.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

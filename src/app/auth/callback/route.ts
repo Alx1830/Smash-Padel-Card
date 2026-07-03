@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const ALLOWED_ORIGINS = [
+  "https://facebinder.com",
+  "https://www.facebinder.com",
   "https://facebinder.vercel.app",
   "http://localhost:3000",
   "http://localhost:3001",

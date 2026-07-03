@@ -36,7 +36,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url: `https://facebinder.vercel.app/${username}/wishlist`,
+      url: `https://facebinder.com/${username}/wishlist`,
       images: [{ url: "/og-brand.png", width: 1200, height: 1200, alt: title }],
     },
     twitter: { card: "summary_large_image", title, description, images: ["/og-brand.png"] },
