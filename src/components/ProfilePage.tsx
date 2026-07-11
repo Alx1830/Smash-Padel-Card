@@ -228,7 +228,7 @@ export function ProfilePage({ player }: { player: PlayerData }) {
               </div>
             </div>
 
-            <div style={{ flex: 1, minWidth: 0, paddingTop: "20px" }}>
+            <div style={{ flex: 1, minWidth: 0, paddingTop: "20px", alignSelf: "stretch", display: "flex", flexDirection: "column" }}>
               {player.profileUserId && (
                 <ProfilePortfolioChart userId={player.profileUserId} cardCount={totalCards} />
               )}

@@ -18,16 +18,17 @@ export type Snapshot       = { date: string; total_usd: number; card_count: numb
 export type HourlySnapshot = { hour_bucket: string; total_usd: number; card_count: number };
 type Range = "1D" | "1M" | "3M" | "6M" | "1Y";
 
-function ChartSVG({ chartData, xLabel }: {
+function ChartSVG({ chartData, xLabel, height = 160 }: {
   chartData: { label: string; value: number }[];
   xLabel?: (d: { label: string; value: number }, idx: number, arr: { label: string; value: number }[]) => string;
+  height?: number;
 }) {
   const vals   = chartData.map(s => s.value);
   const minVal = Math.min(...vals);
   const maxVal = Math.max(...vals);
   const range_ = maxVal - minVal || 1;
 
-  const W = 600, H = 160, PAD = { t: 16, r: 16, b: 32, l: 64 };
+  const W = 600, H = height, PAD = { t: 16, r: 16, b: 32, l: 64 };
   const iW = W - PAD.l - PAD.r;
   const iH = H - PAD.t - PAD.b;
 
@@ -91,11 +92,13 @@ function ChartSVG({ chartData, xLabel }: {
   );
 }
 
-export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount }: {
+export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount, defaultRange = "1D", chartHeight = 160 }: {
   snapshots: Snapshot[]; hourlySnapshots: HourlySnapshot[]; loading?: boolean;
   cardCount?: number | null;
+  defaultRange?: Range;
+  chartHeight?: number;
 }) {
-  const [range, setRange] = useState<Range>("1D");
+  const [range, setRange] = useState<Range>(defaultRange);
 
   // Vista diaria: datos horarios de hoy en hora Colombia
   const todayUTC = new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" });
@@ -165,7 +168,7 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount 
         </div>
         {rangeButtons}
       </div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "160px" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: `${chartHeight}px` }}>
         {loading ? (
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
             <style>{`@keyframes fb-pulse{0%,100%{opacity:.3}50%{opacity:.7}}`}</style>
@@ -214,7 +217,7 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount 
         {rangeButtons}
       </div>
 
-      <ChartSVG chartData={data} xLabel={xLabel} />
+      <ChartSVG chartData={data} xLabel={xLabel} height={chartHeight} />
     </div>
   );
 }
@@ -240,13 +243,29 @@ export function ProfilePortfolioChart({ userId, cardCount }: { userId: string; c
   }, [userId]);
 
   return (
-    <div style={{
-      background: "rgba(255,255,255,0.02)",
-      border: "1px solid rgba(255,255,255,0.08)",
-      borderRadius: "16px",
-      padding: "24px",
-    }}>
-      <PortfolioChart snapshots={snapshots} hourlySnapshots={hourlySnapshots} loading={loading} cardCount={cardCount} />
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      {/* Header estilo "MIS CARTAS DESTACADAS" */}
+      <div style={{
+        fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em",
+        textTransform: "uppercase", color: COURT,
+        display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
+      }}>
+        <span style={{ width: "22px", height: "1px", background: COURT, display: "inline-block" }} />
+        Estimated Portfolio Value
+      </div>
+
+      <div style={{
+        background: "rgba(255,255,255,0.02)",
+        border: "1px solid rgba(255,255,255,0.08)",
+        borderRadius: "16px",
+        padding: "24px",
+        flex: 1,
+      }}>
+        <PortfolioChart
+          snapshots={snapshots} hourlySnapshots={hourlySnapshots} loading={loading}
+          cardCount={cardCount} defaultRange="1M" chartHeight={280}
+        />
+      </div>
     </div>
   );
 }
