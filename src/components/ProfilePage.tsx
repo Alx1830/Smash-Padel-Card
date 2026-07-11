@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { PlayerCard3D } from "./PlayerCard3D";
 import { FollowButton } from "./FollowButton";
+import { ProfilePortfolioChart } from "./PortfolioChart";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { SET_CARDS, loadManySets, FOSSIL_CARDS } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionEffect, getVersionColor } from "@/data/pokemon-cards-meta";
@@ -52,26 +53,13 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
 
-function Row({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <div style={{
-      display: "flex", alignItems: "center", padding: "9px 0",
-      borderBottom: "1px dashed rgba(255,255,255,0.08)",
-      gap: "6px", flexWrap: "wrap",
-    }}>
-      <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.12em", textTransform: "uppercase", color: INK2, flexShrink: 0 }}>
-        {label}
-      </span>
-      <span style={{ color: INK2, fontSize: "12px", flexShrink: 0 }}>/</span>
-      <span style={{ fontFamily: MONO, fontSize: "14px", color: INK0, fontWeight: 500 }}>{value}</span>
-    </div>
-  );
-}
-
 export function ProfilePage({ player }: { player: PlayerData }) {
   const CARD_H     = 416 * 1.2;
   const COVER_H    = 460;
   const NEG_MARGIN = Math.round(CARD_H / 2);
+
+  // Total de cartas del usuario (suma de cantidades del inventario)
+  const totalCards = (player.inventoryRows ?? []).reduce((sum, r) => sum + (r.quantity ?? 0), 0);
 
 
   return (
@@ -240,16 +228,10 @@ export function ProfilePage({ player }: { player: PlayerData }) {
               </div>
             </div>
 
-            <div style={{ flex: 1, paddingTop: "20px" }}>
-              <div style={{ marginBottom: "8px" }}>
-                <h3 style={{ fontFamily: DISP, fontSize: "28px", letterSpacing: "-0.01em", margin: "0 0 24px", color: INK0 }}>
-                  Perfil Maestro Pokémon
-                </h3>
-                <Row label="Tipo de Perfil"     value={player.tipoPerfil || "—"} />
-                <Row label="Edad"               value={player.edad ? `${player.edad} años` : "—"} />
-                <Row label="Pokémon Favorito"   value={player.pokemonFavorito || "—"} />
-                <Row label="Energía Favorita"   value={player.energiaFavorita || "—"} />
-              </div>
+            <div style={{ flex: 1, minWidth: 0, paddingTop: "20px" }}>
+              {player.profileUserId && (
+                <ProfilePortfolioChart userId={player.profileUserId} cardCount={totalCards} />
+              )}
             </div>
 
             {/* Showcase — right column, siempre visible */}
@@ -274,13 +256,9 @@ export function ProfilePage({ player }: { player: PlayerData }) {
             />
           </div>
           <div style={{ width: "100%", height: "1px", marginBottom: "40px", background: "rgba(255,255,255,0.06)" }} />
-          <h3 style={{ fontFamily: DISP, fontSize: "22px", letterSpacing: "-0.01em", margin: "0 0 16px", color: INK0 }}>
-            Perfil Maestro Pokémon
-          </h3>
-          <Row label="Pokémon Favorito"  value={player.pokemonFavorito || "—"} />
-          <Row label="Edad"               value={player.edad ? `${player.edad} años` : "—"} />
-          <Row label="Energía Favorita"   value={player.energiaFavorita || "—"} />
-          <Row label="Tipo de Perfil"     value={player.tipoPerfil || "—"} />
+          {player.profileUserId && (
+            <ProfilePortfolioChart userId={player.profileUserId} cardCount={totalCards} />
+          )}
           <div style={{ marginTop: "40px" }}>
             <Showcase featuredCards={player.featuredCards ?? []} inventoryRows={player.inventoryRows ?? []} />
           </div>
