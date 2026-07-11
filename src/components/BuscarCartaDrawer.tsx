@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { X, Search } from "lucide-react";
@@ -22,9 +22,9 @@ const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
-const ALL_SET_IDS = POKEMON_SERIES.flatMap(s => s.sets).map(s => s.id);
-const ALL_SETS    = POKEMON_SERIES.flatMap(s => s.sets);
-const BATCH_SIZE  = 12;
+const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
+// Posición del set en POKEMON_SERIES = recencia (más reciente primero)
+const SET_RANK: Record<string, number> = Object.fromEntries(ALL_SETS.map((s, i) => [s.id, i]));
 
 interface CardResult {
   card:    PokemonCard;
@@ -42,10 +42,9 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
 
-  const [query,        setQuery]        = useState("");
-  const [loadedSets,   setLoadedSets]   = useState<Set<string>>(new Set());
-  const [loadProgress, setLoadProgress] = useState(0);
-  const [isLoading,    setIsLoading]    = useState(false);
+  const [query,     setQuery]     = useState("");
+  const [results,   setResults]   = useState<CardResult[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [modalTarget,    setModalTarget]    = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [modalInventory, setModalInventory] = useState<InventoryMap>({});
@@ -53,7 +52,7 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
   const [wishlistCards,  setWishlistCards]  = useState<WishlistCard[]>([]);
   const [userListings,   setUserListings]   = useState<UserListing[]>([]);
 
-  const loadingRef = useRef(false);
+  const searchTokenRef = useRef(0);
 
   /* Lock body scroll */
   useEffect(() => {
@@ -92,42 +91,44 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* Load all sets progressively */
+  /* Búsqueda bajo demanda: el índice de nombres dice en qué sets buscar,
+     y solo esos sets se cargan */
   useEffect(() => {
-    if (loadingRef.current) return;
-    loadingRef.current = true;
-    setIsLoading(true);
-    (async () => {
-      const total = ALL_SET_IDS.length;
-      for (let i = 0; i < total; i += BATCH_SIZE) {
-        const batch = ALL_SET_IDS.slice(i, i + BATCH_SIZE);
-        await loadManySets(batch);
-        setLoadedSets(prev => {
-          const next = new Set(prev);
-          batch.forEach(id => next.add(id));
-          return next;
-        });
-        setLoadProgress(Math.min(100, Math.round(((i + BATCH_SIZE) / total) * 100)));
-      }
-      setIsLoading(false);
-    })();
-  }, []);
-
-  const results = useMemo((): CardResult[] => {
     const q = query.trim().toLowerCase();
-    if (q.length < 2) return [];
-    const out: CardResult[] = [];
-    for (const setId of loadedSets) {
-      const cards = SET_CARDS[setId];
-      if (!cards) continue;
-      const setInfo = ALL_SETS.find(s => s.id === setId);
-      for (const card of cards) {
-        if (card.name.toLowerCase().includes(q))
-          out.push({ card: card as PokemonCard, setId, setName: setInfo?.name ?? setId });
-      }
+    const token = ++searchTokenRef.current;
+    if (q.length < 2) {
+      setResults([]);
+      setIsLoading(false);
+      return;
     }
-    return out.sort((a, b) => a.card.name.localeCompare(b.card.name));
-  }, [query, loadedSets]);
+    setIsLoading(true);
+    const timer = setTimeout(async () => {
+      const { SET_NAME_INDEX } = await import("@/data/card-name-index");
+      const matchingSetIds = Object.keys(SET_NAME_INDEX)
+        .filter(setId => SET_NAME_INDEX[setId].includes(q));
+      await loadManySets(matchingSetIds);
+      if (token !== searchTokenRef.current) return;
+
+      const out: CardResult[] = [];
+      for (const setId of matchingSetIds) {
+        const cards = SET_CARDS[setId];
+        if (!cards.length) continue;
+        const setInfo = ALL_SETS.find(s => s.id === setId);
+        for (const card of cards) {
+          if (card.name.toLowerCase().includes(q))
+            out.push({ card: card as PokemonCard, setId, setName: setInfo?.name ?? setId });
+        }
+      }
+      out.sort((a, b) => {
+        const rank = (SET_RANK[a.setId] ?? 9999) - (SET_RANK[b.setId] ?? 9999);
+        if (rank !== 0) return rank;
+        return a.card.card_number - b.card.card_number;
+      });
+      setResults(out);
+      setIsLoading(false);
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [query]);
 
   const openModal = useCallback(async (result: CardResult) => {
     const { data: invData } = await supabase
@@ -204,6 +205,13 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
           cursor: pointer;
           transition: border-color 0.15s, background 0.15s, transform 0.15s;
         }
+        .buscar-spinner {
+          width: 28px; height: 28px; border-radius: 50%;
+          border: 2px solid rgba(46,230,193,0.15);
+          border-top-color: ${COURT};
+          animation: buscar-spin 0.7s linear infinite;
+        }
+        @keyframes buscar-spin { to { transform: rotate(360deg); } }
         .buscar-card-item:hover {
           border-color: rgba(46,230,193,0.25);
           background: rgba(46,230,193,0.04);
@@ -301,20 +309,6 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
             />
           </div>
 
-          {/* Progress bar */}
-          {isLoading && (
-            <div style={{ maxWidth: "560px", marginTop: "10px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "5px" }}>
-                <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                  Cargando sets...
-                </span>
-                <span style={{ fontFamily: MONO, fontSize: "9px", color: COURT }}>{loadProgress}%</span>
-              </div>
-              <div style={{ height: "2px", background: "rgba(255,255,255,0.06)", borderRadius: "2px", overflow: "hidden" }}>
-                <div style={{ height: "100%", width: `${loadProgress}%`, background: COURT, borderRadius: "2px", transition: "width 0.3s ease" }} />
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Scrollable results */}
@@ -326,22 +320,23 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
                 Escribe al menos 2 letras para buscar
               </p>
             </div>
+          ) : isLoading ? (
+            <div style={{ padding: "60px 0", textAlign: "center" }}>
+              <div className="buscar-spinner" style={{ margin: "0 auto 16px" }} />
+              <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>
+                Buscando cartas...
+              </p>
+            </div>
           ) : results.length === 0 ? (
             <div style={{ padding: "60px 0", textAlign: "center" }}>
-              <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: "0 0 6px" }}>
-                {isLoading ? "Buscando en sets cargados..." : "Sin resultados"}
+              <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>
+                Sin resultados
               </p>
-              {isLoading && (
-                <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, opacity: 0.6, margin: 0 }}>
-                  Puede aparecer más resultados mientras cargan los sets
-                </p>
-              )}
             </div>
           ) : (
             <>
               <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.08em", marginBottom: "16px" }}>
                 {results.length} resultado{results.length !== 1 ? "s" : ""}
-                {isLoading && <span style={{ color: COURT }}> · cargando más...</span>}
               </p>
               <div className="buscar-grid">
                 {results.map((r, i) => {
