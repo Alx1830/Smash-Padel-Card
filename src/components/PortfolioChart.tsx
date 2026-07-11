@@ -40,7 +40,7 @@ function ChartSVG({ chartData, xLabel, height = 160 }: {
     chartData.slice(1).map((s, i) => `L${px(i + 1)},${py(s.value)}`).join(" ") +
     ` L${px(chartData.length - 1)},${PAD.t + iH} L${px(0)},${PAD.t + iH} Z`;
 
-  const yTicks = 4;
+  const yTicks = height > 240 ? 6 : 4;
   const xTicks = Math.min(chartData.length, 6);
 
   return (
@@ -223,7 +223,7 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
 }
 
 /** Gráfico autónomo para el perfil: lee los snapshots del usuario (solo lectura) */
-export function ProfilePortfolioChart({ userId, cardCount }: { userId: string; cardCount?: number | null }) {
+export function ProfilePortfolioChart({ userId, cardCount, fixedHeight }: { userId: string; cardCount?: number | null; fixedHeight?: number }) {
   const [snapshots,       setSnapshots]       = useState<Snapshot[]>([]);
   const [hourlySnapshots, setHourlySnapshots] = useState<HourlySnapshot[]>([]);
   const [loading,         setLoading]         = useState(true);
@@ -243,7 +243,7 @@ export function ProfilePortfolioChart({ userId, cardCount }: { userId: string; c
   }, [userId]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+    <div style={{ display: "flex", flexDirection: "column" }}>
       {/* Header estilo "MIS CARTAS DESTACADAS" */}
       <div style={{
         fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em",
@@ -251,7 +251,7 @@ export function ProfilePortfolioChart({ userId, cardCount }: { userId: string; c
         display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
       }}>
         <span style={{ width: "22px", height: "1px", background: COURT, display: "inline-block" }} />
-        Estimated Portfolio Value
+        Valor estimado del portafolio
       </div>
 
       <div style={{
@@ -259,11 +259,13 @@ export function ProfilePortfolioChart({ userId, cardCount }: { userId: string; c
         border: "1px solid rgba(255,255,255,0.08)",
         borderRadius: "16px",
         padding: "24px",
-        flex: 1,
+        height: fixedHeight ? `${fixedHeight}px` : undefined,
+        overflow: fixedHeight ? "hidden" : undefined,
+        boxSizing: "border-box",
       }}>
         <PortfolioChart
           snapshots={snapshots} hourlySnapshots={hourlySnapshots} loading={loading}
-          cardCount={cardCount} defaultRange="1M" chartHeight={280}
+          cardCount={cardCount} defaultRange="1M" chartHeight={300}
         />
       </div>
     </div>

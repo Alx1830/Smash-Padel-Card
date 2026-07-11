@@ -228,9 +228,16 @@ export function ProfilePage({ player }: { player: PlayerData }) {
               </div>
             </div>
 
-            <div style={{ flex: 1, minWidth: 0, paddingTop: "20px", alignSelf: "stretch", display: "flex", flexDirection: "column" }}>
+            {/* marginRight compensa el fan de destacadas que sobresale de su columna.
+                fixedHeight alinea el borde inferior con la card 3D:
+                columna card = 24 padding + CARD_H; aquí restamos paddingTop 20 y título ~35 */}
+            <div style={{ flex: 1, minWidth: 0, paddingTop: "20px", marginRight: "64px" }}>
               {player.profileUserId && (
-                <ProfilePortfolioChart userId={player.profileUserId} cardCount={totalCards} />
+                <ProfilePortfolioChart
+                  userId={player.profileUserId}
+                  cardCount={totalCards}
+                  fixedHeight={Math.round(24 + CARD_H - 20 - 35)}
+                />
               )}
             </div>
 
