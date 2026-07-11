@@ -3,11 +3,12 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { X, Search } from "lucide-react";
+import { X, Search, Star, BadgeDollarSign } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
-import { getVersionColor, getVersionLabel } from "@/data/pokemon-cards-meta";
+import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
+import { InvTiltCard, SellPopup, INV_CARD_KEYFRAMES } from "@/components/InventoryCard";
 import { invKey, type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing } from "@/components/CardDetailModal";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 
@@ -46,11 +47,13 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
   const [results,   setResults]   = useState<CardResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [modalTarget,    setModalTarget]    = useState<{ card: PokemonCard; setId: string } | null>(null);
-  const [modalInventory, setModalInventory] = useState<InventoryMap>({});
-  const [featuredCards,  setFeaturedCards]  = useState<FeaturedCard[]>([]);
-  const [wishlistCards,  setWishlistCards]  = useState<WishlistCard[]>([]);
-  const [userListings,   setUserListings]   = useState<UserListing[]>([]);
+  const [modalTarget,   setModalTarget]   = useState<{ card: PokemonCard; setId: string } | null>(null);
+  const [sellTarget,    setSellTarget]    = useState<{ card: PokemonCard; setId: string } | null>(null);
+  const [inventory,     setInventory]     = useState<InventoryMap>({});
+  const [featuredCards, setFeaturedCards] = useState<FeaturedCard[]>([]);
+  const [wishlistCards, setWishlistCards] = useState<WishlistCard[]>([]);
+  const [userListings,  setUserListings]  = useState<UserListing[]>([]);
+  const [cardPrices,    setCardPrices]    = useState<Record<string, Record<string, number>>>({});
 
   const searchTokenRef = useRef(0);
 
@@ -79,14 +82,22 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
   /* Load user data once */
   useEffect(() => {
     (async () => {
-      const [{ data: featured }, { data: wishlist }, { data: listings }] = await Promise.all([
+      const [{ data: featured }, { data: wishlist }, { data: listings }, { data: inv }] = await Promise.all([
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", userId),
         supabase.from("card_wishlist").select("card_id, set_id").eq("user_id", userId),
         supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", userId).eq("status", "active"),
+        supabase.from("card_inventory").select("card_id, version, quantity").eq("user_id", userId).gt("quantity", 0),
       ]);
       if (featured) setFeaturedCards(featured as FeaturedCard[]);
       if (wishlist) setWishlistCards(wishlist as WishlistCard[]);
       if (listings) setUserListings(listings as UserListing[]);
+      if (inv) {
+        const invMap: InventoryMap = {};
+        for (const row of inv as { card_id: string; version: string | null; quantity: number }[]) {
+          invMap[invKey(row.card_id, row.version ?? "normal")] = row.quantity;
+        }
+        setInventory(invMap);
+      }
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -96,13 +107,11 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
   useEffect(() => {
     const q = query.trim().toLowerCase();
     const token = ++searchTokenRef.current;
-    if (q.length < 2) {
-      setResults([]);
-      setIsLoading(false);
-      return;
-    }
-    setIsLoading(true);
+    // Con menos de 2 letras el render muestra el estado vacío (los resultados
+    // viejos quedan ocultos), así que no hace falta setState síncrono aquí
+    if (q.length < 2) return;
     const timer = setTimeout(async () => {
+      setIsLoading(true);
       const { SET_NAME_INDEX } = await import("@/data/card-name-index");
       const matchingSetIds = Object.keys(SET_NAME_INDEX)
         .filter(setId => SET_NAME_INDEX[setId].includes(q));
@@ -130,18 +139,83 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
     return () => clearTimeout(timer);
   }, [query]);
 
-  const openModal = useCallback(async (result: CardResult) => {
-    const { data: invData } = await supabase
-      .from("card_inventory").select("card_id, version, quantity")
-      .eq("user_id", userId).eq("set_id", result.setId);
-    const invMap: InventoryMap = {};
-    (invData ?? []).forEach((r: { card_id: string; version: string | null; quantity: number }) => {
-      invMap[invKey(r.card_id, r.version ?? "normal")] = r.quantity;
-    });
-    setModalInventory(invMap);
-    setModalTarget({ card: result.card, setId: result.setId });
+  /* Precios Scrydex de los resultados (solo ids exactos, en lotes) */
+  useEffect(() => {
+    if (results.length === 0) return;
+    const ids = [...new Set(
+      results
+        .map(r => {
+          const sc = SCRYDEX_SET_CODES[r.setId];
+          return sc ? `${sc}-${r.card.card_number}` : null;
+        })
+        .filter((id): id is string => !!id && !(id in cardPrices))
+    )];
+    if (ids.length === 0) return;
+    (async () => {
+      const chunks: string[][] = [];
+      for (let i = 0; i < ids.length; i += 200) chunks.push(ids.slice(i, i + 200));
+      const rows = (await Promise.all(chunks.map(chunk =>
+        supabase.from("card_prices").select("card_id, prices").in("card_id", chunk)
+      ))).flatMap(res => res.data ?? []);
+      if (rows.length === 0) return;
+      setCardPrices(prev => {
+        const next = { ...prev };
+        for (const row of rows) next[row.card_id] = row.prices as Record<string, number>;
+        return next;
+      });
+    })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  }, [results]);
+
+  async function toggleFeatured(card: PokemonCard, setId: string) {
+    const isFeat = featuredCards.some(f => (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId);
+    if (isFeat) {
+      await Promise.all([
+        supabase.from("featured_cards").delete().eq("user_id", userId).eq("card_id", card.card_number).eq("set_id", setId),
+        supabase.from("featured_cards").delete().eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId),
+      ]);
+      setFeaturedCards(prev => prev.filter(f => !((Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId)));
+    } else {
+      if (featuredCards.length >= 10) return;
+      await supabase.from("featured_cards").insert({ user_id: userId, card_id: card.card_number, set_id: setId });
+      setFeaturedCards(prev => [...prev, { card_id: card.card_number, set_id: setId }]);
+    }
+  }
+
+  async function incrementQty(card: PokemonCard, setId: string) {
+    const key = invKey(card.id, card.version);
+    const next = (inventory[key] ?? 0) + 1;
+    await supabase.from("card_inventory").upsert({
+      user_id: userId, card_id: card.id, set_id: setId,
+      version: card.version, quantity: next,
+    }, { onConflict: "user_id,card_id,set_id,version" });
+    setInventory(prev => ({ ...prev, [key]: next }));
+  }
+
+  async function decrementQty(card: PokemonCard, setId: string) {
+    const key = invKey(card.id, card.version);
+    const current = inventory[key] ?? 0;
+    if (current <= 0) return;
+    const next = current - 1;
+    if (next === 0) {
+      await supabase.from("card_inventory")
+        .delete()
+        .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId).eq("version", card.version);
+      setInventory(prev => {
+        const updated = { ...prev };
+        delete updated[key];
+        return updated;
+      });
+    } else {
+      await supabase.from("card_inventory").update({ quantity: next })
+        .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId).eq("version", card.version);
+      setInventory(prev => ({ ...prev, [key]: next }));
+    }
+  }
+
+  const openModal = useCallback((result: CardResult) => {
+    setModalTarget({ card: result.card, setId: result.setId });
+  }, []);
 
   function handleClose() {
     const el = panelRef.current;
@@ -194,17 +268,9 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
           grid-template-columns: repeat(2, 1fr);
           gap: 12px;
         }
-        @media (min-width: 480px)  { .buscar-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (min-width: 768px)  { .buscar-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; } }
-        @media (min-width: 1024px) { .buscar-grid { grid-template-columns: repeat(5, 1fr); } }
-        .buscar-card-item {
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.07);
-          border-radius: 14px; overflow: hidden;
-          display: flex; flex-direction: column;
-          cursor: pointer;
-          transition: border-color 0.15s, background 0.15s, transform 0.15s;
-        }
+        @media (min-width: 640px)  { .buscar-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; } }
+        @media (min-width: 1280px) { .buscar-grid { grid-template-columns: repeat(6, 1fr); gap: 12px; } }
+        ${INV_CARD_KEYFRAMES}
         .buscar-spinner {
           width: 28px; height: 28px; border-radius: 50%;
           border: 2px solid rgba(46,230,193,0.15);
@@ -212,11 +278,6 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
           animation: buscar-spin 0.7s linear infinite;
         }
         @keyframes buscar-spin { to { transform: rotate(360deg); } }
-        .buscar-card-item:hover {
-          border-color: rgba(46,230,193,0.25);
-          background: rgba(46,230,193,0.04);
-          transform: translateY(-2px);
-        }
       `}</style>
 
       {/* Backdrop */}
@@ -340,40 +401,102 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
               </p>
               <div className="buscar-grid">
                 {results.map((r, i) => {
-                  const verColor = getVersionColor(r.card.version);
-                  const verLabel = getVersionLabel(r.card.version);
-                  const setInfo  = ALL_SETS.find(s => s.id === r.setId);
+                  const { card, setId } = r;
+                  const setInfo  = ALL_SETS.find(s => s.id === setId);
+                  const isFeat   = featuredCards.some(f => (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId);
+                  const isListed = userListings.some(l => String(l.card_id) === String(card.card_number) && l.set_id === setId && l.version === card.version);
+                  const qty      = inventory[invKey(card.id, card.version)] ?? 0;
+
+                  const sc = SCRYDEX_SET_CODES[setId];
+                  const cardPriceMap = sc ? cardPrices[`${sc}-${card.card_number}`] : undefined;
+                  const vk = card.version.toLowerCase().replace(/\s+/g, "");
+                  const cardPrice: number | null = cardPriceMap
+                    ? (cardPriceMap[vk] ?? cardPriceMap[card.version] ?? cardPriceMap["normal"] ?? null)
+                    : null;
+
                   return (
-                    <div
-                      key={`${r.setId}-${r.card.id}-${i}`}
-                      className="buscar-card-item"
-                      onClick={() => openModal(r)}
-                    >
-                      <div style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)", flexShrink: 0 }}>
-                        <img src={r.card.image} alt={r.card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
-                        <div style={{
-                          position: "absolute", bottom: "8px", right: "8px",
-                          fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em",
-                          color: verColor, border: `1px solid ${verColor}55`,
-                          borderRadius: "4px", padding: "2px 7px",
-                          background: "rgba(5,7,13,0.85)",
-                        }}>
-                          {verLabel}
-                        </div>
-                      </div>
-                      <div style={{ padding: "10px 12px", display: "flex", flexDirection: "column", gap: "4px" }}>
-                        <span style={{ fontFamily: MONO, fontSize: "11px", color: INK0, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                          {r.card.name}
-                        </span>
-                        <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.06em" }}>
-                          #{String(r.card.card_number).padStart(3, "0")}
-                        </span>
-                        {setInfo && (
-                          <div style={{ position: "relative", width: "56px", height: "16px", marginTop: "2px" }}>
-                            <Image src={setInfo.logo} alt={setInfo.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} />
+                    <div key={`${setId}-${card.id}-${i}`} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+
+                      {/* Card image area */}
+                      <div style={{ position: "relative" }}>
+                        <InvTiltCard card={card} onClick={() => openModal(r)} />
+
+                        {/* En venta badge */}
+                        {isListed && (
+                          <div title="En venta" style={{
+                            position: "absolute", top: 6, right: 6,
+                            width: 30, height: 30, borderRadius: "50%",
+                            background: "rgba(5,7,13,0.85)",
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            animation: "inv-salePulse 2s ease-in-out infinite",
+                            zIndex: 10, pointerEvents: "none",
+                          }}>
+                            <BadgeDollarSign size={18} color="#d6ff3d" strokeWidth={1.8} />
                           </div>
                         )}
+
+                        {/* Estrella + vender (top-left) */}
+                        <div style={{ position: "absolute", top: 6, left: 6, display: "flex", flexDirection: "column", gap: "4px", zIndex: 10 }}>
+                          <button
+                            className={`inv-icon-btn${isFeat ? " active" : ""}`}
+                            onClick={e => { e.stopPropagation(); toggleFeatured(card, setId); }}
+                            title={isFeat ? "Quitar de destacadas" : "Destacar en perfil"}
+                          >
+                            <Star size={13} color={isFeat ? COURT : INK2} strokeWidth={isFeat ? 2.2 : 1.7} fill={isFeat ? COURT : "none"} />
+                          </button>
+                          <button
+                            className={`inv-icon-btn${isListed ? " active" : ""}`}
+                            onClick={e => { e.stopPropagation(); setSellTarget({ card, setId }); }}
+                            title="Poner en venta"
+                          >
+                            <BadgeDollarSign size={13} color={isListed ? "#d6ff3d" : INK2} strokeWidth={1.8} />
+                          </button>
+                        </div>
                       </div>
+
+                      {/* Line 1: #090 Rowlet */}
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "4px", overflow: "hidden", textAlign: "center" }}>
+                        <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2, flexShrink: 0, letterSpacing: "0.04em" }}>
+                          #{String(card.card_number).padStart(3, "0")}
+                        </span>
+                        <span style={{ fontFamily: MONO, fontSize: "11px", color: INK0, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {card.name}
+                        </span>
+                      </div>
+
+                      {/* Line 2: precio + qty controls */}
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
+                        <span style={{ fontFamily: MONO, fontSize: "11px", color: cardPrice !== null ? COURT : INK2, fontWeight: 700, flexShrink: 0 }}>
+                          {cardPrice !== null ? `$${cardPrice.toFixed(2)}` : "—"}
+                        </span>
+
+                        <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+                          <button
+                            className="inv-qty-btn"
+                            onClick={() => decrementQty(card, setId)}
+                            style={{ color: INK0 }}
+                            title="Quitar uno"
+                          >
+                            −
+                          </button>
+                          <span className="inv-qty-num">{qty}</span>
+                          <button
+                            className="inv-qty-btn"
+                            onClick={() => incrementQty(card, setId)}
+                            style={{ color: COURT, borderColor: `${COURT}44` }}
+                            title="Agregar uno"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Set logo */}
+                      {setInfo && (
+                        <div style={{ position: "relative", width: "56px", height: "16px", margin: "0 auto" }}>
+                          <Image src={setInfo.logo} alt={setInfo.name} fill style={{ objectFit: "contain" }} />
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -389,8 +512,8 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
           card={modalTarget.card}
           setId={modalTarget.setId}
           userId={userId}
-          inventory={modalInventory}
-          onInventoryChange={(key, qty) => setModalInventory(prev => ({ ...prev, [key]: qty }))}
+          inventory={inventory}
+          onInventoryChange={(key, qty) => setInventory(prev => ({ ...prev, [key]: qty }))}
           featuredCards={featuredCards}
           onFeaturedChange={setFeaturedCards}
           wishlistCards={wishlistCards}
@@ -398,6 +521,15 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
           userListings={userListings}
           onListingsChange={setUserListings}
           onClose={() => setModalTarget(null)}
+        />
+      )}
+
+      {/* Popup de venta */}
+      {sellTarget && (
+        <SellPopup
+          card={sellTarget.card} setId={sellTarget.setId} userId={userId}
+          onPublished={listing => setUserListings(prev => [...prev, listing])}
+          onClose={() => setSellTarget(null)}
         />
       )}
     </>
