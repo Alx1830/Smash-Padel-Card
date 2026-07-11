@@ -557,8 +557,8 @@ async function scrapeSet(page, setSlug, setCode) {
   let modeLabel;
   if (CHUNK_ARG) {
     setsToRun = CHUNKS[CHUNK_ARG];
-    if (!setsToRun) { console.error(`Chunk inválido: ${CHUNK_ARG}. Usa 1-5.`); process.exit(1); }
-    modeLabel = `Chunk ${CHUNK_ARG}/5 (${setsToRun.length} sets)`;
+    if (!setsToRun) { console.error(`Chunk inválido: ${CHUNK_ARG}. Usa 1-19.`); process.exit(1); }
+    modeLabel = `Chunk ${CHUNK_ARG}/19 (${setsToRun.length} sets)`;
   } else if (RUN_ALL) {
     setsToRun = ALL_SETS;
     modeLabel = `TODOS los sets (${setsToRun.length})`;
