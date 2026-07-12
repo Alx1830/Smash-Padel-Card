@@ -37,8 +37,11 @@ export function useNotifications(userId: string | null): UseNotificationsReturn 
       supabase.removeChannel(channelRef.current);
       channelRef.current = null;
     }
+    // Sufijo único real: Date.now() colisionaba si se creaban dos canales en el
+    // mismo milisegundo (StrictMode / doble visibilitychange) y supabase-js
+    // devolvía el canal ya suscrito → "cannot add callbacks after subscribe()"
     const channel = supabase
-      .channel(`notifications:${userId}:${Date.now()}`)
+      .channel(`notifications:${userId}:${Date.now()}-${Math.random().toString(36).slice(2, 8)}`)
       .on(
         "postgres_changes",
         {

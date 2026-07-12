@@ -66,6 +66,7 @@ export default function InventarioPage() {
   const [fDestacados, setFDestacados] = useState(false);
   const [fBulk,       setFBulk]       = useState(false);
   const [setDropdownOpen, setSetDropdownOpen] = useState(false);
+  const [filtersOpen,     setFiltersOpen]     = useState(false); // panel de filtros en móvil
 
   const [modalCard,  setModalCard]  = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [sellTarget, setSellTarget] = useState<{ card: PokemonCard; setId: string } | null>(null);
@@ -349,10 +350,21 @@ export default function InventarioPage() {
         .inv-layout { display: flex; gap: 32px; align-items: flex-start; }
         .inv-sidebar { width: 220px; flex-shrink: 0; }
         .inv-grid-area { flex: 1; min-width: 0; }
+        .inv-filters-toggle { display: none; }
         @media (max-width: 1023px) {
-          .inv-layout { flex-direction: column; }
+          .inv-layout { flex-direction: column; gap: 16px; }
           .inv-sidebar { width: 100% !important; }
           .inv-sidebar > div { position: static !important; }
+          .inv-grid-area { width: 100%; }
+          /* Filtros colapsables y compactos en móvil */
+          .inv-filters-toggle {
+            display: flex; align-items: center; justify-content: space-between;
+            width: 100%; padding: 10px 14px; border-radius: 10px;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.09);
+            cursor: pointer;
+          }
+          .inv-filter-panel { display: none; }
+          .inv-filter-panel.open { display: block; margin-top: 10px; padding: 14px !important; }
         }
 
         /* ── Card grid ── */
@@ -459,7 +471,15 @@ export default function InventarioPage() {
 
               {/* ── Sidebar ── */}
               <aside className="inv-sidebar">
-                <div style={{
+                {/* Toggle compacto — solo visible en móvil */}
+                <button className="inv-filters-toggle" onClick={() => setFiltersOpen(o => !o)}>
+                  <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", color: COURT }}>
+                    Filtros{hasFilters ? " · activos" : ""}
+                  </span>
+                  <span style={{ color: INK2, fontSize: "11px" }}>{filtersOpen ? "▴" : "▾"}</span>
+                </button>
+
+                <div className={`inv-filter-panel${filtersOpen ? " open" : ""}`} style={{
                   background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)",
                   borderRadius: "16px", padding: "20px", position: "sticky", top: "80px",
                 }}>

@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { House, UserRoundPen, UsersRound, User, HeartHandshake, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Layers } from "lucide-react";
+import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Swords, Gamepad2 } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { usePushPermission } from "@/hooks/usePushPermission";
 import { DashboardUserProvider } from "./DashboardUserContext";
@@ -24,21 +24,20 @@ const DISP  = "var(--font-archivo)";
 
 /* Desktop sidebar items */
 const SIDEBAR_ITEMS = [
-  { href: "/dashboard",            label: "Inicio",     Icon: House },
-  { href: "/dashboard/perfil",     label: "Perfil",     Icon: UserRoundPen },
-  { href: "/dashboard/amigos",     label: "Amigos",     Icon: HeartHandshake },
-  { href: "/dashboard/inventario", label: "Inventario", Icon: LayoutGrid },
-  { href: "/dashboard/decks",      label: "Decks",      Icon: Layers },
-  { href: "/dashboard/market",     label: "Market",     Icon: Store },
+  { href: "/dashboard",             label: "Inicio",      Icon: House },
+  { href: "/dashboard/perfil",      label: "Perfil",      Icon: UserRoundPen },
+  { href: "/dashboard/inventario",  label: "Inventario",  Icon: LayoutGrid },
+  { href: "/dashboard/decks",       label: "Interactivo", Icon: Gamepad2 },
+  { href: "/dashboard/market",      label: "Market",      Icon: Store },
 ];
 
-/* Mobile bottom-tab order: Inicio, Perfil, Inventario (highlighted), Amigos, Market */
+/* Mobile bottom-tab order: Inicio, Perfil, Inventario (highlighted), Decks, Market */
 const MOBILE_TABS = [
-  { href: "/dashboard",            label: "Inicio",     Icon: House,          highlight: false },
-  { href: "/dashboard/perfil",     label: "Perfil",     Icon: UserRoundPen,   highlight: false },
-  { href: "/dashboard/inventario", label: "Inventario", Icon: LayoutGrid,     highlight: true  },
-  { href: "/dashboard/amigos",     label: "Amigos",     Icon: HeartHandshake, highlight: false },
-  { href: "/dashboard/market",     label: "Market",     Icon: Store,          highlight: false },
+  { href: "/dashboard",            label: "Inicio",     Icon: House,        highlight: false },
+  { href: "/dashboard/perfil",     label: "Perfil",     Icon: UserRoundPen, highlight: false },
+  { href: "/dashboard/inventario", label: "Inventario", Icon: LayoutGrid,   highlight: true  },
+  { href: "/dashboard/decks",      label: "Interactivo", Icon: Gamepad2,    highlight: false },
+  { href: "/dashboard/market",     label: "Market",     Icon: Store,        highlight: false },
 ];
 
 interface DashboardLayoutClientProps {
@@ -62,6 +61,7 @@ export function DashboardLayoutClient({
   const [isAdmin,  setIsAdmin]  = useState(initialIsAdmin);
   const [menuOpen, setMenuOpen] = useState(false);
   const [marketOpen, setMarketOpen] = useState(false);
+  const [interactivoOpen, setInteractivoOpen] = useState(false);
   const [notifDrawerOpen, setNotifDrawerOpen] = useState(false);
   const [notifAnchorRect, setNotifAnchorRect] = useState<DOMRect | null>(null);
   const [notifIsMobile, setNotifIsMobile]     = useState(false);
@@ -76,6 +76,7 @@ export function DashboardLayoutClient({
   const mobileRef      = useRef<HTMLDivElement>(null);
   const marketRef      = useRef<HTMLDivElement>(null);
   const mktMobileRef   = useRef<HTMLDivElement>(null);
+  const intMobileRef   = useRef<HTMLDivElement>(null);
   const desktopBellRef = useRef<HTMLDivElement>(null);
   const mobileBellRef  = useRef<HTMLDivElement>(null);
 
@@ -147,6 +148,8 @@ export function DashboardLayoutClient({
       const inMktDesktop = marketRef.current?.contains(e.target as Node);
       const inMktMobile  = mktMobileRef.current?.contains(e.target as Node);
       if (!inMktDesktop && !inMktMobile) setMarketOpen(false);
+
+      if (!intMobileRef.current?.contains(e.target as Node)) setInteractivoOpen(false);
     }
     document.addEventListener("mousedown", onOutside);
     return () => document.removeEventListener("mousedown", onOutside);
@@ -432,6 +435,27 @@ export function DashboardLayoutClient({
                 );
               }
 
+              if (label === "Interactivo") {
+                const decksActive = pathname.startsWith("/dashboard/decks");
+                return (
+                  <div key="interactivo" style={{ marginBottom: "4px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 14px 6px" }}>
+                      <Icon size={20} color={decksActive ? COURT : INK2} strokeWidth={1.8} style={{ flexShrink: 0 }} />
+                      <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase", color: decksActive ? COURT : INK2, fontWeight: decksActive ? 600 : 400 }}>{label}</span>
+                    </div>
+                    <div style={{ paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "2px" }}>
+                      <Link href="/dashboard/decks" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: decksActive ? `${COURT}18` : "transparent", border: decksActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                        onMouseEnter={e => { if (!decksActive) e.currentTarget.style.background = `${COURT}10`; }}
+                        onMouseLeave={e => { if (!decksActive) e.currentTarget.style.background = "transparent"; }}
+                      >
+                        <Swords size={14} color={decksActive ? COURT : INK2} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: decksActive ? COURT : "rgba(245,247,251,0.65)" }}>Decks</span>
+                      </Link>
+                    </div>
+                  </div>
+                );
+              }
+
               if (isMarket) {
                 return (
                   <div key="market" style={{ marginBottom: "4px" }}>
@@ -612,6 +636,46 @@ export function DashboardLayoutClient({
                     {label}
                   </span>
                 </Link>
+              );
+            }
+
+            if (label === "Interactivo") {
+              const intActive = pathname.startsWith("/dashboard/decks");
+              const intColor  = intActive ? COURT : INK2;
+              return (
+                <div key="interactivo" ref={intMobileRef} style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {interactivoOpen && (
+                    <div style={{
+                      position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)",
+                      width: 180, background: "#0d1520",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: "12px", overflow: "hidden",
+                      boxShadow: "0 8px 40px rgba(0,0,0,0.6)", zIndex: 200,
+                    }}>
+                      <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                        <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>Interactivo</p>
+                      </div>
+                      <Link href="/dashboard/decks" onClick={() => setInteractivoOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
+                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                      >
+                        <Swords size={14} color={COURT} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Decks</span>
+                      </Link>
+                    </div>
+                  )}
+                  <button onClick={() => setInteractivoOpen(o => !o)} style={{
+                    flex: 1, width: "100%", height: "100%", display: "flex", flexDirection: "column",
+                    alignItems: "center", justifyContent: "center", gap: "4px",
+                    background: "transparent", border: "none", cursor: "pointer", position: "relative", paddingBottom: "4px",
+                  }}>
+                    {intActive && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
+                    <Icon size={iconSz} color={intColor} strokeWidth={intActive ? 2.2 : 1.7} style={{ position: "relative" }} />
+                    <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color: intColor, fontWeight: intActive ? 600 : 400, position: "relative" }}>
+                      {label}
+                    </span>
+                  </button>
+                </div>
               );
             }
 
