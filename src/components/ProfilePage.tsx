@@ -1004,10 +1004,12 @@ function DecksSlider({ profileUserId }: { profileUserId?: string }) {
     })();
   }, [profileUserId]);
 
-  const looped = decks.length > 0 ? [...decks, ...decks, ...decks] : [];
+  // Solo duplicamos para el loop infinito si hay más decks de los visibles
+  const needsLoop = decks.length > 4;
+  const looped = needsLoop ? [...decks, ...decks, ...decks] : decks;
 
   useEffect(() => {
-    if (decks.length < 2) return;
+    if (decks.length <= 4) return;
     const t = setInterval(() => {
       setAnimated(true);
       setOffset(prev => {
