@@ -337,3 +337,9 @@ export const POKEMON_SERIES: PokemonSeries[] = [
     ],
   },
 ];
+
+// Sets ocultos: existen en la librería (buscador, decks) pero no aparecen
+// como expansión en ninguna sección de sets.
+export const HIDDEN_SETS: PokemonSet[] = [
+  { id: "mega-evolution-energies", name: "Mega Evolution Energies", logo: `${P}Mega-Evolution.logo.422.png` },
+];

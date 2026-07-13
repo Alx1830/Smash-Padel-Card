@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { POKEMON_SERIES, HIDDEN_SETS } from "@/data/pokemon-sets";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
@@ -16,7 +16,7 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 const MAX_CARDS = 60;
 
-const ALL_SETS    = POKEMON_SERIES.flatMap(s => s.sets);
+const ALL_SETS    = [...POKEMON_SERIES.flatMap(s => s.sets), ...HIDDEN_SETS];
 const ALL_SET_IDS = ALL_SETS.map(s => s.id);
 const BATCH_SIZE  = 10;
 

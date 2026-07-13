@@ -5,7 +5,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { X, Search, Star, BadgeDollarSign } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { POKEMON_SERIES, HIDDEN_SETS } from "@/data/pokemon-sets";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { InvTiltCard, SellPopup, INV_CARD_KEYFRAMES } from "@/components/InventoryCard";
@@ -23,7 +23,7 @@ const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
-const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
+const ALL_SETS = [...POKEMON_SERIES.flatMap(s => s.sets), ...HIDDEN_SETS];
 // Posición del set en POKEMON_SERIES = recencia (más reciente primero)
 const SET_RANK: Record<string, number> = Object.fromEntries(ALL_SETS.map((s, i) => [s.id, i]));
 
