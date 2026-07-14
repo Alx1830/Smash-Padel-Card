@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
-import { Plus, Layers, Trash2 } from "lucide-react";
+import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
+import { Plus, Layers } from "lucide-react";
 import Link from "next/link";
 
 const COURT = "#2ee6c1";
@@ -12,11 +13,6 @@ const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
-interface DeckCardSummary {
-  name: string;
-  quantity: number;
-}
-
 interface Deck {
   id: string;
   name: string;
@@ -24,7 +20,7 @@ interface Deck {
   cover_card_image: string | null;
   created_at: string;
   card_count: number;
-  cards: DeckCardSummary[];
+  price: number;
 }
 
 export default function DecksPage() {
@@ -61,15 +57,38 @@ export default function DecksPage() {
         const allSetIds = [...new Set(cardQueries.flatMap(c => c.map(r => r.set_id)))];
         if (allSetIds.length > 0) await loadManySets(allSetIds);
 
+        // Precios Scrydex de todas las cartas de todos los decks, en una sola consulta por lotes
+        const priceIds = [...new Set(cardQueries.flatMap(rows => rows.map(r => {
+          const sc = SCRYDEX_SET_CODES[r.set_id];
+          if (!sc) return null;
+          const card = (SET_CARDS[r.set_id] ?? []).find(c => c.id === r.card_id && c.version === r.version);
+          return card ? `${sc}-${card.card_number}` : null;
+        }).filter((id): id is string => !!id)))];
+        const priceMap: Record<string, Record<string, number>> = {};
+        if (priceIds.length > 0) {
+          const chunks: string[][] = [];
+          for (let i = 0; i < priceIds.length; i += 200) chunks.push(priceIds.slice(i, i + 200));
+          const rows = (await Promise.all(chunks.map(chunk =>
+            supabase.from("card_prices").select("card_id, prices").in("card_id", chunk)
+          ))).flatMap(res => res.data ?? []);
+          for (const row of rows) priceMap[row.card_id] = row.prices as Record<string, number>;
+        }
+
         const decksWithCards = data.map((deck, i) => {
           const deckCardRows = cardQueries[i] ?? [];
-          const resolved: DeckCardSummary[] = deckCardRows.map(r => {
-            const setCards = SET_CARDS[r.set_id] ?? [];
-            const card = setCards.find(c => c.id === r.card_id && c.version === r.version);
-            return { name: card?.name ?? r.card_id, quantity: r.quantity };
-          });
           const card_count = deckCardRows.reduce((s, r) => s + r.quantity, 0);
-          return { ...deck, card_count, cards: resolved };
+          // Valor total del deck: cada carta × su cantidad (mínimo 1 para las que faltan)
+          const price = deckCardRows.reduce((sum, r) => {
+            const sc = SCRYDEX_SET_CODES[r.set_id];
+            const card = (SET_CARDS[r.set_id] ?? []).find(c => c.id === r.card_id && c.version === r.version);
+            if (!sc || !card) return sum;
+            const map = priceMap[`${sc}-${card.card_number}`];
+            if (!map) return sum;
+            const vk = card.version.toLowerCase().replace(/\s+/g, "");
+            const p = map[vk] ?? map[card.version] ?? map["normal"] ?? null;
+            return p !== null ? sum + p * Math.max(r.quantity, 1) : sum;
+          }, 0);
+          return { ...deck, card_count, price };
         });
         setDecks(decksWithCards);
       }
@@ -86,7 +105,7 @@ export default function DecksPage() {
       description: newDesc.trim() || null,
     }).select("id, name, description, cover_card_image, created_at").single();
     if (!error && data) {
-      setDecks(prev => [{ ...data, card_count: 0, cards: [] }, ...prev]);
+      setDecks(prev => [{ ...data, card_count: 0, price: 0 }, ...prev]);
       setCreating(false);
       setNewName("");
       setNewDesc("");
@@ -193,60 +212,29 @@ export default function DecksPage() {
             <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2, marginBottom: "16px" }}>
               {decks.length} {decks.length === 1 ? "deck" : "decks"}
             </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(560px, 1fr))", gap: "16px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "20px" }}>
             {decks.map(deck => (
-              <div key={deck.id} style={{ display: "flex", gap: "0", borderRadius: "16px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)", transition: "border-color 0.2s" }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(46,230,193,0.25)")}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
-              >
-                {/* Carta portada */}
-                <Link href={`/dashboard/decks/${deck.id}`} style={{ textDecoration: "none", display: "flex", flexShrink: 0 }}>
-                  <div style={{ width: 302, padding: "14px 0 14px 14px", display: "flex", alignItems: "center" }}>
-                    {deck.cover_card_image ? (
-                      <img
-                        src={deck.cover_card_image}
-                        alt={deck.name}
-                        style={{
-                          width: 288, aspectRatio: "5/7", objectFit: "contain",
-                          borderRadius: "12px",
-                          boxShadow: "0 12px 40px rgba(0,0,0,0.7), 0 4px 12px rgba(0,0,0,0.5)",
-                          display: "block",
-                        }}
-                      />
-                    ) : (
-                      <div style={{ width: 288, aspectRatio: "5/7", borderRadius: "12px", background: "rgba(46,230,193,0.06)", border: "1px solid rgba(46,230,193,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <Layers size={60} color={COURT} strokeWidth={1.2} />
-                      </div>
-                    )}
-                  </div>
-                </Link>
-
-                {/* Info lateral */}
-                <Link href={`/dashboard/decks/${deck.id}`} style={{ textDecoration: "none", flex: 1, minWidth: 0, padding: "14px 10px 14px 14px", display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <div>
-                    <p style={{ fontFamily: DISP, fontSize: "16px", color: INK0, fontWeight: 700, margin: "0 0 3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{deck.name}</p>
-                    {deck.description && <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "0 0 8px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{deck.description}</p>}
-                    <p style={{ fontFamily: MONO, fontSize: "11px", color: deck.card_count >= 60 ? COURT : INK2, margin: 0, letterSpacing: "0.06em" }}>
-                      {deck.card_count} / 60 cartas{deck.card_count >= 60 && <span style={{ marginLeft: "8px", color: COURT }}>✓ Completo</span>}
-                    </p>
-                  </div>
-
-                  {/* Lista de cartas sin scroll */}
-                  {deck.cards.length > 0 && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                      {deck.cards.slice(0, 10).map((c, i) => (
-                        <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                          <span style={{ fontFamily: MONO, fontSize: "10px", color: COURT, fontWeight: 700, minWidth: "20px" }}>×{c.quantity}</span>
-                          <span style={{ fontFamily: MONO, fontSize: "10px", color: INK0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.name}</span>
-                        </div>
-                      ))}
-                      {deck.cards.length > 10 && (
-                        <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, marginTop: "2px" }}>+{deck.cards.length - 10} más…</span>
-                      )}
+              <Link key={deck.id} href={`/dashboard/decks/${deck.id}`} style={{ textDecoration: "none", display: "block" }}>
+                <div
+                  style={{ position: "relative", width: "100%", aspectRatio: "5/7", borderRadius: "12px", overflow: "hidden", background: "rgba(46,230,193,0.04)", border: "1px solid rgba(255,255,255,0.08)", boxShadow: "0 12px 40px rgba(0,0,0,0.6)", transition: "transform 0.2s, border-color 0.2s, box-shadow 0.2s" }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.03)"; e.currentTarget.style.borderColor = "rgba(46,230,193,0.35)"; e.currentTarget.style.boxShadow = "0 16px 50px rgba(0,0,0,0.8)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.6)"; }}
+                >
+                  {deck.cover_card_image ? (
+                    <img src={deck.cover_card_image} alt={deck.name} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0 }} />
+                  ) : (
+                    <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <Layers size={48} color={COURT} strokeWidth={1.2} />
                     </div>
                   )}
-                </Link>
-              </div>
+                </div>
+                <div style={{ marginTop: "10px", textAlign: "center" }}>
+                  <p style={{ fontFamily: DISP, fontSize: "15px", color: INK0, fontWeight: 700, margin: "0 0 3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{deck.name}</p>
+                  <p style={{ fontFamily: MONO, fontSize: "12px", color: deck.price > 0 ? COURT : INK2, fontWeight: 700, margin: 0 }}>
+                    {deck.price > 0 ? <>${deck.price.toFixed(2)} <span style={{ fontSize: "9px", color: INK2, fontWeight: 400 }}>USD</span></> : "—"}
+                  </p>
+                </div>
+              </Link>
             ))}
             </div>
           </div>

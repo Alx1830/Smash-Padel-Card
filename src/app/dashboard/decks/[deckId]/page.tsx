@@ -8,7 +8,7 @@ import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
-import { ArrowLeft, Search, Plus, Minus, Trash2, X } from "lucide-react";
+import { ArrowLeft, Search, Plus, Minus, Trash2, X, Pencil } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
@@ -38,6 +38,10 @@ export default function DeckEditorPage() {
   const supabase = createClient();
 
   const [deckName,   setDeckName]   = useState("");
+  const [deckDesc,   setDeckDesc]   = useState("");
+  const [editingInfo, setEditingInfo] = useState(false);
+  const [editName,   setEditName]   = useState("");
+  const [editDesc,   setEditDesc]   = useState("");
   const [deckCards,  setDeckCards]  = useState<DeckCard[]>([]);
   const [userId,     setUserId]     = useState<string | null>(null);
   const [loading,    setLoading]    = useState(true);
@@ -93,6 +97,20 @@ export default function DeckEditorPage() {
     const p = priceOf(dc);
     return p !== null ? sum + p * Math.max(dc.quantity, 1) : sum;
   }, 0);
+  // Precio de las cartas que ya se tienen (cantidad real)
+  const ownedPrice = deckCards.reduce((sum, dc) => {
+    const p = priceOf(dc);
+    return p !== null ? sum + p * dc.quantity : sum;
+  }, 0);
+
+  async function saveDeckInfo() {
+    const name = editName.trim();
+    if (!name) return;
+    await supabase.from("decks").update({ name, description: editDesc.trim() || null }).eq("id", deckId);
+    setDeckName(name);
+    setDeckDesc(editDesc.trim());
+    setEditingInfo(false);
+  }
 
   // Load deck info + cards
   useEffect(() => {
@@ -102,12 +120,13 @@ export default function DeckEditorPage() {
       setUserId(user.id);
 
       const [{ data: deck }, { data: cards }] = await Promise.all([
-        supabase.from("decks").select("name").eq("id", deckId).eq("user_id", user.id).single(),
+        supabase.from("decks").select("name, description").eq("id", deckId).eq("user_id", user.id).single(),
         supabase.from("deck_cards").select("id, card_id, set_id, version, quantity, position").eq("deck_id", deckId).order("position", { ascending: true }),
       ]);
 
       if (!deck) { router.push("/dashboard/decks"); return; }
       setDeckName(deck.name);
+      setDeckDesc(deck.description ?? "");
 
       if (cards && cards.length > 0) {
         const setIds = [...new Set(cards.map(c => c.set_id))];
@@ -268,7 +287,21 @@ export default function DeckEditorPage() {
         </button>
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "16px", marginBottom: "24px" }}>
           <div>
-            <h1 style={{ fontFamily: DISP, fontSize: "32px", color: INK0, margin: "0 0 6px" }}>{deckName}</h1>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
+              <h1 style={{ fontFamily: DISP, fontSize: "32px", color: INK0, margin: 0 }}>{deckName}</h1>
+              <button
+                onClick={() => { setEditName(deckName); setEditDesc(deckDesc); setEditingInfo(true); }}
+                title="Editar nombre y descripción"
+                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px", width: 30, height: 30, color: INK2, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
+                onMouseEnter={e => { e.currentTarget.style.color = COURT; e.currentTarget.style.borderColor = `${COURT}55`; }}
+                onMouseLeave={e => { e.currentTarget.style.color = INK2; e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"; }}
+              >
+                <Pencil size={13} strokeWidth={1.8} />
+              </button>
+            </div>
+            {deckDesc && (
+              <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, margin: "0 0 8px", maxWidth: "480px" }}>{deckDesc}</p>
+            )}
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <div style={{ height: "6px", width: "120px", background: "rgba(255,255,255,0.08)", borderRadius: "3px", overflow: "hidden" }}>
                 <div style={{ height: "100%", width: `${(totalCards / MAX_CARDS) * 100}%`, background: totalCards >= MAX_CARDS ? COURT : "rgba(46,230,193,0.6)", borderRadius: "3px", transition: "width 0.3s" }} />
@@ -280,12 +313,22 @@ export default function DeckEditorPage() {
           </div>
           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
             {deckPrice > 0 && (
-              <div style={{ textAlign: "right", marginRight: "6px" }}>
-                <div style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, marginBottom: "2px" }}>
-                  Valor del deck
+              <div style={{ display: "flex", gap: "18px", marginRight: "6px" }}>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, marginBottom: "2px" }}>
+                    Valor del deck
+                  </div>
+                  <div style={{ fontFamily: MONO, fontSize: "18px", color: COURT, fontWeight: 700 }}>
+                    ${deckPrice.toFixed(2)} <span style={{ fontSize: "10px", color: INK2, fontWeight: 400 }}>USD</span>
+                  </div>
                 </div>
-                <div style={{ fontFamily: MONO, fontSize: "18px", color: COURT, fontWeight: 700 }}>
-                  ${deckPrice.toFixed(2)} <span style={{ fontSize: "10px", color: INK2, fontWeight: 400 }}>USD</span>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, marginBottom: "2px" }}>
+                    Tengo
+                  </div>
+                  <div style={{ fontFamily: MONO, fontSize: "18px", color: ownedPrice >= deckPrice ? COURT : INK0, fontWeight: 700 }}>
+                    ${ownedPrice.toFixed(2)} <span style={{ fontSize: "10px", color: INK2, fontWeight: 400 }}>USD</span>
+                  </div>
                 </div>
               </div>
             )}
@@ -385,6 +428,43 @@ export default function DeckEditorPage() {
           </div>
         )}
       </div>
+
+      {/* Editar nombre y descripción */}
+      {editingInfo && (
+        <div
+          style={{ position: "fixed", inset: 0, zIndex: 9000, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(5,7,13,0.8)", backdropFilter: "blur(6px)" }}
+          onClick={e => { if (e.target === e.currentTarget) setEditingInfo(false); }}
+        >
+          <div style={{ width: 360, borderRadius: "20px", background: "#0d1520", border: "1px solid rgba(255,255,255,0.1)", padding: "28px", boxShadow: "0 24px 80px rgba(0,0,0,0.7)" }}>
+            <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase", color: COURT, margin: "0 0 20px" }}>Editar Deck</p>
+
+            <label style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px" }}>Nombre del deck</label>
+            <input
+              autoFocus
+              value={editName}
+              onChange={e => setEditName(e.target.value)}
+              onKeyDown={e => { if (e.key === "Enter" && editName.trim()) saveDeckInfo(); }}
+              style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", color: INK0, fontFamily: MONO, fontSize: "13px", outline: "none", boxSizing: "border-box", marginBottom: "16px" }}
+            />
+
+            <label style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px" }}>Descripción (opcional)</label>
+            <textarea
+              value={editDesc}
+              onChange={e => setEditDesc(e.target.value)}
+              placeholder="Describe tu estrategia..."
+              rows={2}
+              style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", color: INK0, fontFamily: MONO, fontSize: "12px", outline: "none", boxSizing: "border-box", resize: "none", marginBottom: "20px" }}
+            />
+
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button onClick={() => setEditingInfo(false)} style={{ flex: 1, padding: "10px", borderRadius: "8px", background: "transparent", border: "1px solid rgba(255,255,255,0.15)", color: INK2, fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" }}>Cancelar</button>
+              <button onClick={saveDeckInfo} disabled={!editName.trim()} style={{ flex: 1, padding: "10px", borderRadius: "8px", background: COURT, color: "#05070d", fontFamily: MONO, fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", border: "none", cursor: editName.trim() ? "pointer" : "default", opacity: editName.trim() ? 1 : 0.5 }}>
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Card Picker Modal */}
       {pickerOpen && (
