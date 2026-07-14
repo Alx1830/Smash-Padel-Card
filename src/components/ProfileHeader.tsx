@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 import { PlayerCard3D } from "./PlayerCard3D";
 import { FollowButton } from "./FollowButton";
+import { ProfilePortfolioChart } from "./PortfolioChart";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionEffect, getVersionColor } from "@/data/pokemon-cards-meta";
 
@@ -224,6 +225,7 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
   const NEG_MARGIN = Math.round(CARD_H / 2);
   const featuredCards = player.featuredCards ?? [];
   const inventoryRows = player.inventoryRows ?? [];
+  const totalCards    = inventoryRows.reduce((s, r) => s + r.quantity, 0);
 
   return (
     <div style={{ width: "100%" }}>
@@ -364,14 +366,25 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
                 />
               </div>
             </div>
-            <div style={{ flex: 1, paddingTop: "20px" }}>
-              <h3 style={{ fontFamily: DISP, fontSize: "28px", letterSpacing: "-0.01em", margin: "0 0 24px", color: INK0 }}>
-                Perfil Maestro Pokémon
-              </h3>
-              <Row label="Tipo de Perfil"   value={player.tipoPerfil || "—"} />
-              <Row label="Edad"             value={player.edad ? `${player.edad} años` : "—"} />
-              <Row label="Pokémon Favorito" value={player.pokemonFavorito || "—"} />
-              <Row label="Energía Favorita" value={player.energiaFavorita || "—"} />
+            {/* Igual que en el perfil: fixedHeight alinea el borde inferior con la card 3D */}
+            <div style={{ flex: 1, minWidth: 0, paddingTop: "20px" }}>
+              {player.profileUserId ? (
+                <ProfilePortfolioChart
+                  userId={player.profileUserId}
+                  cardCount={totalCards}
+                  fixedHeight={Math.round(24 + CARD_H - 20 - 35)}
+                />
+              ) : (
+                <>
+                  <h3 style={{ fontFamily: DISP, fontSize: "28px", letterSpacing: "-0.01em", margin: "0 0 24px", color: INK0 }}>
+                    Perfil Maestro Pokémon
+                  </h3>
+                  <Row label="Tipo de Perfil"   value={player.tipoPerfil || "—"} />
+                  <Row label="Edad"             value={player.edad ? `${player.edad} años` : "—"} />
+                  <Row label="Pokémon Favorito" value={player.pokemonFavorito || "—"} />
+                  <Row label="Energía Favorita" value={player.energiaFavorita || "—"} />
+                </>
+              )}
             </div>
             <div style={{ flex: "0 0 auto", width: "clamp(240px, 26%, 340px)", paddingTop: "20px" }}>
               <Showcase featuredCards={featuredCards} inventoryRows={inventoryRows} />
@@ -388,6 +401,11 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
               photoUrl={player.photoUrl} setFavoritoId={player.setFavoritoId}
             />
           </div>
+          {player.profileUserId && (
+            <div style={{ marginBottom: "40px" }}>
+              <ProfilePortfolioChart userId={player.profileUserId} cardCount={totalCards} />
+            </div>
+          )}
           {!hideMobileDetails && (
             <>
               <div style={{ width: "100%", height: "1px", marginBottom: "40px", background: "rgba(255,255,255,0.06)" }} />

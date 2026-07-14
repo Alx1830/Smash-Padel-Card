@@ -116,7 +116,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
     { label: "INICIO",     href: "/dashboard" },
     { label: "PERFIL",     href: username ? `/${username}` : "/dashboard/perfil" },
     { label: "INVENTARIO", href: "/dashboard/inventario" },
-    { label: "AMIGOS",     href: "/dashboard/amigos" },
+    { label: "DECKS",      href: "/dashboard/decks" },
     { label: "WISHLIST",   href: "/dashboard/market/wishlist" },
     { label: "MARKET",     href: "/market" },
   ];
