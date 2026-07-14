@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES, HIDDEN_SETS } from "@/data/pokemon-sets";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
+import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { ArrowLeft, Search, Plus, Minus, Trash2, X } from "lucide-react";
 
@@ -16,9 +17,9 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 const MAX_CARDS = 60;
 
-const ALL_SETS    = [...POKEMON_SERIES.flatMap(s => s.sets), ...HIDDEN_SETS];
-const ALL_SET_IDS = ALL_SETS.map(s => s.id);
-const BATCH_SIZE  = 10;
+const ALL_SETS = [...POKEMON_SERIES.flatMap(s => s.sets), ...HIDDEN_SETS];
+// Posición del set = recencia (más reciente primero), igual que en Buscar Carta
+const SET_RANK: Record<string, number> = Object.fromEntries(ALL_SETS.map((s, i) => [s.id, i]));
 
 interface DeckCard {
   id: string;
@@ -44,11 +45,54 @@ export default function DeckEditorPage() {
   const [dragIdx,    setDragIdx]    = useState<number | null>(null);
   const [dragOver,   setDragOver]   = useState<number | null>(null);
   const [query,      setQuery]      = useState("");
-  const [loadedSets, setLoadedSets] = useState<Set<string>>(new Set());
-  const [isLoadingCards, setIsLoadingCards] = useState(false);
-  const [loadProgress,   setLoadProgress]   = useState(0);
+  const [searchResults, setSearchResults] = useState<{ card: PokemonCard; setId: string; setName: string }[]>([]);
+  const [isSearching,   setIsSearching]   = useState(false);
+  const searchTokenRef = useRef(0);
 
   const totalCards = deckCards.reduce((s, c) => s + c.quantity, 0);
+  const [cardPrices, setCardPrices] = useState<Record<string, Record<string, number>>>({});
+
+  // Precios Scrydex de las cartas del deck (por set-número, en lotes)
+  useEffect(() => {
+    const ids = [...new Set(
+      deckCards
+        .map(dc => {
+          const sc = SCRYDEX_SET_CODES[dc.set_id];
+          return sc && dc.card ? `${sc}-${dc.card.card_number}` : null;
+        })
+        .filter((id): id is string => !!id && !(id in cardPrices))
+    )];
+    if (ids.length === 0) return;
+    (async () => {
+      const chunks: string[][] = [];
+      for (let i = 0; i < ids.length; i += 200) chunks.push(ids.slice(i, i + 200));
+      const rows = (await Promise.all(chunks.map(chunk =>
+        supabase.from("card_prices").select("card_id, prices").in("card_id", chunk)
+      ))).flatMap(res => res.data ?? []);
+      if (rows.length === 0) return;
+      setCardPrices(prev => {
+        const next = { ...prev };
+        for (const row of rows) next[row.card_id] = row.prices as Record<string, number>;
+        return next;
+      });
+    })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deckCards]);
+
+  function priceOf(dc: DeckCard): number | null {
+    const sc = SCRYDEX_SET_CODES[dc.set_id];
+    if (!sc || !dc.card) return null;
+    const map = cardPrices[`${sc}-${dc.card.card_number}`];
+    if (!map) return null;
+    const vk = dc.card.version.toLowerCase().replace(/\s+/g, "");
+    return map[vk] ?? map[dc.card.version] ?? map["normal"] ?? null;
+  }
+
+  // Precio total del deck: cada carta × su cantidad (mínimo 1 para las que faltan)
+  const deckPrice = deckCards.reduce((sum, dc) => {
+    const p = priceOf(dc);
+    return p !== null ? sum + p * Math.max(dc.quantity, 1) : sum;
+  }, 0);
 
   // Load deck info + cards
   useEffect(() => {
@@ -80,40 +124,40 @@ export default function DeckEditorPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deckId]);
 
-  // Load all sets progressively for the picker
-  const startLoadingAllSets = useCallback(async () => {
-    if (isLoadingCards) return;
-    setIsLoadingCards(true);
-    const total = ALL_SET_IDS.length;
-    for (let i = 0; i < total; i += BATCH_SIZE) {
-      const batch = ALL_SET_IDS.slice(i, i + BATCH_SIZE);
-      await loadManySets(batch);
-      setLoadedSets(prev => {
-        const next = new Set(prev);
-        batch.forEach(id => next.add(id));
-        return next;
-      });
-      setLoadProgress(Math.min(100, Math.round(((i + BATCH_SIZE) / total) * 100)));
-    }
-    setIsLoadingCards(false);
-  }, [isLoadingCards]);
-
-  const searchResults = useMemo(() => {
+  // Búsqueda bajo demanda: el índice de nombres dice en qué sets buscar,
+  // y solo esos sets se cargan (mismo patrón que BuscarCartaDrawer)
+  useEffect(() => {
     const q = query.trim().toLowerCase();
-    if (q.length < 2) return [];
-    const out: { card: PokemonCard; setId: string; setName: string }[] = [];
-    for (const setId of loadedSets) {
-      const cards = SET_CARDS[setId];
-      if (!cards) continue;
-      const setInfo = ALL_SETS.find(s => s.id === setId);
-      for (const card of cards) {
-        if (card.name.toLowerCase().includes(q)) {
-          out.push({ card: card as PokemonCard, setId, setName: setInfo?.name ?? setId });
+    const token = ++searchTokenRef.current;
+    if (q.length < 2) return;
+    const timer = setTimeout(async () => {
+      setIsSearching(true);
+      const { SET_NAME_INDEX } = await import("@/data/card-name-index");
+      const matchingSetIds = Object.keys(SET_NAME_INDEX)
+        .filter(setId => SET_NAME_INDEX[setId].includes(q));
+      await loadManySets(matchingSetIds);
+      if (token !== searchTokenRef.current) return;
+
+      const out: { card: PokemonCard; setId: string; setName: string }[] = [];
+      for (const setId of matchingSetIds) {
+        const cards = SET_CARDS[setId];
+        if (!cards.length) continue;
+        const setInfo = ALL_SETS.find(s => s.id === setId);
+        for (const card of cards) {
+          if (card.name.toLowerCase().includes(q))
+            out.push({ card: card as PokemonCard, setId, setName: setInfo?.name ?? setId });
         }
       }
-    }
-    return out.slice(0, 80).sort((a, b) => a.card.name.localeCompare(b.card.name));
-  }, [query, loadedSets]);
+      out.sort((a, b) => {
+        const rank = (SET_RANK[a.setId] ?? 9999) - (SET_RANK[b.setId] ?? 9999);
+        if (rank !== 0) return rank;
+        return a.card.card_number - b.card.card_number;
+      });
+      setSearchResults(out);
+      setIsSearching(false);
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [query]);
 
   async function saveOrder(newCards: DeckCard[]) {
     setDeckCards(newCards);
@@ -133,7 +177,6 @@ export default function DeckEditorPage() {
   }
 
   async function addCard(card: PokemonCard, setId: string) {
-    if (totalCards >= MAX_CARDS) return;
     const existing = deckCards.find(c => c.card_id === card.id && c.set_id === setId && c.version === card.version);
 
     if (existing) {
@@ -143,8 +186,9 @@ export default function DeckEditorPage() {
       await supabase.from("deck_cards").update({ quantity: newQty }).eq("id", existing.id);
       setDeckCards(prev => prev.map(c => c.id === existing.id ? { ...c, quantity: newQty } : c));
     } else {
+      // Primer clic: entra a la lista con cantidad 0 ("la necesito, aún no la tengo")
       const { data } = await supabase.from("deck_cards").insert({
-        deck_id: deckId, card_id: card.id, set_id: setId, version: card.version, quantity: 1,
+        deck_id: deckId, card_id: card.id, set_id: setId, version: card.version, quantity: 0,
       }).select("id, card_id, set_id, version, quantity, position").single();
       if (data) {
         setDeckCards(prev => [...prev, { ...data, position: data.position ?? 0, card }]);
@@ -168,7 +212,7 @@ export default function DeckEditorPage() {
     const entry = deckCards.find(c => c.id === deckCardId);
     if (!entry) return;
     const newQty = entry.quantity + delta;
-    if (newQty <= 0) {
+    if (newQty < 0) {
       await supabase.from("deck_cards").delete().eq("id", deckCardId);
       const remaining = deckCards.filter(c => c.id !== deckCardId);
       setDeckCards(remaining);
@@ -235,8 +279,18 @@ export default function DeckEditorPage() {
             </div>
           </div>
           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            {deckPrice > 0 && (
+              <div style={{ textAlign: "right", marginRight: "6px" }}>
+                <div style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, marginBottom: "2px" }}>
+                  Valor del deck
+                </div>
+                <div style={{ fontFamily: MONO, fontSize: "18px", color: COURT, fontWeight: 700 }}>
+                  ${deckPrice.toFixed(2)} <span style={{ fontSize: "10px", color: INK2, fontWeight: 400 }}>USD</span>
+                </div>
+              </div>
+            )}
             <button
-              onClick={() => { setPickerOpen(true); startLoadingAllSets(); }}
+              onClick={() => setPickerOpen(true)}
               disabled={totalCards >= MAX_CARDS}
               style={{
                 display: "inline-flex", alignItems: "center", gap: "8px",
@@ -274,7 +328,7 @@ export default function DeckEditorPage() {
         {deckCards.length === 0 ? (
           <div style={{ textAlign: "center", padding: "80px 20px", border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px" }}>
             <p style={{ fontFamily: MONO, fontSize: "13px", color: INK2, marginBottom: "16px" }}>El deck está vacío.</p>
-            <button onClick={() => { setPickerOpen(true); startLoadingAllSets(); }} style={{ fontFamily: MONO, fontSize: "11px", color: COURT, background: "none", border: `1px solid ${COURT}44`, borderRadius: "8px", padding: "8px 20px", cursor: "pointer", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+            <button onClick={() => setPickerOpen(true)} style={{ fontFamily: MONO, fontSize: "11px", color: COURT, background: "none", border: `1px solid ${COURT}44`, borderRadius: "8px", padding: "8px 20px", cursor: "pointer", letterSpacing: "0.1em", textTransform: "uppercase" }}>
               + Agregar primera carta
             </button>
           </div>
@@ -311,9 +365,9 @@ export default function DeckEditorPage() {
                   }}
                 >
                   <div style={{ position: "relative", aspectRatio: "5/7", borderRadius: "8px", overflow: "hidden", background: "rgba(255,255,255,0.03)" }}>
-                    {dc.card?.image && <img src={dc.card.image} alt={dc.card?.name ?? dc.card_id} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0 }} />}
+                    {dc.card?.image && <img src={dc.card.image} alt={dc.card?.name ?? dc.card_id} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0, filter: dc.quantity === 0 ? "grayscale(1) brightness(0.75)" : "none", transition: "filter 0.25s" }} />}
                     <div style={{ position: "absolute", bottom: 4, right: 4, fontFamily: MONO, fontSize: "8px", color: vColor, border: `1px solid ${vColor}55`, borderRadius: "4px", padding: "1px 5px", background: "rgba(5,7,13,0.85)" }}>{vLabel}</div>
-                    <div style={{ position: "absolute", top: 4, right: 4, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "2px 7px", fontFamily: MONO, fontSize: "11px", color: COURT, fontWeight: 700 }}>×{dc.quantity}</div>
+                    <div style={{ position: "absolute", top: 4, right: 4, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "2px 7px", fontFamily: MONO, fontSize: "11px", color: dc.quantity === 0 ? INK2 : COURT, fontWeight: 700 }}>{dc.quantity === 0 ? "falta" : `×${dc.quantity}`}</div>
                   </div>
                   <p style={{ fontFamily: MONO, fontSize: "10px", color: INK0, margin: 0, textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{dc.card?.name ?? dc.card_id}</p>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
@@ -355,27 +409,24 @@ export default function DeckEditorPage() {
             </button>
           </div>
 
-          {/* Progress */}
-          {isLoadingCards && (
-            <div style={{ padding: "8px 24px", flexShrink: 0 }}>
-              <div style={{ height: "2px", background: "rgba(255,255,255,0.06)", borderRadius: "2px", overflow: "hidden" }}>
-                <div style={{ height: "100%", width: `${loadProgress}%`, background: COURT, transition: "width 0.3s" }} />
-              </div>
-            </div>
-          )}
-
           {/* Results */}
           <div style={{ flex: 1, overflowY: "auto", padding: "20px 24px" }}>
             {query.trim().length < 2 ? (
               <div style={{ textAlign: "center", padding: "60px 0" }}>
                 <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>
-                  {isLoadingCards ? `Cargando cartas... ${loadProgress}%` : "Escribe al menos 2 letras para buscar"}
+                  Escribe al menos 2 letras para buscar
+                </p>
+              </div>
+            ) : isSearching ? (
+              <div style={{ textAlign: "center", padding: "60px 0" }}>
+                <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>
+                  Buscando cartas...
                 </p>
               </div>
             ) : searchResults.length === 0 ? (
               <div style={{ textAlign: "center", padding: "60px 0" }}>
                 <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, margin: 0 }}>
-                  {isLoadingCards ? "Buscando en sets cargados..." : "Sin resultados"}
+                  Sin resultados
                 </p>
               </div>
             ) : (
@@ -390,7 +441,10 @@ export default function DeckEditorPage() {
                       <div style={{ position: "relative", aspectRatio: "5/7", borderRadius: "8px", overflow: "hidden", background: "rgba(255,255,255,0.03)", cursor: canAdd ? "pointer" : "default" }} onClick={() => canAdd && addCard(r.card, r.setId)}>
                         <img src={r.card.image} alt={r.card.name} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0 }} />
                         <div style={{ position: "absolute", bottom: 4, right: 4, fontFamily: MONO, fontSize: "8px", color: vColor, border: `1px solid ${vColor}55`, borderRadius: "4px", padding: "1px 5px", background: "rgba(5,7,13,0.85)" }}>{vLabel}</div>
-                        {inDeck && <div style={{ position: "absolute", top: 6, right: 6, background: "#00e676", borderRadius: "8px", padding: "3px 9px", fontFamily: MONO, fontSize: "14px", color: "#05070d", fontWeight: 800, letterSpacing: "0.02em", boxShadow: "0 0 10px rgba(0,230,118,0.6)" }}>×{inDeck.quantity}</div>}
+                        {inDeck && (inDeck.quantity === 0
+                          ? <div style={{ position: "absolute", top: 6, right: 6, background: "rgba(122,130,152,0.9)", borderRadius: "8px", padding: "3px 9px", fontFamily: MONO, fontSize: "11px", color: "#05070d", fontWeight: 800, letterSpacing: "0.04em" }}>en lista</div>
+                          : <div style={{ position: "absolute", top: 6, right: 6, background: "#00e676", borderRadius: "8px", padding: "3px 9px", fontFamily: MONO, fontSize: "14px", color: "#05070d", fontWeight: 800, letterSpacing: "0.02em", boxShadow: "0 0 10px rgba(0,230,118,0.6)" }}>×{inDeck.quantity}</div>
+                        )}
                         {canAdd && (
                           <div style={{ position: "absolute", inset: 0, background: "rgba(46,230,193,0.0)", display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.15s" }}
                             onMouseEnter={e => (e.currentTarget.style.background = "rgba(46,230,193,0.15)")}

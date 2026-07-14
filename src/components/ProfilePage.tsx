@@ -955,6 +955,32 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
 }
 
 /* ── Decks Slider ───────────────────────────────────────────── */
+/* Imagen con reintento: las URLs r2.dev tienen rate limiting y al abrir el
+   modal se piden muchas de golpe; si una falla la volvemos a intentar. */
+function DeckCardImage({ src, alt }: { src: string; alt: string }) {
+  const [attempt, setAttempt] = useState(0);
+  const [loadedImg, setLoadedImg] = useState(false);
+  return (
+    <>
+      {!loadedImg && (
+        <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.05)", animation: "dkPulse 1.4s ease-in-out infinite" }} />
+      )}
+      <img
+        key={attempt}
+        src={attempt === 0 ? src : `${src}${src.includes("?") ? "&" : "?"}retry=${attempt}`}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setLoadedImg(true)}
+        onError={() => {
+          if (attempt < 5) setTimeout(() => setAttempt(a => a + 1), 800 * (attempt + 1));
+        }}
+        style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0, opacity: loadedImg ? 1 : 0, transition: "opacity 0.25s" }}
+      />
+    </>
+  );
+}
+
 type ProfileDeck = {
   id: string;
   name: string;
@@ -1115,11 +1141,20 @@ function DecksSlider({ profileUserId }: { profileUserId?: string }) {
           <div
             onClick={e => e.stopPropagation()}
             style={{
-              width: "min(920px, 100%)", maxHeight: "86vh", overflowY: "auto",
+              width: "min(920px, 100%)", maxHeight: "86vh",
+              display: "flex", flexDirection: "column", overflow: "hidden",
               background: BG0_C, border: `1px solid ${PINK}33`, borderRadius: "16px",
               padding: "24px", boxShadow: "0 24px 80px rgba(0,0,0,0.8)",
             }}
           >
+            <style>{`
+              @keyframes dkPulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+              .deck-modal-scroll { scrollbar-width: thin; scrollbar-color: ${PINK}55 transparent; }
+              .deck-modal-scroll::-webkit-scrollbar { width: 5px; }
+              .deck-modal-scroll::-webkit-scrollbar-track { background: transparent; }
+              .deck-modal-scroll::-webkit-scrollbar-thumb { background: ${PINK}55; border-radius: 3px; }
+              .deck-modal-scroll::-webkit-scrollbar-thumb:hover { background: ${PINK}88; }
+            `}</style>
             {/* Header del modal */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
               <div>
@@ -1148,19 +1183,20 @@ function DecksSlider({ profileUserId }: { profileUserId?: string }) {
                 Este deck aún no tiene cartas.
               </p>
             ) : (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: "12px" }}>
+              <div className="deck-modal-scroll" style={{ overflowY: "auto", paddingRight: "8px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: "12px" }}>
                 {openDeck.cards.map(({ card, quantity }, i) => (
                   <div key={i}>
-                    <div style={{ position: "relative", width: "100%", aspectRatio: "5/7", borderRadius: "7px", overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.6)" }}>
-                      <img src={card.image} alt={card.name} loading="lazy" decoding="async" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
-                      {quantity > 1 && (
+                    <div style={{ position: "relative", width: "100%", aspectRatio: "5/7", borderRadius: "7px", overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.6)", filter: quantity === 0 ? "grayscale(1) brightness(0.75)" : "none" }}>
+                      <DeckCardImage src={card.image} alt={card.name} />
+                      {quantity !== 1 && (
                         <div style={{
                           position: "absolute", top: "6px", right: "6px",
                           fontFamily: MONO_C, fontSize: "9px", fontWeight: 700,
-                          color: "#00e676", border: "1px solid rgba(0,230,118,0.5)",
+                          color: quantity === 0 ? INK2_C : "#00e676",
+                          border: quantity === 0 ? "1px solid rgba(122,130,152,0.5)" : "1px solid rgba(0,230,118,0.5)",
                           borderRadius: "4px", padding: "2px 5px", background: "rgba(5,7,13,0.85)",
                         }}>
-                          ×{quantity}
+                          {quantity === 0 ? "falta" : `×${quantity}`}
                         </div>
                       )}
                     </div>
