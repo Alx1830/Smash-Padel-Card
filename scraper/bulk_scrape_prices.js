@@ -20,6 +20,7 @@ const path = require("path");
 // ── Mapeo completo slug local → código Scrydex ────────────────────────────────
 const ALL_SETS = [
   // Mega Evolution
+  { slug: "pitch-black",             code: "me5"        },
   { slug: "chaos-rising",            code: "me4"        },
   { slug: "perfect-order",           code: "me3"        },
   { slug: "ascended-heroes",         code: "me2pt5"     },
@@ -226,8 +227,8 @@ const CHUNK_ARG = getArg("--chunk"); // formato "N/TOTAL", ej: "1/5"
 
 // Chunks predefinidos (177 sets divididos en 19 grupos de ~9-10 sets)
 const CHUNKS = {
-  "1": [ // 10 sets — ME + SV inicio
-    { slug: "chaos-rising", code: "me4" }, { slug: "perfect-order", code: "me3" },
+  "1": [ // 11 sets — ME + SV inicio
+    { slug: "pitch-black", code: "me5" }, { slug: "chaos-rising", code: "me4" }, { slug: "perfect-order", code: "me3" },
     { slug: "ascended-heroes", code: "me2pt5" }, { slug: "phantasmal-flames", code: "me2" },
     { slug: "mega-evolution", code: "me1" }, { slug: "mega-evo-promos", code: "mep" },
     { slug: "white-flare", code: "rsv10pt5" }, { slug: "black-bolt", code: "zsv10pt5" },
