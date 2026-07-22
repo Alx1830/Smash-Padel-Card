@@ -71,7 +71,7 @@ export default async function UserMarketPage({
 
   const [{ data: listings }, { data: featuredRows }, { data: invRows }] = player.user_id
     ? await Promise.all([
-        supabase.from("market_listings").select("id, card_id, set_id, price_cop, currency, version, created_at").eq("user_id", player.user_id).eq("status", "active").order("created_at", { ascending: false }),
+        supabase.from("market_listings").select("id, card_id, set_id, price_cop, currency, version, language, created_at").eq("user_id", player.user_id).eq("status", "active").order("created_at", { ascending: false }),
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", player.user_id),
         supabase.from("card_inventory").select("card_id, set_id, quantity").eq("user_id", player.user_id).gt("quantity", 0),
       ])
@@ -106,7 +106,7 @@ export default async function UserMarketPage({
         ciudad={player.ciudad ?? ""}
         whatsappIndicativo={player.whatsapp_indicativo ?? ""}
         whatsappNumero={player.whatsapp_numero ?? ""}
-        listings={(listings ?? []) as { id: string; card_id: number | string; set_id: string; price_cop: number; currency: string; version: string; created_at: string }[]}
+        listings={(listings ?? []) as { id: string; card_id: number | string; set_id: string; price_cop: number; currency: string; version: string; language: string | null; created_at: string }[]}
         allSets={allSets.map(s => ({ id: s.id, name: s.name, logo: s.logo }))}
       />
       <Footer />

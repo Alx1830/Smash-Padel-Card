@@ -2,8 +2,8 @@
 -- Expiración automática de publicaciones del marketplace
 -- Ejecutar en Supabase SQL Editor
 -- ============================================================
--- Toda publicación con status 'active' y más de 30 días de
--- antigüedad se marca como 'expired', lo que la saca de todas
+-- Toda publicación con status 'active' y más de 90 días (3 meses)
+-- de antigüedad se marca como 'expired', lo que la saca de todas
 -- las vistas del marketplace (que filtran por status = 'active')
 -- sin borrar el registro.
 
@@ -19,7 +19,7 @@ BEGIN
   UPDATE market_listings
   SET status = 'expired'
   WHERE status = 'active'
-    AND created_at < NOW() - INTERVAL '30 days';
+    AND created_at < NOW() - INTERVAL '90 days';
 END;
 $$;
 

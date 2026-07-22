@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { getVersionLabel, getVersionEffect, getVersionColor, type PokemonCard } from "@/data/pokemon-cards-meta";
 import { getCurrencyForCountry, formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
+import { CARD_LANGUAGES, languageFlag } from "@/lib/languages";
 import { useScrydexPrice, SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 
 export const COURT = "#2ee6c1";
@@ -36,7 +37,7 @@ export const ALL_SETS_FLAT = POKEMON_SERIES.flatMap(s => s.sets);
 export type InventoryMap = Record<string, number>;
 export type FeaturedCard  = { card_id: number | string; set_id: string };
 export type WishlistCard  = { card_id: number | string; set_id: string };
-export type UserListing   = { id: string; card_id: number | string; set_id: string; price_cop: number; version: string; currency?: string };
+export type UserListing   = { id: string; card_id: number | string; set_id: string; price_cop: number; version: string; currency?: string; language?: string | null };
 
 export function invKey(cardId: number | string, version: string): string {
   return `${cardId}:${version}`;
@@ -220,6 +221,7 @@ export function CardDetailModal({
 
   const [sellingMode, setSellingMode] = useState(false);
   const [priceInput, setPriceInput]   = useState("");
+  const [sellLanguage, setSellLanguage] = useState<string>("es");
   const [savingListing, setSavingListing] = useState(false);
   const [userCurrency, setUserCurrency] = useState("COP");
   const [profileComplete, setProfileComplete] = useState(true);
@@ -265,8 +267,9 @@ export function CardDetailModal({
       price_cop: price,
       currency: userCurrency,
       version: card.version,
+      language: sellLanguage,
       status: "active",
-    }).select("id, card_id, set_id, price_cop, version, currency").single();
+    }).select("id, card_id, set_id, price_cop, version, currency, language").single();
     if (error) {
       console.error("[sell] insert error:", error.message);
       setSavingListing(false);
@@ -278,11 +281,13 @@ export function CardDetailModal({
       set_id: setId,
       price_cop: price,
       version: card.version,
+      language: sellLanguage,
     };
     onListingsChange([...userListings, newListing]);
     setSavingListing(false);
     setSellingMode(false);
     setPriceInput("");
+    setSellLanguage("es");
   };
 
   const handleToggleFeatured = async () => {
@@ -578,9 +583,37 @@ export function CardDetailModal({
                       />
                       <span style={{ fontFamily: MONO, fontSize: "10px", color: DARK2, flexShrink: 0 }}>{userCurrency}</span>
                     </div>
+
+                    {/* Idioma de la carta */}
+                    <label style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: DARK2 }}>
+                      Idioma de la carta
+                    </label>
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      {CARD_LANGUAGES.map(lang => {
+                        const active = sellLanguage === lang.code;
+                        return (
+                          <button
+                            key={lang.code}
+                            onClick={() => setSellLanguage(lang.code)}
+                            title={lang.label}
+                            style={{
+                              flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "3px",
+                              padding: "8px 4px", borderRadius: "8px", cursor: "pointer",
+                              background: active ? "rgba(46,230,150,0.14)" : "rgba(5,7,13,0.05)",
+                              border: active ? "1px solid #2ee696" : `1px solid ${BORDER_CLR}`,
+                              transition: "all 0.12s",
+                            }}
+                          >
+                            <span style={{ fontSize: "20px", lineHeight: 1 }}>{lang.flag}</span>
+                            <span style={{ fontFamily: MONO, fontSize: "8px", letterSpacing: "0.06em", textTransform: "uppercase", color: active ? "#15a98e" : DARK2, fontWeight: active ? 700 : 400 }}>{lang.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
                     <div style={{ display: "flex", gap: "8px" }}>
                       <button
-                        onClick={() => { setSellingMode(false); setPriceInput(""); }}
+                        onClick={() => { setSellingMode(false); setPriceInput(""); setSellLanguage("es"); }}
                         style={{ flex: 1, padding: "10px", fontFamily: MONO, fontSize: "11px", letterSpacing: "0.12em", textTransform: "uppercase", background: "transparent", border: `1px solid ${BORDER_CLR}`, borderRadius: "8px", cursor: "pointer", color: DARK2 }}
                       >
                         Cancelar
@@ -621,7 +654,7 @@ export function CardDetailModal({
                         {activeListings.map((listing, i) => (
                           <div key={listing.id} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "8px", alignItems: "center", padding: "8px 10px", background: i % 2 === 0 ? "rgba(46,230,193,0.03)" : "transparent", borderTop: i > 0 ? "1px solid rgba(255,255,255,0.04)" : undefined }}>
                             <span style={{ fontFamily: MONO, fontSize: "10px", color: DARK, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                              {card.name}
+                              {languageFlag(listing.language) && <span style={{ marginRight: "5px" }}>{languageFlag(listing.language)}</span>}{card.name}
                             </span>
                             <span style={{ fontFamily: MONO, fontSize: "11px", color: "#15a98e", fontWeight: 700, whiteSpace: "nowrap" }}>
                               {CURRENCY_SYMBOL[listing.currency ?? userCurrency] ?? "$"}{formatPrice(listing.price_cop, listing.currency ?? userCurrency)} {listing.currency ?? userCurrency}

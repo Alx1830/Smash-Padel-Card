@@ -23,6 +23,7 @@ const DISP  = "var(--font-archivo)";
 const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
 
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
+import { CARD_LANGUAGES, languageFlag } from "@/lib/languages";
 
 interface Listing {
   id: string;
@@ -31,6 +32,7 @@ interface Listing {
   price_cop: number;
   currency: string;
   version: string;
+  language: string | null;
   created_at: string;
 }
 
@@ -44,6 +46,22 @@ export default function DashboardMarketPage() {
   const [fNombre,   setFNombre]   = useState("");
   const [fSet,      setFSet]      = useState("");
   const [fVariante, setFVariante] = useState("");
+
+  /* Publicaciones sin idioma (creadas antes de esta función) */
+  const [langFixOpen, setLangFixOpen] = useState(false);
+  const [savingLang,  setSavingLang]  = useState<string | null>(null);
+  const missingLang = useMemo(() => listings.filter(l => !l.language), [listings]);
+
+  async function assignLanguage(listingId: string, code: string) {
+    setSavingLang(listingId);
+    const supabase = createClient();
+    await supabase.from("market_listings").update({ language: code }).eq("id", listingId);
+    setListings(prev => prev.map(l => l.id === listingId ? { ...l, language: code } : l));
+    setUserListings(prev => prev.map(l => l.id === listingId ? { ...l, language: code } : l));
+    setSavingLang(null);
+  }
+
+  useEffect(() => { if (missingLang.length === 0) setLangFixOpen(false); }, [missingLang.length]);
 
   const setVersions = useMemo(() => {
     const vs = new Set<string>();
@@ -80,7 +98,7 @@ export default function DashboardMarketPage() {
       const [{ data: rows }, { data: featured }, { data: wishlist }] = await Promise.all([
         supabase
           .from("market_listings")
-          .select("id, card_id, set_id, price_cop, currency, version, created_at")
+          .select("id, card_id, set_id, price_cop, currency, version, language, created_at")
           .eq("user_id", user.id)
           .eq("status", "active")
           .order("created_at", { ascending: false }),
@@ -90,7 +108,7 @@ export default function DashboardMarketPage() {
 
       const listingRows = (rows ?? []) as Listing[];
       setListings(listingRows);
-      setUserListings(listingRows.map(l => ({ id: l.id, card_id: l.card_id, set_id: l.set_id, price_cop: l.price_cop, currency: l.currency, version: l.version })));
+      setUserListings(listingRows.map(l => ({ id: l.id, card_id: l.card_id, set_id: l.set_id, price_cop: l.price_cop, currency: l.currency, version: l.version, language: l.language })));
       if (featured) setFeaturedCards(featured as FeaturedCard[]);
       if (wishlist) setWishlistCards(wishlist as WishlistCard[]);
 
@@ -164,7 +182,7 @@ export default function DashboardMarketPage() {
       prev.filter(l => updated.some(u => u.id === l.id))
         .map(l => { const u = updated.find(u => u.id === l.id); return u ? { ...l, price_cop: u.price_cop } : l; })
         .concat(updated.filter(u => !prev.some(l => l.id === u.id))
-          .map(u => ({ id: u.id, card_id: u.card_id, set_id: u.set_id, price_cop: u.price_cop, currency: (u as Listing).currency ?? "COP", version: u.version, created_at: new Date().toISOString() })))
+          .map(u => ({ id: u.id, card_id: u.card_id, set_id: u.set_id, price_cop: u.price_cop, currency: (u as Listing).currency ?? "COP", version: u.version, language: u.language ?? null, created_at: new Date().toISOString() })))
     );
   }, []);
 
@@ -191,6 +209,26 @@ export default function DashboardMarketPage() {
         <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, margin: 0, letterSpacing: "0.08em" }}>
           {loading ? "—" : listings.length} carta{listings.length !== 1 ? "s" : ""} en venta
         </p>
+
+        {!loading && missingLang.length > 0 && (
+          <div style={{ marginTop: "20px", display: "flex", alignItems: "center", gap: "14px", flexWrap: "wrap", background: "rgba(255,196,71,0.08)", border: "1px solid rgba(255,196,71,0.3)", borderRadius: "12px", padding: "14px 18px" }}>
+            <span style={{ fontSize: "20px" }}>🏳️</span>
+            <div style={{ flex: 1, minWidth: "200px" }}>
+              <p style={{ fontFamily: MONO, fontSize: "12px", color: "#ffc447", fontWeight: 700, margin: "0 0 3px", letterSpacing: "0.04em" }}>
+                {missingLang.length} carta{missingLang.length !== 1 ? "s" : ""} sin idioma
+              </p>
+              <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, margin: 0, lineHeight: 1.5 }}>
+                Ahora cada publicación necesita indicar el idioma de la carta. Asígnalo para que los compradores lo vean.
+              </p>
+            </div>
+            <button
+              onClick={() => setLangFixOpen(true)}
+              style={{ fontFamily: MONO, fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#05070d", background: "#ffc447", border: "none", borderRadius: "8px", padding: "10px 18px", cursor: "pointer", whiteSpace: "nowrap" }}
+            >
+              Asignar idioma
+            </button>
+          </div>
+        )}
       </div>
 
       <style>{`
@@ -279,6 +317,15 @@ export default function DashboardMarketPage() {
                     <div style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color: verColor, border: `1px solid ${verColor}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>
                       {verFull}
                     </div>
+                    {listing.language ? (
+                      <div style={{ position: "absolute", top: "8px", left: "8px", fontSize: "16px", lineHeight: 1, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "3px 5px" }} title="Idioma">
+                        {languageFlag(listing.language)}
+                      </div>
+                    ) : (
+                      <div style={{ position: "absolute", top: "8px", left: "8px", fontFamily: MONO, fontSize: "8px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#ffc447", background: "rgba(5,7,13,0.85)", border: "1px solid rgba(255,196,71,0.4)", borderRadius: "6px", padding: "3px 6px" }}>
+                        Sin idioma
+                      </div>
+                    )}
                   </div>
 
                   <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: "8px", flex: 1 }}>
@@ -346,6 +393,59 @@ export default function DashboardMarketPage() {
           onListingsChange={handleListingsChange}
           onClose={() => setModalTarget(null)}
         />
+      )}
+
+      {/* ── Modal: asignar idioma a publicaciones sin idioma ── */}
+      {langFixOpen && (
+        <div
+          onClick={e => { if (e.target === e.currentTarget) setLangFixOpen(false); }}
+          style={{ position: "fixed", inset: 0, zIndex: 9000, background: "rgba(5,7,13,0.85)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}
+        >
+          <div style={{ width: "min(560px, 100%)", maxHeight: "86vh", display: "flex", flexDirection: "column", background: "#0d1520", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "18px", overflow: "hidden", boxShadow: "0 24px 80px rgba(0,0,0,0.8)" }}>
+            <div style={{ padding: "22px 24px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+              <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#ffc447", margin: "0 0 6px" }}>Selecciona el idioma</p>
+              <p style={{ fontFamily: DISP, fontSize: "18px", color: INK0, fontWeight: 700, margin: 0 }}>
+                {missingLang.length} carta{missingLang.length !== 1 ? "s" : ""} sin idioma
+              </p>
+            </div>
+            <div style={{ overflowY: "auto", padding: "16px 24px 24px", display: "flex", flexDirection: "column", gap: "14px" }}>
+              {missingLang.map(listing => {
+                const cards = setCards[listing.set_id];
+                const card  = cards?.find((c: any) => c.card_number === listing.card_id && c.version === listing.version);
+                return (
+                  <div key={listing.id} style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "10px 12px" }}>
+                    <div style={{ position: "relative", width: "40px", height: "56px", borderRadius: "5px", overflow: "hidden", flexShrink: 0, background: "rgba(255,255,255,0.04)" }}>
+                      {card?.image && <img src={card.image} alt={card?.name ?? ""} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", inset: 0 }} />}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontFamily: MONO, fontSize: "11px", color: INK0, fontWeight: 600, margin: "0 0 8px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                        {card?.name ?? `Carta #${listing.card_id}`}
+                      </p>
+                      <div style={{ display: "flex", gap: "6px" }}>
+                        {CARD_LANGUAGES.map(lang => (
+                          <button
+                            key={lang.code}
+                            disabled={savingLang === listing.id}
+                            onClick={() => assignLanguage(listing.id, lang.code)}
+                            title={lang.label}
+                            style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "34px", height: "30px", fontSize: "17px", lineHeight: 1, borderRadius: "7px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", cursor: savingLang === listing.id ? "default" : "pointer", opacity: savingLang === listing.id ? 0.4 : 1 }}
+                          >
+                            {lang.flag}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ padding: "14px 24px", borderTop: "1px solid rgba(255,255,255,0.08)", textAlign: "right" }}>
+              <button onClick={() => setLangFixOpen(false)} style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", color: INK2, background: "transparent", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "9px 20px", cursor: "pointer" }}>
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

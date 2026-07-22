@@ -28,6 +28,7 @@ const DISP  = "var(--font-archivo)";
 const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
 
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
+import { languageFlag } from "@/lib/languages";
 
 interface Listing {
   id: string;
@@ -36,6 +37,7 @@ interface Listing {
   price_cop: number;
   currency: string;
   version: string;
+  language: string | null;
   created_at: string;
   user_id: string;
   players: {
@@ -314,16 +316,12 @@ export function MarketPageClient({
     setFPrecioMin(""); setFPrecioMax("");
   }
 
-  async function handleComprar(listing: Listing, e: React.MouseEvent) {
+  function handleComprar(listing: Listing, e: React.MouseEvent) {
     e.preventDefault();
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { setAuthMsg("Debes registrarte en FaceBinder para poder usar este servicio."); return; }
-    const { data } = await supabase.from("players").select("username, whatsapp_numero").eq("user_id", user.id).single();
-    if (!data?.username) { setAuthMsg("Debes completar tu nombre de usuario en tu perfil para usar este servicio."); return; }
-    if (!data?.whatsapp_numero) { setAuthMsg("Debes agregar tu número de WhatsApp en tu perfil para usar este servicio."); return; }
+    // Comprar no requiere registro: se abre directo el WhatsApp del vendedor.
     const waLink = buildWhatsApp(listing);
-    if (waLink !== "#") window.open(waLink, "_blank");
+    if (waLink === "#") { setAuthMsg("Este vendedor no tiene WhatsApp configurado."); return; }
+    window.open(waLink, "_blank");
   }
 
   /* Close market popup on outside click */
@@ -375,7 +373,7 @@ export function MarketPageClient({
 
       let q = supabase
         .from("market_listings")
-        .select("id, card_id, set_id, price_cop, currency, version, created_at, user_id")
+        .select("id, card_id, set_id, price_cop, currency, version, language, created_at, user_id")
         .eq("status", "active")
         .order("created_at", { ascending: false })
         .range(from, to);
@@ -659,6 +657,12 @@ export function MarketPageClient({
                       }}>
                         {verFull}
                       </div>
+                      {/* Idioma — esquina superior izquierda */}
+                      {listing.language && (
+                        <div style={{ position: "absolute", top: "8px", left: "8px", fontSize: "16px", lineHeight: 1, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "3px 5px" }} title="Idioma">
+                          {languageFlag(listing.language)}
+                        </div>
+                      )}
                     </div>
 
                     {/* Info */}

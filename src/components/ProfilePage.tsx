@@ -11,6 +11,7 @@ import { SET_CARDS, loadManySets, FOSSIL_CARDS } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionEffect, getVersionColor } from "@/data/pokemon-cards-meta";
 import type { InventoryMap, FeaturedCard as FeaturedCardModal, WishlistCard as WishlistCardModal, UserListing } from "@/components/CardDetailModal";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
+import { slugifySetName } from "@/lib/slug";
 import dynamic from "next/dynamic";
 const CardDetailModal = dynamic(
   () => import("@/components/CardDetailModal").then(m => ({ default: m.CardDetailModal })),
@@ -1215,12 +1216,11 @@ function DecksSlider({ profileUserId }: { profileUserId?: string }) {
 }
 
 /* ── My Sets Slider (colecciones dinámicas del usuario) ─────── */
-function MySetsSlider({ profileUserId }: { profileUserId?: string }) {
+function MySetsSlider({ profileUserId, username }: { profileUserId?: string; username?: string }) {
   const [sets,     setSets]     = useState<ProfileDeck[]>([]);
   const [loaded,   setLoaded]   = useState(false);
   const [offset,   setOffset]   = useState(0);
   const [animated, setAnimated] = useState(true);
-  const [openSet,  setOpenSet]  = useState<ProfileDeck | null>(null);
 
   useEffect(() => {
     if (!profileUserId) return;
@@ -1306,13 +1306,14 @@ function MySetsSlider({ profileUserId }: { profileUserId?: string }) {
             >
               <style>{`.msts-track { transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); } .msts-track.no-anim { transition: none !important; }`}</style>
               {looped.map((mset, i) => (
-                <div
+                <Link
                   key={i}
-                  onClick={() => setOpenSet(mset)}
+                  href={username ? `/${username}/${slugifySetName(mset.name)}` : "#"}
                   style={{
                     flexShrink: 0,
                     width: `calc(100% / ${VISIBLE} - ${CARD_GAP * (VISIBLE - 1) / VISIBLE}px)`,
                     cursor: "pointer",
+                    textDecoration: "none",
                   }}
                 >
                   <div
@@ -1346,92 +1347,9 @@ function MySetsSlider({ profileUserId }: { profileUserId?: string }) {
                       {mset.card_count} cartas
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal con las cartas del set */}
-      {openSet && (
-        <div
-          onClick={() => setOpenSet(null)}
-          style={{
-            position: "fixed", inset: 0, zIndex: 1000,
-            background: "rgba(5,7,13,0.88)", backdropFilter: "blur(6px)",
-            display: "flex", alignItems: "center", justifyContent: "center", padding: "20px",
-          }}
-        >
-          <div
-            onClick={e => e.stopPropagation()}
-            style={{
-              width: "min(920px, 100%)", maxHeight: "86vh",
-              display: "flex", flexDirection: "column", overflow: "hidden",
-              background: BG0_C, border: `1px solid ${VIOLET}33`, borderRadius: "16px",
-              padding: "24px", boxShadow: "0 24px 80px rgba(0,0,0,0.8)",
-            }}
-          >
-            <style>{`
-              @keyframes dkPulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
-              .mset-modal-scroll { scrollbar-width: thin; scrollbar-color: ${VIOLET}55 transparent; }
-              .mset-modal-scroll::-webkit-scrollbar { width: 5px; }
-              .mset-modal-scroll::-webkit-scrollbar-track { background: transparent; }
-              .mset-modal-scroll::-webkit-scrollbar-thumb { background: ${VIOLET}55; border-radius: 3px; }
-              .mset-modal-scroll::-webkit-scrollbar-thumb:hover { background: ${VIOLET}88; }
-            `}</style>
-            {/* Header del modal */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
-              <div>
-                <div style={{ fontFamily: MONO_C, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: VIOLET, marginBottom: "4px" }}>
-                  Set · {openSet.card_count} cartas
-                </div>
-                <div style={{ fontFamily: DISP_C, fontSize: "22px", color: INK0_C, letterSpacing: "-0.01em" }}>
-                  {openSet.name}
-                </div>
-              </div>
-              <button
-                onClick={() => setOpenSet(null)}
-                style={{
-                  background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)",
-                  borderRadius: "8px", color: INK0_C, cursor: "pointer",
-                  width: "32px", height: "32px", fontSize: "16px", lineHeight: 1,
-                }}
-              >
-                ×
-              </button>
-            </div>
-
-            {/* Grid de cartas */}
-            {openSet.cards.length === 0 ? (
-              <p style={{ fontFamily: MONO_C, fontSize: "11px", color: INK2_C, textAlign: "center", padding: "24px 0" }}>
-                Este set aún no tiene cartas.
-              </p>
-            ) : (
-              <div className="mset-modal-scroll" style={{ overflowY: "auto", paddingRight: "8px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: "12px" }}>
-                {openSet.cards.map(({ card, quantity }, i) => (
-                  <div key={i}>
-                    <div style={{ position: "relative", width: "100%", aspectRatio: "5/7", borderRadius: "7px", overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.6)", filter: quantity === 0 ? "grayscale(1) brightness(0.75)" : "none" }}>
-                      <DeckCardImage src={card.image} alt={card.name} />
-                      {quantity !== 1 && (
-                        <div style={{
-                          position: "absolute", top: "6px", right: "6px",
-                          fontFamily: MONO_C, fontSize: "9px", fontWeight: 700,
-                          color: quantity === 0 ? INK2_C : VIOLET,
-                          border: quantity === 0 ? "1px solid rgba(122,130,152,0.5)" : `1px solid ${VIOLET}88`,
-                          borderRadius: "4px", padding: "2px 5px", background: "rgba(5,7,13,0.85)",
-                        }}>
-                          {quantity === 0 ? "falta" : `×${quantity}`}
-                        </div>
-                      )}
-                    </div>
-                    <div style={{ marginTop: "5px", fontFamily: MONO_C, fontSize: "8.5px", color: INK0_C, textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      #{String(card.card_number).padStart(3, "0")} {card.name.trim()}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </div>
       )}
@@ -1657,7 +1575,7 @@ function CollectionSection({
             </div>
           )}
           <MarketListingsSlider profileUserId={profileUserId} username={username} />
-          <MySetsSlider profileUserId={profileUserId} />
+          <MySetsSlider profileUserId={profileUserId} username={username} />
           <DecksSlider profileUserId={profileUserId} />
         </div>
 

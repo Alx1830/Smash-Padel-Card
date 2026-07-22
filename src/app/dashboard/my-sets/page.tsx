@@ -131,7 +131,7 @@ export default function MySetsPage() {
           <span style={{ width: "20px", height: "1px", background: VIOLET, display: "inline-block" }} />
           Mi Colección
         </div>
-        <h1 style={{ fontFamily: DISP, fontSize: "36px", color: INK0, margin: "0 0 24px" }}>My Sets</h1>
+        <h1 style={{ fontFamily: DISP, fontSize: "36px", color: INK0, margin: "0 0 24px" }}>Mis Sets</h1>
 
         <button
           onClick={() => setCreating(true)}

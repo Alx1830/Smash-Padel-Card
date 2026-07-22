@@ -275,7 +275,7 @@ export default function MySetEditorPage() {
       <div className="mset-editor-header">
         <button onClick={() => router.push("/dashboard/my-sets")} style={{ display: "flex", alignItems: "center", gap: "6px", background: "none", border: "none", color: INK2, fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", cursor: "pointer", marginBottom: "16px", padding: 0 }}>
           <ArrowLeft size={14} />
-          My Sets
+          Mis Sets
         </button>
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "16px", marginBottom: "24px" }}>
           <div>

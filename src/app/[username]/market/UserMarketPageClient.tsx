@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useMemo, useEffect } from "react";
-import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import dynamic from "next/dynamic";
@@ -22,6 +21,7 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
+import { languageFlag } from "@/lib/languages";
 
 interface Listing {
   id: string;
@@ -30,6 +30,7 @@ interface Listing {
   price_cop: number;
   currency: string;
   version: string;
+  language: string | null;
   created_at: string;
 }
 interface SetInfo { id: string; name: string; logo: string; }
@@ -97,16 +98,12 @@ export function UserMarketPageClient({
   const hasFilters = fNombre || fSet || fVariante || fPrecioMin || fPrecioMax;
   function clearFilters() { setFNombre(""); setFSet(""); setFVariante(""); setFPrecioMin(""); setFPrecioMax(""); }
 
-  async function handleComprar(listing: Listing, e: React.MouseEvent) {
+  function handleComprar(listing: Listing, e: React.MouseEvent) {
     e.preventDefault();
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { setAuthMsg("Debes registrarte en FaceBinder para poder usar este servicio."); return; }
-    const { data } = await supabase.from("players").select("username, whatsapp_numero").eq("user_id", user.id).single();
-    if (!data?.username) { setAuthMsg("Debes completar tu nombre de usuario en tu perfil para usar este servicio."); return; }
-    if (!data?.whatsapp_numero) { setAuthMsg("Debes agregar tu número de WhatsApp en tu perfil para usar este servicio."); return; }
+    // Comprar no requiere registro: se abre directo el WhatsApp del vendedor.
     const waLink = buildWA(listing);
-    if (waLink !== "#") window.open(waLink, "_blank");
+    if (waLink === "#") { setAuthMsg("Este vendedor no tiene WhatsApp configurado."); return; }
+    window.open(waLink, "_blank");
   }
 
   function buildWA(listing: Listing) {
@@ -289,6 +286,11 @@ export function UserMarketPageClient({
                         <div style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>
                           {label}
                         </div>
+                        {listing.language && (
+                          <div style={{ position: "absolute", top: "8px", left: "8px", fontSize: "16px", lineHeight: 1, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "3px 5px" }} title="Idioma">
+                            {languageFlag(listing.language)}
+                          </div>
+                        )}
                       </div>
                       <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
                         <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "6px 10px", alignItems: "center" }}>

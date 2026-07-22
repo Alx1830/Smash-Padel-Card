@@ -458,7 +458,7 @@ export function DashboardLayoutClient({
                         onMouseLeave={e => { if (!mySetsActive) e.currentTarget.style.background = "transparent"; }}
                       >
                         <WalletCards size={14} color={mySetsActive ? COURT : INK2} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: mySetsActive ? COURT : "rgba(245,247,251,0.65)" }}>My Sets</span>
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: mySetsActive ? COURT : "rgba(245,247,251,0.65)" }}>Mis Sets</span>
                       </Link>
                     </div>
                   </div>
@@ -676,7 +676,7 @@ export function DashboardLayoutClient({
                         onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
                       >
                         <WalletCards size={14} color={COURT} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>My Sets</span>
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Mis Sets</span>
                       </Link>
                     </div>
                   )}

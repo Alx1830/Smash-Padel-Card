@@ -7,6 +7,7 @@ import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { getVersionLabel } from "@/data/pokemon-cards-meta";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
+import { languageFlag } from "@/lib/languages";
 
 const COURT  = "#2ee6c1";
 const BALL   = "#d6ff3d";
@@ -52,6 +53,7 @@ interface FeedItem {
   price_cop: number;
   currency: string;
   version: string;
+  language: string | null;
   created_at: string;
   user_id: string;
   player: PlayerInfo | null;
@@ -164,6 +166,7 @@ function PostCard({ item }: { item: FeedItem }) {
               <span style={{ display: "inline-block", fontSize: 9, padding: "1px 6px", borderRadius: 5, background: "rgba(255,255,255,0.07)", color: INK2, letterSpacing: "0.08em", verticalAlign: "middle" }}>
                 {item.versionLabel}
               </span>
+              {item.language && <span title="Idioma" style={{ verticalAlign: "middle" }}>{" "}{languageFlag(item.language)}</span>}
               {" "}del set{" "}
               <span style={{ color: COURT }}>{item.setName}</span>
               {" "}por{" "}
@@ -242,7 +245,7 @@ function PostCard({ item }: { item: FeedItem }) {
 }
 
 async function enrichRows(
-  raw: { id: string; card_id: number | string; set_id: string; version: string; created_at: string; user_id: string; price_cop?: number; currency?: string }[],
+  raw: { id: string; card_id: number | string; set_id: string; version: string; created_at: string; user_id: string; price_cop?: number; currency?: string; language?: string | null }[],
   type: "listing" | "wishlist",
   supabase: ReturnType<typeof createClient>
 ): Promise<FeedItem[]> {
@@ -275,6 +278,7 @@ async function enrichRows(
       price_cop:    r.price_cop ?? 0,
       currency:     r.currency ?? "COP",
       version:      r.version,
+      language:     r.language ?? null,
       created_at:   r.created_at,
       user_id:      r.user_id,
       player:       playerMap[r.user_id] ?? null,
@@ -306,7 +310,7 @@ export function MarketFeed() {
     const [{ data: listings }, { data: wishlists }] = await Promise.all([
       supabase
         .from("market_listings")
-        .select("id, card_id, set_id, price_cop, currency, version, created_at, user_id")
+        .select("id, card_id, set_id, price_cop, currency, version, language, created_at, user_id")
         .eq("status", "active")
         .lt("created_at", cursor)
         .order("created_at", { ascending: false })
@@ -373,7 +377,7 @@ export function MarketFeed() {
     const channel = supabase
       .channel(`feed-realtime-${Math.random().toString(36).slice(2)}`)
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "market_listings" }, async payload => {
-        const r = payload.new as { id: string; card_id: number; set_id: string; price_cop: number; currency: string; version: string; created_at: string; user_id: string; status: string };
+        const r = payload.new as { id: string; card_id: number; set_id: string; price_cop: number; currency: string; version: string; language: string | null; created_at: string; user_id: string; status: string };
         if (r.status !== "active") return;
         const [enriched] = await enrichRows([r], "listing", supabase);
         if (enriched) setItems(prev => [enriched, ...prev]);
