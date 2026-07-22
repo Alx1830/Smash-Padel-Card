@@ -6,7 +6,8 @@ import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { getVersionLabel, getVersionEffect, getVersionColor, type PokemonCard } from "@/data/pokemon-cards-meta";
 import { getCurrencyForCountry, formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
-import { CARD_LANGUAGES, languageFlag } from "@/lib/languages";
+import { CARD_LANGUAGES } from "@/lib/languages";
+import { FlagIcon } from "@/components/FlagIcon";
 import { useScrydexPrice, SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 
 export const COURT = "#2ee6c1";
@@ -604,7 +605,7 @@ export function CardDetailModal({
                               transition: "all 0.12s",
                             }}
                           >
-                            <span style={{ fontSize: "20px", lineHeight: 1 }}>{lang.flag}</span>
+                            <FlagIcon code={lang.code} width={26} />
                             <span style={{ fontFamily: MONO, fontSize: "8px", letterSpacing: "0.06em", textTransform: "uppercase", color: active ? "#15a98e" : DARK2, fontWeight: active ? 700 : 400 }}>{lang.label}</span>
                           </button>
                         );
@@ -654,7 +655,7 @@ export function CardDetailModal({
                         {activeListings.map((listing, i) => (
                           <div key={listing.id} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "8px", alignItems: "center", padding: "8px 10px", background: i % 2 === 0 ? "rgba(46,230,193,0.03)" : "transparent", borderTop: i > 0 ? "1px solid rgba(255,255,255,0.04)" : undefined }}>
                             <span style={{ fontFamily: MONO, fontSize: "10px", color: DARK, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                              {languageFlag(listing.language) && <span style={{ marginRight: "5px" }}>{languageFlag(listing.language)}</span>}{card.name}
+                              {listing.language && <span style={{ marginRight: "5px", display: "inline-flex", verticalAlign: "middle" }}><FlagIcon code={listing.language} width={16} /></span>}{card.name}
                             </span>
                             <span style={{ fontFamily: MONO, fontSize: "11px", color: "#15a98e", fontWeight: 700, whiteSpace: "nowrap" }}>
                               {CURRENCY_SYMBOL[listing.currency ?? userCurrency] ?? "$"}{formatPrice(listing.price_cop, listing.currency ?? userCurrency)} {listing.currency ?? userCurrency}

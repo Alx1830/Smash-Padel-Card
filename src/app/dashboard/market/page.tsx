@@ -23,7 +23,8 @@ const DISP  = "var(--font-archivo)";
 const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
 
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
-import { CARD_LANGUAGES, languageFlag } from "@/lib/languages";
+import { CARD_LANGUAGES } from "@/lib/languages";
+import { FlagIcon } from "@/components/FlagIcon";
 
 interface Listing {
   id: string;
@@ -318,8 +319,8 @@ export default function DashboardMarketPage() {
                       {verFull}
                     </div>
                     {listing.language ? (
-                      <div style={{ position: "absolute", top: "8px", left: "8px", fontSize: "16px", lineHeight: 1, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "3px 5px" }} title="Idioma">
-                        {languageFlag(listing.language)}
+                      <div style={{ position: "absolute", top: "8px", left: "8px", lineHeight: 1, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "4px" }} title="Idioma">
+                        <FlagIcon code={listing.language} width={20} />
                       </div>
                     ) : (
                       <div style={{ position: "absolute", top: "8px", left: "8px", fontFamily: MONO, fontSize: "8px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#ffc447", background: "rgba(5,7,13,0.85)", border: "1px solid rgba(255,196,71,0.4)", borderRadius: "6px", padding: "3px 6px" }}>
@@ -428,9 +429,9 @@ export default function DashboardMarketPage() {
                             disabled={savingLang === listing.id}
                             onClick={() => assignLanguage(listing.id, lang.code)}
                             title={lang.label}
-                            style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "34px", height: "30px", fontSize: "17px", lineHeight: 1, borderRadius: "7px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", cursor: savingLang === listing.id ? "default" : "pointer", opacity: savingLang === listing.id ? 0.4 : 1 }}
+                            style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "40px", height: "32px", lineHeight: 1, borderRadius: "7px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", cursor: savingLang === listing.id ? "default" : "pointer", opacity: savingLang === listing.id ? 0.4 : 1 }}
                           >
-                            {lang.flag}
+                            <FlagIcon code={lang.code} width={22} />
                           </button>
                         ))}
                       </div>

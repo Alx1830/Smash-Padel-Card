@@ -21,7 +21,7 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
-import { languageFlag } from "@/lib/languages";
+import { FlagIcon } from "@/components/FlagIcon";
 
 interface Listing {
   id: string;
@@ -287,8 +287,8 @@ export function UserMarketPageClient({
                           {label}
                         </div>
                         {listing.language && (
-                          <div style={{ position: "absolute", top: "8px", left: "8px", fontSize: "16px", lineHeight: 1, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "3px 5px" }} title="Idioma">
-                            {languageFlag(listing.language)}
+                          <div style={{ position: "absolute", top: "8px", left: "8px", lineHeight: 1, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "4px" }} title="Idioma">
+                            <FlagIcon code={listing.language} width={20} />
                           </div>
                         )}
                       </div>

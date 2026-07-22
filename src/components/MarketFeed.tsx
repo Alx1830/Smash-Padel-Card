@@ -7,7 +7,7 @@ import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { getVersionLabel } from "@/data/pokemon-cards-meta";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
-import { languageFlag } from "@/lib/languages";
+import { FlagIcon } from "@/components/FlagIcon";
 
 const COURT  = "#2ee6c1";
 const BALL   = "#d6ff3d";
@@ -166,7 +166,7 @@ function PostCard({ item }: { item: FeedItem }) {
               <span style={{ display: "inline-block", fontSize: 9, padding: "1px 6px", borderRadius: 5, background: "rgba(255,255,255,0.07)", color: INK2, letterSpacing: "0.08em", verticalAlign: "middle" }}>
                 {item.versionLabel}
               </span>
-              {item.language && <span title="Idioma" style={{ verticalAlign: "middle" }}>{" "}{languageFlag(item.language)}</span>}
+              {item.language && <span title="Idioma" style={{ marginLeft: 4, verticalAlign: "middle" }}><FlagIcon code={item.language} width={16} /></span>}
               {" "}del set{" "}
               <span style={{ color: COURT }}>{item.setName}</span>
               {" "}por{" "}
