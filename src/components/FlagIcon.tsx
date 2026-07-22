@@ -27,8 +27,13 @@ export function FlagIcon({ code, width = 20 }: { code?: string | null; width?: n
           {[1, 3, 5, 7, 9, 11].map(i => (
             <rect key={i} y={i * 1.538} width="30" height="1.538" fill="#fff" />
           ))}
-          <rect width="13" height="10.77" fill="#3c3b6e" />
-          <text x="6.5" y="5.4" fontSize="7" fill="#fff" textAnchor="middle" dominantBaseline="central">★</text>
+          <rect width="12" height="10.77" fill="#3c3b6e" />
+          {[0, 1, 2, 3, 4].map(row => {
+            const even = row % 2 === 0;
+            const cols = even ? [1.4, 3.5, 5.6, 7.7, 9.8] : [2.45, 4.55, 6.65, 8.75];
+            const y = 1.3 + row * 2.05;
+            return cols.map((x, c) => <circle key={`${row}-${c}`} cx={x} cy={y} r="0.42" fill="#fff" />);
+          })}
         </svg>
       );
     case "ja":
