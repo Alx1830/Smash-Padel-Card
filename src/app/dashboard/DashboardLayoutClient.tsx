@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Swords, Gamepad2 } from "lucide-react";
+import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Swords, Gamepad2, WalletCards } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { usePushPermission } from "@/hooks/usePushPermission";
 import { DashboardUserProvider } from "./DashboardUserContext";
@@ -437,11 +437,13 @@ export function DashboardLayoutClient({
 
               if (label === "Interactivo") {
                 const decksActive = pathname.startsWith("/dashboard/decks");
+                const mySetsActive = pathname.startsWith("/dashboard/my-sets");
+                const intActive = decksActive || mySetsActive;
                 return (
                   <div key="interactivo" style={{ marginBottom: "4px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 14px 6px" }}>
-                      <Icon size={20} color={decksActive ? COURT : INK2} strokeWidth={1.8} style={{ flexShrink: 0 }} />
-                      <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase", color: decksActive ? COURT : INK2, fontWeight: decksActive ? 600 : 400 }}>{label}</span>
+                      <Icon size={20} color={intActive ? COURT : INK2} strokeWidth={1.8} style={{ flexShrink: 0 }} />
+                      <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase", color: intActive ? COURT : INK2, fontWeight: intActive ? 600 : 400 }}>{label}</span>
                     </div>
                     <div style={{ paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "2px" }}>
                       <Link href="/dashboard/decks" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: decksActive ? `${COURT}18` : "transparent", border: decksActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
@@ -450,6 +452,13 @@ export function DashboardLayoutClient({
                       >
                         <Swords size={14} color={decksActive ? COURT : INK2} strokeWidth={1.8} />
                         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: decksActive ? COURT : "rgba(245,247,251,0.65)" }}>Decks</span>
+                      </Link>
+                      <Link href="/dashboard/my-sets" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: mySetsActive ? `${COURT}18` : "transparent", border: mySetsActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                        onMouseEnter={e => { if (!mySetsActive) e.currentTarget.style.background = `${COURT}10`; }}
+                        onMouseLeave={e => { if (!mySetsActive) e.currentTarget.style.background = "transparent"; }}
+                      >
+                        <WalletCards size={14} color={mySetsActive ? COURT : INK2} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: mySetsActive ? COURT : "rgba(245,247,251,0.65)" }}>My Sets</span>
                       </Link>
                     </div>
                   </div>
@@ -640,7 +649,7 @@ export function DashboardLayoutClient({
             }
 
             if (label === "Interactivo") {
-              const intActive = pathname.startsWith("/dashboard/decks");
+              const intActive = pathname.startsWith("/dashboard/decks") || pathname.startsWith("/dashboard/my-sets");
               const intColor  = intActive ? COURT : INK2;
               return (
                 <div key="interactivo" ref={intMobileRef} style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -661,6 +670,13 @@ export function DashboardLayoutClient({
                       >
                         <Swords size={14} color={COURT} strokeWidth={1.8} />
                         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Decks</span>
+                      </Link>
+                      <Link href="/dashboard/my-sets" onClick={() => setInteractivoOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
+                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                      >
+                        <WalletCards size={14} color={COURT} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>My Sets</span>
                       </Link>
                     </div>
                   )}

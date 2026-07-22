@@ -1214,6 +1214,231 @@ function DecksSlider({ profileUserId }: { profileUserId?: string }) {
   );
 }
 
+/* ── My Sets Slider (colecciones dinámicas del usuario) ─────── */
+function MySetsSlider({ profileUserId }: { profileUserId?: string }) {
+  const [sets,     setSets]     = useState<ProfileDeck[]>([]);
+  const [loaded,   setLoaded]   = useState(false);
+  const [offset,   setOffset]   = useState(0);
+  const [animated, setAnimated] = useState(true);
+  const [openSet,  setOpenSet]  = useState<ProfileDeck | null>(null);
+
+  useEffect(() => {
+    if (!profileUserId) return;
+    (async () => {
+      const { createClient } = await import("@/lib/supabase/client");
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("my_sets")
+        .select("id, name, cover_card_image")
+        .eq("user_id", profileUserId)
+        .order("created_at", { ascending: false });
+      const rows = data ?? [];
+      if (rows.length === 0) { setLoaded(true); return; }
+
+      const cardQueries = await Promise.all(rows.map(mset =>
+        supabase.from("my_set_cards")
+          .select("card_id, set_id, version, quantity, position")
+          .eq("my_set_id", mset.id)
+          .order("position", { ascending: true })
+          .then(r => r.data ?? [])
+      ));
+      await loadManySets([...new Set(cardQueries.flatMap(c => c.map(r => r.set_id)))]);
+
+      setSets(rows.map((mset, i) => {
+        const cards = (cardQueries[i] ?? []).map(r => {
+          const card = (SET_CARDS[r.set_id] ?? []).find(c => c.id === r.card_id && c.version === r.version);
+          return card ? { card, quantity: r.quantity } : null;
+        }).filter(Boolean) as ProfileDeck["cards"];
+        const card_count = (cardQueries[i] ?? []).reduce((s, r) => s + r.quantity, 0);
+        return { ...mset, cards, card_count };
+      }));
+      setLoaded(true);
+    })();
+  }, [profileUserId]);
+
+  const needsLoop = sets.length > 4;
+  const looped = needsLoop ? [...sets, ...sets, ...sets] : sets;
+
+  useEffect(() => {
+    if (sets.length <= 4) return;
+    const t = setInterval(() => {
+      setAnimated(true);
+      setOffset(prev => {
+        const next = prev + 1;
+        if (next >= sets.length) {
+          setTimeout(() => { setAnimated(false); setOffset(0); }, 400);
+        }
+        return next;
+      });
+    }, 2000);
+    return () => clearInterval(t);
+  }, [sets.length]);
+
+  const VISIBLE  = 4;
+  const CARD_GAP = 10;
+  const VIOLET   = "#a78bfa";
+
+  if (loaded && sets.length === 0) return null;
+
+  return (
+    <div style={{ marginBottom: "16px", minWidth: 0, overflow: "hidden", marginTop: "40px" }}>
+      {/* Header */}
+      <div style={{
+        fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
+        textTransform: "uppercase", color: VIOLET,
+        display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
+      }}>
+        <span style={{ width: "22px", height: "1px", background: VIOLET, display: "inline-block" }} />
+        My Sets
+      </div>
+
+      {/* Carrusel */}
+      {loaded && (
+        <div style={{ padding: "0 0%" }}>
+          <div style={{ overflow: "hidden", borderRadius: "8px" }}>
+            <div
+              className={`msts-track${animated ? "" : " no-anim"}`}
+              style={{
+                display: "flex",
+                gap: `${CARD_GAP}px`,
+                transform: `translateX(calc(-${offset} * (100% / ${VISIBLE} + ${CARD_GAP / VISIBLE}px)))`,
+              }}
+            >
+              <style>{`.msts-track { transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); } .msts-track.no-anim { transition: none !important; }`}</style>
+              {looped.map((mset, i) => (
+                <div
+                  key={i}
+                  onClick={() => setOpenSet(mset)}
+                  style={{
+                    flexShrink: 0,
+                    width: `calc(100% / ${VISIBLE} - ${CARD_GAP * (VISIBLE - 1) / VISIBLE}px)`,
+                    cursor: "pointer",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "relative", width: "100%", aspectRatio: "5/7",
+                      borderRadius: "7px", overflow: "hidden",
+                      background: "rgba(255,255,255,0.04)",
+                      boxShadow: `0 4px 14px rgba(0,0,0,0.6), 0 0 0 1px ${VIOLET}22`,
+                      transition: "transform 0.2s, box-shadow 0.2s",
+                    }}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLDivElement).style.transform = "scale(1.04)";
+                      (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 20px rgba(0,0,0,0.8), 0 0 0 1px ${VIOLET}55`;
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
+                      (e.currentTarget as HTMLDivElement).style.boxShadow = `0 4px 14px rgba(0,0,0,0.6), 0 0 0 1px ${VIOLET}22`;
+                    }}
+                  >
+                    {mset.cover_card_image ? (
+                      <img src={mset.cover_card_image} alt={mset.name} decoding="async" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+                    ) : (
+                      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "26px" }}>🗂️</div>
+                    )}
+                  </div>
+                  <div style={{ marginTop: "6px", textAlign: "center" }}>
+                    <div style={{ fontFamily: MONO_C, fontSize: "9px", color: INK0_C, fontWeight: 600, marginBottom: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {mset.name}
+                    </div>
+                    <div style={{ fontFamily: MONO_C, fontSize: "8px", color: INK2_C, letterSpacing: "0.04em" }}>
+                      {mset.card_count} cartas
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal con las cartas del set */}
+      {openSet && (
+        <div
+          onClick={() => setOpenSet(null)}
+          style={{
+            position: "fixed", inset: 0, zIndex: 1000,
+            background: "rgba(5,7,13,0.88)", backdropFilter: "blur(6px)",
+            display: "flex", alignItems: "center", justifyContent: "center", padding: "20px",
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              width: "min(920px, 100%)", maxHeight: "86vh",
+              display: "flex", flexDirection: "column", overflow: "hidden",
+              background: BG0_C, border: `1px solid ${VIOLET}33`, borderRadius: "16px",
+              padding: "24px", boxShadow: "0 24px 80px rgba(0,0,0,0.8)",
+            }}
+          >
+            <style>{`
+              @keyframes dkPulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+              .mset-modal-scroll { scrollbar-width: thin; scrollbar-color: ${VIOLET}55 transparent; }
+              .mset-modal-scroll::-webkit-scrollbar { width: 5px; }
+              .mset-modal-scroll::-webkit-scrollbar-track { background: transparent; }
+              .mset-modal-scroll::-webkit-scrollbar-thumb { background: ${VIOLET}55; border-radius: 3px; }
+              .mset-modal-scroll::-webkit-scrollbar-thumb:hover { background: ${VIOLET}88; }
+            `}</style>
+            {/* Header del modal */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
+              <div>
+                <div style={{ fontFamily: MONO_C, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: VIOLET, marginBottom: "4px" }}>
+                  Set · {openSet.card_count} cartas
+                </div>
+                <div style={{ fontFamily: DISP_C, fontSize: "22px", color: INK0_C, letterSpacing: "-0.01em" }}>
+                  {openSet.name}
+                </div>
+              </div>
+              <button
+                onClick={() => setOpenSet(null)}
+                style={{
+                  background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)",
+                  borderRadius: "8px", color: INK0_C, cursor: "pointer",
+                  width: "32px", height: "32px", fontSize: "16px", lineHeight: 1,
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Grid de cartas */}
+            {openSet.cards.length === 0 ? (
+              <p style={{ fontFamily: MONO_C, fontSize: "11px", color: INK2_C, textAlign: "center", padding: "24px 0" }}>
+                Este set aún no tiene cartas.
+              </p>
+            ) : (
+              <div className="mset-modal-scroll" style={{ overflowY: "auto", paddingRight: "8px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: "12px" }}>
+                {openSet.cards.map(({ card, quantity }, i) => (
+                  <div key={i}>
+                    <div style={{ position: "relative", width: "100%", aspectRatio: "5/7", borderRadius: "7px", overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.6)", filter: quantity === 0 ? "grayscale(1) brightness(0.75)" : "none" }}>
+                      <DeckCardImage src={card.image} alt={card.name} />
+                      {quantity !== 1 && (
+                        <div style={{
+                          position: "absolute", top: "6px", right: "6px",
+                          fontFamily: MONO_C, fontSize: "9px", fontWeight: 700,
+                          color: quantity === 0 ? INK2_C : VIOLET,
+                          border: quantity === 0 ? "1px solid rgba(122,130,152,0.5)" : `1px solid ${VIOLET}88`,
+                          borderRadius: "4px", padding: "2px 5px", background: "rgba(5,7,13,0.85)",
+                        }}>
+                          {quantity === 0 ? "falta" : `×${quantity}`}
+                        </div>
+                      )}
+                    </div>
+                    <div style={{ marginTop: "5px", fontFamily: MONO_C, fontSize: "8.5px", color: INK0_C, textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      #{String(card.card_number).padStart(3, "0")} {card.name.trim()}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── Panel expandido de un set (con su propio estado de tab) ── */
 function SetExpandedPanel({
   set, inventoryRows, isLoaded,
@@ -1432,6 +1657,7 @@ function CollectionSection({
             </div>
           )}
           <MarketListingsSlider profileUserId={profileUserId} username={username} />
+          <MySetsSlider profileUserId={profileUserId} />
           <DecksSlider profileUserId={profileUserId} />
         </div>
 
