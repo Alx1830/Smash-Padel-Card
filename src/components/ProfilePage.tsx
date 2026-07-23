@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { PlayerCard3D } from "./PlayerCard3D";
 import { FollowButton } from "./FollowButton";
+import { FlagIcon } from "./FlagIcon";
 import { ProfilePortfolioChart } from "./PortfolioChart";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { SET_CARDS, loadManySets, FOSSIL_CARDS } from "@/data/pokemon-cards";
@@ -802,7 +803,7 @@ function WishlistSlider({
 
 /* ── Market Listings Slider ─────────────────────────────────── */
 function MarketListingsSlider({ profileUserId, username }: { profileUserId?: string; username?: string }) {
-  const [listings, setListings] = useState<{ id: string; card_id: number | string; set_id: string; price_cop: number; currency: string; version: string }[]>([]);
+  const [listings, setListings] = useState<{ id: string; card_id: number | string; set_id: string; price_cop: number; currency: string; version: string; language?: string | null }[]>([]);
   const [loaded,   setLoaded]   = useState(false);
   const [offset,   setOffset]   = useState(0);
   const [animated, setAnimated] = useState(true);
@@ -814,7 +815,7 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
       const supabase = createClient();
       const { data } = await supabase
         .from("market_listings")
-        .select("id, card_id, set_id, price_cop, currency, version")
+        .select("id, card_id, set_id, price_cop, currency, version, language")
         .eq("user_id", profileUserId)
         .eq("status", "active")
         .order("created_at", { ascending: false })
@@ -892,6 +893,7 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
             >
               <style>{`.mls-track { transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); } .mls-track.no-anim { transition: none !important; }`}</style>
               {looped.map(({ card, listing }, i) => {
+                const lang = listing.language ?? "en";
                 const color = getVersionColor(listing.version);
                 const label = getVersionLabel(listing.version);
                 return (
@@ -921,6 +923,9 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
                     >
                       <img src={card.image} alt={card.name} loading="eager" fetchPriority="high" decoding="async" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
                       <div style={{ position: "absolute", bottom: "6px", right: "6px", fontFamily: MONO_C, fontSize: "8px", letterSpacing: "0.1em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 5px", background: "rgba(5,7,13,0.85)" }}>{label}</div>
+                      <div style={{ position: "absolute", top: "6px", left: "6px", display: "flex", alignItems: "center", borderRadius: "4px", padding: "2px", background: "rgba(5,7,13,0.85)", lineHeight: 0 }}>
+                        <FlagIcon code={lang} width={16} />
+                      </div>
                     </div>
                     <div style={{ marginTop: "6px", textAlign: "center" }}>
                       <div style={{ fontFamily: MONO_C, fontSize: "9px", color: INK0_C, fontWeight: 600, marginBottom: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
