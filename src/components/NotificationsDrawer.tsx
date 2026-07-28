@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { X, Bell, CheckCheck, UserPlus, UserCheck, ShoppingBag } from "lucide-react";
+import { X, Bell, CheckCheck, UserPlus, UserCheck, ShoppingBag, MessagesSquare, Check, ArrowLeftRight } from "lucide-react";
 import type { AppNotification } from "@/types/notifications";
 
 const COURT = "#2ee6c1";
@@ -25,6 +25,10 @@ interface NotificationsDrawerProps {
 function notifMeta(type: string): { color: string; Icon: React.ComponentType<{ size?: number; color?: string; strokeWidth?: number }> } {
   if (type === "new_follower")        return { color: "#818cf8", Icon: UserPlus };
   if (type === "new_user_registered") return { color: "#f59e0b", Icon: UserCheck };
+  if (type === "trade_message")       return { color: "#d6ff3d", Icon: MessagesSquare };
+  if (type === "trade_accepted")      return { color: COURT,     Icon: Check };
+  if (type === "trade_rejected")      return { color: "#ff6b6b", Icon: X };
+  if (type.startsWith("trade_"))      return { color: COURT,     Icon: ArrowLeftRight };
   return { color: COURT, Icon: ShoppingBag };
 }
 
