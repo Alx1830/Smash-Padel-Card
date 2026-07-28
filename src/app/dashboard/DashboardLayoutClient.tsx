@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { MobileTabBar } from "@/components/MobileTabBar";
 import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Swords, Gamepad2, WalletCards, ArrowLeftRight } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { usePushPermission } from "@/hooks/usePushPermission";
@@ -31,14 +32,6 @@ const SIDEBAR_ITEMS = [
   { href: "/dashboard/market",      label: "Market",      Icon: Store },
 ];
 
-/* Mobile bottom-tab order: Inicio, Perfil, Inventario (highlighted), Decks, Market */
-const MOBILE_TABS = [
-  { href: "/dashboard",            label: "Inicio",     Icon: House,        highlight: false },
-  { href: "/dashboard/perfil",     label: "Perfil",     Icon: UserRoundPen, highlight: false },
-  { href: "/dashboard/inventario", label: "Inventario", Icon: LayoutGrid,   highlight: true  },
-  { href: "/dashboard/decks",      label: "Interactivo", Icon: Gamepad2,    highlight: false },
-  { href: "/dashboard/market",     label: "Market",     Icon: Store,        highlight: false },
-];
 
 interface DashboardLayoutClientProps {
   children:       React.ReactNode;
@@ -60,8 +53,6 @@ export function DashboardLayoutClient({
   const [userId,   setUserId]   = useState<string | null>(initialUserId);
   const [isAdmin,  setIsAdmin]  = useState(initialIsAdmin);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [marketOpen, setMarketOpen] = useState(false);
-  const [interactivoOpen, setInteractivoOpen] = useState(false);
   const [notifDrawerOpen, setNotifDrawerOpen] = useState(false);
   const [notifAnchorRect, setNotifAnchorRect] = useState<DOMRect | null>(null);
   const [notifIsMobile, setNotifIsMobile]     = useState(false);
@@ -74,9 +65,6 @@ export function DashboardLayoutClient({
   const showPushBanner = !!userId && permissionState === "default" && !pushBannerDismissed;
   const menuRef        = useRef<HTMLDivElement>(null);
   const mobileRef      = useRef<HTMLDivElement>(null);
-  const marketRef      = useRef<HTMLDivElement>(null);
-  const mktMobileRef   = useRef<HTMLDivElement>(null);
-  const intMobileRef   = useRef<HTMLDivElement>(null);
   const desktopBellRef = useRef<HTMLDivElement>(null);
   const mobileBellRef  = useRef<HTMLDivElement>(null);
 
@@ -138,18 +126,27 @@ export function DashboardLayoutClient({
     return () => { supabase.removeChannel(channel); };
   }, [userId]);
 
+  /* Heartbeat de última conexión — alimenta la columna del panel de admin */
+  useEffect(() => {
+    if (!userId) return;
+    const supabase = createClient();
+    const touch = () => {
+      supabase.from("players")
+        .update({ last_seen: new Date().toISOString() })
+        .eq("user_id", userId)
+        .then(() => {}, () => {});
+    };
+    touch();
+    const interval = setInterval(touch, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [userId]);
+
   /* Close dropdowns on outside click */
   useEffect(() => {
     function onOutside(e: MouseEvent) {
       const inDesktop = menuRef.current?.contains(e.target as Node);
       const inMobile  = mobileRef.current?.contains(e.target as Node);
       if (!inDesktop && !inMobile) setMenuOpen(false);
-
-      const inMktDesktop = marketRef.current?.contains(e.target as Node);
-      const inMktMobile  = mktMobileRef.current?.contains(e.target as Node);
-      if (!inMktDesktop && !inMktMobile) setMarketOpen(false);
-
-      if (!intMobileRef.current?.contains(e.target as Node)) setInteractivoOpen(false);
     }
     document.addEventListener("mousedown", onOutside);
     return () => document.removeEventListener("mousedown", onOutside);
@@ -245,59 +242,6 @@ export function DashboardLayoutClient({
   );
 
   /* Market popup menu */
-  const MarketPopup = ({ direction = "up" }: { direction?: "up" | "down" }) => (
-    <div style={{
-      position: "absolute",
-      ...(direction === "up"
-        ? { bottom: "calc(100% + 8px)", left: 0 }
-        : { top: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)" }),
-      width: 180,
-      background: "#0d1520",
-      border: "1px solid rgba(255,255,255,0.1)",
-      borderRadius: "12px", overflow: "hidden",
-      boxShadow: "0 8px 40px rgba(0,0,0,0.6)",
-      zIndex: 200,
-    }}>
-      <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>
-          Market
-        </p>
-      </div>
-      <Link href="/dashboard/market" onClick={() => setMarketOpen(false)} style={{
-        display: "flex", alignItems: "center", gap: "10px",
-        padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)",
-      }}
-        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
-        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-      >
-        <BookSearch size={14} color={COURT} strokeWidth={1.8} />
-        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Mi Wishlist</span>
-      </Link>
-      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-      <Link href="/dashboard/market" onClick={() => setMarketOpen(false)} style={{
-        display: "flex", alignItems: "center", gap: "10px",
-        padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)",
-      }}
-        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
-        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-      >
-        <Store size={14} color={COURT} strokeWidth={1.8} />
-        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>En venta</span>
-      </Link>
-      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-      <Link href="/market" onClick={() => setMarketOpen(false)} style={{
-        display: "flex", alignItems: "center", gap: "10px",
-        padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)",
-      }}
-        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
-        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-      >
-        <Store size={14} color="#d6ff3d" strokeWidth={1.8} />
-        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Market local</span>
-      </Link>
-    </div>
-  );
-
   /* Shared avatar circle */
   const AvatarCircle = ({ size = 36 }: { size?: number }) => (
     <div style={{
@@ -335,7 +279,6 @@ export function DashboardLayoutClient({
         }
         /* ── MOBILE top bar + bottom tabs ── */
         .mob-topbar  { display: none; }
-        .mob-tabbar  { display: none; }
         .mob-content { padding-bottom: 0; }
 
         @media (max-width: 1023px) {
@@ -344,7 +287,6 @@ export function DashboardLayoutClient({
           .dash-main {
             margin-left: 0;
             max-width: 100vw;
-            padding-bottom: 84px; /* space for tab bar */
           }
 
           /* Top bar */
@@ -358,19 +300,6 @@ export function DashboardLayoutClient({
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255,255,255,0.06);
-          }
-
-          /* Bottom tab bar */
-          .mob-tabbar {
-            display: flex;
-            position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
-            align-items: stretch;
-            height: 72px;
-            background: rgba(10,14,26,0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255,255,255,0.07);
-            padding-bottom: env(safe-area-inset-bottom);
           }
 
           /* Push content below top bar */
@@ -610,187 +539,7 @@ export function DashboardLayoutClient({
         </div>
 
         {/* ══ MOBILE BOTTOM TAB BAR ══ */}
-        <nav className="mob-tabbar">
-          {MOBILE_TABS.map(({ href, label, Icon, highlight }) => {
-            const isMarket = label === "Market";
-            const isPerfil = label === "Perfil";
-            const active = isMarket
-              ? pathname === "/dashboard/market" || pathname === "/market"
-              : pathname === href;
-            const color  = active ? COURT : highlight ? `${COURT}80` : INK2;
-            const iconSz = highlight ? 26 : 22;
-
-            if (isPerfil) {
-              const perfilHref = username ? `/${username}` : "/dashboard/perfil";
-              return (
-                <Link key="perfil" href={perfilHref} style={{
-                  flex: 1, display: "flex", flexDirection: "column",
-                  alignItems: "center", justifyContent: "center", gap: "4px",
-                  textDecoration: "none", position: "relative", paddingBottom: "4px",
-                }}>
-                  {active && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
-                  <Icon size={iconSz} color={color} strokeWidth={active ? 2.2 : 1.7} style={{ position: "relative" }} />
-                  <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color, fontWeight: active ? 600 : 400, position: "relative" }}>
-                    {label}
-                  </span>
-                </Link>
-              );
-            }
-
-            const isInventario = label === "Inventario";
-            if (isInventario) {
-              const invActive = pathname === "/dashboard/inventario" || pathname === "/dashboard/inventario/cards" || pathname === "/dashboard/inventario/agregar";
-              const invColor = invActive ? COURT : highlight ? `${COURT}80` : INK2;
-              return (
-                <Link key="inventario" href="/dashboard/inventario" style={{
-                  flex: 1, display: "flex", flexDirection: "column",
-                  alignItems: "center", justifyContent: "center", gap: "4px",
-                  textDecoration: "none", position: "relative", paddingBottom: "4px",
-                }}>
-                  {invActive && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
-                  <Icon size={highlight ? 26 : 22} color={invColor} strokeWidth={invActive ? 2.2 : 1.7} style={{ position: "relative" }} />
-                  <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color: invColor, fontWeight: invActive ? 600 : 400, position: "relative" }}>
-                    {label}
-                  </span>
-                </Link>
-              );
-            }
-
-            if (label === "Interactivo") {
-              const intActive = pathname.startsWith("/dashboard/decks") || pathname.startsWith("/dashboard/my-sets") || pathname.startsWith("/dashboard/trades");
-              const intColor  = intActive ? COURT : INK2;
-              return (
-                <div key="interactivo" ref={intMobileRef} style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {interactivoOpen && (
-                    <div style={{
-                      position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)",
-                      width: 180, background: "#0d1520",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      borderRadius: "12px", overflow: "hidden",
-                      boxShadow: "0 8px 40px rgba(0,0,0,0.6)", zIndex: 200,
-                    }}>
-                      <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                        <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>Interactivo</p>
-                      </div>
-                      <Link href="/dashboard/decks" onClick={() => setInteractivoOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}
-                        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
-                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                      >
-                        <Swords size={14} color={COURT} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Decks</span>
-                      </Link>
-                      <Link href="/dashboard/my-sets" onClick={() => setInteractivoOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}
-                        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
-                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                      >
-                        <WalletCards size={14} color={COURT} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Mis Sets</span>
-                      </Link>
-                      <Link href="/dashboard/trades" onClick={() => setInteractivoOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}
-                        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
-                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                      >
-                        <ArrowLeftRight size={14} color={COURT} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Intercambios</span>
-                      </Link>
-                    </div>
-                  )}
-                  <button onClick={() => setInteractivoOpen(o => !o)} style={{
-                    flex: 1, width: "100%", height: "100%", display: "flex", flexDirection: "column",
-                    alignItems: "center", justifyContent: "center", gap: "4px",
-                    background: "transparent", border: "none", cursor: "pointer", position: "relative", paddingBottom: "4px",
-                  }}>
-                    {intActive && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
-                    <Icon size={iconSz} color={intColor} strokeWidth={intActive ? 2.2 : 1.7} style={{ position: "relative" }} />
-                    <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color: intColor, fontWeight: intActive ? 600 : 400, position: "relative" }}>
-                      {label}
-                    </span>
-                  </button>
-                </div>
-              );
-            }
-
-            if (isMarket) {
-              return (
-                <div key="market" ref={mktMobileRef} style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {marketOpen && (
-                    <div style={{
-                      position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)",
-                      width: 180, background: "#0d1520",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      borderRadius: "12px", overflow: "hidden",
-                      boxShadow: "0 8px 40px rgba(0,0,0,0.6)", zIndex: 200,
-                    }}>
-                      <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                        <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>Market</p>
-                      </div>
-                      <Link href="/dashboard/market/wishlist" onClick={() => setMarketOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}
-                        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
-                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                      >
-                        <BookSearch size={14} color={COURT} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Mi Wishlist</span>
-                      </Link>
-                      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-                      <Link href="/dashboard/market" onClick={() => setMarketOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}
-                        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
-                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                      >
-                        <Store size={14} color={COURT} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>En venta</span>
-                      </Link>
-                      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-                      <Link href="/market" onClick={() => setMarketOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}
-                        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
-                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                      >
-                        <Store size={14} color="#d6ff3d" strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Market local</span>
-                      </Link>
-                    </div>
-                  )}
-                  <button onClick={() => setMarketOpen(o => !o)} style={{
-                    flex: 1, width: "100%", height: "100%", display: "flex", flexDirection: "column",
-                    alignItems: "center", justifyContent: "center", gap: "4px",
-                    background: "transparent", border: "none", cursor: "pointer", position: "relative", paddingBottom: "4px",
-                  }}>
-                    {active && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
-                    <Icon size={iconSz} color={color} strokeWidth={active ? 2.2 : 1.7} style={{ position: "relative" }} />
-                    <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color, fontWeight: active ? 600 : 400, position: "relative" }}>
-                      {label}
-                    </span>
-                  </button>
-                </div>
-              );
-            }
-
-            return (
-              <Link key={href} href={href} style={{
-                flex: 1, display: "flex", flexDirection: "column",
-                alignItems: "center", justifyContent: "center", gap: "4px",
-                textDecoration: "none", position: "relative",
-                paddingBottom: "4px",
-              }}>
-                {active && (
-                  <span style={{
-                    position: "absolute", top: 8,
-                    width: 4, height: 4, borderRadius: "50%",
-                    background: COURT,
-                  }} />
-                )}
-                <Icon size={iconSz} color={color} strokeWidth={active ? 2.2 : 1.7} style={{ position: "relative" }} />
-                <span style={{
-                  fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em",
-                  textTransform: "uppercase", color,
-                  fontWeight: active ? 600 : 400,
-                  position: "relative",
-                }}>
-                  {label}
-                </span>
-              </Link>
-            );
-          })}
-        </nav>
+        <MobileTabBar username={username} />
 
         {/* ══ MAIN CONTENT ══ */}
         <main className="dash-main" style={{ flex: 1 }}>

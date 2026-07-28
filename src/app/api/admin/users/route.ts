@@ -23,12 +23,24 @@ export async function GET() {
   const playerMap: Record<string, any> = {};
   (players ?? []).forEach(p => { playerMap[p.user_id] = p; });
 
-  const users = authUsers.users.map(u => ({
-    id: u.id,
-    email: u.email,
-    created_at: u.created_at,
-    ...playerMap[u.id],
-  }));
+  const users = authUsers.users.map(u => {
+    const player = playerMap[u.id] ?? {};
+    // "Última conexión" = lo más reciente entre el último login y el último
+    // heartbeat del dashboard. last_seen puede ser null en cuentas viejas.
+    const candidates = [u.last_sign_in_at, player.last_seen].filter(Boolean) as string[];
+    const lastActive = candidates.length
+      ? candidates.reduce((a, b) => (new Date(a) > new Date(b) ? a : b))
+      : null;
+
+    return {
+      id: u.id,
+      email: u.email,
+      created_at: u.created_at,
+      ...player,
+      last_sign_in_at: u.last_sign_in_at ?? null,
+      last_active: lastActive,
+    };
+  });
 
   return NextResponse.json({ users });
 }
