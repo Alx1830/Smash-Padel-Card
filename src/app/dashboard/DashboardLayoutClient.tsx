@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Swords, Gamepad2, WalletCards } from "lucide-react";
+import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Swords, Gamepad2, WalletCards, ArrowLeftRight } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { usePushPermission } from "@/hooks/usePushPermission";
 import { DashboardUserProvider } from "./DashboardUserContext";
@@ -438,7 +438,8 @@ export function DashboardLayoutClient({
               if (label === "Interactivo") {
                 const decksActive = pathname.startsWith("/dashboard/decks");
                 const mySetsActive = pathname.startsWith("/dashboard/my-sets");
-                const intActive = decksActive || mySetsActive;
+                const tradesActive = pathname.startsWith("/dashboard/trades");
+                const intActive = decksActive || mySetsActive || tradesActive;
                 return (
                   <div key="interactivo" style={{ marginBottom: "4px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 14px 6px" }}>
@@ -459,6 +460,13 @@ export function DashboardLayoutClient({
                       >
                         <WalletCards size={14} color={mySetsActive ? COURT : INK2} strokeWidth={1.8} />
                         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: mySetsActive ? COURT : "rgba(245,247,251,0.65)" }}>Mis Sets</span>
+                      </Link>
+                      <Link href="/dashboard/trades" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: tradesActive ? `${COURT}18` : "transparent", border: tradesActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                        onMouseEnter={e => { if (!tradesActive) e.currentTarget.style.background = `${COURT}10`; }}
+                        onMouseLeave={e => { if (!tradesActive) e.currentTarget.style.background = "transparent"; }}
+                      >
+                        <ArrowLeftRight size={14} color={tradesActive ? COURT : INK2} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: tradesActive ? COURT : "rgba(245,247,251,0.65)" }}>Intercambios</span>
                       </Link>
                     </div>
                   </div>
@@ -649,7 +657,7 @@ export function DashboardLayoutClient({
             }
 
             if (label === "Interactivo") {
-              const intActive = pathname.startsWith("/dashboard/decks") || pathname.startsWith("/dashboard/my-sets");
+              const intActive = pathname.startsWith("/dashboard/decks") || pathname.startsWith("/dashboard/my-sets") || pathname.startsWith("/dashboard/trades");
               const intColor  = intActive ? COURT : INK2;
               return (
                 <div key="interactivo" ref={intMobileRef} style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -677,6 +685,13 @@ export function DashboardLayoutClient({
                       >
                         <WalletCards size={14} color={COURT} strokeWidth={1.8} />
                         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Mis Sets</span>
+                      </Link>
+                      <Link href="/dashboard/trades" onClick={() => setInteractivoOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = `${COURT}12`)}
+                        onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                      >
+                        <ArrowLeftRight size={14} color={COURT} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Intercambios</span>
                       </Link>
                     </div>
                   )}
