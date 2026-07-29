@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { loadManySets, SET_CARDS } from "@/data/pokemon-cards";
@@ -210,6 +212,17 @@ export default function DashboardMarketPage() {
         <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, margin: 0, letterSpacing: "0.08em" }}>
           {loading ? "—" : listings.length} carta{listings.length !== 1 ? "s" : ""} en venta
         </p>
+
+        {/* Publicar se hace desde el inventario, carta por carta */}
+        <Link href="/dashboard/inventario" style={{
+          display: "inline-flex", alignItems: "center", gap: "8px", marginTop: "18px",
+          padding: "11px 20px", borderRadius: "10px", textDecoration: "none",
+          background: COURT, color: "#05070d",
+          fontFamily: MONO, fontSize: "11px", fontWeight: 700,
+          letterSpacing: "0.1em", textTransform: "uppercase",
+        }}>
+          <Plus size={15} strokeWidth={2.4} /> Agregar carta en venta
+        </Link>
 
         {!loading && missingLang.length > 0 && (
           <div style={{ marginTop: "20px", display: "flex", alignItems: "center", gap: "14px", flexWrap: "wrap", background: "rgba(255,196,71,0.08)", border: "1px solid rgba(255,196,71,0.3)", borderRadius: "12px", padding: "14px 18px" }}>

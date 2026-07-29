@@ -657,7 +657,7 @@ function TradesPageInner() {
       {/* Selector de contraparte */}
       {!peer ? (
         <>
-        <div className="trade-panel" style={{ maxWidth: 680, margin: "0 auto" }}>
+        <div className="trade-panel" style={{ width: "100%", maxWidth: 1100, alignSelf: "center", margin: "0 auto", boxSizing: "border-box" }}>
           <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: "0 0 12px" }}>
             ¿Con quién quieres intercambiar?
           </p>
@@ -699,7 +699,7 @@ function TradesPageInner() {
           </div>
         </div>
 
-        <div className="trade-panel" style={{ maxWidth: 680, margin: "16px auto 0" }}>
+        <div className="trade-panel" style={{ width: "100%", maxWidth: 1100, alignSelf: "center", margin: "16px auto 0", boxSizing: "border-box" }}>
           <TradesInbox supabase={supabase} meId={meId} />
         </div>
         </>

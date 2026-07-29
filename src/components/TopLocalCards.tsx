@@ -24,10 +24,10 @@ interface TopCard {
   key: string;
   card_id: string; set_id: string; version: string | null;
   listings: number;
-  minPrice: number; currency: string;
+  topPrice: number; currency: string;
 }
 
-/** Las 5 cartas con más publicaciones activas en el país del usuario */
+/** Las 5 cartas más caras publicadas en el país del usuario */
 export function TopLocalCards() {
   const [cards, setCards]     = useState<TopCard[]>([]);
   const [pais, setPais]       = useState<string | null>(null);
@@ -69,8 +69,8 @@ export function TopLocalCards() {
       const { data } = await q;
       if (cancelled) return;
 
-      // Se agrupa por carta + variante: la misma carta publicada por varios
-      // jugadores es lo que la vuelve "lo que más se está vendiendo".
+      // Se agrupa por carta + variante; el precio que manda es el más alto,
+      // porque el top va de la más cara a la más barata.
       const grouped: Record<string, TopCard> = {};
       for (const r of (data ?? []) as Row[]) {
         const key = `${r.card_id}::${r.set_id}::${r.version ?? ""}`;
@@ -78,17 +78,17 @@ export function TopLocalCards() {
         const g = grouped[key];
         if (g) {
           g.listings += 1;
-          if (r.price_cop < g.minPrice) { g.minPrice = r.price_cop; g.currency = cur; }
+          if (r.price_cop > g.topPrice) { g.topPrice = r.price_cop; g.currency = cur; }
         } else {
           grouped[key] = {
             key, card_id: r.card_id, set_id: r.set_id, version: r.version,
-            listings: 1, minPrice: r.price_cop, currency: cur,
+            listings: 1, topPrice: r.price_cop, currency: cur,
           };
         }
       }
 
       const top = Object.values(grouped)
-        .sort((a, b) => b.listings - a.listings || a.minPrice - b.minPrice)
+        .sort((a, b) => b.topPrice - a.topPrice || b.listings - a.listings)
         .slice(0, 5);
 
       // Los sets se cargan antes de pintar, si no las miniaturas salen vacías
@@ -121,7 +121,7 @@ export function TopLocalCards() {
         </p>
       </div>
       <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "0 0 14px" }}>
-        {pais ? `Lo más publicado en ${pais}` : "Lo más publicado en el market"}
+        {pais ? `Lo más caro publicado en ${pais}` : "Lo más caro publicado en el market"}
       </p>
 
       {loading ? (
@@ -185,7 +185,7 @@ export function TopLocalCards() {
                   fontFamily: MONO, fontSize: 10, fontWeight: 700, color: COURT,
                   flexShrink: 0, whiteSpace: "nowrap",
                 }}>
-                  {CURRENCY_SYMBOL[c.currency] ?? "$"}{formatPrice(c.minPrice, c.currency)}
+                  {CURRENCY_SYMBOL[c.currency] ?? "$"}{formatPrice(c.topPrice, c.currency)}
                 </span>
               </Link>
             );

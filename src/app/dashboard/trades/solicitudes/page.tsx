@@ -279,7 +279,7 @@ function SolicitudesPageInner() {
         /* Propuesta y negociación lado a lado cuando hay ancho */
         .sol-split { display: grid; grid-template-columns: 1fr; gap: 16px; }
         @media (min-width: 1000px) {
-          .sol-split { grid-template-columns: minmax(0, 1fr) 320px; align-items: start; }
+          .sol-split { grid-template-columns: minmax(0, 1fr) 360px; align-items: start; }
         }
       `}</style>
 
@@ -299,7 +299,7 @@ function SolicitudesPageInner() {
           Todavía no tienes solicitudes de intercambio.
         </p>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 880 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 1320 }}>
           {trades.map(trade => (
             <TradeCardRow
               key={trade.id}
@@ -393,11 +393,13 @@ function TradeCardRow({
   }, [other, trade.id, trade.cash_amount, trade.cash_currency, iGive.length, iReceive.length, cashLabel, iPayCash]);
 
   return (
+    // La propuesta y la negociación son dos tarjetas hermanas
+    <div className="sol-split">
     <div ref={ref} style={{
       background: "rgba(255,255,255,0.02)",
       border: `1px solid ${focused ? `${COURT}55` : "rgba(255,255,255,0.08)"}`,
       boxShadow: focused ? `0 0 24px ${COURT}22` : "none",
-      borderRadius: 14, padding: 18,
+      borderRadius: 14, padding: 18, minWidth: 0,
     }}>
       {/* Cabecera */}
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14, flexWrap: "wrap" }}>
@@ -439,9 +441,6 @@ function TradeCardRow({
         </span>
       </div>
 
-      {/* Propuesta a la izquierda, negociación a la derecha */}
-      <div className="sol-split">
-      <div style={{ minWidth: 0 }}>
       <div className="sol-cards">
         <CardList label="Tú entregas" accent={RED} cards={iGive} total={giveTotal}
           findCard={findCard} priceOf={priceOf} onZoom={onZoom} />
@@ -546,9 +545,9 @@ function TradeCardRow({
               : `Confirmaste la recepción ✓ — falta que @${other?.username ?? "el otro jugador"} confirme.`}
         </p>
       )}
-      </div>
+    </div>
 
-      {/* Chat de negociación */}
+      {/* Negociación, en su propia tarjeta */}
       <TradeChat
         tradeId={trade.id}
         meId={meId}
@@ -557,7 +556,6 @@ function TradeCardRow({
         onToggle={() => setChatOpen(o => !o)}
         supabase={supabase}
       />
-      </div>
     </div>
   );
 }
@@ -666,8 +664,8 @@ function TradeChat({ tradeId, meId, other, open, onToggle, supabase }: {
   return (
     <div style={{
       background: "rgba(255,255,255,0.02)",
-      border: "1px solid rgba(255,255,255,0.07)",
-      borderRadius: 12, padding: "12px 14px",
+      border: "1px solid rgba(255,255,255,0.08)",
+      borderRadius: 14, padding: 18, alignSelf: "start",
     }}>
       <button onClick={onToggle} style={{
         display: "flex", alignItems: "center", gap: 8, width: "100%",
