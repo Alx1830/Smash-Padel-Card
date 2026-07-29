@@ -268,19 +268,27 @@ function TradesPageInner() {
       setMyWish(myWishRows);
       setPeerWish(wishRows);
       setPeerInv(peerRows);
-      setLoadingData(false);
 
       // Sets de los dos inventarios completos: ambas columnas tienen un tab
       // que muestra todo, no solo el cruce con la wishlist.
-      const needed = new Set<string>();
-      myRows.forEach(r => needed.add(r.set_id));
-      peerRows.forEach(r => needed.add(r.set_id));
+      // Los del otro jugador van primero: sin su metadata su columna se ve
+      // vacía y parecería que no tiene cartas.
+      const peerSets = [...new Set(peerRows.map(r => r.set_id))];
+      const mySets   = [...new Set(myRows.map(r => r.set_id))].filter(id => !peerSets.includes(id));
+      const needed   = new Set([...peerSets, ...mySets]);
 
-      for (const setId of needed) {
+      // De a pocos sets por tanda: cargarlos todos de golpe dispara la memoria
+      // en móvil, y uno por uno tarda demasiado con inventarios grandes.
+      const order = [...needed];
+      for (let i = 0; i < order.length; i += 4) {
         if (cancelled) return;
-        await loadManySets([setId]);
+        await loadManySets(order.slice(i, i + 4));
         if (!cancelled) setCardsReady(n => n + 1);
       }
+      if (cancelled) return;
+      // Hasta aquí no se sabe qué cartas existen: recién ahora tiene sentido
+      // mostrar "no tiene cartas".
+      setLoadingData(false);
 
       // Precios Scrydex de los sets involucrados
       await Promise.all([...needed].map(async setId => {
@@ -632,6 +640,10 @@ function TradesPageInner() {
           font-family: ${MONO}; font-size: 12px; outline: none; width: 100%;
         }
         .trade-input:focus { border-color: ${COURT}66; }
+        /* El desplegable nativo hereda el fondo translúcido y queda ilegible:
+           se le fuerza un fondo opaco y el esquema oscuro del sistema. */
+        select.trade-input { color-scheme: dark; background-color: #10141f; }
+        select.trade-input option { background-color: #10141f; color: ${INK0}; }
         .trade-panel {
           background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);
           border-radius: 14px; padding: 16px;
