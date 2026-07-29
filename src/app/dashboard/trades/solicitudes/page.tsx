@@ -13,7 +13,7 @@ import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { parseProposal } from "@/lib/trade-messages";
 import {
   ArrowLeft, Check, X, Clock, Ban, Pencil, MessageCircle,
-  MessagesSquare, Send, ChevronDown,
+  MessagesSquare, Send, ChevronDown, ArrowDownLeft, ArrowUpRight,
 } from "lucide-react";
 
 const COURT = "#2ee6c1";
@@ -91,7 +91,6 @@ function SolicitudesPageInner() {
   const [acting, setActing]   = useState<string | null>(null);
   const [, setCardsReady]     = useState(0);
   const [zoom, setZoom]       = useState<{ card: PokemonCard; setId: string; price: number | null } | null>(null);
-  const [tabOverride, setTabOverride] = useState<"recibidas" | "enviadas" | null>(null);
 
   const load = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -139,14 +138,6 @@ function SolicitudesPageInner() {
 
   useEffect(() => { (async () => { await load(); })(); }, [load]);
 
-  /* Si llegamos con ?trade=, la pestaña por defecto es donde vive ese intercambio */
-  const tab = useMemo<"recibidas" | "enviadas">(() => {
-    if (tabOverride) return tabOverride;
-    const t = focusId ? trades.find(x => x.id === focusId) : undefined;
-    if (t && meId) return t.to_user_id === meId ? "recibidas" : "enviadas";
-    return "recibidas";
-  }, [tabOverride, focusId, trades, meId]);
-
   const priceOf = useCallback((card: PokemonCard | undefined, setId: string): number | null => {
     if (!card) return null;
     const sc = SCRYDEX_SET_CODES[setId];
@@ -172,15 +163,18 @@ function SolicitudesPageInner() {
   async function respond(trade: Trade, status: "accepted" | "rejected" | "cancelled") {
     if (acting) return;
     setActing(trade.id);
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("trades")
       .update({ status, responded_at: new Date().toISOString() })
       .eq("id", trade.id)
-      .eq("status", "pending");
+      .eq("status", "pending")
+      .select("id");
 
-    if (error) {
+    if (error || !data?.length) {
       console.error("[Trades] Error respondiendo:", error);
-      alert("No se pudo actualizar la solicitud.");
+      alert(error
+        ? `No se pudo actualizar la solicitud: ${error.message}`
+        : "Esta solicitud ya no está pendiente. Recarga la página.");
       setActing(null);
       return;
     }
@@ -196,10 +190,6 @@ function SolicitudesPageInner() {
     setTrades(prev => prev.map(t => t.id === trade.id ? { ...t, status } : t));
     setActing(null);
   }
-
-  const visible = trades.filter(t =>
-    tab === "recibidas" ? t.to_user_id === meId : t.from_user_id === meId
-  );
 
   return (
     <div style={{ padding: "24px", minHeight: "100vh" }}>
@@ -220,27 +210,15 @@ function SolicitudesPageInner() {
         </h1>
       </div>
 
-      <div style={{ display: "flex", gap: 8, marginBottom: 22 }}>
-        {(["recibidas", "enviadas"] as const).map(t => (
-          <button key={t} onClick={() => setTabOverride(t)} style={{
-            padding: "9px 16px", borderRadius: 10, cursor: "pointer",
-            background: tab === t ? `${COURT}18` : "transparent",
-            border: `1px solid ${tab === t ? `${COURT}44` : "rgba(255,255,255,0.1)"}`,
-            color: tab === t ? COURT : INK2,
-            fontFamily: MONO, fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase",
-          }}>{t}</button>
-        ))}
-      </div>
-
       {loading ? (
         <p style={{ fontFamily: MONO, fontSize: 12, color: INK2 }}>Cargando…</p>
-      ) : visible.length === 0 ? (
+      ) : trades.length === 0 ? (
         <p style={{ fontFamily: MONO, fontSize: 12, color: INK2 }}>
-          No tienes solicitudes {tab}.
+          Todavía no tienes solicitudes de intercambio.
         </p>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 880 }}>
-          {visible.map(trade => (
+          {trades.map(trade => (
             <TradeCardRow
               key={trade.id}
               trade={trade}
@@ -350,6 +328,17 @@ function TradeCardRow({
               (iProposed ? " · esperando su respuesta" : " · te toca responder")}
           </p>
         </div>
+        <span style={{
+          display: "flex", alignItems: "center", gap: 5,
+          fontFamily: MONO, fontSize: 9.5, letterSpacing: "0.1em", textTransform: "uppercase",
+          color: isReceived ? COURT : INK2,
+          border: `1px solid ${isReceived ? `${COURT}44` : "rgba(255,255,255,0.14)"}`,
+          background: isReceived ? `${COURT}12` : "transparent",
+          borderRadius: 6, padding: "4px 8px", whiteSpace: "nowrap",
+        }}>
+          {isReceived ? <ArrowDownLeft size={11} /> : <ArrowUpRight size={11} />}
+          {isReceived ? "Recibida" : "Enviada"}
+        </span>
         <span style={{
           display: "flex", alignItems: "center", gap: 5,
           fontFamily: MONO, fontSize: 9.5, letterSpacing: "0.1em", textTransform: "uppercase",
@@ -616,18 +605,13 @@ function TradeChat({ tradeId, meId, other, open, onToggle, supabase }: {
                     display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap",
                   }}>
                     <Pencil size={10} strokeWidth={2} />
-                    Nueva propuesta de {mine ? "ti" : `@${other?.username ?? "jugador"}`}
+                    Nueva propuesta {mine ? "tuya" : `de @${other?.username ?? "jugador"}`}
                     {" · "}
                     {new Date(m.created_at).toLocaleString("es-CO", {
                       day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
                     })}
                   </p>
-                  <p style={{
-                    fontFamily: MONO, fontSize: 10.5, color: INK0, margin: 0,
-                    lineHeight: 1.6, whiteSpace: "pre-wrap", wordBreak: "break-word",
-                  }}>
-                    {proposal}
-                  </p>
+                  <ProposalBody text={proposal} />
                 </div>
               );
 
@@ -685,6 +669,43 @@ function TradeChat({ tradeId, meId, other, open, onToggle, supabase }: {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ── Cuerpo de un mensaje de propuesta ──────────────────────── */
+const GREEN = "#4ade80";
+
+/** Cada línea es "etiqueta: item · item"; el signo del item define su color */
+function ProposalBody({ text }: { text: string }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      {text.split("\n").map((line, i) => {
+        const sep   = line.indexOf(": ");
+        const label = sep > 0 ? line.slice(0, sep) : "";
+        const rest  = sep > 0 ? line.slice(sep + 2) : line;
+
+        return (
+          <p key={i} style={{
+            fontFamily: MONO, fontSize: 10.5, color: INK0, margin: 0,
+            lineHeight: 1.6, wordBreak: "break-word",
+          }}>
+            {label && (
+              <span style={{ color: INK2 }}>{label}: </span>
+            )}
+            {rest.split(" · ").map((item, j) => {
+              const sign  = item.trim().charAt(0);
+              const color = sign === "+" ? GREEN : sign === "−" ? RED : sign === "±" ? LIME : INK0;
+              return (
+                <span key={j} style={{ color }}>
+                  {j > 0 && <span style={{ color: INK2 }}> · </span>}
+                  {item}
+                </span>
+              );
+            })}
+          </p>
+        );
+      })}
     </div>
   );
 }

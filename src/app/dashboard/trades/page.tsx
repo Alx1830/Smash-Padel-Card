@@ -96,6 +96,7 @@ function TradesPageInner() {
 
   const [meId, setMeId]       = useState<string | null>(null);
   const [myCurrency, setMyCurrency] = useState("COP");
+  const [myUsername, setMyUsername] = useState<string | null>(null);
 
   /* ── Selección de contraparte ─────────────────────────────── */
   const [search, setSearch]   = useState("");
@@ -156,8 +157,9 @@ function TradesPageInner() {
       if (!user) return;
       setMeId(user.id);
       const { data: me } = await supabase
-        .from("players").select("pais").eq("user_id", user.id).maybeSingle();
+        .from("players").select("pais, username").eq("user_id", user.id).maybeSingle();
       if (me?.pais) setMyCurrency(getCurrencyForCountry(me.pais));
+      if (me?.username) setMyUsername(me.username);
     })();
   }, [supabase]);
 
@@ -440,11 +442,15 @@ function TradesPageInner() {
       return parts;
     };
 
+    // Cada lado se rotula con el @ de quien entrega esas cartas, que es más
+    // claro que "ofrece/pide" cuando el mensaje lo leen los dos.
     const lines: string[] = [];
     const off = diffSide(initialOffer, offer);
     const req = diffSide(initialRequest, request);
-    if (off.length) lines.push(`Ofrece: ${off.join(", ")}`);
-    if (req.length) lines.push(`Pide: ${req.join(", ")}`);
+    const meTag  = myUsername ? `@${myUsername}` : "Tú";
+    const peerTag = peer?.username ? `@${peer.username}` : "El otro jugador";
+    if (off.length) lines.push(`${meTag} entrega: ${off.join(" · ")}`);
+    if (req.length) lines.push(`${peerTag} entrega: ${req.join(" · ")}`);
 
     const beforeCash = origCash?.amount ?? 0;
     if (Math.abs(beforeCash - cashNum) > 0.005) {
@@ -455,7 +461,7 @@ function TradesPageInner() {
     }
 
     return lines.join("\n");
-  }, [initialOffer, initialRequest, offer, request, entryByKey, origCash, cashNum, myCurrency]);
+  }, [initialOffer, initialRequest, offer, request, entryByKey, origCash, cashNum, myCurrency, myUsername, peer]);
 
   /* ── Enviar o guardar la solicitud ────────────────────────── */
   async function sendTrade() {
@@ -650,6 +656,7 @@ function TradesPageInner() {
 
       {/* Selector de contraparte */}
       {!peer ? (
+        <>
         <div className="trade-panel" style={{ maxWidth: 680 }}>
           <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: "0 0 12px" }}>
             ¿Con quién quieres intercambiar?
@@ -690,9 +697,12 @@ function TradesPageInner() {
               </button>
             ))}
           </div>
+        </div>
 
+        <div className="trade-panel" style={{ maxWidth: 680, marginTop: 16 }}>
           <TradesInbox supabase={supabase} meId={meId} />
         </div>
+        </>
       ) : (
         <>
           {/* Barra de contraparte */}
@@ -1011,7 +1021,6 @@ function TradesInbox({ supabase, meId }: {
   supabase: ReturnType<typeof createClient>;
   meId: string | null;
 }) {
-  const [tab, setTab]         = useState<"recibidas" | "enviadas">("recibidas");
   const [trades, setTrades]   = useState<InboxTrade[]>([]);
   const [people, setPeople]   = useState<Record<string, Player>>({});
   const [loading, setLoading] = useState(true);
@@ -1052,22 +1061,23 @@ function TradesInbox({ supabase, meId }: {
     return () => { cancelled = true; };
   }, [supabase, meId]);
 
-  const visible = trades.filter(t =>
-    tab === "recibidas" ? t.to_user_id === meId : t.from_user_id === meId
-  );
-
-  const pendingCount = (which: "recibidas" | "enviadas") => trades.filter(t =>
-    t.status === "pending" &&
-    (which === "recibidas" ? t.to_user_id === meId : t.from_user_id === meId)
-  ).length;
+  const pending = trades.filter(t => t.status === "pending").length;
 
   return (
-    <div style={{ marginTop: 22, borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 18 }}>
+    <div>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
         <Inbox size={14} color={INK2} strokeWidth={1.8} />
         <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>
           Mis solicitudes
         </p>
+        {pending > 0 && (
+          <span style={{
+            fontFamily: MONO, fontSize: 9, color: LIME, background: `${LIME}18`,
+            border: `1px solid ${LIME}33`, borderRadius: 5, padding: "2px 6px",
+          }}>
+            {pending} pendiente{pending === 1 ? "" : "s"}
+          </span>
+        )}
         <Link href="/dashboard/trades/solicitudes" style={{
           marginLeft: "auto", fontFamily: MONO, fontSize: 10, color: COURT,
           textDecoration: "none", letterSpacing: "0.06em",
@@ -1076,37 +1086,16 @@ function TradesInbox({ supabase, meId }: {
         </Link>
       </div>
 
-      <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
-        {(["recibidas", "enviadas"] as const).map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{
-            display: "flex", alignItems: "center", gap: 6,
-            padding: "7px 12px", borderRadius: 8, cursor: "pointer",
-            background: tab === t ? `${COURT}18` : "transparent",
-            border: `1px solid ${tab === t ? `${COURT}55` : "rgba(255,255,255,0.1)"}`,
-            color: tab === t ? COURT : INK2,
-            fontFamily: MONO, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase",
-          }}>
-            {t}
-            {pendingCount(t) > 0 && (
-              <span style={{
-                background: `${LIME}22`, color: LIME, borderRadius: 5,
-                padding: "1px 5px", fontSize: 9,
-              }}>{pendingCount(t)}</span>
-            )}
-          </button>
-        ))}
-      </div>
-
       {loading ? (
         <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, margin: 0 }}>Cargando…</p>
-      ) : visible.length === 0 ? (
+      ) : trades.length === 0 ? (
         <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, margin: 0, lineHeight: 1.6 }}>
-          No tienes solicitudes {tab}.
+          Todavía no tienes solicitudes de intercambio.
         </p>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 380, overflowY: "auto" }}
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 420, overflowY: "auto" }}
           className="trade-panel-scroll">
-          {visible.map(t => (
+          {trades.map(t => (
             <InboxRow key={t.id} trade={t} meId={meId} other={people[t.from_user_id === meId ? t.to_user_id : t.from_user_id]} />
           ))}
         </div>
@@ -1130,7 +1119,7 @@ function InboxRow({ trade, meId, other }: {
       display: "block", textDecoration: "none", padding: "11px 12px", borderRadius: 11,
       background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)",
     }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 9 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 9, flexWrap: "wrap" }}>
         <Avatar url={other?.photo_url ?? null} name={other?.username ?? "?"} size={28} />
         <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{
@@ -1143,11 +1132,20 @@ function InboxRow({ trade, meId, other }: {
             {new Date(trade.created_at).toLocaleDateString("es-CO", { day: "2-digit", month: "short" })}
           </p>
         </div>
+        <span style={{
+          fontFamily: MONO, fontSize: 8.5, color: isReceived ? COURT : INK2,
+          letterSpacing: "0.08em", textTransform: "uppercase",
+          border: `1px solid ${isReceived ? `${COURT}44` : "rgba(255,255,255,0.14)"}`,
+          background: isReceived ? `${COURT}12` : "transparent",
+          borderRadius: 5, padding: "3px 6px", whiteSpace: "nowrap",
+        }}>
+          {isReceived ? "Recibida" : "Enviada"}
+        </span>
         {myTurn && (
           <span style={{
             fontFamily: MONO, fontSize: 8.5, color: LIME, letterSpacing: "0.08em",
             textTransform: "uppercase", border: `1px solid ${LIME}44`,
-            background: `${LIME}12`, borderRadius: 5, padding: "3px 6px",
+            background: `${LIME}12`, borderRadius: 5, padding: "3px 6px", whiteSpace: "nowrap",
           }}>Te toca</span>
         )}
         <span style={{
