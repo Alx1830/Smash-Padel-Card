@@ -13,7 +13,7 @@ import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { parseProposal } from "@/lib/trade-messages";
 import {
   ArrowLeft, Check, X, Clock, Ban, Pencil, MessageCircle,
-  MessagesSquare, Send, ChevronDown, ArrowDownLeft, ArrowUpRight, PackageCheck,
+  MessagesSquare, Send, ChevronDown, ArrowDownLeft, ArrowUpRight, PackageCheck, Trash2,
 } from "lucide-react";
 
 const COURT = "#2ee6c1";
@@ -51,6 +51,9 @@ interface Trade {
   /** Cuándo confirmó cada parte que recibió las cartas */
   from_received_at: string | null;
   to_received_at:   string | null;
+  /** Cada parte puede sacarlo de su propio historial sin afectar al otro */
+  from_hidden: boolean;
+  to_hidden:   boolean;
   trade_cards: TradeCard[];
 }
 
@@ -105,11 +108,13 @@ function SolicitudesPageInner() {
 
     const { data } = await supabase
       .from("trades")
-      .select("id, from_user_id, to_user_id, status, cash_amount, cash_currency, cash_payer, message, created_at, updated_at, last_proposed_by, from_received_at, to_received_at, trade_cards(side, card_id, set_id, version, quantity)")
+      .select("id, from_user_id, to_user_id, status, cash_amount, cash_currency, cash_payer, message, created_at, updated_at, last_proposed_by, from_received_at, to_received_at, from_hidden, to_hidden, trade_cards(side, card_id, set_id, version, quantity)")
       .or(`from_user_id.eq.${user.id},to_user_id.eq.${user.id}`)
       .order("created_at", { ascending: false });
 
-    const rows = (data ?? []) as unknown as Trade[];
+    const all = (data ?? []) as unknown as Trade[];
+    // Los que saqué de mi historial siguen existiendo para el otro jugador
+    const rows = all.filter(t => !(t.from_user_id === user.id ? t.from_hidden : t.to_hidden));
     setTrades(rows);
     setLoading(false);
 
@@ -201,6 +206,21 @@ function SolicitudesPageInner() {
     }
 
     setTrades(prev => prev.map(t => t.id === trade.id ? { ...t, status } : t));
+    setActing(null);
+  }
+
+  /** Lo saca de mi historial; el otro jugador lo sigue viendo */
+  async function hideTrade(trade: Trade) {
+    if (acting) return;
+    if (!confirm("¿Quitar este intercambio de tu historial? El otro jugador lo seguirá viendo en el suyo.")) return;
+    setActing(trade.id);
+    const { error } = await supabase.rpc("hide_trade", { p_trade_id: trade.id, p_hidden: true });
+    if (error) {
+      console.error("[Trades] Error ocultando:", error);
+      alert("No se pudo quitar del historial. Intenta de nuevo.");
+    } else {
+      setTrades(prev => prev.filter(t => t.id !== trade.id));
+    }
     setActing(null);
   }
 
@@ -343,6 +363,7 @@ function SolicitudesPageInner() {
               sideTotal={sideTotal}
               onRespond={respond}
               onReceived={confirmReceived}
+              onHide={hideTrade}
               onZoom={setZoom}
               supabase={supabase}
             />
@@ -357,7 +378,7 @@ function SolicitudesPageInner() {
 
 /* ── Tarjeta de un intercambio ──────────────────────────────── */
 function TradeCardRow({
-  trade, meId, other, focused, acting, findCard, priceOf, sideTotal, onRespond, onReceived, onZoom, supabase,
+  trade, meId, other, focused, acting, findCard, priceOf, sideTotal, onRespond, onReceived, onHide, onZoom, supabase,
 }: {
   trade: Trade;
   meId: string | null;
@@ -369,6 +390,7 @@ function TradeCardRow({
   sideTotal: (cards: TradeCard[]) => number;
   onRespond: (t: Trade, s: "accepted" | "rejected" | "cancelled") => void;
   onReceived: (t: Trade) => void;
+  onHide: (t: Trade) => void;
   onZoom: (z: { card: PokemonCard; setId: string; price: number | null }) => void;
   supabase: ReturnType<typeof createClient>;
 }) {
@@ -558,6 +580,14 @@ function TradeCardRow({
             style={btnStyle(COURT, "#05070d")}>
             <PackageCheck size={14} strokeWidth={2.2} />
             {acting ? "Actualizando…" : "Recibí las cartas"}
+          </button>
+        )}
+
+        {/* Un intercambio pendiente sigue vivo: primero se cancela o se responde */}
+        {trade.status !== "pending" && (
+          <button onClick={() => onHide(trade)} disabled={acting}
+            style={{ ...btnStyle("transparent", INK2, "rgba(255,255,255,0.15)"), marginLeft: "auto" }}>
+            <Trash2 size={14} strokeWidth={2} /> Quitar del historial
           </button>
         )}
       </div>

@@ -1023,6 +1023,8 @@ interface InboxTrade {
   cash_amount: number | null;
   created_at: string;
   last_proposed_by: string | null;
+  from_hidden: boolean;
+  to_hidden:   boolean;
   trade_cards: InboxCard[];
 }
 
@@ -1048,13 +1050,15 @@ function TradesInbox({ supabase, meId }: {
     (async () => {
       const { data } = await supabase
         .from("trades")
-        .select("id, from_user_id, to_user_id, status, cash_amount, created_at, last_proposed_by, trade_cards(side, card_id, set_id, quantity)")
+        .select("id, from_user_id, to_user_id, status, cash_amount, created_at, last_proposed_by, from_hidden, to_hidden, trade_cards(side, card_id, set_id, quantity)")
         .or(`from_user_id.eq.${meId},to_user_id.eq.${meId}`)
         .order("created_at", { ascending: false })
         .limit(30);
       if (cancelled) return;
 
-      const rows = (data ?? []) as unknown as InboxTrade[];
+      // Los que el usuario sacó de su historial no vuelven a aparecer aquí
+      const rows = ((data ?? []) as unknown as InboxTrade[])
+        .filter(t => !(t.from_user_id === meId ? t.from_hidden : t.to_hidden));
       setTrades(rows);
       setLoading(false);
 
