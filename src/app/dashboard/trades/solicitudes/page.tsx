@@ -10,6 +10,7 @@ import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
+import { parseProposal } from "@/lib/trade-messages";
 import {
   ArrowLeft, Check, X, Clock, Ban, Pencil, MessageCircle,
   MessagesSquare, Send, ChevronDown,
@@ -45,6 +46,8 @@ interface Trade {
   message: string | null;
   created_at: string;
   updated_at: string | null;
+  /** Quién hizo la última propuesta; null = el emisor original */
+  last_proposed_by: string | null;
   trade_cards: TradeCard[];
 }
 
@@ -97,7 +100,7 @@ function SolicitudesPageInner() {
 
     const { data } = await supabase
       .from("trades")
-      .select("id, from_user_id, to_user_id, status, cash_amount, cash_currency, cash_payer, message, created_at, updated_at, trade_cards(side, card_id, set_id, version, quantity)")
+      .select("id, from_user_id, to_user_id, status, cash_amount, cash_currency, cash_payer, message, created_at, updated_at, last_proposed_by, trade_cards(side, card_id, set_id, version, quantity)")
       .or(`from_user_id.eq.${user.id},to_user_id.eq.${user.id}`)
       .order("created_at", { ascending: false });
 
@@ -287,6 +290,8 @@ function TradeCardRow({
   const isReceived = trade.to_user_id === meId;
   const isSender   = trade.from_user_id === meId;
   const meta       = STATUS_META[trade.status];
+  /** La pelota está en el campo del otro si la última propuesta es mía */
+  const iProposed  = (trade.last_proposed_by ?? trade.from_user_id) === meId;
 
   // Desde mi punto de vista: si recibí la solicitud, su 'offer' es lo que yo recibo
   const iGive    = (trade.trade_cards ?? []).filter(c => c.side === (isReceived ? "request" : "offer"));
@@ -341,6 +346,8 @@ function TradeCardRow({
           <p style={{ fontFamily: MONO, fontSize: 9.5, color: INK2, margin: 0 }}>
             {new Date(trade.created_at).toLocaleDateString("es-CO", { day: "2-digit", month: "short", year: "numeric" })}
             {trade.updated_at && " · editado"}
+            {trade.status === "pending" &&
+              (iProposed ? " · esperando su respuesta" : " · te toca responder")}
           </p>
         </div>
         <span style={{
@@ -417,7 +424,8 @@ function TradeCardRow({
 
       {/* Acciones */}
       <div style={{ display: "flex", gap: 8, marginTop: 16, flexWrap: "wrap" }}>
-        {trade.status === "pending" && isReceived && (
+        {/* Responde quien no hizo la última propuesta */}
+        {trade.status === "pending" && !iProposed && (
           <>
             <button onClick={() => onRespond(trade, "accepted")} disabled={acting}
               style={btnStyle(COURT, "#05070d")}>
@@ -430,16 +438,18 @@ function TradeCardRow({
           </>
         )}
 
+        {/* Ambas partes pueden contraproponer */}
+        {trade.status === "pending" && (
+          <Link href={`/dashboard/trades?edit=${trade.id}`} style={{ ...btnStyle("transparent", LIME, LIME), textDecoration: "none" }}>
+            <Pencil size={14} strokeWidth={2} /> Editar
+          </Link>
+        )}
+
         {trade.status === "pending" && isSender && (
-          <>
-            <Link href={`/dashboard/trades?edit=${trade.id}`} style={{ ...btnStyle("transparent", LIME, LIME), textDecoration: "none" }}>
-              <Pencil size={14} strokeWidth={2} /> Editar
-            </Link>
-            <button onClick={() => onRespond(trade, "cancelled")} disabled={acting}
-              style={btnStyle("transparent", INK2, "rgba(255,255,255,0.15)")}>
-              <Ban size={14} strokeWidth={2} /> Cancelar
-            </button>
-          </>
+          <button onClick={() => onRespond(trade, "cancelled")} disabled={acting}
+            style={btnStyle("transparent", INK2, "rgba(255,255,255,0.15)")}>
+            <Ban size={14} strokeWidth={2} /> Cancelar
+          </button>
         )}
 
         {trade.status === "pending" && waLink && (
@@ -593,6 +603,34 @@ function TradeChat({ tradeId, meId, other, open, onToggle, supabase }: {
               </p>
             ) : messages.map(m => {
               const mine = m.user_id === meId;
+              const proposal = parseProposal(m.body);
+
+              if (proposal) return (
+                <div key={m.id} style={{
+                  alignSelf: "stretch", borderRadius: 10, padding: "9px 12px",
+                  background: `${LIME}0e`, border: `1px solid ${LIME}33`,
+                }}>
+                  <p style={{
+                    fontFamily: MONO, fontSize: 9, color: LIME, margin: "0 0 5px",
+                    letterSpacing: "0.06em", textTransform: "uppercase",
+                    display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap",
+                  }}>
+                    <Pencil size={10} strokeWidth={2} />
+                    Nueva propuesta de {mine ? "ti" : `@${other?.username ?? "jugador"}`}
+                    {" · "}
+                    {new Date(m.created_at).toLocaleString("es-CO", {
+                      day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
+                    })}
+                  </p>
+                  <p style={{
+                    fontFamily: MONO, fontSize: 10.5, color: INK0, margin: 0,
+                    lineHeight: 1.6, whiteSpace: "pre-wrap", wordBreak: "break-word",
+                  }}>
+                    {proposal}
+                  </p>
+                </div>
+              );
+
               return (
                 <div key={m.id} style={{
                   alignSelf: mine ? "flex-end" : "flex-start",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -11,6 +11,7 @@ import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { InvTiltCard, INV_CARD_KEYFRAMES } from "@/components/InventoryCard";
 import { CURRENCY_SYMBOL, getCurrencyForCountry } from "@/lib/currency";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
+import { PROPOSAL_PREFIX } from "@/lib/trade-messages";
 import { ArrowLeftRight, Inbox, Search, X, Minus, Plus, Send, Heart, MessageCircle, Pencil } from "lucide-react";
 
 const COURT = "#2ee6c1";
@@ -60,6 +61,26 @@ const usd = (n: number) =>
 const rowKey = (r: { card_id: string; set_id: string; version?: string | null }) =>
   `${r.card_id}::${r.set_id}::${r.version ?? ""}`;
 
+/* ── Layout angosto ─────────────────────────────────────────── */
+/** Por debajo de 1100px las tres columnas no caben una al lado de otra */
+const NARROW_QUERY = "(max-width: 1099px)";
+
+const subscribeNarrow = (cb: () => void) => {
+  const mq = window.matchMedia(NARROW_QUERY);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
+
+function useIsNarrow() {
+  return useSyncExternalStore(
+    subscribeNarrow,
+    () => window.matchMedia(NARROW_QUERY).matches,
+    () => false,
+  );
+}
+
+type MobileTab = "mias" | "suyo" | "resumen";
+
 export default function TradesPage() {
   return (
     <Suspense fallback={null}>
@@ -92,6 +113,10 @@ function TradesPageInner() {
   const [cardsReady, setCardsReady] = useState(0); // fuerza re-render al cargar sets
   const [peerTab, setPeerTab]     = useState<"todo" | "wishlist">("todo");
 
+  /* ── Navegación en pantallas angostas ─────────────────────── */
+  const narrow = useIsNarrow();
+  const [mobileTab, setMobileTab] = useState<MobileTab>("mias");
+
   /* ── Selección del trade ──────────────────────────────────── */
   // null = todavía sin tocar; al editar arranca desde el trade original
   const [offerState, setOffer]     = useState<Record<string, number> | null>(null);
@@ -109,6 +134,14 @@ function TradesPageInner() {
   const [prefill, setPrefill] = useState<{
     offer: Record<string, number>; request: Record<string, number>;
   } | null>(null);
+  /**
+   * true cuando quien edita es el receptor del trade. Los lados se guardan
+   * siempre respecto a from_user_id, así que hay que invertirlos al leer y
+   * al escribir para que la pantalla siga hablando en primera persona.
+   */
+  const [flipped, setFlipped] = useState(false);
+  /** Dinero del trade original, para describir los cambios en el chat */
+  const [origCash, setOrigCash] = useState<{ amount: number; currency: string | null } | null>(null);
 
   /* ── Filtros ──────────────────────────────────────────────── */
   const [fNombre, setFNombre]     = useState("");
@@ -165,26 +198,35 @@ function TradesPageInner() {
     (async () => {
       const { data: trade } = await supabase
         .from("trades")
-        .select("id, from_user_id, to_user_id, status, cash_amount, cash_payer, message, trade_cards(side, card_id, set_id, quantity)")
+        .select("id, from_user_id, to_user_id, status, cash_amount, cash_currency, cash_payer, message, trade_cards(side, card_id, set_id, quantity)")
         .eq("id", editId).maybeSingle();
 
-      // Solo el emisor edita, y solo mientras siga pendiente
-      if (!trade || trade.from_user_id !== meId || trade.status !== "pending") {
+      // Cualquiera de las dos partes edita, mientras siga pendiente
+      const isFrom = trade?.from_user_id === meId;
+      const isTo   = trade?.to_user_id === meId;
+      if (!trade || (!isFrom && !isTo) || trade.status !== "pending") {
         router.replace("/dashboard/trades");
         return;
       }
+      setFlipped(isTo);
 
       const { data: other } = await supabase
-        .from("players").select(PLAYER_COLS).eq("user_id", trade.to_user_id).maybeSingle();
+        .from("players").select(PLAYER_COLS)
+        .eq("user_id", isTo ? trade.from_user_id : trade.to_user_id).maybeSingle();
       if (other) setPeer(other as Player);
 
       const pf = { offer: {} as Record<string, number>, request: {} as Record<string, number> };
       for (const c of (trade.trade_cards ?? []) as { side: "offer" | "request"; card_id: string; set_id: string; quantity: number }[]) {
-        pf[c.side][`${c.card_id}::${c.set_id}`] = c.quantity;
+        // Lo que yo entrego es el lado 'offer' del emisor, o el 'request' si soy el receptor
+        const mine = isTo ? (c.side === "offer" ? "request" : "offer") : c.side;
+        pf[mine][`${c.card_id}::${c.set_id}`] = c.quantity;
       }
       setPrefill(pf);
       setCash(trade.cash_amount ? String(trade.cash_amount) : "");
-      setCashPayer((trade.cash_payer as "from" | "to") ?? "to");
+      // cash_payer se guarda respecto a from_user_id; "to" significa "él me paga"
+      const payer = (trade.cash_payer as "from" | "to") ?? "to";
+      setCashPayer(isTo ? (payer === "to" ? "from" : "to") : payer);
+      setOrigCash({ amount: Number(trade.cash_amount ?? 0), currency: trade.cash_currency ?? null });
       setMessage(trade.message ?? "");
     })();
   }, [editId, meId, prefill, supabase, router]);
@@ -377,15 +419,50 @@ function TradesPageInner() {
   const offerTotal   = useMemo(() => totalOf(offer),   [offer, totalOf]);
   const requestTotal = useMemo(() => totalOf(request), [request, totalOf]);
 
+  /* ── Resumen de cambios para el chat ──────────────────────── */
+  /** Diferencias entre la propuesta original y la actual, en texto plano */
+  const changeSummary = useCallback(() => {
+    const diffSide = (before: Record<string, number>, now: Record<string, number>) => {
+      const parts: string[] = [];
+      for (const key of new Set([...Object.keys(before), ...Object.keys(now)])) {
+        const b = before[key] ?? 0, n = now[key] ?? 0;
+        if (b === n) continue;
+        const name = entryByKey[key]?.card.name ?? "carta";
+        parts.push(n === 0 ? `− ${name}`
+          : b === 0 ? `+ ${name}${n > 1 ? ` ×${n}` : ""}`
+          : `± ${name} ×${b} → ×${n}`);
+      }
+      return parts;
+    };
+
+    const lines: string[] = [];
+    const off = diffSide(initialOffer, offer);
+    const req = diffSide(initialRequest, request);
+    if (off.length) lines.push(`Ofrece: ${off.join(", ")}`);
+    if (req.length) lines.push(`Pide: ${req.join(", ")}`);
+
+    const beforeCash = origCash?.amount ?? 0;
+    if (Math.abs(beforeCash - cashNum) > 0.005) {
+      const sym = CURRENCY_SYMBOL[myCurrency] ?? "$";
+      const fmt = (n: number, cur: string | null) =>
+        n > 0 ? `${CURRENCY_SYMBOL[cur ?? myCurrency] ?? sym}${n.toLocaleString("es-CO")}` : "sin dinero";
+      lines.push(`Dinero: ${fmt(beforeCash, origCash?.currency ?? null)} → ${fmt(cashNum, myCurrency)}`);
+    }
+
+    return lines.join("\n");
+  }, [initialOffer, initialRequest, offer, request, entryByKey, origCash, cashNum, myCurrency]);
+
   /* ── Enviar o guardar la solicitud ────────────────────────── */
   async function sendTrade() {
     if (!canSend || !peer || !meId || sending) return;
     setSending(true);
     try {
+      // Al editar como receptor, "yo pago" es 'to' visto desde from_user_id
+      const storedPayer = flipped ? (cashPayer === "from" ? "to" : "from") : cashPayer;
       const payload = {
         cash_amount: cashNum > 0 ? cashNum : null,
         cash_currency: cashNum > 0 ? myCurrency : null,
-        cash_payer: cashNum > 0 ? cashPayer : null,
+        cash_payer: cashNum > 0 ? storedPayer : null,
         message: message.trim() || null,
       };
 
@@ -393,7 +470,7 @@ function TradesPageInner() {
 
       if (editId) {
         const { error: upErr } = await supabase.from("trades")
-          .update({ ...payload, updated_at: new Date().toISOString() })
+          .update({ ...payload, updated_at: new Date().toISOString(), last_proposed_by: meId })
           .eq("id", editId).eq("status", "pending");
         if (upErr) throw upErr;
 
@@ -421,7 +498,8 @@ function TradesPageInner() {
       ].map(({ key, qty, side }) => {
         const e = entryByKey[key];
         return {
-          trade_id: tradeId, side,
+          trade_id: tradeId,
+          side: flipped ? (side === "offer" ? "request" : "offer") : side,
           card_id: String(e.card.id), set_id: e.set_id,
           version: e.version, quantity: qty,
         };
@@ -429,6 +507,16 @@ function TradesPageInner() {
 
       const { error: cardsError } = await supabase.from("trade_cards").insert(rows);
       if (cardsError) throw cardsError;
+
+      // Deja constancia en el chat de qué cambió respecto a la propuesta anterior
+      if (editId) {
+        const summary = changeSummary();
+        if (summary) {
+          await supabase.from("trade_messages").insert({
+            trade_id: tradeId, user_id: meId, body: PROPOSAL_PREFIX + summary,
+          });
+        }
+      }
 
       await fetch("/api/trades/notify", {
         method: "POST",
@@ -478,6 +566,14 @@ function TradesPageInner() {
         .trade-page { padding: 24px; min-height: 100vh; }
         .trade-cols { display: grid; grid-template-columns: 1fr; gap: 20px; }
         .trade-panel-scroll { overflow: visible; }
+
+        /* Navegación entre las tres secciones cuando no caben a lo ancho */
+        .trade-mtabs {
+          position: sticky; top: 0; z-index: 20;
+          display: flex; gap: 6px; margin-bottom: 12px;
+          padding: 8px 0;
+          background: rgba(5,7,13,0.92); backdrop-filter: blur(8px);
+        }
 
         /* Escritorio: la página no scrollea, cada columna sí */
         @media (min-width: 1100px) {
@@ -637,9 +733,40 @@ function TradesPageInner() {
             )}
           </div>
 
+          {/* Tabs de navegación en celular: las tres columnas no caben a lo ancho */}
+          {narrow && (
+            <div className="trade-mtabs">
+              {([
+                ["mias",    "Lo que tengo",      offerCount],
+                ["suyo",    `@${peer.username}`, requestCount],
+                ["resumen", "Tu solicitud",      offerCount + requestCount],
+              ] as const).map(([val, label, count]) => (
+                <button key={val} onClick={() => setMobileTab(val)} style={{
+                  flex: 1, minWidth: 0, display: "flex", alignItems: "center",
+                  justifyContent: "center", gap: 5,
+                  padding: "9px 8px", borderRadius: 9, cursor: "pointer",
+                  background: mobileTab === val ? `${COURT}18` : "transparent",
+                  border: `1px solid ${mobileTab === val ? `${COURT}55` : "rgba(255,255,255,0.1)"}`,
+                  color: mobileTab === val ? COURT : INK2,
+                  fontFamily: MONO, fontSize: 10, letterSpacing: "0.04em",
+                  overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                }}>
+                  <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{label}</span>
+                  {count > 0 && (
+                    <span style={{
+                      flexShrink: 0, background: `${COURT}22`, color: COURT,
+                      borderRadius: 5, padding: "1px 5px", fontSize: 9,
+                    }}>{count}</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+
           <div className="trade-cols">
             {/* Columna izquierda: lo mío que él necesita */}
             <Column
+              hidden={narrow && mobileTab !== "mias"}
               title="Lo que tengo que él necesita"
               subtitle={`${filteredMatches.length} carta${filteredMatches.length === 1 ? "" : "s"} en común`}
               accent={COURT}
@@ -652,6 +779,7 @@ function TradesPageInner() {
 
             {/* Columna centro: su inventario, con dos tabs */}
             <Column
+              hidden={narrow && mobileTab !== "suyo"}
               title={`Inventario de @${peer.username}`}
               subtitle="Elige lo que quieres pedirle"
               accent={LIME}
@@ -684,7 +812,8 @@ function TradesPageInner() {
             />
 
             {/* Columna derecha: resumen y envío */}
-            <div className="trade-panel trade-col">
+            <div className="trade-panel trade-col"
+              style={narrow && mobileTab !== "resumen" ? { display: "none" } : undefined}>
               <p style={{ fontFamily: DISP, fontSize: 16, color: INK0, margin: "0 0 14px", flexShrink: 0 }}>Tu solicitud</p>
 
               <div className="trade-panel-scroll">
@@ -830,14 +959,14 @@ function TradesPageInner() {
 }
 
 /* ── Columna de cartas ──────────────────────────────────────── */
-function Column({ title, subtitle, accent, entries, selected, onBump, loading, empty, tabs }: {
+function Column({ title, subtitle, accent, entries, selected, onBump, loading, empty, tabs, hidden }: {
   title: string; subtitle: string; accent: string;
   entries: Entry[]; selected: Record<string, number>;
   onBump: (key: string, delta: number, max: number) => void;
-  loading: boolean; empty: string; tabs?: React.ReactNode;
+  loading: boolean; empty: string; tabs?: React.ReactNode; hidden?: boolean;
 }) {
   return (
-    <div className="trade-panel trade-col">
+    <div className="trade-panel trade-col" style={hidden ? { display: "none" } : undefined}>
       <div style={{ flexShrink: 0 }}>
         <p style={{ fontFamily: DISP, fontSize: 15, color: INK0, margin: 0 }}>{title}</p>
         <p style={{ fontFamily: MONO, fontSize: 10, color: INK2, letterSpacing: "0.08em", margin: "3px 0 14px" }}>

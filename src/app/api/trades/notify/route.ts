@@ -42,11 +42,12 @@ export async function POST(request: NextRequest) {
   if (!trade) return NextResponse.json({ error: 'Trade not found' }, { status: 404 });
 
   // Solo el actor legítimo puede disparar cada tipo de aviso.
-  // 'message' lo puede mandar cualquiera de los dos; el resto tiene dueño fijo.
+  // 'message' y 'edited' los puede mandar cualquiera de los dos, porque ambas
+  // partes negocian; el resto tiene dueño fijo.
   const isParticipant = user.id === trade.from_user_id || user.id === trade.to_user_id;
   const expectedActor =
-    kind === 'new' || kind === 'edited' ? trade.from_user_id
-    : kind === 'message'                ? user.id
+    kind === 'new'                          ? trade.from_user_id
+    : kind === 'message' || kind === 'edited' ? user.id
     : trade.to_user_id;
 
   if (!isParticipant || user.id !== expectedActor) {
