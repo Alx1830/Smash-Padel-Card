@@ -66,6 +66,9 @@ interface TradeMessage {
 
 type PriceMaps = Record<string, Record<string, Record<string, number>>>;
 
+/** Código corto y legible del intercambio, para nombrarlo en el chat o WhatsApp */
+const tradeCode = (id: string) => `#${id.replace(/-/g, "").slice(0, 6).toUpperCase()}`;
+
 const STATUS_META: Record<Trade["status"], { label: string; color: string }> = {
   pending:   { label: "Pendiente", color: LIME  },
   accepted:  { label: "Aceptado",  color: COURT },
@@ -140,6 +143,13 @@ function SolicitudesPageInner() {
   }, [supabase]);
 
   useEffect(() => { (async () => { await load(); })(); }, [load]);
+
+  /**
+   * Con ?trade=<id> se entra a una solicitud concreta (desde el chat, WhatsApp
+   * o una notificación): ahí sobra el resto de la lista.
+   */
+  const focused = focusId ? trades.find(t => t.id === focusId) : undefined;
+  const visible = focusId ? (focused ? [focused] : []) : trades;
 
   const priceOf = useCallback((card: PokemonCard | undefined, setId: string): number | null => {
     if (!card) return null;
@@ -288,19 +298,39 @@ function SolicitudesPageInner() {
           <ArrowLeft size={20} strokeWidth={1.8} />
         </Link>
         <h1 style={{ fontFamily: DISP, fontSize: "24px", color: INK0, margin: 0, letterSpacing: "-0.02em" }}>
-          Solicitudes de intercambio
+          {focusId ? "Solicitud de intercambio" : "Solicitudes de intercambio"}
         </h1>
+        {focusId && (
+          <span style={{
+            fontFamily: MONO, fontSize: 10, color: COURT, letterSpacing: "0.08em",
+            border: `1px solid ${COURT}44`, background: `${COURT}12`,
+            borderRadius: 6, padding: "4px 8px",
+          }}>
+            {tradeCode(focusId)}
+          </span>
+        )}
+        {focusId && !loading && (
+          <Link href="/dashboard/trades/solicitudes" style={{
+            marginLeft: "auto", fontFamily: MONO, fontSize: 10, color: INK2,
+            textDecoration: "none", letterSpacing: "0.06em",
+            border: "1px solid rgba(255,255,255,0.12)", borderRadius: 8, padding: "7px 11px",
+          }}>
+            Ver todas ({trades.length})
+          </Link>
+        )}
       </div>
 
       {loading ? (
         <p style={{ fontFamily: MONO, fontSize: 12, color: INK2 }}>Cargando…</p>
-      ) : trades.length === 0 ? (
+      ) : visible.length === 0 ? (
         <p style={{ fontFamily: MONO, fontSize: 12, color: INK2 }}>
-          Todavía no tienes solicitudes de intercambio.
+          {focusId
+            ? "Esta solicitud ya no existe o no es tuya."
+            : "Todavía no tienes solicitudes de intercambio."}
         </p>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 1320 }}>
-          {trades.map(trade => (
+          {visible.map(trade => (
             <TradeCardRow
               key={trade.id}
               trade={trade}
@@ -346,10 +376,6 @@ function TradeCardRow({
   // Con el chat en su propia columna tiene sentido que arranque abierto
   const [chatOpen, setChatOpen] = useState(true);
 
-  useEffect(() => {
-    if (focused) ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [focused]);
-
   const isReceived = trade.to_user_id === meId;
   const isSender   = trade.from_user_id === meId;
   const meta       = STATUS_META[trade.status];
@@ -382,7 +408,7 @@ function TradeCardRow({
     const name   = other.username ?? other.first_name ?? "";
     const text = encodeURIComponent(
       `¡Hola ${name}! 👋\n\n` +
-      `Te escribo por la solicitud de intercambio que tenemos en FaceBinder: ` +
+      `Te escribo por la solicitud de intercambio ${tradeCode(trade.id)} que tenemos en FaceBinder: ` +
       `${iGive.length} carta${iGive.length === 1 ? "" : "s"} mía${iGive.length === 1 ? "" : "s"} ` +
       `por ${iReceive.length} tuya${iReceive.length === 1 ? "" : "s"}` +
       (cashLabel ? ` ${iPayCash ? "más" : "y"} ${CURRENCY_SYMBOL[trade.cash_currency ?? "COP"] ?? "$"}${Number(trade.cash_amount).toLocaleString("es-CO")}` : "") +
@@ -411,7 +437,7 @@ function TradeCardRow({
             @{other?.username ?? "jugador"}
           </p>
           <p style={{ fontFamily: MONO, fontSize: 9.5, color: INK2, margin: 0 }}>
-            {new Date(trade.created_at).toLocaleDateString("es-CO", { day: "2-digit", month: "short", year: "numeric" })}
+            {tradeCode(trade.id)} · {new Date(trade.created_at).toLocaleDateString("es-CO", { day: "2-digit", month: "short", year: "numeric" })}
             {trade.updated_at && " · editado"}
             {trade.status === "pending" &&
               (iProposed ? " · esperando su respuesta" : " · te toca responder")}
