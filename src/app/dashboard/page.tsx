@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { useDashboardUser } from "./DashboardUserContext";
 import { PortfolioChart, type Snapshot, type HourlySnapshot } from "@/components/PortfolioChart";
+import { TopLocalCards } from "@/components/TopLocalCards";
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
@@ -443,6 +444,15 @@ export default function DashboardHome() {
         @media (max-width: 480px) {
           .stats-grid { grid-template-columns: 1fr 1fr; }
         }
+        .portfolio-row {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 16px;
+          margin-bottom: 40px;
+        }
+        @media (min-width: 1100px) {
+          .portfolio-row { grid-template-columns: minmax(0, 1fr) 320px; }
+        }
       `}</style>
 
       {/* Header dentro del área del grid */}
@@ -497,15 +507,21 @@ export default function DashboardHome() {
 
       </div>
 
-      {/* Gráfico histórico */}
-      <div style={{
-        background: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        borderRadius: "16px",
-        padding: "24px",
-        marginBottom: "40px",
-      }}>
-        <PortfolioChart snapshots={snapshots} hourlySnapshots={hourlySnapshots} loading={chartLoading} />
+      {/* Gráfico histórico + lo que más se vende cerca */}
+      <div className="portfolio-row">
+        <div style={{
+          background: "rgba(255,255,255,0.02)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: "16px",
+          padding: "24px",
+          minWidth: 0,
+        }}>
+          <PortfolioChart
+            snapshots={snapshots} hourlySnapshots={hourlySnapshots}
+            loading={chartLoading} defaultRange="1M"
+          />
+        </div>
+        <TopLocalCards />
       </div>
 
       {/* Popup seguidores */}

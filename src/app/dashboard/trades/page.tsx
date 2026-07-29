@@ -112,6 +112,7 @@ function TradesPageInner() {
   const [priceMaps, setPriceMaps] = useState<PriceMaps>({});
   const [cardsReady, setCardsReady] = useState(0); // fuerza re-render al cargar sets
   const [peerTab, setPeerTab]     = useState<"todo" | "wishlist">("todo");
+  const [myTab, setMyTab]         = useState<"match" | "todo">("match");
 
   /* ── Navegación en pantallas angostas ─────────────────────── */
   const narrow = useIsNarrow();
@@ -263,10 +264,10 @@ function TradesPageInner() {
       setPeerInv(peerRows);
       setLoadingData(false);
 
-      // Solo cargan los sets realmente necesarios: los del cruce y los de su inventario
-      const wishKeys = new Set(wishRows.map(w => `${w.card_id}::${w.set_id}`));
+      // Sets de los dos inventarios completos: ambas columnas tienen un tab
+      // que muestra todo, no solo el cruce con la wishlist.
       const needed = new Set<string>();
-      myRows.forEach(r => { if (wishKeys.has(`${r.card_id}::${r.set_id}`)) needed.add(r.set_id); });
+      myRows.forEach(r => needed.add(r.set_id));
       peerRows.forEach(r => needed.add(r.set_id));
 
       for (const setId of needed) {
@@ -329,6 +330,9 @@ function TradesPageInner() {
     }));
   }, [myInv, peerWish, resolve, prefill]);
 
+  /** Todo mi inventario, por si quiero ofrecer algo que él no tiene en wishlist */
+  const myEntries = useMemo(() => resolve(myInv), [myInv, resolve]);
+
   const peerEntries = useMemo(() => resolve(peerInv), [peerInv, resolve]);
 
   /** Su inventario ∩ mi wishlist = lo que yo ando buscando y él tiene */
@@ -350,7 +354,7 @@ function TradesPageInner() {
     return out;
   }, []);
 
-  const initialOffer   = useMemo(() => pick(matches, prefill?.offer), [matches, prefill, pick]);
+  const initialOffer   = useMemo(() => pick(myEntries, prefill?.offer), [myEntries, prefill, pick]);
   const initialRequest = useMemo(() => pick(peerEntries, prefill?.request), [peerEntries, prefill, pick]);
 
   const offer   = offerState   ?? initialOffer;
@@ -365,19 +369,20 @@ function TradesPageInner() {
   }), [fNombre, fSet, fVariante]);
 
   const filteredMatches = useMemo(() => applyFilters(matches), [matches, applyFilters]);
+  const filteredMine    = useMemo(() => applyFilters(myEntries), [myEntries, applyFilters]);
   const filteredPeerAll = useMemo(() => applyFilters(peerEntries), [peerEntries, applyFilters]);
   const filteredPeerWanted = useMemo(() => applyFilters(peerWanted), [peerWanted, applyFilters]);
   const filteredPeer = peerTab === "todo" ? filteredPeerAll : filteredPeerWanted;
 
   const setOptions = useMemo(() => {
-    const ids = new Set([...matches, ...peerEntries].map(e => e.set_id));
+    const ids = new Set([...myEntries, ...peerEntries].map(e => e.set_id));
     return [...ids].sort((a, b) => SET_NAME(a).localeCompare(SET_NAME(b)));
-  }, [matches, peerEntries]);
+  }, [myEntries, peerEntries]);
 
   const versionOptions = useMemo(() => {
-    const vs = new Set([...matches, ...peerEntries].map(e => e.card.version));
+    const vs = new Set([...myEntries, ...peerEntries].map(e => e.card.version));
     return [...vs].sort();
-  }, [matches, peerEntries]);
+  }, [myEntries, peerEntries]);
 
   const hasFilters = !!(fNombre || fSet || fVariante);
   const clearFilters = () => { setFNombre(""); setFSet(""); setFVariante(""); };
@@ -404,9 +409,9 @@ function TradesPageInner() {
 
   const entryByKey = useMemo(() => {
     const m: Record<string, Entry> = {};
-    [...matches, ...peerEntries].forEach(e => { m[e.key] = e; });
+    [...myEntries, ...peerEntries].forEach(e => { m[e.key] = e; });
     return m;
-  }, [matches, peerEntries]);
+  }, [myEntries, peerEntries]);
 
   /** Total USD de una selección; ignora cartas sin precio conocido */
   const totalOf = useCallback((sel: Record<string, number>) =>
@@ -604,6 +609,12 @@ function TradesPageInner() {
         }
         .trade-panel-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
 
+        .inbox-row { transition: border-color 0.15s, background 0.15s; }
+        .inbox-row:hover {
+          border-color: ${COURT}55 !important;
+          background: rgba(46,230,193,0.06) !important;
+        }
+
         .trade-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
         .trade-input {
           background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
@@ -635,19 +646,11 @@ function TradesPageInner() {
             </span>
           )}
         </div>
-        <Link href="/dashboard/trades/solicitudes" style={{
-          display: "flex", alignItems: "center", gap: 8, textDecoration: "none",
-          border: `1px solid ${COURT}44`, background: `${COURT}12`, borderRadius: 10,
-          padding: "9px 14px", color: COURT, fontFamily: MONO, fontSize: 11,
-          letterSpacing: "0.08em", textTransform: "uppercase",
-        }}>
-          <Inbox size={14} strokeWidth={1.8} /> Mis solicitudes
-        </Link>
       </div>
 
       {/* Selector de contraparte */}
       {!peer ? (
-        <div className="trade-panel" style={{ maxWidth: 620 }}>
+        <div className="trade-panel" style={{ maxWidth: 680 }}>
           <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: "0 0 12px" }}>
             ¿Con quién quieres intercambiar?
           </p>
@@ -687,6 +690,8 @@ function TradesPageInner() {
               </button>
             ))}
           </div>
+
+          <TradesInbox supabase={supabase} meId={meId} />
         </div>
       ) : (
         <>
@@ -767,14 +772,37 @@ function TradesPageInner() {
             {/* Columna izquierda: lo mío que él necesita */}
             <Column
               hidden={narrow && mobileTab !== "mias"}
-              title="Lo que tengo que él necesita"
-              subtitle={`${filteredMatches.length} carta${filteredMatches.length === 1 ? "" : "s"} en común`}
+              title="Lo que tú entregas"
+              subtitle={myTab === "match"
+                ? `${filteredMatches.length} carta${filteredMatches.length === 1 ? "" : "s"} en común`
+                : `${filteredMine.length} carta${filteredMine.length === 1 ? "" : "s"} en tu inventario`}
               accent={COURT}
               loading={loadingData}
-              empty="No tienes ninguna carta de su wishlist."
-              entries={filteredMatches}
+              empty={myTab === "match"
+                ? "No tienes ninguna carta de su wishlist."
+                : "No tienes cartas en tu inventario."}
+              entries={myTab === "match" ? filteredMatches : filteredMine}
               selected={offer}
               onBump={(key, d, max) => bump("offer", key, d, max)}
+              tabs={
+                <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
+                  {([
+                    ["match", "Lo que él necesita", filteredMatches.length, <Heart key="h" size={11} strokeWidth={2} />],
+                    ["todo",  "Mi inventario",      filteredMine.length,    null],
+                  ] as const).map(([val, label, count, icon]) => (
+                    <button key={val} onClick={() => setMyTab(val)} style={{
+                      display: "flex", alignItems: "center", gap: 6,
+                      padding: "7px 11px", borderRadius: 8, cursor: "pointer",
+                      background: myTab === val ? `${COURT}18` : "transparent",
+                      border: `1px solid ${myTab === val ? `${COURT}55` : "rgba(255,255,255,0.1)"}`,
+                      color: myTab === val ? COURT : INK2,
+                      fontFamily: MONO, fontSize: 10, letterSpacing: "0.06em",
+                    }}>
+                      {icon}{label} ({count})
+                    </button>
+                  ))}
+                </div>
+              }
             />
 
             {/* Columna centro: su inventario, con dos tabs */}
@@ -954,6 +982,227 @@ function TradesPageInner() {
           </div>
         </>
       )}
+    </div>
+  );
+}
+
+/* ── Solicitudes recientes, con vista previa ────────────────── */
+interface InboxCard { side: "offer" | "request"; card_id: string; set_id: string; quantity: number }
+
+interface InboxTrade {
+  id: string;
+  from_user_id: string;
+  to_user_id: string;
+  status: "pending" | "accepted" | "rejected" | "cancelled";
+  cash_amount: number | null;
+  created_at: string;
+  last_proposed_by: string | null;
+  trade_cards: InboxCard[];
+}
+
+const INBOX_STATUS: Record<InboxTrade["status"], { label: string; color: string }> = {
+  pending:   { label: "Pendiente", color: LIME  },
+  accepted:  { label: "Aceptado",  color: COURT },
+  rejected:  { label: "Rechazado", color: "#ff6b6b" },
+  cancelled: { label: "Cancelado", color: INK2  },
+};
+
+function TradesInbox({ supabase, meId }: {
+  supabase: ReturnType<typeof createClient>;
+  meId: string | null;
+}) {
+  const [tab, setTab]         = useState<"recibidas" | "enviadas">("recibidas");
+  const [trades, setTrades]   = useState<InboxTrade[]>([]);
+  const [people, setPeople]   = useState<Record<string, Player>>({});
+  const [loading, setLoading] = useState(true);
+  const [, setCardsReady]     = useState(0);
+
+  useEffect(() => {
+    if (!meId) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("trades")
+        .select("id, from_user_id, to_user_id, status, cash_amount, created_at, last_proposed_by, trade_cards(side, card_id, set_id, quantity)")
+        .or(`from_user_id.eq.${meId},to_user_id.eq.${meId}`)
+        .order("created_at", { ascending: false })
+        .limit(30);
+      if (cancelled) return;
+
+      const rows = (data ?? []) as unknown as InboxTrade[];
+      setTrades(rows);
+      setLoading(false);
+
+      const otherIds = [...new Set(rows.map(t => t.from_user_id === meId ? t.to_user_id : t.from_user_id))];
+      if (otherIds.length) {
+        const { data: pl } = await supabase.from("players").select(PLAYER_COLS).in("user_id", otherIds);
+        if (cancelled) return;
+        const map: Record<string, Player> = {};
+        (pl ?? []).forEach((p: Player) => { map[p.user_id] = p; });
+        setPeople(map);
+      }
+
+      // Las miniaturas necesitan la metadata de cada set involucrado
+      for (const setId of new Set(rows.flatMap(t => (t.trade_cards ?? []).map(c => c.set_id)))) {
+        if (cancelled) return;
+        await loadManySets([setId]);
+        if (!cancelled) setCardsReady(n => n + 1);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [supabase, meId]);
+
+  const visible = trades.filter(t =>
+    tab === "recibidas" ? t.to_user_id === meId : t.from_user_id === meId
+  );
+
+  const pendingCount = (which: "recibidas" | "enviadas") => trades.filter(t =>
+    t.status === "pending" &&
+    (which === "recibidas" ? t.to_user_id === meId : t.from_user_id === meId)
+  ).length;
+
+  return (
+    <div style={{ marginTop: 22, borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 18 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
+        <Inbox size={14} color={INK2} strokeWidth={1.8} />
+        <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>
+          Mis solicitudes
+        </p>
+        <Link href="/dashboard/trades/solicitudes" style={{
+          marginLeft: "auto", fontFamily: MONO, fontSize: 10, color: COURT,
+          textDecoration: "none", letterSpacing: "0.06em",
+        }}>
+          Ver todas →
+        </Link>
+      </div>
+
+      <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
+        {(["recibidas", "enviadas"] as const).map(t => (
+          <button key={t} onClick={() => setTab(t)} style={{
+            display: "flex", alignItems: "center", gap: 6,
+            padding: "7px 12px", borderRadius: 8, cursor: "pointer",
+            background: tab === t ? `${COURT}18` : "transparent",
+            border: `1px solid ${tab === t ? `${COURT}55` : "rgba(255,255,255,0.1)"}`,
+            color: tab === t ? COURT : INK2,
+            fontFamily: MONO, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase",
+          }}>
+            {t}
+            {pendingCount(t) > 0 && (
+              <span style={{
+                background: `${LIME}22`, color: LIME, borderRadius: 5,
+                padding: "1px 5px", fontSize: 9,
+              }}>{pendingCount(t)}</span>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {loading ? (
+        <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, margin: 0 }}>Cargando…</p>
+      ) : visible.length === 0 ? (
+        <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, margin: 0, lineHeight: 1.6 }}>
+          No tienes solicitudes {tab}.
+        </p>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 380, overflowY: "auto" }}
+          className="trade-panel-scroll">
+          {visible.map(t => (
+            <InboxRow key={t.id} trade={t} meId={meId} other={people[t.from_user_id === meId ? t.to_user_id : t.from_user_id]} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function InboxRow({ trade, meId, other }: {
+  trade: InboxTrade; meId: string | null; other: Player | undefined;
+}) {
+  const isReceived = trade.to_user_id === meId;
+  // Desde mi punto de vista: si la recibí, su 'offer' es lo que yo recibo
+  const iGive    = (trade.trade_cards ?? []).filter(c => c.side === (isReceived ? "request" : "offer"));
+  const iReceive = (trade.trade_cards ?? []).filter(c => c.side === (isReceived ? "offer" : "request"));
+  const meta     = INBOX_STATUS[trade.status];
+  const myTurn   = trade.status === "pending" && (trade.last_proposed_by ?? trade.from_user_id) !== meId;
+
+  return (
+    <Link href={`/dashboard/trades/solicitudes?trade=${trade.id}`} className="inbox-row" style={{
+      display: "block", textDecoration: "none", padding: "11px 12px", borderRadius: 11,
+      background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)",
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 9 }}>
+        <Avatar url={other?.photo_url ?? null} name={other?.username ?? "?"} size={28} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <p style={{
+            fontFamily: DISP, fontSize: 13, color: INK0, margin: 0,
+            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+          }}>
+            @{other?.username ?? "jugador"}
+          </p>
+          <p style={{ fontFamily: MONO, fontSize: 9, color: INK2, margin: 0 }}>
+            {new Date(trade.created_at).toLocaleDateString("es-CO", { day: "2-digit", month: "short" })}
+          </p>
+        </div>
+        {myTurn && (
+          <span style={{
+            fontFamily: MONO, fontSize: 8.5, color: LIME, letterSpacing: "0.08em",
+            textTransform: "uppercase", border: `1px solid ${LIME}44`,
+            background: `${LIME}12`, borderRadius: 5, padding: "3px 6px",
+          }}>Te toca</span>
+        )}
+        <span style={{
+          fontFamily: MONO, fontSize: 8.5, color: meta.color, letterSpacing: "0.08em",
+          textTransform: "uppercase", border: `1px solid ${meta.color}44`,
+          background: `${meta.color}12`, borderRadius: 5, padding: "3px 6px",
+        }}>{meta.label}</span>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <MiniStack cards={iGive} label="Entregas" />
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, flexShrink: 0 }}>
+          <ArrowLeftRight size={13} color={INK2} strokeWidth={1.8} />
+          {trade.cash_amount ? (
+            <span style={{ fontFamily: MONO, fontSize: 8.5, color: LIME }}>+$</span>
+          ) : null}
+        </div>
+        <MiniStack cards={iReceive} label="Recibes" />
+      </div>
+    </Link>
+  );
+}
+
+/** Miniaturas de un lado del trade; muestra hasta 4 y resume el resto */
+function MiniStack({ cards, label }: { cards: InboxCard[]; label: string }) {
+  const shown = cards.slice(0, 4);
+  const extra = cards.reduce((n, c) => n + c.quantity, 0) - shown.reduce((n, c) => n + c.quantity, 0);
+
+  return (
+    <div style={{ flex: 1, minWidth: 0 }}>
+      <p style={{
+        fontFamily: MONO, fontSize: 8, color: INK2, margin: "0 0 4px",
+        letterSpacing: "0.12em", textTransform: "uppercase",
+      }}>{label}</p>
+      <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
+        {shown.length === 0 && (
+          <span style={{ fontFamily: MONO, fontSize: 9.5, color: INK2 }}>—</span>
+        )}
+        {shown.map((c, i) => {
+          const card = SET_CARDS[c.set_id]?.find(pc => String(pc.id) === String(c.card_id));
+          return card?.image ? (
+            <img key={i} src={card.image} alt="" loading="lazy" style={{
+              width: 26, aspectRatio: "5/7", objectFit: "contain", borderRadius: 3, flexShrink: 0,
+            }} />
+          ) : (
+            <div key={i} style={{
+              width: 26, aspectRatio: "5/7", borderRadius: 3, flexShrink: 0,
+              background: "rgba(255,255,255,0.06)",
+            }} />
+          );
+        })}
+        {extra > 0 && (
+          <span style={{ fontFamily: MONO, fontSize: 9, color: INK2, flexShrink: 0 }}>+{extra}</span>
+        )}
+      </div>
     </div>
   );
 }
