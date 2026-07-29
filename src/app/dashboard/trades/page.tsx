@@ -16,6 +16,10 @@ import { ArrowLeftRight, Inbox, Search, X, Minus, Plus, Send, Heart, MessageCirc
 
 const COURT = "#2ee6c1";
 const LIME  = "#d6ff3d";
+/* Colores de los tabs móviles: yo en rojo, el otro jugador en verde, la solicitud en ámbar */
+const TAB_MINE = "#ff4d5e";
+const TAB_PEER = "#3ddc84";
+const TAB_SUM  = "#ffc63d";
 const INK0  = "#f5f7fb";
 const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
@@ -657,7 +661,7 @@ function TradesPageInner() {
       {/* Selector de contraparte */}
       {!peer ? (
         <>
-        <div className="trade-panel" style={{ width: "100%", maxWidth: 1100, alignSelf: "center", margin: "0 auto", boxSizing: "border-box" }}>
+        <div className="trade-panel" style={{ width: "100%", maxWidth: 880, alignSelf: "center", margin: "0 auto", boxSizing: "border-box" }}>
           <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: "0 0 12px" }}>
             ¿Con quién quieres intercambiar?
           </p>
@@ -699,7 +703,7 @@ function TradesPageInner() {
           </div>
         </div>
 
-        <div className="trade-panel" style={{ width: "100%", maxWidth: 1100, alignSelf: "center", margin: "16px auto 0", boxSizing: "border-box" }}>
+        <div className="trade-panel" style={{ width: "100%", maxWidth: 880, alignSelf: "center", margin: "16px auto 0", boxSizing: "border-box" }}>
           <TradesInbox supabase={supabase} meId={meId} />
         </div>
         </>
@@ -752,24 +756,24 @@ function TradesPageInner() {
           {narrow && (
             <div className="trade-mtabs">
               {([
-                ["mias",    "Lo que tengo",      offerCount],
-                ["suyo",    `@${peer.username}`, requestCount],
-                ["resumen", "Tu solicitud",      offerCount + requestCount],
-              ] as const).map(([val, label, count]) => (
+                ["mias",    myUsername ? `@${myUsername}` : "Lo que tengo", offerCount,                 TAB_MINE],
+                ["suyo",    `@${peer.username}`,                            requestCount,               TAB_PEER],
+                ["resumen", "Tu solicitud",                                 offerCount + requestCount,  TAB_SUM],
+              ] as const).map(([val, label, count, accent]) => (
                 <button key={val} onClick={() => setMobileTab(val)} style={{
                   flex: 1, minWidth: 0, display: "flex", alignItems: "center",
                   justifyContent: "center", gap: 5,
                   padding: "9px 8px", borderRadius: 9, cursor: "pointer",
-                  background: mobileTab === val ? `${COURT}18` : "transparent",
-                  border: `1px solid ${mobileTab === val ? `${COURT}55` : "rgba(255,255,255,0.1)"}`,
-                  color: mobileTab === val ? COURT : INK2,
+                  background: mobileTab === val ? `${accent}18` : "transparent",
+                  border: `1px solid ${mobileTab === val ? `${accent}55` : "rgba(255,255,255,0.1)"}`,
+                  color: mobileTab === val ? accent : INK2,
                   fontFamily: MONO, fontSize: 10, letterSpacing: "0.04em",
                   overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                 }}>
                   <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{label}</span>
                   {count > 0 && (
                     <span style={{
-                      flexShrink: 0, background: `${COURT}22`, color: COURT,
+                      flexShrink: 0, background: `${accent}22`, color: accent,
                       borderRadius: 5, padding: "1px 5px", fontSize: 9,
                     }}>{count}</span>
                   )}
@@ -786,7 +790,7 @@ function TradesPageInner() {
               subtitle={myTab === "match"
                 ? `${filteredMatches.length} carta${filteredMatches.length === 1 ? "" : "s"} en común`
                 : `${filteredMine.length} carta${filteredMine.length === 1 ? "" : "s"} en tu inventario`}
-              accent={COURT}
+              accent={TAB_MINE}
               loading={loadingData}
               empty={myTab === "match"
                 ? "No tienes ninguna carta de su wishlist."
@@ -803,9 +807,9 @@ function TradesPageInner() {
                     <button key={val} onClick={() => setMyTab(val)} style={{
                       display: "flex", alignItems: "center", gap: 6,
                       padding: "7px 11px", borderRadius: 8, cursor: "pointer",
-                      background: myTab === val ? `${COURT}18` : "transparent",
-                      border: `1px solid ${myTab === val ? `${COURT}55` : "rgba(255,255,255,0.1)"}`,
-                      color: myTab === val ? COURT : INK2,
+                      background: myTab === val ? `${TAB_MINE}18` : "transparent",
+                      border: `1px solid ${myTab === val ? `${TAB_MINE}55` : "rgba(255,255,255,0.1)"}`,
+                      color: myTab === val ? TAB_MINE : INK2,
                       fontFamily: MONO, fontSize: 10, letterSpacing: "0.06em",
                     }}>
                       {icon}{label} ({count})
@@ -820,7 +824,7 @@ function TradesPageInner() {
               hidden={narrow && mobileTab !== "suyo"}
               title={`Inventario de @${peer.username}`}
               subtitle="Elige lo que quieres pedirle"
-              accent={LIME}
+              accent={TAB_PEER}
               loading={loadingData}
               empty={peerTab === "todo"
                 ? "Este jugador no tiene cartas en su inventario."
@@ -837,9 +841,9 @@ function TradesPageInner() {
                     <button key={val} onClick={() => setPeerTab(val)} style={{
                       display: "flex", alignItems: "center", gap: 6,
                       padding: "7px 11px", borderRadius: 8, cursor: "pointer",
-                      background: peerTab === val ? `${LIME}18` : "transparent",
-                      border: `1px solid ${peerTab === val ? `${LIME}55` : "rgba(255,255,255,0.1)"}`,
-                      color: peerTab === val ? LIME : INK2,
+                      background: peerTab === val ? `${TAB_PEER}18` : "transparent",
+                      border: `1px solid ${peerTab === val ? `${TAB_PEER}55` : "rgba(255,255,255,0.1)"}`,
+                      color: peerTab === val ? TAB_PEER : INK2,
                       fontFamily: MONO, fontSize: 10, letterSpacing: "0.06em",
                     }}>
                       {icon}{label} ({count})
@@ -852,16 +856,16 @@ function TradesPageInner() {
             {/* Columna derecha: resumen y envío */}
             <div className="trade-panel trade-col"
               style={narrow && mobileTab !== "resumen" ? { display: "none" } : undefined}>
-              <p style={{ fontFamily: DISP, fontSize: 16, color: INK0, margin: "0 0 14px", flexShrink: 0 }}>Tu solicitud</p>
+              <p style={{ fontFamily: DISP, fontSize: 16, color: TAB_SUM, margin: "0 0 14px", flexShrink: 0 }}>Tu solicitud</p>
 
               <div className="trade-panel-scroll">
-              <Summary label="Yo entrego" accent={COURT} count={offerCount} total={offerTotal}
+              <Summary label="Yo entrego" accent={TAB_MINE} count={offerCount} total={offerTotal}
                 items={Object.entries(offer)} entryByKey={entryByKey}
                 onRemove={key => dropFrom("offer", key)} />
 
               <div style={{ height: 1, background: "rgba(255,255,255,0.08)", margin: "14px 0" }} />
 
-              <Summary label="Yo recibo" accent={LIME} count={requestCount} total={requestTotal}
+              <Summary label="Yo recibo" accent={TAB_PEER} count={requestCount} total={requestTotal}
                 items={Object.entries(request)} entryByKey={entryByKey}
                 onRemove={key => dropFrom("request", key)} />
 
@@ -875,7 +879,7 @@ function TradesPageInner() {
                     <span style={{
                       fontFamily: MONO, fontSize: 11, fontWeight: 700,
                       color: Math.abs(requestTotal - offerTotal) < 0.005 ? INK2
-                        : requestTotal > offerTotal ? LIME : COURT,
+                        : requestTotal > offerTotal ? TAB_PEER : TAB_MINE,
                     }}>
                       {requestTotal >= offerTotal ? "+" : "−"}{usd(Math.abs(requestTotal - offerTotal))}
                     </span>
@@ -1188,11 +1192,11 @@ function MiniStack({ cards, label }: { cards: InboxCard[]; label: string }) {
           const card = SET_CARDS[c.set_id]?.find(pc => String(pc.id) === String(c.card_id));
           return card?.image ? (
             <img key={i} src={card.image} alt="" loading="lazy" style={{
-              width: 26, aspectRatio: "5/7", objectFit: "contain", borderRadius: 3, flexShrink: 0,
+              width: 36, aspectRatio: "5/7", objectFit: "contain", borderRadius: 4, flexShrink: 0,
             }} />
           ) : (
             <div key={i} style={{
-              width: 26, aspectRatio: "5/7", borderRadius: 3, flexShrink: 0,
+              width: 36, aspectRatio: "5/7", borderRadius: 4, flexShrink: 0,
               background: "rgba(255,255,255,0.06)",
             }} />
           );
@@ -1215,7 +1219,7 @@ function Column({ title, subtitle, accent, entries, selected, onBump, loading, e
   return (
     <div className="trade-panel trade-col" style={hidden ? { display: "none" } : undefined}>
       <div style={{ flexShrink: 0 }}>
-        <p style={{ fontFamily: DISP, fontSize: 15, color: INK0, margin: 0 }}>{title}</p>
+        <p style={{ fontFamily: DISP, fontSize: 15, color: accent, margin: 0 }}>{title}</p>
         <p style={{ fontFamily: MONO, fontSize: 10, color: INK2, letterSpacing: "0.08em", margin: "3px 0 14px" }}>
           {subtitle}
         </p>
