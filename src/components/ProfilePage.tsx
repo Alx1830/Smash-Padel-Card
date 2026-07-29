@@ -961,28 +961,72 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
 }
 
 /* ── Decks Slider ───────────────────────────────────────────── */
-/* Imagen con reintento: las URLs r2.dev tienen rate limiting y al abrir el
-   modal se piden muchas de golpe; si una falla la volvemos a intentar. */
+/* Las URLs de r2.dev responden 429 cuando se piden 60 imágenes de golpe, que
+   es justo lo que pasa al abrir un deck. En vez de dispararlas todas y
+   reintentar los fallos, se descargan en cola con tope de concurrencia: cada
+   imagen se precarga fuera del DOM y solo cuando está en caché se pinta, así
+   el <img> resuelve al instante. */
+const IMG_MAX_PARALLEL = 6;
+let imgActive = 0;
+const imgQueue: (() => void)[] = [];
+/** URLs ya descargadas: repetir un deck no vuelve a pedir nada */
+const imgDone = new Set<string>();
+
+function imgAcquire(): Promise<void> {
+  if (imgActive < IMG_MAX_PARALLEL) { imgActive++; return Promise.resolve(); }
+  return new Promise(resolve => imgQueue.push(() => { imgActive++; resolve(); }));
+}
+
+function imgRelease() {
+  imgActive--;
+  imgQueue.shift()?.();
+}
+
+/** Descarga con reintentos espaciados; resuelve cuando la imagen está en caché */
+function preloadImage(src: string, attempt = 0): Promise<boolean> {
+  return new Promise(resolve => {
+    // createElement en vez de new Image(): aquí `Image` es el componente de Next
+    const img = document.createElement("img");
+    img.decoding = "async";
+    img.onload  = () => resolve(true);
+    img.onerror = () => {
+      if (attempt >= 3) { resolve(false); return; }
+      setTimeout(() => preloadImage(src, attempt + 1).then(resolve), 600 * (attempt + 1));
+    };
+    img.src = src;
+  });
+}
+
 function DeckCardImage({ src, alt }: { src: string; alt: string }) {
-  const [attempt, setAttempt] = useState(0);
-  const [loadedImg, setLoadedImg] = useState(false);
+  const [ready, setReady] = useState(() => imgDone.has(src));
+
+  useEffect(() => {
+    if (imgDone.has(src)) return; // el estado inicial ya la da por lista
+    let cancelled = false;
+    (async () => {
+      await imgAcquire();
+      if (cancelled) { imgRelease(); return; }
+      const ok = await preloadImage(src);
+      imgRelease();
+      if (ok) imgDone.add(src);
+      if (!cancelled && ok) setReady(true);
+    })();
+    return () => { cancelled = true; };
+  }, [src]);
+
   return (
     <>
-      {!loadedImg && (
+      {!ready && (
         <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.05)", animation: "dkPulse 1.4s ease-in-out infinite" }} />
       )}
-      <img
-        key={attempt}
-        src={attempt === 0 ? src : `${src}${src.includes("?") ? "&" : "?"}retry=${attempt}`}
-        alt={alt}
-        loading="lazy"
-        decoding="async"
-        onLoad={() => setLoadedImg(true)}
-        onError={() => {
-          if (attempt < 5) setTimeout(() => setAttempt(a => a + 1), 800 * (attempt + 1));
-        }}
-        style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0, opacity: loadedImg ? 1 : 0, transition: "opacity 0.25s" }}
-      />
+      {ready && (
+        <img
+          src={src}
+          alt={alt}
+          decoding="async"
+          style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }}
+        />
+      )}
     </>
   );
 }
@@ -1191,7 +1235,9 @@ function DecksSlider({ profileUserId }: { profileUserId?: string }) {
             ) : (
               <div className="deck-modal-scroll" style={{ overflowY: "auto", paddingRight: "8px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: "12px" }}>
                 {openDeck.cards.map(({ card, quantity }, i) => (
-                  <div key={i}>
+                  // La key lleva la imagen para que al abrir otro deck la
+                  // miniatura se remonte con su propio estado de carga
+                  <div key={`${card.image}-${i}`}>
                     <div style={{ position: "relative", width: "100%", aspectRatio: "5/7", borderRadius: "7px", overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.6)", filter: quantity === 0 ? "grayscale(1) brightness(0.75)" : "none" }}>
                       <DeckCardImage src={card.image} alt={card.name} />
                       {quantity !== 1 && (

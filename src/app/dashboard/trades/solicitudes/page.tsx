@@ -13,7 +13,7 @@ import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { parseProposal } from "@/lib/trade-messages";
 import {
   ArrowLeft, Check, X, Clock, Ban, Pencil, MessageCircle,
-  MessagesSquare, Send, ChevronDown, ArrowDownLeft, ArrowUpRight,
+  MessagesSquare, Send, ChevronDown, ArrowDownLeft, ArrowUpRight, PackageCheck,
 } from "lucide-react";
 
 const COURT = "#2ee6c1";
@@ -48,6 +48,9 @@ interface Trade {
   updated_at: string | null;
   /** Quién hizo la última propuesta; null = el emisor original */
   last_proposed_by: string | null;
+  /** Cuándo confirmó cada parte que recibió las cartas */
+  from_received_at: string | null;
+  to_received_at:   string | null;
   trade_cards: TradeCard[];
 }
 
@@ -99,7 +102,7 @@ function SolicitudesPageInner() {
 
     const { data } = await supabase
       .from("trades")
-      .select("id, from_user_id, to_user_id, status, cash_amount, cash_currency, cash_payer, message, created_at, updated_at, last_proposed_by, trade_cards(side, card_id, set_id, version, quantity)")
+      .select("id, from_user_id, to_user_id, status, cash_amount, cash_currency, cash_payer, message, created_at, updated_at, last_proposed_by, from_received_at, to_received_at, trade_cards(side, card_id, set_id, version, quantity)")
       .or(`from_user_id.eq.${user.id},to_user_id.eq.${user.id}`)
       .order("created_at", { ascending: false });
 
@@ -191,6 +194,80 @@ function SolicitudesPageInner() {
     setActing(null);
   }
 
+  /**
+   * Confirma la recepción: descuenta lo entregado, suma lo recibido y limpia
+   * la wishlist de esas cartas. Cada parte lo hace sobre su propio inventario.
+   */
+  async function confirmReceived(trade: Trade) {
+    if (acting || !meId) return;
+    setActing(trade.id);
+
+    const isReceived = trade.to_user_id === meId;
+    const iGive    = (trade.trade_cards ?? []).filter(c => c.side === (isReceived ? "request" : "offer"));
+    const iReceive = (trade.trade_cards ?? []).filter(c => c.side === (isReceived ? "offer" : "request"));
+
+    try {
+      const touched = [...iGive, ...iReceive];
+      const { data: rows } = await supabase
+        .from("card_inventory")
+        .select("card_id, set_id, version, quantity")
+        .eq("user_id", meId)
+        .in("card_id", [...new Set(touched.map(c => String(c.card_id)))]);
+
+      const key = (c: { card_id: string; set_id: string; version: string | null }) =>
+        `${c.card_id}::${c.set_id}::${c.version ?? ""}`;
+      const have: Record<string, number> = {};
+      for (const r of (rows ?? []) as TradeCard[]) have[key(r)] = r.quantity;
+
+      // Lo entregado se descuenta; lo recibido se suma
+      const delta: Record<string, number> = {};
+      const meta:  Record<string, TradeCard> = {};
+      for (const c of iGive)    { delta[key(c)] = (delta[key(c)] ?? 0) - c.quantity; meta[key(c)] = c; }
+      for (const c of iReceive) { delta[key(c)] = (delta[key(c)] ?? 0) + c.quantity; meta[key(c)] = c; }
+
+      for (const [k, d] of Object.entries(delta)) {
+        if (d === 0) continue;
+        const c = meta[k];
+        const next = Math.max(0, (have[k] ?? 0) + d);
+
+        if (next === 0) {
+          await supabase.from("card_inventory").delete()
+            .eq("user_id", meId).eq("card_id", String(c.card_id))
+            .eq("set_id", c.set_id).eq("version", c.version ?? "normal");
+        } else if (have[k] != null) {
+          await supabase.from("card_inventory").update({ quantity: next })
+            .eq("user_id", meId).eq("card_id", String(c.card_id))
+            .eq("set_id", c.set_id).eq("version", c.version ?? "normal");
+        } else {
+          await supabase.from("card_inventory").insert({
+            user_id: meId, card_id: String(c.card_id), set_id: c.set_id,
+            version: c.version ?? "normal", quantity: next,
+          });
+        }
+      }
+
+      // Lo que llega deja de estar en la wishlist
+      if (iReceive.length) {
+        await supabase.from("card_wishlist").delete()
+          .eq("user_id", meId)
+          .in("card_id", [...new Set(iReceive.map(c => String(c.card_id)))]);
+      }
+
+      const field = isReceived ? "to_received_at" : "from_received_at";
+      const stamp = new Date().toISOString();
+      const { error } = await supabase.from("trades")
+        .update({ [field]: stamp }).eq("id", trade.id);
+      if (error) throw error;
+
+      setTrades(prev => prev.map(t => t.id === trade.id ? { ...t, [field]: stamp } : t));
+    } catch (err) {
+      console.error("[Trades] Error confirmando recepción:", err);
+      alert("No se pudo actualizar tu inventario. Intenta de nuevo.");
+    } finally {
+      setActing(null);
+    }
+  }
+
   return (
     <div style={{ padding: "24px", minHeight: "100vh" }}>
       <style>{`
@@ -199,6 +276,11 @@ function SolicitudesPageInner() {
         .sol-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
         .sol-cards { display: grid; grid-template-columns: 1fr; gap: 16px; }
         @media (min-width: 640px) { .sol-cards { grid-template-columns: 1fr 1fr; } }
+        /* Propuesta y negociación lado a lado cuando hay ancho */
+        .sol-split { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        @media (min-width: 1000px) {
+          .sol-split { grid-template-columns: minmax(0, 1fr) 320px; align-items: start; }
+        }
       `}</style>
 
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
@@ -230,6 +312,7 @@ function SolicitudesPageInner() {
               priceOf={priceOf}
               sideTotal={sideTotal}
               onRespond={respond}
+              onReceived={confirmReceived}
               onZoom={setZoom}
               supabase={supabase}
             />
@@ -244,7 +327,7 @@ function SolicitudesPageInner() {
 
 /* ── Tarjeta de un intercambio ──────────────────────────────── */
 function TradeCardRow({
-  trade, meId, other, focused, acting, findCard, priceOf, sideTotal, onRespond, onZoom, supabase,
+  trade, meId, other, focused, acting, findCard, priceOf, sideTotal, onRespond, onReceived, onZoom, supabase,
 }: {
   trade: Trade;
   meId: string | null;
@@ -255,11 +338,13 @@ function TradeCardRow({
   priceOf: (card: PokemonCard | undefined, setId: string) => number | null;
   sideTotal: (cards: TradeCard[]) => number;
   onRespond: (t: Trade, s: "accepted" | "rejected" | "cancelled") => void;
+  onReceived: (t: Trade) => void;
   onZoom: (z: { card: PokemonCard; setId: string; price: number | null }) => void;
   supabase: ReturnType<typeof createClient>;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [chatOpen, setChatOpen] = useState(focused);
+  // Con el chat en su propia columna tiene sentido que arranque abierto
+  const [chatOpen, setChatOpen] = useState(true);
 
   useEffect(() => {
     if (focused) ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -270,6 +355,8 @@ function TradeCardRow({
   const meta       = STATUS_META[trade.status];
   /** La pelota está en el campo del otro si la última propuesta es mía */
   const iProposed  = (trade.last_proposed_by ?? trade.from_user_id) === meId;
+  const iReceived     = !!(isReceived ? trade.to_received_at : trade.from_received_at);
+  const otherReceived = !!(isReceived ? trade.from_received_at : trade.to_received_at);
 
   // Desde mi punto de vista: si recibí la solicitud, su 'offer' es lo que yo recibo
   const iGive    = (trade.trade_cards ?? []).filter(c => c.side === (isReceived ? "request" : "offer"));
@@ -352,7 +439,9 @@ function TradeCardRow({
         </span>
       </div>
 
-      {/* Cartas */}
+      {/* Propuesta a la izquierda, negociación a la derecha */}
+      <div className="sol-split">
+      <div style={{ minWidth: 0 }}>
       <div className="sol-cards">
         <CardList label="Tú entregas" accent={RED} cards={iGive} total={giveTotal}
           findCard={findCard} priceOf={priceOf} onZoom={onZoom} />
@@ -401,16 +490,6 @@ function TradeCardRow({
         </p>
       )}
 
-      {/* Chat de negociación */}
-      <TradeChat
-        tradeId={trade.id}
-        meId={meId}
-        other={other}
-        open={chatOpen}
-        onToggle={() => setChatOpen(o => !o)}
-        supabase={supabase}
-      />
-
       {/* Acciones */}
       <div style={{ display: "flex", gap: 8, marginTop: 16, flexWrap: "wrap" }}>
         {/* Responde quien no hizo la última propuesta */}
@@ -447,14 +526,38 @@ function TradeCardRow({
             <MessageCircle size={14} strokeWidth={2.2} /> Avisar por WhatsApp
           </a>
         )}
+
+        {/* Una vez acordado, cada parte confirma cuando le llegan las cartas */}
+        {trade.status === "accepted" && !iReceived && (
+          <button onClick={() => onReceived(trade)} disabled={acting}
+            style={btnStyle(COURT, "#05070d")}>
+            <PackageCheck size={14} strokeWidth={2.2} />
+            {acting ? "Actualizando…" : "Recibí las cartas"}
+          </button>
+        )}
       </div>
 
       {trade.status === "accepted" && (
-        <p style={{ fontFamily: MONO, fontSize: 10.5, color: INK2, margin: "14px 0 0", lineHeight: 1.6 }}>
-          Intercambio acordado. Coordinen el envío entre ustedes — el inventario no se
-          modifica automáticamente.
+        <p style={{ fontFamily: MONO, fontSize: 10.5, color: iReceived ? COURT : INK2, margin: "14px 0 0", lineHeight: 1.6 }}>
+          {!iReceived
+            ? "Intercambio acordado. Cuando tengas las cartas en la mano, confirma aquí y tu inventario se actualiza solo."
+            : otherReceived
+              ? "Intercambio completado: los dos confirmaron la entrega."
+              : `Confirmaste la recepción ✓ — falta que @${other?.username ?? "el otro jugador"} confirme.`}
         </p>
       )}
+      </div>
+
+      {/* Chat de negociación */}
+      <TradeChat
+        tradeId={trade.id}
+        meId={meId}
+        other={other}
+        open={chatOpen}
+        onToggle={() => setChatOpen(o => !o)}
+        supabase={supabase}
+      />
+      </div>
     </div>
   );
 }
@@ -561,7 +664,11 @@ function TradeChat({ tradeId, meId, other, open, onToggle, supabase }: {
   }
 
   return (
-    <div style={{ marginTop: 14, borderTop: "1px solid rgba(255,255,255,0.07)", paddingTop: 12 }}>
+    <div style={{
+      background: "rgba(255,255,255,0.02)",
+      border: "1px solid rgba(255,255,255,0.07)",
+      borderRadius: 12, padding: "12px 14px",
+    }}>
       <button onClick={onToggle} style={{
         display: "flex", alignItems: "center", gap: 8, width: "100%",
         background: "transparent", border: "none", cursor: "pointer", padding: 0,

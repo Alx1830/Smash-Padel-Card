@@ -5,7 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel } from "@/data/pokemon-cards-meta";
-import { formatPrice } from "@/lib/currency";
+import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { Store } from "lucide-react";
 
 const COURT = "#2ee6c1";
@@ -91,14 +91,13 @@ export function TopLocalCards() {
         .sort((a, b) => b.listings - a.listings || a.minPrice - b.minPrice)
         .slice(0, 5);
 
-      setCards(top);
-      setLoading(false);
+      // Los sets se cargan antes de pintar, si no las miniaturas salen vacías
+      try { await loadManySets([...new Set(top.map(c => c.set_id))]); } catch { /* sin metadata se pinta el hueco */ }
+      if (cancelled) return;
 
-      for (const setId of new Set(top.map(c => c.set_id))) {
-        if (cancelled) return;
-        await loadManySets([setId]);
-        if (!cancelled) setCardsReady(n => n + 1);
-      }
+      setCards(top);
+      setCardsReady(n => n + 1);
+      setLoading(false);
     })();
 
     return () => { cancelled = true; };
@@ -142,8 +141,13 @@ export function TopLocalCards() {
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {cards.map((c, i) => {
-            const card = SET_CARDS[c.set_id]?.find(pc => String(pc.id) === String(c.card_id));
-            const name = card?.name ?? String(c.card_id).split(":")[1] ?? "Carta";
+            // Los listings viejos guardan solo el número de carta, los nuevos
+            // el id completo "NNN:Nombre:Versión"
+            const pool = SET_CARDS[c.set_id] ?? [];
+            const card = pool.find(pc => String(pc.id) === String(c.card_id))
+              ?? pool.find(pc => String(pc.card_number) === String(c.card_id) && pc.version === c.version)
+              ?? pool.find(pc => String(pc.card_number) === String(c.card_id));
+            const name = card?.name?.trim() || String(c.card_id).split(":")[1] || "Carta";
             const version = c.version ?? card?.version ?? "";
             return (
               <Link key={c.key} href="/market" className="top-local-row" style={{
@@ -181,7 +185,7 @@ export function TopLocalCards() {
                   fontFamily: MONO, fontSize: 10, fontWeight: 700, color: COURT,
                   flexShrink: 0, whiteSpace: "nowrap",
                 }}>
-                  {formatPrice(c.minPrice, c.currency)}
+                  {CURRENCY_SYMBOL[c.currency] ?? "$"}{formatPrice(c.minPrice, c.currency)}
                 </span>
               </Link>
             );

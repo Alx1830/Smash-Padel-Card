@@ -7,7 +7,7 @@ import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { Plus, WalletCards } from "lucide-react";
 import Link from "next/link";
 
-const VIOLET = "#a78bfa";
+const COURT  = "#2ee6c1";
 const INK0   = "#f5f7fb";
 const INK2   = "#7a8298";
 const MONO   = "var(--font-jetbrains)";
@@ -127,8 +127,8 @@ export default function MySetsPage() {
 
       {/* Header */}
       <div className="msets-header">
-        <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em", textTransform: "uppercase", color: VIOLET, display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
-          <span style={{ width: "20px", height: "1px", background: VIOLET, display: "inline-block" }} />
+        <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
+          <span style={{ width: "20px", height: "1px", background: COURT, display: "inline-block" }} />
           Mi Colección
         </div>
         <h1 style={{ fontFamily: DISP, fontSize: "36px", color: INK0, margin: "0 0 24px" }}>Mis Sets</h1>
@@ -137,7 +137,7 @@ export default function MySetsPage() {
           onClick={() => setCreating(true)}
           style={{
             display: "inline-flex", alignItems: "center", gap: "8px",
-            padding: "11px 22px", borderRadius: "10px", background: VIOLET, color: "#05070d",
+            padding: "11px 22px", borderRadius: "10px", background: COURT, color: "#05070d",
             fontFamily: MONO, fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em",
             textTransform: "uppercase", border: "none", cursor: "pointer",
             marginBottom: "36px", transition: "opacity 0.15s",
@@ -159,7 +159,7 @@ export default function MySetsPage() {
             background: "rgba(5,7,13,0.8)", backdropFilter: "blur(6px)",
           }} onClick={e => { if (e.target === e.currentTarget) { setCreating(false); setNewName(""); setNewDesc(""); } }}>
             <div style={{ width: 360, borderRadius: "20px", background: "#0d1520", border: "1px solid rgba(255,255,255,0.1)", padding: "28px", boxShadow: "0 24px 80px rgba(0,0,0,0.7)" }}>
-              <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase", color: VIOLET, margin: "0 0 6px" }}>Nuevo Set</p>
+              <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase", color: COURT, margin: "0 0 6px" }}>Nuevo Set</p>
               <p style={{ fontFamily: DISP, fontSize: "18px", color: INK0, fontWeight: 700, margin: "0 0 20px" }}>¿Cómo se llama?</p>
 
               <label style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px" }}>Nombre del set</label>
@@ -183,7 +183,7 @@ export default function MySetsPage() {
 
               <div style={{ display: "flex", gap: "10px" }}>
                 <button onClick={() => { setCreating(false); setNewName(""); setNewDesc(""); }} style={{ flex: 1, padding: "10px", borderRadius: "8px", background: "transparent", border: "1px solid rgba(255,255,255,0.15)", color: INK2, fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" }}>Cancelar</button>
-                <button onClick={createSet} disabled={!newName.trim() || saving} style={{ flex: 1, padding: "10px", borderRadius: "8px", background: VIOLET, color: "#05070d", fontFamily: MONO, fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", border: "none", cursor: newName.trim() ? "pointer" : "default", opacity: newName.trim() ? 1 : 0.5 }}>
+                <button onClick={createSet} disabled={!newName.trim() || saving} style={{ flex: 1, padding: "10px", borderRadius: "8px", background: COURT, color: "#05070d", fontFamily: MONO, fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", border: "none", cursor: newName.trim() ? "pointer" : "default", opacity: newName.trim() ? 1 : 0.5 }}>
                   {saving ? "…" : "Crear"}
                 </button>
               </div>
@@ -218,13 +218,13 @@ export default function MySetsPage() {
                     <img src={set.cover_card_image} alt={set.name} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0 }} />
                   ) : (
                     <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <WalletCards size={48} color={VIOLET} strokeWidth={1.2} />
+                      <WalletCards size={48} color={COURT} strokeWidth={1.2} />
                     </div>
                   )}
                 </div>
                 <div style={{ marginTop: "10px", textAlign: "center" }}>
                   <p style={{ fontFamily: DISP, fontSize: "15px", color: INK0, fontWeight: 700, margin: "0 0 3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{set.name}</p>
-                  <p style={{ fontFamily: MONO, fontSize: "12px", color: set.price > 0 ? VIOLET : INK2, fontWeight: 700, margin: 0 }}>
+                  <p style={{ fontFamily: MONO, fontSize: "12px", color: set.price > 0 ? COURT : INK2, fontWeight: 700, margin: 0 }}>
                     {set.price > 0 ? <>${set.price.toFixed(2)} <span style={{ fontSize: "9px", color: INK2, fontWeight: 400 }}>USD</span></> : "—"}
                   </p>
                 </div>

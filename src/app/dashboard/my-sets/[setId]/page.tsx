@@ -10,7 +10,7 @@ import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { ArrowLeft, Search, Plus, Minus, Trash2, X, Pencil } from "lucide-react";
 
-const VIOLET = "#a78bfa";
+const COURT  = "#2ee6c1";
 const INK0   = "#f5f7fb";
 const INK2   = "#7a8298";
 const MONO   = "var(--font-jetbrains)";
@@ -285,7 +285,7 @@ export default function MySetEditorPage() {
                 onClick={() => { setEditName(setName); setEditDesc(setDesc); setEditingInfo(true); }}
                 title="Editar nombre y descripción"
                 style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px", width: 30, height: 30, color: INK2, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
-                onMouseEnter={e => { e.currentTarget.style.color = VIOLET; e.currentTarget.style.borderColor = `${VIOLET}55`; }}
+                onMouseEnter={e => { e.currentTarget.style.color = COURT; e.currentTarget.style.borderColor = `${COURT}55`; }}
                 onMouseLeave={e => { e.currentTarget.style.color = INK2; e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"; }}
               >
                 <Pencil size={13} strokeWidth={1.8} />
@@ -305,7 +305,7 @@ export default function MySetEditorPage() {
                   <div style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, marginBottom: "2px" }}>
                     Valor del set
                   </div>
-                  <div style={{ fontFamily: MONO, fontSize: "18px", color: VIOLET, fontWeight: 700 }}>
+                  <div style={{ fontFamily: MONO, fontSize: "18px", color: COURT, fontWeight: 700 }}>
                     ${setPrice.toFixed(2)} <span style={{ fontSize: "10px", color: INK2, fontWeight: 400 }}>USD</span>
                   </div>
                 </div>
@@ -313,7 +313,7 @@ export default function MySetEditorPage() {
                   <div style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, marginBottom: "2px" }}>
                     Tengo
                   </div>
-                  <div style={{ fontFamily: MONO, fontSize: "18px", color: ownedPrice >= setPrice ? VIOLET : INK0, fontWeight: 700 }}>
+                  <div style={{ fontFamily: MONO, fontSize: "18px", color: ownedPrice >= setPrice ? COURT : INK0, fontWeight: 700 }}>
                     ${ownedPrice.toFixed(2)} <span style={{ fontSize: "10px", color: INK2, fontWeight: 400 }}>USD</span>
                   </div>
                 </div>
@@ -323,7 +323,7 @@ export default function MySetEditorPage() {
               onClick={() => setPickerOpen(true)}
               style={{
                 display: "inline-flex", alignItems: "center", gap: "8px",
-                padding: "11px 22px", borderRadius: "10px", background: VIOLET,
+                padding: "11px 22px", borderRadius: "10px", background: COURT,
                 color: "#05070d",
                 fontFamily: MONO, fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em",
                 textTransform: "uppercase", border: "none", cursor: "pointer",
@@ -356,7 +356,7 @@ export default function MySetEditorPage() {
         {setCards.length === 0 ? (
           <div style={{ textAlign: "center", padding: "80px 20px", border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px" }}>
             <p style={{ fontFamily: MONO, fontSize: "13px", color: INK2, marginBottom: "16px" }}>Este set está vacío.</p>
-            <button onClick={() => setPickerOpen(true)} style={{ fontFamily: MONO, fontSize: "11px", color: VIOLET, background: "none", border: `1px solid ${VIOLET}44`, borderRadius: "8px", padding: "8px 20px", cursor: "pointer", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+            <button onClick={() => setPickerOpen(true)} style={{ fontFamily: MONO, fontSize: "11px", color: COURT, background: "none", border: `1px solid ${COURT}44`, borderRadius: "8px", padding: "8px 20px", cursor: "pointer", letterSpacing: "0.1em", textTransform: "uppercase" }}>
               + Agregar primera carta
             </button>
           </div>
@@ -386,7 +386,7 @@ export default function MySetEditorPage() {
                     display: "flex", flexDirection: "column", gap: "6px",
                     cursor: "grab",
                     opacity: dragIdx === index ? 0.4 : 1,
-                    outline: dragOver === index && dragIdx !== index ? `2px solid ${VIOLET}` : "none",
+                    outline: dragOver === index && dragIdx !== index ? `2px solid ${COURT}` : "none",
                     outlineOffset: "3px",
                     borderRadius: "10px",
                     transition: "opacity 0.15s, outline 0.1s",
@@ -395,7 +395,7 @@ export default function MySetEditorPage() {
                   <div style={{ position: "relative", aspectRatio: "5/7", borderRadius: "8px", overflow: "hidden", background: "rgba(255,255,255,0.03)" }}>
                     {dc.card?.image && <img src={dc.card.image} alt={dc.card?.name ?? dc.card_id} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0, filter: dc.quantity === 0 ? "grayscale(1) brightness(0.75)" : "none", transition: "filter 0.25s" }} />}
                     <div style={{ position: "absolute", bottom: 4, right: 4, fontFamily: MONO, fontSize: "8px", color: vColor, border: `1px solid ${vColor}55`, borderRadius: "4px", padding: "1px 5px", background: "rgba(5,7,13,0.85)" }}>{vLabel}</div>
-                    <div style={{ position: "absolute", top: 4, right: 4, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "2px 7px", fontFamily: MONO, fontSize: "11px", color: dc.quantity === 0 ? INK2 : VIOLET, fontWeight: 700 }}>{dc.quantity === 0 ? "falta" : `×${dc.quantity}`}</div>
+                    <div style={{ position: "absolute", top: 4, right: 4, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "2px 7px", fontFamily: MONO, fontSize: "11px", color: dc.quantity === 0 ? INK2 : COURT, fontWeight: 700 }}>{dc.quantity === 0 ? "falta" : `×${dc.quantity}`}</div>
                   </div>
                   <p style={{ fontFamily: MONO, fontSize: "10px", color: INK0, margin: 0, textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{dc.card?.name ?? dc.card_id}</p>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
@@ -403,7 +403,7 @@ export default function MySetEditorPage() {
                       <Minus size={12} />
                     </button>
                     <span style={{ fontFamily: MONO, fontSize: "13px", color: INK0, fontWeight: 700, width: "20px", textAlign: "center" }}>{dc.quantity}</span>
-                    <button onClick={() => changeQty(dc.id, 1)} style={{ width: 28, height: 28, borderRadius: "6px", border: `1px solid ${VIOLET}44`, background: "none", color: VIOLET, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <button onClick={() => changeQty(dc.id, 1)} style={{ width: 28, height: 28, borderRadius: "6px", border: `1px solid ${COURT}44`, background: "none", color: COURT, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <Plus size={12} />
                     </button>
                   </div>
@@ -421,7 +421,7 @@ export default function MySetEditorPage() {
           onClick={e => { if (e.target === e.currentTarget) setEditingInfo(false); }}
         >
           <div style={{ width: 360, borderRadius: "20px", background: "#0d1520", border: "1px solid rgba(255,255,255,0.1)", padding: "28px", boxShadow: "0 24px 80px rgba(0,0,0,0.7)" }}>
-            <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase", color: VIOLET, margin: "0 0 20px" }}>Editar Set</p>
+            <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase", color: COURT, margin: "0 0 20px" }}>Editar Set</p>
 
             <label style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px" }}>Nombre del set</label>
             <input
@@ -443,7 +443,7 @@ export default function MySetEditorPage() {
 
             <div style={{ display: "flex", gap: "10px" }}>
               <button onClick={() => setEditingInfo(false)} style={{ flex: 1, padding: "10px", borderRadius: "8px", background: "transparent", border: "1px solid rgba(255,255,255,0.15)", color: INK2, fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer" }}>Cancelar</button>
-              <button onClick={saveSetInfo} disabled={!editName.trim()} style={{ flex: 1, padding: "10px", borderRadius: "8px", background: VIOLET, color: "#05070d", fontFamily: MONO, fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", border: "none", cursor: editName.trim() ? "pointer" : "default", opacity: editName.trim() ? 1 : 0.5 }}>
+              <button onClick={saveSetInfo} disabled={!editName.trim()} style={{ flex: 1, padding: "10px", borderRadius: "8px", background: COURT, color: "#05070d", fontFamily: MONO, fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", border: "none", cursor: editName.trim() ? "pointer" : "default", opacity: editName.trim() ? 1 : 0.5 }}>
                 Guardar
               </button>
             </div>
@@ -504,7 +504,7 @@ export default function MySetEditorPage() {
                         <div style={{ position: "absolute", bottom: 4, right: 4, fontFamily: MONO, fontSize: "8px", color: vColor, border: `1px solid ${vColor}55`, borderRadius: "4px", padding: "1px 5px", background: "rgba(5,7,13,0.85)" }}>{vLabel}</div>
                         {inSet && (inSet.quantity === 0
                           ? <div style={{ position: "absolute", top: 6, right: 6, background: "rgba(122,130,152,0.9)", borderRadius: "8px", padding: "3px 9px", fontFamily: MONO, fontSize: "11px", color: "#05070d", fontWeight: 800, letterSpacing: "0.04em" }}>en set</div>
-                          : <div style={{ position: "absolute", top: 6, right: 6, background: VIOLET, borderRadius: "8px", padding: "3px 9px", fontFamily: MONO, fontSize: "14px", color: "#05070d", fontWeight: 800, letterSpacing: "0.02em", boxShadow: `0 0 10px ${VIOLET}99` }}>×{inSet.quantity}</div>
+                          : <div style={{ position: "absolute", top: 6, right: 6, background: COURT, borderRadius: "8px", padding: "3px 9px", fontFamily: MONO, fontSize: "14px", color: "#05070d", fontWeight: 800, letterSpacing: "0.02em", boxShadow: `0 0 10px ${COURT}99` }}>×{inSet.quantity}</div>
                         )}
                         <div style={{ position: "absolute", inset: 0, background: "rgba(167,139,250,0.0)", display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.15s" }}
                           onMouseEnter={e => (e.currentTarget.style.background = "rgba(167,139,250,0.15)")}

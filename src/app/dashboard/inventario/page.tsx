@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useRef, useEffect, useState, useMemo, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
@@ -29,6 +29,11 @@ const AgregarDrawer = dynamic(
 
 const BuscarCartaDrawer = dynamic(
   () => import("@/components/BuscarCartaDrawer").then(m => ({ default: m.BuscarCartaDrawer })),
+  { ssr: false }
+);
+
+const TradeReceivedModal = dynamic(
+  () => import("@/components/TradeReceivedModal").then(m => ({ default: m.TradeReceivedModal })),
   { ssr: false }
 );
 
@@ -65,6 +70,7 @@ export default function InventarioPage() {
   const [fSet,        setFSet]        = useState("");
   const [fDestacados, setFDestacados] = useState(false);
   const [fBulk,       setFBulk]       = useState(false);
+  const [fOrden,      setFOrden]      = useState<"precio-desc" | "precio-asc" | "set">("precio-desc");
   const [setDropdownOpen, setSetDropdownOpen] = useState(false);
   const [filtersOpen,     setFiltersOpen]     = useState(false); // panel de filtros en móvil
 
@@ -252,6 +258,16 @@ export default function InventarioPage() {
     });
   }, [sets]);
 
+  /** Precio Scrydex de una carta, o null si el set no tiene datos */
+  const priceOf = useCallback((card: PokemonCard, setId: string): number | null => {
+    const sc = SCRYDEX_SET_CODES[setId];
+    if (!sc) return null;
+    const byCard = (setCardPrices[setId] ?? {})[`${sc}-${card.card_number}`];
+    if (!byCard) return null;
+    const vk = card.version.toLowerCase().replace(/\s+/g, "");
+    return byCard[vk] ?? byCard[card.version] ?? byCard["normal"] ?? null;
+  }, [setCardPrices]);
+
   // Filtered cards
   const filteredCards = useMemo(() => {
     return allInventoryCards.filter(({ card, setId }) => {
@@ -267,13 +283,27 @@ export default function InventarioPage() {
     });
   }, [allInventoryCards, fNombre, fVariante, fSet, fDestacados, fBulk, featuredCards, inventory]);
 
+  /** Por defecto entran primero las cartas más caras; las sin precio, al final */
+  const sortedCards = useMemo(() => {
+    if (fOrden === "set") return filteredCards;
+    const dir = fOrden === "precio-asc" ? 1 : -1;
+    return [...filteredCards].sort((a, b) => {
+      const pa = priceOf(a.card, a.setId);
+      const pb = priceOf(b.card, b.setId);
+      if (pa == null && pb == null) return 0;
+      if (pa == null) return 1;
+      if (pb == null) return -1;
+      return (pa - pb) * dir;
+    });
+  }, [filteredCards, fOrden, priceOf]);
+
   const hasFilters = fNombre || fVariante || fSet || fDestacados || fBulk;
   function clearFilters() { setFNombre(""); setFVariante(""); setFSet(""); setFDestacados(false); setFBulk(false); }
 
   // Resetear paginación cuando cambian los filtros
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [fNombre, fVariante, fSet, fDestacados, fBulk]);
+  }, [fNombre, fVariante, fSet, fDestacados, fBulk, fOrden]);
 
   // IntersectionObserver para cargar más cartas al hacer scroll
   useEffect(() => {
@@ -292,8 +322,8 @@ export default function InventarioPage() {
   }, [filteredCards.length]);
 
   const visibleCards = useMemo(
-    () => filteredCards.slice(0, visibleCount),
-    [filteredCards, visibleCount]
+    () => sortedCards.slice(0, visibleCount),
+    [sortedCards, visibleCount]
   );
 
   const totalCards = Object.values(inventory).reduce((a, b) => a + b, 0);
@@ -495,6 +525,21 @@ export default function InventarioPage() {
                       </button>
                     )}
                   </div>
+
+                  <div>
+                    <label style={sLabel}>Ordenar por</label>
+                    <select
+                      style={sInput}
+                      value={fOrden}
+                      onChange={e => setFOrden(e.target.value as typeof fOrden)}
+                    >
+                      <option value="precio-desc">Precio: mayor a menor</option>
+                      <option value="precio-asc">Precio: menor a mayor</option>
+                      <option value="set">Orden del set</option>
+                    </select>
+                  </div>
+
+                  <div style={sDivider} />
 
                   <div>
                     <label style={sLabel}>Nombre de carta</label>
@@ -808,6 +853,9 @@ export default function InventarioPage() {
           onClose={() => setBuscarOpen(false)}
         />
       )}
+
+      {/* Aviso de cartas que entraron por un intercambio */}
+      <TradeReceivedModal />
     </div>
   );
 }
