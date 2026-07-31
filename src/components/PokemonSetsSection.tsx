@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
-import { POKEMON_SERIES, type PokemonSet } from "@/data/pokemon-sets";
+import { POKEMON_SERIES, STANDALONE_SETS, type PokemonSet } from "@/data/pokemon-sets";
 import { VERSION_LABEL, getVersionLabel, getVersionEffect, getVersionColor, type PokemonCard, type CardVersion } from "@/data/pokemon-cards-meta";
 import { SET_CARD_COUNT, loadSetCards } from "@/data/pokemon-cards";
 import {
@@ -416,7 +416,10 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const [addingWish,    setAddingWish]    = useState<"idle" | "loading" | "done">("idle");
 
   const openSeries = POKEMON_SERIES.find(s => s.id === openSeriesId);
-  const openSet    = openSeries?.sets.find(s => s.id === openSetId);
+  // El set se busca en todas las series, no solo en la abierta: a un set suelto
+  // se entra directo desde Expansiones, sin pasar por ninguna serie.
+  const openSet    = POKEMON_SERIES.flatMap(s => s.sets).find(s => s.id === openSetId);
+  const setSeries  = POKEMON_SERIES.find(s => s.sets.some(x => x.id === openSetId));
 
   useEffect(() => { setInvFilter("todas"); setVersionFilter("todas"); setAddingWish("idle"); setVisibleCount(PAGE_SIZE); }, [openSetId]);
 
@@ -541,7 +544,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           fontFamily: MONO, fontSize: "12px", letterSpacing: "0.1em",
           color: INK2, marginTop: "10px", textTransform: "uppercase",
         }}>
-          {POKEMON_SERIES.length} expansiones · {POKEMON_SERIES.reduce((a, s) => a + s.sets.length, 0)} sets
+          {POKEMON_SERIES.filter(s => !s.standalone).length} expansiones · {POKEMON_SERIES.reduce((a, s) => a + s.sets.length, 0)} sets
         </p>
       </div>
 
@@ -552,7 +555,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           <>
             <SectionLabel>Expansiones</SectionLabel>
             <div className="pks-thumbs" style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
-              {POKEMON_SERIES.map(series => (
+              {POKEMON_SERIES.filter(s => !s.standalone).map(series => (
                 <Thumb
                   key={series.id}
                   imgSrc={series.icon}
@@ -563,6 +566,24 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                   onClick={() => goToSets(series.id)}
                 />
               ))}
+              {/* Sets sueltos: no tienen expansión que los agrupe, así que van
+                  aquí mismo y entran directo a las cartas. */}
+              {STANDALONE_SETS.map(set => {
+                const cardCount = SET_CARD_COUNT[set.id] ?? 0;
+                return (
+                  <Thumb
+                    key={set.id}
+                    imgSrc={set.logo}
+                    imgW={110} imgH={50}
+                    label={set.name}
+                    sublabel={cardCount ? `${cardCount} cartas` : undefined}
+                    isOpen={false}
+                    isGray={!cardCount}
+                    showPronto={!cardCount}
+                    onClick={() => { if (cardCount) goToCards(set.id); }}
+                  />
+                );
+              })}
             </div>
           </>
         )}
@@ -616,7 +637,10 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
             <>
               <Breadcrumb items={[
                 { label: "Expansiones", onClick: goToSeries },
-                { label: openSeries!.name, onClick: () => goToSets(openSeries!.id) },
+                // Un set suelto no tiene expansión que mostrar en el camino.
+                ...(setSeries && !setSeries.standalone
+                  ? [{ label: setSeries.name, onClick: () => goToSets(setSeries.id) }]
+                  : []),
                 { label: openSet.name },
               ]} />
 

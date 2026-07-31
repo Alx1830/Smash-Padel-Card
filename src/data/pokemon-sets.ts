@@ -10,6 +10,14 @@ export interface PokemonSeries {
   name: string;
   icon: string;
   sets: PokemonSet[];
+  /**
+   * Series que no son una expansión de verdad, sino un cajón para sets sueltos.
+   * En la pantalla de Colección sus sets salen como tarjetas propias junto a las
+   * expansiones, sin el paso intermedio. Siguen agrupados aquí porque el resto
+   * de la app (inventario, mercado, trades, perfil) busca los sets recorriendo
+   * POKEMON_SERIES, y sacarlos los dejaría sin nombre ni logo.
+   */
+  standalone?: boolean;
 }
 
 const P = "/pokemon-sets/";
@@ -343,12 +351,17 @@ export const POKEMON_SERIES: PokemonSeries[] = [
     id: "otras-cartas",
     name: "Otras Cartas",
     icon: `${P}Prize-Pack-Series.symbol.png`,
+    standalone: true,
     sets: [
       { id: "prize-pack-series",      name: "Prize Pack Series Cards",         logo: `${P}Prize-Pack-Series.logo.png`,                   symbol: `${P}Prize-Pack-Series.symbol.png` },
       { id: "misc-cards",             name: "Miscellaneous Cards & Products",  logo: `${P}Miscellaneous-Cards.logo.png`,                 symbol: `${P}Miscellaneous-Cards.symbol.png` },
     ],
   },
 ];
+
+// Sets que se muestran solos, sin expansión que los agrupe.
+export const STANDALONE_SETS: PokemonSet[] =
+  POKEMON_SERIES.filter(s => s.standalone).flatMap(s => s.sets);
 
 // Sets ocultos: existen en la librería (buscador, decks) pero no aparecen
 // como expansión en ninguna sección de sets.

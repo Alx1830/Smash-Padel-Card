@@ -331,6 +331,8 @@ export async function loadManySets(setIds: string[]): Promise<void> {
 }
 
 export const SET_CARD_COUNT: Record<string, number> = {
+  "prize-pack-series": 872,
+  "misc-cards": 614,
   "prismatic-evolutions": 475,
   "pitch-black":        120,
   "chaos-rising":       198,
