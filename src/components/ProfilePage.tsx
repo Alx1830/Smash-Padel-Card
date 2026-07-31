@@ -1344,7 +1344,7 @@ function MySetsSlider({ profileUserId, username }: { profileUserId?: string; use
         display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
       }}>
         <span style={{ width: "22px", height: "1px", background: VIOLET, display: "inline-block" }} />
-        My Sets
+        Mis Sets
       </div>
 
       {/* Carrusel */}
