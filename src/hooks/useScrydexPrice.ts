@@ -213,6 +213,10 @@ export const SCRYDEX_SET_CODES: Record<string, string> = {
   "pop-7": "pop7",
   "pop-8": "pop8",
   "pop-9": "pop9",
+
+  // ── Sets de TCGplayer (no existen en Scrydex; ver scripts/tcgplayer-set-lib.mjs) ──
+  "prize-pack-series": "pp",
+  "misc-cards":        "misc",
 };
 
 const supabase = createClient(

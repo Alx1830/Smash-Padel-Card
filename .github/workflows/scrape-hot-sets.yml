@@ -14,7 +14,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        chunk: ["1","2"]
+        # El chunk 2 (Scarlet & Violet) salio de aqui: su turno cada 3 horas lo
+        # ocupa scrape-tcgplayer.yml. Sigue actualizandose en el ciclo completo.
+        chunk: ["1"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

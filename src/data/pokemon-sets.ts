@@ -337,6 +337,17 @@ export const POKEMON_SERIES: PokemonSeries[] = [
       { id: "base-set",               name: "Base Set",                        logo: `${P}Base-Set.logo.119.png`,                        symbol: `${P}Base-Set.symbol.119.png` },
     ],
   },
+  {
+    // Agrupaciones que no son expansiones oficiales: cartas de torneo, promos
+    // sueltas y ediciones especiales que TCGplayer junta en un solo catálogo.
+    id: "otras-cartas",
+    name: "Otras Cartas",
+    icon: `${P}Prize-Pack-Series.symbol.png`,
+    sets: [
+      { id: "prize-pack-series",      name: "Prize Pack Series Cards",         logo: `${P}Prize-Pack-Series.logo.png`,                   symbol: `${P}Prize-Pack-Series.symbol.png` },
+      { id: "misc-cards",             name: "Miscellaneous Cards & Products",  logo: `${P}Miscellaneous-Cards.logo.png`,                 symbol: `${P}Miscellaneous-Cards.symbol.png` },
+    ],
+  },
 ];
 
 // Sets ocultos: existen en la librería (buscador, decks) pero no aparecen

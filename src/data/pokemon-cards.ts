@@ -4,6 +4,8 @@ export type CardVersion = string;
 
 // Per-set dynamic loaders — only load what's needed
 const SET_LOADERS: Record<string, () => Promise<{ default: PokemonCard[] }>> = {
+  "prize-pack-series": () => import("./sets/prize-pack-series"),
+  "misc-cards": () => import("./sets/misc-cards"),
   "pitch-black": () => import("./sets/pitch-black"),
   "chaos-rising": () => import("./sets/chaos-rising"),
   "prismatic-evolutions": () => import("./sets/prismatic-evolutions"),
