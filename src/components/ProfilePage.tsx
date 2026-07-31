@@ -44,6 +44,8 @@ interface PlayerData {
   inventoryRows?:   InvRow[];
   featuredCards?:   FeaturedCard[];
   wishlistCards?:   WishlistCard[];
+  hasDecks?:        boolean;
+  hasMySets?:       boolean;
 }
 
 const COURT = "#2ee6c1";
@@ -282,7 +284,9 @@ export function ProfilePage({ player }: { player: PlayerData }) {
       </section>
 
       {/* ══ SHOWCASE + COLECCIÓN ══ */}
-      {(player.setStats && Object.keys(player.setStats).length > 0) || (player.wishlistCards && player.wishlistCards.length > 0) ? (
+      {(player.setStats && Object.keys(player.setStats).length > 0)
+        || (player.wishlistCards && player.wishlistCards.length > 0)
+        || player.hasDecks || player.hasMySets ? (
         <CollectionSection
           setStats={player.setStats ?? {}}
           inventoryRows={player.inventoryRows ?? []}

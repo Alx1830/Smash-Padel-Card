@@ -9,6 +9,7 @@ import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { ArrowLeft, Search, Plus, Minus, Trash2, X, Pencil } from "lucide-react";
+import { ensureInInventory } from "@/lib/my-sets-inventory";
 
 const COURT  = "#2ee6c1";
 const INK0   = "#f5f7fb";
@@ -194,8 +195,11 @@ export default function MySetEditorPage() {
   async function addCard(card: PokemonCard, cardSetId: string) {
     const existing = setCards.find(c => c.card_id === card.id && c.set_id === cardSetId && c.version === card.version);
 
+    let qtyEnSet = 1;
+
     if (existing) {
       const newQty = existing.quantity + 1;
+      qtyEnSet = newQty;
       await supabase.from("my_set_cards").update({ quantity: newQty }).eq("id", existing.id);
       setSetCards(prev => prev.map(c => c.id === existing.id ? { ...c, quantity: newQty } : c));
     } else {
@@ -209,6 +213,14 @@ export default function MySetEditorPage() {
           await supabase.from("my_sets").update({ cover_card_image: card.image }).eq("id", setId);
         }
       }
+    }
+
+    if (userId) {
+      await ensureInInventory(
+        supabase, userId,
+        { card_id: card.id, set_id: cardSetId, version: card.version },
+        qtyEnSet,
+      );
     }
 
     await supabase.from("my_sets").update({
@@ -235,6 +247,15 @@ export default function MySetEditorPage() {
     } else {
       await supabase.from("my_set_cards").update({ quantity: newQty }).eq("id", cardRowId);
       setSetCards(prev => prev.map(c => c.id === cardRowId ? { ...c, quantity: newQty } : c));
+      // Al subir la cantidad el inventario acompaña; al bajarla no se toca,
+      // porque quitar una carta del set no significa que dejó de tenerla.
+      if (userId && delta > 0) {
+        await ensureInInventory(
+          supabase, userId,
+          { card_id: entry.card_id, set_id: entry.set_id, version: entry.version },
+          newQty,
+        );
+      }
     }
   }
 

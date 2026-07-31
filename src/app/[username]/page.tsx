@@ -68,7 +68,10 @@ export default async function JugadorPage({
 
   // Fetch inventory + featured cards + wishlist in parallel
   // NOTE: no .in("set_id", ...) filter — SET_CARDS is a lazy Proxy, empty on server
-  const [{ data: invRows }, { data: featuredRows }, { data: wishlistRows }] = data.user_id
+  const [
+    { data: invRows }, { data: featuredRows }, { data: wishlistRows },
+    { count: decksCount }, { count: mySetsCount },
+  ] = data.user_id
     ? await Promise.all([
         supabase
           .from("card_inventory")
@@ -83,8 +86,18 @@ export default async function JugadorPage({
           .from("card_wishlist")
           .select("card_id, set_id")
           .eq("user_id", data.user_id),
+        // Solo el conteo: los sliders cargan sus cartas en cliente, pero la
+        // sección debe montarse aunque el jugador no tenga inventario
+        supabase
+          .from("decks")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", data.user_id),
+        supabase
+          .from("my_sets")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", data.user_id),
       ])
-    : [{ data: null }, { data: null }, { data: null }];
+    : [{ data: null }, { data: null }, { data: null }, { count: 0 }, { count: 0 }];
 
   // Build per-set stats using SET_CARD_COUNT (static, available server-side)
   type SetStats = { unique: number; total: number; totalQty: number };
@@ -125,6 +138,8 @@ export default async function JugadorPage({
     inventoryRows:    invRows ?? [],
     featuredCards:    (featuredRows  ?? []) as { card_id: number; set_id: string }[],
     wishlistCards:    (wishlistRows  ?? []) as { card_id: number; set_id: string }[],
+    hasDecks:         (decksCount  ?? 0) > 0,
+    hasMySets:        (mySetsCount ?? 0) > 0,
   };
 
   return (
