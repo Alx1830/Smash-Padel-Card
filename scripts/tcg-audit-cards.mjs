@@ -27,6 +27,7 @@ import { fileURLToPath } from "url";
 
 const __dirname  = path.dirname(fileURLToPath(import.meta.url));
 const MAP_DIR    = path.resolve(__dirname, "tcgplayer-mapping");
+const PROPIOS_DIR = path.resolve(__dirname, "tcgplayer-sets");
 const CARDS_DIR  = path.join(MAP_DIR, "cards");
 const CACHE_DIR  = path.join(MAP_DIR, ".cache");
 const SETS_DIR   = path.resolve(__dirname, "../src/data/sets");
@@ -150,6 +151,40 @@ const peores = [];
 for (const [setId, info] of objetivo) {
   const ours = readOurCards(setId);
   if (!ours || ours.length === 0) { global.sinArchivo++; continue; }
+
+  /*
+   * Los sets que armamos nosotros desde TCGplayer (Prize Pack, Miscellaneous)
+   * ya nacieron con el producto de origen anotado: su numeracion es un indice
+   * nuestro, no el numero impreso, asi que compararlos por numero no dice nada.
+   * Aqui el mapeo no hay que deducirlo, ya existe.
+   */
+  const propio = path.join(PROPIOS_DIR, `${setId}.json`);
+  if (fs.existsSync(propio)) {
+    const porProducto = JSON.parse(fs.readFileSync(propio, "utf8"));
+    const productoDe = new Map(Object.entries(porProducto).map(([pid, n]) => [n, +pid]));
+    const cards = {};
+    const vistos = new Map();
+    for (const c of ours) {
+      if (!vistos.has(c.number)) vistos.set(c.number, { name: c.name, versions: [] });
+      vistos.get(c.number).versions.push(c.version);
+    }
+    for (const [number, c] of vistos) {
+      cards[number] = {
+        name: c.name, versions: c.versions, status: "ok",
+        product_id: productoDe.get(number) ?? 0,
+        origen: "scraper",
+      };
+    }
+    const total = vistos.size;
+    fs.writeFileSync(path.join(CARDS_DIR, `${setId}.json`), JSON.stringify({
+      set: setId, tcg_set: info.tcg_set, code: info.code, propio: true,
+      summary: { total, ok: total, review: 0, missing: 0, pct: 100 },
+      cards,
+    }, null, 1) + "\n");
+    console.log(`  100%  ${setId.padEnd(26)} ${total}/${total}  (mapeo directo del scraper)`);
+    global.sets++; global.cards += total; global.ok += total;
+    continue;
+  }
 
   let products;
   try {
