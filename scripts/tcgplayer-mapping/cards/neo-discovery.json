@@ -1,0 +1,565 @@
+{
+ "set": "neo-discovery",
+ "tcg_set": "Neo Discovery",
+ "code": "neo2",
+ "summary": {
+  "total": 35,
+  "ok": 35,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Espeon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85316,
+   "tcg_name": "Espeon (1)",
+   "tcg_number": "01/75",
+   "variant_products": [
+    {
+     "suffix": "1",
+     "product_id": 85316
+    }
+   ]
+  },
+  "2": {
+   "name": "Forretress",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85542,
+   "tcg_name": "Forretress (2)",
+   "tcg_number": "02/75",
+   "variant_products": [
+    {
+     "suffix": "2",
+     "product_id": 85542
+    }
+   ]
+  },
+  "3": {
+   "name": "Hitmontop",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86110,
+   "tcg_name": "Hitmontop (3)",
+   "tcg_number": "03/75",
+   "variant_products": [
+    {
+     "suffix": "3",
+     "product_id": 86110
+    }
+   ]
+  },
+  "4": {
+   "name": "Houndoom",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86197,
+   "tcg_name": "Houndoom (4)",
+   "tcg_number": "04/75",
+   "variant_products": [
+    {
+     "suffix": "4",
+     "product_id": 86197
+    }
+   ]
+  },
+  "5": {
+   "name": "Houndour",
+   "versions": [
+    "holofoil",
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 86216,
+   "tcg_name": "Houndour (5)",
+   "tcg_number": "05/75",
+   "variant_products": [
+    {
+     "suffix": "5",
+     "product_id": 86216
+    }
+   ]
+  },
+  "6": {
+   "name": "Kabutops",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86389,
+   "tcg_name": "Kabutops (6)",
+   "tcg_number": "06/75",
+   "variant_products": [
+    {
+     "suffix": "6",
+     "product_id": 86389
+    }
+   ]
+  },
+  "7": {
+   "name": "Magnemite",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 87064,
+   "tcg_name": "Magnemite (7)",
+   "tcg_number": "07/75",
+   "variant_products": [
+    {
+     "suffix": "7",
+     "product_id": 87064
+    }
+   ]
+  },
+  "8": {
+   "name": "Politoed",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 88246,
+   "tcg_name": "Politoed (8)",
+   "tcg_number": "08/75",
+   "variant_products": [
+    {
+     "suffix": "8",
+     "product_id": 88246
+    }
+   ]
+  },
+  "9": {
+   "name": "Poliwrath",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 88269,
+   "tcg_name": "Poliwrath (9)",
+   "tcg_number": "09/75",
+   "variant_products": [
+    {
+     "suffix": "9",
+     "product_id": 88269
+    }
+   ]
+  },
+  "10": {
+   "name": "Scizor",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 88956,
+   "tcg_name": "Scizor (10)",
+   "tcg_number": "10/75",
+   "variant_products": [
+    {
+     "suffix": "10",
+     "product_id": 88956
+    }
+   ]
+  },
+  "11": {
+   "name": "Smeargle",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 89350,
+   "tcg_name": "Smeargle (11)",
+   "tcg_number": "11/75",
+   "variant_products": [
+    {
+     "suffix": "11",
+     "product_id": 89350
+    }
+   ]
+  },
+  "12": {
+   "name": "Tyranitar",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90113,
+   "tcg_name": "Tyranitar (12)",
+   "tcg_number": "12/75",
+   "variant_products": [
+    {
+     "suffix": "12",
+     "product_id": 90113
+    }
+   ]
+  },
+  "13": {
+   "name": "Umbreon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90137,
+   "tcg_name": "Umbreon (13)",
+   "tcg_number": "13/75",
+   "variant_products": [
+    {
+     "suffix": "13",
+     "product_id": 90137
+    }
+   ]
+  },
+  "14": {
+   "name": "Unown [A]",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90196,
+   "tcg_name": "Unown [A] (14)",
+   "tcg_number": "14/75",
+   "note": "nuestro \"Unown [A]\" vs TCG \"Unown\""
+  },
+  "15": {
+   "name": "Ursaring",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90249,
+   "tcg_name": "Ursaring (15)",
+   "tcg_number": "15/75",
+   "variant_products": [
+    {
+     "suffix": "15",
+     "product_id": 90249
+    }
+   ]
+  },
+  "16": {
+   "name": "Wobbuffet",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90612,
+   "tcg_name": "Wobbuffet (16)",
+   "tcg_number": "16/75",
+   "variant_products": [
+    {
+     "suffix": "16",
+     "product_id": 90612
+    }
+   ]
+  },
+  "17": {
+   "name": "Yanma",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90680,
+   "tcg_name": "Yanma (17)",
+   "tcg_number": "17/75",
+   "variant_products": [
+    {
+     "suffix": "17",
+     "product_id": 90680
+    }
+   ]
+  },
+  "20": {
+   "name": "Espeon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85320,
+   "tcg_name": "Espeon (20)",
+   "tcg_number": "20/75",
+   "variant_products": [
+    {
+     "suffix": "20",
+     "product_id": 85320
+    }
+   ]
+  },
+  "21": {
+   "name": "Forretress",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85545,
+   "tcg_name": "Forretress (21)",
+   "tcg_number": "21/75",
+   "variant_products": [
+    {
+     "suffix": "21",
+     "product_id": 85545
+    }
+   ]
+  },
+  "22": {
+   "name": "Hitmontop",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86111,
+   "tcg_name": "Hitmontop (22)",
+   "tcg_number": "22/75",
+   "variant_products": [
+    {
+     "suffix": "22",
+     "product_id": 86111
+    }
+   ]
+  },
+  "23": {
+   "name": "Houndoom",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86204,
+   "tcg_name": "Houndoom (23)",
+   "tcg_number": "23/75",
+   "variant_products": [
+    {
+     "suffix": "23",
+     "product_id": 86204
+    }
+   ]
+  },
+  "24": {
+   "name": "Houndour",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86217,
+   "tcg_name": "Houndour (24)",
+   "tcg_number": "24/75",
+   "variant_products": [
+    {
+     "suffix": "24",
+     "product_id": 86217
+    }
+   ]
+  },
+  "25": {
+   "name": "Kabutops",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86394,
+   "tcg_name": "Kabutops (25)",
+   "tcg_number": "25/75",
+   "variant_products": [
+    {
+     "suffix": "25",
+     "product_id": 86394
+    }
+   ]
+  },
+  "26": {
+   "name": "Magnemite",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 87065,
+   "tcg_name": "Magnemite (26)",
+   "tcg_number": "26",
+   "variant_products": [
+    {
+     "suffix": "26",
+     "product_id": 87065
+    }
+   ]
+  },
+  "27": {
+   "name": "Politoed",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 88249,
+   "tcg_name": "Politoed (27)",
+   "tcg_number": "27/75",
+   "variant_products": [
+    {
+     "suffix": "27",
+     "product_id": 88249
+    }
+   ]
+  },
+  "28": {
+   "name": "Poliwrath",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 88274,
+   "tcg_name": "Poliwrath (28)",
+   "tcg_number": "28/75",
+   "variant_products": [
+    {
+     "suffix": "28",
+     "product_id": 88274
+    }
+   ]
+  },
+  "29": {
+   "name": "Scizor",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 88958,
+   "tcg_name": "Scizor (29)",
+   "tcg_number": "29/75",
+   "variant_products": [
+    {
+     "suffix": "29",
+     "product_id": 88958
+    }
+   ]
+  },
+  "30": {
+   "name": "Smeargle",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 89351,
+   "tcg_name": "Smeargle (30)",
+   "tcg_number": "30/75",
+   "variant_products": [
+    {
+     "suffix": "30",
+     "product_id": 89351
+    }
+   ]
+  },
+  "31": {
+   "name": "Tyranitar",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90116,
+   "tcg_name": "Tyranitar (31)",
+   "tcg_number": "31/75",
+   "variant_products": [
+    {
+     "suffix": "31",
+     "product_id": 90116
+    }
+   ]
+  },
+  "32": {
+   "name": "Umbreon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90142,
+   "tcg_name": "Umbreon (32)",
+   "tcg_number": "32/75",
+   "variant_products": [
+    {
+     "suffix": "32",
+     "product_id": 90142
+    }
+   ]
+  },
+  "33": {
+   "name": "Unown [A]",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90197,
+   "tcg_name": "Unown [A] (33)",
+   "tcg_number": "33/75",
+   "note": "nuestro \"Unown [A]\" vs TCG \"Unown\""
+  },
+  "34": {
+   "name": "Ursaring",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90250,
+   "tcg_name": "Ursaring (34)",
+   "tcg_number": "34/75",
+   "variant_products": [
+    {
+     "suffix": "34",
+     "product_id": 90250
+    }
+   ]
+  },
+  "35": {
+   "name": "Wobbuffet",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90614,
+   "tcg_name": "Wobbuffet (35)",
+   "tcg_number": "35/75",
+   "variant_products": [
+    {
+     "suffix": "35",
+     "product_id": 90614
+    }
+   ]
+  },
+  "36": {
+   "name": "Yanma",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90681,
+   "tcg_name": "Yanma (36)",
+   "tcg_number": "36/75",
+   "variant_products": [
+    {
+     "suffix": "36",
+     "product_id": 90681
+    }
+   ]
+  },
+  "39": {
+   "name": "Houndour",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86218,
+   "tcg_name": "Houndour (39)",
+   "tcg_number": "39/75",
+   "variant_products": [
+    {
+     "suffix": "39",
+     "product_id": 86218
+    }
+   ]
+  }
+ }
+}

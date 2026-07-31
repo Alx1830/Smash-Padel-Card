@@ -1,0 +1,837 @@
+{
+ "set": "hidden-fates",
+ "tcg_set": "Hidden Fates",
+ "code": "sm115",
+ "summary": {
+  "total": 69,
+  "ok": 69,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Caterpie",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197643,
+   "tcg_name": "Caterpie",
+   "tcg_number": "1/68"
+  },
+  "2": {
+   "name": "Metapod",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197644,
+   "tcg_name": "Metapod",
+   "tcg_number": "2/68"
+  },
+  "3": {
+   "name": "Butterfree",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197645,
+   "tcg_name": "Butterfree",
+   "tcg_number": "3/68"
+  },
+  "4": {
+   "name": "Paras",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197646,
+   "tcg_name": "Paras",
+   "tcg_number": "4/68"
+  },
+  "5": {
+   "name": "Scyther",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197647,
+   "tcg_name": "Scyther",
+   "tcg_number": "5/68"
+  },
+  "6": {
+   "name": "Pinsir-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 197648,
+   "tcg_name": "Pinsir GX",
+   "tcg_number": "6/68"
+  },
+  "7": {
+   "name": "Charmander",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197649,
+   "tcg_name": "Charmander",
+   "tcg_number": "7/68"
+  },
+  "8": {
+   "name": "Charmeleon",
+   "versions": [
+    "charizardStamp15",
+    "charizardStamp30",
+    "charizardStamp51",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197650,
+   "tcg_name": "Charmeleon",
+   "tcg_number": "8/68"
+  },
+  "9": {
+   "name": "Charizard-GX",
+   "versions": [
+    "charizardStamp60",
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 197651,
+   "tcg_name": "Charizard GX",
+   "tcg_number": "9/68"
+  },
+  "10": {
+   "name": "Magmar",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197652,
+   "tcg_name": "Magmar",
+   "tcg_number": "10/68"
+  },
+  "11": {
+   "name": "Psyduck",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197653,
+   "tcg_name": "Psyduck",
+   "tcg_number": "11/68"
+  },
+  "12": {
+   "name": "Slowpoke",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197654,
+   "tcg_name": "Slowpoke",
+   "tcg_number": "12/68"
+  },
+  "13": {
+   "name": "Staryu",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197657,
+   "tcg_name": "Staryu",
+   "tcg_number": "13/68"
+  },
+  "14": {
+   "name": "Starmie-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 197658,
+   "tcg_name": "Starmie GX",
+   "tcg_number": "14/68"
+  },
+  "15": {
+   "name": "Magikarp",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197659,
+   "tcg_name": "Magikarp",
+   "tcg_number": "15/68"
+  },
+  "16": {
+   "name": "Gyarados-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 197660,
+   "tcg_name": "Gyarados GX",
+   "tcg_number": "16/68"
+  },
+  "17": {
+   "name": "Lapras",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197661,
+   "tcg_name": "Lapras",
+   "tcg_number": "17/68"
+  },
+  "18": {
+   "name": "Vaporeon",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197662,
+   "tcg_name": "Vaporeon",
+   "tcg_number": "18/68"
+  },
+  "19": {
+   "name": "Pikachu",
+   "versions": [
+    "normal",
+    "pikachuStamp15",
+    "pikachuStamp2",
+    "pikachuStamp30",
+    "pikachuStamp55",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197663,
+   "tcg_name": "Pikachu",
+   "tcg_number": "19/68"
+  },
+  "20": {
+   "name": "Raichu-GX",
+   "versions": [
+    "holofoil",
+    "pikachuStamp60"
+   ],
+   "status": "ok",
+   "product_id": 197664,
+   "tcg_name": "Raichu GX",
+   "tcg_number": "20/68"
+  },
+  "21": {
+   "name": "Voltorb",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197665,
+   "tcg_name": "Voltorb",
+   "tcg_number": "21/68"
+  },
+  "22": {
+   "name": "Electrode",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197666,
+   "tcg_name": "Electrode",
+   "tcg_number": "22/68"
+  },
+  "23": {
+   "name": "Jolteon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197667,
+   "tcg_name": "Jolteon",
+   "tcg_number": "23/68"
+  },
+  "24": {
+   "name": "Zapdos",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197668,
+   "tcg_name": "Zapdos",
+   "tcg_number": "24/68"
+  },
+  "25": {
+   "name": "Ekans",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197669,
+   "tcg_name": "Ekans (25)",
+   "tcg_number": "25/68",
+   "variant_products": [
+    {
+     "suffix": "25",
+     "product_id": 197669
+    }
+   ]
+  },
+  "26": {
+   "name": "Ekans",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197670,
+   "tcg_name": "Ekans (26)",
+   "tcg_number": "26/68",
+   "variant_products": [
+    {
+     "suffix": "26",
+     "product_id": 197670
+    }
+   ]
+  },
+  "27": {
+   "name": "Arbok",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197671,
+   "tcg_name": "Arbok",
+   "tcg_number": "27/68"
+  },
+  "28": {
+   "name": "Koffing",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197672,
+   "tcg_name": "Koffing",
+   "tcg_number": "28/68"
+  },
+  "29": {
+   "name": "Weezing",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197673,
+   "tcg_name": "Weezing",
+   "tcg_number": "29/68"
+  },
+  "30": {
+   "name": "Jynx",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197674,
+   "tcg_name": "Jynx",
+   "tcg_number": "30/68"
+  },
+  "31": {
+   "name": "Mewtwo-GX",
+   "versions": [
+    "holofoil",
+    "mewtwoStamp"
+   ],
+   "status": "ok",
+   "product_id": 197675,
+   "tcg_name": "Mewtwo GX",
+   "tcg_number": "31/68"
+  },
+  "32": {
+   "name": "Mew",
+   "versions": [
+    "mewtwoStamp",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197676,
+   "tcg_name": "Mew",
+   "tcg_number": "32/68"
+  },
+  "33": {
+   "name": "Geodude",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197677,
+   "tcg_name": "Geodude",
+   "tcg_number": "33/68"
+  },
+  "34": {
+   "name": "Graveler",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197678,
+   "tcg_name": "Graveler",
+   "tcg_number": "34/68"
+  },
+  "35": {
+   "name": "Golem",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197679,
+   "tcg_name": "Golem",
+   "tcg_number": "35/68"
+  },
+  "36": {
+   "name": "Onix-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 197680,
+   "tcg_name": "Onix GX",
+   "tcg_number": "36/68"
+  },
+  "37": {
+   "name": "Cubone",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197681,
+   "tcg_name": "Cubone",
+   "tcg_number": "37/68"
+  },
+  "38": {
+   "name": "Clefairy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197682,
+   "tcg_name": "Clefairy (38)",
+   "tcg_number": "38/68",
+   "variant_products": [
+    {
+     "suffix": "38",
+     "product_id": 197682
+    }
+   ]
+  },
+  "39": {
+   "name": "Clefairy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197683,
+   "tcg_name": "Clefairy (39)",
+   "tcg_number": "39/68",
+   "variant_products": [
+    {
+     "suffix": "39",
+     "product_id": 197683
+    }
+   ]
+  },
+  "40": {
+   "name": "Clefable",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197684,
+   "tcg_name": "Clefable",
+   "tcg_number": "40/68"
+  },
+  "41": {
+   "name": "Jigglypuff",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197685,
+   "tcg_name": "Jigglypuff",
+   "tcg_number": "41/68"
+  },
+  "42": {
+   "name": "Wigglytuff-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 197686,
+   "tcg_name": "Wigglytuff GX",
+   "tcg_number": "42/68"
+  },
+  "43": {
+   "name": "Mr. Mime",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197687,
+   "tcg_name": "Mr. Mime",
+   "tcg_number": "43/68"
+  },
+  "44": {
+   "name": "Moltres & Zapdos & Articuno-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 197688,
+   "tcg_name": "Moltres & Zapdos & Articuno GX",
+   "tcg_number": "44/68"
+  },
+  "45": {
+   "name": "Farfetch'd",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197689,
+   "tcg_name": "Farfetch'd",
+   "tcg_number": "45/68"
+  },
+  "46": {
+   "name": "Chansey",
+   "versions": [
+    "normal",
+    "pikachuStamp47",
+    "pikachuStamp5",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197691,
+   "tcg_name": "Chansey",
+   "tcg_number": "46/68"
+  },
+  "47": {
+   "name": "Kangaskhan",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197692,
+   "tcg_name": "Kangaskhan",
+   "tcg_number": "47/68"
+  },
+  "48": {
+   "name": "Eevee",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197693,
+   "tcg_name": "Eevee (48)",
+   "tcg_number": "48/68",
+   "variant_products": [
+    {
+     "suffix": "48",
+     "product_id": 197693
+    }
+   ]
+  },
+  "49": {
+   "name": "Eevee",
+   "versions": [
+    "charizardStamp26",
+    "charizardStamp36",
+    "mewtwoStamp",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197694,
+   "tcg_name": "Eevee (49)",
+   "tcg_number": "49/68",
+   "variant_products": [
+    {
+     "suffix": "49",
+     "product_id": 197694
+    }
+   ]
+  },
+  "50": {
+   "name": "Snorlax",
+   "versions": [
+    "mewtwoStamp",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197696,
+   "tcg_name": "Snorlax",
+   "tcg_number": "50/68"
+  },
+  "51": {
+   "name": "Bill's Analysis",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197697,
+   "tcg_name": "Bill's Analysis",
+   "tcg_number": "51/68"
+  },
+  "52": {
+   "name": "Blaine's Last Stand",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197699,
+   "tcg_name": "Blaine's Last Stand",
+   "tcg_number": "52/68"
+  },
+  "53": {
+   "name": "Brock's Grit",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197700,
+   "tcg_name": "Brock's Grit",
+   "tcg_number": "53/68"
+  },
+  "54": {
+   "name": "Brock's Pewter City Gym",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197702,
+   "tcg_name": "Brock's Pewter City Gym",
+   "tcg_number": "54/68"
+  },
+  "55": {
+   "name": "Brock's Training",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197704,
+   "tcg_name": "Brock's Training",
+   "tcg_number": "55/68"
+  },
+  "56": {
+   "name": "Erika's Hospitality",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197706,
+   "tcg_name": "Erika's Hospitality",
+   "tcg_number": "56/68"
+  },
+  "57": {
+   "name": "Giovanni's Exile",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197709,
+   "tcg_name": "Giovanni's Exile",
+   "tcg_number": "57/68"
+  },
+  "58": {
+   "name": "Jessie & James",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197711,
+   "tcg_name": "Jessie & James",
+   "tcg_number": "58/68"
+  },
+  "59": {
+   "name": "Koga's Trap",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197712,
+   "tcg_name": "Koga's Trap",
+   "tcg_number": "59/68"
+  },
+  "60": {
+   "name": "Lt. Surge's Strategy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197714,
+   "tcg_name": "Lt. Surge's Strategy",
+   "tcg_number": "60/68"
+  },
+  "61": {
+   "name": "Misty's Cerulean City Gym",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197716,
+   "tcg_name": "Misty's Cerulean City Gym",
+   "tcg_number": "61/68"
+  },
+  "62": {
+   "name": "Misty's Determination",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197717,
+   "tcg_name": "Misty's Determination",
+   "tcg_number": "62/68"
+  },
+  "63": {
+   "name": "Misty's Water Command",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197720,
+   "tcg_name": "Misty's Water Command",
+   "tcg_number": "63/68"
+  },
+  "64": {
+   "name": "Pokémon Center Lady",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197724,
+   "tcg_name": "Pokemon Center Lady",
+   "tcg_number": "64/68"
+  },
+  "65": {
+   "name": "Sabrina's Suggestion",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 197725,
+   "tcg_name": "Sabrina's Suggestion",
+   "tcg_number": "65/68"
+  },
+  "66": {
+   "name": "Moltres & Zapdos & Articuno-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 197726,
+   "tcg_name": "Moltres & Zapdos & Articuno GX (Full Art)",
+   "tcg_number": "66/68",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 197726
+    }
+   ]
+  },
+  "67": {
+   "name": "Giovanni's Exile",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 197730,
+   "tcg_name": "Giovanni's Exile (Full Art)",
+   "tcg_number": "67/68",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 197730
+    }
+   ]
+  },
+  "68": {
+   "name": "Jessie & James",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 197732,
+   "tcg_name": "Jessie & James (Full Art)",
+   "tcg_number": "68/68",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 197732
+    }
+   ]
+  },
+  "69": {
+   "name": "Moltres & Zapdos & Articuno-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 197728,
+   "tcg_name": "Moltres & Zapdos & Articuno GX (Secret)",
+   "tcg_number": "69/68",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 197728
+    }
+   ]
+  }
+ }
+}

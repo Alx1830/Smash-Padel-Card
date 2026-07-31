@@ -1,0 +1,980 @@
+{
+ "set": "dragon-majesty",
+ "tcg_set": "Dragon Majesty",
+ "code": "sm75",
+ "summary": {
+  "total": 78,
+  "ok": 78,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Charmander",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175263,
+   "tcg_name": "Charmander",
+   "tcg_number": "1/70"
+  },
+  "2": {
+   "name": "Charmeleon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175269,
+   "tcg_name": "Charmeleon",
+   "tcg_number": "2/70"
+  },
+  "3": {
+   "name": "Charizard",
+   "versions": [
+    "charizardStamp39",
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175270,
+   "tcg_name": "Charizard",
+   "tcg_number": "3/70"
+  },
+  "4": {
+   "name": "Torchic",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175272,
+   "tcg_name": "Torchic",
+   "tcg_number": "4/70"
+  },
+  "5": {
+   "name": "Combusken",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175273,
+   "tcg_name": "Combusken",
+   "tcg_number": "5/70"
+  },
+  "6": {
+   "name": "Blaziken",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175274,
+   "tcg_name": "Blaziken",
+   "tcg_number": "6/70"
+  },
+  "7": {
+   "name": "Victini ◇",
+   "versions": [
+    "holofoil",
+    "kayaLichtleitner"
+   ],
+   "status": "ok",
+   "product_id": 175275,
+   "tcg_name": "Victini Prism Star",
+   "tcg_number": "7/70",
+   "note": "nuestro \"Victini ◇\" vs TCG \"Victini Prism Star\""
+  },
+  "8": {
+   "name": "Darumaka",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175276,
+   "tcg_name": "Darumaka",
+   "tcg_number": "8/70"
+  },
+  "9": {
+   "name": "Darmanitan",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175277,
+   "tcg_name": "Darmanitan",
+   "tcg_number": "9/70"
+  },
+  "10": {
+   "name": "Heatmor",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175312,
+   "tcg_name": "Heatmor",
+   "tcg_number": "10/70"
+  },
+  "11": {
+   "name": "Reshiram-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175347,
+   "tcg_name": "Reshiram GX",
+   "tcg_number": "11/70"
+  },
+  "12": {
+   "name": "Litten",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175348,
+   "tcg_name": "Litten",
+   "tcg_number": "12/70"
+  },
+  "13": {
+   "name": "Salandit",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175365,
+   "tcg_name": "Salandit",
+   "tcg_number": "13/70"
+  },
+  "14": {
+   "name": "Salazzle",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175366,
+   "tcg_name": "Salazzle",
+   "tcg_number": "14/70"
+  },
+  "15": {
+   "name": "Horsea",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175369,
+   "tcg_name": "Horsea (15)",
+   "tcg_number": "15/70",
+   "variant_products": [
+    {
+     "suffix": "15",
+     "product_id": 175369
+    }
+   ]
+  },
+  "16": {
+   "name": "Horsea",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175371,
+   "tcg_name": "Horsea (16)",
+   "tcg_number": "16/70",
+   "variant_products": [
+    {
+     "suffix": "16",
+     "product_id": 175371
+    }
+   ]
+  },
+  "17": {
+   "name": "Seadra",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175379,
+   "tcg_name": "Seadra",
+   "tcg_number": "17/70"
+  },
+  "18": {
+   "name": "Kingdra-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175380,
+   "tcg_name": "Kingdra GX",
+   "tcg_number": "18/70"
+  },
+  "19": {
+   "name": "Magikarp",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175381,
+   "tcg_name": "Magikarp",
+   "tcg_number": "19/70"
+  },
+  "20": {
+   "name": "Gyarados",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175382,
+   "tcg_name": "Gyarados",
+   "tcg_number": "20/70"
+  },
+  "21": {
+   "name": "Lapras",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175383,
+   "tcg_name": "Lapras",
+   "tcg_number": "21/70"
+  },
+  "22": {
+   "name": "Totodile",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175384,
+   "tcg_name": "Totodile",
+   "tcg_number": "22/70"
+  },
+  "23": {
+   "name": "Croconaw",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175385,
+   "tcg_name": "Croconaw",
+   "tcg_number": "23/70"
+  },
+  "24": {
+   "name": "Feraligatr",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175386,
+   "tcg_name": "Feraligatr",
+   "tcg_number": "24/70"
+  },
+  "25": {
+   "name": "Wooper",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175387,
+   "tcg_name": "Wooper",
+   "tcg_number": "25/70"
+  },
+  "26": {
+   "name": "Quagsire",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175392,
+   "tcg_name": "Quagsire",
+   "tcg_number": "26/70"
+  },
+  "27": {
+   "name": "Corsola",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175400,
+   "tcg_name": "Corsola",
+   "tcg_number": "27/70"
+  },
+  "28": {
+   "name": "Feebas",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175403,
+   "tcg_name": "Feebas",
+   "tcg_number": "28/70"
+  },
+  "29": {
+   "name": "Milotic",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175412,
+   "tcg_name": "Milotic",
+   "tcg_number": "29/70"
+  },
+  "30": {
+   "name": "Phione",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175416,
+   "tcg_name": "Phione",
+   "tcg_number": "30/70"
+  },
+  "31": {
+   "name": "Wishiwashi",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175417,
+   "tcg_name": "Wishiwashi",
+   "tcg_number": "31/70"
+  },
+  "32": {
+   "name": "Trapinch",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175425,
+   "tcg_name": "Trapinch",
+   "tcg_number": "32/70"
+  },
+  "33": {
+   "name": "Hydreigon",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175431,
+   "tcg_name": "Hydreigon",
+   "tcg_number": "33/70"
+  },
+  "34": {
+   "name": "Dratini",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175438,
+   "tcg_name": "Dratini (34)",
+   "tcg_number": "34/70",
+   "variant_products": [
+    {
+     "suffix": "34",
+     "product_id": 175438
+    }
+   ]
+  },
+  "35": {
+   "name": "Dratini",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175439,
+   "tcg_name": "Dratini (35)",
+   "tcg_number": "35/70",
+   "variant_products": [
+    {
+     "suffix": "35",
+     "product_id": 175439
+    }
+   ]
+  },
+  "36": {
+   "name": "Dragonair",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175441,
+   "tcg_name": "Dragonair",
+   "tcg_number": "36/70"
+  },
+  "37": {
+   "name": "Dragonite-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175450,
+   "tcg_name": "Dragonite GX",
+   "tcg_number": "37/70"
+  },
+  "38": {
+   "name": "Vibrava",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175451,
+   "tcg_name": "Vibrava",
+   "tcg_number": "38/70"
+  },
+  "39": {
+   "name": "Flygon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175456,
+   "tcg_name": "Flygon",
+   "tcg_number": "39/70"
+  },
+  "40": {
+   "name": "Altaria",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175459,
+   "tcg_name": "Altaria",
+   "tcg_number": "40/70"
+  },
+  "41": {
+   "name": "Altaria-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175467,
+   "tcg_name": "Altaria GX",
+   "tcg_number": "41/70"
+  },
+  "42": {
+   "name": "Bagon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175468,
+   "tcg_name": "Bagon",
+   "tcg_number": "42/70"
+  },
+  "43": {
+   "name": "Shelgon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175469,
+   "tcg_name": "Shelgon",
+   "tcg_number": "43/70"
+  },
+  "44": {
+   "name": "Salamence-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175472,
+   "tcg_name": "Salamence GX",
+   "tcg_number": "44/70"
+  },
+  "45": {
+   "name": "Druddigon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175473,
+   "tcg_name": "Druddigon",
+   "tcg_number": "45/70"
+  },
+  "46": {
+   "name": "Zekrom",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175476,
+   "tcg_name": "Zekrom",
+   "tcg_number": "46/70"
+  },
+  "47": {
+   "name": "Kyurem",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175477,
+   "tcg_name": "Kyurem",
+   "tcg_number": "47/70"
+  },
+  "48": {
+   "name": "White Kyurem-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175478,
+   "tcg_name": "White Kyurem GX",
+   "tcg_number": "48/70"
+  },
+  "49": {
+   "name": "Zygarde",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175479,
+   "tcg_name": "Zygarde",
+   "tcg_number": "49/70"
+  },
+  "50": {
+   "name": "Turtonator",
+   "versions": [
+    "kayaLichtleitner",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175480,
+   "tcg_name": "Turtonator",
+   "tcg_number": "50/70"
+  },
+  "51": {
+   "name": "Drampa",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175481,
+   "tcg_name": "Drampa",
+   "tcg_number": "51/70"
+  },
+  "52": {
+   "name": "Jangmo-o",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175482,
+   "tcg_name": "Jangmo-o",
+   "tcg_number": "52/70"
+  },
+  "53": {
+   "name": "Hakamo-o",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175483,
+   "tcg_name": "Hakamo-o",
+   "tcg_number": "53/70"
+  },
+  "54": {
+   "name": "Kommo-o",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175484,
+   "tcg_name": "Kommo-o",
+   "tcg_number": "54/70"
+  },
+  "55": {
+   "name": "Kangaskhan",
+   "versions": [
+    "charizardStamp4",
+    "charizardStamp53",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175485,
+   "tcg_name": "Kangaskhan",
+   "tcg_number": "55/70"
+  },
+  "56": {
+   "name": "Swablu",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175486,
+   "tcg_name": "Swablu (56)",
+   "tcg_number": "56/70",
+   "variant_products": [
+    {
+     "suffix": "56",
+     "product_id": 175486
+    }
+   ]
+  },
+  "57": {
+   "name": "Swablu",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175487,
+   "tcg_name": "Swablu (57)",
+   "tcg_number": "57/70",
+   "variant_products": [
+    {
+     "suffix": "57",
+     "product_id": 175487
+    }
+   ]
+  },
+  "58": {
+   "name": "Blaine's Last Stand",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175488,
+   "tcg_name": "Blaine's Last Stand",
+   "tcg_number": "58/70"
+  },
+  "59": {
+   "name": "Dragon Talon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175489,
+   "tcg_name": "Dragon Talon",
+   "tcg_number": "59/70"
+  },
+  "60": {
+   "name": "Fiery Flint",
+   "versions": [
+    "kayaLichtleitner",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175490,
+   "tcg_name": "Fiery Flint",
+   "tcg_number": "60/70"
+  },
+  "61": {
+   "name": "Lance ◇",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175491,
+   "tcg_name": "Lance Prism Star",
+   "tcg_number": "61/70",
+   "note": "nuestro \"Lance ◇\" vs TCG \"Lance Prism Star\""
+  },
+  "62": {
+   "name": "Switch Raft",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175492,
+   "tcg_name": "Switch Raft",
+   "tcg_number": "62/70"
+  },
+  "63": {
+   "name": "Wela Volcano Park",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175493,
+   "tcg_name": "Wela Volcano Park",
+   "tcg_number": "63/70"
+  },
+  "64": {
+   "name": "Zinnia",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 175494,
+   "tcg_name": "Zinnia",
+   "tcg_number": "64/70"
+  },
+  "65": {
+   "name": "Reshiram-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175495,
+   "tcg_name": "Reshiram GX (Full Art)",
+   "tcg_number": "65/70",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 175495
+    }
+   ]
+  },
+  "66": {
+   "name": "Kingdra-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175496,
+   "tcg_name": "Kingdra GX (Full Art)",
+   "tcg_number": "66/70",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 175496
+    }
+   ]
+  },
+  "67": {
+   "name": "Dragonite-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175497,
+   "tcg_name": "Dragonite GX (Full Art)",
+   "tcg_number": "67/70",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 175497
+    }
+   ]
+  },
+  "68": {
+   "name": "Altaria-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175498,
+   "tcg_name": "Altaria GX (Full Art)",
+   "tcg_number": "68/70",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 175498
+    }
+   ]
+  },
+  "69": {
+   "name": "Blaine's Last Stand",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175499,
+   "tcg_name": "Blaine's Last Stand (Full Art)",
+   "tcg_number": "69/70",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 175499
+    }
+   ]
+  },
+  "70": {
+   "name": "Zinnia",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175500,
+   "tcg_name": "Zinnia (Full Art)",
+   "tcg_number": "70/70",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 175500
+    }
+   ]
+  },
+  "71": {
+   "name": "Reshiram-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175501,
+   "tcg_name": "Reshiram GX (Secret)",
+   "tcg_number": "71/70",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 175501
+    }
+   ]
+  },
+  "72": {
+   "name": "Altaria-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175502,
+   "tcg_name": "Altaria GX (Secret)",
+   "tcg_number": "72/70",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 175502
+    }
+   ]
+  },
+  "73": {
+   "name": "Salamence-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175503,
+   "tcg_name": "Salamence GX (Secret)",
+   "tcg_number": "73/70",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 175503
+    }
+   ]
+  },
+  "74": {
+   "name": "White Kyurem-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175504,
+   "tcg_name": "White Kyurem GX (Secret)",
+   "tcg_number": "74/70",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 175504
+    }
+   ]
+  },
+  "75": {
+   "name": "Dragon Talon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175505,
+   "tcg_name": "Dragon Talon (Secret)",
+   "tcg_number": "75/70",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 175505
+    }
+   ]
+  },
+  "76": {
+   "name": "Fiery Flint",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175506,
+   "tcg_name": "Fiery Flint (Secret)",
+   "tcg_number": "76/70",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 175506
+    }
+   ]
+  },
+  "77": {
+   "name": "Switch Raft",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175507,
+   "tcg_name": "Switch Raft (Secret)",
+   "tcg_number": "77/70",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 175507
+    }
+   ]
+  },
+  "78": {
+   "name": "Ultra Necrozma-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 175508,
+   "tcg_name": "Ultra Necrozma GX (Secret)",
+   "tcg_number": "78/70",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 175508
+    }
+   ]
+  }
+ }
+}

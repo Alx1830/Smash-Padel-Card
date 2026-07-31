@@ -1,0 +1,864 @@
+{
+ "set": "fossil",
+ "tcg_set": "Fossil",
+ "code": "base3",
+ "summary": {
+  "total": 62,
+  "ok": 62,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Aerodactyl",
+   "versions": [
+    "holofoil",
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 44418,
+   "tcg_name": "Aerodactyl (1)",
+   "tcg_number": "01/62",
+   "variant_products": [
+    {
+     "suffix": "1",
+     "product_id": 44418
+    }
+   ]
+  },
+  "2": {
+   "name": "Articuno",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 106518,
+   "tcg_name": "Articuno (2)",
+   "tcg_number": "02/62",
+   "variant_products": [
+    {
+     "suffix": "2",
+     "product_id": 106518
+    }
+   ]
+  },
+  "3": {
+   "name": "Ditto",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 106519,
+   "tcg_name": "Ditto (3)",
+   "tcg_number": "03/62",
+   "variant_products": [
+    {
+     "suffix": "3",
+     "product_id": 106519
+    }
+   ]
+  },
+  "4": {
+   "name": "Dragonite",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 106520,
+   "tcg_name": "Dragonite (4)",
+   "tcg_number": "04/62",
+   "variant_products": [
+    {
+     "suffix": "4",
+     "product_id": 106520
+    }
+   ]
+  },
+  "5": {
+   "name": "Gengar",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 106521,
+   "tcg_name": "Gengar (5)",
+   "tcg_number": "05/62",
+   "variant_products": [
+    {
+     "suffix": "5",
+     "product_id": 106521
+    }
+   ]
+  },
+  "6": {
+   "name": "Haunter",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 106522,
+   "tcg_name": "Haunter (6)",
+   "tcg_number": "06/62",
+   "variant_products": [
+    {
+     "suffix": "6",
+     "product_id": 106522
+    }
+   ]
+  },
+  "7": {
+   "name": "Hitmonlee",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 106523,
+   "tcg_name": "Hitmonlee (7)",
+   "tcg_number": "07/62",
+   "variant_products": [
+    {
+     "suffix": "7",
+     "product_id": 106523
+    }
+   ]
+  },
+  "8": {
+   "name": "Hypno",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 106524,
+   "tcg_name": "Hypno (8)",
+   "tcg_number": "08/62",
+   "variant_products": [
+    {
+     "suffix": "8",
+     "product_id": 106524
+    }
+   ]
+  },
+  "9": {
+   "name": "Kabutops",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 106525,
+   "tcg_name": "Kabutops (9)",
+   "tcg_number": "09/62",
+   "variant_products": [
+    {
+     "suffix": "9",
+     "product_id": 106525
+    }
+   ]
+  },
+  "10": {
+   "name": "Lapras",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 44419,
+   "tcg_name": "Lapras (10)",
+   "tcg_number": "10/62",
+   "variant_products": [
+    {
+     "suffix": "10",
+     "product_id": 44419
+    }
+   ]
+  },
+  "11": {
+   "name": "Magneton",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 44420,
+   "tcg_name": "Magneton (11)",
+   "tcg_number": "11/62",
+   "variant_products": [
+    {
+     "suffix": "11",
+     "product_id": 44420
+    }
+   ]
+  },
+  "12": {
+   "name": "Moltres",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 44421,
+   "tcg_name": "Moltres (12)",
+   "tcg_number": "12/62",
+   "variant_products": [
+    {
+     "suffix": "12",
+     "product_id": 44421
+    }
+   ]
+  },
+  "13": {
+   "name": "Muk",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 44422,
+   "tcg_name": "Muk (13)",
+   "tcg_number": "13/62",
+   "variant_products": [
+    {
+     "suffix": "13",
+     "product_id": 44422
+    }
+   ]
+  },
+  "14": {
+   "name": "Raichu",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 44423,
+   "tcg_name": "Raichu (14)",
+   "tcg_number": "14/62",
+   "variant_products": [
+    {
+     "suffix": "14",
+     "product_id": 44423
+    }
+   ]
+  },
+  "15": {
+   "name": "Zapdos",
+   "versions": [
+    "cosmosHolofoil",
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 44424,
+   "tcg_name": "Zapdos (15)",
+   "tcg_number": "15/62",
+   "variant_products": [
+    {
+     "suffix": "15",
+     "product_id": 44424
+    }
+   ]
+  },
+  "16": {
+   "name": "Aerodactyl",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106526,
+   "tcg_name": "Aerodactyl (16)",
+   "tcg_number": "16/62",
+   "variant_products": [
+    {
+     "suffix": "16",
+     "product_id": 106526
+    }
+   ]
+  },
+  "17": {
+   "name": "Articuno",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44425,
+   "tcg_name": "Articuno (17)",
+   "tcg_number": "17/62",
+   "variant_products": [
+    {
+     "suffix": "17",
+     "product_id": 44425
+    }
+   ]
+  },
+  "18": {
+   "name": "Ditto",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44426,
+   "tcg_name": "Ditto (18)",
+   "tcg_number": "18/62",
+   "variant_products": [
+    {
+     "suffix": "18",
+     "product_id": 44426
+    }
+   ]
+  },
+  "19": {
+   "name": "Dragonite",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44427,
+   "tcg_name": "Dragonite (19)",
+   "tcg_number": "19/62",
+   "variant_products": [
+    {
+     "suffix": "19",
+     "product_id": 44427
+    }
+   ]
+  },
+  "20": {
+   "name": "Gengar",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44428,
+   "tcg_name": "Gengar (20)",
+   "tcg_number": "20/62",
+   "variant_products": [
+    {
+     "suffix": "20",
+     "product_id": 44428
+    }
+   ]
+  },
+  "21": {
+   "name": "Haunter",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44429,
+   "tcg_name": "Haunter (21)",
+   "tcg_number": "21/62",
+   "variant_products": [
+    {
+     "suffix": "21",
+     "product_id": 44429
+    }
+   ]
+  },
+  "22": {
+   "name": "Hitmonlee",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44430,
+   "tcg_name": "Hitmonlee (22)",
+   "tcg_number": "22/62",
+   "variant_products": [
+    {
+     "suffix": "22",
+     "product_id": 44430
+    }
+   ]
+  },
+  "23": {
+   "name": "Hypno",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44431,
+   "tcg_name": "Hypno (23)",
+   "tcg_number": "23/62",
+   "variant_products": [
+    {
+     "suffix": "23",
+     "product_id": 44431
+    }
+   ]
+  },
+  "24": {
+   "name": "Kabutops",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44432,
+   "tcg_name": "Kabutops (24)",
+   "tcg_number": "24/62",
+   "variant_products": [
+    {
+     "suffix": "24",
+     "product_id": 44432
+    }
+   ]
+  },
+  "25": {
+   "name": "Lapras",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106527,
+   "tcg_name": "Lapras (25)",
+   "tcg_number": "25/62",
+   "variant_products": [
+    {
+     "suffix": "25",
+     "product_id": 106527
+    }
+   ]
+  },
+  "26": {
+   "name": "Magneton",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106528,
+   "tcg_name": "Magneton (26)",
+   "tcg_number": "26/62",
+   "variant_products": [
+    {
+     "suffix": "26",
+     "product_id": 106528
+    }
+   ]
+  },
+  "27": {
+   "name": "Moltres",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106529,
+   "tcg_name": "Moltres (27)",
+   "tcg_number": "27/62",
+   "variant_products": [
+    {
+     "suffix": "27",
+     "product_id": 106529
+    }
+   ]
+  },
+  "28": {
+   "name": "Muk",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106530,
+   "tcg_name": "Muk (28)",
+   "tcg_number": "28/62",
+   "variant_products": [
+    {
+     "suffix": "28",
+     "product_id": 106530
+    }
+   ]
+  },
+  "29": {
+   "name": "Raichu",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106531,
+   "tcg_name": "Raichu (29)",
+   "tcg_number": "29/62",
+   "variant_products": [
+    {
+     "suffix": "29",
+     "product_id": 106531
+    }
+   ]
+  },
+  "30": {
+   "name": "Zapdos",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106532,
+   "tcg_name": "Zapdos (30)",
+   "tcg_number": "30/62",
+   "variant_products": [
+    {
+     "suffix": "30",
+     "product_id": 106532
+    }
+   ]
+  },
+  "31": {
+   "name": "Arbok",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44433,
+   "tcg_name": "Arbok",
+   "tcg_number": "31/62"
+  },
+  "32": {
+   "name": "Cloyster",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44434,
+   "tcg_name": "Cloyster",
+   "tcg_number": "32/62"
+  },
+  "33": {
+   "name": "Gastly",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44435,
+   "tcg_name": "Gastly",
+   "tcg_number": "33/62"
+  },
+  "34": {
+   "name": "Golbat",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44436,
+   "tcg_name": "Golbat",
+   "tcg_number": "34/62"
+  },
+  "35": {
+   "name": "Golduck",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44437,
+   "tcg_name": "Golduck",
+   "tcg_number": "35/62"
+  },
+  "36": {
+   "name": "Golem",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44438,
+   "tcg_name": "Golem",
+   "tcg_number": "36/62"
+  },
+  "37": {
+   "name": "Graveler",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44439,
+   "tcg_name": "Graveler",
+   "tcg_number": "37/62"
+  },
+  "38": {
+   "name": "Kingler",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44440,
+   "tcg_name": "Kingler",
+   "tcg_number": "38/62"
+  },
+  "39": {
+   "name": "Magmar",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44441,
+   "tcg_name": "Magmar",
+   "tcg_number": "39/62"
+  },
+  "40": {
+   "name": "Omastar",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44442,
+   "tcg_name": "Omastar",
+   "tcg_number": "40/62"
+  },
+  "41": {
+   "name": "Sandslash",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44443,
+   "tcg_name": "Sandslash",
+   "tcg_number": "41/62"
+  },
+  "42": {
+   "name": "Seadra",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44444,
+   "tcg_name": "Seadra",
+   "tcg_number": "42/62"
+  },
+  "43": {
+   "name": "Slowbro",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44445,
+   "tcg_name": "Slowbro",
+   "tcg_number": "43/62"
+  },
+  "44": {
+   "name": "Tentacruel",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44446,
+   "tcg_name": "Tentacruel",
+   "tcg_number": "44/62"
+  },
+  "45": {
+   "name": "Weezing",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44447,
+   "tcg_name": "Weezing",
+   "tcg_number": "45/62"
+  },
+  "46": {
+   "name": "Ekans",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44448,
+   "tcg_name": "Ekans",
+   "tcg_number": "46/62"
+  },
+  "47": {
+   "name": "Geodude",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44449,
+   "tcg_name": "Geodude",
+   "tcg_number": "47/62"
+  },
+  "48": {
+   "name": "Grimer",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44450,
+   "tcg_name": "Grimer",
+   "tcg_number": "48/62"
+  },
+  "49": {
+   "name": "Horsea",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44451,
+   "tcg_name": "Horsea",
+   "tcg_number": "49/62"
+  },
+  "50": {
+   "name": "Kabuto",
+   "versions": [
+    "firstEdition",
+    "unlimited",
+    "wStamp"
+   ],
+   "status": "ok",
+   "product_id": 44452,
+   "tcg_name": "Kabuto",
+   "tcg_number": "50/62"
+  },
+  "51": {
+   "name": "Krabby",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44453,
+   "tcg_name": "Krabby",
+   "tcg_number": "51/62"
+  },
+  "52": {
+   "name": "Omanyte",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44454,
+   "tcg_name": "Omanyte",
+   "tcg_number": "52/62"
+  },
+  "53": {
+   "name": "Psyduck",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44455,
+   "tcg_name": "Psyduck",
+   "tcg_number": "53/62"
+  },
+  "54": {
+   "name": "Shellder",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44456,
+   "tcg_name": "Shellder",
+   "tcg_number": "54/62"
+  },
+  "55": {
+   "name": "Slowpoke",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44457,
+   "tcg_name": "Slowpoke",
+   "tcg_number": "55/62"
+  },
+  "56": {
+   "name": "Tentacool",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44458,
+   "tcg_name": "Tentacool",
+   "tcg_number": "56/62"
+  },
+  "57": {
+   "name": "Zubat",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44459,
+   "tcg_name": "Zubat",
+   "tcg_number": "57/62"
+  },
+  "58": {
+   "name": "Mr. Fuji",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44460,
+   "tcg_name": "Mr. Fuji",
+   "tcg_number": "58/62"
+  },
+  "59": {
+   "name": "Energy Search",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44461,
+   "tcg_name": "Energy Search",
+   "tcg_number": "59/62"
+  },
+  "60": {
+   "name": "Gambler",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44462,
+   "tcg_name": "Gambler",
+   "tcg_number": "60/62"
+  },
+  "61": {
+   "name": "Recycle",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44463,
+   "tcg_name": "Recycle",
+   "tcg_number": "61/62"
+  },
+  "62": {
+   "name": "Mysterious Fossil",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 44464,
+   "tcg_name": "Mysterious Fossil",
+   "tcg_number": "62/62"
+  }
+ }
+}

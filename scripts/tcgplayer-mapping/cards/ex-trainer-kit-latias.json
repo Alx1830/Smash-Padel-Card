@@ -1,0 +1,134 @@
+{
+ "set": "ex-trainer-kit-latias",
+ "tcg_set": "EX Trainer Kit 1: Latias & Latios",
+ "code": "tk1a",
+ "summary": {
+  "total": 10,
+  "ok": 10,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Bagon",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 83694,
+   "tcg_name": "Bagon",
+   "tcg_number": "1/10"
+  },
+  "2": {
+   "name": "Combusken",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 84403,
+   "tcg_name": "Combusken",
+   "tcg_number": "2/10"
+  },
+  "3": {
+   "name": "Delcatty",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 84737,
+   "tcg_name": "Delcatty",
+   "tcg_number": "3/10"
+  },
+  "4": {
+   "name": "Latias",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86650,
+   "tcg_name": "Latias",
+   "tcg_number": "4/10"
+  },
+  "5": {
+   "name": "Numel",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 87808,
+   "tcg_name": "Numel",
+   "tcg_number": "5/10"
+  },
+  "6": {
+   "name": "Skitty",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 89263,
+   "tcg_name": "Skitty",
+   "tcg_number": "6/10"
+  },
+  "7": {
+   "name": "Torchic",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 89954,
+   "tcg_name": "Torchic",
+   "tcg_number": "7/10"
+  },
+  "8": {
+   "name": "Potion",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 88335,
+   "tcg_name": "Potion (Latias)",
+   "tcg_number": "8/10",
+   "variant_products": [
+    {
+     "suffix": "Latias",
+     "product_id": 88335
+    },
+    {
+     "suffix": "Latios",
+     "product_id": 88336
+    }
+   ]
+  },
+  "9": {
+   "name": "Energy Search",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 85239,
+   "tcg_name": "Energy Search (Latias)",
+   "tcg_number": "9/10",
+   "variant_products": [
+    {
+     "suffix": "Latias",
+     "product_id": 85239
+    },
+    {
+     "suffix": "Latios",
+     "product_id": 85240
+    }
+   ]
+  },
+  "10": {
+   "name": "Fire Energy",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 85457,
+   "tcg_name": "Fire Energy",
+   "tcg_number": "10/10"
+  }
+ }
+}

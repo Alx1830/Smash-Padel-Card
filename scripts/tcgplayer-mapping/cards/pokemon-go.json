@@ -1,0 +1,1087 @@
+{
+ "set": "pokemon-go",
+ "tcg_set": "Pokemon GO",
+ "code": "pgo",
+ "summary": {
+  "total": 88,
+  "ok": 88,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Bulbasaur",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 274433,
+   "tcg_name": "Bulbasaur",
+   "tcg_number": "001/078"
+  },
+  "2": {
+   "name": "Ivysaur",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 274434,
+   "tcg_name": "Ivysaur",
+   "tcg_number": "002/078"
+  },
+  "3": {
+   "name": "Venusaur",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 274435,
+   "tcg_name": "Venusaur",
+   "tcg_number": "003/078"
+  },
+  "4": {
+   "name": "Radiant Venusaur",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 274465,
+   "tcg_name": "Radiant Venusaur",
+   "tcg_number": "004/078"
+  },
+  "5": {
+   "name": "Alolan Exeggutor V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 276943,
+   "tcg_name": "Alolan Exeggutor V",
+   "tcg_number": "005/078"
+  },
+  "6": {
+   "name": "Spinarak",
+   "versions": [
+    "normal",
+    "peelableDitto",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276944,
+   "tcg_name": "Spinarak",
+   "tcg_number": "006/078",
+   "variant_products": [
+    {
+     "suffix": "Peelable Ditto",
+     "product_id": 277793
+    }
+   ]
+  },
+  "7": {
+   "name": "Ariados",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276945,
+   "tcg_name": "Ariados",
+   "tcg_number": "007/078"
+  },
+  "8": {
+   "name": "Charmander",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 274436,
+   "tcg_name": "Charmander",
+   "tcg_number": "008/078"
+  },
+  "9": {
+   "name": "Charmeleon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 274438,
+   "tcg_name": "Charmeleon",
+   "tcg_number": "009/078"
+  },
+  "10": {
+   "name": "Charizard",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 274439,
+   "tcg_name": "Charizard",
+   "tcg_number": "010/078"
+  },
+  "11": {
+   "name": "Radiant Charizard",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 274467,
+   "tcg_name": "Radiant Charizard",
+   "tcg_number": "011/078"
+  },
+  "12": {
+   "name": "Moltres",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276953,
+   "tcg_name": "Moltres",
+   "tcg_number": "012/078"
+  },
+  "13": {
+   "name": "Numel",
+   "versions": [
+    "normal",
+    "peelableDitto",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276947,
+   "tcg_name": "Numel",
+   "tcg_number": "013/078",
+   "variant_products": [
+    {
+     "suffix": "Peelable Ditto",
+     "product_id": 277791
+    }
+   ]
+  },
+  "14": {
+   "name": "Camerupt",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276948,
+   "tcg_name": "Camerupt",
+   "tcg_number": "014/078"
+  },
+  "15": {
+   "name": "Squirtle",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 274445,
+   "tcg_name": "Squirtle",
+   "tcg_number": "015/078"
+  },
+  "16": {
+   "name": "Wartortle",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 274451,
+   "tcg_name": "Wartortle",
+   "tcg_number": "016/078"
+  },
+  "17": {
+   "name": "Blastoise",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 274453,
+   "tcg_name": "Blastoise",
+   "tcg_number": "017/078"
+  },
+  "18": {
+   "name": "Radiant Blastoise",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 274468,
+   "tcg_name": "Radiant Blastoise",
+   "tcg_number": "018/078"
+  },
+  "19": {
+   "name": "Slowpoke",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276949,
+   "tcg_name": "Slowpoke",
+   "tcg_number": "019/078"
+  },
+  "20": {
+   "name": "Slowbro",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276950,
+   "tcg_name": "Slowbro",
+   "tcg_number": "020/078"
+  },
+  "21": {
+   "name": "Magikarp",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276951,
+   "tcg_name": "Magikarp",
+   "tcg_number": "021/078"
+  },
+  "22": {
+   "name": "Gyarados",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276955,
+   "tcg_name": "Gyarados",
+   "tcg_number": "022/078"
+  },
+  "23": {
+   "name": "Lapras",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276957,
+   "tcg_name": "Lapras",
+   "tcg_number": "023/078"
+  },
+  "24": {
+   "name": "Articuno",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276959,
+   "tcg_name": "Articuno",
+   "tcg_number": "024/078"
+  },
+  "25": {
+   "name": "Wimpod",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 274457,
+   "tcg_name": "Wimpod",
+   "tcg_number": "025/078"
+  },
+  "26": {
+   "name": "Golisopod",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 274459,
+   "tcg_name": "Golisopod",
+   "tcg_number": "026/078"
+  },
+  "27": {
+   "name": "Pikachu",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276946,
+   "tcg_name": "Pikachu (27)",
+   "tcg_number": "027/078",
+   "variant_products": [
+    {
+     "suffix": "27",
+     "product_id": 276946
+    }
+   ]
+  },
+  "28": {
+   "name": "Pikachu",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 274461,
+   "tcg_name": "Pikachu (28)",
+   "tcg_number": "028/078",
+   "variant_products": [
+    {
+     "suffix": "28",
+     "product_id": 274461
+    }
+   ]
+  },
+  "29": {
+   "name": "Zapdos",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276954,
+   "tcg_name": "Zapdos",
+   "tcg_number": "029/078"
+  },
+  "30": {
+   "name": "Mewtwo V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 276960,
+   "tcg_name": "Mewtwo V",
+   "tcg_number": "030/078"
+  },
+  "31": {
+   "name": "Mewtwo VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 276963,
+   "tcg_name": "Mewtwo VSTAR",
+   "tcg_number": "031/078"
+  },
+  "32": {
+   "name": "Natu",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276966,
+   "tcg_name": "Natu",
+   "tcg_number": "032/078"
+  },
+  "33": {
+   "name": "Xatu",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276969,
+   "tcg_name": "Xatu",
+   "tcg_number": "033/078"
+  },
+  "34": {
+   "name": "Lunatone",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276972,
+   "tcg_name": "Lunatone",
+   "tcg_number": "034/078"
+  },
+  "35": {
+   "name": "Sylveon",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276976,
+   "tcg_name": "Sylveon",
+   "tcg_number": "035/078"
+  },
+  "36": {
+   "name": "Onix",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276981,
+   "tcg_name": "Onix",
+   "tcg_number": "036/078"
+  },
+  "37": {
+   "name": "Larvitar",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276984,
+   "tcg_name": "Larvitar",
+   "tcg_number": "037/078"
+  },
+  "38": {
+   "name": "Pupitar",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276990,
+   "tcg_name": "Pupitar",
+   "tcg_number": "038/078"
+  },
+  "39": {
+   "name": "Solrock",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276993,
+   "tcg_name": "Solrock",
+   "tcg_number": "039/078"
+  },
+  "40": {
+   "name": "Conkeldurr V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 276999,
+   "tcg_name": "Conkeldurr V",
+   "tcg_number": "040/078"
+  },
+  "41": {
+   "name": "Alolan Rattata",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 277002,
+   "tcg_name": "Alolan Rattata",
+   "tcg_number": "041/078"
+  },
+  "42": {
+   "name": "Alolan Raticate",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 277003,
+   "tcg_name": "Alolan Raticate",
+   "tcg_number": "042/078"
+  },
+  "43": {
+   "name": "Tyranitar",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 277007,
+   "tcg_name": "Tyranitar",
+   "tcg_number": "043/078"
+  },
+  "44": {
+   "name": "Steelix",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 277012,
+   "tcg_name": "Steelix",
+   "tcg_number": "044/078"
+  },
+  "45": {
+   "name": "Meltan",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 277027,
+   "tcg_name": "Meltan",
+   "tcg_number": "045/078"
+  },
+  "46": {
+   "name": "Melmetal",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 277016,
+   "tcg_name": "Melmetal",
+   "tcg_number": "046/078"
+  },
+  "47": {
+   "name": "Melmetal V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277019,
+   "tcg_name": "Melmetal V",
+   "tcg_number": "047/078"
+  },
+  "48": {
+   "name": "Melmetal VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277023,
+   "tcg_name": "Melmetal VMAX",
+   "tcg_number": "048/078"
+  },
+  "49": {
+   "name": "Dragonite V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 276962,
+   "tcg_name": "Dragonite V",
+   "tcg_number": "049/078"
+  },
+  "50": {
+   "name": "Dragonite VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 276964,
+   "tcg_name": "Dragonite VSTAR",
+   "tcg_number": "050/078"
+  },
+  "51": {
+   "name": "Chansey",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276965,
+   "tcg_name": "Chansey",
+   "tcg_number": "051/078"
+  },
+  "52": {
+   "name": "Blissey",
+   "versions": [
+    "cosmosHolofoil",
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276967,
+   "tcg_name": "Blissey",
+   "tcg_number": "052/078"
+  },
+  "53": {
+   "name": "Ditto",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 276971,
+   "tcg_name": "Ditto",
+   "tcg_number": "053/078"
+  },
+  "54": {
+   "name": "Eevee",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276973,
+   "tcg_name": "Eevee",
+   "tcg_number": "054/078"
+  },
+  "55": {
+   "name": "Snorlax",
+   "versions": [
+    "cosmosHolofoil",
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276974,
+   "tcg_name": "Snorlax",
+   "tcg_number": "055/078"
+  },
+  "56": {
+   "name": "Aipom",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276975,
+   "tcg_name": "Aipom",
+   "tcg_number": "056/078"
+  },
+  "57": {
+   "name": "Ambipom",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276978,
+   "tcg_name": "Ambipom",
+   "tcg_number": "057/078"
+  },
+  "58": {
+   "name": "Slaking V",
+   "versions": [
+    "gabrielFernandez",
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 276980,
+   "tcg_name": "Slaking V",
+   "tcg_number": "058/078"
+  },
+  "59": {
+   "name": "Bidoof",
+   "versions": [
+    "normal",
+    "peelableDitto",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276982,
+   "tcg_name": "Bidoof",
+   "tcg_number": "059/078",
+   "variant_products": [
+    {
+     "suffix": "Peelable Ditto",
+     "product_id": 277788
+    }
+   ]
+  },
+  "60": {
+   "name": "Bibarel",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276983,
+   "tcg_name": "Bibarel",
+   "tcg_number": "060/078"
+  },
+  "61": {
+   "name": "Pidove",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276985,
+   "tcg_name": "Pidove",
+   "tcg_number": "061/078"
+  },
+  "62": {
+   "name": "Tranquill",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276988,
+   "tcg_name": "Tranquill",
+   "tcg_number": "062/078"
+  },
+  "63": {
+   "name": "Unfezant",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276989,
+   "tcg_name": "Unfezant",
+   "tcg_number": "063/078"
+  },
+  "64": {
+   "name": "Blanche",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276991,
+   "tcg_name": "Blanche",
+   "tcg_number": "064/078"
+  },
+  "65": {
+   "name": "Candela",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276992,
+   "tcg_name": "Candela",
+   "tcg_number": "065/078"
+  },
+  "66": {
+   "name": "Egg Incubator",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276994,
+   "tcg_name": "Egg Incubator",
+   "tcg_number": "066/078"
+  },
+  "67": {
+   "name": "Lure Module",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276995,
+   "tcg_name": "Lure Module",
+   "tcg_number": "067/078"
+  },
+  "68": {
+   "name": "PokéStop",
+   "versions": [
+    "normal",
+    "reverseHolofoil",
+    "shaoTongYen"
+   ],
+   "status": "ok",
+   "product_id": 276996,
+   "tcg_name": "PokeStop",
+   "tcg_number": "068/078"
+  },
+  "69": {
+   "name": "Rare Candy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276997,
+   "tcg_name": "Rare Candy",
+   "tcg_number": "069/078"
+  },
+  "70": {
+   "name": "Spark",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 276998,
+   "tcg_name": "Spark",
+   "tcg_number": "070/078"
+  },
+  "71": {
+   "name": "Alolan Exeggutor V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277000,
+   "tcg_name": "Alolan Exeggutor V (Full Art)",
+   "tcg_number": "071/078",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 277000
+    }
+   ]
+  },
+  "72": {
+   "name": "Mewtwo V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 274470,
+   "tcg_name": "Mewtwo V (Alternate Full Art)",
+   "tcg_number": "072/078",
+   "variant_products": [
+    {
+     "suffix": "Alternate Full Art",
+     "product_id": 274470
+    }
+   ]
+  },
+  "73": {
+   "name": "Conkeldurr V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277001,
+   "tcg_name": "Conkeldurr V (Full Art)",
+   "tcg_number": "073/078",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 277001
+    }
+   ]
+  },
+  "74": {
+   "name": "Conkeldurr V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277004,
+   "tcg_name": "Conkeldurr V (Alternate Full Art)",
+   "tcg_number": "074/078",
+   "variant_products": [
+    {
+     "suffix": "Alternate Full Art",
+     "product_id": 277004
+    }
+   ]
+  },
+  "75": {
+   "name": "Melmetal V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277005,
+   "tcg_name": "Melmetal V (Full Art)",
+   "tcg_number": "075/078",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 277005
+    }
+   ]
+  },
+  "76": {
+   "name": "Dragonite V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277006,
+   "tcg_name": "Dragonite V (Full Art)",
+   "tcg_number": "076/078",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 277006
+    }
+   ]
+  },
+  "77": {
+   "name": "Slaking V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277008,
+   "tcg_name": "Slaking V (Full Art)",
+   "tcg_number": "077/078",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 277008
+    }
+   ]
+  },
+  "78": {
+   "name": "Professor's Research",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277009,
+   "tcg_name": "Professor's Research [Professor Willow] (Full Art)",
+   "tcg_number": "078/078",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 277009
+    }
+   ]
+  },
+  "79": {
+   "name": "Mewtwo VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277011,
+   "tcg_name": "Mewtwo VSTAR (79) (Secret)",
+   "tcg_number": "079/078",
+   "note": "nuestro \"Mewtwo VSTAR\" vs TCG \"Mewtwo VSTAR (79)\""
+  },
+  "80": {
+   "name": "Melmetal VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277013,
+   "tcg_name": "Melmetal VMAX (Secret)",
+   "tcg_number": "080/078",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 277013
+    }
+   ]
+  },
+  "81": {
+   "name": "Dragonite VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277014,
+   "tcg_name": "Dragonite VSTAR (Secret)",
+   "tcg_number": "081/078",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 277014
+    }
+   ]
+  },
+  "82": {
+   "name": "Blanche",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277015,
+   "tcg_name": "Blanche (Secret)",
+   "tcg_number": "082/078",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 277015
+    }
+   ]
+  },
+  "83": {
+   "name": "Candela",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277017,
+   "tcg_name": "Candela (Secret)",
+   "tcg_number": "083/078",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 277017
+    }
+   ]
+  },
+  "84": {
+   "name": "Professor's Research",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277018,
+   "tcg_name": "Professor's Research [Professor Willow] (Secret)",
+   "tcg_number": "084/078",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 277018
+    }
+   ]
+  },
+  "85": {
+   "name": "Spark",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277020,
+   "tcg_name": "Spark (Secret)",
+   "tcg_number": "085/078",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 277020
+    }
+   ]
+  },
+  "86": {
+   "name": "Mewtwo VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277024,
+   "tcg_name": "Mewtwo VSTAR (86) (Secret)",
+   "tcg_number": "086/078",
+   "note": "nuestro \"Mewtwo VSTAR\" vs TCG \"Mewtwo VSTAR (86)\""
+  },
+  "87": {
+   "name": "Egg Incubator",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277025,
+   "tcg_name": "Egg Incubator (Secret)",
+   "tcg_number": "087/078",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 277025
+    }
+   ]
+  },
+  "88": {
+   "name": "Lure Module",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277026,
+   "tcg_name": "Lure Module (Secret)",
+   "tcg_number": "088/078",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 277026
+    }
+   ]
+  }
+ }
+}

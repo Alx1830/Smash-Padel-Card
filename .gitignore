@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Catalogos crudos de TCGplayer: se regeneran con --refresh
+scripts/tcgplayer-mapping/.cache/

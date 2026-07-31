@@ -1,0 +1,914 @@
+{
+ "set": "jungle",
+ "tcg_set": "Jungle",
+ "code": "base2",
+ "summary": {
+  "total": 64,
+  "ok": 64,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Clefable",
+   "versions": [
+    "firstEditionHolofoil",
+    "prereleaseStamp",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45120,
+   "tcg_name": "Clefable (1)",
+   "tcg_number": "01/64",
+   "variant_products": [
+    {
+     "suffix": "1",
+     "product_id": 45120
+    }
+   ]
+  },
+  "2": {
+   "name": "Electrode",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45128,
+   "tcg_name": "Electrode (2)",
+   "tcg_number": "02/64",
+   "variant_products": [
+    {
+     "suffix": "2",
+     "product_id": 45128
+    }
+   ]
+  },
+  "3": {
+   "name": "Flareon",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45129,
+   "tcg_name": "Flareon (3)",
+   "tcg_number": "03/64",
+   "variant_products": [
+    {
+     "suffix": "3",
+     "product_id": 45129
+    }
+   ]
+  },
+  "4": {
+   "name": "Jolteon",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45130,
+   "tcg_name": "Jolteon (4)",
+   "tcg_number": "04/64",
+   "variant_products": [
+    {
+     "suffix": "4",
+     "product_id": 45130
+    }
+   ]
+  },
+  "5": {
+   "name": "Kangaskhan",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45131,
+   "tcg_name": "Kangaskhan (5)",
+   "tcg_number": "05/64",
+   "variant_products": [
+    {
+     "suffix": "5",
+     "product_id": 45131
+    }
+   ]
+  },
+  "6": {
+   "name": "Mr. Mime",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45132,
+   "tcg_name": "Mr. Mime (6)",
+   "tcg_number": "06/64",
+   "variant_products": [
+    {
+     "suffix": "6",
+     "product_id": 45132
+    }
+   ]
+  },
+  "7": {
+   "name": "Nidoqueen",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45133,
+   "tcg_name": "Nidoqueen (7)",
+   "tcg_number": "07/64",
+   "variant_products": [
+    {
+     "suffix": "7",
+     "product_id": 45133
+    }
+   ]
+  },
+  "8": {
+   "name": "Pidgeot",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45134,
+   "tcg_name": "Pidgeot (8)",
+   "tcg_number": "08/64",
+   "variant_products": [
+    {
+     "suffix": "8",
+     "product_id": 45134
+    }
+   ]
+  },
+  "9": {
+   "name": "Pinsir",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45135,
+   "tcg_name": "Pinsir (9)",
+   "tcg_number": "09/64",
+   "variant_products": [
+    {
+     "suffix": "9",
+     "product_id": 45135
+    }
+   ]
+  },
+  "10": {
+   "name": "Scyther",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45121,
+   "tcg_name": "Scyther (10)",
+   "tcg_number": "10/64",
+   "variant_products": [
+    {
+     "suffix": "10",
+     "product_id": 45121
+    }
+   ]
+  },
+  "11": {
+   "name": "Snorlax",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45122,
+   "tcg_name": "Snorlax (11)",
+   "tcg_number": "11/64",
+   "variant_products": [
+    {
+     "suffix": "11",
+     "product_id": 45122
+    }
+   ]
+  },
+  "12": {
+   "name": "Vaporeon",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45123,
+   "tcg_name": "Vaporeon (12)",
+   "tcg_number": "12/64",
+   "variant_products": [
+    {
+     "suffix": "12",
+     "product_id": 45123
+    }
+   ]
+  },
+  "13": {
+   "name": "Venomoth",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45124,
+   "tcg_name": "Venomoth (13)",
+   "tcg_number": "13/64",
+   "variant_products": [
+    {
+     "suffix": "13",
+     "product_id": 45124
+    }
+   ]
+  },
+  "14": {
+   "name": "Victreebel",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45125,
+   "tcg_name": "Victreebel (14)",
+   "tcg_number": "14/64",
+   "variant_products": [
+    {
+     "suffix": "14",
+     "product_id": 45125
+    }
+   ]
+  },
+  "15": {
+   "name": "Vileplume",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45126,
+   "tcg_name": "Vileplume (15)",
+   "tcg_number": "15/64",
+   "variant_products": [
+    {
+     "suffix": "15",
+     "product_id": 45126
+    }
+   ]
+  },
+  "16": {
+   "name": "Wigglytuff",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 45127,
+   "tcg_name": "Wigglytuff (16)",
+   "tcg_number": "16/64",
+   "variant_products": [
+    {
+     "suffix": "16",
+     "product_id": 45127
+    }
+   ]
+  },
+  "17": {
+   "name": "Clefable",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106979,
+   "tcg_name": "Clefable (17)",
+   "tcg_number": "17/64",
+   "variant_products": [
+    {
+     "suffix": "17",
+     "product_id": 106979
+    }
+   ]
+  },
+  "18": {
+   "name": "Electrode",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106980,
+   "tcg_name": "Electrode (18)",
+   "tcg_number": "18/64",
+   "variant_products": [
+    {
+     "suffix": "18",
+     "product_id": 106980
+    }
+   ]
+  },
+  "19": {
+   "name": "Flareon",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106981,
+   "tcg_name": "Flareon (19)",
+   "tcg_number": "19/64",
+   "variant_products": [
+    {
+     "suffix": "19",
+     "product_id": 106981
+    }
+   ]
+  },
+  "20": {
+   "name": "Jolteon",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106982,
+   "tcg_name": "Jolteon (20)",
+   "tcg_number": "20/64",
+   "variant_products": [
+    {
+     "suffix": "20",
+     "product_id": 106982
+    }
+   ]
+  },
+  "21": {
+   "name": "Kangaskhan",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106983,
+   "tcg_name": "Kangaskhan (21)",
+   "tcg_number": "21/64",
+   "variant_products": [
+    {
+     "suffix": "21",
+     "product_id": 106983
+    }
+   ]
+  },
+  "22": {
+   "name": "Mr. Mime",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106984,
+   "tcg_name": "Mr. Mime (22)",
+   "tcg_number": "22/64",
+   "variant_products": [
+    {
+     "suffix": "22",
+     "product_id": 106984
+    }
+   ]
+  },
+  "23": {
+   "name": "Nidoqueen",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106985,
+   "tcg_name": "Nidoqueen (23)",
+   "tcg_number": "23/64",
+   "variant_products": [
+    {
+     "suffix": "23",
+     "product_id": 106985
+    }
+   ]
+  },
+  "24": {
+   "name": "Pidgeot",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106986,
+   "tcg_name": "Pidgeot (24)",
+   "tcg_number": "24/64",
+   "variant_products": [
+    {
+     "suffix": "24",
+     "product_id": 106986
+    }
+   ]
+  },
+  "25": {
+   "name": "Pinsir",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106987,
+   "tcg_name": "Pinsir (25)",
+   "tcg_number": "25/64",
+   "variant_products": [
+    {
+     "suffix": "25",
+     "product_id": 106987
+    }
+   ]
+  },
+  "26": {
+   "name": "Scyther",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106988,
+   "tcg_name": "Scyther (26)",
+   "tcg_number": "26/64",
+   "variant_products": [
+    {
+     "suffix": "26",
+     "product_id": 106988
+    }
+   ]
+  },
+  "27": {
+   "name": "Snorlax",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106989,
+   "tcg_name": "Snorlax (27)",
+   "tcg_number": "27/64",
+   "variant_products": [
+    {
+     "suffix": "27",
+     "product_id": 106989
+    }
+   ]
+  },
+  "28": {
+   "name": "Vaporeon",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106990,
+   "tcg_name": "Vaporeon (28)",
+   "tcg_number": "28/64",
+   "variant_products": [
+    {
+     "suffix": "28",
+     "product_id": 106990
+    }
+   ]
+  },
+  "29": {
+   "name": "Venomoth",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106991,
+   "tcg_name": "Venomoth (29)",
+   "tcg_number": "29/64",
+   "variant_products": [
+    {
+     "suffix": "29",
+     "product_id": 106991
+    }
+   ]
+  },
+  "30": {
+   "name": "Victreebel",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106992,
+   "tcg_name": "Victreebel (30)",
+   "tcg_number": "30/64",
+   "variant_products": [
+    {
+     "suffix": "30",
+     "product_id": 106992
+    }
+   ]
+  },
+  "31": {
+   "name": "Vileplume",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106993,
+   "tcg_name": "Vileplume (31)",
+   "tcg_number": "31/64",
+   "variant_products": [
+    {
+     "suffix": "31",
+     "product_id": 106993
+    }
+   ]
+  },
+  "32": {
+   "name": "Wigglytuff",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 106994,
+   "tcg_name": "Wigglytuff (32)",
+   "tcg_number": "32/64",
+   "variant_products": [
+    {
+     "suffix": "32",
+     "product_id": 106994
+    }
+   ]
+  },
+  "33": {
+   "name": "Butterfree",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45136,
+   "tcg_name": "Butterfree",
+   "tcg_number": "33/64"
+  },
+  "34": {
+   "name": "Dodrio",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45137,
+   "tcg_name": "Dodrio",
+   "tcg_number": "34/64"
+  },
+  "35": {
+   "name": "Exeggutor",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45138,
+   "tcg_name": "Exeggutor",
+   "tcg_number": "35/64"
+  },
+  "36": {
+   "name": "Fearow",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45139,
+   "tcg_name": "Fearow",
+   "tcg_number": "36/64"
+  },
+  "37": {
+   "name": "Gloom",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45140,
+   "tcg_name": "Gloom",
+   "tcg_number": "37/64"
+  },
+  "38": {
+   "name": "Lickitung",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45141,
+   "tcg_name": "Lickitung",
+   "tcg_number": "38/64"
+  },
+  "39": {
+   "name": "Marowak",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45142,
+   "tcg_name": "Marowak",
+   "tcg_number": "39/64"
+  },
+  "40": {
+   "name": "Nidorina",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45143,
+   "tcg_name": "Nidorina",
+   "tcg_number": "40/64"
+  },
+  "41": {
+   "name": "Parasect",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45144,
+   "tcg_name": "Parasect",
+   "tcg_number": "41/64"
+  },
+  "42": {
+   "name": "Persian",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45145,
+   "tcg_name": "Persian",
+   "tcg_number": "42/64"
+  },
+  "43": {
+   "name": "Primeape",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45146,
+   "tcg_name": "Primeape",
+   "tcg_number": "43/64"
+  },
+  "44": {
+   "name": "Rapidash",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45147,
+   "tcg_name": "Rapidash",
+   "tcg_number": "44/64"
+  },
+  "45": {
+   "name": "Rhydon",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45148,
+   "tcg_name": "Rhydon",
+   "tcg_number": "45/64"
+  },
+  "46": {
+   "name": "Seaking",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45149,
+   "tcg_name": "Seaking",
+   "tcg_number": "46/64"
+  },
+  "47": {
+   "name": "Tauros",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45150,
+   "tcg_name": "Tauros",
+   "tcg_number": "47/64"
+  },
+  "48": {
+   "name": "Weepinbell",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45151,
+   "tcg_name": "Weepinbell",
+   "tcg_number": "48/64"
+  },
+  "49": {
+   "name": "Bellsprout",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45152,
+   "tcg_name": "Bellsprout",
+   "tcg_number": "49/64"
+  },
+  "50": {
+   "name": "Cubone",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45153,
+   "tcg_name": "Cubone",
+   "tcg_number": "50/64"
+  },
+  "51": {
+   "name": "Eevee",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45154,
+   "tcg_name": "Eevee",
+   "tcg_number": "51/64"
+  },
+  "52": {
+   "name": "Exeggcute",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45155,
+   "tcg_name": "Exeggcute",
+   "tcg_number": "52/64"
+  },
+  "53": {
+   "name": "Goldeen",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45156,
+   "tcg_name": "Goldeen",
+   "tcg_number": "53/64"
+  },
+  "54": {
+   "name": "Jigglypuff",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45157,
+   "tcg_name": "Jigglypuff",
+   "tcg_number": "54/64"
+  },
+  "55": {
+   "name": "Mankey",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45158,
+   "tcg_name": "Mankey",
+   "tcg_number": "55/64"
+  },
+  "56": {
+   "name": "Meowth",
+   "versions": [
+    "firstEdition",
+    "goldBorder",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45159,
+   "tcg_name": "Meowth",
+   "tcg_number": "56/64"
+  },
+  "57": {
+   "name": "Nidoran ♀",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45160,
+   "tcg_name": "Nidoran F",
+   "tcg_number": "57/64",
+   "note": "nuestro \"Nidoran ♀\" vs TCG \"Nidoran F\""
+  },
+  "58": {
+   "name": "Oddish",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45161,
+   "tcg_name": "Oddish",
+   "tcg_number": "58/64"
+  },
+  "59": {
+   "name": "Paras",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45162,
+   "tcg_name": "Paras",
+   "tcg_number": "59/64"
+  },
+  "60": {
+   "name": "Pikachu",
+   "versions": [
+    "firstEdition",
+    "unlimited",
+    "wStamp"
+   ],
+   "status": "ok",
+   "product_id": 45163,
+   "tcg_name": "Pikachu",
+   "tcg_number": "60/64"
+  },
+  "61": {
+   "name": "Rhyhorn",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45164,
+   "tcg_name": "Rhyhorn",
+   "tcg_number": "61/64"
+  },
+  "62": {
+   "name": "Spearow",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45165,
+   "tcg_name": "Spearow",
+   "tcg_number": "62/64"
+  },
+  "63": {
+   "name": "Venonat",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45166,
+   "tcg_name": "Venonat",
+   "tcg_number": "63/64"
+  },
+  "64": {
+   "name": "Poké Ball",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 45167,
+   "tcg_name": "Poke Ball",
+   "tcg_number": "64/64"
+  }
+ }
+}

@@ -1,0 +1,874 @@
+{
+ "set": "shining-fates",
+ "tcg_set": "Shining Fates",
+ "code": "shf",
+ "summary": {
+  "total": 73,
+  "ok": 73,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Yanma",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232348,
+   "tcg_name": "Yanma",
+   "tcg_number": "001/072"
+  },
+  "2": {
+   "name": "Yanmega",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232349,
+   "tcg_name": "Yanmega",
+   "tcg_number": "002/072"
+  },
+  "3": {
+   "name": "Celebi",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232352,
+   "tcg_name": "Celebi",
+   "tcg_number": "003/072"
+  },
+  "4": {
+   "name": "Cacnea",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232355,
+   "tcg_name": "Cacnea",
+   "tcg_number": "004/072"
+  },
+  "5": {
+   "name": "Tropius",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232358,
+   "tcg_name": "Tropius",
+   "tcg_number": "005/072"
+  },
+  "6": {
+   "name": "Rowlet",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232364,
+   "tcg_name": "Rowlet",
+   "tcg_number": "006/072"
+  },
+  "7": {
+   "name": "Dartrix",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232367,
+   "tcg_name": "Dartrix",
+   "tcg_number": "007/072"
+  },
+  "8": {
+   "name": "Decidueye",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232372,
+   "tcg_name": "Decidueye",
+   "tcg_number": "008/072"
+  },
+  "9": {
+   "name": "Dhelmise V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232376,
+   "tcg_name": "Dhelmise V",
+   "tcg_number": "009/072"
+  },
+  "10": {
+   "name": "Dhelmise VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232380,
+   "tcg_name": "Dhelmise VMAX",
+   "tcg_number": "010/072"
+  },
+  "11": {
+   "name": "Grookey",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232381,
+   "tcg_name": "Grookey",
+   "tcg_number": "011/072"
+  },
+  "12": {
+   "name": "Thwackey",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232386,
+   "tcg_name": "Thwackey",
+   "tcg_number": "012/072"
+  },
+  "13": {
+   "name": "Rillaboom",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232389,
+   "tcg_name": "Rillaboom",
+   "tcg_number": "013/072"
+  },
+  "14": {
+   "name": "Gossifleur",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232392,
+   "tcg_name": "Gossifleur",
+   "tcg_number": "014/072"
+  },
+  "15": {
+   "name": "Eldegoss",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232394,
+   "tcg_name": "Eldegoss",
+   "tcg_number": "015/072"
+  },
+  "16": {
+   "name": "Zarude",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232398,
+   "tcg_name": "Zarude",
+   "tcg_number": "016/072"
+  },
+  "17": {
+   "name": "Reshiram",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232402,
+   "tcg_name": "Reshiram",
+   "tcg_number": "017/072"
+  },
+  "18": {
+   "name": "Cinderace V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232406,
+   "tcg_name": "Cinderace V",
+   "tcg_number": "018/072"
+  },
+  "19": {
+   "name": "Cinderace VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232407,
+   "tcg_name": "Cinderace VMAX",
+   "tcg_number": "019/072"
+  },
+  "20": {
+   "name": "Horsea",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232409,
+   "tcg_name": "Horsea",
+   "tcg_number": "020/072"
+  },
+  "21": {
+   "name": "Kyogre",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232414,
+   "tcg_name": "Kyogre",
+   "tcg_number": "021/072"
+  },
+  "22": {
+   "name": "Buizel",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232418,
+   "tcg_name": "Buizel",
+   "tcg_number": "022/072"
+  },
+  "23": {
+   "name": "Floatzel",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232419,
+   "tcg_name": "Floatzel",
+   "tcg_number": "023/072"
+  },
+  "24": {
+   "name": "Manaphy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232424,
+   "tcg_name": "Manaphy",
+   "tcg_number": "024/072"
+  },
+  "25": {
+   "name": "Volcanion",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232427,
+   "tcg_name": "Volcanion",
+   "tcg_number": "025/072"
+  },
+  "26": {
+   "name": "Chewtle",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232430,
+   "tcg_name": "Chewtle",
+   "tcg_number": "026/072"
+  },
+  "27": {
+   "name": "Drednaw",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232433,
+   "tcg_name": "Drednaw",
+   "tcg_number": "027/072"
+  },
+  "28": {
+   "name": "Cramorant",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232438,
+   "tcg_name": "Cramorant",
+   "tcg_number": "028/072"
+  },
+  "29": {
+   "name": "Snom",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232446,
+   "tcg_name": "Snom",
+   "tcg_number": "029/072"
+  },
+  "30": {
+   "name": "Frosmoth",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232448,
+   "tcg_name": "Frosmoth",
+   "tcg_number": "030/072"
+  },
+  "31": {
+   "name": "Shinx",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232455,
+   "tcg_name": "Shinx",
+   "tcg_number": "031/072"
+  },
+  "32": {
+   "name": "Luxio",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232459,
+   "tcg_name": "Luxio",
+   "tcg_number": "032/072"
+  },
+  "33": {
+   "name": "Luxray",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232463,
+   "tcg_name": "Luxray",
+   "tcg_number": "033/072"
+  },
+  "34": {
+   "name": "Rotom",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232467,
+   "tcg_name": "Rotom",
+   "tcg_number": "034/072"
+  },
+  "35": {
+   "name": "Morpeko",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232468,
+   "tcg_name": "Morpeko (035)",
+   "tcg_number": "035/072",
+   "variant_products": [
+    {
+     "suffix": "035",
+     "product_id": 232468
+    }
+   ]
+  },
+  "36": {
+   "name": "Morpeko",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232470,
+   "tcg_name": "Morpeko (036)",
+   "tcg_number": "036/072",
+   "variant_products": [
+    {
+     "suffix": "036",
+     "product_id": 232470
+    }
+   ]
+  },
+  "37": {
+   "name": "Morpeko V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232475,
+   "tcg_name": "Morpeko V",
+   "tcg_number": "037/072"
+  },
+  "38": {
+   "name": "Morpeko VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232478,
+   "tcg_name": "Morpeko VMAX",
+   "tcg_number": "038/072"
+  },
+  "39": {
+   "name": "Indeedee V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232484,
+   "tcg_name": "Indeedee V",
+   "tcg_number": "039/072"
+  },
+  "40": {
+   "name": "Trapinch",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232490,
+   "tcg_name": "Trapinch",
+   "tcg_number": "040/072"
+  },
+  "41": {
+   "name": "Koffing",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232497,
+   "tcg_name": "Koffing",
+   "tcg_number": "041/072"
+  },
+  "42": {
+   "name": "Galarian Weezing",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232505,
+   "tcg_name": "Galarian Weezing",
+   "tcg_number": "042/072"
+  },
+  "43": {
+   "name": "Spinarak",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232509,
+   "tcg_name": "Spinarak",
+   "tcg_number": "043/072"
+  },
+  "44": {
+   "name": "Crobat V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232512,
+   "tcg_name": "Crobat V",
+   "tcg_number": "044/072"
+  },
+  "45": {
+   "name": "Crobat VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232515,
+   "tcg_name": "Crobat VMAX",
+   "tcg_number": "045/072"
+  },
+  "46": {
+   "name": "Yveltal",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232519,
+   "tcg_name": "Yveltal",
+   "tcg_number": "046/072"
+  },
+  "47": {
+   "name": "Nickit",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232520,
+   "tcg_name": "Nickit",
+   "tcg_number": "047/072"
+  },
+  "48": {
+   "name": "Thievul",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232522,
+   "tcg_name": "Thievul",
+   "tcg_number": "048/072"
+  },
+  "49": {
+   "name": "Cufant",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232523,
+   "tcg_name": "Cufant",
+   "tcg_number": "049/072"
+  },
+  "50": {
+   "name": "Ditto V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232524,
+   "tcg_name": "Ditto V",
+   "tcg_number": "050/072"
+  },
+  "51": {
+   "name": "Ditto VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232526,
+   "tcg_name": "Ditto VMAX",
+   "tcg_number": "051/072"
+  },
+  "52": {
+   "name": "Eevee",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232528,
+   "tcg_name": "Eevee",
+   "tcg_number": "052/072"
+  },
+  "53": {
+   "name": "Greedent V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232530,
+   "tcg_name": "Greedent V",
+   "tcg_number": "053/072"
+  },
+  "54": {
+   "name": "Cramorant V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232532,
+   "tcg_name": "Cramorant V",
+   "tcg_number": "054/072"
+  },
+  "55": {
+   "name": "Cramorant VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232534,
+   "tcg_name": "Cramorant VMAX",
+   "tcg_number": "055/072"
+  },
+  "56": {
+   "name": "Indeedee",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232547,
+   "tcg_name": "Indeedee",
+   "tcg_number": "056/072"
+  },
+  "57": {
+   "name": "Ball Guy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232540,
+   "tcg_name": "Ball Guy",
+   "tcg_number": "057/072"
+  },
+  "58": {
+   "name": "Boss's Orders",
+   "versions": [
+    "holofoil",
+    "normal",
+    "playPokemonStamp",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232546,
+   "tcg_name": "Boss's Orders",
+   "tcg_number": "058/072"
+  },
+  "59": {
+   "name": "Gym Trainer",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232536,
+   "tcg_name": "Gym Trainer",
+   "tcg_number": "059/072"
+  },
+  "60": {
+   "name": "Professor's Research",
+   "versions": [
+    "cosmosHolofoil",
+    "holofoil",
+    "normal",
+    "playPokemonStamp",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232545,
+   "tcg_name": "Professor's Research [Professor Juniper]",
+   "tcg_number": "060/072",
+   "variant_products": [
+    {
+     "suffix": "Professor Juniper",
+     "product_id": 232545
+    }
+   ]
+  },
+  "61": {
+   "name": "Rusted Shield",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232544,
+   "tcg_name": "Rusted Shield",
+   "tcg_number": "061/072"
+  },
+  "62": {
+   "name": "Rusted Sword",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232543,
+   "tcg_name": "Rusted Sword",
+   "tcg_number": "062/072"
+  },
+  "63": {
+   "name": "Team Yell Towel",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 232542,
+   "tcg_name": "Team Yell Towel",
+   "tcg_number": "063/072"
+  },
+  "64": {
+   "name": "Alcremie V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232541,
+   "tcg_name": "Alcremie V (Full Art)",
+   "tcg_number": "064/072",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 232541
+    }
+   ]
+  },
+  "65": {
+   "name": "Ball Guy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232539,
+   "tcg_name": "Ball Guy (Full Art)",
+   "tcg_number": "065/072",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 232539
+    }
+   ]
+  },
+  "66": {
+   "name": "Bird Keeper",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232538,
+   "tcg_name": "Bird Keeper (Full Art)",
+   "tcg_number": "066/072",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 232538
+    }
+   ]
+  },
+  "67": {
+   "name": "Cara Liss",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232537,
+   "tcg_name": "Cara Liss (Full Art)",
+   "tcg_number": "067/072",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 232537
+    }
+   ]
+  },
+  "68": {
+   "name": "Gym Trainer",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232535,
+   "tcg_name": "Gym Trainer (Full Art)",
+   "tcg_number": "068/072",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 232535
+    }
+   ]
+  },
+  "69": {
+   "name": "Piers",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232533,
+   "tcg_name": "Piers (Full Art)",
+   "tcg_number": "069/072",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 232533
+    }
+   ]
+  },
+  "70": {
+   "name": "Poké Kid",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232531,
+   "tcg_name": "Poke Kid (Full Art)",
+   "tcg_number": "070/072",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 232531
+    }
+   ]
+  },
+  "71": {
+   "name": "Rose",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232529,
+   "tcg_name": "Rose (Full Art)",
+   "tcg_number": "071/072",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 232529
+    }
+   ]
+  },
+  "72": {
+   "name": "Skyla",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232527,
+   "tcg_name": "Skyla (Full Art)",
+   "tcg_number": "072/072",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 232527
+    }
+   ]
+  },
+  "73": {
+   "name": "Alcremie VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232525,
+   "tcg_name": "Alcremie VMAX (Secret)",
+   "tcg_number": "073/072",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 232525
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,2333 @@
+{
+ "set": "celestial-storm",
+ "tcg_set": "SM - Celestial Storm",
+ "code": "sm7",
+ "summary": {
+  "total": 183,
+  "ok": 183,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Bellsprout",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170806,
+   "tcg_name": "Bellsprout",
+   "tcg_number": "1/168"
+  },
+  "2": {
+   "name": "Weepinbell",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170807,
+   "tcg_name": "Weepinbell",
+   "tcg_number": "2/168"
+  },
+  "3": {
+   "name": "Victreebel",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170808,
+   "tcg_name": "Victreebel",
+   "tcg_number": "3/168"
+  },
+  "4": {
+   "name": "Scyther",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170810,
+   "tcg_name": "Scyther",
+   "tcg_number": "4/168"
+  },
+  "5": {
+   "name": "Spinarak",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170811,
+   "tcg_name": "Spinarak",
+   "tcg_number": "5/168"
+  },
+  "6": {
+   "name": "Ariados",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170812,
+   "tcg_name": "Ariados",
+   "tcg_number": "6/168"
+  },
+  "7": {
+   "name": "Treecko",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170813,
+   "tcg_name": "Treecko (7)",
+   "tcg_number": "7/168",
+   "variant_products": [
+    {
+     "suffix": "7",
+     "product_id": 170813
+    }
+   ]
+  },
+  "8": {
+   "name": "Treecko",
+   "versions": [
+    "expansionStamp",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170816,
+   "tcg_name": "Treecko (8)",
+   "tcg_number": "8/168",
+   "variant_products": [
+    {
+     "suffix": "8",
+     "product_id": 170816
+    }
+   ]
+  },
+  "9": {
+   "name": "Grovyle",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170817,
+   "tcg_name": "Grovyle",
+   "tcg_number": "9/168"
+  },
+  "10": {
+   "name": "Sceptile",
+   "versions": [
+    "crackedIceHolofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170818,
+   "tcg_name": "Sceptile",
+   "tcg_number": "10/168"
+  },
+  "11": {
+   "name": "Seedot",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170819,
+   "tcg_name": "Seedot (11)",
+   "tcg_number": "11/168",
+   "variant_products": [
+    {
+     "suffix": "11",
+     "product_id": 170819
+    }
+   ]
+  },
+  "12": {
+   "name": "Seedot",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170820,
+   "tcg_name": "Seedot (12)",
+   "tcg_number": "12/168",
+   "variant_products": [
+    {
+     "suffix": "12",
+     "product_id": 170820
+    }
+   ]
+  },
+  "13": {
+   "name": "Nuzleaf",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170821,
+   "tcg_name": "Nuzleaf",
+   "tcg_number": "13/168"
+  },
+  "14": {
+   "name": "Shiftry-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170822,
+   "tcg_name": "Shiftry GX",
+   "tcg_number": "14/168"
+  },
+  "15": {
+   "name": "Surskit",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170825,
+   "tcg_name": "Surskit",
+   "tcg_number": "15/168"
+  },
+  "16": {
+   "name": "Masquerain",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170826,
+   "tcg_name": "Masquerain",
+   "tcg_number": "16/168"
+  },
+  "17": {
+   "name": "Volbeat",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170827,
+   "tcg_name": "Volbeat",
+   "tcg_number": "17/168"
+  },
+  "18": {
+   "name": "Illumise",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170828,
+   "tcg_name": "Illumise",
+   "tcg_number": "18/168"
+  },
+  "19": {
+   "name": "Cacnea",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170829,
+   "tcg_name": "Cacnea",
+   "tcg_number": "19/168"
+  },
+  "20": {
+   "name": "Cacturne",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170830,
+   "tcg_name": "Cacturne",
+   "tcg_number": "20/168"
+  },
+  "21": {
+   "name": "Tropius",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170831,
+   "tcg_name": "Tropius",
+   "tcg_number": "21/168"
+  },
+  "22": {
+   "name": "Dhelmise",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170832,
+   "tcg_name": "Dhelmise",
+   "tcg_number": "22/168"
+  },
+  "23": {
+   "name": "Slugma",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170834,
+   "tcg_name": "Slugma",
+   "tcg_number": "23/168"
+  },
+  "24": {
+   "name": "Magcargo",
+   "versions": [
+    "league1StPlaceStamp",
+    "league2NdPlaceStamp",
+    "league3RdPlaceStamp",
+    "league4ThPlaceStamp",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170837,
+   "tcg_name": "Magcargo",
+   "tcg_number": "24/168"
+  },
+  "25": {
+   "name": "Torchic",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170838,
+   "tcg_name": "Torchic (25)",
+   "tcg_number": "25/168",
+   "variant_products": [
+    {
+     "suffix": "25",
+     "product_id": 170838
+    }
+   ]
+  },
+  "26": {
+   "name": "Torchic",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170839,
+   "tcg_name": "Torchic (26)",
+   "tcg_number": "26/168",
+   "variant_products": [
+    {
+     "suffix": "26",
+     "product_id": 170839
+    }
+   ]
+  },
+  "27": {
+   "name": "Combusken",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170840,
+   "tcg_name": "Combusken",
+   "tcg_number": "27/168"
+  },
+  "28": {
+   "name": "Blaziken-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170841,
+   "tcg_name": "Blaziken GX",
+   "tcg_number": "28/168"
+  },
+  "29": {
+   "name": "Torkoal",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170844,
+   "tcg_name": "Torkoal",
+   "tcg_number": "29/168"
+  },
+  "30": {
+   "name": "Oricorio",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170845,
+   "tcg_name": "Oricorio (30)",
+   "tcg_number": "30/168",
+   "variant_products": [
+    {
+     "suffix": "30",
+     "product_id": 170845
+    }
+   ]
+  },
+  "31": {
+   "name": "Articuno-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170846,
+   "tcg_name": "Articuno GX",
+   "tcg_number": "31/168"
+  },
+  "32": {
+   "name": "Mudkip",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170849,
+   "tcg_name": "Mudkip (32)",
+   "tcg_number": "32/168",
+   "variant_products": [
+    {
+     "suffix": "32",
+     "product_id": 170849
+    }
+   ]
+  },
+  "33": {
+   "name": "Mudkip",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170850,
+   "tcg_name": "Mudkip (33)",
+   "tcg_number": "33/168",
+   "variant_products": [
+    {
+     "suffix": "33",
+     "product_id": 170850
+    }
+   ]
+  },
+  "34": {
+   "name": "Marshtomp",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170851,
+   "tcg_name": "Marshtomp",
+   "tcg_number": "34/168"
+  },
+  "35": {
+   "name": "Swampert",
+   "versions": [
+    "crackedIceHolofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170852,
+   "tcg_name": "Swampert",
+   "tcg_number": "35/168"
+  },
+  "36": {
+   "name": "Lotad",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170853,
+   "tcg_name": "Lotad",
+   "tcg_number": "36/168"
+  },
+  "37": {
+   "name": "Lombre",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170854,
+   "tcg_name": "Lombre",
+   "tcg_number": "37/168"
+  },
+  "38": {
+   "name": "Ludicolo",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170855,
+   "tcg_name": "Ludicolo",
+   "tcg_number": "38/168"
+  },
+  "39": {
+   "name": "Wailmer",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170856,
+   "tcg_name": "Wailmer",
+   "tcg_number": "39/168"
+  },
+  "40": {
+   "name": "Wailord",
+   "versions": [
+    "cosmosHolofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170857,
+   "tcg_name": "Wailord",
+   "tcg_number": "40/168"
+  },
+  "41": {
+   "name": "Clamperl",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170858,
+   "tcg_name": "Clamperl",
+   "tcg_number": "41/168"
+  },
+  "42": {
+   "name": "Huntail",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170859,
+   "tcg_name": "Huntail",
+   "tcg_number": "42/168"
+  },
+  "43": {
+   "name": "Gorebyss",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170860,
+   "tcg_name": "Gorebyss",
+   "tcg_number": "43/168"
+  },
+  "44": {
+   "name": "Luvdisc",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170861,
+   "tcg_name": "Luvdisc",
+   "tcg_number": "44/168"
+  },
+  "45": {
+   "name": "Regice",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170862,
+   "tcg_name": "Regice",
+   "tcg_number": "45/168"
+  },
+  "46": {
+   "name": "Kyogre",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170863,
+   "tcg_name": "Kyogre",
+   "tcg_number": "46/168"
+  },
+  "47": {
+   "name": "Voltorb",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170864,
+   "tcg_name": "Voltorb",
+   "tcg_number": "47/168"
+  },
+  "48": {
+   "name": "Electrode-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170865,
+   "tcg_name": "Electrode GX",
+   "tcg_number": "48/168"
+  },
+  "49": {
+   "name": "Chinchou",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170868,
+   "tcg_name": "Chinchou",
+   "tcg_number": "49/168"
+  },
+  "50": {
+   "name": "Lanturn",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170869,
+   "tcg_name": "Lanturn",
+   "tcg_number": "50/168"
+  },
+  "51": {
+   "name": "Electrike",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170870,
+   "tcg_name": "Electrike",
+   "tcg_number": "51/168"
+  },
+  "52": {
+   "name": "Manectric",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170871,
+   "tcg_name": "Manectric",
+   "tcg_number": "52/168"
+  },
+  "53": {
+   "name": "Plusle",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170872,
+   "tcg_name": "Plusle",
+   "tcg_number": "53/168"
+  },
+  "54": {
+   "name": "Minun",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170873,
+   "tcg_name": "Minun",
+   "tcg_number": "54/168"
+  },
+  "55": {
+   "name": "Oricorio",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170874,
+   "tcg_name": "Oricorio (55)",
+   "tcg_number": "55/168",
+   "variant_products": [
+    {
+     "suffix": "55",
+     "product_id": 170874
+    }
+   ]
+  },
+  "56": {
+   "name": "Mr. Mime-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170875,
+   "tcg_name": "Mr. Mime GX",
+   "tcg_number": "56/168"
+  },
+  "57": {
+   "name": "Gulpin",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170878,
+   "tcg_name": "Gulpin",
+   "tcg_number": "57/168"
+  },
+  "58": {
+   "name": "Swalot",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170879,
+   "tcg_name": "Swalot",
+   "tcg_number": "58/168"
+  },
+  "59": {
+   "name": "Spoink",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170880,
+   "tcg_name": "Spoink",
+   "tcg_number": "59/168"
+  },
+  "60": {
+   "name": "Grumpig",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170881,
+   "tcg_name": "Grumpig",
+   "tcg_number": "60/168"
+  },
+  "61": {
+   "name": "Lunatone",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170882,
+   "tcg_name": "Lunatone",
+   "tcg_number": "61/168"
+  },
+  "62": {
+   "name": "Solrock",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170883,
+   "tcg_name": "Solrock",
+   "tcg_number": "62/168"
+  },
+  "63": {
+   "name": "Shuppet",
+   "versions": [
+    "magnusPedersen",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170884,
+   "tcg_name": "Shuppet (63)",
+   "tcg_number": "63/168",
+   "variant_products": [
+    {
+     "suffix": "63",
+     "product_id": 170884
+    }
+   ]
+  },
+  "64": {
+   "name": "Shuppet",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170885,
+   "tcg_name": "Shuppet (64)",
+   "tcg_number": "64/168",
+   "variant_products": [
+    {
+     "suffix": "64",
+     "product_id": 170885
+    }
+   ]
+  },
+  "65": {
+   "name": "Banette",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170886,
+   "tcg_name": "Banette",
+   "tcg_number": "65/168"
+  },
+  "66": {
+   "name": "Banette-GX",
+   "versions": [
+    "holofoil",
+    "magnusPedersen"
+   ],
+   "status": "ok",
+   "product_id": 170887,
+   "tcg_name": "Banette GX",
+   "tcg_number": "66/168"
+  },
+  "67": {
+   "name": "Deoxys",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170889,
+   "tcg_name": "Deoxys (67)",
+   "tcg_number": "67/168",
+   "variant_products": [
+    {
+     "suffix": "67",
+     "product_id": 170889
+    }
+   ]
+  },
+  "68": {
+   "name": "Deoxys",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170890,
+   "tcg_name": "Deoxys (68)",
+   "tcg_number": "68/168",
+   "variant_products": [
+    {
+     "suffix": "68",
+     "product_id": 170890
+    }
+   ]
+  },
+  "69": {
+   "name": "Deoxys",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170891,
+   "tcg_name": "Deoxys (69)",
+   "tcg_number": "69/168",
+   "variant_products": [
+    {
+     "suffix": "69",
+     "product_id": 170891
+    }
+   ]
+  },
+  "70": {
+   "name": "Lunala",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170892,
+   "tcg_name": "Lunala",
+   "tcg_number": "70/168"
+  },
+  "71": {
+   "name": "Onix",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170893,
+   "tcg_name": "Onix",
+   "tcg_number": "71/168"
+  },
+  "72": {
+   "name": "Phanpy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170894,
+   "tcg_name": "Phanpy",
+   "tcg_number": "72/168"
+  },
+  "73": {
+   "name": "Donphan",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170895,
+   "tcg_name": "Donphan",
+   "tcg_number": "73/168"
+  },
+  "74": {
+   "name": "Larvitar",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170896,
+   "tcg_name": "Larvitar",
+   "tcg_number": "74/168"
+  },
+  "75": {
+   "name": "Pupitar",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170897,
+   "tcg_name": "Pupitar",
+   "tcg_number": "75/168"
+  },
+  "76": {
+   "name": "Meditite",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170898,
+   "tcg_name": "Meditite",
+   "tcg_number": "76/168"
+  },
+  "77": {
+   "name": "Medicham",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170899,
+   "tcg_name": "Medicham",
+   "tcg_number": "77/168"
+  },
+  "78": {
+   "name": "Baltoy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170900,
+   "tcg_name": "Baltoy",
+   "tcg_number": "78/168"
+  },
+  "79": {
+   "name": "Claydol",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170901,
+   "tcg_name": "Claydol",
+   "tcg_number": "79/168"
+  },
+  "80": {
+   "name": "Regirock",
+   "versions": [
+    "naohitoInoue",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170902,
+   "tcg_name": "Regirock",
+   "tcg_number": "80/168"
+  },
+  "81": {
+   "name": "Groudon",
+   "versions": [
+    "cosmosHolofoil",
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170903,
+   "tcg_name": "Groudon",
+   "tcg_number": "81/168"
+  },
+  "82": {
+   "name": "Palossand-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170904,
+   "tcg_name": "Palossand GX",
+   "tcg_number": "82/168"
+  },
+  "83": {
+   "name": "Minior",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170905,
+   "tcg_name": "Minior",
+   "tcg_number": "83/168"
+  },
+  "84": {
+   "name": "Alolan Rattata",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170906,
+   "tcg_name": "Alolan Rattata",
+   "tcg_number": "84/168"
+  },
+  "85": {
+   "name": "Alolan Raticate-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170907,
+   "tcg_name": "Alolan Raticate GX",
+   "tcg_number": "85/168"
+  },
+  "86": {
+   "name": "Sneasel",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170908,
+   "tcg_name": "Sneasel",
+   "tcg_number": "86/168"
+  },
+  "87": {
+   "name": "Tyranitar",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170909,
+   "tcg_name": "Tyranitar",
+   "tcg_number": "87/168"
+  },
+  "88": {
+   "name": "Sableye",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170910,
+   "tcg_name": "Sableye",
+   "tcg_number": "88/168"
+  },
+  "89": {
+   "name": "Steelix",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170911,
+   "tcg_name": "Steelix",
+   "tcg_number": "89/168"
+  },
+  "90": {
+   "name": "Scizor-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170912,
+   "tcg_name": "Scizor GX",
+   "tcg_number": "90/168"
+  },
+  "91": {
+   "name": "Mawile",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170916,
+   "tcg_name": "Mawile",
+   "tcg_number": "91/168"
+  },
+  "92": {
+   "name": "Beldum",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170917,
+   "tcg_name": "Beldum (92)",
+   "tcg_number": "92/168",
+   "variant_products": [
+    {
+     "suffix": "92",
+     "product_id": 170917
+    }
+   ]
+  },
+  "93": {
+   "name": "Beldum",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170918,
+   "tcg_name": "Beldum (93)",
+   "tcg_number": "93/168",
+   "variant_products": [
+    {
+     "suffix": "93",
+     "product_id": 170918
+    }
+   ]
+  },
+  "94": {
+   "name": "Metang",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170919,
+   "tcg_name": "Metang",
+   "tcg_number": "94/168"
+  },
+  "95": {
+   "name": "Metagross",
+   "versions": [
+    "holofoil",
+    "leagueStamp",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170920,
+   "tcg_name": "Metagross",
+   "tcg_number": "95/168"
+  },
+  "96": {
+   "name": "Registeel",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170921,
+   "tcg_name": "Registeel",
+   "tcg_number": "96/168"
+  },
+  "97": {
+   "name": "Jirachi ◇",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170922,
+   "tcg_name": "Jirachi Prism Star",
+   "tcg_number": "97/168",
+   "note": "nuestro \"Jirachi ◇\" vs TCG \"Jirachi Prism Star\""
+  },
+  "98": {
+   "name": "Heatran",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170923,
+   "tcg_name": "Heatran",
+   "tcg_number": "98/168"
+  },
+  "99": {
+   "name": "Solgaleo",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170924,
+   "tcg_name": "Solgaleo",
+   "tcg_number": "99/168"
+  },
+  "100": {
+   "name": "Celesteela",
+   "versions": [
+    "holofoil",
+    "leagueStamp",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170925,
+   "tcg_name": "Celesteela",
+   "tcg_number": "100/168"
+  },
+  "101": {
+   "name": "Kartana",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170926,
+   "tcg_name": "Kartana",
+   "tcg_number": "101/168"
+  },
+  "102": {
+   "name": "Stakataka-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170927,
+   "tcg_name": "Stakataka GX",
+   "tcg_number": "102/168"
+  },
+  "103": {
+   "name": "Bagon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170930,
+   "tcg_name": "Bagon (103)",
+   "tcg_number": "103/168",
+   "variant_products": [
+    {
+     "suffix": "103",
+     "product_id": 170930
+    }
+   ]
+  },
+  "104": {
+   "name": "Bagon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170931,
+   "tcg_name": "Bagon (104)",
+   "tcg_number": "104/168",
+   "variant_products": [
+    {
+     "suffix": "104",
+     "product_id": 170931
+    }
+   ]
+  },
+  "105": {
+   "name": "Shelgon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170932,
+   "tcg_name": "Shelgon",
+   "tcg_number": "105/168"
+  },
+  "106": {
+   "name": "Salamence",
+   "versions": [
+    "cosmosHolofoil",
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170933,
+   "tcg_name": "Salamence",
+   "tcg_number": "106/168"
+  },
+  "107": {
+   "name": "Latias ◇",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170934,
+   "tcg_name": "Latias Prism Star",
+   "tcg_number": "107/168",
+   "note": "nuestro \"Latias ◇\" vs TCG \"Latias Prism Star\""
+  },
+  "108": {
+   "name": "Latios ◇",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170935,
+   "tcg_name": "Latios Prism Star",
+   "tcg_number": "108/168",
+   "note": "nuestro \"Latios ◇\" vs TCG \"Latios Prism Star\""
+  },
+  "109": {
+   "name": "Rayquaza-GX",
+   "versions": [
+    "holofoil",
+    "pedroEugenioTorres"
+   ],
+   "status": "ok",
+   "product_id": 170936,
+   "tcg_name": "Rayquaza GX",
+   "tcg_number": "109/168"
+  },
+  "110": {
+   "name": "Dunsparce",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170939,
+   "tcg_name": "Dunsparce",
+   "tcg_number": "110/168"
+  },
+  "111": {
+   "name": "Wingull",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170940,
+   "tcg_name": "Wingull",
+   "tcg_number": "111/168"
+  },
+  "112": {
+   "name": "Pelipper",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170941,
+   "tcg_name": "Pelipper",
+   "tcg_number": "112/168"
+  },
+  "113": {
+   "name": "Slakoth",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170942,
+   "tcg_name": "Slakoth",
+   "tcg_number": "113/168"
+  },
+  "114": {
+   "name": "Vigoroth",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170943,
+   "tcg_name": "Vigoroth",
+   "tcg_number": "114/168"
+  },
+  "115": {
+   "name": "Slaking",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170944,
+   "tcg_name": "Slaking",
+   "tcg_number": "115/168"
+  },
+  "116": {
+   "name": "Whismur",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170974,
+   "tcg_name": "Whismur (116)",
+   "tcg_number": "116/168",
+   "variant_products": [
+    {
+     "suffix": "116",
+     "product_id": 170974
+    }
+   ]
+  },
+  "117": {
+   "name": "Whismur",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170975,
+   "tcg_name": "Whismur (117)",
+   "tcg_number": "117/168",
+   "variant_products": [
+    {
+     "suffix": "117",
+     "product_id": 170975
+    }
+   ]
+  },
+  "118": {
+   "name": "Loudred",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170976,
+   "tcg_name": "Loudred",
+   "tcg_number": "118/168"
+  },
+  "119": {
+   "name": "Exploud",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170977,
+   "tcg_name": "Exploud",
+   "tcg_number": "119/168"
+  },
+  "120": {
+   "name": "Skitty",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170978,
+   "tcg_name": "Skitty",
+   "tcg_number": "120/168"
+  },
+  "121": {
+   "name": "Delcatty",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170980,
+   "tcg_name": "Delcatty",
+   "tcg_number": "121/168"
+  },
+  "122": {
+   "name": "Kecleon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170983,
+   "tcg_name": "Kecleon",
+   "tcg_number": "122/168"
+  },
+  "123": {
+   "name": "Acro Bike",
+   "versions": [
+    "henryBrand",
+    "kayaLichtleitner",
+    "normal",
+    "pedroEugenioTorres",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170984,
+   "tcg_name": "Acro Bike",
+   "tcg_number": "123/168"
+  },
+  "124": {
+   "name": "Apricorn Maker",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170985,
+   "tcg_name": "Apricorn Maker",
+   "tcg_number": "124/168"
+  },
+  "125": {
+   "name": "Beast Ball",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170986,
+   "tcg_name": "Beast Ball",
+   "tcg_number": "125/168"
+  },
+  "126": {
+   "name": "Bill's Maintenance",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170987,
+   "tcg_name": "Bill's Maintenance",
+   "tcg_number": "126/168"
+  },
+  "127": {
+   "name": "Copycat",
+   "versions": [
+    "leagueStamp",
+    "normal",
+    "reverseHolofoil",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 170988,
+   "tcg_name": "Copycat",
+   "tcg_number": "127/168"
+  },
+  "128": {
+   "name": "Energy Recycle System",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170989,
+   "tcg_name": "Energy Recycle System",
+   "tcg_number": "128/168"
+  },
+  "129": {
+   "name": "Energy Switch",
+   "versions": [
+    "harukiMiyamoto",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170990,
+   "tcg_name": "Energy Switch",
+   "tcg_number": "129/168"
+  },
+  "130": {
+   "name": "Fisherman",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170991,
+   "tcg_name": "Fisherman",
+   "tcg_number": "130/168"
+  },
+  "131": {
+   "name": "Friend Ball",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170992,
+   "tcg_name": "Friend Ball",
+   "tcg_number": "131/168"
+  },
+  "132": {
+   "name": "Hau",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170993,
+   "tcg_name": "Hau",
+   "tcg_number": "132/168"
+  },
+  "133": {
+   "name": "Hiker",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170994,
+   "tcg_name": "Hiker",
+   "tcg_number": "133/168"
+  },
+  "134": {
+   "name": "Hustle Belt",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170995,
+   "tcg_name": "Hustle Belt",
+   "tcg_number": "134/168"
+  },
+  "135": {
+   "name": "Last Chance Potion",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170996,
+   "tcg_name": "Last Chance Potion",
+   "tcg_number": "135/168"
+  },
+  "136": {
+   "name": "Life Herb",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170997,
+   "tcg_name": "Life Herb",
+   "tcg_number": "136/168"
+  },
+  "137": {
+   "name": "Lisia",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170998,
+   "tcg_name": "Lisia",
+   "tcg_number": "137/168"
+  },
+  "138": {
+   "name": "Lure Ball",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 170999,
+   "tcg_name": "Lure Ball",
+   "tcg_number": "138/168"
+  },
+  "139": {
+   "name": "The Masked Royal",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 171000,
+   "tcg_name": "The Masked Royal",
+   "tcg_number": "139/168"
+  },
+  "140": {
+   "name": "PokéNav",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 171001,
+   "tcg_name": "PokeNav",
+   "tcg_number": "140/168"
+  },
+  "141": {
+   "name": "Rainbow Brush",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 171002,
+   "tcg_name": "Rainbow Brush",
+   "tcg_number": "141/168"
+  },
+  "142": {
+   "name": "Rare Candy",
+   "versions": [
+    "leagueStamp",
+    "normal",
+    "reverseHolofoil",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 171003,
+   "tcg_name": "Rare Candy",
+   "tcg_number": "142/168"
+  },
+  "143": {
+   "name": "Shrine of Punishment",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 171004,
+   "tcg_name": "Shrine of Punishment",
+   "tcg_number": "143/168"
+  },
+  "144": {
+   "name": "Sky Pillar",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 171005,
+   "tcg_name": "Sky Pillar",
+   "tcg_number": "144/168"
+  },
+  "145": {
+   "name": "Steven's Resolve",
+   "versions": [
+    "holofoil",
+    "leagueStamp",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 171006,
+   "tcg_name": "Steven's Resolve",
+   "tcg_number": "145/168"
+  },
+  "146": {
+   "name": "Super Scoop Up",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 171007,
+   "tcg_name": "Super Scoop Up",
+   "tcg_number": "146/168"
+  },
+  "147": {
+   "name": "Switch",
+   "versions": [
+    "harukiMiyamoto",
+    "henryBrand",
+    "kayaLichtleitner",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 171008,
+   "tcg_name": "Switch",
+   "tcg_number": "147/168"
+  },
+  "148": {
+   "name": "Tate & Liza",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 171009,
+   "tcg_name": "Tate & Liza",
+   "tcg_number": "148/168"
+  },
+  "149": {
+   "name": "TV Reporter",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 171010,
+   "tcg_name": "TV Reporter",
+   "tcg_number": "149/168"
+  },
+  "150": {
+   "name": "Underground Expedition",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 171011,
+   "tcg_name": "Underground Expedition",
+   "tcg_number": "150/168"
+  },
+  "151": {
+   "name": "Rainbow Energy",
+   "versions": [
+    "magnusPedersen",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 171012,
+   "tcg_name": "Rainbow Energy",
+   "tcg_number": "151/168"
+  },
+  "152": {
+   "name": "Shiftry-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170823,
+   "tcg_name": "Shiftry GX (Full Art)",
+   "tcg_number": "152/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 170823
+    }
+   ]
+  },
+  "153": {
+   "name": "Blaziken-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170842,
+   "tcg_name": "Blaziken GX (Full Art)",
+   "tcg_number": "153/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 170842
+    }
+   ]
+  },
+  "154": {
+   "name": "Articuno-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170847,
+   "tcg_name": "Articuno GX (Full Art)",
+   "tcg_number": "154/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 170847
+    }
+   ]
+  },
+  "155": {
+   "name": "Electrode-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170866,
+   "tcg_name": "Electrode GX (Full Art)",
+   "tcg_number": "155/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 170866
+    }
+   ]
+  },
+  "156": {
+   "name": "Mr. Mime-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170876,
+   "tcg_name": "Mr. Mime GX (Full Art)",
+   "tcg_number": "156/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 170876
+    }
+   ]
+  },
+  "157": {
+   "name": "Banette-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170888,
+   "tcg_name": "Banette GX (Full Art)",
+   "tcg_number": "157/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 170888
+    }
+   ]
+  },
+  "158": {
+   "name": "Scizor-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170913,
+   "tcg_name": "Scizor GX (Full Art)",
+   "tcg_number": "158/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 170913
+    }
+   ]
+  },
+  "159": {
+   "name": "Stakataka-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170928,
+   "tcg_name": "Stakataka GX (Full Art)",
+   "tcg_number": "159/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 170928
+    }
+   ]
+  },
+  "160": {
+   "name": "Rayquaza-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170937,
+   "tcg_name": "Rayquaza GX (Full Art)",
+   "tcg_number": "160/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 170937
+    }
+   ]
+  },
+  "161": {
+   "name": "Apricorn Maker",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171013,
+   "tcg_name": "Apricorn Maker (Full Art)",
+   "tcg_number": "161/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 171013
+    }
+   ]
+  },
+  "162": {
+   "name": "Bill's Maintenance",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171014,
+   "tcg_name": "Bill's Maintenance (Full Art)",
+   "tcg_number": "162/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 171014
+    }
+   ]
+  },
+  "163": {
+   "name": "Copycat",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171015,
+   "tcg_name": "Copycat (Full Art)",
+   "tcg_number": "163/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 171015
+    }
+   ]
+  },
+  "164": {
+   "name": "Lisia",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171016,
+   "tcg_name": "Lisia (Full Art)",
+   "tcg_number": "164/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 171016
+    }
+   ]
+  },
+  "165": {
+   "name": "Steven's Resolve",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171017,
+   "tcg_name": "Steven's Resolve (Full Art)",
+   "tcg_number": "165/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 171017
+    }
+   ]
+  },
+  "166": {
+   "name": "Tate & Liza",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171018,
+   "tcg_name": "Tate & Liza (Full Art)",
+   "tcg_number": "166/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 171018
+    }
+   ]
+  },
+  "167": {
+   "name": "TV Reporter",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171019,
+   "tcg_name": "TV Reporter (Full Art)",
+   "tcg_number": "167/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 171019
+    }
+   ]
+  },
+  "168": {
+   "name": "Underground Expedition",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171020,
+   "tcg_name": "Underground Expedition (Full Art)",
+   "tcg_number": "168/168",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 171020
+    }
+   ]
+  },
+  "169": {
+   "name": "Shiftry-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170824,
+   "tcg_name": "Shiftry GX (Secret)",
+   "tcg_number": "169/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 170824
+    }
+   ]
+  },
+  "170": {
+   "name": "Blaziken-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170843,
+   "tcg_name": "Blaziken GX (Secret)",
+   "tcg_number": "170/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 170843
+    }
+   ]
+  },
+  "171": {
+   "name": "Articuno-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170848,
+   "tcg_name": "Articuno GX (Secret)",
+   "tcg_number": "171/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 170848
+    }
+   ]
+  },
+  "172": {
+   "name": "Electrode-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170867,
+   "tcg_name": "Electrode GX (Secret)",
+   "tcg_number": "172/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 170867
+    }
+   ]
+  },
+  "173": {
+   "name": "Mr. Mime-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170877,
+   "tcg_name": "Mr. Mime GX (Secret)",
+   "tcg_number": "173/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 170877
+    }
+   ]
+  },
+  "174": {
+   "name": "Banette-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170915,
+   "tcg_name": "Banette GX (Secret)",
+   "tcg_number": "174/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 170915
+    }
+   ]
+  },
+  "175": {
+   "name": "Scizor-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170914,
+   "tcg_name": "Scizor GX (Secret)",
+   "tcg_number": "175/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 170914
+    }
+   ]
+  },
+  "176": {
+   "name": "Stakataka-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170929,
+   "tcg_name": "Stakataka GX (Secret)",
+   "tcg_number": "176/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 170929
+    }
+   ]
+  },
+  "177": {
+   "name": "Rayquaza-GX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 170938,
+   "tcg_name": "Rayquaza GX (Secret)",
+   "tcg_number": "177/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 170938
+    }
+   ]
+  },
+  "178": {
+   "name": "Acro Bike",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171021,
+   "tcg_name": "Acro Bike (Secret)",
+   "tcg_number": "178/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 171021
+    }
+   ]
+  },
+  "179": {
+   "name": "Hustle Belt",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171022,
+   "tcg_name": "Hustle Belt (Secret)",
+   "tcg_number": "179/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 171022
+    }
+   ]
+  },
+  "180": {
+   "name": "Life Herb",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171023,
+   "tcg_name": "Life Herb (Secret)",
+   "tcg_number": "180/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 171023
+    }
+   ]
+  },
+  "181": {
+   "name": "PokéNav",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171024,
+   "tcg_name": "PokeNav (Secret)",
+   "tcg_number": "181/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 171024
+    }
+   ]
+  },
+  "182": {
+   "name": "Rainbow Brush",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171025,
+   "tcg_name": "Rainbow Brush (Secret)",
+   "tcg_number": "182/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 171025
+    }
+   ]
+  },
+  "183": {
+   "name": "Rainbow Energy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 171026,
+   "tcg_name": "Rainbow Energy (Secret)",
+   "tcg_number": "183/168",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 171026
+    }
+   ]
+  }
+ }
+}

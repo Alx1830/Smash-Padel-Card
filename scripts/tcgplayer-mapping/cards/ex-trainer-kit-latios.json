@@ -1,0 +1,134 @@
+{
+ "set": "ex-trainer-kit-latios",
+ "tcg_set": "EX Trainer Kit 1: Latias & Latios",
+ "code": "tk1b",
+ "summary": {
+  "total": 10,
+  "ok": 10,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Electrike",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 85131,
+   "tcg_name": "Electrike",
+   "tcg_number": "1/10"
+  },
+  "2": {
+   "name": "Latios",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86664,
+   "tcg_name": "Latios",
+   "tcg_number": "2/10"
+  },
+  "3": {
+   "name": "Linoone",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 86805,
+   "tcg_name": "Linoone",
+   "tcg_number": "3/10"
+  },
+  "4": {
+   "name": "Magnemite",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 87076,
+   "tcg_name": "Magnemite",
+   "tcg_number": "4/10"
+  },
+  "5": {
+   "name": "Magneton",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 87103,
+   "tcg_name": "Magneton",
+   "tcg_number": "5/10"
+  },
+  "6": {
+   "name": "Pikachu",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 88079,
+   "tcg_name": "Pikachu",
+   "tcg_number": "6/10"
+  },
+  "7": {
+   "name": "Zigzagoon",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 90746,
+   "tcg_name": "Zigzagoon",
+   "tcg_number": "7/10"
+  },
+  "8": {
+   "name": "Potion",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 88335,
+   "tcg_name": "Potion (Latias)",
+   "tcg_number": "8/10",
+   "variant_products": [
+    {
+     "suffix": "Latias",
+     "product_id": 88335
+    },
+    {
+     "suffix": "Latios",
+     "product_id": 88336
+    }
+   ]
+  },
+  "9": {
+   "name": "Energy Search",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 85239,
+   "tcg_name": "Energy Search (Latias)",
+   "tcg_number": "9/10",
+   "variant_products": [
+    {
+     "suffix": "Latias",
+     "product_id": 85239
+    },
+    {
+     "suffix": "Latios",
+     "product_id": 85240
+    }
+   ]
+  },
+  "10": {
+   "name": "Lightning Energy",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 86760,
+   "tcg_name": "Lightning Energy",
+   "tcg_number": "10/10"
+  }
+ }
+}

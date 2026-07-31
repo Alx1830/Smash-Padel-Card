@@ -1,0 +1,1312 @@
+{
+ "set": "evolutions",
+ "tcg_set": "XY - Evolutions",
+ "code": "xy12",
+ "summary": {
+  "total": 113,
+  "ok": 113,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Venusaur-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124014,
+   "tcg_name": "Venusaur EX",
+   "tcg_number": "1/108"
+  },
+  "2": {
+   "name": "M Venusaur-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124015,
+   "tcg_name": "M Venusaur EX",
+   "tcg_number": "2/108"
+  },
+  "3": {
+   "name": "Caterpie",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124016,
+   "tcg_name": "Caterpie",
+   "tcg_number": "3/108"
+  },
+  "4": {
+   "name": "Metapod",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124017,
+   "tcg_name": "Metapod",
+   "tcg_number": "4/108"
+  },
+  "5": {
+   "name": "Weedle",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124018,
+   "tcg_name": "Weedle",
+   "tcg_number": "5/108"
+  },
+  "6": {
+   "name": "Kakuna",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124019,
+   "tcg_name": "Kakuna",
+   "tcg_number": "6/108"
+  },
+  "7": {
+   "name": "Beedrill",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124020,
+   "tcg_name": "Beedrill",
+   "tcg_number": "7/108"
+  },
+  "8": {
+   "name": "Tangela",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124021,
+   "tcg_name": "Tangela",
+   "tcg_number": "8/108"
+  },
+  "9": {
+   "name": "Charmander",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124022,
+   "tcg_name": "Charmander",
+   "tcg_number": "9/108"
+  },
+  "10": {
+   "name": "Charmeleon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124023,
+   "tcg_name": "Charmeleon",
+   "tcg_number": "10/108"
+  },
+  "11": {
+   "name": "Charizard",
+   "versions": [
+    "expansionStaffStamp",
+    "expansionStamp",
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124026,
+   "tcg_name": "Charizard",
+   "tcg_number": "11/108"
+  },
+  "12": {
+   "name": "Charizard-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124024,
+   "tcg_name": "Charizard EX",
+   "tcg_number": "12/108"
+  },
+  "13": {
+   "name": "M Charizard-EX",
+   "versions": [
+    "holofoil",
+    "jumbo"
+   ],
+   "status": "ok",
+   "product_id": 124025,
+   "tcg_name": "M Charizard EX",
+   "tcg_number": "13/108"
+  },
+  "14": {
+   "name": "Vulpix",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124027,
+   "tcg_name": "Vulpix",
+   "tcg_number": "14/108"
+  },
+  "15": {
+   "name": "Ninetales",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124028,
+   "tcg_name": "Ninetales",
+   "tcg_number": "15/108"
+  },
+  "16": {
+   "name": "Ninetales BREAK",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124029,
+   "tcg_name": "Ninetales BREAK",
+   "tcg_number": "16/108"
+  },
+  "17": {
+   "name": "Growlithe",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124030,
+   "tcg_name": "Growlithe",
+   "tcg_number": "17/108"
+  },
+  "18": {
+   "name": "Arcanine",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124031,
+   "tcg_name": "Arcanine",
+   "tcg_number": "18/108"
+  },
+  "19": {
+   "name": "Ponyta",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124032,
+   "tcg_name": "Ponyta",
+   "tcg_number": "19/108"
+  },
+  "20": {
+   "name": "Magmar",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124033,
+   "tcg_name": "Magmar",
+   "tcg_number": "20/108"
+  },
+  "21": {
+   "name": "Blastoise-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124034,
+   "tcg_name": "Blastoise EX",
+   "tcg_number": "21/108"
+  },
+  "22": {
+   "name": "M Blastoise-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124035,
+   "tcg_name": "M Blastoise EX",
+   "tcg_number": "22/108"
+  },
+  "23": {
+   "name": "Poliwag",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124036,
+   "tcg_name": "Poliwag",
+   "tcg_number": "23/108"
+  },
+  "24": {
+   "name": "Poliwhirl",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124037,
+   "tcg_name": "Poliwhirl",
+   "tcg_number": "24/108"
+  },
+  "25": {
+   "name": "Poliwrath",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124038,
+   "tcg_name": "Poliwrath",
+   "tcg_number": "25/108"
+  },
+  "26": {
+   "name": "Slowbro-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124039,
+   "tcg_name": "Slowbro EX",
+   "tcg_number": "26/108"
+  },
+  "27": {
+   "name": "M Slowbro-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124040,
+   "tcg_name": "M Slowbro EX",
+   "tcg_number": "27/108"
+  },
+  "28": {
+   "name": "Seel",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124041,
+   "tcg_name": "Seel",
+   "tcg_number": "28/108"
+  },
+  "29": {
+   "name": "Dewgong",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124042,
+   "tcg_name": "Dewgong",
+   "tcg_number": "29/108"
+  },
+  "30": {
+   "name": "Staryu",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124043,
+   "tcg_name": "Staryu",
+   "tcg_number": "30/108"
+  },
+  "31": {
+   "name": "Starmie",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124044,
+   "tcg_name": "Starmie",
+   "tcg_number": "31/108"
+  },
+  "32": {
+   "name": "Starmie BREAK",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124045,
+   "tcg_name": "Starmie BREAK",
+   "tcg_number": "32/108"
+  },
+  "33": {
+   "name": "Magikarp",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124046,
+   "tcg_name": "Magikarp",
+   "tcg_number": "33/108"
+  },
+  "34": {
+   "name": "Gyarados",
+   "versions": [
+    "expansionStaffStamp",
+    "expansionStamp",
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124047,
+   "tcg_name": "Gyarados",
+   "tcg_number": "34/108"
+  },
+  "35": {
+   "name": "Pikachu",
+   "versions": [
+    "crackedIceHolofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124048,
+   "tcg_name": "Pikachu",
+   "tcg_number": "35/108"
+  },
+  "36": {
+   "name": "Raichu",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124049,
+   "tcg_name": "Raichu",
+   "tcg_number": "36/108"
+  },
+  "37": {
+   "name": "Magnemite",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124050,
+   "tcg_name": "Magnemite",
+   "tcg_number": "37/108"
+  },
+  "38": {
+   "name": "Magneton",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124051,
+   "tcg_name": "Magneton",
+   "tcg_number": "38/108"
+  },
+  "39": {
+   "name": "Voltorb",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124052,
+   "tcg_name": "Voltorb",
+   "tcg_number": "39/108"
+  },
+  "40": {
+   "name": "Electrode",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124053,
+   "tcg_name": "Electrode",
+   "tcg_number": "40/108"
+  },
+  "41": {
+   "name": "Electabuzz",
+   "versions": [
+    "normal",
+    "reverseHolofoil",
+    "toysRusStamp"
+   ],
+   "status": "ok",
+   "product_id": 124054,
+   "tcg_name": "Electabuzz",
+   "tcg_number": "41/108"
+  },
+  "42": {
+   "name": "Zapdos",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124055,
+   "tcg_name": "Zapdos",
+   "tcg_number": "42/108"
+  },
+  "43": {
+   "name": "Nidoran ♂",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124056,
+   "tcg_name": "Nidoran M",
+   "tcg_number": "43/108",
+   "note": "nuestro \"Nidoran ♂\" vs TCG \"Nidoran M\""
+  },
+  "44": {
+   "name": "Nidorino",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124057,
+   "tcg_name": "Nidorino",
+   "tcg_number": "44/108"
+  },
+  "45": {
+   "name": "Nidoking",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124058,
+   "tcg_name": "Nidoking",
+   "tcg_number": "45/108"
+  },
+  "46": {
+   "name": "Nidoking BREAK",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124059,
+   "tcg_name": "Nidoking BREAK",
+   "tcg_number": "46/108"
+  },
+  "47": {
+   "name": "Gastly",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124061,
+   "tcg_name": "Gastly",
+   "tcg_number": "47/108"
+  },
+  "48": {
+   "name": "Haunter",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124060,
+   "tcg_name": "Haunter",
+   "tcg_number": "48/108"
+  },
+  "49": {
+   "name": "Drowzee",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124062,
+   "tcg_name": "Drowzee",
+   "tcg_number": "49/108"
+  },
+  "50": {
+   "name": "Koffing",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124063,
+   "tcg_name": "Koffing",
+   "tcg_number": "50/108"
+  },
+  "51": {
+   "name": "Mewtwo",
+   "versions": [
+    "crackedIceHolofoil",
+    "expansionStaffStamp",
+    "expansionStamp",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124064,
+   "tcg_name": "Mewtwo",
+   "tcg_number": "51/108"
+  },
+  "52": {
+   "name": "Mewtwo-EX",
+   "versions": [
+    "holofoil",
+    "jumbo"
+   ],
+   "status": "ok",
+   "product_id": 124065,
+   "tcg_name": "Mewtwo EX",
+   "tcg_number": "52/108"
+  },
+  "53": {
+   "name": "Mew",
+   "versions": [
+    "holofoil",
+    "league1StPlaceStamp",
+    "league2NdPlaceStamp",
+    "league3RdPlaceStamp",
+    "league4ThPlaceStamp",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124066,
+   "tcg_name": "Mew",
+   "tcg_number": "53/108"
+  },
+  "54": {
+   "name": "Sandshrew",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124067,
+   "tcg_name": "Sandshrew",
+   "tcg_number": "54/108"
+  },
+  "55": {
+   "name": "Diglett",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124068,
+   "tcg_name": "Diglett",
+   "tcg_number": "55/108"
+  },
+  "56": {
+   "name": "Dugtrio",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124069,
+   "tcg_name": "Dugtrio",
+   "tcg_number": "56/108"
+  },
+  "57": {
+   "name": "Machop",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124070,
+   "tcg_name": "Machop",
+   "tcg_number": "57/108"
+  },
+  "58": {
+   "name": "Machoke",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124071,
+   "tcg_name": "Machoke",
+   "tcg_number": "58/108"
+  },
+  "59": {
+   "name": "Machamp",
+   "versions": [
+    "expansionStaffStamp",
+    "expansionStamp",
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124072,
+   "tcg_name": "Machamp",
+   "tcg_number": "59/108"
+  },
+  "60": {
+   "name": "Machamp BREAK",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124073,
+   "tcg_name": "Machamp BREAK",
+   "tcg_number": "60/108"
+  },
+  "61": {
+   "name": "Onix",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124074,
+   "tcg_name": "Onix",
+   "tcg_number": "61/108"
+  },
+  "62": {
+   "name": "Hitmonchan",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124075,
+   "tcg_name": "Hitmonchan",
+   "tcg_number": "62/108"
+  },
+  "63": {
+   "name": "Clefairy",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124076,
+   "tcg_name": "Clefairy",
+   "tcg_number": "63/108"
+  },
+  "64": {
+   "name": "Pidgeot-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124077,
+   "tcg_name": "Pidgeot EX",
+   "tcg_number": "64/108"
+  },
+  "65": {
+   "name": "M Pidgeot-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124078,
+   "tcg_name": "M Pidgeot EX",
+   "tcg_number": "65/108"
+  },
+  "66": {
+   "name": "Rattata",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124079,
+   "tcg_name": "Rattata",
+   "tcg_number": "66/108"
+  },
+  "67": {
+   "name": "Raticate",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124080,
+   "tcg_name": "Raticate",
+   "tcg_number": "67/108"
+  },
+  "68": {
+   "name": "Farfetch'd",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124081,
+   "tcg_name": "Farfetch'd",
+   "tcg_number": "68/108"
+  },
+  "69": {
+   "name": "Doduo",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124082,
+   "tcg_name": "Doduo",
+   "tcg_number": "69/108"
+  },
+  "70": {
+   "name": "Chansey",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124083,
+   "tcg_name": "Chansey",
+   "tcg_number": "70/108"
+  },
+  "71": {
+   "name": "Porygon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124084,
+   "tcg_name": "Porygon",
+   "tcg_number": "71/108"
+  },
+  "72": {
+   "name": "Dragonite-EX",
+   "versions": [
+    "holofoil",
+    "jumbo"
+   ],
+   "status": "ok",
+   "product_id": 124085,
+   "tcg_name": "Dragonite EX",
+   "tcg_number": "72/108"
+  },
+  "73": {
+   "name": "Blastoise Spirit Link",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124086,
+   "tcg_name": "Blastoise Spirit Link",
+   "tcg_number": "73/108"
+  },
+  "74": {
+   "name": "Brock's Grit",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124087,
+   "tcg_name": "Brock's Grit",
+   "tcg_number": "74/108"
+  },
+  "75": {
+   "name": "Charizard Spirit Link",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124088,
+   "tcg_name": "Charizard Spirit Link",
+   "tcg_number": "75/108"
+  },
+  "76": {
+   "name": "Devolution Spray",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124089,
+   "tcg_name": "Devolution Spray",
+   "tcg_number": "76/108"
+  },
+  "77": {
+   "name": "Energy Retrieval",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124090,
+   "tcg_name": "Energy Retrieval",
+   "tcg_number": "77/108"
+  },
+  "78": {
+   "name": "Full Heal",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124091,
+   "tcg_name": "Full Heal",
+   "tcg_number": "78/108"
+  },
+  "79": {
+   "name": "Maintenance",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124092,
+   "tcg_name": "Maintenance",
+   "tcg_number": "79/108"
+  },
+  "80": {
+   "name": "Misty's Determination",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124093,
+   "tcg_name": "Misty's Determination",
+   "tcg_number": "80/108"
+  },
+  "81": {
+   "name": "Pidgeot Spirit Link",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124094,
+   "tcg_name": "Pidgeot Spirit Link",
+   "tcg_number": "81/108"
+  },
+  "82": {
+   "name": "Pokédex",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124095,
+   "tcg_name": "Pokedex",
+   "tcg_number": "82/108"
+  },
+  "83": {
+   "name": "Potion",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124096,
+   "tcg_name": "Potion",
+   "tcg_number": "83/108"
+  },
+  "84": {
+   "name": "Professor Oak's Hint",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124097,
+   "tcg_name": "Professor Oak's Hint",
+   "tcg_number": "84/108"
+  },
+  "85": {
+   "name": "Revive",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124098,
+   "tcg_name": "Revive",
+   "tcg_number": "85/108"
+  },
+  "86": {
+   "name": "Slowbro Spirit Link",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124099,
+   "tcg_name": "Slowbro Spirit Link",
+   "tcg_number": "86/108"
+  },
+  "87": {
+   "name": "Super Potion",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124100,
+   "tcg_name": "Super Potion",
+   "tcg_number": "87/108"
+  },
+  "88": {
+   "name": "Switch",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124101,
+   "tcg_name": "Switch",
+   "tcg_number": "88/108"
+  },
+  "89": {
+   "name": "Venusaur Spirit Link",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124102,
+   "tcg_name": "Venusaur Spirit Link",
+   "tcg_number": "89/108"
+  },
+  "90": {
+   "name": "Double Colorless Energy",
+   "versions": [
+    "latinStaffStamp",
+    "latinStamp",
+    "leagueStamp",
+    "normal",
+    "oceaniaStamp",
+    "reverseHolofoil",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 124103,
+   "tcg_name": "Double Colorless Energy",
+   "tcg_number": "90/108"
+  },
+  "91": {
+   "name": "Grass Energy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124104,
+   "tcg_name": "Grass Energy",
+   "tcg_number": "91/108"
+  },
+  "92": {
+   "name": "Fire Energy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124105,
+   "tcg_name": "Fire Energy",
+   "tcg_number": "92/108"
+  },
+  "93": {
+   "name": "Water Energy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124106,
+   "tcg_name": "Water Energy",
+   "tcg_number": "93/108"
+  },
+  "94": {
+   "name": "Lightning Energy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124107,
+   "tcg_name": "Lightning Energy",
+   "tcg_number": "94/108"
+  },
+  "95": {
+   "name": "Psychic Energy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124108,
+   "tcg_name": "Psychic Energy",
+   "tcg_number": "95/108"
+  },
+  "96": {
+   "name": "Fighting Energy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124109,
+   "tcg_name": "Fighting Energy",
+   "tcg_number": "96/108"
+  },
+  "97": {
+   "name": "Darkness Energy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124110,
+   "tcg_name": "Darkness Energy",
+   "tcg_number": "97/108"
+  },
+  "98": {
+   "name": "Metal Energy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124111,
+   "tcg_name": "Metal Energy",
+   "tcg_number": "98/108"
+  },
+  "99": {
+   "name": "Fairy Energy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 124112,
+   "tcg_name": "Fairy Energy",
+   "tcg_number": "99/108"
+  },
+  "100": {
+   "name": "M Venusaur-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124113,
+   "tcg_name": "M Venusaur EX (Full Art)",
+   "tcg_number": "100/108",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 124113
+    }
+   ]
+  },
+  "101": {
+   "name": "M Charizard-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124114,
+   "tcg_name": "M Charizard EX (Full Art)",
+   "tcg_number": "101/108",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 124114
+    }
+   ]
+  },
+  "102": {
+   "name": "M Blastoise-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124115,
+   "tcg_name": "M Blastoise EX (Full Art)",
+   "tcg_number": "102/108",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 124115
+    }
+   ]
+  },
+  "103": {
+   "name": "Mewtwo-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124116,
+   "tcg_name": "Mewtwo EX (Full Art)",
+   "tcg_number": "103/108",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 124116
+    }
+   ]
+  },
+  "104": {
+   "name": "Pidgeot-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124117,
+   "tcg_name": "Pidgeot EX (Full Art)",
+   "tcg_number": "104/108",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 124117
+    }
+   ]
+  },
+  "105": {
+   "name": "M Pidgeot-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124118,
+   "tcg_name": "M Pidgeot EX (Full Art)",
+   "tcg_number": "105/108",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 124118
+    }
+   ]
+  },
+  "106": {
+   "name": "Dragonite-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124119,
+   "tcg_name": "Dragonite EX (Full Art)",
+   "tcg_number": "106/108",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 124119
+    }
+   ]
+  },
+  "107": {
+   "name": "Brock's Grit",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124120,
+   "tcg_name": "Brock's Grit (Full Art)",
+   "tcg_number": "107/108",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 124120
+    }
+   ]
+  },
+  "108": {
+   "name": "Misty's Determination",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 124121,
+   "tcg_name": "Misty's Determination (Full Art)",
+   "tcg_number": "108/108",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 124121
+    }
+   ]
+  },
+  "109": {
+   "name": "ナッシー[Exeggutor]",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 124122,
+   "tcg_name": "Exeggutor",
+   "tcg_number": "109/108"
+  },
+  "110": {
+   "name": "Flying Pikachu",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 124123,
+   "tcg_name": "Flying Pikachu",
+   "tcg_number": "110/108"
+  },
+  "111": {
+   "name": "Surfing Pikachu",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 124124,
+   "tcg_name": "Surfing Pikachu",
+   "tcg_number": "111/108"
+  },
+  "112": {
+   "name": "Imakuni?'s Doduo",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 124125,
+   "tcg_name": "Imakuni?'s Doduo",
+   "tcg_number": "112/108"
+  },
+  "113": {
+   "name": "Here Comes Team Rocket!",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 124126,
+   "tcg_name": "Here Comes Team Rocket!",
+   "tcg_number": "113/108"
+  }
+ }
+}

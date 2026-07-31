@@ -1,0 +1,1317 @@
+{
+ "set": "base-set-2",
+ "tcg_set": "Base Set 2",
+ "code": "base4",
+ "summary": {
+  "total": 130,
+  "ok": 130,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Alakazam",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42444,
+   "tcg_name": "Alakazam",
+   "tcg_number": "001/130"
+  },
+  "2": {
+   "name": "Blastoise",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42464,
+   "tcg_name": "Blastoise",
+   "tcg_number": "002/130"
+  },
+  "3": {
+   "name": "Chansey",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42471,
+   "tcg_name": "Chansey",
+   "tcg_number": "003/130"
+  },
+  "4": {
+   "name": "Charizard",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42479,
+   "tcg_name": "Charizard",
+   "tcg_number": "004/130"
+  },
+  "5": {
+   "name": "Clefable",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42482,
+   "tcg_name": "Clefable",
+   "tcg_number": "005/130"
+  },
+  "6": {
+   "name": "Clefairy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42483,
+   "tcg_name": "Clefairy",
+   "tcg_number": "006/130"
+  },
+  "7": {
+   "name": "Gyarados",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42489,
+   "tcg_name": "Gyarados",
+   "tcg_number": "007/130"
+  },
+  "8": {
+   "name": "Hitmonchan",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42496,
+   "tcg_name": "Hitmonchan",
+   "tcg_number": "008/130"
+  },
+  "9": {
+   "name": "Magneton",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42497,
+   "tcg_name": "Magneton",
+   "tcg_number": "009/130"
+  },
+  "10": {
+   "name": "Mewtwo",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42445,
+   "tcg_name": "Mewtwo",
+   "tcg_number": "010/130"
+  },
+  "11": {
+   "name": "Nidoking",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42448,
+   "tcg_name": "Nidoking",
+   "tcg_number": "011/130"
+  },
+  "12": {
+   "name": "Nidoqueen",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42453,
+   "tcg_name": "Nidoqueen",
+   "tcg_number": "012/130"
+  },
+  "13": {
+   "name": "Ninetales",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42457,
+   "tcg_name": "Ninetales",
+   "tcg_number": "013/130"
+  },
+  "14": {
+   "name": "Pidgeot",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42458,
+   "tcg_name": "Pidgeot",
+   "tcg_number": "014/130"
+  },
+  "15": {
+   "name": "Poliwrath",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42459,
+   "tcg_name": "Poliwrath",
+   "tcg_number": "015/130"
+  },
+  "16": {
+   "name": "Raichu",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42460,
+   "tcg_name": "Raichu",
+   "tcg_number": "016/130"
+  },
+  "17": {
+   "name": "Scyther",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42461,
+   "tcg_name": "Scyther",
+   "tcg_number": "017/130"
+  },
+  "18": {
+   "name": "Venusaur",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42462,
+   "tcg_name": "Venusaur",
+   "tcg_number": "018/130"
+  },
+  "19": {
+   "name": "Wigglytuff",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42463,
+   "tcg_name": "Wigglytuff",
+   "tcg_number": "019/130"
+  },
+  "20": {
+   "name": "Zapdos",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 42465,
+   "tcg_name": "Zapdos",
+   "tcg_number": "020/130"
+  },
+  "21": {
+   "name": "Beedrill",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42466,
+   "tcg_name": "Beedrill",
+   "tcg_number": "021/130"
+  },
+  "22": {
+   "name": "Dragonair",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42467,
+   "tcg_name": "Dragonair",
+   "tcg_number": "022/130"
+  },
+  "23": {
+   "name": "Dugtrio",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42468,
+   "tcg_name": "Dugtrio",
+   "tcg_number": "023/130"
+  },
+  "24": {
+   "name": "Electabuzz",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42469,
+   "tcg_name": "Electabuzz",
+   "tcg_number": "024/130"
+  },
+  "25": {
+   "name": "Electrode",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42470,
+   "tcg_name": "Electrode",
+   "tcg_number": "025/130"
+  },
+  "26": {
+   "name": "Kangaskhan",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42498,
+   "tcg_name": "Kangaskhan",
+   "tcg_number": "026/130"
+  },
+  "27": {
+   "name": "Mr. Mime",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42499,
+   "tcg_name": "Mr. Mime",
+   "tcg_number": "027/130"
+  },
+  "28": {
+   "name": "Pidgeotto",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42500,
+   "tcg_name": "Pidgeotto",
+   "tcg_number": "028/130"
+  },
+  "29": {
+   "name": "Pinsir",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42501,
+   "tcg_name": "Pinsir",
+   "tcg_number": "029/130"
+  },
+  "30": {
+   "name": "Snorlax",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42502,
+   "tcg_name": "Snorlax",
+   "tcg_number": "030/130"
+  },
+  "31": {
+   "name": "Venomoth",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42503,
+   "tcg_name": "Venomoth",
+   "tcg_number": "031/130"
+  },
+  "32": {
+   "name": "Victreebel",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42504,
+   "tcg_name": "Victreebel",
+   "tcg_number": "032/130"
+  },
+  "33": {
+   "name": "Arcanine",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42472,
+   "tcg_name": "Arcanine",
+   "tcg_number": "033/130"
+  },
+  "34": {
+   "name": "Butterfree",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42473,
+   "tcg_name": "Butterfree",
+   "tcg_number": "034/130"
+  },
+  "35": {
+   "name": "Charmeleon",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42474,
+   "tcg_name": "Charmeleon",
+   "tcg_number": "035/130"
+  },
+  "36": {
+   "name": "Dewgong",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42475,
+   "tcg_name": "Dewgong",
+   "tcg_number": "036/130"
+  },
+  "37": {
+   "name": "Dodrio",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42476,
+   "tcg_name": "Dodrio",
+   "tcg_number": "037/130"
+  },
+  "38": {
+   "name": "Dratini",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42477,
+   "tcg_name": "Dratini",
+   "tcg_number": "038/130"
+  },
+  "39": {
+   "name": "Exeggutor",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42478,
+   "tcg_name": "Exeggutor",
+   "tcg_number": "039/130"
+  },
+  "40": {
+   "name": "Farfetch'd",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42480,
+   "tcg_name": "Farfetch'd",
+   "tcg_number": "040/130"
+  },
+  "41": {
+   "name": "Fearow",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42481,
+   "tcg_name": "Fearow",
+   "tcg_number": "041/130"
+  },
+  "42": {
+   "name": "Growlithe",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42505,
+   "tcg_name": "Growlithe",
+   "tcg_number": "042/130"
+  },
+  "43": {
+   "name": "Haunter",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42506,
+   "tcg_name": "Haunter",
+   "tcg_number": "043/130"
+  },
+  "44": {
+   "name": "Ivysaur",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42507,
+   "tcg_name": "Ivysaur",
+   "tcg_number": "044/130"
+  },
+  "45": {
+   "name": "Jynx",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42508,
+   "tcg_name": "Jynx",
+   "tcg_number": "045/130"
+  },
+  "46": {
+   "name": "Kadabra",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42509,
+   "tcg_name": "Kadabra",
+   "tcg_number": "046/130"
+  },
+  "47": {
+   "name": "Kakuna",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42510,
+   "tcg_name": "Kakuna",
+   "tcg_number": "047/130"
+  },
+  "48": {
+   "name": "Lickitung",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42511,
+   "tcg_name": "Lickitung",
+   "tcg_number": "048/130"
+  },
+  "49": {
+   "name": "Machoke",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42512,
+   "tcg_name": "Machoke",
+   "tcg_number": "049/130"
+  },
+  "50": {
+   "name": "Magikarp",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42513,
+   "tcg_name": "Magikarp",
+   "tcg_number": "050/130"
+  },
+  "51": {
+   "name": "Magmar",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42514,
+   "tcg_name": "Magmar",
+   "tcg_number": "051/130"
+  },
+  "52": {
+   "name": "Marowak",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42515,
+   "tcg_name": "Marowak",
+   "tcg_number": "052/130"
+  },
+  "53": {
+   "name": "Nidorina",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42516,
+   "tcg_name": "Nidorina",
+   "tcg_number": "053/130"
+  },
+  "54": {
+   "name": "Nidorino",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42517,
+   "tcg_name": "Nidorino",
+   "tcg_number": "054/130"
+  },
+  "55": {
+   "name": "Parasect",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42518,
+   "tcg_name": "Parasect",
+   "tcg_number": "055/130"
+  },
+  "56": {
+   "name": "Persian",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42519,
+   "tcg_name": "Persian",
+   "tcg_number": "056/130"
+  },
+  "57": {
+   "name": "Poliwhirl",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42520,
+   "tcg_name": "Poliwhirl",
+   "tcg_number": "057/130"
+  },
+  "58": {
+   "name": "Raticate",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42521,
+   "tcg_name": "Raticate",
+   "tcg_number": "058/130"
+  },
+  "59": {
+   "name": "Rhydon",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42522,
+   "tcg_name": "Rhydon",
+   "tcg_number": "059/130"
+  },
+  "60": {
+   "name": "Seaking",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42523,
+   "tcg_name": "Seaking",
+   "tcg_number": "060/130"
+  },
+  "61": {
+   "name": "Seel",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42524,
+   "tcg_name": "Seel",
+   "tcg_number": "061/130"
+  },
+  "62": {
+   "name": "Tauros",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42525,
+   "tcg_name": "Tauros",
+   "tcg_number": "062/130"
+  },
+  "63": {
+   "name": "Wartortle",
+   "versions": [
+    "normal",
+    "wStamp"
+   ],
+   "status": "ok",
+   "product_id": 42526,
+   "tcg_name": "Wartortle",
+   "tcg_number": "063/130"
+  },
+  "64": {
+   "name": "Weepinbell",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42527,
+   "tcg_name": "Weepinbell",
+   "tcg_number": "064/130"
+  },
+  "65": {
+   "name": "Abra",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42484,
+   "tcg_name": "Abra",
+   "tcg_number": "065/130"
+  },
+  "66": {
+   "name": "Bellsprout",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42485,
+   "tcg_name": "Bellsprout",
+   "tcg_number": "066/130"
+  },
+  "67": {
+   "name": "Bulbasaur",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42486,
+   "tcg_name": "Bulbasaur",
+   "tcg_number": "067/130"
+  },
+  "68": {
+   "name": "Caterpie",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42487,
+   "tcg_name": "Caterpie",
+   "tcg_number": "068/130"
+  },
+  "69": {
+   "name": "Charmander",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42488,
+   "tcg_name": "Charmander",
+   "tcg_number": "069/130"
+  },
+  "70": {
+   "name": "Cubone",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42490,
+   "tcg_name": "Cubone",
+   "tcg_number": "070/130"
+  },
+  "71": {
+   "name": "Diglett",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42491,
+   "tcg_name": "Diglett",
+   "tcg_number": "071/130"
+  },
+  "72": {
+   "name": "Doduo",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42492,
+   "tcg_name": "Doduo",
+   "tcg_number": "072/130"
+  },
+  "73": {
+   "name": "Drowzee",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42493,
+   "tcg_name": "Drowzee",
+   "tcg_number": "073/130"
+  },
+  "74": {
+   "name": "Exeggcute",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42494,
+   "tcg_name": "Exeggcute",
+   "tcg_number": "074/130"
+  },
+  "75": {
+   "name": "Gastly",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42495,
+   "tcg_name": "Gastly",
+   "tcg_number": "075/130"
+  },
+  "76": {
+   "name": "Goldeen",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42528,
+   "tcg_name": "Goldeen",
+   "tcg_number": "076/130"
+  },
+  "77": {
+   "name": "Jigglypuff",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42529,
+   "tcg_name": "Jigglypuff",
+   "tcg_number": "077/130"
+  },
+  "78": {
+   "name": "Machop",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42530,
+   "tcg_name": "Machop",
+   "tcg_number": "078/130"
+  },
+  "79": {
+   "name": "Magnemite",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42531,
+   "tcg_name": "Magnemite",
+   "tcg_number": "079/130"
+  },
+  "80": {
+   "name": "Meowth",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42532,
+   "tcg_name": "Meowth",
+   "tcg_number": "080/130"
+  },
+  "81": {
+   "name": "Metapod",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42533,
+   "tcg_name": "Metapod",
+   "tcg_number": "081/130"
+  },
+  "82": {
+   "name": "Nidoran ♀",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 106357,
+   "tcg_name": "Nidoran F",
+   "tcg_number": "082/130",
+   "note": "nuestro \"Nidoran ♀\" vs TCG \"Nidoran F\""
+  },
+  "83": {
+   "name": "Nidoran ♂",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42534,
+   "tcg_name": "Nidoran M",
+   "tcg_number": "083/130",
+   "note": "nuestro \"Nidoran ♂\" vs TCG \"Nidoran M\""
+  },
+  "84": {
+   "name": "Onix",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42535,
+   "tcg_name": "Onix",
+   "tcg_number": "084/130"
+  },
+  "85": {
+   "name": "Paras",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42536,
+   "tcg_name": "Paras",
+   "tcg_number": "085/130"
+  },
+  "86": {
+   "name": "Pidgey",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42537,
+   "tcg_name": "Pidgey",
+   "tcg_number": "086/130"
+  },
+  "87": {
+   "name": "Pikachu",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42538,
+   "tcg_name": "Pikachu",
+   "tcg_number": "087/130"
+  },
+  "88": {
+   "name": "Poliwag",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42539,
+   "tcg_name": "Poliwag",
+   "tcg_number": "088/130"
+  },
+  "89": {
+   "name": "Rattata",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42540,
+   "tcg_name": "Rattata",
+   "tcg_number": "089/130"
+  },
+  "90": {
+   "name": "Rhyhorn",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42541,
+   "tcg_name": "Rhyhorn",
+   "tcg_number": "090/130"
+  },
+  "91": {
+   "name": "Sandshrew",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42542,
+   "tcg_name": "Sandshrew",
+   "tcg_number": "091/130"
+  },
+  "92": {
+   "name": "Spearow",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42543,
+   "tcg_name": "Spearow",
+   "tcg_number": "092/130"
+  },
+  "93": {
+   "name": "Squirtle",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42544,
+   "tcg_name": "Squirtle",
+   "tcg_number": "093/130"
+  },
+  "94": {
+   "name": "Starmie",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42545,
+   "tcg_name": "Starmie",
+   "tcg_number": "094/130"
+  },
+  "95": {
+   "name": "Staryu",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42546,
+   "tcg_name": "Staryu",
+   "tcg_number": "095/130"
+  },
+  "96": {
+   "name": "Tangela",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42547,
+   "tcg_name": "Tangela",
+   "tcg_number": "096/130"
+  },
+  "97": {
+   "name": "Venonat",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42548,
+   "tcg_name": "Venonat",
+   "tcg_number": "097/130"
+  },
+  "98": {
+   "name": "Voltorb",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42549,
+   "tcg_name": "Voltorb",
+   "tcg_number": "098/130"
+  },
+  "99": {
+   "name": "Vulpix",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42550,
+   "tcg_name": "Vulpix",
+   "tcg_number": "099/130"
+  },
+  "100": {
+   "name": "Weedle",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42551,
+   "tcg_name": "Weedle",
+   "tcg_number": "100/130"
+  },
+  "101": {
+   "name": "Computer Search",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42446,
+   "tcg_name": "Computer Search",
+   "tcg_number": "101/130"
+  },
+  "102": {
+   "name": "Imposter Professor Oak",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42552,
+   "tcg_name": "Imposter Professor Oak",
+   "tcg_number": "102/130"
+  },
+  "103": {
+   "name": "Item Finder",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42553,
+   "tcg_name": "Item Finder",
+   "tcg_number": "103/130"
+  },
+  "104": {
+   "name": "Lass",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42554,
+   "tcg_name": "Lass",
+   "tcg_number": "104/130"
+  },
+  "105": {
+   "name": "Pokémon Breeder",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42555,
+   "tcg_name": "Pokemon Breeder",
+   "tcg_number": "105/130"
+  },
+  "106": {
+   "name": "Pokémon Trader",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 106358,
+   "tcg_name": "Pokemon Trader",
+   "tcg_number": "106/130"
+  },
+  "107": {
+   "name": "Scoop Up",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42556,
+   "tcg_name": "Scoop Up",
+   "tcg_number": "107/130"
+  },
+  "108": {
+   "name": "Super Energy Removal",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42557,
+   "tcg_name": "Super Energy Removal",
+   "tcg_number": "108/130"
+  },
+  "109": {
+   "name": "Defender",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42447,
+   "tcg_name": "Defender",
+   "tcg_number": "109/130"
+  },
+  "110": {
+   "name": "Energy Retrieval",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42449,
+   "tcg_name": "Energy Retrieval",
+   "tcg_number": "110/130"
+  },
+  "111": {
+   "name": "Full Heal",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42450,
+   "tcg_name": "Full Heal",
+   "tcg_number": "111/130"
+  },
+  "112": {
+   "name": "Maintenance",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42558,
+   "tcg_name": "Maintenance",
+   "tcg_number": "112/130"
+  },
+  "113": {
+   "name": "PlusPower",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42559,
+   "tcg_name": "PlusPower",
+   "tcg_number": "113/130"
+  },
+  "114": {
+   "name": "Pokémon Center",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 106359,
+   "tcg_name": "Pokemon Center",
+   "tcg_number": "114/130"
+  },
+  "115": {
+   "name": "Pokédex",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 106360,
+   "tcg_name": "Pokedex",
+   "tcg_number": "115/130"
+  },
+  "116": {
+   "name": "Professor Oak",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42560,
+   "tcg_name": "Professor Oak",
+   "tcg_number": "116/130"
+  },
+  "117": {
+   "name": "Super Potion",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42561,
+   "tcg_name": "Super Potion",
+   "tcg_number": "117/130"
+  },
+  "118": {
+   "name": "Bill",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42451,
+   "tcg_name": "Bill",
+   "tcg_number": "118/130"
+  },
+  "119": {
+   "name": "Energy Removal",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42452,
+   "tcg_name": "Energy Removal",
+   "tcg_number": "119/130"
+  },
+  "120": {
+   "name": "Gust of Wind",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42562,
+   "tcg_name": "Gust of Wind",
+   "tcg_number": "120/130"
+  },
+  "121": {
+   "name": "Poké Ball",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 106361,
+   "tcg_name": "Poke Ball",
+   "tcg_number": "121/130"
+  },
+  "122": {
+   "name": "Potion",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42563,
+   "tcg_name": "Potion",
+   "tcg_number": "122/130"
+  },
+  "123": {
+   "name": "Switch",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42564,
+   "tcg_name": "Switch",
+   "tcg_number": "123/130"
+  },
+  "124": {
+   "name": "Double Colorless Energy",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42454,
+   "tcg_name": "Double Colorless Energy",
+   "tcg_number": "124/130"
+  },
+  "125": {
+   "name": "Fighting Energy",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42455,
+   "tcg_name": "Fighting Energy",
+   "tcg_number": "125/130"
+  },
+  "126": {
+   "name": "Fire Energy",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42456,
+   "tcg_name": "Fire Energy",
+   "tcg_number": "126/130"
+  },
+  "127": {
+   "name": "Grass Energy",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42565,
+   "tcg_name": "Grass Energy",
+   "tcg_number": "127/130"
+  },
+  "128": {
+   "name": "Lightning Energy",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42566,
+   "tcg_name": "Lightning Energy",
+   "tcg_number": "128/130"
+  },
+  "129": {
+   "name": "Psychic Energy",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42567,
+   "tcg_name": "Psychic Energy",
+   "tcg_number": "129/130"
+  },
+  "130": {
+   "name": "Water Energy",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 42568,
+   "tcg_name": "Water Energy",
+   "tcg_number": "130/130"
+  }
+ }
+}

@@ -1,0 +1,1344 @@
+{
+ "set": "plasma-blast",
+ "tcg_set": "Plasma Blast",
+ "code": "bw10",
+ "summary": {
+  "total": 105,
+  "ok": 105,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Surskit",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89652,
+   "tcg_name": "Surskit",
+   "tcg_number": "1/101"
+  },
+  "2": {
+   "name": "Masquerain",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87250,
+   "tcg_name": "Masquerain (Team Plasma)",
+   "tcg_number": "2/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 87250
+    }
+   ]
+  },
+  "3": {
+   "name": "Lileep",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86790,
+   "tcg_name": "Lileep",
+   "tcg_number": "3/101"
+  },
+  "4": {
+   "name": "Cradily",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84455,
+   "tcg_name": "Cradily",
+   "tcg_number": "4/101"
+  },
+  "5": {
+   "name": "Tropius",
+   "versions": [
+    "leagueStamp",
+    "normal",
+    "reverseHolofoil",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 90063,
+   "tcg_name": "Tropius",
+   "tcg_number": "5/101"
+  },
+  "6": {
+   "name": "Karrablast",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86427,
+   "tcg_name": "Karrablast",
+   "tcg_number": "6/101"
+  },
+  "7": {
+   "name": "Shelmet",
+   "versions": [
+    "normal",
+    "reverseHolofoil",
+    "trentOrndorff"
+   ],
+   "status": "ok",
+   "product_id": 89148,
+   "tcg_name": "Shelmet",
+   "tcg_number": "7/101"
+  },
+  "8": {
+   "name": "Accelgor",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83461,
+   "tcg_name": "Accelgor (Team Plasma)",
+   "tcg_number": "8/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 83461
+    }
+   ]
+  },
+  "9": {
+   "name": "Virizion-EX",
+   "versions": [
+    "andrewEstrada",
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90393,
+   "tcg_name": "Virizion EX",
+   "tcg_number": "9/101"
+  },
+  "10": {
+   "name": "Genesect",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85661,
+   "tcg_name": "Genesect",
+   "tcg_number": "10/101"
+  },
+  "11": {
+   "name": "Genesect-EX",
+   "versions": [
+    "andrewEstrada",
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85665,
+   "tcg_name": "Genesect EX (Team Plasma)",
+   "tcg_number": "11/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 85665
+    }
+   ]
+  },
+  "12": {
+   "name": "Larvesta",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86631,
+   "tcg_name": "Larvesta",
+   "tcg_number": "12/101"
+  },
+  "13": {
+   "name": "Volcarona",
+   "versions": [
+    "crackedIceHolofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90405,
+   "tcg_name": "Volcarona (Team Plasma)",
+   "tcg_number": "13/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 90405
+    }
+   ]
+  },
+  "14": {
+   "name": "Squirtle",
+   "versions": [
+    "buildAbearStamp",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89499,
+   "tcg_name": "Squirtle",
+   "tcg_number": "14/101"
+  },
+  "15": {
+   "name": "Wartortle",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90493,
+   "tcg_name": "Wartortle",
+   "tcg_number": "15/101"
+  },
+  "16": {
+   "name": "Blastoise",
+   "versions": [
+    "cosmosHolofoil",
+    "holofoil",
+    "jacobVanWagner",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83898,
+   "tcg_name": "Blastoise",
+   "tcg_number": "16/101"
+  },
+  "17": {
+   "name": "Lapras",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86624,
+   "tcg_name": "Lapras",
+   "tcg_number": "17/101"
+  },
+  "18": {
+   "name": "Remoraid",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88700,
+   "tcg_name": "Remoraid",
+   "tcg_number": "18/101"
+  },
+  "19": {
+   "name": "Octillery",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87835,
+   "tcg_name": "Octillery (Team Plasma)",
+   "tcg_number": "19/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 87835
+    }
+   ]
+  },
+  "20": {
+   "name": "Suicune",
+   "versions": [
+    "michikazuTsuda",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89607,
+   "tcg_name": "Suicune",
+   "tcg_number": "20/101"
+  },
+  "21": {
+   "name": "Snorunt",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89404,
+   "tcg_name": "Snorunt",
+   "tcg_number": "21/101"
+  },
+  "22": {
+   "name": "Glalie",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85757,
+   "tcg_name": "Glalie (Team Plasma)",
+   "tcg_number": "22/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 85757
+    }
+   ]
+  },
+  "23": {
+   "name": "Froslass",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85574,
+   "tcg_name": "Froslass (Team Plasma)",
+   "tcg_number": "23/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 85574
+    }
+   ]
+  },
+  "24": {
+   "name": "Relicanth",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88691,
+   "tcg_name": "Relicanth (Team Plasma)",
+   "tcg_number": "24/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 88691
+    }
+   ]
+  },
+  "25": {
+   "name": "Snover",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89407,
+   "tcg_name": "Snover",
+   "tcg_number": "25/101"
+  },
+  "26": {
+   "name": "Abomasnow",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83442,
+   "tcg_name": "Abomasnow",
+   "tcg_number": "26/101"
+  },
+  "27": {
+   "name": "Tirtouga",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89922,
+   "tcg_name": "Tirtouga",
+   "tcg_number": "27/101"
+  },
+  "28": {
+   "name": "Carracosta",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84110,
+   "tcg_name": "Carracosta",
+   "tcg_number": "28/101"
+  },
+  "29": {
+   "name": "Ducklett",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84995,
+   "tcg_name": "Ducklett",
+   "tcg_number": "29/101"
+  },
+  "30": {
+   "name": "Kyurem-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86568,
+   "tcg_name": "Kyurem EX",
+   "tcg_number": "30/101"
+  },
+  "31": {
+   "name": "Tynamo",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90097,
+   "tcg_name": "Tynamo",
+   "tcg_number": "31/101"
+  },
+  "32": {
+   "name": "Eelektrik",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85069,
+   "tcg_name": "Eelektrik",
+   "tcg_number": "32/101"
+  },
+  "33": {
+   "name": "Eelektross",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85072,
+   "tcg_name": "Eelektross (Team Plasma)",
+   "tcg_number": "33/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 85072
+    }
+   ]
+  },
+  "34": {
+   "name": "Drifloon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84963,
+   "tcg_name": "Drifloon",
+   "tcg_number": "34/101"
+  },
+  "35": {
+   "name": "Drifblim",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84951,
+   "tcg_name": "Drifblim",
+   "tcg_number": "35/101"
+  },
+  "36": {
+   "name": "Uxie",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90261,
+   "tcg_name": "Uxie",
+   "tcg_number": "36/101"
+  },
+  "37": {
+   "name": "Mesprit",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87333,
+   "tcg_name": "Mesprit",
+   "tcg_number": "37/101"
+  },
+  "38": {
+   "name": "Azelf",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83676,
+   "tcg_name": "Azelf",
+   "tcg_number": "38/101"
+  },
+  "39": {
+   "name": "Munna",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87645,
+   "tcg_name": "Munna",
+   "tcg_number": "39/101"
+  },
+  "40": {
+   "name": "Musharna",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87662,
+   "tcg_name": "Musharna",
+   "tcg_number": "40/101"
+  },
+  "41": {
+   "name": "Sigilyph",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89208,
+   "tcg_name": "Sigilyph",
+   "tcg_number": "41/101"
+  },
+  "42": {
+   "name": "Solosis",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89422,
+   "tcg_name": "Solosis",
+   "tcg_number": "42/101"
+  },
+  "43": {
+   "name": "Duosion",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85018,
+   "tcg_name": "Duosion",
+   "tcg_number": "43/101"
+  },
+  "44": {
+   "name": "Reuniclus",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88723,
+   "tcg_name": "Reuniclus",
+   "tcg_number": "44/101"
+  },
+  "45": {
+   "name": "Golett",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85834,
+   "tcg_name": "Golett",
+   "tcg_number": "45/101"
+  },
+  "46": {
+   "name": "Golurk",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85838,
+   "tcg_name": "Golurk",
+   "tcg_number": "46/101"
+  },
+  "47": {
+   "name": "Machop",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86999,
+   "tcg_name": "Machop",
+   "tcg_number": "47/101"
+  },
+  "48": {
+   "name": "Machoke",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86985,
+   "tcg_name": "Machoke",
+   "tcg_number": "48/101"
+  },
+  "49": {
+   "name": "Machamp",
+   "versions": [
+    "cosmosHolofoil",
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86969,
+   "tcg_name": "Machamp (49)",
+   "tcg_number": "49/101",
+   "variant_products": [
+    {
+     "suffix": "49",
+     "product_id": 86969
+    }
+   ]
+  },
+  "50": {
+   "name": "Machamp",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86970,
+   "tcg_name": "Machamp (50)",
+   "tcg_number": "50/101",
+   "variant_products": [
+    {
+     "suffix": "50",
+     "product_id": 86970
+    }
+   ]
+  },
+  "51": {
+   "name": "Throh",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89902,
+   "tcg_name": "Throh",
+   "tcg_number": "51/101"
+  },
+  "52": {
+   "name": "Sawk",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88940,
+   "tcg_name": "Sawk",
+   "tcg_number": "52/101"
+  },
+  "53": {
+   "name": "Archen",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83608,
+   "tcg_name": "Archen",
+   "tcg_number": "53/101"
+  },
+  "54": {
+   "name": "Archeops",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83611,
+   "tcg_name": "Archeops",
+   "tcg_number": "54/101"
+  },
+  "55": {
+   "name": "Houndour",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86234,
+   "tcg_name": "Houndour",
+   "tcg_number": "55/101"
+  },
+  "56": {
+   "name": "Houndoom",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86213,
+   "tcg_name": "Houndoom",
+   "tcg_number": "56/101"
+  },
+  "57": {
+   "name": "Aron",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83641,
+   "tcg_name": "Aron",
+   "tcg_number": "57/101"
+  },
+  "58": {
+   "name": "Lairon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86585,
+   "tcg_name": "Lairon",
+   "tcg_number": "58/101"
+  },
+  "59": {
+   "name": "Aggron",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83482,
+   "tcg_name": "Aggron",
+   "tcg_number": "59/101"
+  },
+  "60": {
+   "name": "Jirachi-EX",
+   "versions": [
+    "andrewEstrada",
+    "holofoil",
+    "jacobVanWagner"
+   ],
+   "status": "ok",
+   "product_id": 86333,
+   "tcg_name": "Jirachi EX",
+   "tcg_number": "60/101"
+  },
+  "61": {
+   "name": "Escavalier",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85315,
+   "tcg_name": "Escavalier (Team Plasma)",
+   "tcg_number": "61/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 85315
+    }
+   ]
+  },
+  "62": {
+   "name": "Bagon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83702,
+   "tcg_name": "Bagon",
+   "tcg_number": "62/101"
+  },
+  "63": {
+   "name": "Shelgon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89131,
+   "tcg_name": "Shelgon",
+   "tcg_number": "63/101"
+  },
+  "64": {
+   "name": "Salamence",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88901,
+   "tcg_name": "Salamence",
+   "tcg_number": "64/101"
+  },
+  "65": {
+   "name": "Dialga-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 84808,
+   "tcg_name": "Dialga EX (Team Plasma)",
+   "tcg_number": "65/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 84808
+    }
+   ]
+  },
+  "66": {
+   "name": "Palkia-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 87915,
+   "tcg_name": "Palkia EX (Team Plasma)",
+   "tcg_number": "66/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 87915
+    }
+   ]
+  },
+  "67": {
+   "name": "Axew",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83672,
+   "tcg_name": "Axew",
+   "tcg_number": "67/101"
+  },
+  "68": {
+   "name": "Fraxure",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85561,
+   "tcg_name": "Fraxure",
+   "tcg_number": "68/101"
+  },
+  "69": {
+   "name": "Haxorus",
+   "versions": [
+    "cosmosHolofoil",
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86036,
+   "tcg_name": "Haxorus",
+   "tcg_number": "69/101"
+  },
+  "70": {
+   "name": "Druddigon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84980,
+   "tcg_name": "Druddigon",
+   "tcg_number": "70/101"
+  },
+  "71": {
+   "name": "Kangaskhan",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86424,
+   "tcg_name": "Kangaskhan",
+   "tcg_number": "71/101"
+  },
+  "72": {
+   "name": "Porygon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88314,
+   "tcg_name": "Porygon",
+   "tcg_number": "72/101"
+  },
+  "73": {
+   "name": "Porygon2",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88329,
+   "tcg_name": "Porygon2",
+   "tcg_number": "73/101"
+  },
+  "74": {
+   "name": "Porygon-Z",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88319,
+   "tcg_name": "Porygon-Z (Team Plasma)",
+   "tcg_number": "74/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 88319
+    }
+   ]
+  },
+  "75": {
+   "name": "Teddiursa",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89861,
+   "tcg_name": "Teddiursa",
+   "tcg_number": "75/101"
+  },
+  "76": {
+   "name": "Ursaring",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90258,
+   "tcg_name": "Ursaring (Team Plasma)",
+   "tcg_number": "76/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 90258
+    }
+   ]
+  },
+  "77": {
+   "name": "Chatot",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84244,
+   "tcg_name": "Chatot (Team Plasma)",
+   "tcg_number": "77/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 84244
+    }
+   ]
+  },
+  "78": {
+   "name": "Caitlin",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84085,
+   "tcg_name": "Caitlin",
+   "tcg_number": "78/101"
+  },
+  "79": {
+   "name": "Cover Fossil",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84450,
+   "tcg_name": "Cover Fossil",
+   "tcg_number": "79/101"
+  },
+  "80": {
+   "name": "Energy Retrieval",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85231,
+   "tcg_name": "Energy Retrieval",
+   "tcg_number": "80/101"
+  },
+  "81": {
+   "name": "Iris",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86288,
+   "tcg_name": "Iris",
+   "tcg_number": "81/101"
+  },
+  "82": {
+   "name": "Plume Fossil",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88160,
+   "tcg_name": "Plume Fossil",
+   "tcg_number": "82/101"
+  },
+  "83": {
+   "name": "Pokémon Catcher",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88210,
+   "tcg_name": "Pokemon Catcher",
+   "tcg_number": "83/101"
+  },
+  "84": {
+   "name": "Professor Juniper",
+   "versions": [
+    "alejandroNg",
+    "jacobVanWagner",
+    "normal",
+    "patrickMartinez",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88397,
+   "tcg_name": "Professor Juniper",
+   "tcg_number": "84/101"
+  },
+  "85": {
+   "name": "Rare Candy",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88597,
+   "tcg_name": "Rare Candy",
+   "tcg_number": "85/101"
+  },
+  "86": {
+   "name": "Reversal Trigger",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88725,
+   "tcg_name": "Reversal Trigger (Team Plasma)",
+   "tcg_number": "86/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 88725
+    }
+   ]
+  },
+  "87": {
+   "name": "Root Fossil Lileep",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88814,
+   "tcg_name": "Root Fossil Lileep",
+   "tcg_number": "87/101"
+  },
+  "88": {
+   "name": "Silver Bangle",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89215,
+   "tcg_name": "Silver Bangle",
+   "tcg_number": "88/101"
+  },
+  "89": {
+   "name": "Silver Mirror",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89216,
+   "tcg_name": "Silver Mirror",
+   "tcg_number": "89/101"
+  },
+  "90": {
+   "name": "Ultra Ball",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90136,
+   "tcg_name": "Ultra Ball",
+   "tcg_number": "90/101"
+  },
+  "91": {
+   "name": "Plasma Energy",
+   "versions": [
+    "andrewEstrada",
+    "harutoKobayashi",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88157,
+   "tcg_name": "Plasma Energy (Team Plasma)",
+   "tcg_number": "91/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 88157
+    }
+   ]
+  },
+  "92": {
+   "name": "G Booster",
+   "versions": [
+    "andrewEstrada",
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85595,
+   "tcg_name": "G Booster (Team Plasma)",
+   "tcg_number": "92/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 85595
+    }
+   ]
+  },
+  "93": {
+   "name": "G Scope",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85596,
+   "tcg_name": "G Scope (Team Plasma)",
+   "tcg_number": "93/101",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 85596
+    }
+   ]
+  },
+  "94": {
+   "name": "Master Ball",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 87256,
+   "tcg_name": "Master Ball",
+   "tcg_number": "94/101"
+  },
+  "95": {
+   "name": "Scoop Up Cyclone",
+   "versions": [
+    "holofoil",
+    "rowanStavenow"
+   ],
+   "status": "ok",
+   "product_id": 88974,
+   "tcg_name": "Scoop Up Cyclone",
+   "tcg_number": "95/101"
+  },
+  "96": {
+   "name": "Virizion-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90394,
+   "tcg_name": "Virizion EX (Full Art)",
+   "tcg_number": "96/101",
+   "variant_products": [
+    {
+     "suffix": "Full Art",
+     "product_id": 90394
+    }
+   ]
+  },
+  "97": {
+   "name": "Genesect-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85666,
+   "tcg_name": "Genesect EX (Team Plasma) (97 Full Art)",
+   "tcg_number": "97/101",
+   "note": "nuestro \"Genesect-EX\" vs TCG \"Genesect EX (Team Plasma)\""
+  },
+  "98": {
+   "name": "Jirachi-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86334,
+   "tcg_name": "Jirachi EX (98 Full Art)",
+   "tcg_number": "98/101",
+   "variant_products": [
+    {
+     "suffix": "98 Full Art",
+     "product_id": 86334
+    }
+   ]
+  },
+  "99": {
+   "name": "Dialga-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 84809,
+   "tcg_name": "Dialga EX (Team Plasma) (99 Full Art)",
+   "tcg_number": "99/101",
+   "note": "nuestro \"Dialga-EX\" vs TCG \"Dialga EX (Team Plasma)\""
+  },
+  "100": {
+   "name": "Palkia-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 87916,
+   "tcg_name": "Palkia EX (Team Plasma) (100 Full Art)",
+   "tcg_number": "100/101",
+   "note": "nuestro \"Palkia-EX\" vs TCG \"Palkia EX (Team Plasma)\""
+  },
+  "101": {
+   "name": "Iris",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86289,
+   "tcg_name": "Iris (101 Full Art)",
+   "tcg_number": "101/101",
+   "variant_products": [
+    {
+     "suffix": "101 Full Art",
+     "product_id": 86289
+    }
+   ]
+  },
+  "102": {
+   "name": "Exeggcute",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85351,
+   "tcg_name": "Exeggcute (102 Secret Rare)",
+   "tcg_number": "102/101",
+   "variant_products": [
+    {
+     "suffix": "102 Secret Rare",
+     "product_id": 85351
+    }
+   ]
+  },
+  "103": {
+   "name": "Virizion",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90390,
+   "tcg_name": "Virizion (Secret)",
+   "tcg_number": "103/101",
+   "variant_products": [
+    {
+     "suffix": "Secret",
+     "product_id": 90390
+    }
+   ]
+  },
+  "104": {
+   "name": "Dusknoir",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85041,
+   "tcg_name": "Dusknoir (104 Secret Rare)",
+   "tcg_number": "104/101",
+   "variant_products": [
+    {
+     "suffix": "104 Secret Rare",
+     "product_id": 85041
+    }
+   ]
+  },
+  "105": {
+   "name": "Rare Candy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 88598,
+   "tcg_name": "Rare Candy (105 Secret Rare)",
+   "tcg_number": "105/101",
+   "variant_products": [
+    {
+     "suffix": "105 Secret Rare",
+     "product_id": 88598
+    }
+   ]
+  }
+ }
+}

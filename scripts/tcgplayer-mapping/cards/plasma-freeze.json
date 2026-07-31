@@ -1,0 +1,1658 @@
+{
+ "set": "plasma-freeze",
+ "tcg_set": "Plasma Freeze",
+ "code": "bw9",
+ "summary": {
+  "total": 122,
+  "ok": 122,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
+ },
+ "cards": {
+  "1": {
+   "name": "Weedle",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90547,
+   "tcg_name": "Weedle",
+   "tcg_number": "1/116"
+  },
+  "2": {
+   "name": "Kakuna",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86416,
+   "tcg_name": "Kakuna",
+   "tcg_number": "2/116"
+  },
+  "3": {
+   "name": "Beedrill",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83773,
+   "tcg_name": "Beedrill",
+   "tcg_number": "3/116"
+  },
+  "4": {
+   "name": "Exeggcute",
+   "versions": [
+    "jacobVanWagner",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85350,
+   "tcg_name": "Exeggcute",
+   "tcg_number": "4/116"
+  },
+  "5": {
+   "name": "Exeggutor",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85363,
+   "tcg_name": "Exeggutor",
+   "tcg_number": "5/116"
+  },
+  "6": {
+   "name": "Treecko",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90043,
+   "tcg_name": "Treecko",
+   "tcg_number": "6/116"
+  },
+  "7": {
+   "name": "Grovyle",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85945,
+   "tcg_name": "Grovyle",
+   "tcg_number": "7/116"
+  },
+  "8": {
+   "name": "Sceptile",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88953,
+   "tcg_name": "Sceptile",
+   "tcg_number": "8/116"
+  },
+  "9": {
+   "name": "Cacnea",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84077,
+   "tcg_name": "Cacnea",
+   "tcg_number": "9/116"
+  },
+  "10": {
+   "name": "Cacturne",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84082,
+   "tcg_name": "Cacturne",
+   "tcg_number": "10/116"
+  },
+  "11": {
+   "name": "Leafeon",
+   "versions": [
+    "crackedIceHolofoil",
+    "leagueStamp",
+    "normal",
+    "reverseHolofoil",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 86683,
+   "tcg_name": "Leafeon (Team Plasma)",
+   "tcg_number": "11/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 86683
+    }
+   ]
+  },
+  "12": {
+   "name": "Flareon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85502,
+   "tcg_name": "Flareon (Team Plasma)",
+   "tcg_number": "12/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 85502
+    }
+   ]
+  },
+  "13": {
+   "name": "Heatran-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86052,
+   "tcg_name": "Heatran EX (Team Plasma)",
+   "tcg_number": "13/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 86052
+    }
+   ]
+  },
+  "14": {
+   "name": "Litwick",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86813,
+   "tcg_name": "Litwick",
+   "tcg_number": "14/116"
+  },
+  "15": {
+   "name": "Lampent",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86590,
+   "tcg_name": "Lampent",
+   "tcg_number": "15/116"
+  },
+  "16": {
+   "name": "Chandelure",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84167,
+   "tcg_name": "Chandelure (Team Plasma)",
+   "tcg_number": "16/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 84167
+    }
+   ]
+  },
+  "17": {
+   "name": "Reshiram",
+   "versions": [
+    "cosmosHolofoil",
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88708,
+   "tcg_name": "Reshiram",
+   "tcg_number": "17/116"
+  },
+  "18": {
+   "name": "Horsea",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86193,
+   "tcg_name": "Horsea",
+   "tcg_number": "18/116"
+  },
+  "19": {
+   "name": "Seadra",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89017,
+   "tcg_name": "Seadra",
+   "tcg_number": "19/116"
+  },
+  "20": {
+   "name": "Vaporeon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90291,
+   "tcg_name": "Vaporeon (Team Plasma)",
+   "tcg_number": "20/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 90291
+    }
+   ]
+  },
+  "21": {
+   "name": "Wooper",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90638,
+   "tcg_name": "Wooper",
+   "tcg_number": "21/116"
+  },
+  "22": {
+   "name": "Quagsire",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88474,
+   "tcg_name": "Quagsire",
+   "tcg_number": "22/116"
+  },
+  "23": {
+   "name": "Glaceon",
+   "versions": [
+    "holofoil",
+    "leagueStamp",
+    "normal",
+    "reverseHolofoil",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 85749,
+   "tcg_name": "Glaceon (Team Plasma)",
+   "tcg_number": "23/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 85749
+    }
+   ]
+  },
+  "24": {
+   "name": "Tympole",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90091,
+   "tcg_name": "Tympole",
+   "tcg_number": "24/116"
+  },
+  "25": {
+   "name": "Palpitoad",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87925,
+   "tcg_name": "Palpitoad",
+   "tcg_number": "25/116"
+  },
+  "26": {
+   "name": "Seismitoad",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89060,
+   "tcg_name": "Seismitoad (Team Plasma)",
+   "tcg_number": "26/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 89060
+    }
+   ]
+  },
+  "27": {
+   "name": "Vanillite",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90272,
+   "tcg_name": "Vanillite",
+   "tcg_number": "27/116"
+  },
+  "28": {
+   "name": "Vanillish",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90267,
+   "tcg_name": "Vanillish",
+   "tcg_number": "28/116"
+  },
+  "29": {
+   "name": "Vanilluxe",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90276,
+   "tcg_name": "Vanilluxe (Team Plasma)",
+   "tcg_number": "29/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 90276
+    }
+   ]
+  },
+  "30": {
+   "name": "Cryogonal",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84515,
+   "tcg_name": "Cryogonal (Team Plasma)",
+   "tcg_number": "30/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 84515
+    }
+   ]
+  },
+  "31": {
+   "name": "Kyurem",
+   "versions": [
+    "harutoKobayashi",
+    "holofoil",
+    "normal",
+    "reverseHolofoil",
+    "yugoSato"
+   ],
+   "status": "ok",
+   "product_id": 86565,
+   "tcg_name": "Kyurem (Team Plasma)",
+   "tcg_number": "31/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 86565
+    }
+   ]
+  },
+  "32": {
+   "name": "Voltorb",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90424,
+   "tcg_name": "Voltorb",
+   "tcg_number": "32/116"
+  },
+  "33": {
+   "name": "Electrode",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85162,
+   "tcg_name": "Electrode",
+   "tcg_number": "33/116"
+  },
+  "34": {
+   "name": "Jolteon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86350,
+   "tcg_name": "Jolteon (Team Plasma)",
+   "tcg_number": "34/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 86350
+    }
+   ]
+  },
+  "35": {
+   "name": "Chinchou",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84312,
+   "tcg_name": "Chinchou",
+   "tcg_number": "35/116"
+  },
+  "36": {
+   "name": "Lanturn",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86612,
+   "tcg_name": "Lanturn",
+   "tcg_number": "36/116"
+  },
+  "37": {
+   "name": "Pachirisu",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87905,
+   "tcg_name": "Pachirisu",
+   "tcg_number": "37/116"
+  },
+  "38": {
+   "name": "Thundurus-EX",
+   "versions": [
+    "harutoKobayashi",
+    "holofoil",
+    "yugoSato"
+   ],
+   "status": "ok",
+   "product_id": 89907,
+   "tcg_name": "Thundurus EX (Team Plasma)",
+   "tcg_number": "38/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 89907
+    }
+   ]
+  },
+  "39": {
+   "name": "Zekrom",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90736,
+   "tcg_name": "Zekrom",
+   "tcg_number": "39/116"
+  },
+  "40": {
+   "name": "Nidoran ♀",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87721,
+   "tcg_name": "Nidoran F",
+   "tcg_number": "40/116",
+   "note": "nuestro \"Nidoran ♀\" vs TCG \"Nidoran F\""
+  },
+  "41": {
+   "name": "Nidorina",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87739,
+   "tcg_name": "Nidorina",
+   "tcg_number": "41/116"
+  },
+  "42": {
+   "name": "Nidoqueen",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87711,
+   "tcg_name": "Nidoqueen",
+   "tcg_number": "42/116"
+  },
+  "43": {
+   "name": "Nidoran ♂",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87730,
+   "tcg_name": "Nidoran M",
+   "tcg_number": "43/116",
+   "note": "nuestro \"Nidoran ♂\" vs TCG \"Nidoran M\""
+  },
+  "44": {
+   "name": "Nidorino",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87748,
+   "tcg_name": "Nidorino",
+   "tcg_number": "44/116"
+  },
+  "45": {
+   "name": "Grimer",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85915,
+   "tcg_name": "Grimer",
+   "tcg_number": "45/116"
+  },
+  "46": {
+   "name": "Muk",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87627,
+   "tcg_name": "Muk (Team Plasma)",
+   "tcg_number": "46/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 87627
+    }
+   ]
+  },
+  "47": {
+   "name": "Mr. Mime",
+   "versions": [
+    "andrewEstrada",
+    "jasonKlaczynski",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87595,
+   "tcg_name": "Mr. Mime",
+   "tcg_number": "47/116"
+  },
+  "48": {
+   "name": "Espeon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85328,
+   "tcg_name": "Espeon (Team Plasma)",
+   "tcg_number": "48/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 85328
+    }
+   ]
+  },
+  "49": {
+   "name": "Sableye",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88858,
+   "tcg_name": "Sableye (Team Plasma)",
+   "tcg_number": "49/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 88858
+    }
+   ]
+  },
+  "50": {
+   "name": "Beldum",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83793,
+   "tcg_name": "Beldum",
+   "tcg_number": "50/116"
+  },
+  "51": {
+   "name": "Metang",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87383,
+   "tcg_name": "Metang",
+   "tcg_number": "51/116"
+  },
+  "52": {
+   "name": "Metagross",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87343,
+   "tcg_name": "Metagross (Team Plasma)",
+   "tcg_number": "52/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 87343
+    }
+   ]
+  },
+  "53": {
+   "name": "Deoxys-EX",
+   "versions": [
+    "harutoKobayashi",
+    "holofoil",
+    "jumbo",
+    "yugoSato"
+   ],
+   "status": "ok",
+   "product_id": 84775,
+   "tcg_name": "Deoxys EX (Team Plasma)",
+   "tcg_number": "53/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 84775
+    }
+   ]
+  },
+  "54": {
+   "name": "Yamask",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90678,
+   "tcg_name": "Yamask (54)",
+   "tcg_number": "54/116",
+   "variant_products": [
+    {
+     "suffix": "54",
+     "product_id": 90678
+    }
+   ]
+  },
+  "55": {
+   "name": "Yamask",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90679,
+   "tcg_name": "Yamask (55)",
+   "tcg_number": "55/116",
+   "variant_products": [
+    {
+     "suffix": "55",
+     "product_id": 90679
+    }
+   ]
+  },
+  "56": {
+   "name": "Cofagrigus",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84387,
+   "tcg_name": "Cofagrigus (Team Plasma) (56)",
+   "tcg_number": "56/116",
+   "note": "nuestro \"Cofagrigus\" vs TCG \"Cofagrigus (Team Plasma)\""
+  },
+  "57": {
+   "name": "Cofagrigus",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84388,
+   "tcg_name": "Cofagrigus (Team Plasma) (57)",
+   "tcg_number": "57/116",
+   "note": "nuestro \"Cofagrigus\" vs TCG \"Cofagrigus (Team Plasma)\""
+  },
+  "58": {
+   "name": "Nidoking",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87700,
+   "tcg_name": "Nidoking",
+   "tcg_number": "58/116"
+  },
+  "59": {
+   "name": "Mankey",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87177,
+   "tcg_name": "Mankey",
+   "tcg_number": "59/116"
+  },
+  "60": {
+   "name": "Primeape",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88366,
+   "tcg_name": "Primeape",
+   "tcg_number": "60/116"
+  },
+  "61": {
+   "name": "Onix",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87886,
+   "tcg_name": "Onix",
+   "tcg_number": "61/116"
+  },
+  "62": {
+   "name": "Makuhita",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87135,
+   "tcg_name": "Makuhita",
+   "tcg_number": "62/116"
+  },
+  "63": {
+   "name": "Hariyama",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86017,
+   "tcg_name": "Hariyama",
+   "tcg_number": "63/116"
+  },
+  "64": {
+   "name": "Umbreon",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90152,
+   "tcg_name": "Umbreon (Team Plasma)",
+   "tcg_number": "64/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 90152
+    }
+   ]
+  },
+  "65": {
+   "name": "Sneasel",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89373,
+   "tcg_name": "Sneasel",
+   "tcg_number": "65/116"
+  },
+  "66": {
+   "name": "Weavile",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90535,
+   "tcg_name": "Weavile (Team Plasma)",
+   "tcg_number": "66/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 90535
+    }
+   ]
+  },
+  "67": {
+   "name": "Absol",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83455,
+   "tcg_name": "Absol (Team Plasma)",
+   "tcg_number": "67/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 83455
+    }
+   ]
+  },
+  "68": {
+   "name": "Sandile",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88916,
+   "tcg_name": "Sandile",
+   "tcg_number": "68/116"
+  },
+  "69": {
+   "name": "Krokorok",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86539,
+   "tcg_name": "Krokorok",
+   "tcg_number": "69/116"
+  },
+  "70": {
+   "name": "Krookodile",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86546,
+   "tcg_name": "Krookodile (Team Plasma)",
+   "tcg_number": "70/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 86546
+    }
+   ]
+  },
+  "71": {
+   "name": "Pawniard",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87970,
+   "tcg_name": "Pawniard (71)",
+   "tcg_number": "71/116",
+   "variant_products": [
+    {
+     "suffix": "71",
+     "product_id": 87970
+    }
+   ]
+  },
+  "72": {
+   "name": "Pawniard",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87971,
+   "tcg_name": "Pawniard (72)",
+   "tcg_number": "72/116",
+   "variant_products": [
+    {
+     "suffix": "72",
+     "product_id": 87971
+    }
+   ]
+  },
+  "73": {
+   "name": "Bisharp",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83848,
+   "tcg_name": "Bisharp (Team Plasma) (73)",
+   "tcg_number": "73/116",
+   "note": "nuestro \"Bisharp\" vs TCG \"Bisharp (Team Plasma)\""
+  },
+  "74": {
+   "name": "Bisharp",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83849,
+   "tcg_name": "Bisharp (Team Plasma) (74)",
+   "tcg_number": "74/116",
+   "note": "nuestro \"Bisharp\" vs TCG \"Bisharp (Team Plasma)\""
+  },
+  "75": {
+   "name": "Deino",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84731,
+   "tcg_name": "Deino (75)",
+   "tcg_number": "75/116",
+   "variant_products": [
+    {
+     "suffix": "75",
+     "product_id": 84731
+    }
+   ]
+  },
+  "76": {
+   "name": "Deino",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84732,
+   "tcg_name": "Deino (76)",
+   "tcg_number": "76/116",
+   "variant_products": [
+    {
+     "suffix": "76",
+     "product_id": 84732
+    }
+   ]
+  },
+  "77": {
+   "name": "Zweilous",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 90782,
+   "tcg_name": "Zweilous",
+   "tcg_number": "77/116"
+  },
+  "78": {
+   "name": "Hydreigon",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86244,
+   "tcg_name": "Hydreigon (Team Plasma)",
+   "tcg_number": "78/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 86244
+    }
+   ]
+  },
+  "79": {
+   "name": "Steelix",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89565,
+   "tcg_name": "Steelix (Team Plasma)",
+   "tcg_number": "79/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 89565
+    }
+   ]
+  },
+  "80": {
+   "name": "Mawile",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87265,
+   "tcg_name": "Mawile",
+   "tcg_number": "80/116"
+  },
+  "81": {
+   "name": "Dratini",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84939,
+   "tcg_name": "Dratini",
+   "tcg_number": "81/116"
+  },
+  "82": {
+   "name": "Dragonair",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84904,
+   "tcg_name": "Dragonair",
+   "tcg_number": "82/116"
+  },
+  "83": {
+   "name": "Dragonite",
+   "versions": [
+    "cosmosHolofoil",
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84916,
+   "tcg_name": "Dragonite",
+   "tcg_number": "83/116"
+  },
+  "84": {
+   "name": "Kingdra",
+   "versions": [
+    "holofoil",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86449,
+   "tcg_name": "Kingdra",
+   "tcg_number": "84/116"
+  },
+  "85": {
+   "name": "Latias-EX",
+   "versions": [
+    "harutoKobayashi",
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86660,
+   "tcg_name": "Latias EX",
+   "tcg_number": "85/116"
+  },
+  "86": {
+   "name": "Latios-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86674,
+   "tcg_name": "Latios EX",
+   "tcg_number": "86/116"
+  },
+  "87": {
+   "name": "Rattata",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88623,
+   "tcg_name": "Rattata",
+   "tcg_number": "87/116"
+  },
+  "88": {
+   "name": "Raticate",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88608,
+   "tcg_name": "Raticate (Team Plasma)",
+   "tcg_number": "88/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 88608
+    }
+   ]
+  },
+  "89": {
+   "name": "Eevee",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85092,
+   "tcg_name": "Eevee (89)",
+   "tcg_number": "89/116",
+   "variant_products": [
+    {
+     "suffix": "89",
+     "product_id": 85092
+    }
+   ]
+  },
+  "90": {
+   "name": "Eevee",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85093,
+   "tcg_name": "Eevee (90)",
+   "tcg_number": "90/116",
+   "variant_products": [
+    {
+     "suffix": "90",
+     "product_id": 85093
+    }
+   ]
+  },
+  "91": {
+   "name": "Hoothoot",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86175,
+   "tcg_name": "Hoothoot",
+   "tcg_number": "91/116"
+  },
+  "92": {
+   "name": "Noctowl",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87796,
+   "tcg_name": "Noctowl",
+   "tcg_number": "92/116"
+  },
+  "93": {
+   "name": "Miltank",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87467,
+   "tcg_name": "Miltank",
+   "tcg_number": "93/116"
+  },
+  "94": {
+   "name": "Kecleon",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86432,
+   "tcg_name": "Kecleon",
+   "tcg_number": "94/116"
+  },
+  "95": {
+   "name": "Starly",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89526,
+   "tcg_name": "Starly",
+   "tcg_number": "95/116"
+  },
+  "96": {
+   "name": "Staravia",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89518,
+   "tcg_name": "Staravia",
+   "tcg_number": "96/116"
+  },
+  "97": {
+   "name": "Staraptor",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89510,
+   "tcg_name": "Staraptor",
+   "tcg_number": "97/116"
+  },
+  "98": {
+   "name": "Tornadus-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 89981,
+   "tcg_name": "Tornadus EX (Team Plasma)",
+   "tcg_number": "98/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 89981
+    }
+   ]
+  },
+  "99": {
+   "name": "Float Stone",
+   "versions": [
+    "clementLamberton",
+    "ianWhiton",
+    "jacobVanWagner",
+    "normal",
+    "reverseHolofoil",
+    "trentOrndorff",
+    "yugoSato"
+   ],
+   "status": "ok",
+   "product_id": 85510,
+   "tcg_name": "Float Stone",
+   "tcg_number": "99/116"
+  },
+  "100": {
+   "name": "Frozen City",
+   "versions": [
+    "leagueStamp",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85577,
+   "tcg_name": "Frozen City (Team Plasma)",
+   "tcg_number": "100/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 85577
+    }
+   ]
+  },
+  "101": {
+   "name": "Ghetsis",
+   "versions": [
+    "holofoil",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85694,
+   "tcg_name": "Ghetsis (Team Plasma)",
+   "tcg_number": "101/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 85694
+    }
+   ]
+  },
+  "102": {
+   "name": "Shadow Triad",
+   "versions": [
+    "andrewEstrada",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89096,
+   "tcg_name": "Shadow Triad (Team Plasma)",
+   "tcg_number": "102/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 89096
+    }
+   ]
+  },
+  "103": {
+   "name": "Superior Energy Retrieval",
+   "versions": [
+    "jacobVanWagner",
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89642,
+   "tcg_name": "Superior Energy Retrieval",
+   "tcg_number": "103/116"
+  },
+  "104": {
+   "name": "Team Plasma Badge",
+   "versions": [
+    "normal",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89847,
+   "tcg_name": "Team Plasma Badge (Team Plasma)",
+   "tcg_number": "104/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 89847
+    }
+   ]
+  },
+  "105": {
+   "name": "Team Plasma Ball",
+   "versions": [
+    "harutoKobayashi",
+    "normal",
+    "reverseHolofoil",
+    "yugoSato"
+   ],
+   "status": "ok",
+   "product_id": 89848,
+   "tcg_name": "Team Plasma Ball (Team Plasma)",
+   "tcg_number": "105/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 89848
+    }
+   ]
+  },
+  "106": {
+   "name": "Plasma Energy",
+   "versions": [
+    "leagueStamp",
+    "normal",
+    "patrickMartinez",
+    "reverseHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88156,
+   "tcg_name": "Plasma Energy (Team Plasma)",
+   "tcg_number": "106/116",
+   "variant_products": [
+    {
+     "suffix": "Team Plasma",
+     "product_id": 88156
+    }
+   ]
+  },
+  "107": {
+   "name": "Life Dew",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86729,
+   "tcg_name": "Life Dew",
+   "tcg_number": "107/116"
+  },
+  "108": {
+   "name": "Rock Guard",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 88766,
+   "tcg_name": "Rock Guard",
+   "tcg_number": "108/116"
+  },
+  "109": {
+   "name": "Heatran-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86053,
+   "tcg_name": "Heatran EX (Team Plasma) (Full Art)",
+   "tcg_number": "109/116",
+   "note": "nuestro \"Heatran-EX\" vs TCG \"Heatran EX (Team Plasma)\""
+  },
+  "110": {
+   "name": "Thundurus-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 89909,
+   "tcg_name": "Thundurus EX (Team Plasma) (110 Full Art)",
+   "tcg_number": "110/116",
+   "note": "nuestro \"Thundurus-EX\" vs TCG \"Thundurus EX (Team Plasma)\""
+  },
+  "111": {
+   "name": "Deoxys-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 84777,
+   "tcg_name": "Deoxys EX (Team Plasma) (Full Art)",
+   "tcg_number": "111/116",
+   "note": "nuestro \"Deoxys-EX\" vs TCG \"Deoxys EX (Team Plasma)\""
+  },
+  "112": {
+   "name": "Latias-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86662,
+   "tcg_name": "Latias EX (112 Full Art)",
+   "tcg_number": "112/116",
+   "variant_products": [
+    {
+     "suffix": "112 Full Art",
+     "product_id": 86662
+    }
+   ]
+  },
+  "113": {
+   "name": "Latios-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 86676,
+   "tcg_name": "Latios EX (113 Full Art)",
+   "tcg_number": "113/116",
+   "variant_products": [
+    {
+     "suffix": "113 Full Art",
+     "product_id": 86676
+    }
+   ]
+  },
+  "114": {
+   "name": "Tornadus-EX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 89982,
+   "tcg_name": "Tornadus EX (Team Plasma) (114 Full Art)",
+   "tcg_number": "114/116",
+   "note": "nuestro \"Tornadus-EX\" vs TCG \"Tornadus EX (Team Plasma)\""
+  },
+  "115": {
+   "name": "Ghetsis",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85695,
+   "tcg_name": "Ghetsis (Team Plasma) (Full Art)",
+   "tcg_number": "115/116",
+   "note": "nuestro \"Ghetsis\" vs TCG \"Ghetsis (Team Plasma)\""
+  },
+  "116": {
+   "name": "Professor Juniper",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 88398,
+   "tcg_name": "Professor Juniper (116 Full Art)",
+   "tcg_number": "116/116",
+   "variant_products": [
+    {
+     "suffix": "116 Full Art",
+     "product_id": 88398
+    }
+   ]
+  },
+  "117": {
+   "name": "Empoleon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85203,
+   "tcg_name": "Empoleon (117 Secret Rare)",
+   "tcg_number": "117/116",
+   "variant_products": [
+    {
+     "suffix": "117 Secret Rare",
+     "product_id": 85203
+    }
+   ]
+  },
+  "118": {
+   "name": "Sigilyph",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 89207,
+   "tcg_name": "Sigilyph",
+   "tcg_number": "118/116"
+  },
+  "119": {
+   "name": "Garbodor",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85617,
+   "tcg_name": "Garbodor (119 Secret Rare)",
+   "tcg_number": "119/116",
+   "variant_products": [
+    {
+     "suffix": "119 Secret Rare",
+     "product_id": 85617
+    }
+   ]
+  },
+  "120": {
+   "name": "Garchomp",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 85626,
+   "tcg_name": "Garchomp (120 Secret Rare)",
+   "tcg_number": "120/116",
+   "variant_products": [
+    {
+     "suffix": "120 Secret Rare",
+     "product_id": 85626
+    }
+   ]
+  },
+  "121": {
+   "name": "Max Potion",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 87267,
+   "tcg_name": "Max Potion (121 Secret Rare)",
+   "tcg_number": "121/116",
+   "variant_products": [
+    {
+     "suffix": "121 Secret Rare",
+     "product_id": 87267
+    }
+   ]
+  },
+  "122": {
+   "name": "Ultra Ball",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 90135,
+   "tcg_name": "Ultra Ball",
+   "tcg_number": "122/116"
+  }
+ }
+}
