@@ -182,6 +182,49 @@ function TiltCard({
   );
 }
 
+/* ── Tap real vs. scroll ───────────────────────────────────────
+   En móvil un touchend crudo dispara aunque el dedo venga deslizando.
+   Solo contamos como tap si el dedo casi no se movió y el contacto fue breve. */
+const TAP_SLOP_PX = 12;
+const TAP_MAX_MS  = 700;
+
+function useTapProps(onTap: () => void, enabled: boolean) {
+  const start   = useRef<{ x: number; y: number; t: number } | null>(null);
+  const moved   = useRef(false);
+  const lastTouchEnd = useRef(0);
+
+  return {
+    onTouchStart: (e: React.TouchEvent) => {
+      const t = e.touches[0];
+      start.current = { x: t.clientX, y: t.clientY, t: Date.now() };
+      moved.current = false;
+    },
+    onTouchMove: (e: React.TouchEvent) => {
+      if (!start.current || moved.current) return;
+      const t = e.touches[0];
+      if (Math.hypot(t.clientX - start.current.x, t.clientY - start.current.y) > TAP_SLOP_PX) {
+        moved.current = true;
+      }
+    },
+    onTouchCancel: () => { start.current = null; moved.current = true; },
+    onTouchEnd: (e: React.TouchEvent) => {
+      const s = start.current;
+      start.current = null;
+      /* Marca el gesto táctil para descartar el click sintético que viene después */
+      lastTouchEnd.current = Date.now();
+      if (!enabled || !s || moved.current) return;
+      if (Date.now() - s.t > TAP_MAX_MS) return;
+      e.preventDefault();
+      onTap();
+    },
+    onClick: () => {
+      /* En táctil ya lo resolvió onTouchEnd; aquí solo pasan mouse y teclado */
+      if (Date.now() - lastTouchEnd.current < 600) return;
+      if (enabled) onTap();
+    },
+  };
+}
+
 /* ── Thumb base ────────────────────────────────────────────── */
 function Thumb({
   imgSrc, imgW, imgH, label, sublabel, isOpen, isGray, onClick, badgeText, showPronto,
@@ -192,11 +235,11 @@ function Thumb({
   onClick: () => void; badgeText?: string; showPronto?: boolean;
 }) {
   const clickable = !isGray;
+  const tapProps = useTapProps(onClick, clickable);
   return (
     <button
       type="button"
-      onClick={onClick}
-      onTouchEnd={(e) => { if (clickable) { e.preventDefault(); onClick(); } }}
+      {...tapProps}
       className={`pks-thumb${isOpen ? " pks-thumb--open" : ""}${!clickable ? " pks-thumb--gray" : ""}`}
       style={{
         background: isOpen ? "rgba(46,230,193,0.08)" : "rgba(255,255,255,0.02)",
