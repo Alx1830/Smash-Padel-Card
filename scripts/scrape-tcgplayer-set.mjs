@@ -13,6 +13,11 @@
  *   node --env-file=.env.local scripts/scrape-tcgplayer-set.mjs --all --dry-run
  *   node --env-file=.env.local scripts/scrape-tcgplayer-set.mjs --all --force   (re-sube imagenes)
  *
+ * Portada del set (opcional), desde el panel de admin o a mano:
+ *   ... --slug <slug> --cover https://…/logo.png
+ * La descarga, la convierte a WebP y la deja en public/pokemon-sets/. Sin
+ * --cover el set usa el logo generado con su nombre.
+ *
  * Es reanudable: las imagenes que ya estan en R2 se saltan, y los numeros de
  * carta ya asignados se conservan (scripts/tcgplayer-sets/<slug>.json).
  *
@@ -46,6 +51,7 @@ const DRY_RUN = args.includes("--dry-run");
 const FORCE   = args.includes("--force");
 const ALL     = args.includes("--all");
 const SLUG    = getArg("--slug");
+const COVER   = getArg("--cover");
 const LIMIT   = getArg("--limit") ? parseInt(getArg("--limit"), 10) : Infinity;
 
 const targets = ALL ? TCG_SETS : TCG_SETS.filter(s => s.slug === SLUG);
@@ -195,7 +201,37 @@ export default cards;
   fs.writeFileSync(path.join(SETS_DIR, `${slug}.ts`), contents, "utf8");
 }
 
+/**
+ * Portada del set. Las de los sets normales viven en public/pokemon-sets/ como
+ * PNG, asi que la de TCGplayer se guarda ahi mismo en WebP — pesa menos y
+ * cualquier navegador la abre.
+ */
+async function descargarPortada(set, urlOrigen) {
+  const destino = path.resolve(__dirname, "../public/pokemon-sets", `${set.slug}.logo.webp`);
+  const res = await fetch(urlOrigen, { headers: { "User-Agent": TCG_UA } });
+  if (!res.ok) throw new Error(`portada HTTP ${res.status}`);
+
+  const webp = await sharp(Buffer.from(await res.arrayBuffer()))
+    .resize({ width: 640, height: 300, fit: "inside", withoutEnlargement: true })
+    .webp({ quality: 88 })
+    .toBuffer();
+
+  fs.writeFileSync(destino, webp);
+  return { ruta: `/pokemon-sets/${set.slug}.logo.webp`, bytes: webp.length };
+}
+
 // ── Main ────────────────────────────────────────────────────────────────────
+if (COVER && targets.length === 1 && !DRY_RUN) {
+  try {
+    const { ruta, bytes } = await descargarPortada(targets[0], COVER);
+    console.log(`🎨 Portada → public${ruta}  (${(bytes / 1024).toFixed(0)} KB)`);
+    console.log(`   Apuntar el logo del set a "${ruta}" en src/data/pokemon-sets.ts`);
+  } catch (err) {
+    console.error(`⚠️  No se pudo traer la portada: ${err.message}`);
+    console.error(`   El set queda con el logo generado a partir de su nombre.`);
+  }
+}
+
 for (const set of targets) {
   console.log(`\n${"═".repeat(60)}`);
   console.log(`  ${set.name}  (${set.slug} / ${set.code})`);

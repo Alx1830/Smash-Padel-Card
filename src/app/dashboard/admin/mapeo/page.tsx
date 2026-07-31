@@ -14,7 +14,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { Search, ChevronRight, ChevronDown, Check, X, ExternalLink, RefreshCw } from "lucide-react";
+import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { Search, ChevronRight, ChevronDown, Check, X, ExternalLink, RefreshCw, Plus, Clock, ImageOff } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -59,6 +60,18 @@ interface Fix {
   tcgplayer_url: string; card_name?: string | null;
 }
 
+interface SetRequest {
+  id?: string;
+  tcg_set_name: string;
+  tcg_url: string;
+  cover_url: string | null;
+  parent_series: string | null;   // null = independiente, sin expansión
+  cards_estimadas: number | null;
+  status: "pendiente" | "procesado";
+  note: string | null;
+  created_at?: string;
+}
+
 const ESTADO: Record<Flag, { txt: string; color: string }> = {
   0: { txt: "Lista",     color: COURT },
   1: { txt: "Revisar",   color: WARN  },
@@ -84,6 +97,7 @@ export default function MapeoPage() {
   const [busq, setBusq]       = useState("");
   const [filtro, setFiltro]   = useState<"todos" | "pendientes" | "completos">("todos");
   const [abiertos, setAbiertos] = useState<Set<string>>(new Set());
+  const [solicitudes, setSolicitudes] = useState<SetRequest[]>([]);
 
   const keyOf = (setId: string, num: number) => `${setId}:${num}`;
 
@@ -111,13 +125,17 @@ export default function MapeoPage() {
         if (!res.ok) throw new Error("No se pudo cargar el mapeo");
         const json: Data = await res.json();
 
-        const { data: rows } = await supabase
-          .from("tcg_mapping_fixes")
-          .select("set_id, card_number, product_id, tcgplayer_url, card_name");
+        const [{ data: rows }, { data: reqs }] = await Promise.all([
+          supabase.from("tcg_mapping_fixes")
+            .select("set_id, card_number, product_id, tcgplayer_url, card_name"),
+          supabase.from("tcg_set_requests")
+            .select("*").order("created_at", { ascending: false }),
+        ]);
 
         if (!vivo) return;
         setData(json);
         setFixes(Object.fromEntries((rows ?? []).map(r => [keyOf(r.set_id, r.card_number), r as Fix])));
+        setSolicitudes((reqs ?? []) as SetRequest[]);
       } catch (e) {
         if (vivo) setError(e instanceof Error ? e.message : "Error cargando el mapeo");
       } finally {
@@ -213,6 +231,19 @@ export default function MapeoPage() {
           <Stat k="Sin match" v={String(resumen.mis)} sub="no están allá" color={resumen.mis ? CRIT : undefined} />
           <Stat k="Resueltas por ti" v={String(resueltas)} sub="enlaces pegados" color={resueltas ? BALL : undefined} />
         </div>
+
+        {/* Encargar un set nuevo */}
+        <Seccion
+          titulo="Agregar un set nuevo"
+          sub="Pega el enlace de la colección en TCGplayer. Yo lo traigo: cartas, imágenes y precios."
+        >
+          <NuevoSet
+            supabase={supabase}
+            solicitudes={solicitudes}
+            onCreada={s => setSolicitudes(prev => [s, ...prev])}
+            onBorrada={id => setSolicitudes(prev => prev.filter(s => s.id !== id))}
+          />
+        </Seccion>
 
         {/* Pendientes */}
         <Seccion
@@ -360,6 +391,259 @@ function Seccion({ titulo, sub, children }: { titulo: string; sub: string; child
       <p style={{ color: INK2, fontSize: "13px", margin: "0 0 16px" }}>{sub}</p>
       {children}
     </section>
+  );
+}
+
+/**
+ * Encargar un set nuevo. El formulario no trae las cartas: guarda el pedido con
+ * todo lo necesario para traerlas (enlace, portada, dónde va), porque bajar
+ * cientos de imágenes, convertirlas y subirlas a R2 tarda minutos y necesita
+ * llaves que no viven en el navegador.
+ */
+function NuevoSet({ supabase, solicitudes, onCreada, onBorrada }: {
+  supabase: ReturnType<typeof createClient>;
+  solicitudes: SetRequest[];
+  onCreada: (s: SetRequest) => void;
+  onBorrada: (id: string) => void;
+}) {
+  const [url, setUrl]         = useState("");
+  const [cover, setCover]     = useState("");
+  const [donde, setDonde]     = useState<string>("");     // "" = independiente
+  const [hallado, setHallado] = useState<{ name: string; cards: number } | null>(null);
+  const [candidatos, setCandidatos] = useState<{ name: string; cards: number }[]>([]);
+  const [buscando, setBuscando]     = useState(false);
+  const [guardando, setGuardando]   = useState(false);
+  const [msg, setMsg]         = useState<string | null>(null);
+
+  const series = useMemo(() => POKEMON_SERIES.filter(s => !s.standalone), []);
+
+  async function buscar() {
+    if (!url.trim()) return;
+    setBuscando(true); setMsg(null); setHallado(null); setCandidatos([]);
+    try {
+      const res = await fetch("/api/admin/tcg-set-lookup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      const json = await res.json();
+      if (!res.ok) { setMsg(json.error ?? "No se encontró el set"); return; }
+      setHallado(json.set);
+      if (!json.exacto) setCandidatos(json.candidatos ?? []);
+    } catch {
+      setMsg("No se pudo consultar TCGplayer");
+    } finally {
+      setBuscando(false);
+    }
+  }
+
+  async function encargar() {
+    if (!hallado) return;
+    setGuardando(true); setMsg(null);
+    const fila: SetRequest = {
+      tcg_set_name: hallado.name,
+      tcg_url: url.trim(),
+      cover_url: cover.trim() || null,
+      parent_series: donde || null,
+      cards_estimadas: hallado.cards,
+      status: "pendiente",
+      note: null,
+    };
+    const { data, error } = await supabase.from("tcg_set_requests").insert(fila).select().single();
+    setGuardando(false);
+    if (error) { setMsg(error.message); return; }
+    onCreada(data as SetRequest);
+    setUrl(""); setCover(""); setDonde(""); setHallado(null); setCandidatos([]);
+  }
+
+  const campo = {
+    width: "100%", background: BG0, color: INK0, border: `1px solid ${LINE}`,
+    borderRadius: "6px", padding: "9px 12px", fontSize: "13px",
+    fontFamily: MONO, outline: "none",
+  } as const;
+
+  const etiqueta = {
+    display: "block", fontFamily: MONO, fontSize: "10px", letterSpacing: "0.14em",
+    textTransform: "uppercase", color: INK2, marginBottom: "6px",
+  } as const;
+
+  return (
+    <>
+      <div style={{
+        background: BG1, border: `1px solid ${LINE}`, borderRadius: "8px",
+        padding: "18px", display: "flex", flexDirection: "column", gap: "16px",
+      }}>
+        <div>
+          <label style={etiqueta} htmlFor="set-url">Enlace de la colección en TCGplayer</label>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+            <input
+              id="set-url"
+              value={url}
+              onChange={e => { setUrl(e.target.value); setHallado(null); setMsg(null); }}
+              onKeyDown={e => { if (e.key === "Enter") buscar(); }}
+              placeholder="https://www.tcgplayer.com/search/pokemon/…"
+              style={{ ...campo, flex: "1 1 340px" }}
+            />
+            <button
+              onClick={buscar}
+              disabled={!url.trim() || buscando}
+              style={{
+                background: url.trim() ? BG2 : BG1, color: url.trim() ? COURT : INK2,
+                border: `1px solid ${LINE}`, borderRadius: "6px", padding: "9px 16px",
+                cursor: url.trim() ? "pointer" : "default",
+                fontFamily: MONO, fontSize: "12px", letterSpacing: "0.06em",
+              }}
+            >
+              {buscando ? "Buscando…" : "Comprobar"}
+            </button>
+          </div>
+        </div>
+
+        {hallado && (
+          <div style={{
+            background: BG0, border: `1px solid ${COURT}44`, borderRadius: "6px",
+            padding: "12px 14px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap",
+          }}>
+            <Check size={15} color={COURT} strokeWidth={2.2} />
+            <span style={{ color: INK0, fontWeight: 600, fontSize: "14px" }}>{hallado.name}</span>
+            <span style={{ color: INK2, fontFamily: MONO, fontSize: "12px" }}>
+              {hallado.cards} cartas en TCGplayer
+            </span>
+          </div>
+        )}
+
+        {candidatos.length > 1 && (
+          <div>
+            <span style={etiqueta}>No hubo coincidencia exacta — elige cuál es</span>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+              {candidatos.map(c => (
+                <button key={c.name} onClick={() => setHallado(c)} style={{
+                  background: hallado?.name === c.name ? BG2 : BG0,
+                  color: hallado?.name === c.name ? COURT : INK2,
+                  border: `1px solid ${hallado?.name === c.name ? COURT : LINE}`,
+                  borderRadius: "6px", padding: "6px 10px", cursor: "pointer",
+                  fontFamily: MONO, fontSize: "11px",
+                }}>
+                  {c.name} · {c.cards}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div>
+          <label style={etiqueta} htmlFor="cover-url">Portada del set (opcional)</label>
+          <input
+            id="cover-url"
+            value={cover}
+            onChange={e => setCover(e.target.value)}
+            placeholder="Enlace de la imagen del logo"
+            style={campo}
+          />
+          <span style={{
+            display: "flex", alignItems: "center", gap: "6px",
+            color: INK2, fontSize: "12px", marginTop: "6px",
+          }}>
+            <ImageOff size={12} strokeWidth={1.8} />
+            Si lo dejas vacío se genera un logo con el nombre, como el de Miscellaneous Cards.
+          </span>
+        </div>
+
+        <div>
+          <span style={etiqueta}>¿Dónde va?</span>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+            <button onClick={() => setDonde("")} style={{
+              background: donde === "" ? BG2 : BG0,
+              color: donde === "" ? COURT : INK2,
+              border: `1px solid ${donde === "" ? COURT : LINE}`,
+              borderRadius: "6px", padding: "7px 12px", cursor: "pointer",
+              fontFamily: MONO, fontSize: "11px",
+            }}>
+              Independiente
+            </button>
+            {series.map(s => (
+              <button key={s.id} onClick={() => setDonde(s.id)} style={{
+                background: donde === s.id ? BG2 : BG0,
+                color: donde === s.id ? COURT : INK2,
+                border: `1px solid ${donde === s.id ? COURT : LINE}`,
+                borderRadius: "6px", padding: "7px 12px", cursor: "pointer",
+                fontFamily: MONO, fontSize: "11px",
+              }}>
+                {s.name.replace(/ Series$/, "")}
+              </button>
+            ))}
+          </div>
+          <span style={{ display: "block", color: INK2, fontSize: "12px", marginTop: "6px" }}>
+            Independiente sale con tarjeta propia junto a las expansiones, como Prize Pack Series.
+          </span>
+        </div>
+
+        {msg && <span style={{ color: CRIT, fontSize: "12px", fontFamily: MONO }}>{msg}</span>}
+
+        <button
+          onClick={encargar}
+          disabled={!hallado || guardando}
+          style={{
+            alignSelf: "flex-start",
+            background: hallado ? COURT : BG2, color: hallado ? BG0 : INK2,
+            border: "none", borderRadius: "6px", padding: "10px 20px",
+            cursor: hallado ? "pointer" : "default",
+            fontFamily: MONO, fontSize: "12px", fontWeight: 700, letterSpacing: "0.06em",
+            display: "inline-flex", alignItems: "center", gap: "7px",
+          }}
+        >
+          <Plus size={14} strokeWidth={2.4} />
+          {guardando ? "Guardando…" : "Encargar este set"}
+        </button>
+      </div>
+
+      {solicitudes.length > 0 && (
+        <div style={{ marginTop: "14px", display: "flex", flexDirection: "column", gap: "8px" }}>
+          {solicitudes.map(s => {
+            const listo = s.status === "procesado";
+            return (
+              <div key={s.id} style={{
+                background: BG1, border: `1px solid ${listo ? `${COURT}44` : LINE}`,
+                borderRadius: "8px", padding: "11px 14px",
+                display: "flex", flexWrap: "wrap", alignItems: "center", gap: "10px",
+              }}>
+                {listo
+                  ? <Check size={15} color={COURT} strokeWidth={2.2} />
+                  : <Clock size={15} color={WARN} strokeWidth={2} />}
+                <span style={{ color: INK0, fontWeight: 600, fontSize: "14px", flex: "1 1 200px" }}>
+                  {s.tcg_set_name}
+                </span>
+                <span style={{ color: INK2, fontFamily: MONO, fontSize: "12px" }}>
+                  {s.cards_estimadas ?? "?"} cartas
+                </span>
+                <span style={{ color: INK2, fontFamily: MONO, fontSize: "12px" }}>
+                  {s.parent_series
+                    ? (POKEMON_SERIES.find(x => x.id === s.parent_series)?.name ?? s.parent_series)
+                    : "Independiente"}
+                </span>
+                {s.cover_url && (
+                  <span style={{ color: INK2, fontFamily: MONO, fontSize: "12px" }}>con portada</span>
+                )}
+                <span style={{
+                  fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase",
+                  color: listo ? COURT : WARN, border: `1px solid ${listo ? COURT : WARN}55`,
+                  borderRadius: "999px", padding: "2px 9px",
+                }}>
+                  {listo ? "Listo" : "Pendiente"}
+                </span>
+                {!listo && s.id && (
+                  <button onClick={() => { supabase.from("tcg_set_requests").delete().eq("id", s.id!).then(() => onBorrada(s.id!)); }}
+                    title="Cancelar el encargo"
+                    style={{ background: "transparent", border: "none", cursor: "pointer", color: INK2, display: "inline-flex", padding: 0 }}>
+                    <X size={13} strokeWidth={2} />
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </>
   );
 }
 
