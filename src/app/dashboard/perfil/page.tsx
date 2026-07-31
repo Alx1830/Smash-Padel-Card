@@ -6,6 +6,11 @@ import { createClient } from "@/lib/supabase/client";
 import { CustomSelect } from "@/components/ui/custom-select";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { CITIES_BY_COUNTRY } from "@/data/cities";
+import { STORE_COVERS, isValidStoreCover } from "@/data/store-covers";
+import type { StoreHours, HourSlot } from "@/components/StoreSections";
+import {
+  User, Camera, Lock, CheckCircle2, AlertTriangle, XCircle, Smartphone, Plus, Trash2,
+} from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -23,10 +28,19 @@ interface PerfilForm {
   tipo_perfil:         string;
   ciudad:              string;
   edad:                string;
-  energia_favorita:    string;
-  pokemon_favorito:    string;
   set_favorito:        string;
   photo_url:           string;
+  /** Solo para tiendas: una de las portadas autorizadas, o "" para ninguna */
+  cover_url:           string;
+  /** Encuadre vertical de la portada en %: 0 arriba, 50 centro, 100 abajo */
+  cover_position:      number;
+  store_address:       string;
+  store_maps_url:      string;
+  store_hours:         StoreHours;
+  social_facebook:     string;
+  social_instagram:    string;
+  /** user_id de la tienda a la que pertenece el jugador */
+  my_store_id:         string;
   whatsapp_indicativo: string;
   whatsapp_numero:     string;
 }
@@ -54,18 +68,54 @@ async function compressImage(file: File, maxPx = 480, quality = 0.82): Promise<B
   });
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({ label, children, locked }: {
+  label: string;
+  children: React.ReactNode;
+  /** Muestra un candado: el campo ya no se puede cambiar */
+  locked?: boolean;
+}) {
   return (
-    <div style={{ marginBottom: "20px" }}>
+    // El margen lo pone la rejilla; así todos los campos quedan alineados
+    <div>
       <label style={{
-        display: "block", fontFamily: MONO, fontSize: "10px",
+        display: "flex", alignItems: "center", gap: "6px",
+        fontFamily: MONO, fontSize: "10px",
         letterSpacing: "0.15em", textTransform: "uppercase",
         color: INK2, marginBottom: "8px",
       }}>
         {label}
+        {locked && <Lock size={11} strokeWidth={2} />}
       </label>
       {children}
     </div>
+  );
+}
+
+/** Texto de ayuda debajo de un campo */
+function Hint({ children }: { children: React.ReactNode }) {
+  return (
+    <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "7px 0 0", lineHeight: 1.6 }}>
+      {children}
+    </p>
+  );
+}
+
+/** Aviso con icono: confirmación, advertencia o error */
+function Note({ kind, children }: { kind: "ok" | "warn" | "error"; children: React.ReactNode }) {
+  const { color, Icon } = {
+    ok:    { color: COURT,     Icon: CheckCircle2 },
+    warn:  { color: "#ffc800", Icon: AlertTriangle },
+    error: { color: "#ff4f4f", Icon: XCircle },
+  }[kind];
+
+  return (
+    <p style={{
+      display: "flex", alignItems: "flex-start", gap: "6px",
+      fontFamily: MONO, fontSize: "10px", color, margin: "7px 0 0", lineHeight: 1.6,
+    }}>
+      <Icon size={12} strokeWidth={2} style={{ flexShrink: 0, marginTop: 2 }} />
+      <span>{children}</span>
+    </p>
   );
 }
 
@@ -78,125 +128,6 @@ const inputStyle: React.CSSProperties = {
   transition: "border-color 0.2s",
 };
 
-const ENERGIA_OPTS = [
-  { value: "🍃 Planta",          label: "🍃 Planta" },
-  { value: "🔥 Fuego",           label: "🔥 Fuego" },
-  { value: "💧 Agua",            label: "💧 Agua" },
-  { value: "⚡ Eléctrica/Rayo",  label: "⚡ Eléctrica/Rayo" },
-  { value: "🔮 Psíquica",        label: "🔮 Psíquica" },
-  { value: "🥊 Lucha",           label: "🥊 Lucha" },
-  { value: "🖤 Oscuridad",       label: "🖤 Oscuridad" },
-  { value: "⚔️ Metal",           label: "⚔️ Metal" },
-  { value: "🐉 Dragón",          label: "🐉 Dragón" },
-  { value: "🧚 Hada",            label: "🧚 Hada" },
-];
-
-const TIPO_PERFIL_OPTS = [
-  { value: "Inversionista",       label: "Inversionista" },
-  { value: "Coleccionista",       label: "Coleccionista" },
-  { value: "Jugador TCG",         label: "Jugador TCG" },
-  { value: "Creador de Contenido",label: "Creador de Contenido" },
-  { value: "Tienda Pokémon",      label: "Tienda Pokémon" },
-];
-
-const POKEMON_OPTS = [
-  "Abomasnow","Abra","Absol","Accelgor","Aegislash","Aerodactyl","Aggron","Aipom","Alakazam","Alcremie",
-  "Alomomola","Altaria","Amaura","Ambipom","Amoonguss","Annihilape","Anorith","Appletun","Applin","Araquanid",
-  "Arbok","Arboliva","Arcanine","Arceus","Archen","Archeops","Archaludon","Arctibax","Arctovish","Arctozolt",
-  "Ariados","Armarouge","Armaldo","Aromatisse","Aron","Arrokuda","Articuno","Axew","Azelf","Azumarill",
-  "Azurill","Bagon","Baltoy","Banette","Barbaracle","Barboach","Barraskewda","Basculegion","Basculin","Bastiodon",
-  "Baxcalibur","Bayleef","Beartic","Beautifly","Beedrill","Beheeyem","Beldum","Bellibolt","Bellossom","Bellsprout",
-  "Bergmite","Bewear","Bibarel","Bidoof","Binacle","Bisharp","Blacephalon","Blastoise","Blaziken","Blipbug",
-  "Blissey","Blitzle","Boldore","Boltund","Bombirdier","Bonsly","Bouffalant","Bounsweet","Braixen","Bramblin",
-  "Brambleghast","Braviary","Breloom","Brionne","Bronzong","Bronzor","Brute Bonnet","Bruxish","Budew","Buizel",
-  "Bulbasaur","Buneary","Bunnelby","Burmy","Butterfree","Buzzwole","Cacnea","Cacturne","Calyrex","Camerupt",
-  "Capsakid","Carbink","Carripace","Carracosta","Carvanha","Cascoon","Castform","Caterpie","Celebi","Celesteel",
-  "Centiskorch","Ceruledge","Cetitan","Cetoddle","Chandelure","Chansey","Charcadet","Charizard","Charmander","Charmeleon",
-  "Chatot","Cherrim","Cherubi","Chesnaught","Chespin","Chi Yu","Chien Pao","Chikorita","Chimchar","Chimecho",
-  "Chinchou","Chingling","Cinderace","Clamperl","Clauncher","Clawitzer","Claydol","Clefable","Clefairy","Cleffa",
-  "Clobbopus","Clodsire","Cloyster","Coalossal","Cobalion","Cofagrigus","Combee","Combusken","Comfey","Conkeldurr",
-  "Copperajah","Corvisquire","Corviknight","Corsola","Cottonee","Crabominable","Crabrawler","Cradily","Cramorant","Cranidos",
-  "Crawdaunt","Cresselia","Croagunk","Crobat","Crocalor","Croconaw","Crustle","Cryogonal","Cubchoo","Cubone",
-  "Cufant","Cursola","Cutiefly","Cyndaquil","Darkrai","Darmanitan","Dartrix","Darumaka","Decidueye","Dedenne",
-  "Deerling","Deino","Delcatty","Delibird","Delphox","Deoxys","Dewgong","Dewpider","Dewott","Dialga",
-  "Diancie","Diglett","Dipplin","Ditto","Dodrio","Doduo","Donphan","Dondozo","Dottler","Doublade",
-  "Dracovish","Dracozolt","Dragapult","Dragonair","Dragonite","Drakloak","Drampa","Dreepy","Drifblim","Drifloon",
-  "Drilbur","Drizzile","Drowzee","Druddigon","Dubwool","Ducklett","Dugtrio","Dunsparce","Duosion","Duraludon",
-  "Durant","Dusclops","Dusknoir","Duskull","Dustox","Dwebble","Eevee","Eiscue","Ekans","Eldegoss",
-  "Electabuzz","Electivire","Electrike","Electrode","Elekid","Elgyem","Emboar","Emolga","Empoleon","Enamorus",
-  "Entei","Escavalier","Espathra","Espeon","Espurr","Eternatus","Exeggcute","Exeggutor","Exploud","Falinks",
-  "Farigiraf","Farfetchd","Fearow","Feebas","Fennekin","Feraligatr","Ferroseed","Ferrothorn","Fidough","Finizen",
-  "Finneon","Flaaffy","Flapple","Flareon","Fletchinder","Fletchling","Flittle","Floatzel","Floette","Florges",
-  "Floragato","Flygon","Fomantis","Foongus","Forretress","Fraxure","Frigibax","Frillish","Froakie","Frogadier",
-  "Froslass","Frosmoth","Fuecoco","Furret","Furfrou","Gabite","Gallade","Galvantula","Garbodor","Garchomp",
-  "Gardevoir","Garganacl","Gastly","Gastrodon","Genesect","Gengar","Geodude","Gholdengo","Gible","Gigalith",
-  "Gimmighoul","Girafarig","Giratina","Glaceon","Glalie","Glameow","Glastrier","Gligar","Gliscor","Glimmet",
-  "Glimmora","Gloom","Gogoat","Golduck","Golem","Golett","Golurk","Goodra","Goomy","Gorebyss",
-  "Gossifleur","Gothita","Gothitelle","Gothorita","Gouging Fire","Gourgeist","Grafaiai","Granbull","Grapploct","Graveler",
-  "Great Tusk","Greavard","Greedent","Greninja","Grimer","Grimsnarl","Grookey","Grotle","Groudon","Grovyle",
-  "Growlithe","Grubbin","Grumpig","Gulpin","Gumshoos","Gurdurr","Guzzlord","Gyarados","Hakamo o","Happiny",
-  "Hariyama","Hattrem","Hatterene","Haunter","Hawlucha","Haxorus","Heatmor","Heatran","Heliolisk","Helioptile",
-  "Heracross","Herdier","Hippopotas","Hippowdon","Hitmonchan","Hitmonlee","Hitmontop","Honchkrow","Honedge","Ho Oh",
-  "Hoopa","Hoothoot","Hoppip","Horsea","Houndoom","Houndour","Houndstone","Hydreigon","Hypno","Igglybuff",
-  "Illumise","Impidimp","Incineroar","Indeedee","Infernape","Inkay","Inteleon","Iron Bundle","Iron Hands","Iron Jugulis",
-  "Iron Leaves","Iron Moth","Iron Thorns","Iron Valiant","Ivysaur","Jangmo o","Jellicent","Jigglypuff","Jirachi","Jolteon",
-  "Joltik","Jumpluff","Jynx","Kabuto","Kabutops","Kadabra","Kakuna","Kangaskhan","Karrablast","Kartana",
-  "Kecleon","Keldeo","Kingambit","Kingdra","Kingler","Kirlia","Klang","Kleavor","Klefki","Klink",
-  "Klinklang","Koffing","Komala","Kommo o","Koraidon","Krabby","Kricketot","Kricketune","Krokorok","Krookodile",
-  "Kyogre","Kyurem","Lairon","Lampent","Landorus","Lanturn","Lapras","Larvitar","Latias","Latios",
-  "Leafeon","Leavanny","Lechonk","Ledian","Ledyba","Lickilicky","Lickitung","Liepard","Lileep","Lilligant",
-  "Lillipup","Linoone","Litleo","Litten","Lokix","Lombre","Lopunny","Lotad","Loudred","Lucario",
-  "Ludicolo","Lugia","Lumineon","Lunala","Lunatone","Lurantis","Luvdisc","Luxio","Luxray","Lycanroc",
-  "Mabosstiff","Machamp","Machoke","Machop","Magby","Magcargo","Magearna","Magikarp","Magmar","Magmortar",
-  "Magnemite","Magneton","Magnezone","Makuhita","Malamar","Mamoswine","Manaphy","Mandibuzz","Manectric","Mankey",
-  "Mantine","Mantyke","Maractus","Mareanie","Mareep","Marill","Marowak","Marshadow","Marshtomp","Maschiff",
-  "Masquerain","Maushold","Mawile","Medicham","Meditite","Meganium","Melmetal","Meltan","Meowscarada","Meowth",
-  "Mesprit","Metagross","Metang","Metapod","Mew","Mewtwo","Mienfoo","Mienshao","Mightyena","Milcery",
-  "Milotic","Miltank","Mime Jr","Mimikyu","Minior","Minccino","Minun","Miraidon","Misdreavus","Mismagius",
-  "Moltres","Monferno","Morelull","Morgrem","Morpeko","Mothim","Mr Mime","Mr Rime","Mudbray","Mudkip",
-  "Mudsdale","Muk","Munchlax","Munna","Murkrow","Musharna","Nacli","Naclstack","Nagadel","Natu",
-  "Necrozma","Nickit","Nidoking","Nidoqueen","Nidoran","Nidorina","Nidorino","Nihilego","Ninjask","Noctowl",
-  "Noibat","Noivern","Nosepass","Numel","Nuzleaf","Obstagoon","Octillery","Oddish","Ogerpon","Oinkologne",
-  "Okidogi","Omanyte","Omastar","Onix","Oranguru","Orbeetle","Oricorio","Orthworm","Oshawott","Overqwil",
-  "Palkia","Palossand","Palpitoad","Pancham","Pangoro","Panpour","Pansage","Pansear","Paras","Parasect",
-  "Passimian","Patrat","Pawmi","Pawmo","Pawmot","Pawniard","Pecharunt","Pelipper","Perrserker","Persian",
-  "Phanpy","Phantump","Pheromosa","Phione","Pichu","Pidgeot","Pidgeotto","Pidgey","Pidove","Pignite",
-  "Pikachu","Pikipek","Piloswine","Pincurchin","Pineco","Pinsir","Piplup","Politoed","Poliwag","Poliwhirl",
-  "Poliwrath","Poltchageist","Polteageist","Ponyta","Poochyena","Poipole","Popplio","Porygon","Porygon2","Porygon Z",
-  "Primarina","Primeape","Prinplup","Probopass","Psyduck","Pumpkaboo","Pupitar","Purrloin","Purugly","Pyroar",
-  "Pyukumuku","Quagsire","Quaquaval","Quaxly","Quaxwell","Quilava","Quilladin","Qwilfish","Raboot","Rabsca",
-  "Raichu","Raikou","Ralts","Rampardos","Rapidash","Raticate","Rattata","Rayquaza","Regice","Regidrago",
-  "Regieleki","Regigigas","Regirock","Registeel","Relicanth","Rellor","Remoraid","Reshiram","Reuniclus","Revavroom",
-  "Rhydon","Rhyhorn","Rhyperior","Ribombee","Rillaboom","Riolu","Roaring Moon","Rockruff","Roggenrola","Rookidee",
-  "Roselia","Roserade","Rotom","Rowlet","Rufflet","Runerigus","Sableye","Salamence","Salandit","Salazzle",
-  "Samurott","Sandaconda","Sandile","Sandshrew","Sandslash","Sandy Shocks","Sandygast","Sawk","Sawsbuck","Scatterbug",
-  "Sceptile","Scizor","Scolipede","Scorbunny","Scovillain","Scrafty","Scraggy","Scream Tail","Scyther","Seadra",
-  "Seaking","Sealeo","Seedot","Seel","Seismitoad","Sentret","Serperior","Servine","Seviper","Sewaddle",
-  "Sharpedo","Shaymin","Shedinja","Shelgon","Shellder","Shellos","Shelmet","Shieldon","Shiftry","Shiinotic",
-  "Shinx","Shroodle","Shroomish","Shuckle","Shuppet","Sigilyph","Silcoon","Silicobra","Silvally","Simipour",
-  "Simisage","Simisear","Sinistea","Sinistcha","Sirfetchd","Sizzlipede","Skarmory","Skiddo","Skiploom","Skrelp",
-  "Skuntank","Skwovet","Slaking","Slakoth","Sliggoo","Slither Wing","Slowbro","Slowking","Slowpoke","Slugma",
-  "Slurpuff","Smeargle","Smoliv","Smoochum","Sneasel","Sneasler","Snivy","Snom","Snorlax","Snorunt",
-  "Snover","Snubbull","Sobble","Solgaleo","Solosis","Solrock","Spearow","Spectrier","Spewpa","Spheal",
-  "Spidops","Spinarak","Spinda","Spiritomb","Spoink","Sprigatito","Spritzee","Squawkabilly","Squirtle","Stakataka",
-  "Stantler","Staraptor","Staravia","Starly","Starmie","Staryu","Steelix","Steenee","Stonjourner","Stoutland",
-  "Stufful","Stunfisk","Stunky","Sudowoodo","Suicune","Sunflora","Sunkern","Surskit","Swablu","Swadloon",
-  "Swalot","Swampert","Swanna","Swellow","Swinub","Swirlix","Swoobat","Sylveon","Tadbulb","Taillow",
-  "Talonflame","Tandemaus","Tangela","Tangrowth","Tapu Bulu","Tapu Fini","Tapu Koko","Tapu Lele","Tarountula","Tatsugiri",
-  "Tauros","Teddiursa","Tentacool","Tentacruel","Tepig","Terapagos","Terrakion","Thievul","Throh","Thundurus",
-  "Thwackey","Timburr","Ting Lu","Tirtouga","Toedscool","Toedscruel","Togedemaru","Togekiss","Togepi","Togetic",
-  "Torchic","Torkoal","Tornadus","Torracat","Torterra","Totodile","Toucannon","Toxapex","Toxel","Toxtricity",
-  "Tranquill","Trapinch","Treecko","Trevenant","Tropius","Trubbish","Trumbeak","Tsareena","Turtonator","Turtwig",
-  "Tympole","Tynamo","Type Null","Tyranitar","Tyrantrum","Tyrogue","Tyrunt","Unfezant","Unown","Ursaluna",
-  "Ursaring","Urshifu","Uxie","Vanillish","Vanillite","Vanilluxe","Vaporeon","Varoom","Veluza","Venomoth",
-  "Venonat","Venusaur","Vespiquen","Vibrava","Victini","Victreebel","Vigoroth","Vikavolt","Vileplume","Virizion",
-  "Vivillon","Volbeat","Volcanion","Volcarona","Voltorb","Vullaby","Vulpix","Wailmer","Wailord","Walking Wake",
-  "Walrein","Wartortle","Watchog","Wattrel","Weavile","Weedle","Weepinbell","Weezing","Whimsicott","Whirlipede",
-  "Whiscash","Whismur","Wigglytuff","Wiglett","Wimpod","Wingull","Wishiwashi","Wo Chien","Wobbuffet","Woobat",
-  "Wooloo","Wooper","Wormadam","Wugtrio","Wurmple","Wynaut","Xatu","Xerneas","Xurkitree","Yamask",
-  "Yamper","Yanma","Yanmega","Yungoos","Yveltal","Zacian","Zamazenta","Zangoose","Zapdos","Zarude",
-  "Zebstrika","Zekrom","Zeraora","Zigzagoon","Zoroark","Zorua","Zubat","Zweilous","Zygarde",
-].map(p => ({ value: p, label: p }));
 
 const PAISES_OPTS = [
   "Afganistán","Albania","Alemania","Andorra","Angola","Antigua y Barbuda","Arabia Saudita","Argelia","Argentina",
@@ -255,6 +186,16 @@ const INDICATIVOS_OPTS = [
   { value: "+61",  label: "+61 — Australia" },
 ];
 
+
+const TIPO_PERFIL_OPTS = [
+  { value: "Inversionista",       label: "Inversionista" },
+  { value: "Coleccionista",       label: "Coleccionista" },
+  { value: "Jugador TCG",         label: "Jugador TCG" },
+  { value: "Creador de Contenido",label: "Creador de Contenido" },
+  { value: "Tienda Pokémon",      label: "Tienda Pokémon" },
+];
+
+
 export default function PerfilPage() {
   const supabase     = createClient();
   const fileRef      = useRef<HTMLInputElement>(null);
@@ -276,12 +217,17 @@ export default function PerfilPage() {
   const [form, setForm] = useState<PerfilForm>({
     username: "", first_name: "", last_name: "",
     pais: "", tipo_perfil: "", ciudad: "",
-    edad: "", energia_favorita: "",
-    pokemon_favorito: "",
+    edad: "",
     set_favorito: "", photo_url: "",
     whatsapp_indicativo: "+57",
     whatsapp_numero: "",
+    cover_url: "", cover_position: 50,
+    store_address: "", store_maps_url: "", store_hours: {},
+    social_facebook: "", social_instagram: "", my_store_id: "",
   });
+
+  /** Tiendas aprobadas, para que un jugador elija la suya */
+  const [stores, setStores] = useState<{ user_id: string; label: string }[]>([]);
 
   useEffect(() => {
     async function load() {
@@ -303,18 +249,45 @@ export default function PerfilPage() {
           tipo_perfil:         data.tipo_perfil ?? "",
           ciudad:              data.ciudad ?? "",
           edad:                data.edad?.toString() ?? "",
-          energia_favorita:    data.energia_favorita ?? "",
-          pokemon_favorito:    data.pokemon_favorito ?? "",
           set_favorito:        data.set_favorito ?? "",
           photo_url:           data.photo_url ?? "",
           whatsapp_indicativo: data.whatsapp_indicativo ?? "+57",
           whatsapp_numero:     data.whatsapp_numero ?? "",
+          cover_url:           data.cover_url ?? "",
+          cover_position:      data.cover_position ?? 50,
+          store_address:       data.store_address ?? "",
+          store_maps_url:      data.store_maps_url ?? "",
+          store_hours:         data.store_hours ?? {},
+          social_facebook:     data.social_facebook ?? "",
+          social_instagram:    data.social_instagram ?? "",
+          my_store_id:         data.my_store_id ?? "",
         });
         if (data.photo_url) setPreview(data.photo_url);
       }
+
+      // Tiendas aprobadas: la lista de "Mi tienda Pokémon"
+      const { data: tiendas } = await supabase
+        .from("players")
+        .select("user_id, username, first_name, last_name, ciudad")
+        .eq("tipo_perfil", "Tienda Pokémon")
+        .eq("store_status", "approved")
+        .order("first_name");
+
+      setStores((tiendas ?? [])
+        .filter(t => t.user_id !== user.id)
+        .map(t => {
+          const nombre = `${t.first_name ?? ""} ${t.last_name ?? ""}`.trim() || t.username || "Tienda";
+          return {
+            user_id: t.user_id,
+            label: t.ciudad ? `${nombre} · ${t.ciudad}` : nombre,
+          };
+        }));
     }
     load();
   }, []);
+
+  /** La portada solo se ofrece a los perfiles de tienda */
+  const isTienda = form.tipo_perfil === "Tienda Pokémon";
 
   function set(field: keyof PerfilForm, value: string) {
     setForm(f => ({ ...f, [field]: value }));
@@ -371,12 +344,23 @@ export default function PerfilPage() {
       tipo_perfil:         form.tipo_perfil,
       ciudad:              form.ciudad,
       edad:                parseInt(form.edad) || null,
-      energia_favorita:    form.energia_favorita,
-      pokemon_favorito:    form.pokemon_favorito,
       set_favorito:        form.set_favorito || null,
       photo_url:           form.photo_url,
       whatsapp_indicativo: form.whatsapp_indicativo || null,
       whatsapp_numero:     form.whatsapp_numero || null,
+      // La portada solo aplica a las tiendas; en el resto se limpia
+      cover_url:           isTienda && isValidStoreCover(form.cover_url)
+                             ? (form.cover_url || null)
+                             : null,
+      cover_position:      Math.min(100, Math.max(0, Math.round(form.cover_position))),
+      // Dirección y horarios solo tienen sentido en una tienda
+      store_address:       isTienda ? (form.store_address.trim()  || null) : null,
+      store_maps_url:      isTienda ? (form.store_maps_url.trim() || null) : null,
+      store_hours:         isTienda ? form.store_hours : null,
+      social_facebook:     isTienda ? (form.social_facebook.trim()  || null) : null,
+      social_instagram:    isTienda ? (form.social_instagram.trim() || null) : null,
+      // Una tienda no pertenece a otra tienda
+      my_store_id:         isTienda ? null : (form.my_store_id || null),
     }, { onConflict: "user_id" });
     setSaving(false);
     if (error) {
@@ -411,15 +395,29 @@ export default function PerfilPage() {
   return (
     <div className="page-container" style={{ maxWidth: "1100px" }}>
       <style>{`
-        .page-container { padding: 24px; }
-        @media (min-width: 768px) { .page-container { padding: 48px; } }
-        .perfil-sections { display: flex; gap: 48px; align-items: flex-start; flex-wrap: wrap; }
-        .perfil-section  { flex: 1; min-width: 280px; }
-        .perfil-grid-2   { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 540px) {
-          .perfil-grid-2 { grid-template-columns: 1fr !important; }
-          .perfil-section { min-width: 100% !important; }
+        .page-container { padding: clamp(14px, 3vw, 48px); }
+        /* Secciones apiladas a ancho completo: los campos quedan alineados en
+           una sola rejilla en vez de dos columnas que se desfasaban. */
+        .perfil-sections { display: flex; flex-direction: column; gap: clamp(16px, 2.5vw, 24px); }
+        .perfil-card {
+          background: rgba(255,255,255,0.02);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 16px;
+          padding: clamp(16px, 2.5vw, 28px);
+          min-width: 0;
         }
+        /* auto-fit reparte las columnas que caben: no hace falta un media query
+           por cada corte, y nunca deja un campo huérfano estrujado. */
+        .perfil-grid-2 {
+          display: grid; gap: clamp(14px, 2vw, 20px);
+          grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+          align-items: start;
+        }
+        .perfil-grid-2 > * { min-width: 0; }
+        /* Un campo que necesita toda la fila */
+        .perfil-full { grid-column: 1 / -1; }
+        .perfil-wa-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+        input, select, textarea { max-width: 100%; }
       `}</style>
 
       {/* Header */}
@@ -438,9 +436,9 @@ export default function PerfilPage() {
       <form onSubmit={handleSave}>
 
         {/* 00 FOTO DE PERFIL */}
-        <div style={{ marginBottom: "48px" }}>
+        <div className="perfil-card" style={{ marginBottom: "clamp(16px, 2.5vw, 24px)" }}>
           {sectionTitle("00", "Foto de Perfil")}
-          <div style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "clamp(16px, 3vw, 28px)", flexWrap: "wrap" }}>
             <div
               onClick={() => fileRef.current?.click()}
               style={{
@@ -454,19 +452,19 @@ export default function PerfilPage() {
               {preview ? (
                 <Image src={preview} alt="Foto de perfil" fill style={{ objectFit: "cover" }} unoptimized />
               ) : (
-                <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "32px", color: INK2 }}>
-                  👤
+                <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: INK2 }}>
+                  <User size={34} strokeWidth={1.5} />
                 </div>
               )}
               <div style={{
                 position: "absolute", inset: 0, background: "rgba(0,0,0,0.5)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                opacity: 0, transition: "opacity 0.2s", fontSize: "20px",
+                opacity: 0, transition: "opacity 0.2s", color: "#fff",
               }}
                 onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.opacity = "1"}
                 onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.opacity = "0"}
               >
-                📷
+                <Camera size={22} strokeWidth={1.7} />
               </div>
             </div>
             <div>
@@ -483,8 +481,8 @@ export default function PerfilPage() {
                 JPG, PNG o WEBP · Máx 10 MB<br />
                 <span style={{ color: COURT + "99" }}>Se comprime automáticamente antes de subir</span>
               </p>
-              {photoSaved && <p style={{ fontFamily: MONO, fontSize: "10px", color: COURT, margin: "6px 0 0" }}>✓ Foto guardada correctamente</p>}
-              {photoError && <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ff4f4f", margin: "6px 0 0" }}>✕ {photoError}</p>}
+              {photoSaved && <Note kind="ok">Foto guardada correctamente</Note>}
+              {photoError && <Note kind="error">{photoError}</Note>}
             </div>
             <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" style={{ display: "none" }} onChange={handlePhoto} suppressHydrationWarning />
           </div>
@@ -492,10 +490,10 @@ export default function PerfilPage() {
 
         <div className="perfil-sections" style={{ marginBottom: "48px" }}>
           {/* 01 IDENTIDAD */}
-          <div className="perfil-section">
+          <div className="perfil-card">
             {sectionTitle("01", "Identidad")}
             <div className="perfil-grid-2">
-              <Field label={`Usuario${usernameFixed ? "  🔒" : ""}`}>
+              <Field label="Usuario" locked={usernameFixed}>
                 <div style={{ position: "relative" }}>
                   <input
                     style={{ ...inputStyle, opacity: usernameFixed ? 0.6 : 1, cursor: usernameFixed ? "not-allowed" : "text" }}
@@ -506,19 +504,13 @@ export default function PerfilPage() {
                   />
                 </div>
                 {isAdmin ? (
-                  <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "6px 0 0", lineHeight: 1.5 }}>
-                    Cuenta admin — puedes cambiar tu usuario las veces que quieras.
-                  </p>
+                  <Hint>Cuenta admin — puedes cambiar tu usuario las veces que quieras.</Hint>
                 ) : usernameFixed ? (
-                  <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "6px 0 0", lineHeight: 1.5 }}>
-                    El usuario es permanente — es tu identificador único en la plataforma.
-                  </p>
+                  <Hint>El usuario es permanente — es tu identificador único en la plataforma.</Hint>
                 ) : (
-                  <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ffc800", margin: "6px 0 0", lineHeight: 1.5 }}>
-                    ⚠ Elige bien tu usuario — una vez guardado no podrá cambiarse.
-                  </p>
+                  <Note kind="warn">Elige bien tu usuario — una vez guardado no podrá cambiarse.</Note>
                 )}
-                {usernameError && <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ff4f4f", margin: "6px 0 0" }}>✕ {usernameError}</p>}
+                {usernameError && <Note kind="error">{usernameError}</Note>}
               </Field>
               <Field label="Nombre">
                 <input style={inputStyle} value={form.first_name}
@@ -557,16 +549,16 @@ export default function PerfilPage() {
 
             {/* WhatsApp */}
             <div style={{
-              marginTop: "8px", padding: "20px", borderRadius: "12px",
+              marginTop: "20px", padding: "clamp(14px, 2vw, 20px)", borderRadius: "12px",
               background: "rgba(46,230,193,0.04)", border: "1px solid rgba(46,230,193,0.15)",
             }}>
-              <div style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: COURT, marginBottom: "14px", display: "flex", alignItems: "center", gap: "8px" }}>
-                <span>📱</span> WhatsApp
+              <div style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: COURT, marginBottom: "12px", display: "flex", alignItems: "center", gap: "8px" }}>
+                <Smartphone size={13} strokeWidth={1.9} /> WhatsApp
               </div>
               <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "0 0 14px", lineHeight: 1.6 }}>
                 Requerido para vender en el Market. Solo lo verán compradores interesados.
               </p>
-              <div style={{ display: "grid", gridTemplateColumns: "160px 1fr", gap: "12px" }}>
+              <div className="perfil-wa-grid">
                 <Field label="Indicativo">
                   <CustomSelect
                     value={form.whatsapp_indicativo}
@@ -589,7 +581,7 @@ export default function PerfilPage() {
           </div>
 
           {/* 02 PERFIL POKÉMON */}
-          <div className="perfil-section">
+          <div className="perfil-card">
             {sectionTitle("02", "Perfil Pokémon")}
             <div className="perfil-grid-2">
               <Field label="Tipo de Perfil">
@@ -600,38 +592,127 @@ export default function PerfilPage() {
                   placeholder="Seleccionar tipo"
                 />
               </Field>
-              <Field label="Energía Favorita">
+
+              <Field label="Tu Set Favorito">
                 <CustomSelect
-                  value={form.energia_favorita}
-                  onChange={v => set("energia_favorita", v)}
-                  options={ENERGIA_OPTS}
-                  placeholder="Seleccionar energía"
+                  value={form.set_favorito}
+                  onChange={v => set("set_favorito", v)}
+                  options={SET_OPTS}
+                  placeholder="Buscar set..."
                 />
               </Field>
-              <Field label="Pokémon Favorito">
-                <CustomSelect
-                  value={form.pokemon_favorito}
-                  onChange={v => set("pokemon_favorito", v)}
-                  options={POKEMON_OPTS}
-                  placeholder="Buscar Pokémon..."
-                />
-              </Field>
-              <div style={{ gridColumn: "1 / -1" }}>
-                <Field label="Tu Set Favorito">
-                  <CustomSelect
-                    value={form.set_favorito}
-                    onChange={v => set("set_favorito", v)}
-                    options={SET_OPTS}
-                    placeholder="Buscar set..."
-                  />
-                </Field>
-              </div>
+
+              {/* Los jugadores eligen a qué tienda pertenecen */}
+              {!isTienda && (
+                <div className="perfil-full">
+                  <Field label="Mi tienda Pokémon">
+                    <CustomSelect
+                      value={form.my_store_id}
+                      onChange={v => set("my_store_id", v)}
+                      options={[
+                        { value: "", label: "Ninguna por ahora" },
+                        ...stores.map(s => ({ value: s.user_id, label: s.label })),
+                      ]}
+                      placeholder={stores.length ? "Seleccionar tienda" : "Todavía no hay tiendas aprobadas"}
+                    />
+                    <Hint>
+                      La tienda donde juegas o compras habitualmente. Aparecerás en su comunidad de jugadores.
+                    </Hint>
+                  </Field>
+                </div>
+              )}
             </div>
           </div>
+
+          {/* 03 TU TIENDA — solo para perfiles de tienda */}
+          {isTienda && (
+            <div className="perfil-card">
+              {sectionTitle("03", "Tu tienda")}
+              <div className="perfil-grid-2">
+                <div className="perfil-full">
+                  <Field label="Portada de tu tienda">
+                    <CoverPicker
+                      value={form.cover_url}
+                      onChange={v => set("cover_url", v)}
+                      position={form.cover_position}
+                      onPositionChange={p => setForm(f => ({ ...f, cover_position: p }))}
+                    />
+                  </Field>
+                </div>
+
+                <Field label="Facebook">
+                  <input
+                    value={form.social_facebook}
+                    onChange={e => set("social_facebook", e.target.value)}
+                    placeholder="tutienda  ·  o pega el enlace"
+                    maxLength={200}
+                    style={inputStyle}
+                  />
+                </Field>
+
+                <Field label="Instagram">
+                  <input
+                    value={form.social_instagram}
+                    onChange={e => set("social_instagram", e.target.value)}
+                    placeholder="@tutienda  ·  o pega el enlace"
+                    maxLength={200}
+                    style={inputStyle}
+                  />
+                </Field>
+
+                <div className="perfil-full">
+                  <Hint>
+                    El icono de WhatsApp usa el número que pusiste en Identidad.
+                  </Hint>
+                </div>
+
+                <div className="perfil-full">
+                  <Field label="Dirección de tu tienda">
+                    <input
+                      value={form.store_address}
+                      onChange={e => set("store_address", e.target.value)}
+                      placeholder="Ej: Calle 10 #5-23, Centro Comercial Ventura"
+                      maxLength={200}
+                      style={inputStyle}
+                    />
+                    <Hint>Se muestra en el mapa de tu perfil, junto con tu ciudad y país.</Hint>
+                  </Field>
+                </div>
+
+                <div className="perfil-full">
+                  <Field label="Enlace de Google Maps">
+                    <input
+                      value={form.store_maps_url}
+                      onChange={e => set("store_maps_url", e.target.value)}
+                      placeholder="https://maps.app.goo.gl/…"
+                      maxLength={500}
+                      style={inputStyle}
+                    />
+                    <Hint>
+                      Busca tu tienda en Google Maps y pega el enlace de Compartir. El botón
+                      “Ver en Google Maps” llevará justo ahí.
+                    </Hint>
+                  </Field>
+                </div>
+
+                <div className="perfil-full">
+                  <Field label="Horarios de atención">
+                    <HoursEditor
+                      hours={form.store_hours}
+                      onChange={h => setForm(f => ({ ...f, store_hours: h }))}
+                    />
+                  </Field>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* GUARDAR */}
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        <div style={{
+          display: "flex", alignItems: "center", gap: "16px",
+          flexWrap: "wrap", marginTop: "clamp(20px, 3vw, 32px)",
+        }}>
           <button type="submit" disabled={saving || uploading} style={{
             padding: "12px 32px", borderRadius: "10px",
             background: `linear-gradient(90deg, ${COURT}, ${BALL})`,
@@ -642,8 +723,8 @@ export default function PerfilPage() {
           }}>
             {saving ? "Guardando..." : "Guardar cambios"}
           </button>
-          {saved && <span style={{ fontFamily: MONO, fontSize: "12px", color: COURT }}>✓ Guardado correctamente</span>}
-          {saveError && <span style={{ fontFamily: MONO, fontSize: "12px", color: "#ff4f4f" }}>✕ {saveError}</span>}
+          {saved && <Note kind="ok">Guardado correctamente</Note>}
+          {saveError && <Note kind="error">{saveError}</Note>}
         </div>
 
         {/* ELIMINAR PERFIL */}
@@ -719,4 +800,355 @@ export default function PerfilPage() {
 
     </div>
   );
+}
+
+/* ── Selector de portada: solo las autorizadas ─────────────────────────── */
+function CoverPicker({ value, onChange, position, onPositionChange }: {
+  value: string;
+  onChange: (v: string) => void;
+  position: number;
+  onPositionChange: (p: number) => void;
+}) {
+  const options = [
+    { path: "", name: "Sin portada", hint: "Degradado por defecto" },
+    ...STORE_COVERS.map(c => ({ path: c.path, name: c.name, hint: "" })),
+  ];
+
+  return (
+    <div>
+      <div style={{
+        display: "grid", gap: "10px",
+        gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+      }}>
+        {options.map(opt => {
+          const active = value === opt.path;
+          return (
+            <button
+              key={opt.path || "none"}
+              type="button"
+              onClick={() => onChange(opt.path)}
+              aria-pressed={active}
+              style={{
+                position: "relative", padding: 0, cursor: "pointer",
+                borderRadius: "10px", overflow: "hidden", textAlign: "left",
+                border: `1px solid ${active ? COURT : "rgba(255,255,255,0.12)"}`,
+                boxShadow: active ? `0 0 0 1px ${COURT}, 0 8px 24px -12px ${COURT}66` : "none",
+                background: "rgba(255,255,255,0.03)",
+                transition: "border-color 0.15s, box-shadow 0.15s",
+              }}
+            >
+              <div style={{
+                position: "relative", width: "100%", aspectRatio: "16 / 7",
+                background: opt.path
+                  ? undefined
+                  : `radial-gradient(ellipse 80% 70% at 30% 20%, rgba(46,230,193,0.30), transparent 60%),
+                     radial-gradient(ellipse 60% 50% at 85% 80%, rgba(255,79,216,0.24), transparent 70%),
+                     linear-gradient(180deg, #0a1320 0%, #060912 100%)`,
+              }}>
+                {opt.path && (
+                  <Image src={opt.path} alt={opt.name} fill sizes="220px"
+                    style={{ objectFit: "cover" }} />
+                )}
+                {active && (
+                  <span style={{
+                    position: "absolute", top: 6, right: 6,
+                    width: 20, height: 20, borderRadius: "50%",
+                    background: COURT, color: BG0,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontFamily: MONO, fontSize: 12, fontWeight: 700, lineHeight: 1,
+                  }}>✓</span>
+                )}
+              </div>
+              <div style={{ padding: "8px 10px 9px" }}>
+                <p style={{
+                  fontFamily: MONO, fontSize: 10.5, margin: 0,
+                  color: active ? COURT : INK0, letterSpacing: "0.04em",
+                }}>
+                  {opt.name}
+                </p>
+                {opt.hint && (
+                  <p style={{ fontFamily: MONO, fontSize: 8.5, color: INK2, margin: "3px 0 0" }}>
+                    {opt.hint}
+                  </p>
+                )}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {!isValidStoreCover(value) && (
+        <p style={{ fontFamily: MONO, fontSize: 10, color: "#ff6b6b", margin: "10px 0 0" }}>
+          Esa portada no está entre las autorizadas. Elige una de la lista.
+        </p>
+      )}
+
+      {value && (
+        <CoverPositioner
+          src={value}
+          position={position}
+          onChange={onPositionChange}
+        />
+      )}
+    </div>
+  );
+}
+
+/* ── Horarios de atención, día por día ─────────────────────────────────── */
+const HOUR_DAYS = [
+  { key: "mon", label: "Lunes" },
+  { key: "tue", label: "Martes" },
+  { key: "wed", label: "Miércoles" },
+  { key: "thu", label: "Jueves" },
+  { key: "fri", label: "Viernes" },
+  { key: "sat", label: "Sábado" },
+  { key: "sun", label: "Domingo" },
+];
+
+const MORNING: HourSlot = { open: "09:00", close: "13:00" };
+const EVENING: HourSlot = { open: "15:00", close: "19:00" };
+
+function HoursEditor({ hours, onChange }: {
+  hours: StoreHours;
+  onChange: (h: StoreHours) => void;
+}) {
+  const slotsOf = (key: string): HourSlot[] => hours[key] ?? [];
+
+  function setSlots(key: string, slots: HourSlot[]) {
+    const next = { ...hours };
+    if (slots.length === 0) delete next[key];
+    else next[key] = slots;
+    onChange(next);
+  }
+
+  /** Cerrado → jornada corrida; ya abierto → cerrado */
+  function toggleDay(key: string) {
+    setSlots(key, slotsOf(key).length ? [] : [{ open: "10:00", close: "19:00" }]);
+  }
+
+  function setTime(key: string, i: number, field: keyof HourSlot, value: string) {
+    const slots = [...slotsOf(key)];
+    slots[i] = { ...slots[i], [field]: value };
+    setSlots(key, slots);
+  }
+
+  /** Parte la jornada en mañana y tarde, con su descanso en medio */
+  function splitDay(key: string) {
+    setSlots(key, [{ ...MORNING }, { ...EVENING }]);
+  }
+
+  function removeSlot(key: string, i: number) {
+    setSlots(key, slotsOf(key).filter((_, j) => j !== i));
+  }
+
+  /** Copia el horario del primer día abierto al resto */
+  function applyToAll() {
+    const first = HOUR_DAYS.find(d => slotsOf(d.key).length);
+    if (!first) return;
+    const model = slotsOf(first.key).map(s => ({ ...s }));
+    const next: StoreHours = {};
+    for (const d of HOUR_DAYS) next[d.key] = model.map(s => ({ ...s }));
+    onChange(next);
+  }
+
+  const anyOpen = HOUR_DAYS.some(d => slotsOf(d.key).length);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+      {HOUR_DAYS.map(d => {
+        const slots = slotsOf(d.key);
+        const open  = slots.length > 0;
+
+        return (
+          <div key={d.key} style={{
+            display: "flex", alignItems: "flex-start", gap: "10px", flexWrap: "wrap",
+            padding: "10px", borderRadius: "9px",
+            background: open ? "rgba(46,230,193,0.05)" : "rgba(255,255,255,0.02)",
+            border: `1px solid ${open ? `${COURT}33` : "rgba(255,255,255,0.08)"}`,
+          }}>
+            <button type="button" onClick={() => toggleDay(d.key)} style={{
+              fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em",
+              padding: "6px 10px", borderRadius: "6px", cursor: "pointer",
+              minWidth: "112px", textAlign: "left", flexShrink: 0,
+              color: open ? COURT : INK2,
+              background: "transparent",
+              border: `1px solid ${open ? `${COURT}55` : "rgba(255,255,255,0.14)"}`,
+            }}>
+              {open ? "● " : "○ "}{d.label}
+            </button>
+
+            {!open ? (
+              <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2, padding: "7px 0" }}>
+                Cerrado
+              </span>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: "7px", flex: 1, minWidth: 0 }}>
+                {slots.map((s, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: "7px", flexWrap: "wrap" }}>
+                    {slots.length > 1 && (
+                      <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, minWidth: "48px", letterSpacing: "0.08em" }}>
+                        {i === 0 ? "Mañana" : "Tarde"}
+                      </span>
+                    )}
+                    <input type="time" value={s.open}
+                      onChange={e => setTime(d.key, i, "open", e.target.value)}
+                      style={{ ...inputStyle, width: "auto", padding: "6px 9px", fontSize: "11px" }} />
+                    <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2 }}>a</span>
+                    <input type="time" value={s.close}
+                      onChange={e => setTime(d.key, i, "close", e.target.value)}
+                      style={{ ...inputStyle, width: "auto", padding: "6px 9px", fontSize: "11px" }} />
+                    {slots.length > 1 && (
+                      <button type="button" onClick={() => removeSlot(d.key, i)}
+                        title="Quitar esta franja"
+                        style={{
+                          display: "flex", padding: "6px", borderRadius: "6px", cursor: "pointer",
+                          background: "transparent", border: "1px solid rgba(255,79,79,0.3)", color: "#ff6b6b",
+                        }}>
+                        <Trash2 size={12} strokeWidth={2} />
+                      </button>
+                    )}
+                  </div>
+                ))}
+
+                {slots.length === 1 && (
+                  <button type="button" onClick={() => splitDay(d.key)} style={{
+                    alignSelf: "flex-start", display: "flex", alignItems: "center", gap: "6px",
+                    fontFamily: MONO, fontSize: "9px", letterSpacing: "0.08em",
+                    textTransform: "uppercase", padding: "5px 9px", borderRadius: "6px",
+                    cursor: "pointer", color: INK2, background: "transparent",
+                    border: "1px solid rgba(255,255,255,0.14)",
+                  }}>
+                    <Plus size={11} strokeWidth={2.2} />
+                    Cierro a mediodía
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {anyOpen && (
+        <button type="button" onClick={applyToAll} style={{
+          alignSelf: "flex-start", marginTop: "4px",
+          fontFamily: MONO, fontSize: "9.5px", letterSpacing: "0.08em",
+          textTransform: "uppercase", padding: "7px 12px", borderRadius: "7px",
+          cursor: "pointer", color: BALL, background: "transparent",
+          border: `1px solid ${BALL}44`,
+        }}>
+          Usar el mismo horario todos los días
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ── Reposicionar la portada arrastrándola, estilo Facebook ────────────── */
+function CoverPositioner({ src, position, onChange }: {
+  src: string;
+  position: number;
+  onChange: (p: number) => void;
+}) {
+  const boxRef    = useRef<HTMLDivElement>(null);
+  const [dragging, setDragging] = useState(false);
+  // Se guardan al empezar a arrastrar para calcular el desplazamiento relativo
+  const startRef  = useRef({ y: 0, pos: 50 });
+
+  function clamp(n: number) { return Math.min(100, Math.max(0, n)); }
+
+  function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    startRef.current = { y: e.clientY, pos: position };
+    setDragging(true);
+  }
+
+  function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    if (!dragging) return;
+    const h = boxRef.current?.clientHeight ?? 1;
+    // Arrastrar hacia abajo debe revelar la parte de arriba de la imagen
+    const delta = ((e.clientY - startRef.current.y) / h) * 100;
+    onChange(Math.round(clamp(startRef.current.pos - delta)));
+  }
+
+  function onPointerUp(e: React.PointerEvent<HTMLDivElement>) {
+    e.currentTarget.releasePointerCapture(e.pointerId);
+    setDragging(false);
+  }
+
+  /** Con el teclado se ajusta de 5 en 5 */
+  function onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (e.key === "ArrowUp")   { e.preventDefault(); onChange(clamp(position - 5)); }
+    if (e.key === "ArrowDown") { e.preventDefault(); onChange(clamp(position + 5)); }
+  }
+
+  return (
+    <div style={{ marginTop: "14px" }}>
+      <div style={{
+        display: "flex", alignItems: "baseline", justifyContent: "space-between",
+        gap: "10px", marginBottom: "8px", flexWrap: "wrap",
+      }}>
+        <span style={{ fontFamily: MONO, fontSize: 9.5, color: INK2, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+          Arrastra para reposicionar
+        </span>
+        <span style={{ fontFamily: MONO, fontSize: 9.5, color: COURT, fontVariantNumeric: "tabular-nums" }}>
+          {position}%
+        </span>
+      </div>
+
+      <div
+        ref={boxRef}
+        role="slider"
+        tabIndex={0}
+        aria-label="Posición vertical de la portada"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={position}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onKeyDown={onKeyDown}
+        style={{
+          position: "relative", width: "100%",
+          // Mismo encuadre ancho que la portada real
+          aspectRatio: "1200 / 340",
+          borderRadius: "10px", overflow: "hidden",
+          border: `1px solid ${dragging ? COURT : "rgba(255,255,255,0.12)"}`,
+          cursor: dragging ? "grabbing" : "grab",
+          touchAction: "none", userSelect: "none",
+        }}
+      >
+        <Image
+          src={src}
+          alt="Previsualización de la portada"
+          fill
+          sizes="720px"
+          draggable={false}
+          style={{ objectFit: "cover", objectPosition: `center ${position}%`, pointerEvents: "none" }}
+        />
+        {/* Guía: dónde queda el avatar en el perfil real */}
+        <div aria-hidden="true" style={{
+          position: "absolute", left: "5%", bottom: "-14%",
+          width: "13%", aspectRatio: "1", borderRadius: "50%",
+          border: "2px dashed rgba(255,255,255,0.5)",
+          background: "rgba(5,7,13,0.5)",
+        }} />
+      </div>
+
+      <div style={{ display: "flex", gap: "8px", marginTop: "10px", flexWrap: "wrap" }}>
+        <button type="button" onClick={() => onChange(0)} style={miniBtn(position === 0)}>Arriba</button>
+        <button type="button" onClick={() => onChange(50)} style={miniBtn(position === 50)}>Centro</button>
+        <button type="button" onClick={() => onChange(100)} style={miniBtn(position === 100)}>Abajo</button>
+      </div>
+    </div>
+  );
+}
+
+function miniBtn(active: boolean): React.CSSProperties {
+  return {
+    fontFamily: MONO, fontSize: 9.5, letterSpacing: "0.08em", textTransform: "uppercase",
+    padding: "6px 12px", borderRadius: "7px", cursor: "pointer",
+    color: active ? BG0 : INK2,
+    background: active ? COURT : "transparent",
+    border: `1px solid ${active ? COURT : "rgba(255,255,255,0.14)"}`,
+  };
 }

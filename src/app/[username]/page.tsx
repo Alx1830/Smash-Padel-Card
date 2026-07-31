@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { ProfilePage } from "@/components/ProfilePage";
+import { StoreProfilePage, StorePendingScreen } from "@/components/StoreProfilePage";
 import { Footer } from "@/components/Footer";
 import { MobileTabBar } from "@/components/MobileTabBar";
 import { notFound } from "next/navigation";
@@ -9,6 +10,9 @@ import { SET_CARD_COUNT } from "@/data/pokemon-cards";
 
 export const revalidate = 300;
 export const dynamicParams = true;
+
+/** Valor guardado en players.tipo_perfil para las tiendas */
+const TIENDA = "Tienda Pokémon";
 
 export async function generateMetadata({
   params,
@@ -22,7 +26,7 @@ export async function generateMetadata({
   );
   const { data } = await adminClient
     .from("players")
-    .select("username, first_name, last_name")
+    .select("username, first_name, last_name, tipo_perfil, store_status")
     .ilike("username", username)
     .single();
 
@@ -30,12 +34,22 @@ export async function generateMetadata({
     ? `${data.first_name}${data.last_name ? " " + data.last_name : ""}`
     : data?.username ?? username;
 
-  const title = `Colección de ${display} · FaceBinder`;
-  const description = `Mira la colección de cartas Pokémon TCG de ${display}. Descubre sus sets completados, cartas Normal, Reverse Holo y Holofoil en FaceBinder.`;
+  const isStore = data?.tipo_perfil === TIENDA;
+
+  const title = isStore
+    ? `${display} · Tienda Pokémon en FaceBinder`
+    : `Colección de ${display} · FaceBinder`;
+  const description = isStore
+    ? `Conoce la tienda ${display} en FaceBinder: cartas Pokémon TCG, novedades y contacto directo.`
+    : `Mira la colección de cartas Pokémon TCG de ${display}. Descubre sus sets completados, cartas Normal, Reverse Holo y Holofoil en FaceBinder.`;
 
   return {
     title,
     description,
+    // Una tienda sin aprobar no debe llegar a los buscadores
+    ...(isStore && data?.store_status !== "approved"
+      ? { robots: { index: false, follow: false } }
+      : {}),
     openGraph: {
       title,
       description,
@@ -65,6 +79,58 @@ export default async function JugadorPage({
   ]);
 
   if (!data || data.activo === false) notFound();
+
+  /* ── Tiendas: perfil propio, tipo fanpage ─────────────────────────────── */
+  if (data.tipo_perfil === TIENDA) {
+    const isOwner = !!user && user.id === data.user_id;
+
+    // Un admin necesita ver la tienda para poder decidir si la aprueba
+    let isAdmin = false;
+    if (user && !isOwner) {
+      const { data: me } = await supabase
+        .from("players").select("role").eq("user_id", user.id).single();
+      isAdmin = me?.role === "admin";
+    }
+
+    const approved = data.store_status === "approved";
+
+    return (
+      <main style={{ background: "#05070d", minHeight: "100vh" }}>
+        {approved || isOwner || isAdmin ? (
+          <StoreProfilePage
+            store={{
+              username:      data.username,
+              firstName:     data.first_name ?? "",
+              lastName:      data.last_name ?? "",
+              tipoPerfil:    data.tipo_perfil,
+              pais:          data.pais ?? "—",
+              ciudad:        data.ciudad ?? "—",
+              photoUrl:      data.photo_url || undefined,
+              coverUrl:      data.cover_url || undefined,
+              coverPosition: data.cover_position ?? 50,
+              address:       data.store_address || undefined,
+              mapsUrl:       data.store_maps_url || undefined,
+              hours:         data.store_hours ?? null,
+              facebook:      data.social_facebook || undefined,
+              instagram:     data.social_instagram || undefined,
+              // El WhatsApp ya existía en el perfil: indicativo + número
+              whatsapp:      data.whatsapp_numero
+                ? `${data.whatsapp_indicativo ?? ""}${data.whatsapp_numero}`
+                : undefined,
+              storeStatus:   data.store_status ?? null,
+              profileUserId: data.user_id ?? undefined,
+              currentUserId: user?.id ?? null,
+              isOwner,
+            }}
+          />
+        ) : (
+          <StorePendingScreen username={data.username} />
+        )}
+        <Footer />
+        <MobileTabBar />
+      </main>
+    );
+  }
 
   // Fetch inventory + featured cards + wishlist in parallel
   // NOTE: no .in("set_id", ...) filter — SET_CARDS is a lazy Proxy, empty on server
@@ -114,9 +180,7 @@ export default async function JugadorPage({
     pais:            data.pais ?? "—",
     tipoPerfil:      data.tipo_perfil ?? "—",
     ciudad:          data.ciudad ?? "—",
-    pokemonFavorito: data.pokemon_favorito ?? "—",
     edad:            data.edad ?? 0,
-    energiaFavorita:  data.energia_favorita ?? "—",
     setFavoritoId:    data.set_favorito ?? undefined,
     photoUrl:         data.photo_url || undefined,
     profileUserId:    data.user_id ?? undefined,

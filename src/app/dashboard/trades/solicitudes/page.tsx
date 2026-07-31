@@ -299,17 +299,40 @@ function SolicitudesPageInner() {
   }
 
   return (
-    <div style={{ padding: "24px", minHeight: "100vh" }}>
+    <div style={{ padding: "clamp(14px, 2.2vw, 24px)" }}>
       <style>{`
         .sol-scroll::-webkit-scrollbar { width: 7px; }
         .sol-scroll::-webkit-scrollbar-track { background: transparent; }
         .sol-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
-        .sol-cards { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        .sol-cards { display: grid; grid-template-columns: 1fr; gap: 16px; align-content: start; }
         @media (min-width: 640px) { .sol-cards { grid-template-columns: 1fr 1fr; } }
+        /* Las miniaturas llenan el ancho de su columna en vez de amontonarse
+           a la izquierda dejando el resto vacío. */
+        .sol-thumbs {
+          display: grid; gap: 8px;
+          grid-template-columns: repeat(auto-fill, minmax(58px, 1fr));
+        }
         /* Propuesta y negociación lado a lado cuando hay ancho */
         .sol-split { display: grid; grid-template-columns: 1fr; gap: 16px; }
         @media (min-width: 1000px) {
-          .sol-split { grid-template-columns: minmax(0, 1fr) 360px; align-items: start; }
+          .sol-split { grid-template-columns: minmax(0, 1fr) minmax(320px, 33%); align-items: stretch; }
+        }
+        /* Viendo una sola solicitud, las dos tarjetas llenan la pantalla y el
+           espacio de sobra se lo reparten las cartas y los mensajes. */
+        @media (min-width: 1000px) {
+          .sol-split-solo { min-height: calc(100dvh - 108px); }
+          .sol-split-solo > * { min-height: 0; }
+        }
+        .sol-prop { display: flex; flex-direction: column; }
+        .sol-split-solo .sol-cards { flex: 1; }
+        /* El chat abierto iguala la altura de la propuesta y los mensajes se
+           quedan con todo el espacio que sobra; colapsado no se estira. */
+        .sol-chat { display: flex; flex-direction: column; align-self: start; min-width: 0; }
+        .sol-chat-open { align-self: stretch; }
+        .sol-chat-body { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+        .sol-chat-msgs { max-height: 230px; overflow-y: auto; }
+        @media (min-width: 1000px) {
+          .sol-chat-open .sol-chat-msgs { max-height: none; flex: 1; min-height: 120px; }
         }
       `}</style>
 
@@ -349,7 +372,7 @@ function SolicitudesPageInner() {
             : "Todavía no tienes solicitudes de intercambio."}
         </p>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 1320 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, width: "100%" }}>
           {visible.map(trade => (
             <TradeCardRow
               key={trade.id}
@@ -357,6 +380,7 @@ function SolicitudesPageInner() {
               meId={meId}
               other={players[trade.to_user_id === meId ? trade.from_user_id : trade.to_user_id]}
               focused={trade.id === focusId}
+              solo={visible.length === 1}
               acting={acting === trade.id}
               findCard={findCard}
               priceOf={priceOf}
@@ -378,12 +402,14 @@ function SolicitudesPageInner() {
 
 /* ── Tarjeta de un intercambio ──────────────────────────────── */
 function TradeCardRow({
-  trade, meId, other, focused, acting, findCard, priceOf, sideTotal, onRespond, onReceived, onHide, onZoom, supabase,
+  trade, meId, other, focused, solo, acting, findCard, priceOf, sideTotal, onRespond, onReceived, onHide, onZoom, supabase,
 }: {
   trade: Trade;
   meId: string | null;
   other: PlayerLite | undefined;
   focused: boolean;
+  /** Única solicitud en pantalla: las tarjetas pueden llenar el alto */
+  solo: boolean;
   acting: boolean;
   findCard: (c: TradeCard) => PokemonCard | undefined;
   priceOf: (card: PokemonCard | undefined, setId: string) => number | null;
@@ -442,8 +468,8 @@ function TradeCardRow({
 
   return (
     // La propuesta y la negociación son dos tarjetas hermanas
-    <div className="sol-split">
-    <div ref={ref} style={{
+    <div className={`sol-split${solo ? " sol-split-solo" : ""}`}>
+    <div ref={ref} className="sol-prop" style={{
       background: "rgba(255,255,255,0.02)",
       border: `1px solid ${focused ? `${COURT}55` : "rgba(255,255,255,0.08)"}`,
       boxShadow: focused ? `0 0 24px ${COURT}22` : "none",
@@ -718,10 +744,10 @@ function TradeChat({ tradeId, meId, other, open, onToggle, supabase }: {
   }
 
   return (
-    <div style={{
+    <div className={`sol-chat${open ? " sol-chat-open" : ""}`} style={{
       background: "rgba(255,255,255,0.02)",
       border: "1px solid rgba(255,255,255,0.08)",
-      borderRadius: 14, padding: 18, alignSelf: "start",
+      borderRadius: 14, padding: 18,
     }}>
       <button onClick={onToggle} style={{
         display: "flex", alignItems: "center", gap: 8, width: "100%",
@@ -739,9 +765,8 @@ function TradeChat({ tradeId, meId, other, open, onToggle, supabase }: {
       </button>
 
       {open && (
-        <div style={{ marginTop: 12 }}>
-          <div className="sol-scroll" style={{
-            maxHeight: 230, overflowY: "auto",
+        <div className="sol-chat-body" style={{ marginTop: 12 }}>
+          <div className="sol-scroll sol-chat-msgs" style={{
             display: "flex", flexDirection: "column", gap: 8,
             paddingRight: 4,
           }}>
@@ -806,7 +831,7 @@ function TradeChat({ tradeId, meId, other, open, onToggle, supabase }: {
             <div ref={endRef} />
           </div>
 
-          <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+          <div style={{ display: "flex", gap: 8, marginTop: 12, flexShrink: 0 }}>
             <input
               value={draft}
               maxLength={1000}
@@ -908,19 +933,19 @@ function CardList({ label, accent, cards, total, findCard, priceOf, onZoom }: {
         <p style={{ fontFamily: MONO, fontSize: 10, color: INK2, margin: 0 }}>—</p>
       ) : (
         <>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <div className="sol-thumbs">
             {cards.map((c, i) => {
               const card  = findCard(c);
               const name  = card?.name ?? String(c.card_id).split(":")[1] ?? "Carta";
               const price = priceOf(card, c.set_id);
               return (
-                <div key={i} style={{ width: 58, textAlign: "center" }}>
+                <div key={i} style={{ minWidth: 0, textAlign: "center" }}>
                   <button
                     onClick={() => card && onZoom({ card, setId: c.set_id, price })}
                     disabled={!card}
                     title={card ? `Ver ${name}` : name}
                     style={{
-                      position: "relative", width: 58, aspectRatio: "5/7",
+                      position: "relative", width: "100%", aspectRatio: "5/7",
                       padding: 0, border: "none", background: "transparent",
                       cursor: card ? "zoom-in" : "default", display: "block",
                     }}

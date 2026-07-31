@@ -21,7 +21,6 @@ export default async function AmigosPage() {
     last_name: string;
     pais: string | null;
     tipo_perfil: string | null;
-    energia_favorita: string | null;
     photo_url: string | null;
     set_favorito: string | null;
   }[] = [];
@@ -36,7 +35,7 @@ export default async function AmigosPage() {
       const ids = follows.map((f: { following_id: string }) => f.following_id);
       const { data } = await supabase
         .from("players")
-        .select("username, first_name, last_name, pais, tipo_perfil, energia_favorita, photo_url, set_favorito")
+        .select("username, first_name, last_name, pais, tipo_perfil, photo_url, set_favorito")
         .in("user_id", ids)
         .not("username", "is", null);
       players = data ?? [];
@@ -124,7 +123,6 @@ export default async function AmigosPage() {
                   lastName={p.last_name ?? ""}
                   category={p.pais ?? "—"}
                   position={p.tipo_perfil ?? "—"}
-                  energiaFavorita={p.energia_favorita ?? "—"}
                   photoUrl={p.photo_url || undefined}
                   setFavoritoId={p.set_favorito || undefined}
                 />

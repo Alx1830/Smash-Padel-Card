@@ -54,7 +54,7 @@ export default async function WishlistPage({
   const [{ data: player }, { data: { user } }] = await Promise.all([
     supabase
       .from("players")
-      .select("user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, energia_favorita, pokemon_favorito, edad, set_favorito, whatsapp_indicativo, whatsapp_numero")
+      .select("user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, edad, set_favorito, whatsapp_indicativo, whatsapp_numero")
       .ilike("username", username)
       .single(),
     supabase.auth.getUser(),
@@ -79,8 +79,6 @@ export default async function WishlistPage({
     tipoPerfil:      player.tipo_perfil ?? "",
     pais:            player.pais ?? "",
     ciudad:          player.ciudad ?? "",
-    energiaFavorita: player.energia_favorita ?? "",
-    pokemonFavorito: player.pokemon_favorito ?? "",
     edad:            player.edad ?? 0,
     setFavoritoId:   player.set_favorito ?? undefined,
     photoUrl:        player.photo_url ?? undefined,

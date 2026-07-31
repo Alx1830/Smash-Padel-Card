@@ -23,18 +23,6 @@ const SET_OPTS = POKEMON_SERIES.flatMap(series =>
   series.sets.map(set => ({ value: set.id, label: `${series.name} — ${set.name}` }))
 );
 
-const ENERGIA_OPTS = [
-  { value: "🍃 Planta",          label: "🍃 Planta" },
-  { value: "🔥 Fuego",           label: "🔥 Fuego" },
-  { value: "💧 Agua",            label: "💧 Agua" },
-  { value: "⚡ Eléctrica/Rayo",  label: "⚡ Eléctrica/Rayo" },
-  { value: "🔮 Psíquica",        label: "🔮 Psíquica" },
-  { value: "🥊 Lucha",           label: "🥊 Lucha" },
-  { value: "🖤 Oscuridad",       label: "🖤 Oscuridad" },
-  { value: "⚔️ Metal",           label: "⚔️ Metal" },
-  { value: "🐉 Dragón",          label: "🐉 Dragón" },
-  { value: "🧚 Hada",            label: "🧚 Hada" },
-];
 
 const TIPO_PERFIL_OPTS = [
   { value: "Inversionista",        label: "Inversionista" },
@@ -240,8 +228,6 @@ interface WizardForm {
   whatsapp_indicativo: string;
   whatsapp_numero:     string;
   // Step 3
-  pokemon_favorito: string;
-  energia_favorita: string;
   set_favorito:     string;
   photo_url:        string;
 }
@@ -250,7 +236,7 @@ const EMPTY: WizardForm = {
   first_name: "", last_name: "", username: "",
   pais: "", ciudad: "", edad: "", tipo_perfil: "",
   whatsapp_indicativo: "", whatsapp_numero: "",
-  pokemon_favorito: "", energia_favorita: "", set_favorito: "", photo_url: "",
+  set_favorito: "", photo_url: "",
 };
 
 const TOTAL_STEPS = 3;
@@ -403,8 +389,6 @@ export default function OnboardingPage() {
       ciudad:           form.ciudad || null,
       edad:             parseInt(form.edad) || null,
       tipo_perfil:      form.tipo_perfil,
-      pokemon_favorito: form.pokemon_favorito || null,
-      energia_favorita: form.energia_favorita || null,
       set_favorito:     form.set_favorito     || null,
       photo_url:           form.photo_url        || null,
       whatsapp_indicativo: form.whatsapp_indicativo.trim() || null,
@@ -688,22 +672,6 @@ export default function OnboardingPage() {
               </div>
             </div>
 
-            <Field label="Pokémon favorito (opcional)">
-              <CustomSelect
-                value={form.pokemon_favorito}
-                onChange={v => set("pokemon_favorito", v)}
-                options={POKEMON_OPTS}
-                placeholder="Buscar Pokémon..."
-              />
-            </Field>
-            <Field label="Energía favorita (opcional)">
-              <CustomSelect
-                value={form.energia_favorita}
-                onChange={v => set("energia_favorita", v)}
-                options={ENERGIA_OPTS}
-                placeholder="Seleccionar energía"
-              />
-            </Field>
             <Field label="Set favorito (opcional)">
               <CustomSelect
                 value={form.set_favorito}

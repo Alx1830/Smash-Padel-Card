@@ -17,7 +17,6 @@ interface Player {
   last_name:        string;
   pais:             string | null;
   tipo_perfil:      string | null;
-  energia_favorita: string | null;
   photo_url:        string | null;
   set_favorito:     string | null;
 }
@@ -42,7 +41,7 @@ export default function AmigosPage() {
       const ids = follows.map(f => f.following_id);
       const { data } = await supabase
         .from("players")
-        .select("username, first_name, last_name, pais, tipo_perfil, energia_favorita, photo_url, set_favorito")
+        .select("username, first_name, last_name, pais, tipo_perfil, photo_url, set_favorito")
         .in("user_id", ids)
         .not("username", "is", null);
 
@@ -99,7 +98,6 @@ export default function AmigosPage() {
                 lastName={p.last_name ?? ""}
                 category={p.pais ?? "—"}
                 position={p.tipo_perfil ?? "—"}
-                energiaFavorita={p.energia_favorita ?? "—"}
                 photoUrl={p.photo_url || undefined}
                 setFavoritoId={p.set_favorito || undefined}
               />

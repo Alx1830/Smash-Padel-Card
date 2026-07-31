@@ -23,8 +23,6 @@ export interface ProfileHeaderData {
   tipoPerfil:      string;
   pais:            string;
   ciudad:          string;
-  energiaFavorita: string;
-  pokemonFavorito: string;
   edad:            number;
   setFavoritoId?:  string;
   photoUrl?:       string;
@@ -266,7 +264,6 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
             </p>
           </div>
           <div style={{ position: "absolute", top: "38%", right: "80px", transform: "translateY(-80%)", textAlign: "right", fontFamily: MONO, fontSize: "15px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2, lineHeight: 2.2, zIndex: 20 }}>
-            <div>Energía Favorita / <b style={{ color: INK0 }}>{player.energiaFavorita || "—"}</b></div>
             <div>País / <b style={{ color: INK0 }}>{player.pais || "—"}</b></div>
             <div>Ciudad / <b style={{ color: INK0 }}>{player.ciudad || "—"}</b></div>
           </div>
@@ -302,7 +299,6 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
             {player.tipoPerfil || "Maestro Pokémon"}
           </p>
           <div style={{ marginTop: "20px", display: "flex", flexWrap: "wrap", gap: "8px 24px", fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", color: INK2 }}>
-            <span>Energía Favorita / <b style={{ color: INK0 }}>{player.energiaFavorita || "—"}</b></span>
             <span>País / <b style={{ color: INK0 }}>{player.pais || "—"}</b></span>
             <span>Ciudad / <b style={{ color: INK0 }}>{player.ciudad || "—"}</b></span>
           </div>
@@ -361,7 +357,7 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
               <div style={{ transform: "scale(1.2)", transformOrigin: "top left" }}>
                 <PlayerCard3D
                   username={player.username} firstName={player.firstName} lastName={player.lastName}
-                  position={player.tipoPerfil} category={player.pais} energiaFavorita={player.energiaFavorita}
+                  position={player.tipoPerfil} category={player.pais}
                   setFavoritoId={player.setFavoritoId} photoUrl={player.photoUrl}
                 />
               </div>
@@ -381,8 +377,6 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
                   </h3>
                   <Row label="Tipo de Perfil"   value={player.tipoPerfil || "—"} />
                   <Row label="Edad"             value={player.edad ? `${player.edad} años` : "—"} />
-                  <Row label="Pokémon Favorito" value={player.pokemonFavorito || "—"} />
-                  <Row label="Energía Favorita" value={player.energiaFavorita || "—"} />
                 </>
               )}
             </div>
@@ -397,7 +391,7 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
           <div style={{ display: "flex", justifyContent: "center", marginBottom: "48px" }}>
             <PlayerCard3D
               username={player.username} firstName={player.firstName} lastName={player.lastName}
-              position={player.tipoPerfil} category={player.pais} energiaFavorita={player.energiaFavorita}
+              position={player.tipoPerfil} category={player.pais}
               photoUrl={player.photoUrl} setFavoritoId={player.setFavoritoId}
             />
           </div>
@@ -412,9 +406,7 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
               <h3 style={{ fontFamily: DISP, fontSize: "22px", letterSpacing: "-0.01em", margin: "0 0 16px", color: INK0 }}>
                 Perfil Maestro Pokémon
               </h3>
-              <Row label="Pokémon Favorito" value={player.pokemonFavorito || "—"} />
               <Row label="Edad"             value={player.edad ? `${player.edad} años` : "—"} />
-              <Row label="Energía Favorita" value={player.energiaFavorita || "—"} />
               <Row label="Tipo de Perfil"   value={player.tipoPerfil || "—"} />
               <div style={{ marginTop: "40px" }}>
                 <Showcase featuredCards={featuredCards} inventoryRows={inventoryRows} />

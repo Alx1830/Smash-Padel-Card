@@ -10,7 +10,6 @@ interface PlayerCardProps {
   lastName:        string;
   position:        string;
   category:        string;
-  energiaFavorita: string;
   photoUrl?:       string;
   setFavoritoId?:  string;
 }
@@ -24,7 +23,7 @@ const INK1   = "#c9cfdd";
 const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
 
 export function PlayerCard3D({
-  username, firstName, lastName, position, category, energiaFavorita, photoUrl, setFavoritoId,
+  username, firstName, lastName, position, category, photoUrl, setFavoritoId,
 }: PlayerCardProps) {
   const setLogo = setFavoritoId ? ALL_SETS.find(s => s.id === setFavoritoId)?.logo : undefined;
   const cardRef = useRef<HTMLDivElement>(null);
@@ -196,19 +195,12 @@ export function PlayerCard3D({
             zIndex: 10,
             background: "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
           }}>
-            {/* Set favorito o energía favorita */}
+            {/* Logo del set favorito; sin él, el espacio queda libre */}
             {setLogo ? (
               <div style={{ position: "relative", width: "80px", height: "28px", flexShrink: 0 }}>
                 <Image src={setLogo} alt="Set favorito" fill style={{ objectFit: "contain", objectPosition: "left center" }} unoptimized />
               </div>
-            ) : (
-              <div style={{
-                fontFamily: "var(--font-jetbrains)", fontSize: "11px",
-                letterSpacing: "0.1em", color: INK1,
-              }}>
-                {energiaFavorita || "—"}
-              </div>
-            )}
+            ) : <span />}
 
             {/* País con bandera */}
             <div style={{

@@ -32,9 +32,7 @@ interface PlayerData {
   pais:             string;
   tipoPerfil:       string;
   ciudad:           string;
-  pokemonFavorito:  string;
   edad:             number;
-  energiaFavorita:  string;
   setFavoritoId?:   string;
   photoUrl?:        string;
   year?:            string;
@@ -135,7 +133,6 @@ export function ProfilePage({ player }: { player: PlayerData }) {
             textAlign: "right", fontFamily: MONO, fontSize: "15px",
             letterSpacing: "0.15em", textTransform: "uppercase", color: INK2, lineHeight: 2.2, zIndex: 20,
           }}>
-            <div>Energía Favorita / <b style={{ color: INK0 }}>{player.energiaFavorita || "—"}</b></div>
             <div>País / <b style={{ color: INK0 }}>{player.pais || "—"}</b></div>
             <div>Ciudad / <b style={{ color: INK0 }}>{player.ciudad || "—"}</b></div>
           </div>
@@ -191,7 +188,6 @@ export function ProfilePage({ player }: { player: PlayerData }) {
             fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em",
             textTransform: "uppercase", color: INK2,
           }}>
-            <span>Energía Favorita / <b style={{ color: INK0 }}>{player.energiaFavorita || "—"}</b></span>
             <span>País / <b style={{ color: INK0 }}>{player.pais || "—"}</b></span>
             <span>Ciudad / <b style={{ color: INK0 }}>{player.ciudad || "—"}</b></span>
           </div>
@@ -223,7 +219,6 @@ export function ProfilePage({ player }: { player: PlayerData }) {
                   lastName={player.lastName}
                   position={player.tipoPerfil}
                   category={player.pais}
-                  energiaFavorita={player.energiaFavorita}
                   setFavoritoId={player.setFavoritoId}
                   photoUrl={player.photoUrl}
                 />
@@ -259,7 +254,6 @@ export function ProfilePage({ player }: { player: PlayerData }) {
               lastName={player.lastName}
               position={player.tipoPerfil}
               category={player.pais}
-              energiaFavorita={player.energiaFavorita}
               photoUrl={player.photoUrl}
               setFavoritoId={player.setFavoritoId}
             />
@@ -651,11 +645,19 @@ function WishlistSlider({
   const inventoryMap: InventoryMap = {};
   inventoryRows.forEach(r => { inventoryMap[r.card_id] = r.quantity; });
 
-  // Loop infinito: duplicamos el array para simular carrusel continuo
-  const looped = resolved.length > 0 ? [...resolved, ...resolved, ...resolved] : [];
+  const VISIBLE  = 4;
+  const CARD_GAP = 10; // px
+
+  /**
+   * Loop infinito: duplicamos el array para simular carrusel continuo, pero
+   * solo si hay más cartas que huecos visibles. Con 1 sola carta, duplicar
+   * hacía que apareciera repetida 3 veces.
+   */
+  const needsLoop = resolved.length > VISIBLE;
+  const looped    = needsLoop ? [...resolved, ...resolved, ...resolved] : resolved;
 
   useEffect(() => {
-    if (resolved.length < 2) return;
+    if (!needsLoop) return;
     const t = setInterval(() => {
       setAnimated(true);
       setOffset(prev => {
@@ -671,12 +673,9 @@ function WishlistSlider({
       });
     }, 2000);
     return () => clearInterval(t);
-  }, [resolved.length]);
+  }, [resolved.length, needsLoop]);
 
   if (resolved.length === 0) return null;
-
-  const VISIBLE  = 4;
-  const CARD_GAP = 10; // px
 
   return (
     <div style={{ marginBottom: "16px", minWidth: 0, overflow: "hidden" }}>
@@ -802,7 +801,8 @@ function WishlistSlider({
 }
 
 /* ── Market Listings Slider ─────────────────────────────────── */
-function MarketListingsSlider({ profileUserId, username }: { profileUserId?: string; username?: string }) {
+/** Lo reutiliza la fanpage de tienda, que trae su propio encabezado */
+export function MarketListingsSlider({ profileUserId, username, hideHeader }: { profileUserId?: string; username?: string; hideHeader?: boolean }) {
   const [listings, setListings] = useState<{ id: string; card_id: number | string; set_id: string; price_cop: number; currency: string; version: string; language?: string | null }[]>([]);
   const [loaded,   setLoaded]   = useState(false);
   const [offset,   setOffset]   = useState(0);
@@ -834,10 +834,15 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
     return card && set ? { card, set, listing: l } : null;
   }).filter(Boolean) as { card: NonNullable<ReturnType<typeof SET_CARDS[string]["find"]>>; set: { id: string; name: string }; listing: typeof listings[0] }[];
 
-  const looped = resolved.length > 0 ? [...resolved, ...resolved, ...resolved] : [];
+  const VISIBLE  = 4;
+  const CARD_GAP = 10;
+
+  /** Solo se duplica si sobran cartas; con 1 sola salía repetida 3 veces */
+  const needsLoop = resolved.length > VISIBLE;
+  const looped    = needsLoop ? [...resolved, ...resolved, ...resolved] : resolved;
 
   useEffect(() => {
-    if (resolved.length < 2) return;
+    if (!needsLoop) return;
     const t = setInterval(() => {
       setAnimated(true);
       setOffset(prev => {
@@ -849,24 +854,21 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
       });
     }, 2000);
     return () => clearInterval(t);
-  }, [resolved.length]);
-
-
-  const VISIBLE  = 4;
-  const CARD_GAP = 10;
+  }, [resolved.length, needsLoop]);
   const GREEN    = COURT_C; // "#2ee6c1"
 
   return (
-    <div style={{ marginBottom: "16px", minWidth: 0, overflow: "hidden", marginTop: "40px" }}>
-      {/* Header */}
-      <div style={{
-        fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
-        textTransform: "uppercase", color: GREEN,
-        display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
-      }}>
-        <span style={{ width: "22px", height: "1px", background: GREEN, display: "inline-block" }} />
-        Cartas en venta
-      </div>
+    <div style={{ marginBottom: hideHeader ? 0 : "16px", minWidth: 0, overflow: "hidden", marginTop: hideHeader ? 0 : "40px" }}>
+      {!hideHeader && (
+        <div style={{
+          fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
+          textTransform: "uppercase", color: GREEN,
+          display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
+        }}>
+          <span style={{ width: "22px", height: "1px", background: GREEN, display: "inline-block" }} />
+          Cartas en venta
+        </div>
+      )}
 
       {/* Slider or empty state */}
       {!loaded ? null : resolved.length === 0 ? (

@@ -16,7 +16,7 @@ async function loadSet(username: string, setSlug: string) {
 
   const { data: player } = await supabase
     .from("players")
-    .select("user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, energia_favorita, pokemon_favorito, edad, set_favorito")
+    .select("user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, edad, set_favorito")
     .ilike("username", username)
     .single();
   if (!player?.user_id) return null;
@@ -91,8 +91,6 @@ export default async function MySetPage({
     tipoPerfil:      player.tipo_perfil ?? "",
     pais:            player.pais ?? "",
     ciudad:          player.ciudad ?? "",
-    energiaFavorita: player.energia_favorita ?? "",
-    pokemonFavorito: player.pokemon_favorito ?? "",
     edad:            player.edad ?? 0,
     setFavoritoId:   player.set_favorito ?? undefined,
     photoUrl:        player.photo_url ?? undefined,

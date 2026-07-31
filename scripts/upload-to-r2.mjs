@@ -2,21 +2,39 @@
  * Descarga todas las imágenes de cartas desde Scrydex y las sube a Cloudflare R2.
  * Luego actualiza todas las URLs en los archivos de sets.
  *
- * Uso: node scripts/upload-to-r2.mjs
+ * Uso: node --env-file=.env.local scripts/upload-to-r2.mjs
+ *
+ * Requiere R2_ACCESS_KEY_ID y R2_SECRET_ACCESS_KEY en .env.local
+ * (R2 → API → Manage API tokens; las credenciales son de tipo S3).
  */
 
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // ── Config ──────────────────────────────────────────────────────────────────
 const ACCOUNT_ID  = "f41f124769343cd4354765d6a149a75a";
-const API_TOKEN   = "cfut_4kScbLxZCeXfLKNm0whpcRsXjvdN8gNMaQlDUnAD76db5277";
+const ACCESS_KEY  = process.env.R2_ACCESS_KEY_ID     ?? "";
+const SECRET_KEY  = process.env.R2_SECRET_ACCESS_KEY ?? "";
 const BUCKET_NAME = "facebinder-cards";
 const PUBLIC_URL  = "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev";
 const SETS_DIR    = path.resolve(__dirname, "../src/data/sets");
+
+if (!ACCESS_KEY || !SECRET_KEY) {
+  console.error("❌ Faltan R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY.");
+  console.error("   Corre: node --env-file=.env.local scripts/upload-to-r2.mjs");
+  process.exit(1);
+}
+
+// ── S3 client apuntando a R2 (la vía REST responde 429 con tanto volumen) ────
+const s3 = new S3Client({
+  region: "auto",
+  endpoint: `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: { accessKeyId: ACCESS_KEY, secretAccessKey: SECRET_KEY },
+});
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
@@ -28,20 +46,12 @@ async function downloadImage(url) {
 }
 
 async function uploadToR2(key, buffer, contentType = "image/png") {
-  const url = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/r2/buckets/${BUCKET_NAME}/objects/${key}`;
-  const res = await fetch(url, {
-    method: "PUT",
-    headers: {
-      "Authorization": `Bearer ${API_TOKEN}`,
-      "Content-Type": contentType,
-      "Content-Length": String(buffer.length),
-    },
-    body: buffer,
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`R2 upload failed (${res.status}): ${text}`);
-  }
+  await s3.send(new PutObjectCommand({
+    Bucket: BUCKET_NAME,
+    Key: key,
+    Body: buffer,
+    ContentType: contentType,
+  }));
 }
 
 function scrydexUrlToKey(scrydexUrl) {
