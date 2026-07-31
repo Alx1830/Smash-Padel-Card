@@ -64,7 +64,13 @@ const {
 // a responder 429 con decenas de miles de objetos, pero aqui son ~1.500.
 const USE_S3 = Boolean(R2_ACCESS_KEY_ID && R2_SECRET_ACCESS_KEY);
 if (!DRY_RUN && !USE_S3) {
-  console.log("ℹ️  Sin llaves S3 (R2_ACCESS_KEY_ID/R2_SECRET_ACCESS_KEY): uso la API REST de Cloudflare.");
+  if (!R2_API_TOKEN) {
+    console.error("❌ Falta como subir a R2. Pon en .env.local una de las dos:");
+    console.error("   · R2_ACCESS_KEY_ID + R2_SECRET_ACCESS_KEY  (API S3, preferida)");
+    console.error("   · R2_API_TOKEN                             (API REST de Cloudflare)");
+    process.exit(1);
+  }
+  console.log("ℹ️  Sin llaves S3: uso la API REST de Cloudflare.");
 }
 if (!DRY_RUN && (!NEXT_PUBLIC_SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY)) {
   console.error("❌ Faltan NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY en .env.local");

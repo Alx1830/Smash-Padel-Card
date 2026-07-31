@@ -13,7 +13,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // ── Config ──────────────────────────────────────────────────────────────────
 const ACCOUNT_ID  = "f41f124769343cd4354765d6a149a75a";
-const API_TOKEN   = "cfut_4kScbLxZCeXfLKNm0whpcRsXjvdN8gNMaQlDUnAD76db5277";
+// El token va por entorno: escrito aqui queda en el historial de git y GitHub
+// lo detecta y lo revoca. Corre con: node --env-file=.env.local scripts/upload-to-r2.mjs
+const API_TOKEN   = process.env.R2_API_TOKEN ?? "";
 const BUCKET_NAME = "facebinder-cards";
 const PUBLIC_URL  = "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev";
 const SETS_DIR    = path.resolve(__dirname, "../src/data/sets");

@@ -17,9 +17,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const R2_ACCOUNT_ID = "f41f124769343cd4354765d6a149a75a";
 export const R2_BUCKET     = "facebinder-cards";
 export const R2_PUBLIC_URL = "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev";
-/** Fallback cuando no hay llaves S3; es el mismo token de scripts/upload-to-r2.mjs. */
-export const R2_API_TOKEN = process.env.R2_API_TOKEN
-  ?? "cfut_4kScbLxZCeXfLKNm0whpcRsXjvdN8gNMaQlDUnAD76db5277";
+/**
+ * Token de la API REST de Cloudflare, usado solo cuando no hay llaves S3.
+ * Va por variable de entorno: un token escrito aqui queda en el historial de
+ * git y GitHub lo detecta y lo revoca.
+ */
+export const R2_API_TOKEN = process.env.R2_API_TOKEN ?? "";
 
 const SEARCH_API = "https://mp-search-api.tcgplayer.com/v1/search/request?q=&isList=false";
 const PAGE_SIZE  = 50;   // la API rechaza size:100 con HTTP 400
