@@ -266,9 +266,15 @@ for (const set of targets) {
     continue;
   }
 
-  saveMap(set.slug, map);
-  writeSetFile(set.slug, cards);
-  console.log(`📝 src/data/sets/${set.slug}.ts — ${cards.length} cartas`);
+  // Con --limit solo se vio un pedazo del catalogo: escribir el archivo lo
+  // dejaria con esas pocas cartas y borraria el resto del set.
+  if (LIMIT === Infinity) {
+    saveMap(set.slug, map);
+    writeSetFile(set.slug, cards);
+    console.log(`📝 src/data/sets/${set.slug}.ts — ${cards.length} cartas`);
+  } else {
+    console.log(`⏭️  --limit activo: no se toca src/data/sets/${set.slug}.ts`);
+  }
 
   console.log(`💲 Guardando ${priceRows.length} precios en card_prices...`);
   for (let i = 0; i < priceRows.length; i += 500) {
