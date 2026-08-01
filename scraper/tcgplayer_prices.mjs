@@ -87,26 +87,33 @@ async function sealedPage(from, attempt = 1) {
   return { items: r?.results ?? [], total: r?.totalResults ?? 0 };
 }
 
-/** Los product_id que ya estan en la tabla, para no insertar filas a medias. */
-async function knownSealedIds() {
-  if (DRY_RUN) return null;
-  const ids = new Set();
+/**
+ * product_id → name de lo que ya esta guardado.
+ *
+ * Hace falta el nombre, no solo el id: `name` es NOT NULL y Postgres valida esa
+ * restriccion sobre la fila propuesta ANTES de resolver el ON CONFLICT, asi que
+ * un upsert con solo el precio revienta aunque el producto ya exista.
+ */
+async function knownSealed() {
+  if (DRY_RUN) return new Map();
+  const map = new Map();
   for (let from = 0; ; from += 1000) {
     const { data, error } = await supabase
-      .from("sealed_products").select("product_id").range(from, from + 999);
+      .from("sealed_products").select("product_id, name").range(from, from + 999);
     if (error) throw new Error(`sealed_products: ${error.message}`);
-    data.forEach(r => ids.add(r.product_id));
+    data.forEach(r => map.set(r.product_id, r.name));
     if (data.length < 1000) break;
   }
-  return ids;
+  return map;
 }
 
 async function refreshSealed() {
   console.log("\n📦 Productos sellados");
-  const known = await knownSealedIds();
+  const known = await knownSealed();
   const rows = [];
   const seen = new Set();
-  let from = 0, total = Infinity, sinFicha = 0;
+  const ahora = new Date().toISOString();
+  let from = 0, total = Infinity, nuevos = 0;
 
   while (from < total) {
     const { items, total: t } = await sealedPage(from);
@@ -116,18 +123,32 @@ async function refreshSealed() {
       if (seen.has(it.productId)) continue;
       seen.add(it.productId);
       if (it.marketPrice == null) continue;
-      // Un producto que TCGplayer agrego despues del ultimo catalogo no tiene
-      // ficha aqui; insertarlo con solo el precio lo dejaria sin nombre ni foto,
-      // asi que se salta hasta que corra scrape-sealed-products.
-      if (known && !known.has(it.productId)) { sinFicha++; continue; }
-      // Solo se toca el precio: nombre e imagen los fija scrape-sealed-products.
-      rows.push({ product_id: it.productId, market_price: it.marketPrice });
+
+      const nombreGuardado = known.get(it.productId);
+      if (nombreGuardado != null) {
+        // Se reenvia el nombre que ya estaba para satisfacer el NOT NULL; el
+        // unico dato que cambia es el precio.
+        rows.push({
+          product_id: it.productId, name: nombreGuardado,
+          market_price: it.marketPrice, updated_at: ahora,
+        });
+      } else {
+        // Producto que TCGplayer agrego despues del ultimo catalogo. Entra con
+        // lo que da la busqueda; la imagen la pone scrape-sealed-products.
+        nuevos++;
+        rows.push({
+          product_id: it.productId, name: it.productName,
+          variant: it.setName ?? null,
+          tcgplayer_url: `https://www.tcgplayer.com/product/${it.productId}`,
+          market_price: it.marketPrice, updated_at: ahora,
+        });
+      }
     }
     process.stdout.write(`\r   ${seen.size}/${total} leidos, ${rows.length} con precio`);
     from += PAGE_SIZE;
     await sleep(350);
   }
-  console.log(sinFicha ? `\n   ℹ️  ${sinFicha} productos nuevos sin ficha, se saltaron` : "");
+  console.log(nuevos ? `\n   ℹ️  ${nuevos} productos nuevos, entran sin imagen` : "");
   await upsert("sealed_products", rows, "product_id");
 }
 
