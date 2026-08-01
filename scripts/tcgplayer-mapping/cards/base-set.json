@@ -4,10 +4,10 @@
  "code": "base1",
  "summary": {
   "total": 102,
-  "ok": 101,
+  "ok": 102,
   "review": 0,
-  "missing": 1,
-  "pct": 99
+  "missing": 0,
+  "pct": 100
  },
  "cards": {
   "1": {
@@ -100,7 +100,11 @@
    "versions": [
     "holofoil"
    ],
-   "status": "missing"
+   "status": "ok",
+   "product_id": 107004,
+   "tcg_name": "Machamp - 8/102 (Base Set Shadowless)",
+   "origen": "manual",
+   "tcg_set": "Deck Exclusives"
   },
   "9": {
    "name": "Magneton",

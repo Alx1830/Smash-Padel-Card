@@ -139,6 +139,16 @@ function numOf(raw) {
 
 // ── Main ────────────────────────────────────────────────────────────────────
 const sets = JSON.parse(fs.readFileSync(path.join(MAP_DIR, "sets.json"), "utf8"));
+
+/**
+ * Cartas resueltas a mano desde el panel de admin, ya comprobadas contra
+ * TCGplayer por scripts/tcg-verify-fixes.mjs. Mandan sobre lo que deduzca el
+ * emparejamiento automatico: son una decision humana.
+ */
+const FIXES = (() => {
+  const f = path.join(MAP_DIR, "fixes.json");
+  return fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, "utf8")) : {};
+})();
 const objetivo = Object.entries(sets)
   .filter(([id, e]) => e.tcg_set && (e.status === "confirmed" || e.status === "manual"))
   .filter(([id]) => !ONE || id === ONE);
@@ -265,6 +275,21 @@ for (const [setId, info] of objetivo) {
     // pasada debe poder volver a considerarlo.
     if (elegido && status === "ok") usados.add(elegido.id);
     cards[number] = fila;
+  }
+
+  // Lo resuelto a mano se aplica antes de contar: no hay nada que deducir
+  for (const [number, fila] of Object.entries(cards)) {
+    const fix = FIXES[`${setId}:${number}`];
+    if (!fix) continue;
+    if (fila.status !== "ok") { res[fila.status]--; res.ok++; }
+    fila.status     = "ok";
+    fila.product_id = fix.product_id;
+    fila.tcg_name   = fix.tcg_name;
+    fila.origen     = "manual";
+    // Varias resultaron estar en otro set de TCGplayer (Battle Academy, Deck
+    // Exclusives), no en el que suponiamos
+    if (fix.tcg_set && fix.tcg_set !== info.tcg_set) fila.tcg_set = fix.tcg_set;
+    usados.add(fix.product_id);
   }
 
   /*

@@ -188,12 +188,11 @@ export default function MapeoPage() {
   const resueltas = Object.keys(fixes).length;
 
   if (verificando) return <Estado texto="Verificando acceso…" />;
-  if (cargando) return <Estado texto="Cargando el mapeo…" />;
-  if (error)    return <Estado texto={error} tono={CRIT} />;
-  if (!data)    return <Estado texto="Sin datos" />;
 
-  const { resumen } = data;
-  const pctOk = ((resumen.ok / resumen.tot) * 100).toFixed(2);
+  // El formulario de sets nuevos no depende del mapeo: aunque este no cargue,
+  // tiene que poder encargarse un set.
+  const resumen = data?.resumen;
+  const pctOk = resumen ? ((resumen.ok / resumen.tot) * 100).toFixed(2) : "—";
 
   return (
     <div style={{ background: BG0, minHeight: "100vh", padding: "28px 20px 90px" }}>
@@ -220,17 +219,19 @@ export default function MapeoPage() {
         </p>
 
         {/* Resumen */}
-        <div style={{
-          display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(148px, 1fr))",
-          gap: "1px", background: LINE, border: `1px solid ${LINE}`,
-          borderRadius: "8px", overflow: "hidden", marginBottom: "34px",
-        }}>
-          <Stat k="Cartas" v={resumen.tot.toLocaleString("es")} sub={`en ${resumen.sets} sets`} />
-          <Stat k="Identificadas" v={`${pctOk}%`} sub={resumen.ok.toLocaleString("es")} color={COURT} />
-          <Stat k="Por revisar" v={String(resumen.rev)} sub="ambiguas" color={resumen.rev ? WARN : undefined} />
-          <Stat k="Sin match" v={String(resumen.mis)} sub="no están allá" color={resumen.mis ? CRIT : undefined} />
-          <Stat k="Resueltas por ti" v={String(resueltas)} sub="enlaces pegados" color={resueltas ? BALL : undefined} />
-        </div>
+        {resumen && (
+          <div style={{
+            display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(148px, 1fr))",
+            gap: "1px", background: LINE, border: `1px solid ${LINE}`,
+            borderRadius: "8px", overflow: "hidden", marginBottom: "34px",
+          }}>
+            <Stat k="Cartas" v={resumen.tot.toLocaleString("es")} sub={`en ${resumen.sets} sets`} />
+            <Stat k="Identificadas" v={`${pctOk}%`} sub={resumen.ok.toLocaleString("es")} color={COURT} />
+            <Stat k="Por revisar" v={String(resumen.rev)} sub="ambiguas" color={resumen.rev ? WARN : undefined} />
+            <Stat k="Sin match" v={String(resumen.mis)} sub="no están allá" color={resumen.mis ? CRIT : undefined} />
+            <Stat k="Resueltas por ti" v={String(resueltas)} sub="enlaces pegados" color={resueltas ? BALL : undefined} />
+          </div>
+        )}
 
         {/* Encargar un set nuevo */}
         <Seccion
@@ -245,7 +246,15 @@ export default function MapeoPage() {
           />
         </Seccion>
 
+        {cargando && <Estado texto="Cargando el mapeo…" />}
+        {error && !cargando && (
+          <p style={{ color: CRIT, fontFamily: MONO, fontSize: "13px" }}>
+            No se pudo cargar el mapeo: {error}
+          </p>
+        )}
+
         {/* Pendientes */}
+        {data && (data.pendientes.length > 0 ? (
         <Seccion
           titulo="Cartas que necesitan tu enlace"
           sub={`${data.pendientes.length} en total. Busca la carta en TCGplayer, copia el enlace y pégalo.`}
@@ -266,8 +275,22 @@ export default function MapeoPage() {
             })}
           </div>
         </Seccion>
+        ) : (
+          <Seccion titulo="Cartas que necesitan tu enlace" sub="Ninguna: el mapeo está completo.">
+            <div style={{
+              display: "flex", alignItems: "center", gap: "10px",
+              background: BG1, border: `1px solid ${COURT}44`, borderRadius: "8px", padding: "14px 16px",
+            }}>
+              <Check size={16} color={COURT} strokeWidth={2.4} />
+              <span style={{ color: INK0, fontSize: "14px" }}>
+                Las {resueltas} que resolviste a mano ya están en el mapeo.
+              </span>
+            </div>
+          </Seccion>
+        ))}
 
         {/* Sets sin equivalente */}
+        {data && (
         <Seccion
           titulo="Sets que TCGplayer no tiene"
           sub="Sus precios tendrían que seguir saliendo de Scrydex."
@@ -285,8 +308,10 @@ export default function MapeoPage() {
             ))}
           </div>
         </Seccion>
+        )}
 
         {/* Todos los sets */}
+        {data && (
         <Seccion titulo="Todos los sets" sub="Toca una fila para ver sus cartas.">
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "14px" }}>
             <div style={{ position: "relative", flex: "1 1 260px", minWidth: 0 }}>
@@ -341,6 +366,7 @@ export default function MapeoPage() {
             ))}
           </div>
         </Seccion>
+        )}
 
         <p style={{ marginTop: "40px", color: INK2, fontFamily: MONO, fontSize: "11px",
           display: "flex", alignItems: "center", gap: "8px" }}>

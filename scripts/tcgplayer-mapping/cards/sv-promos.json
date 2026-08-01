@@ -4,10 +4,10 @@
  "code": "svp",
  "summary": {
   "total": 224,
-  "ok": 215,
-  "review": 3,
-  "missing": 6,
-  "pct": 96
+  "ok": 224,
+  "review": 0,
+  "missing": 0,
+  "pct": 100
  },
  "cards": {
   "1": {
@@ -1345,18 +1345,24 @@
    "versions": [
     "holofoil"
    ],
-   "status": "review",
-   "product_id": 547653,
-   "tcg_name": "Armarouge ex - 125",
+   "status": "ok",
+   "product_id": 556445,
+   "tcg_name": "Armarouge ex (Armarouge 60)",
    "tcg_number": "125",
-   "note": "nombre casa pero el numero no (nuestro 105, TCG 125)"
+   "note": "nombre casa pero el numero no (nuestro 105, TCG 125)",
+   "origen": "manual",
+   "tcg_set": "Battle Academy 2024"
   },
   "106": {
    "name": "Pikachu ex",
    "versions": [
     "holofoil"
    ],
-   "status": "missing"
+   "status": "ok",
+   "product_id": 556443,
+   "tcg_name": "Pikachu ex (Pikachu 60)",
+   "origen": "manual",
+   "tcg_set": "Battle Academy 2024"
   },
   "107": {
    "name": "Mareep",
@@ -1366,7 +1372,11 @@
     "pikachuStamp41",
     "pikachuStamp45"
    ],
-   "status": "missing"
+   "status": "ok",
+   "product_id": 556926,
+   "tcg_name": "Mareep - Pikachu 45",
+   "origen": "manual",
+   "tcg_set": "Battle Academy 2024"
   },
   "108": {
    "name": "Flaaffy",
@@ -1375,11 +1385,13 @@
     "pikachuStamp37",
     "pikachuStamp53"
    ],
-   "status": "review",
-   "product_id": 496972,
-   "tcg_name": "Flaaffy - 015",
+   "status": "ok",
+   "product_id": 556912,
+   "tcg_name": "Flaaffy - Pikachu 53",
    "tcg_number": "015",
-   "note": "nombre casa pero el numero no (nuestro 108, TCG 015)"
+   "note": "nombre casa pero el numero no (nuestro 108, TCG 015)",
+   "origen": "manual",
+   "tcg_set": "Battle Academy 2024"
   },
   "109": {
    "name": "Ampharos",
@@ -1387,39 +1399,57 @@
     "normal",
     "pikachuStamp47"
    ],
-   "status": "missing"
+   "status": "ok",
+   "product_id": 556880,
+   "tcg_name": "Ampharos - Pikachu 28",
+   "origen": "manual",
+   "tcg_set": "Battle Academy 2024"
   },
   "110": {
    "name": "Darkrai ex",
    "versions": [
     "holofoil"
    ],
-   "status": "missing"
+   "status": "ok",
+   "product_id": 556444,
+   "tcg_name": "Darkrai ex (Darkrai)",
+   "origen": "manual",
+   "tcg_set": "Battle Academy 2024"
   },
   "111": {
    "name": "Pawniard",
    "versions": [
     "normal"
    ],
-   "status": "missing"
+   "status": "ok",
+   "product_id": 556854,
+   "tcg_name": "Pawniard - Darkrai Deck",
+   "origen": "manual",
+   "tcg_set": "Battle Academy 2024"
   },
   "112": {
    "name": "Bisharp",
    "versions": [
     "normal"
    ],
-   "status": "missing"
+   "status": "ok",
+   "product_id": 556815,
+   "tcg_name": "Bisharp - Darkrai Deck",
+   "origen": "manual",
+   "tcg_set": "Battle Academy 2024"
   },
   "113": {
    "name": "Kingambit",
    "versions": [
     "normal"
    ],
-   "status": "review",
-   "product_id": 562087,
-   "tcg_name": "Kingambit - 130",
+   "status": "ok",
+   "product_id": 556835,
+   "tcg_name": "Kingambit - Darkrai Deck",
    "tcg_number": "130",
-   "note": "nombre casa pero el numero no (nuestro 113, TCG 130)"
+   "note": "nombre casa pero el numero no (nuestro 113, TCG 130)",
+   "origen": "manual",
+   "tcg_set": "Battle Academy 2024"
   },
   "114": {
    "name": "Picnicker",
