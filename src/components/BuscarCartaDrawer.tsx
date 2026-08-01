@@ -86,15 +86,15 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", userId),
         supabase.from("card_wishlist").select("card_id, set_id").eq("user_id", userId),
         supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", userId).eq("status", "active"),
-        supabase.from("card_inventory").select("card_id, version, quantity").eq("user_id", userId).gt("quantity", 0),
+        supabase.from("card_inventory").select("card_id, set_id, version, quantity").eq("user_id", userId).gt("quantity", 0),
       ]);
       if (featured) setFeaturedCards(featured as FeaturedCard[]);
       if (wishlist) setWishlistCards(wishlist as WishlistCard[]);
       if (listings) setUserListings(listings as UserListing[]);
       if (inv) {
         const invMap: InventoryMap = {};
-        for (const row of inv as { card_id: string; version: string | null; quantity: number }[]) {
-          invMap[invKey(row.card_id, row.version ?? "normal")] = row.quantity;
+        for (const row of inv as { card_id: string; set_id: string; version: string | null; quantity: number }[]) {
+          invMap[invKey(row.card_id, row.version ?? "normal", row.set_id)] = row.quantity;
         }
         setInventory(invMap);
       }
@@ -183,7 +183,7 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
   }
 
   async function incrementQty(card: PokemonCard, setId: string) {
-    const key = invKey(card.id, card.version);
+    const key = invKey(card.id, card.version, setId);
     const next = (inventory[key] ?? 0) + 1;
     await supabase.from("card_inventory").upsert({
       user_id: userId, card_id: card.id, set_id: setId,
@@ -193,7 +193,7 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
   }
 
   async function decrementQty(card: PokemonCard, setId: string) {
-    const key = invKey(card.id, card.version);
+    const key = invKey(card.id, card.version, setId);
     const current = inventory[key] ?? 0;
     if (current <= 0) return;
     const next = current - 1;
@@ -405,7 +405,7 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
                   const setInfo  = ALL_SETS.find(s => s.id === setId);
                   const isFeat   = featuredCards.some(f => (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId);
                   const isListed = userListings.some(l => String(l.card_id) === String(card.card_number) && l.set_id === setId && l.version === card.version);
-                  const qty      = inventory[invKey(card.id, card.version)] ?? 0;
+                  const qty      = inventory[invKey(card.id, card.version, setId)] ?? 0;
 
                   const sc = SCRYDEX_SET_CODES[setId];
                   const cardPriceMap = sc ? cardPrices[`${sc}-${card.card_number}`] : undefined;

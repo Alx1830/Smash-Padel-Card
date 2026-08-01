@@ -40,8 +40,16 @@ export type FeaturedCard  = { card_id: number | string; set_id: string };
 export type WishlistCard  = { card_id: number | string; set_id: string };
 export type UserListing   = { id: string; card_id: number | string; set_id: string; price_cop: number; version: string; currency?: string; language?: string | null };
 
-export function invKey(cardId: number | string, version: string): string {
-  return `${cardId}:${version}`;
+/**
+ * Llave de una carta dentro del inventario en memoria.
+ *
+ * Lleva el set porque el id de carta se repite entre expansiones: la #002 de
+ * Mega Evolution y la de Shining Legends son ambas "002:Ivysaur:Normal". Sin el
+ * set, tener una hacía aparecer las dos, y los botones de cantidad movían la
+ * que no era. En la base de datos la llave siempre fue (card_id, set_id, version).
+ */
+export function invKey(cardId: number | string, version: string, setId: string): string {
+  return `${setId}:${cardId}:${version}`;
 }
 
 /* ── Inventory controls ─────────────────────────────────────── */
@@ -68,7 +76,7 @@ export function QtyControl({
         .upsert({ user_id: userId, card_id: cardId, set_id: setId, version, quantity: next },
           { onConflict: "user_id,card_id,set_id,version" });
     }
-    onChange(invKey(cardId, version), next);
+    onChange(invKey(cardId, version, setId), next);
     setLoading(false);
   };
 
@@ -189,7 +197,7 @@ export function CardDetailModal({
   const setInfo    = ALL_SETS_FLAT.find(s => s.id === setId);
   const label      = getVersionLabel(card.version);
   const versionFull = label;
-  const qty        = inventory[invKey(card.id, card.version)] ?? 0;
+  const qty        = inventory[invKey(card.id, card.version, setId)] ?? 0;
 
   const scrydexCode = SCRYDEX_SET_CODES[setId];
   const { prices: scrydexPrices, loading: pricesLoading } = useScrydexPrice({

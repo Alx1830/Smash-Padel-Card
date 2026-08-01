@@ -154,7 +154,7 @@ export default function DashboardWishlistPage() {
       .eq("user_id", userId).eq("set_id", row.set_id);
 
     const invMap: InventoryMap = {};
-    (invData ?? []).forEach((r: any) => { invMap[invKey(r.card_id, r.version ?? "normal")] = r.quantity; });
+    (invData ?? []).forEach((r: any) => { invMap[invKey(r.card_id, r.version ?? "normal", row.set_id)] = r.quantity; });
     setModalInventory(invMap);
     setModalTarget({ card, setId: row.set_id });
   };

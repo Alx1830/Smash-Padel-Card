@@ -170,7 +170,7 @@ export default function DashboardMarketPage() {
       .eq("user_id", userId).eq("set_id", listing.set_id);
 
     const invMap: InventoryMap = {};
-    (invData ?? []).forEach((r: any) => { invMap[invKey(r.card_id, r.version ?? "normal")] = r.quantity; });
+    (invData ?? []).forEach((r: any) => { invMap[invKey(r.card_id, r.version ?? "normal", listing.set_id)] = r.quantity; });
     setModalInventory(invMap);
     setModalTarget({ card, setId: listing.set_id });
   };

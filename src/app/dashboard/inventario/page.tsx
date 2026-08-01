@@ -95,7 +95,7 @@ export default function InventarioPage() {
     const invMap: InventoryMap = {};
     const setMap: Record<string, number> = {};
     for (const row of (invRes.data ?? [])) {
-      invMap[invKey(row.card_id, row.version ?? "normal")] = row.quantity;
+      invMap[invKey(row.card_id, row.version ?? "normal", row.set_id)] = row.quantity;
       if (row.set_id) setMap[row.set_id] = (setMap[row.set_id] ?? 0) + 1;
     }
     setInventory(invMap);
@@ -191,7 +191,7 @@ export default function InventarioPage() {
 
   async function incrementQty(card: PokemonCard, setId: string) {
     if (!userId) return;
-    const key = invKey(card.id, card.version);
+    const key = invKey(card.id, card.version, setId);
     const current = inventory[key] ?? 0;
     const next = current + 1;
     await supabase.from("card_inventory").upsert({
@@ -203,7 +203,7 @@ export default function InventarioPage() {
 
   async function decrementQty(card: PokemonCard, setId: string) {
     if (!userId) return;
-    const key = invKey(card.id, card.version);
+    const key = invKey(card.id, card.version, setId);
     const current = inventory[key] ?? 0;
     if (current <= 0) return;
     const next = current - 1;
@@ -233,7 +233,7 @@ export default function InventarioPage() {
     for (const { setId } of sets) {
       const cards = setCards[setId] ?? [];
       for (const card of cards) {
-        if ((inventory[invKey(card.id, card.version)] ?? 0) > 0) {
+        if ((inventory[invKey(card.id, card.version, setId)] ?? 0) > 0) {
           result.push({ card, setId });
         }
       }
@@ -278,7 +278,7 @@ export default function InventarioPage() {
         (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) &&
         f.set_id === setId
       )) return false;
-      if (fBulk && (inventory[invKey(card.id, card.version)] ?? 0) < 2) return false;
+      if (fBulk && (inventory[invKey(card.id, card.version, setId)] ?? 0) < 2) return false;
       return true;
     });
   }, [allInventoryCards, fNombre, fVariante, fSet, fDestacados, fBulk, featuredCards, inventory]);
@@ -693,7 +693,7 @@ export default function InventarioPage() {
                     {visibleCards.map(({ card, setId }) => {
                       const isFeat   = featuredCards.some(f => (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId);
                       const isListed = listings.some(l => String(l.card_id) === String(card.card_number) && l.set_id === setId && l.version === card.version);
-                      const qty      = inventory[invKey(card.id, card.version)] ?? 0;
+                      const qty      = inventory[invKey(card.id, card.version, setId)] ?? 0;
 
                       // Scrydex price
                       const sc = SCRYDEX_SET_CODES[setId];

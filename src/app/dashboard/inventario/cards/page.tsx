@@ -114,7 +114,7 @@ export default function CardSearchPage() {
       .from("card_inventory").select("card_id, version, quantity")
       .eq("user_id", userId).eq("set_id", result.setId);
     const invMap: InventoryMap = {};
-    (invData ?? []).forEach((r: any) => { invMap[invKey(r.card_id, r.version ?? "normal")] = r.quantity; });
+    (invData ?? []).forEach((r: any) => { invMap[invKey(r.card_id, r.version ?? "normal", result.setId)] = r.quantity; });
     setModalInventory(invMap);
     setModalTarget({ card: result.card, setId: result.setId });
   }, [userId]);

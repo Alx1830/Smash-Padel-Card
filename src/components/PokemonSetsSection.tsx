@@ -35,7 +35,7 @@ function TiltCard({
 }) {
   const [hovered, setHovered] = useState(false);
 
-  const qty = inventory[invKey(card.id, card.version)] ?? 0;
+  const qty = inventory[invKey(card.id, card.version, setId)] ?? 0;
 
   const label = getVersionLabel(card.version);
   const effect = getVersionEffect(card.version);
@@ -309,11 +309,11 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 /* ── Progress bar ──────────────────────────────────────────── */
-function SetProgress({ cards, inventory }: { cards: PokemonCard[]; inventory: InventoryMap }) {
+function SetProgress({ cards, inventory, setId }: { cards: PokemonCard[]; inventory: InventoryMap; setId: string }) {
   if (!cards.length) return null;
   const total    = cards.length;
-  const unique   = cards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) > 0).length;
-  const totalQty = cards.reduce((s, c) => s + (inventory[invKey(c.id, c.version)] ?? 0), 0);
+  const unique   = cards.filter(c => (inventory[invKey(c.id, c.version, setId)] ?? 0) > 0).length;
+  const totalQty = cards.reduce((s, c) => s + (inventory[invKey(c.id, c.version, setId)] ?? 0), 0);
   const pct = total > 0 ? Math.round((unique / total) * 100) : 0;
 
   return (
@@ -475,7 +475,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
       .then(({ data }) => {
         if (data) {
           const map: InventoryMap = {};
-          data.forEach(r => { map[invKey(r.card_id, r.version ?? "normal")] = r.quantity; });
+          data.forEach(r => { map[invKey(r.card_id, r.version ?? "normal", openSetId)] = r.quantity; });
           setInventory(prev => ({ ...prev, ...map }));
         }
         setLoadingInv(false);
@@ -489,7 +489,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   async function handleAddAllMissingToWishlist() {
     if (!userId || !openSetId || addingWish === "loading") return;
     setAddingWish("loading");
-    const missing = setCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) === 0);
+    const missing = setCards.filter(c => (inventory[invKey(c.id, c.version, openSetId)] ?? 0) === 0);
     const toAdd   = missing.filter(c => !wishlistCards.some(w => w.card_id === c.id && w.set_id === openSetId));
     if (toAdd.length > 0) {
       const supabase = createClient();
@@ -625,7 +625,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           const setVersions = [...new Set(allCards.map(c => c.version))].sort();
 
           const filteredCards = allCards.filter(card => {
-            const qty = inventory[invKey(card.id, card.version)] ?? 0;
+            const qty = inventory[invKey(card.id, card.version, openSet.id)] ?? 0;
             if (invFilter === "tengo"  && qty === 0) return false;
             if (invFilter === "faltan" && qty  >  0) return false;
             if (versionFilter !== "todas" && card.version !== versionFilter) return false;
@@ -649,12 +649,12 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                 {(loadingCards || loadingInv) && <span style={{ color: INK2, fontSize: "10px", marginLeft: "8px" }}>cargando...</span>}
               </SectionLabel>
 
-              {userId && <SetProgress cards={allCards} inventory={inventory} />}
+              {userId && <SetProgress cards={allCards} inventory={inventory} setId={openSet.id} />}
 
               {/* Filtros */}
               {(() => {
-                const tengoCount  = allCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) > 0).length;
-                const faltanCount = allCards.filter(c => (inventory[invKey(c.id, c.version)] ?? 0) === 0).length;
+                const tengoCount  = allCards.filter(c => (inventory[invKey(c.id, c.version, openSet.id)] ?? 0) > 0).length;
+                const faltanCount = allCards.filter(c => (inventory[invKey(c.id, c.version, openSet.id)] ?? 0) === 0).length;
                 const sSelect: React.CSSProperties = {
                   fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em",
                   color: INK0, background: "rgba(255,255,255,0.04)",
@@ -676,7 +676,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                       <option value="todas" style={{ background: "#0a0e1a" }}>Todas las variantes</option>
                       {setVersions.map(v => {
                         const cnt = allCards.filter(c => {
-                          const qty = inventory[invKey(c.id, c.version)] ?? 0;
+                          const qty = inventory[invKey(c.id, c.version, openSet.id)] ?? 0;
                           if (invFilter === "tengo"  && qty === 0) return false;
                           if (invFilter === "faltan" && qty  >  0) return false;
                           return c.version === v;
