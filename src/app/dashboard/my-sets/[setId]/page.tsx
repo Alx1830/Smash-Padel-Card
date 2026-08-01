@@ -290,6 +290,27 @@ export default function MySetEditorPage() {
         @media (min-width: 480px)  { .mpicker-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
         @media (min-width: 768px)  { .mpicker-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
         @media (min-width: 1200px) { .mpicker-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
+
+        /* Cifras y botones: apilados en movil, en una sola linea a la derecha
+           en pantallas anchas. Antes iban siempre en fila y se apretaban. */
+        .mset-actions {
+          display: flex; flex-direction: column; gap: 14px;
+          align-items: stretch; width: 100%;
+        }
+        .mset-stats { display: flex; gap: 28px; }
+        .mset-stat-label {
+          font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+          margin-bottom: 3px;
+        }
+        .mset-stat-value { font-size: 20px; font-weight: 700; line-height: 1.1; }
+        .mset-buttons { display: flex; gap: 10px; }
+        .mset-buttons > button { flex: 1 1 0; justify-content: center; white-space: nowrap; }
+        @media (min-width: 768px) {
+          .mset-actions { flex-direction: row; align-items: center; width: auto; gap: 10px; }
+          .mset-stats { gap: 18px; margin-right: 6px; text-align: right; }
+          .mset-stat-value { font-size: 18px; }
+          .mset-buttons > button { flex: 0 0 auto; }
+        }
       `}</style>
 
       {/* Header */}
@@ -319,56 +340,58 @@ export default function MySetEditorPage() {
               {uniqueCards} {uniqueCards === 1 ? "carta única" : "cartas únicas"} · {totalCards} en total
             </div>
           </div>
-          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <div className="mset-actions">
             {setPrice > 0 && (
-              <div style={{ display: "flex", gap: "18px", marginRight: "6px" }}>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, marginBottom: "2px" }}>
+              <div className="mset-stats">
+                <div>
+                  <div className="mset-stat-label" style={{ fontFamily: MONO, color: INK2 }}>
                     Valor del set
                   </div>
-                  <div style={{ fontFamily: MONO, fontSize: "18px", color: COURT, fontWeight: 700 }}>
+                  <div className="mset-stat-value" style={{ fontFamily: MONO, color: COURT }}>
                     ${setPrice.toFixed(2)} <span style={{ fontSize: "10px", color: INK2, fontWeight: 400 }}>USD</span>
                   </div>
                 </div>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, marginBottom: "2px" }}>
+                <div>
+                  <div className="mset-stat-label" style={{ fontFamily: MONO, color: INK2 }}>
                     Tengo
                   </div>
-                  <div style={{ fontFamily: MONO, fontSize: "18px", color: ownedPrice >= setPrice ? COURT : INK0, fontWeight: 700 }}>
+                  <div className="mset-stat-value" style={{ fontFamily: MONO, color: ownedPrice >= setPrice ? COURT : INK0 }}>
                     ${ownedPrice.toFixed(2)} <span style={{ fontSize: "10px", color: INK2, fontWeight: 400 }}>USD</span>
                   </div>
                 </div>
               </div>
             )}
-            <button
-              onClick={() => setPickerOpen(true)}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: "8px",
-                padding: "11px 22px", borderRadius: "10px", background: COURT,
-                color: "#05070d",
-                fontFamily: MONO, fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em",
-                textTransform: "uppercase", border: "none", cursor: "pointer",
-              }}
-            >
-              <Plus size={14} strokeWidth={2.5} />
-              Agregar Carta
-            </button>
-            <button
-              onClick={deleteSet}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: "8px",
-                padding: "11px 22px", borderRadius: "10px",
-                background: "rgba(209,53,53,0.08)", color: "#d95555",
-                border: "1px solid rgba(209,53,53,0.25)",
-                fontFamily: MONO, fontSize: "12px", fontWeight: 600, letterSpacing: "0.08em",
-                textTransform: "uppercase", cursor: "pointer", transition: "background 0.15s",
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(209,53,53,0.18)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "rgba(209,53,53,0.08)")}
-            >
-              <Trash2 size={14} strokeWidth={1.8} />
-              Eliminar Set
-            </button>
+            <div className="mset-buttons">
+              <button
+                onClick={() => setPickerOpen(true)}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: "8px",
+                  padding: "12px 20px", borderRadius: "10px", background: COURT,
+                  color: "#05070d",
+                  fontFamily: MONO, fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em",
+                  textTransform: "uppercase", border: "none", cursor: "pointer",
+                }}
+              >
+                <Plus size={14} strokeWidth={2.5} />
+                Agregar Carta
+              </button>
+              <button
+                onClick={deleteSet}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: "8px",
+                  padding: "12px 20px", borderRadius: "10px",
+                  background: "rgba(209,53,53,0.08)", color: "#d95555",
+                  border: "1px solid rgba(209,53,53,0.25)",
+                  fontFamily: MONO, fontSize: "12px", fontWeight: 600, letterSpacing: "0.08em",
+                  textTransform: "uppercase", cursor: "pointer", transition: "background 0.15s",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = "rgba(209,53,53,0.18)")}
+                onMouseLeave={e => (e.currentTarget.style.background = "rgba(209,53,53,0.08)")}
+              >
+                <Trash2 size={14} strokeWidth={1.8} />
+                Eliminar Set
+              </button>
+            </div>
           </div>
         </div>
       </div>
