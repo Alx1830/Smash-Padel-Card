@@ -965,121 +965,43 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
 }
 
 /* ── Decks Slider ───────────────────────────────────────────── */
-/* Las URLs de r2.dev responden 429 cuando se piden 60 imágenes de golpe, que
-   es justo lo que pasa al abrir un deck. En vez de dispararlas todas y
-   reintentar los fallos, se descargan en cola con tope de concurrencia: cada
-   imagen se precarga fuera del DOM y solo cuando está en caché se pinta, así
-   el <img> resuelve al instante. */
-const IMG_MAX_PARALLEL = 6;
-let imgActive = 0;
-const imgQueue: (() => void)[] = [];
-/** URLs ya descargadas: repetir un deck no vuelve a pedir nada */
-const imgDone = new Set<string>();
-
-function imgAcquire(): Promise<void> {
-  if (imgActive < IMG_MAX_PARALLEL) { imgActive++; return Promise.resolve(); }
-  return new Promise(resolve => imgQueue.push(() => { imgActive++; resolve(); }));
-}
-
-function imgRelease() {
-  imgActive--;
-  imgQueue.shift()?.();
-}
-
-/** Descarga con reintentos espaciados; resuelve cuando la imagen está en caché */
-function preloadImage(src: string, attempt = 0): Promise<boolean> {
-  return new Promise(resolve => {
-    // createElement en vez de new Image(): aquí `Image` es el componente de Next
-    const img = document.createElement("img");
-    img.decoding = "async";
-    img.onload  = () => resolve(true);
-    img.onerror = () => {
-      if (attempt >= 3) { resolve(false); return; }
-      setTimeout(() => preloadImage(src, attempt + 1).then(resolve), 600 * (attempt + 1));
-    };
-    img.src = src;
-  });
-}
-
-function DeckCardImage({ src, alt }: { src: string; alt: string }) {
-  const [ready, setReady] = useState(() => imgDone.has(src));
-
-  useEffect(() => {
-    if (imgDone.has(src)) return; // el estado inicial ya la da por lista
-    let cancelled = false;
-    (async () => {
-      await imgAcquire();
-      if (cancelled) { imgRelease(); return; }
-      const ok = await preloadImage(src);
-      imgRelease();
-      if (ok) imgDone.add(src);
-      if (!cancelled && ok) setReady(true);
-    })();
-    return () => { cancelled = true; };
-  }, [src]);
-
-  return (
-    <>
-      {!ready && (
-        <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.05)", animation: "dkPulse 1.4s ease-in-out infinite" }} />
-      )}
-      {ready && (
-        <img
-          src={src}
-          alt={alt}
-          decoding="async"
-          style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }}
-        />
-      )}
-    </>
-  );
-}
-
 type ProfileDeck = {
   id: string;
   name: string;
   cover_card_image: string | null;
-  cards: { card: NonNullable<ReturnType<typeof SET_CARDS[string]["find"]>>; quantity: number }[];
   card_count: number;
 };
 
-function DecksSlider({ profileUserId }: { profileUserId?: string }) {
+function DecksSlider({ profileUserId, username }: { profileUserId?: string; username?: string }) {
   const [decks,    setDecks]    = useState<ProfileDeck[]>([]);
   const [loaded,   setLoaded]   = useState(false);
   const [offset,   setOffset]   = useState(0);
   const [animated, setAnimated] = useState(true);
-  const [openDeck, setOpenDeck] = useState<ProfileDeck | null>(null);
 
   useEffect(() => {
     if (!profileUserId) return;
     (async () => {
       const { createClient } = await import("@/lib/supabase/client");
       const supabase = createClient();
+      /*
+       * Solo la portada y cuántas cartas tiene cada deck. Antes se traían todas
+       * las cartas y se cargaban los archivos de cada expansión para poder
+       * abrirlos en un modal; eso hacía lento el perfil entero. Ahora cada deck
+       * tiene su propia página y ahí se carga lo suyo.
+       */
       const { data } = await supabase
         .from("decks")
-        .select("id, name, cover_card_image")
+        .select("id, name, cover_card_image, deck_cards(quantity)")
         .eq("user_id", profileUserId)
         .order("created_at", { ascending: false });
-      const rows = data ?? [];
-      if (rows.length === 0) { setLoaded(true); return; }
 
-      const cardQueries = await Promise.all(rows.map(deck =>
-        supabase.from("deck_cards")
-          .select("card_id, set_id, version, quantity, position")
-          .eq("deck_id", deck.id)
-          .order("position", { ascending: true })
-          .then(r => r.data ?? [])
-      ));
-      await loadManySets([...new Set(cardQueries.flatMap(c => c.map(r => r.set_id)))]);
-
-      setDecks(rows.map((deck, i) => {
-        const cards = (cardQueries[i] ?? []).map(r => {
-          const card = (SET_CARDS[r.set_id] ?? []).find(c => c.id === r.card_id && c.version === r.version);
-          return card ? { card, quantity: r.quantity } : null;
-        }).filter(Boolean) as ProfileDeck["cards"];
-        const card_count = (cardQueries[i] ?? []).reduce((s, r) => s + r.quantity, 0);
-        return { ...deck, cards, card_count };
-      }));
+      setDecks((data ?? []).map(d => ({
+        id: d.id,
+        name: d.name,
+        cover_card_image: d.cover_card_image,
+        card_count: ((d.deck_cards ?? []) as { quantity: number }[])
+          .reduce((s, c) => s + (c.quantity ?? 0), 0),
+      })));
       setLoaded(true);
     })();
   }, [profileUserId]);
@@ -1135,13 +1057,14 @@ function DecksSlider({ profileUserId }: { profileUserId?: string }) {
             >
               <style>{`.dks-track { transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); } .dks-track.no-anim { transition: none !important; }`}</style>
               {looped.map((deck, i) => (
-                <div
+                <Link
                   key={i}
-                  onClick={() => setOpenDeck(deck)}
+                  href={username ? `/${username}/deck/${slugifySetName(deck.name)}` : "#"}
                   style={{
                     flexShrink: 0,
                     width: `calc(100% / ${VISIBLE} - ${CARD_GAP * (VISIBLE - 1) / VISIBLE}px)`,
                     cursor: "pointer",
+                    textDecoration: "none",
                   }}
                 >
                   <div
@@ -1175,97 +1098,13 @@ function DecksSlider({ profileUserId }: { profileUserId?: string }) {
                       {deck.card_count} cartas
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
         </div>
       )}
 
-      {/* Modal con las cartas del deck */}
-      {openDeck && (
-        <div
-          onClick={() => setOpenDeck(null)}
-          style={{
-            position: "fixed", inset: 0, zIndex: 1000,
-            background: "rgba(5,7,13,0.88)", backdropFilter: "blur(6px)",
-            display: "flex", alignItems: "center", justifyContent: "center", padding: "20px",
-          }}
-        >
-          <div
-            onClick={e => e.stopPropagation()}
-            style={{
-              width: "min(920px, 100%)", maxHeight: "86vh",
-              display: "flex", flexDirection: "column", overflow: "hidden",
-              background: BG0_C, border: `1px solid ${PINK}33`, borderRadius: "16px",
-              padding: "24px", boxShadow: "0 24px 80px rgba(0,0,0,0.8)",
-            }}
-          >
-            <style>{`
-              @keyframes dkPulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
-              .deck-modal-scroll { scrollbar-width: thin; scrollbar-color: ${PINK}55 transparent; }
-              .deck-modal-scroll::-webkit-scrollbar { width: 5px; }
-              .deck-modal-scroll::-webkit-scrollbar-track { background: transparent; }
-              .deck-modal-scroll::-webkit-scrollbar-thumb { background: ${PINK}55; border-radius: 3px; }
-              .deck-modal-scroll::-webkit-scrollbar-thumb:hover { background: ${PINK}88; }
-            `}</style>
-            {/* Header del modal */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
-              <div>
-                <div style={{ fontFamily: MONO_C, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: PINK, marginBottom: "4px" }}>
-                  Deck · {openDeck.card_count} cartas
-                </div>
-                <div style={{ fontFamily: DISP_C, fontSize: "22px", color: INK0_C, letterSpacing: "-0.01em" }}>
-                  {openDeck.name}
-                </div>
-              </div>
-              <button
-                onClick={() => setOpenDeck(null)}
-                style={{
-                  background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)",
-                  borderRadius: "8px", color: INK0_C, cursor: "pointer",
-                  width: "32px", height: "32px", fontSize: "16px", lineHeight: 1,
-                }}
-              >
-                ×
-              </button>
-            </div>
-
-            {/* Grid de cartas */}
-            {openDeck.cards.length === 0 ? (
-              <p style={{ fontFamily: MONO_C, fontSize: "11px", color: INK2_C, textAlign: "center", padding: "24px 0" }}>
-                Este deck aún no tiene cartas.
-              </p>
-            ) : (
-              <div className="deck-modal-scroll" style={{ overflowY: "auto", paddingRight: "8px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: "12px" }}>
-                {openDeck.cards.map(({ card, quantity }, i) => (
-                  // La key lleva la imagen para que al abrir otro deck la
-                  // miniatura se remonte con su propio estado de carga
-                  <div key={`${card.image}-${i}`}>
-                    <div style={{ position: "relative", width: "100%", aspectRatio: "5/7", borderRadius: "7px", overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.6)", filter: quantity === 0 ? "grayscale(1) brightness(0.75)" : "none" }}>
-                      <DeckCardImage src={card.image} alt={card.name} />
-                      {quantity !== 1 && (
-                        <div style={{
-                          position: "absolute", top: "6px", right: "6px",
-                          fontFamily: MONO_C, fontSize: "9px", fontWeight: 700,
-                          color: quantity === 0 ? INK2_C : "#00e676",
-                          border: quantity === 0 ? "1px solid rgba(122,130,152,0.5)" : "1px solid rgba(0,230,118,0.5)",
-                          borderRadius: "4px", padding: "2px 5px", background: "rgba(5,7,13,0.85)",
-                        }}>
-                          {quantity === 0 ? "falta" : `×${quantity}`}
-                        </div>
-                      )}
-                    </div>
-                    <div style={{ marginTop: "5px", fontFamily: MONO_C, fontSize: "8.5px", color: INK0_C, textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      #{String(card.card_number).padStart(3, "0")} {card.name.trim()}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -1282,31 +1121,21 @@ function MySetsSlider({ profileUserId, username }: { profileUserId?: string; use
     (async () => {
       const { createClient } = await import("@/lib/supabase/client");
       const supabase = createClient();
+      // Igual que los decks: aqui solo hace falta la portada y el total. Las
+      // cartas se cargan al abrir el set, en su propia pagina.
       const { data } = await supabase
         .from("my_sets")
-        .select("id, name, cover_card_image")
+        .select("id, name, cover_card_image, my_set_cards(quantity)")
         .eq("user_id", profileUserId)
         .order("created_at", { ascending: false });
-      const rows = data ?? [];
-      if (rows.length === 0) { setLoaded(true); return; }
 
-      const cardQueries = await Promise.all(rows.map(mset =>
-        supabase.from("my_set_cards")
-          .select("card_id, set_id, version, quantity, position")
-          .eq("my_set_id", mset.id)
-          .order("position", { ascending: true })
-          .then(r => r.data ?? [])
-      ));
-      await loadManySets([...new Set(cardQueries.flatMap(c => c.map(r => r.set_id)))]);
-
-      setSets(rows.map((mset, i) => {
-        const cards = (cardQueries[i] ?? []).map(r => {
-          const card = (SET_CARDS[r.set_id] ?? []).find(c => c.id === r.card_id && c.version === r.version);
-          return card ? { card, quantity: r.quantity } : null;
-        }).filter(Boolean) as ProfileDeck["cards"];
-        const card_count = (cardQueries[i] ?? []).reduce((s, r) => s + r.quantity, 0);
-        return { ...mset, cards, card_count };
-      }));
+      setSets((data ?? []).map(m => ({
+        id: m.id,
+        name: m.name,
+        cover_card_image: m.cover_card_image,
+        card_count: ((m.my_set_cards ?? []) as { quantity: number }[])
+          .reduce((s, c) => s + (c.quantity ?? 0), 0),
+      })));
       setLoaded(true);
     })();
   }, [profileUserId]);
@@ -1631,7 +1460,7 @@ function CollectionSection({
           )}
           <MarketListingsSlider profileUserId={profileUserId} username={username} />
           <MySetsSlider profileUserId={profileUserId} username={username} />
-          <DecksSlider profileUserId={profileUserId} />
+          <DecksSlider profileUserId={profileUserId} username={username} />
         </div>
 
         {/* ── Colección ── */}
