@@ -51,7 +51,7 @@ export default async function AmigosPage() {
 
         .amigos-grid {
           display: grid;
-          grid-template-columns: repeat(6, 1fr);
+          grid-template-columns: repeat(6, minmax(0, 1fr));
           gap: 12px;
         }
         /* Each cell controls the real layout dimensions */
@@ -78,7 +78,7 @@ export default async function AmigosPage() {
           .amigos-card-wrap { transform: scale(0.68); }
         }
         @media (max-width: 1023px) {
-          .amigos-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+          .amigos-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
           .amigos-card-wrap { transform: scale(0.64); }
         }
         @media (max-width: 390px) {

@@ -133,7 +133,7 @@ export default function CardSearchPage() {
           .cards-body   { padding: 32px 48px 80px; }
         }
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
-        @media (max-width: 767px) { .cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; } }
+        @media (max-width: 767px) { .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }
       `}</style>
 
       <div className="cards-header">

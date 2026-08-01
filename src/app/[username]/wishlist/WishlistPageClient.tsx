@@ -325,7 +325,7 @@ export function WishlistPageClient({
               </div>
             ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="wl-cards-grid">
-                <style>{`@media (max-width: 767px) { .wl-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; } }`}</style>
+                <style>{`@media (max-width: 767px) { .wl-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
                 {filtered.map((item, i) => {
                   const color    = getVersionColor(item.card.version);
                   const label    = getVersionLabel(item.card.version);

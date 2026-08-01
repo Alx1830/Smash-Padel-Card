@@ -780,7 +780,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           .pks-header { padding: 48px 12px 32px !important; }
           .pks-body   { padding: 0 12px !important; }
           .pks-cards-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             gap: 28px 10px !important;
             align-items: start !important;
           }
@@ -789,7 +789,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           .pks-thumbs {
             justify-content: center !important;
             display: grid !important;
-            grid-template-columns: repeat(2, 1fr) !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             gap: 12px !important;
           }
           .pks-thumb {

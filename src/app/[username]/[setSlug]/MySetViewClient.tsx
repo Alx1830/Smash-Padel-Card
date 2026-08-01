@@ -120,7 +120,7 @@ export function MySetViewClient({
             animation: ms-shimmer 1.4s ease-in-out infinite;
             border-radius: 8px;
           }
-          @media (max-width: 767px) { .ms-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; } }
+          @media (max-width: 767px) { .ms-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }
         `}</style>
 
         {!setsLoaded && rows.length > 0 ? (

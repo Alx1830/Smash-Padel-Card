@@ -261,7 +261,7 @@ export default function DashboardWishlistPage() {
                 </div>
               ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="dwish-cards-grid">
-                <style>{`@media (max-width: 767px) { .dwish-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; } }`}</style>
+                <style>{`@media (max-width: 767px) { .dwish-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
                 {filtered.map(({ card, set, row }) => {
                   const version = card?.version ?? "normal";
                   const verColor = getVersionColor(version);

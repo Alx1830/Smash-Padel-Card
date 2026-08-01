@@ -553,7 +553,7 @@ export function MarketPageClient({
             .mkt-layout { flex-direction: column; }
             .mkt-sidebar { display: none; }
             .mkt-cards-grid {
-              grid-template-columns: repeat(2, 1fr) !important;
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
               gap: 12px !important;
               max-width: 480px;
               margin: 0 auto;

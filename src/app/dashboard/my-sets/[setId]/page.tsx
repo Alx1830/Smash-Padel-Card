@@ -276,20 +276,20 @@ export default function MySetEditorPage() {
         @media (min-width: 768px) { .mset-editor-body { padding: 0 48px 80px; } }
         .mset-cards-grid {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
+          grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 10px;
         }
-        @media (min-width: 480px)  { .mset-cards-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (min-width: 768px)  { .mset-cards-grid { grid-template-columns: repeat(4, 1fr); } }
-        @media (min-width: 1200px) { .mset-cards-grid { grid-template-columns: repeat(6, 1fr); } }
+        @media (min-width: 480px)  { .mset-cards-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (min-width: 768px)  { .mset-cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (min-width: 1200px) { .mset-cards-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
         .mpicker-grid {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
+          grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 12px;
         }
-        @media (min-width: 480px)  { .mpicker-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (min-width: 768px)  { .mpicker-grid { grid-template-columns: repeat(5, 1fr); } }
-        @media (min-width: 1200px) { .mpicker-grid { grid-template-columns: repeat(7, 1fr); } }
+        @media (min-width: 480px)  { .mpicker-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (min-width: 768px)  { .mpicker-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+        @media (min-width: 1200px) { .mpicker-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
       `}</style>
 
       {/* Header */}

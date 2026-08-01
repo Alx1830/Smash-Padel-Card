@@ -311,7 +311,7 @@ export default function DashboardMarketPage() {
                 </div>
               ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="dmkt-cards-grid">
-                <style>{`@media (max-width: 767px) { .dmkt-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; } }`}</style>
+                <style>{`@media (max-width: 767px) { .dmkt-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
                 {filtered.map(listing => {
               const cards   = setCards[listing.set_id];
               const card    = cards?.find((c: any) => c.card_number === listing.card_id && c.version === listing.version);

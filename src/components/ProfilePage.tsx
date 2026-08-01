@@ -1509,7 +1509,7 @@ function SetExpandedPanel({
             </div>
           ) : (
             <div style={{ maxHeight: "580px", overflowY: ownedCards.length > 6 ? "auto" : "visible", paddingRight: ownedCards.length > 6 ? "6px" : "0", scrollbarWidth: "thin", scrollbarColor: `${COURT_C}44 transparent` }}>
-              <div className="prof-cards-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px 16px", justifyItems: "center" }}>
+              <div className="prof-cards-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "20px 16px", justifyItems: "center" }}>
                 {ownedCards.map(({ card, qty }) => (
                   <MiniCard key={String(card.id)} cardId={card.id} setId={set.id} quantity={qty} />
                 ))}
@@ -1530,7 +1530,7 @@ function SetExpandedPanel({
             </div>
           ) : (
             <div style={{ maxHeight: "580px", overflowY: missingCards.length > 6 ? "auto" : "visible", paddingRight: missingCards.length > 6 ? "6px" : "0", scrollbarWidth: "thin", scrollbarColor: `${COURT_C}44 transparent` }}>
-              <div className="prof-cards-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px 16px", justifyItems: "center" }}>
+              <div className="prof-cards-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "20px 16px", justifyItems: "center" }}>
                 {missingCards.map(card => (
                   <div key={`${card.id}`} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
                     <div style={{ position: "relative", width: "160px", height: "224px", borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 24px rgba(0,0,0,0.6)", filter: "grayscale(1) opacity(0.45)" }}>
@@ -1730,7 +1730,7 @@ function CollectionSection({
         /* Mobile */
         @media (max-width: 767px) {
           .coll-outer { padding: 16px 16px 0 !important; grid-template-columns: 1fr !important; gap: 16px !important; }
-          .prof-cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px 12px !important; }
+          .prof-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 16px 12px !important; }
           .showcase-wrap { margin-bottom: 16px !important; }
         }
       `}</style>

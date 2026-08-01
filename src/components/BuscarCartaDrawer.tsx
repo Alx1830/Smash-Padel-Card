@@ -265,11 +265,19 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
         .buscar-input::placeholder { color: rgba(122,130,152,0.7); }
         .buscar-grid {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
+          /* minmax(0, …) y no 1fr a secas: con 1fr la columna nunca baja del
+             ancho de su contenido y el grid se sale de la pantalla */
+          grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 12px;
         }
-        @media (min-width: 640px)  { .buscar-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; } }
-        @media (min-width: 1280px) { .buscar-grid { grid-template-columns: repeat(6, 1fr); gap: 12px; } }
+        .buscar-grid > * { min-width: 0; }
+        .buscar-results { padding: 20px 24px 40px; }
+        @media (max-width: 420px) {
+          .buscar-results { padding: 16px 12px 40px; }
+          .buscar-grid { gap: 10px; }
+        }
+        @media (min-width: 640px)  { .buscar-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; } }
+        @media (min-width: 1280px) { .buscar-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; } }
         ${INV_CARD_KEYFRAMES}
         .buscar-spinner {
           width: 28px; height: 28px; border-radius: 50%;
@@ -373,7 +381,7 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
         </div>
 
         {/* Scrollable results */}
-        <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", padding: "20px 24px 40px" }}>
+        <div className="buscar-results" style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
           {query.trim().length < 2 ? (
             <div style={{ padding: "60px 0", textAlign: "center" }}>
               <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.2 }}>🔍</div>
@@ -415,7 +423,9 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
                     : null;
 
                   return (
-                    <div key={`${setId}-${card.id}-${i}`} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                    // minWidth 0 deja que la celda se encoja con la columna en
+                    // vez de imponerle el ancho de su contenido
+                    <div key={`${setId}-${card.id}-${i}`} style={{ display: "flex", flexDirection: "column", gap: "6px", minWidth: 0 }}>
 
                       {/* Card image area */}
                       <div style={{ position: "relative" }}>
@@ -464,8 +474,9 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
                         </span>
                       </div>
 
-                      {/* Line 2: precio + qty controls */}
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
+                      {/* Line 2: precio + qty controls — en pantallas angostas
+                          el precio baja a su propia linea en vez de desbordar */}
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", flexWrap: "wrap" }}>
                         <span style={{ fontFamily: MONO, fontSize: "11px", color: cardPrice !== null ? COURT : INK2, fontWeight: 700, flexShrink: 0 }}>
                           {cardPrice !== null ? `$${cardPrice.toFixed(2)}` : "—"}
                         </span>
