@@ -7,7 +7,12 @@
   "ok": 9,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 21,
+   "resueltas": 21,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -26,7 +31,20 @@
      "suffix": "Winner",
      "product_id": 167078
     }
-   ]
+   ],
+   "variants": {
+    "jumbo": {
+     "product_id": 211445,
+     "fuente": "transversal"
+    },
+    "reverseHolofoil": {
+     "product_id": 85106,
+     "printing": "Reverse Holofoil"
+    },
+    "winnerStamp": {
+     "product_id": 167078
+    }
+   }
   },
   "2": {
    "name": "Hitmonchan",
@@ -44,7 +62,20 @@
      "suffix": "Winner",
      "product_id": 117599
     }
-   ]
+   ],
+   "variants": {
+    "jumbo": {
+     "product_id": 180263,
+     "fuente": "transversal"
+    },
+    "reverseHolofoil": {
+     "product_id": 86098,
+     "printing": "Reverse Holofoil"
+    },
+    "winnerStamp": {
+     "product_id": 117599
+    }
+   }
   },
   "3": {
    "name": "Professor Elm",
@@ -54,7 +85,13 @@
    "status": "ok",
    "product_id": 88387,
    "tcg_name": "Professor Elm - 3",
-   "tcg_number": "003/009"
+   "tcg_number": "003/009",
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 88387,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Rocket's Scizor",
@@ -72,7 +109,20 @@
      "suffix": "Winner",
      "product_id": 167081
     }
-   ]
+   ],
+   "variants": {
+    "jumbo": {
+     "product_id": 211508,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 88786,
+     "printing": "Normal"
+    },
+    "winnerStamp": {
+     "product_id": 167081
+    }
+   }
   },
   "5": {
    "name": "Rocket's Sneasel",
@@ -90,7 +140,20 @@
      "suffix": "Winner",
      "product_id": 107877
     }
-   ]
+   ],
+   "variants": {
+    "jumbo": {
+     "product_id": 180264,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 88793,
+     "printing": "Normal"
+    },
+    "winnerStamp": {
+     "product_id": 107877
+    }
+   }
   },
   "6": {
    "name": "Dark Ivysaur",
@@ -108,7 +171,20 @@
      "suffix": "Winner",
      "product_id": 107876
     }
-   ]
+   ],
+   "variants": {
+    "jumbo": {
+     "product_id": 180262,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 84616,
+     "printing": "Normal"
+    },
+    "winnerStamp": {
+     "product_id": 107876
+    }
+   }
   },
   "7": {
    "name": "Dark Venusaur",
@@ -126,7 +202,20 @@
      "suffix": "Winner",
      "product_id": 167077
     }
-   ]
+   ],
+   "variants": {
+    "jumbo": {
+     "product_id": 211424,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 84666,
+     "printing": "Normal"
+    },
+    "winnerStamp": {
+     "product_id": 167077
+    }
+   }
   },
   "8": {
    "name": "Rocket's Mewtwo",
@@ -142,7 +231,13 @@
      "suffix": "Winner",
      "product_id": 167080
     }
-   ]
+   ],
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 167080,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "9": {
    "name": "Rocket's Hitmonchan",
@@ -158,7 +253,13 @@
      "suffix": "Winner",
      "product_id": 167079
     }
-   ]
+   ],
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 167079,
+     "printing": "Reverse Holofoil"
+    }
+   }
   }
  }
 }

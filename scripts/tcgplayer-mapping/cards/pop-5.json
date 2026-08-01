@@ -7,7 +7,12 @@
   "ok": 17,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 23,
+   "resueltas": 23,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -19,7 +24,17 @@
    "status": "ok",
    "product_id": 86123,
    "tcg_name": "Ho-Oh",
-   "tcg_number": "001/017"
+   "tcg_number": "001/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 86123,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 86123,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Lugia",
@@ -30,7 +45,17 @@
    "status": "ok",
    "product_id": 86907,
    "tcg_name": "Lugia",
-   "tcg_number": "002/017"
+   "tcg_number": "002/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 86907,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 86907,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Mew δ",
@@ -42,7 +67,17 @@
    "product_id": 87407,
    "tcg_name": "Mew (Delta Species)",
    "tcg_number": "003/017",
-   "note": "nuestro \"Mew δ\" vs TCG \"Mew\""
+   "note": "nuestro \"Mew δ\" vs TCG \"Mew\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 87407,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 87407,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Double Rainbow Energy",
@@ -52,7 +87,13 @@
    "status": "ok",
    "product_id": 84894,
    "tcg_name": "Double Rainbow Energy",
-   "tcg_number": "004/017"
+   "tcg_number": "004/017",
+   "variants": {
+    "normal": {
+     "product_id": 84894,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Charmeleon δ",
@@ -63,7 +104,13 @@
    "product_id": 84237,
    "tcg_name": "Charmeleon (Delta Species)",
    "tcg_number": "005/017",
-   "note": "nuestro \"Charmeleon δ\" vs TCG \"Charmeleon\""
+   "note": "nuestro \"Charmeleon δ\" vs TCG \"Charmeleon\"",
+   "variants": {
+    "normal": {
+     "product_id": 84237,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Bill's Maintenance",
@@ -73,7 +120,13 @@
    "status": "ok",
    "product_id": 83840,
    "tcg_name": "Bill's Maintenance",
-   "tcg_number": "006/017"
+   "tcg_number": "006/017",
+   "variants": {
+    "normal": {
+     "product_id": 83840,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Rare Candy",
@@ -83,7 +136,13 @@
    "status": "ok",
    "product_id": 88592,
    "tcg_name": "Rare Candy",
-   "tcg_number": "007/017"
+   "tcg_number": "007/017",
+   "variants": {
+    "normal": {
+     "product_id": 88592,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Boost Energy",
@@ -93,7 +152,13 @@
    "status": "ok",
    "product_id": 83941,
    "tcg_name": "Boost Energy",
-   "tcg_number": "008/017"
+   "tcg_number": "008/017",
+   "variants": {
+    "normal": {
+     "product_id": 83941,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "δ Rainbow Energy",
@@ -104,7 +169,13 @@
    "product_id": 84756,
    "tcg_name": "Delta Rainbow Energy",
    "tcg_number": "009/017",
-   "note": "nuestro \"δ Rainbow Energy\" vs TCG \"Delta Rainbow Energy\""
+   "note": "nuestro \"δ Rainbow Energy\" vs TCG \"Delta Rainbow Energy\"",
+   "variants": {
+    "normal": {
+     "product_id": 84756,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Charmander δ",
@@ -115,7 +186,13 @@
    "product_id": 84221,
    "tcg_name": "Charmander (Delta Species)",
    "tcg_number": "010/017",
-   "note": "nuestro \"Charmander δ\" vs TCG \"Charmander\""
+   "note": "nuestro \"Charmander δ\" vs TCG \"Charmander\"",
+   "variants": {
+    "normal": {
+     "product_id": 84221,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Meowth δ",
@@ -126,7 +203,13 @@
    "product_id": 87330,
    "tcg_name": "Meowth (Delta Species)",
    "tcg_number": "011/017",
-   "note": "nuestro \"Meowth δ\" vs TCG \"Meowth\""
+   "note": "nuestro \"Meowth δ\" vs TCG \"Meowth\"",
+   "variants": {
+    "normal": {
+     "product_id": 87330,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Pikachu",
@@ -137,7 +220,17 @@
    "status": "ok",
    "product_id": 88085,
    "tcg_name": "Pikachu",
-   "tcg_number": "012/017"
+   "tcg_number": "012/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 88085,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 88085,
+     "printing": "Normal"
+    }
+   }
   },
   "13": {
    "name": "Pikachu δ",
@@ -148,7 +241,13 @@
    "product_id": 88110,
    "tcg_name": "Pikachu (Delta Species)",
    "tcg_number": "013/017",
-   "note": "nuestro \"Pikachu δ\" vs TCG \"Pikachu\""
+   "note": "nuestro \"Pikachu δ\" vs TCG \"Pikachu\"",
+   "variants": {
+    "normal": {
+     "product_id": 88110,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Pelipper δ",
@@ -160,7 +259,17 @@
    "product_id": 87981,
    "tcg_name": "Pelipper (Delta Species)",
    "tcg_number": "014/017",
-   "note": "nuestro \"Pelipper δ\" vs TCG \"Pelipper\""
+   "note": "nuestro \"Pelipper δ\" vs TCG \"Pelipper\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 87981,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 87981,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Zangoose δ",
@@ -172,7 +281,17 @@
    "product_id": 90709,
    "tcg_name": "Zangoose (Delta Species)",
    "tcg_number": "015/017",
-   "note": "nuestro \"Zangoose δ\" vs TCG \"Zangoose\""
+   "note": "nuestro \"Zangoose δ\" vs TCG \"Zangoose\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 90709,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 90709,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Espeon ☆",
@@ -183,7 +302,13 @@
    "product_id": 85329,
    "tcg_name": "Espeon Star",
    "tcg_number": "016/017",
-   "note": "nuestro \"Espeon ☆\" vs TCG \"Espeon Star\""
+   "note": "nuestro \"Espeon ☆\" vs TCG \"Espeon Star\"",
+   "variants": {
+    "normal": {
+     "product_id": 85329,
+     "printing": "Normal"
+    }
+   }
   },
   "17": {
    "name": "Umbreon ☆",
@@ -194,7 +319,13 @@
    "product_id": 90153,
    "tcg_name": "Umbreon Star",
    "tcg_number": "017/017",
-   "note": "nuestro \"Umbreon ☆\" vs TCG \"Umbreon Star\""
+   "note": "nuestro \"Umbreon ☆\" vs TCG \"Umbreon Star\"",
+   "variants": {
+    "normal": {
+     "product_id": 90153,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

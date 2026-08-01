@@ -7,7 +7,12 @@
   "ok": 12,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 12,
+   "resueltas": 12,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 110429,
    "tcg_name": "Treecko - 1/12",
-   "tcg_number": "001/012"
+   "tcg_number": "001/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 110429,
+     "printing": "Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Lotad",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 110422,
    "tcg_name": "Lotad - 2/12",
-   "tcg_number": "002/012"
+   "tcg_number": "002/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 110422,
+     "printing": "Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Torchic",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 110433,
    "tcg_name": "Torchic - 3/12",
-   "tcg_number": "003/012"
+   "tcg_number": "003/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 110433,
+     "printing": "Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Staryu",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 110431,
    "tcg_name": "Staryu - 4/12",
-   "tcg_number": "004/012"
+   "tcg_number": "004/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 110431,
+     "printing": "Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Mudkip",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 110427,
    "tcg_name": "Mudkip - 5/12",
-   "tcg_number": "005/012"
+   "tcg_number": "005/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 110427,
+     "printing": "Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Pikachu",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 110424,
    "tcg_name": "Pikachu - 6/12",
-   "tcg_number": "006/012"
+   "tcg_number": "006/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 110424,
+     "printing": "Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Electrike",
@@ -78,7 +119,13 @@
    "status": "ok",
    "product_id": 110428,
    "tcg_name": "Electrike - 7/12",
-   "tcg_number": "007/012"
+   "tcg_number": "007/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 110428,
+     "printing": "Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Rhyhorn",
@@ -88,7 +135,13 @@
    "status": "ok",
    "product_id": 110426,
    "tcg_name": "Rhyhorn - 8/12",
-   "tcg_number": "008/012"
+   "tcg_number": "008/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 110426,
+     "printing": "Holofoil"
+    }
+   }
   },
   "9": {
    "name": "Meditite",
@@ -98,7 +151,13 @@
    "status": "ok",
    "product_id": 110425,
    "tcg_name": "Meditite - 9/12",
-   "tcg_number": "009/012"
+   "tcg_number": "009/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 110425,
+     "printing": "Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Marill",
@@ -108,7 +167,13 @@
    "status": "ok",
    "product_id": 110430,
    "tcg_name": "Marill - 10/12",
-   "tcg_number": "010/012"
+   "tcg_number": "010/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 110430,
+     "printing": "Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Zigzagoon",
@@ -118,7 +183,13 @@
    "status": "ok",
    "product_id": 110423,
    "tcg_name": "Zigzagoon - 11/12",
-   "tcg_number": "011/012"
+   "tcg_number": "011/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 110423,
+     "printing": "Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Skitty",
@@ -128,7 +199,13 @@
    "status": "ok",
    "product_id": 110432,
    "tcg_name": "Skitty - 12/12",
-   "tcg_number": "012/012"
+   "tcg_number": "012/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 110432,
+     "printing": "Holofoil"
+    }
+   }
   }
  }
 }

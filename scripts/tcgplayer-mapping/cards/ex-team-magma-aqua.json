@@ -7,7 +7,12 @@
   "ok": 97,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 205,
+   "resueltas": 204,
+   "sinResolver": 1
+  }
  },
  "cards": {
   "1": {
@@ -19,7 +24,17 @@
    "status": "ok",
    "product_id": 89775,
    "tcg_name": "Team Aqua's Cacturne",
-   "tcg_number": "1/95"
+   "tcg_number": "1/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 89775,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 89775,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Team Aqua's Crawdaunt",
@@ -30,7 +45,17 @@
    "status": "ok",
    "product_id": 89783,
    "tcg_name": "Team Aqua's Crawdaunt - 2/95",
-   "tcg_number": "2/95"
+   "tcg_number": "2/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 89783,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 89783,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Team Aqua's Kyogre",
@@ -42,7 +67,21 @@
    "status": "ok",
    "product_id": 89788,
    "tcg_name": "Team Aqua's Kyogre",
-   "tcg_number": "3/95"
+   "tcg_number": "3/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 89788,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 89788,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89788,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Team Aqua's Manectric",
@@ -54,7 +93,21 @@
    "status": "ok",
    "product_id": 89790,
    "tcg_name": "Team Aqua's Manectric - 4/95",
-   "tcg_number": "4/95"
+   "tcg_number": "4/95",
+   "variants": {
+    "chrisFulop": {
+     "product_id": 477445,
+     "fuente": "transversal"
+    },
+    "holofoil": {
+     "product_id": 89790,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 89790,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Team Aqua's Sharpedo",
@@ -65,7 +118,17 @@
    "status": "ok",
    "product_id": 89799,
    "tcg_name": "Team Aqua's Sharpedo - 5/95",
-   "tcg_number": "5/95"
+   "tcg_number": "5/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 89799,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 89799,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Team Aqua's Walrein",
@@ -76,7 +139,17 @@
    "status": "ok",
    "product_id": 89803,
    "tcg_name": "Team Aqua's Walrein",
-   "tcg_number": "6/95"
+   "tcg_number": "6/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 89803,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 89803,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Team Magma's Aggron",
@@ -87,7 +160,17 @@
    "status": "ok",
    "product_id": 89818,
    "tcg_name": "Team Magma's Aggron",
-   "tcg_number": "7/95"
+   "tcg_number": "7/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 89818,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 89818,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Team Magma's Claydol",
@@ -99,7 +182,21 @@
    "status": "ok",
    "product_id": 89825,
    "tcg_name": "Team Magma's Claydol - 8/95",
-   "tcg_number": "8/95"
+   "tcg_number": "8/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 89825,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 89825,
+     "printing": "Reverse Holofoil"
+    },
+    "tsuguyoshiYamato": {
+     "product_id": 477450,
+     "fuente": "transversal"
+    }
+   }
   },
   "9": {
    "name": "Team Magma's Groudon",
@@ -112,7 +209,25 @@
    "status": "ok",
    "product_id": 89827,
    "tcg_name": "Team Magma's Groudon",
-   "tcg_number": "9/95"
+   "tcg_number": "9/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 89827,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 89827,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89827,
+     "printing": "Reverse Holofoil"
+    },
+    "tsuguyoshiYamato": {
+     "product_id": 477451,
+     "fuente": "transversal"
+    }
+   }
   },
   "10": {
    "name": "Team Magma's Houndoom",
@@ -123,7 +238,17 @@
    "status": "ok",
    "product_id": 89828,
    "tcg_name": "Team Magma's Houndoom - 10/95",
-   "tcg_number": "10/95"
+   "tcg_number": "10/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 89828,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 89828,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Team Magma's Rhydon",
@@ -134,7 +259,17 @@
    "status": "ok",
    "product_id": 89840,
    "tcg_name": "Team Magma's Rhydon - 11/95",
-   "tcg_number": "11/95"
+   "tcg_number": "11/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 89840,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 89840,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Team Magma's Torkoal",
@@ -145,7 +280,17 @@
    "status": "ok",
    "product_id": 89845,
    "tcg_name": "Team Magma's Torkoal",
-   "tcg_number": "12/95"
+   "tcg_number": "12/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 89845,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 89845,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Raichu",
@@ -156,7 +301,17 @@
    "status": "ok",
    "product_id": 88506,
    "tcg_name": "Raichu",
-   "tcg_number": "13/95"
+   "tcg_number": "13/95",
+   "variants": {
+    "normal": {
+     "product_id": 88506,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 88506,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "14": {
    "name": "Team Aqua's Crawdaunt",
@@ -167,7 +322,17 @@
    "status": "ok",
    "product_id": 89784,
    "tcg_name": "Team Aqua's Crawdaunt - 14/95",
-   "tcg_number": "14/95"
+   "tcg_number": "14/95",
+   "variants": {
+    "normal": {
+     "product_id": 89784,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89784,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "15": {
    "name": "Team Aqua's Mightyena",
@@ -178,7 +343,17 @@
    "status": "ok",
    "product_id": 89792,
    "tcg_name": "Team Aqua's Mightyena - 15/95",
-   "tcg_number": "15/95"
+   "tcg_number": "15/95",
+   "variants": {
+    "normal": {
+     "product_id": 89792,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89792,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "16": {
    "name": "Team Aqua's Sealeo",
@@ -189,7 +364,17 @@
    "status": "ok",
    "product_id": 89796,
    "tcg_name": "Team Aqua's Sealeo - 16/95",
-   "tcg_number": "16/95"
+   "tcg_number": "16/95",
+   "variants": {
+    "normal": {
+     "product_id": 89796,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89796,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "17": {
    "name": "Team Aqua's Seviper",
@@ -200,7 +385,17 @@
    "status": "ok",
    "product_id": 89798,
    "tcg_name": "Team Aqua's Seviper",
-   "tcg_number": "17/95"
+   "tcg_number": "17/95",
+   "variants": {
+    "normal": {
+     "product_id": 89798,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89798,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "18": {
    "name": "Team Aqua's Sharpedo",
@@ -211,7 +406,17 @@
    "status": "ok",
    "product_id": 89800,
    "tcg_name": "Team Aqua's Sharpedo - 18/95",
-   "tcg_number": "18/95"
+   "tcg_number": "18/95",
+   "variants": {
+    "normal": {
+     "product_id": 89800,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89800,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "19": {
    "name": "Team Magma's Camerupt",
@@ -223,7 +428,21 @@
    "status": "ok",
    "product_id": 89824,
    "tcg_name": "Team Magma's Camerupt",
-   "tcg_number": "19/95"
+   "tcg_number": "19/95",
+   "variants": {
+    "normal": {
+     "product_id": 89824,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89824,
+     "printing": "Reverse Holofoil"
+    },
+    "tsuguyoshiYamato": {
+     "product_id": 477449,
+     "fuente": "transversal"
+    }
+   }
   },
   "20": {
    "name": "Team Magma's Lairon",
@@ -234,7 +453,17 @@
    "status": "ok",
    "product_id": 89833,
    "tcg_name": "Team Magma's Lairon - 20/95",
-   "tcg_number": "20/95"
+   "tcg_number": "20/95",
+   "variants": {
+    "normal": {
+     "product_id": 89833,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89833,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "21": {
    "name": "Team Magma's Mightyena",
@@ -245,7 +474,17 @@
    "status": "ok",
    "product_id": 89835,
    "tcg_name": "Team Magma's Mightyena - 21/95",
-   "tcg_number": "21/95"
+   "tcg_number": "21/95",
+   "variants": {
+    "normal": {
+     "product_id": 89835,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89835,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "22": {
    "name": "Team Magma's Rhydon",
@@ -256,7 +495,17 @@
    "status": "ok",
    "product_id": 89841,
    "tcg_name": "Team Magma's Rhydon - 22/95",
-   "tcg_number": "22/95"
+   "tcg_number": "22/95",
+   "variants": {
+    "normal": {
+     "product_id": 89841,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89841,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "23": {
    "name": "Team Magma's Zangoose",
@@ -268,7 +517,21 @@
    "status": "ok",
    "product_id": 89846,
    "tcg_name": "Team Magma's Zangoose",
-   "tcg_number": "23/95"
+   "tcg_number": "23/95",
+   "variants": {
+    "normal": {
+     "product_id": 89846,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89846,
+     "printing": "Reverse Holofoil"
+    },
+    "tsuguyoshiYamato": {
+     "product_id": 477453,
+     "fuente": "transversal"
+    }
+   }
   },
   "24": {
    "name": "Team Aqua's Cacnea",
@@ -280,7 +543,17 @@
    "status": "ok",
    "product_id": 89774,
    "tcg_name": "Team Aqua's Cacnea - 24/95",
-   "tcg_number": "24/95"
+   "tcg_number": "24/95",
+   "variants": {
+    "normal": {
+     "product_id": 89774,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89774,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "25": {
    "name": "Team Aqua's Carvanha",
@@ -291,7 +564,17 @@
    "status": "ok",
    "product_id": 89776,
    "tcg_name": "Team Aqua's Carvanha - 25/95",
-   "tcg_number": "25/95"
+   "tcg_number": "25/95",
+   "variants": {
+    "normal": {
+     "product_id": 89776,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89776,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "26": {
    "name": "Team Aqua's Corphish",
@@ -302,7 +585,17 @@
    "status": "ok",
    "product_id": 89780,
    "tcg_name": "Team Aqua's Corphish - 26/95",
-   "tcg_number": "26/95"
+   "tcg_number": "26/95",
+   "variants": {
+    "normal": {
+     "product_id": 89780,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89780,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "27": {
    "name": "Team Aqua's Electrike",
@@ -314,7 +607,21 @@
    "status": "ok",
    "product_id": 89785,
    "tcg_name": "Team Aqua's Electrike - 27/95",
-   "tcg_number": "27/95"
+   "tcg_number": "27/95",
+   "variants": {
+    "chrisFulop": {
+     "product_id": 477444,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 89785,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89785,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "28": {
    "name": "Team Aqua's Lanturn",
@@ -325,7 +632,17 @@
    "status": "ok",
    "product_id": 89789,
    "tcg_name": "Team Aqua's Lanturn",
-   "tcg_number": "28/95"
+   "tcg_number": "28/95",
+   "variants": {
+    "normal": {
+     "product_id": 89789,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89789,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "29": {
    "name": "Team Aqua's Manectric",
@@ -336,7 +653,17 @@
    "status": "ok",
    "product_id": 89791,
    "tcg_name": "Team Aqua's Manectric - 29/95",
-   "tcg_number": "29/95"
+   "tcg_number": "29/95",
+   "variants": {
+    "normal": {
+     "product_id": 89791,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89791,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "30": {
    "name": "Team Aqua's Mightyena",
@@ -347,7 +674,17 @@
    "status": "ok",
    "product_id": 89793,
    "tcg_name": "Team Aqua's Mightyena - 30/95",
-   "tcg_number": "30/95"
+   "tcg_number": "30/95",
+   "variants": {
+    "normal": {
+     "product_id": 89793,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89793,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "31": {
    "name": "Team Aqua's Sealeo",
@@ -358,7 +695,17 @@
    "status": "ok",
    "product_id": 89797,
    "tcg_name": "Team Aqua's Sealeo - 31/95",
-   "tcg_number": "31/95"
+   "tcg_number": "31/95",
+   "variants": {
+    "normal": {
+     "product_id": 89797,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89797,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "32": {
    "name": "Team Magma's Baltoy",
@@ -369,7 +716,17 @@
    "status": "ok",
    "product_id": 89821,
    "tcg_name": "Team Magma's Baltoy - 32/95",
-   "tcg_number": "32/95"
+   "tcg_number": "32/95",
+   "variants": {
+    "normal": {
+     "product_id": 89821,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89821,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "33": {
    "name": "Team Magma's Claydol",
@@ -380,7 +737,17 @@
    "status": "ok",
    "product_id": 89826,
    "tcg_name": "Team Magma's Claydol - 33/95",
-   "tcg_number": "33/95"
+   "tcg_number": "33/95",
+   "variants": {
+    "normal": {
+     "product_id": 89826,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89826,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "34": {
    "name": "Team Magma's Houndoom",
@@ -391,7 +758,17 @@
    "status": "ok",
    "product_id": 89829,
    "tcg_name": "Team Magma's Houndoom - 34/95",
-   "tcg_number": "34/95"
+   "tcg_number": "34/95",
+   "variants": {
+    "normal": {
+     "product_id": 89829,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89829,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "35": {
    "name": "Team Magma's Houndour",
@@ -402,7 +779,17 @@
    "status": "ok",
    "product_id": 89830,
    "tcg_name": "Team Magma's Houndour - 35/95",
-   "tcg_number": "35/95"
+   "tcg_number": "35/95",
+   "variants": {
+    "normal": {
+     "product_id": 89830,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89830,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "36": {
    "name": "Team Magma's Lairon",
@@ -413,7 +800,17 @@
    "status": "ok",
    "product_id": 89834,
    "tcg_name": "Team Magma's Lairon - 36/95",
-   "tcg_number": "36/95"
+   "tcg_number": "36/95",
+   "variants": {
+    "normal": {
+     "product_id": 89834,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89834,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "37": {
    "name": "Team Magma's Mightyena",
@@ -424,7 +821,17 @@
    "status": "ok",
    "product_id": 89836,
    "tcg_name": "Team Magma's Mightyena - 37/95",
-   "tcg_number": "37/95"
+   "tcg_number": "37/95",
+   "variants": {
+    "normal": {
+     "product_id": 89836,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89836,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "38": {
    "name": "Team Magma's Rhyhorn",
@@ -435,7 +842,17 @@
    "status": "ok",
    "product_id": 89842,
    "tcg_name": "Team Magma's Rhyhorn - 38/95",
-   "tcg_number": "38/95"
+   "tcg_number": "38/95",
+   "variants": {
+    "normal": {
+     "product_id": 89842,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89842,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "39": {
    "name": "Bulbasaur",
@@ -446,7 +863,17 @@
    "status": "ok",
    "product_id": 84028,
    "tcg_name": "Bulbasaur",
-   "tcg_number": "39/95"
+   "tcg_number": "39/95",
+   "variants": {
+    "normal": {
+     "product_id": 84028,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 84028,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "40": {
    "name": "Cubone",
@@ -457,7 +884,17 @@
    "status": "ok",
    "product_id": 84530,
    "tcg_name": "Cubone",
-   "tcg_number": "40/95"
+   "tcg_number": "40/95",
+   "variants": {
+    "normal": {
+     "product_id": 84530,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 84530,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "41": {
    "name": "Jigglypuff",
@@ -468,7 +905,17 @@
    "status": "ok",
    "product_id": 86314,
    "tcg_name": "Jigglypuff",
-   "tcg_number": "41/95"
+   "tcg_number": "41/95",
+   "variants": {
+    "normal": {
+     "product_id": 86314,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 86314,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "42": {
    "name": "Meowth",
@@ -479,7 +926,17 @@
    "status": "ok",
    "product_id": 87316,
    "tcg_name": "Meowth",
-   "tcg_number": "42/95"
+   "tcg_number": "42/95",
+   "variants": {
+    "normal": {
+     "product_id": 87316,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 87316,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "43": {
    "name": "Pikachu",
@@ -490,7 +947,17 @@
    "status": "ok",
    "product_id": 88077,
    "tcg_name": "Pikachu",
-   "tcg_number": "43/95"
+   "tcg_number": "43/95",
+   "variants": {
+    "normal": {
+     "product_id": 88077,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 88077,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "44": {
    "name": "Psyduck",
@@ -501,7 +968,17 @@
    "status": "ok",
    "product_id": 88436,
    "tcg_name": "Psyduck",
-   "tcg_number": "44/95"
+   "tcg_number": "44/95",
+   "variants": {
+    "normal": {
+     "product_id": 88436,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 88436,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "45": {
    "name": "Slowpoke",
@@ -512,7 +989,17 @@
    "status": "ok",
    "product_id": 89326,
    "tcg_name": "Slowpoke",
-   "tcg_number": "45/95"
+   "tcg_number": "45/95",
+   "variants": {
+    "normal": {
+     "product_id": 89326,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89326,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "46": {
    "name": "Squirtle",
@@ -523,7 +1010,17 @@
    "status": "ok",
    "product_id": 89488,
    "tcg_name": "Squirtle",
-   "tcg_number": "46/95"
+   "tcg_number": "46/95",
+   "variants": {
+    "normal": {
+     "product_id": 89488,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89488,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "47": {
    "name": "Team Aqua's Carvanha",
@@ -534,7 +1031,17 @@
    "status": "ok",
    "product_id": 89777,
    "tcg_name": "Team Aqua's Carvanha - 47/95",
-   "tcg_number": "47/95"
+   "tcg_number": "47/95",
+   "variants": {
+    "normal": {
+     "product_id": 89777,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89777,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "48": {
    "name": "Team Aqua's Carvanha",
@@ -545,7 +1052,17 @@
    "status": "ok",
    "product_id": 89778,
    "tcg_name": "Team Aqua's Carvanha - 48/95",
-   "tcg_number": "48/95"
+   "tcg_number": "48/95",
+   "variants": {
+    "normal": {
+     "product_id": 89778,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89778,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "49": {
    "name": "Team Aqua's Chinchou",
@@ -556,7 +1073,17 @@
    "status": "ok",
    "product_id": 89779,
    "tcg_name": "Team Aqua's Chinchou",
-   "tcg_number": "49/95"
+   "tcg_number": "49/95",
+   "variants": {
+    "normal": {
+     "product_id": 89779,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89779,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "50": {
    "name": "Team Aqua's Corphish",
@@ -567,7 +1094,17 @@
    "status": "ok",
    "product_id": 89781,
    "tcg_name": "Team Aqua's Corphish - 50/95",
-   "tcg_number": "50/95"
+   "tcg_number": "50/95",
+   "variants": {
+    "normal": {
+     "product_id": 89781,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89781,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "51": {
    "name": "Team Aqua's Corphish",
@@ -578,7 +1115,17 @@
    "status": "ok",
    "product_id": 89782,
    "tcg_name": "Team Aqua's Corphish - 51/95",
-   "tcg_number": "51/95"
+   "tcg_number": "51/95",
+   "variants": {
+    "normal": {
+     "product_id": 89782,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89782,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "52": {
    "name": "Team Aqua's Electrike",
@@ -589,7 +1136,17 @@
    "status": "ok",
    "product_id": 89786,
    "tcg_name": "Team Aqua's Electrike - 52/95",
-   "tcg_number": "52/95"
+   "tcg_number": "52/95",
+   "variants": {
+    "normal": {
+     "product_id": 89786,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89786,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "53": {
    "name": "Team Aqua's Electrike",
@@ -600,7 +1157,17 @@
    "status": "ok",
    "product_id": 89787,
    "tcg_name": "Team Aqua's Electrike - 53/95",
-   "tcg_number": "53/95"
+   "tcg_number": "53/95",
+   "variants": {
+    "normal": {
+     "product_id": 89787,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89787,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "54": {
    "name": "Team Aqua's Poochyena",
@@ -611,7 +1178,17 @@
    "status": "ok",
    "product_id": 89794,
    "tcg_name": "Team Aqua's Poochyena - 54/95",
-   "tcg_number": "54/95"
+   "tcg_number": "54/95",
+   "variants": {
+    "normal": {
+     "product_id": 89794,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89794,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "55": {
    "name": "Team Aqua's Poochyena",
@@ -622,7 +1199,17 @@
    "status": "ok",
    "product_id": 89795,
    "tcg_name": "Team Aqua's Poochyena - 55/95",
-   "tcg_number": "55/95"
+   "tcg_number": "55/95",
+   "variants": {
+    "normal": {
+     "product_id": 89795,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89795,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "56": {
    "name": "Team Aqua's Spheal",
@@ -633,7 +1220,17 @@
    "status": "ok",
    "product_id": 89801,
    "tcg_name": "Team Aqua's Spheal - 56/95",
-   "tcg_number": "56/95"
+   "tcg_number": "56/95",
+   "variants": {
+    "normal": {
+     "product_id": 89801,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89801,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "57": {
    "name": "Team Aqua's Spheal",
@@ -644,7 +1241,17 @@
    "status": "ok",
    "product_id": 89802,
    "tcg_name": "Team Aqua's Spheal - 57/95",
-   "tcg_number": "57/95"
+   "tcg_number": "57/95",
+   "variants": {
+    "normal": {
+     "product_id": 89802,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89802,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "58": {
    "name": "Team Magma's Aron",
@@ -655,7 +1262,17 @@
    "status": "ok",
    "product_id": 89819,
    "tcg_name": "Team Magma's Aron - 58/95",
-   "tcg_number": "58/95"
+   "tcg_number": "58/95",
+   "variants": {
+    "normal": {
+     "product_id": 89819,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89819,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "59": {
    "name": "Team Magma's Aron",
@@ -666,7 +1283,17 @@
    "status": "ok",
    "product_id": 89820,
    "tcg_name": "Team Magma's Aron - 59/95",
-   "tcg_number": "59/95"
+   "tcg_number": "59/95",
+   "variants": {
+    "normal": {
+     "product_id": 89820,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89820,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "60": {
    "name": "Team Magma's Baltoy",
@@ -678,7 +1305,21 @@
    "status": "ok",
    "product_id": 89822,
    "tcg_name": "Team Magma's Baltoy - 60/95",
-   "tcg_number": "60/95"
+   "tcg_number": "60/95",
+   "variants": {
+    "normal": {
+     "product_id": 89822,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89822,
+     "printing": "Reverse Holofoil"
+    },
+    "tsuguyoshiYamato": {
+     "product_id": 477448,
+     "fuente": "transversal"
+    }
+   }
   },
   "61": {
    "name": "Team Magma's Baltoy",
@@ -689,7 +1330,17 @@
    "status": "ok",
    "product_id": 89823,
    "tcg_name": "Team Magma's Baltoy - 61/95",
-   "tcg_number": "61/95"
+   "tcg_number": "61/95",
+   "variants": {
+    "normal": {
+     "product_id": 89823,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89823,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "62": {
    "name": "Team Magma's Houndour",
@@ -700,7 +1351,17 @@
    "status": "ok",
    "product_id": 89831,
    "tcg_name": "Team Magma's Houndour - 62/95",
-   "tcg_number": "62/95"
+   "tcg_number": "62/95",
+   "variants": {
+    "normal": {
+     "product_id": 89831,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89831,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "63": {
    "name": "Team Magma's Houndour",
@@ -711,7 +1372,17 @@
    "status": "ok",
    "product_id": 89832,
    "tcg_name": "Team Magma's Houndour - 63/95",
-   "tcg_number": "63/95"
+   "tcg_number": "63/95",
+   "variants": {
+    "normal": {
+     "product_id": 89832,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89832,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "64": {
    "name": "Team Magma's Numel",
@@ -723,7 +1394,21 @@
    "status": "ok",
    "product_id": 89837,
    "tcg_name": "Team Magma's Numel",
-   "tcg_number": "64/95"
+   "tcg_number": "64/95",
+   "variants": {
+    "normal": {
+     "product_id": 89837,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89837,
+     "printing": "Reverse Holofoil"
+    },
+    "tsuguyoshiYamato": {
+     "product_id": 477452,
+     "fuente": "transversal"
+    }
+   }
   },
   "65": {
    "name": "Team Magma's Poochyena",
@@ -734,7 +1419,17 @@
    "status": "ok",
    "product_id": 89838,
    "tcg_name": "Team Magma's Poochyena - 65/95",
-   "tcg_number": "65/95"
+   "tcg_number": "65/95",
+   "variants": {
+    "normal": {
+     "product_id": 89838,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89838,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "66": {
    "name": "Team Magma's Poochyena",
@@ -745,7 +1440,17 @@
    "status": "ok",
    "product_id": 89839,
    "tcg_name": "Team Magma's Poochyena - 66/95",
-   "tcg_number": "66/95"
+   "tcg_number": "66/95",
+   "variants": {
+    "normal": {
+     "product_id": 89839,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89839,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "67": {
    "name": "Team Magma's Rhyhorn",
@@ -756,7 +1461,17 @@
    "status": "ok",
    "product_id": 89843,
    "tcg_name": "Team Magma's Rhyhorn - 67/95",
-   "tcg_number": "67/95"
+   "tcg_number": "67/95",
+   "variants": {
+    "normal": {
+     "product_id": 89843,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89843,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "68": {
    "name": "Team Magma's Rhyhorn",
@@ -767,7 +1482,17 @@
    "status": "ok",
    "product_id": 89844,
    "tcg_name": "Team Magma's Rhyhorn - 68/95",
-   "tcg_number": "68/95"
+   "tcg_number": "68/95",
+   "variants": {
+    "normal": {
+     "product_id": 89844,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89844,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "69": {
    "name": "Team Aqua Schemer",
@@ -778,7 +1503,17 @@
    "status": "ok",
    "product_id": 89772,
    "tcg_name": "Team Aqua Schemer",
-   "tcg_number": "69/95"
+   "tcg_number": "69/95",
+   "variants": {
+    "normal": {
+     "product_id": 89772,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89772,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "70": {
    "name": "Team Magma Schemer",
@@ -789,7 +1524,17 @@
    "status": "ok",
    "product_id": 89816,
    "tcg_name": "Team Magma Schemer",
-   "tcg_number": "70/95"
+   "tcg_number": "70/95",
+   "variants": {
+    "normal": {
+     "product_id": 89816,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89816,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "71": {
    "name": "Archie",
@@ -800,7 +1545,17 @@
    "status": "ok",
    "product_id": 83612,
    "tcg_name": "Archie",
-   "tcg_number": "71/95"
+   "tcg_number": "71/95",
+   "variants": {
+    "normal": {
+     "product_id": 83612,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 83612,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "72": {
    "name": "Dual Ball",
@@ -811,7 +1566,17 @@
    "status": "ok",
    "product_id": 84985,
    "tcg_name": "Dual Ball",
-   "tcg_number": "72/95"
+   "tcg_number": "72/95",
+   "variants": {
+    "normal": {
+     "product_id": 84985,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 84985,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "73": {
    "name": "Maxie",
@@ -823,7 +1588,21 @@
    "status": "ok",
    "product_id": 87270,
    "tcg_name": "Maxie",
-   "tcg_number": "73/95"
+   "tcg_number": "73/95",
+   "variants": {
+    "normal": {
+     "product_id": 87270,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 87270,
+     "printing": "Reverse Holofoil"
+    },
+    "tsuguyoshiYamato": {
+     "product_id": 477404,
+     "fuente": "transversal"
+    }
+   }
   },
   "74": {
    "name": "Strength Charm",
@@ -834,7 +1613,17 @@
    "status": "ok",
    "product_id": 89578,
    "tcg_name": "Strength Charm",
-   "tcg_number": "74/95"
+   "tcg_number": "74/95",
+   "variants": {
+    "normal": {
+     "product_id": 89578,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89578,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "75": {
    "name": "Team Aqua Ball",
@@ -845,7 +1634,17 @@
    "status": "ok",
    "product_id": 89768,
    "tcg_name": "Team Aqua Ball",
-   "tcg_number": "75/95"
+   "tcg_number": "75/95",
+   "variants": {
+    "normal": {
+     "product_id": 89768,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89768,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "76": {
    "name": "Team Aqua Belt",
@@ -856,7 +1655,17 @@
    "status": "ok",
    "product_id": 89769,
    "tcg_name": "Team Aqua Belt",
-   "tcg_number": "76/95"
+   "tcg_number": "76/95",
+   "variants": {
+    "normal": {
+     "product_id": 89769,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89769,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "77": {
    "name": "Team Aqua Conspirator",
@@ -867,7 +1676,17 @@
    "status": "ok",
    "product_id": 89770,
    "tcg_name": "Team Aqua Conspirator",
-   "tcg_number": "77/95"
+   "tcg_number": "77/95",
+   "variants": {
+    "normal": {
+     "product_id": 89770,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89770,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "78": {
    "name": "Team Aqua Hideout",
@@ -879,7 +1698,21 @@
    "status": "ok",
    "product_id": 89771,
    "tcg_name": "Team Aqua Hideout",
-   "tcg_number": "78/95"
+   "tcg_number": "78/95",
+   "variants": {
+    "curranHill": {
+     "product_id": 477593,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 89771,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89771,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "79": {
    "name": "Team Aqua Technical Machine 01",
@@ -890,7 +1723,17 @@
    "status": "ok",
    "product_id": 89773,
    "tcg_name": "Team Aqua Technical Machine 01",
-   "tcg_number": "79/95"
+   "tcg_number": "79/95",
+   "variants": {
+    "normal": {
+     "product_id": 89773,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89773,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "80": {
    "name": "Team Magma Ball",
@@ -902,7 +1745,21 @@
    "status": "ok",
    "product_id": 89812,
    "tcg_name": "Team Magma Ball",
-   "tcg_number": "80/95"
+   "tcg_number": "80/95",
+   "variants": {
+    "normal": {
+     "product_id": 89812,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89812,
+     "printing": "Reverse Holofoil"
+    },
+    "tsuguyoshiYamato": {
+     "product_id": 477446,
+     "fuente": "transversal"
+    }
+   }
   },
   "81": {
    "name": "Team Magma Belt",
@@ -913,7 +1770,17 @@
    "status": "ok",
    "product_id": 89813,
    "tcg_name": "Team Magma Belt",
-   "tcg_number": "81/95"
+   "tcg_number": "81/95",
+   "variants": {
+    "normal": {
+     "product_id": 89813,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89813,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "82": {
    "name": "Team Magma Conspirator",
@@ -925,7 +1792,21 @@
    "status": "ok",
    "product_id": 89814,
    "tcg_name": "Team Magma Conspirator",
-   "tcg_number": "82/95"
+   "tcg_number": "82/95",
+   "variants": {
+    "normal": {
+     "product_id": 89814,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89814,
+     "printing": "Reverse Holofoil"
+    },
+    "tsuguyoshiYamato": {
+     "product_id": 477447,
+     "fuente": "transversal"
+    }
+   }
   },
   "83": {
    "name": "Team Magma Hideout",
@@ -936,7 +1817,17 @@
    "status": "ok",
    "product_id": 89815,
    "tcg_name": "Team Magma Hideout",
-   "tcg_number": "83/95"
+   "tcg_number": "83/95",
+   "variants": {
+    "normal": {
+     "product_id": 89815,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89815,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "84": {
    "name": "Team Magma Technical Machine 01",
@@ -947,7 +1838,17 @@
    "status": "ok",
    "product_id": 89817,
    "tcg_name": "Team Magma Technical Machine 01",
-   "tcg_number": "84/95"
+   "tcg_number": "84/95",
+   "variants": {
+    "normal": {
+     "product_id": 89817,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 89817,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "85": {
    "name": "Warp Point",
@@ -959,7 +1860,21 @@
    "status": "ok",
    "product_id": 90478,
    "tcg_name": "Warp Point",
-   "tcg_number": "85/95"
+   "tcg_number": "85/95",
+   "variants": {
+    "kevinNguyen": {
+     "product_id": 477461,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 90478,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 90478,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "86": {
    "name": "Aqua Energy",
@@ -970,7 +1885,17 @@
    "status": "ok",
    "product_id": 83565,
    "tcg_name": "Aqua Energy",
-   "tcg_number": "86/95"
+   "tcg_number": "86/95",
+   "variants": {
+    "normal": {
+     "product_id": 83565,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 83565,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "87": {
    "name": "Magma Energy",
@@ -982,7 +1907,21 @@
    "status": "ok",
    "product_id": 87039,
    "tcg_name": "Magma Energy",
-   "tcg_number": "87/95"
+   "tcg_number": "87/95",
+   "variants": {
+    "normal": {
+     "product_id": 87039,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 87039,
+     "printing": "Reverse Holofoil"
+    },
+    "tsuguyoshiYamato": {
+     "product_id": 477394,
+     "fuente": "transversal"
+    }
+   }
   },
   "88": {
    "name": "Double Rainbow Energy",
@@ -993,7 +1932,17 @@
    "status": "ok",
    "product_id": 84895,
    "tcg_name": "Double Rainbow Energy",
-   "tcg_number": "88/95"
+   "tcg_number": "88/95",
+   "variants": {
+    "normal": {
+     "product_id": 84895,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 84895,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "89": {
    "name": "Blaziken ex",
@@ -1004,7 +1953,17 @@
    "status": "ok",
    "product_id": 83912,
    "tcg_name": "Blaziken ex",
-   "tcg_number": "89/95"
+   "tcg_number": "89/95",
+   "variants": {
+    "chrisFulop": {
+     "product_id": 477368,
+     "fuente": "transversal"
+    },
+    "holofoil": {
+     "product_id": 83912,
+     "printing": "Holofoil"
+    }
+   }
   },
   "90": {
    "name": "Cradily ex",
@@ -1014,7 +1973,13 @@
    "status": "ok",
    "product_id": 84457,
    "tcg_name": "Cradily ex",
-   "tcg_number": "90/95"
+   "tcg_number": "90/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 84457,
+     "printing": "Holofoil"
+    }
+   }
   },
   "91": {
    "name": "Entei ex",
@@ -1024,7 +1989,13 @@
    "status": "ok",
    "product_id": 85278,
    "tcg_name": "Entei ex",
-   "tcg_number": "91/95"
+   "tcg_number": "91/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 85278,
+     "printing": "Holofoil"
+    }
+   }
   },
   "92": {
    "name": "Raikou ex",
@@ -1034,7 +2005,13 @@
    "status": "ok",
    "product_id": 88540,
    "tcg_name": "Raikou ex",
-   "tcg_number": "92/95"
+   "tcg_number": "92/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 88540,
+     "printing": "Holofoil"
+    }
+   }
   },
   "93": {
    "name": "Sceptile ex",
@@ -1044,7 +2021,13 @@
    "status": "ok",
    "product_id": 88954,
    "tcg_name": "Sceptile ex",
-   "tcg_number": "93/95"
+   "tcg_number": "93/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 88954,
+     "printing": "Holofoil"
+    }
+   }
   },
   "94": {
    "name": "Suicune ex",
@@ -1055,7 +2038,17 @@
    "status": "ok",
    "product_id": 89611,
    "tcg_name": "Suicune ex",
-   "tcg_number": "94/95"
+   "tcg_number": "94/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 89611,
+     "printing": "Holofoil"
+    },
+    "reedWeichler": {
+     "product_id": 477437,
+     "fuente": "transversal"
+    }
+   }
   },
   "95": {
    "name": "Swampert ex",
@@ -1066,7 +2059,17 @@
    "status": "ok",
    "product_id": 89682,
    "tcg_name": "Swampert ex",
-   "tcg_number": "95/95"
+   "tcg_number": "95/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 89682,
+     "printing": "Holofoil"
+    },
+    "reedWeichler": {
+     "product_id": 477439,
+     "fuente": "transversal"
+    }
+   }
   },
   "96": {
    "name": "Absol",
@@ -1076,7 +2079,13 @@
    "status": "ok",
    "product_id": 83450,
    "tcg_name": "Absol",
-   "tcg_number": "96/95"
+   "tcg_number": "96/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 83450,
+     "printing": "Holofoil"
+    }
+   }
   },
   "97": {
    "name": "Jirachi",
@@ -1086,7 +2095,13 @@
    "status": "ok",
    "product_id": 86324,
    "tcg_name": "Jirachi",
-   "tcg_number": "97/95"
+   "tcg_number": "97/95",
+   "variants": {
+    "holofoil": {
+     "product_id": 86324,
+     "printing": "Holofoil"
+    }
+   }
   }
  }
 }

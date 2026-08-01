@@ -7,7 +7,12 @@
   "ok": 17,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 25,
+   "resueltas": 24,
+   "sinResolver": 1
+  }
  },
  "cards": {
   "1": {
@@ -19,7 +24,17 @@
    "status": "ok",
    "product_id": 85271,
    "tcg_name": "Entei",
-   "tcg_number": "001/017"
+   "tcg_number": "001/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 85271,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 85271,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Pidgeot",
@@ -30,7 +45,17 @@
    "status": "ok",
    "product_id": 88032,
    "tcg_name": "Pidgeot",
-   "tcg_number": "002/017"
+   "tcg_number": "002/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 88032,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 88032,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Raikou",
@@ -41,7 +66,17 @@
    "status": "ok",
    "product_id": 88533,
    "tcg_name": "Raikou",
-   "tcg_number": "003/017"
+   "tcg_number": "003/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 88533,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 88533,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Suicune",
@@ -52,7 +87,17 @@
    "status": "ok",
    "product_id": 89602,
    "tcg_name": "Suicune",
-   "tcg_number": "004/017"
+   "tcg_number": "004/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 89602,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 89602,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Tauros",
@@ -63,7 +108,17 @@
    "status": "ok",
    "product_id": 89762,
    "tcg_name": "Tauros",
-   "tcg_number": "005/017"
+   "tcg_number": "005/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 89762,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 89762,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Venusaur",
@@ -74,7 +129,17 @@
    "status": "ok",
    "product_id": 90317,
    "tcg_name": "Venusaur",
-   "tcg_number": "006/017"
+   "tcg_number": "006/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 90317,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 90317,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Ivysaur",
@@ -84,7 +149,13 @@
    "status": "ok",
    "product_id": 86298,
    "tcg_name": "Ivysaur",
-   "tcg_number": "007/017"
+   "tcg_number": "007/017",
+   "variants": {
+    "normal": {
+     "product_id": 86298,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Mr. Briney's Compassion",
@@ -94,7 +165,13 @@
    "status": "ok",
    "product_id": 87586,
    "tcg_name": "Mr. Briney's Compassion",
-   "tcg_number": "008/017"
+   "tcg_number": "008/017",
+   "variants": {
+    "normal": {
+     "product_id": 87586,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Multi Technical Machine 01",
@@ -104,7 +181,13 @@
    "status": "ok",
    "product_id": 87636,
    "tcg_name": "Multi Technical Machine 01",
-   "tcg_number": "009/017"
+   "tcg_number": "009/017",
+   "variants": {
+    "normal": {
+     "product_id": 87636,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Pokémon Park",
@@ -114,7 +197,13 @@
    "status": "ok",
    "product_id": 88231,
    "tcg_name": "Pokemon Park",
-   "tcg_number": "010/017"
+   "tcg_number": "010/017",
+   "variants": {
+    "normal": {
+     "product_id": 88231,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "TV Reporter",
@@ -125,7 +214,17 @@
    "status": "ok",
    "product_id": 90084,
    "tcg_name": "TV Reporter",
-   "tcg_number": "011/017"
+   "tcg_number": "011/017",
+   "variants": {
+    "jasonKlaczynski": {
+     "product_id": 477972,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 90084,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Bulbasaur",
@@ -135,7 +234,13 @@
    "status": "ok",
    "product_id": 84031,
    "tcg_name": "Bulbasaur",
-   "tcg_number": "012/17"
+   "tcg_number": "012/17",
+   "variants": {
+    "normal": {
+     "product_id": 84031,
+     "printing": "Normal"
+    }
+   }
   },
   "13": {
    "name": "Cacnea",
@@ -145,7 +250,13 @@
    "status": "ok",
    "product_id": 84072,
    "tcg_name": "Cacnea",
-   "tcg_number": "013/017"
+   "tcg_number": "013/017",
+   "variants": {
+    "normal": {
+     "product_id": 84072,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Luvdisc",
@@ -155,7 +266,13 @@
    "status": "ok",
    "product_id": 86934,
    "tcg_name": "Luvdisc",
-   "tcg_number": "014/017"
+   "tcg_number": "014/017",
+   "variants": {
+    "normal": {
+     "product_id": 86934,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Phanpy",
@@ -165,7 +282,13 @@
    "status": "ok",
    "product_id": 88000,
    "tcg_name": "Phanpy",
-   "tcg_number": "015/017"
+   "tcg_number": "015/017",
+   "variants": {
+    "normal": {
+     "product_id": 88000,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Pikachu",
@@ -175,7 +298,13 @@
    "status": "ok",
    "product_id": 88081,
    "tcg_name": "Pikachu",
-   "tcg_number": "016/017"
+   "tcg_number": "016/017",
+   "variants": {
+    "normal": {
+     "product_id": 88081,
+     "printing": "Normal"
+    }
+   }
   },
   "17": {
    "name": "Celebi ex",
@@ -196,7 +325,13 @@
      "suffix": "Non-Holo",
      "product_id": 84151
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 97808,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

@@ -7,7 +7,12 @@
   "ok": 16,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 16,
+   "resueltas": 16,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 90320,
    "tcg_name": "Venusaur",
-   "tcg_number": "1"
+   "tcg_number": "1",
+   "variants": {
+    "holofoil": {
+     "product_id": 90320,
+     "printing": "Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Cherrim",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 84256,
    "tcg_name": "Cherrim",
-   "tcg_number": "2"
+   "tcg_number": "2",
+   "variants": {
+    "normal": {
+     "product_id": 84256,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Ninetales",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 87775,
    "tcg_name": "Ninetales",
-   "tcg_number": "3"
+   "tcg_number": "3",
+   "variants": {
+    "normal": {
+     "product_id": 87775,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Heatran",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 86051,
    "tcg_name": "Heatran",
-   "tcg_number": "4"
+   "tcg_number": "4",
+   "variants": {
+    "normal": {
+     "product_id": 86051,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Starmie",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 89537,
    "tcg_name": "Starmie",
-   "tcg_number": "5"
+   "tcg_number": "5",
+   "variants": {
+    "normal": {
+     "product_id": 89537,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Gyarados",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 85996,
    "tcg_name": "Gyarados",
-   "tcg_number": "6"
+   "tcg_number": "6",
+   "variants": {
+    "normal": {
+     "product_id": 85996,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Pikachu",
@@ -78,7 +119,13 @@
    "status": "ok",
    "product_id": 88096,
    "tcg_name": "Pikachu",
-   "tcg_number": "7"
+   "tcg_number": "7",
+   "variants": {
+    "holofoil": {
+     "product_id": 88096,
+     "printing": "Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Zapdos",
@@ -88,7 +135,13 @@
    "status": "ok",
    "product_id": 90720,
    "tcg_name": "Zapdos",
-   "tcg_number": "8"
+   "tcg_number": "8",
+   "variants": {
+    "normal": {
+     "product_id": 90720,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Mewtwo",
@@ -98,7 +151,13 @@
    "status": "ok",
    "product_id": 87423,
    "tcg_name": "Mewtwo",
-   "tcg_number": "9"
+   "tcg_number": "9",
+   "variants": {
+    "holofoil": {
+     "product_id": 87423,
+     "printing": "Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Mew",
@@ -108,7 +167,13 @@
    "status": "ok",
    "product_id": 87404,
    "tcg_name": "Mew",
-   "tcg_number": "10"
+   "tcg_number": "10",
+   "variants": {
+    "normal": {
+     "product_id": 87404,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Diglett",
@@ -118,7 +183,13 @@
    "status": "ok",
    "product_id": 84825,
    "tcg_name": "Diglett",
-   "tcg_number": "11"
+   "tcg_number": "11",
+   "variants": {
+    "normal": {
+     "product_id": 84825,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Lucario",
@@ -128,7 +199,13 @@
    "status": "ok",
    "product_id": 86879,
    "tcg_name": "Lucario",
-   "tcg_number": "12"
+   "tcg_number": "12",
+   "variants": {
+    "normal": {
+     "product_id": 86879,
+     "printing": "Normal"
+    }
+   }
   },
   "13": {
    "name": "Skuntank",
@@ -138,7 +215,13 @@
    "status": "ok",
    "product_id": 89281,
    "tcg_name": "Skuntank",
-   "tcg_number": "13"
+   "tcg_number": "13",
+   "variants": {
+    "normal": {
+     "product_id": 89281,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Bastiodon",
@@ -148,7 +231,13 @@
    "status": "ok",
    "product_id": 83737,
    "tcg_name": "Bastiodon",
-   "tcg_number": "14"
+   "tcg_number": "14",
+   "variants": {
+    "normal": {
+     "product_id": 83737,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Rattata",
@@ -158,7 +247,13 @@
    "status": "ok",
    "product_id": 88620,
    "tcg_name": "Rattata",
-   "tcg_number": "15"
+   "tcg_number": "15",
+   "variants": {
+    "normal": {
+     "product_id": 88620,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Bibarel",
@@ -168,7 +263,13 @@
    "status": "ok",
    "product_id": 83820,
    "tcg_name": "Bibarel",
-   "tcg_number": "16"
+   "tcg_number": "16",
+   "variants": {
+    "normal": {
+     "product_id": 83820,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

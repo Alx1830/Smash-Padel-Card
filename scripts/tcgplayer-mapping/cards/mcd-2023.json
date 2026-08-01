@@ -7,7 +7,12 @@
   "ok": 15,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 15,
+   "resueltas": 15,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 516512,
    "tcg_name": "Sprigatito",
-   "tcg_number": "001/015"
+   "tcg_number": "001/015",
+   "variants": {
+    "holofoil": {
+     "product_id": 516512,
+     "printing": "Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Fuecoco",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 516513,
    "tcg_name": "Fuecoco",
-   "tcg_number": "002/015"
+   "tcg_number": "002/015",
+   "variants": {
+    "holofoil": {
+     "product_id": 516513,
+     "printing": "Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Quaxly",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 516514,
    "tcg_name": "Quaxly",
-   "tcg_number": "003/015"
+   "tcg_number": "003/015",
+   "variants": {
+    "holofoil": {
+     "product_id": 516514,
+     "printing": "Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Cetoddle",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 516515,
    "tcg_name": "Cetoddle",
-   "tcg_number": "004/015"
+   "tcg_number": "004/015",
+   "variants": {
+    "normal": {
+     "product_id": 516515,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Cetitan",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 516516,
    "tcg_name": "Cetitan",
-   "tcg_number": "005/015"
+   "tcg_number": "005/015",
+   "variants": {
+    "holofoil": {
+     "product_id": 516516,
+     "printing": "Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Pikachu",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 516517,
    "tcg_name": "Pikachu",
-   "tcg_number": "006/015"
+   "tcg_number": "006/015",
+   "variants": {
+    "holofoil": {
+     "product_id": 516517,
+     "printing": "Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Pawmi",
@@ -78,7 +119,13 @@
    "status": "ok",
    "product_id": 516518,
    "tcg_name": "Pawmi",
-   "tcg_number": "007/015"
+   "tcg_number": "007/015",
+   "variants": {
+    "normal": {
+     "product_id": 516518,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Kilowattrel",
@@ -88,7 +135,13 @@
    "status": "ok",
    "product_id": 516519,
    "tcg_name": "Kilowattrel",
-   "tcg_number": "008/015"
+   "tcg_number": "008/015",
+   "variants": {
+    "normal": {
+     "product_id": 516519,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Flittle",
@@ -98,7 +151,13 @@
    "status": "ok",
    "product_id": 516520,
    "tcg_name": "Flittle",
-   "tcg_number": "009/015"
+   "tcg_number": "009/015",
+   "variants": {
+    "normal": {
+     "product_id": 516520,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Sandaconda",
@@ -108,7 +167,13 @@
    "status": "ok",
    "product_id": 516521,
    "tcg_name": "Sandaconda",
-   "tcg_number": "010/015"
+   "tcg_number": "010/015",
+   "variants": {
+    "normal": {
+     "product_id": 516521,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Klawf",
@@ -118,7 +183,13 @@
    "status": "ok",
    "product_id": 516522,
    "tcg_name": "Klawf",
-   "tcg_number": "011/015"
+   "tcg_number": "011/015",
+   "variants": {
+    "holofoil": {
+     "product_id": 516522,
+     "printing": "Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Blissey",
@@ -128,7 +199,13 @@
    "status": "ok",
    "product_id": 516523,
    "tcg_name": "Blissey",
-   "tcg_number": "012/015"
+   "tcg_number": "012/015",
+   "variants": {
+    "normal": {
+     "product_id": 516523,
+     "printing": "Normal"
+    }
+   }
   },
   "13": {
    "name": "Tandemaus",
@@ -138,7 +215,13 @@
    "status": "ok",
    "product_id": 516524,
    "tcg_name": "Tandemaus",
-   "tcg_number": "013/015"
+   "tcg_number": "013/015",
+   "variants": {
+    "normal": {
+     "product_id": 516524,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Cyclizar",
@@ -148,7 +231,13 @@
    "status": "ok",
    "product_id": 516525,
    "tcg_name": "Cyclizar",
-   "tcg_number": "014/015"
+   "tcg_number": "014/015",
+   "variants": {
+    "normal": {
+     "product_id": 516525,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Kirlia",
@@ -158,7 +247,13 @@
    "status": "ok",
    "product_id": 516526,
    "tcg_name": "Kirlia",
-   "tcg_number": "015/015"
+   "tcg_number": "015/015",
+   "variants": {
+    "normal": {
+     "product_id": 516526,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

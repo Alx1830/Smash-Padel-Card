@@ -7,7 +7,12 @@
   "ok": 39,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 52,
+   "resueltas": 52,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 90549,
    "tcg_name": "Weedle",
-   "tcg_number": "1/39"
+   "tcg_number": "1/39",
+   "variants": {
+    "normal": {
+     "product_id": 90549,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Pansage",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 87939,
    "tcg_name": "Pansage",
-   "tcg_number": "2/39"
+   "tcg_number": "2/39",
+   "variants": {
+    "normal": {
+     "product_id": 87939,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Chespin",
@@ -39,7 +56,17 @@
    "status": "ok",
    "product_id": 84271,
    "tcg_name": "Chespin",
-   "tcg_number": "3/39"
+   "tcg_number": "3/39",
+   "variants": {
+    "holofoil": {
+     "product_id": 84271,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 84271,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Quilladin",
@@ -50,7 +77,17 @@
    "status": "ok",
    "product_id": 88490,
    "tcg_name": "Quilladin",
-   "tcg_number": "4/39"
+   "tcg_number": "4/39",
+   "variants": {
+    "holofoil": {
+     "product_id": 88490,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 88490,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Chesnaught",
@@ -61,7 +98,17 @@
    "status": "ok",
    "product_id": 84268,
    "tcg_name": "Chesnaught",
-   "tcg_number": "5/39"
+   "tcg_number": "5/39",
+   "variants": {
+    "holofoil": {
+     "product_id": 84268,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 84268,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Slugma",
@@ -71,7 +118,13 @@
    "status": "ok",
    "product_id": 89348,
    "tcg_name": "Slugma",
-   "tcg_number": "6/39"
+   "tcg_number": "6/39",
+   "variants": {
+    "normal": {
+     "product_id": 89348,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Pansear",
@@ -81,7 +134,13 @@
    "status": "ok",
    "product_id": 87946,
    "tcg_name": "Pansear",
-   "tcg_number": "7/39"
+   "tcg_number": "7/39",
+   "variants": {
+    "normal": {
+     "product_id": 87946,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Fennekin",
@@ -92,7 +151,17 @@
    "status": "ok",
    "product_id": 85411,
    "tcg_name": "Fennekin",
-   "tcg_number": "8/39"
+   "tcg_number": "8/39",
+   "variants": {
+    "holofoil": {
+     "product_id": 85411,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 85411,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Braixen",
@@ -103,7 +172,17 @@
    "status": "ok",
    "product_id": 83949,
    "tcg_name": "Braixen",
-   "tcg_number": "9/39"
+   "tcg_number": "9/39",
+   "variants": {
+    "holofoil": {
+     "product_id": 83949,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 83949,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Delphox",
@@ -114,7 +193,17 @@
    "status": "ok",
    "product_id": 84753,
    "tcg_name": "Delphox",
-   "tcg_number": "10/39"
+   "tcg_number": "10/39",
+   "variants": {
+    "holofoil": {
+     "product_id": 84753,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 84753,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Panpour",
@@ -124,7 +213,13 @@
    "status": "ok",
    "product_id": 87931,
    "tcg_name": "Panpour",
-   "tcg_number": "11/39"
+   "tcg_number": "11/39",
+   "variants": {
+    "normal": {
+     "product_id": 87931,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Froakie",
@@ -135,7 +230,17 @@
    "status": "ok",
    "product_id": 85569,
    "tcg_name": "Froakie",
-   "tcg_number": "12/39"
+   "tcg_number": "12/39",
+   "variants": {
+    "holofoil": {
+     "product_id": 85569,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 85569,
+     "printing": "Normal"
+    }
+   }
   },
   "13": {
    "name": "Frogadier",
@@ -146,7 +251,17 @@
    "status": "ok",
    "product_id": 85571,
    "tcg_name": "Frogadier",
-   "tcg_number": "13/39"
+   "tcg_number": "13/39",
+   "variants": {
+    "holofoil": {
+     "product_id": 85571,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 85571,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Greninja",
@@ -157,7 +272,17 @@
    "status": "ok",
    "product_id": 85903,
    "tcg_name": "Greninja",
-   "tcg_number": "14/39"
+   "tcg_number": "14/39",
+   "variants": {
+    "holofoil": {
+     "product_id": 85903,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 85903,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Clauncher",
@@ -167,7 +292,13 @@
    "status": "ok",
    "product_id": 84326,
    "tcg_name": "Clauncher",
-   "tcg_number": "15/39"
+   "tcg_number": "15/39",
+   "variants": {
+    "normal": {
+     "product_id": 84326,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Poochyena",
@@ -177,7 +308,13 @@
    "status": "ok",
    "product_id": 88302,
    "tcg_name": "Poochyena",
-   "tcg_number": "16/39"
+   "tcg_number": "16/39",
+   "variants": {
+    "normal": {
+     "product_id": 88302,
+     "printing": "Normal"
+    }
+   }
   },
   "17": {
    "name": "Mightyena",
@@ -187,7 +324,13 @@
    "status": "ok",
    "product_id": 87449,
    "tcg_name": "Mightyena",
-   "tcg_number": "17/39"
+   "tcg_number": "17/39",
+   "variants": {
+    "normal": {
+     "product_id": 87449,
+     "printing": "Normal"
+    }
+   }
   },
   "18": {
    "name": "Inkay",
@@ -197,7 +340,13 @@
    "status": "ok",
    "product_id": 86285,
    "tcg_name": "Inkay",
-   "tcg_number": "18/39"
+   "tcg_number": "18/39",
+   "variants": {
+    "normal": {
+     "product_id": 86285,
+     "printing": "Normal"
+    }
+   }
   },
   "19": {
    "name": "Pawniard",
@@ -207,7 +356,13 @@
    "status": "ok",
    "product_id": 87973,
    "tcg_name": "Pawniard",
-   "tcg_number": "19/39"
+   "tcg_number": "19/39",
+   "variants": {
+    "normal": {
+     "product_id": 87973,
+     "printing": "Normal"
+    }
+   }
   },
   "20": {
    "name": "Bisharp",
@@ -217,7 +372,13 @@
    "status": "ok",
    "product_id": 83847,
    "tcg_name": "Bisharp",
-   "tcg_number": "20/39"
+   "tcg_number": "20/39",
+   "variants": {
+    "normal": {
+     "product_id": 83847,
+     "printing": "Normal"
+    }
+   }
   },
   "21": {
    "name": "Honedge",
@@ -227,7 +388,13 @@
    "status": "ok",
    "product_id": 86167,
    "tcg_name": "Honedge",
-   "tcg_number": "21/39"
+   "tcg_number": "21/39",
+   "variants": {
+    "normal": {
+     "product_id": 86167,
+     "printing": "Normal"
+    }
+   }
   },
   "22": {
    "name": "Snubbull",
@@ -237,7 +404,13 @@
    "status": "ok",
    "product_id": 89418,
    "tcg_name": "Snubbull",
-   "tcg_number": "22/39"
+   "tcg_number": "22/39",
+   "variants": {
+    "normal": {
+     "product_id": 89418,
+     "printing": "Normal"
+    }
+   }
   },
   "23": {
    "name": "Granbull",
@@ -247,7 +420,13 @@
    "status": "ok",
    "product_id": 85867,
    "tcg_name": "Granbull",
-   "tcg_number": "23/39"
+   "tcg_number": "23/39",
+   "variants": {
+    "normal": {
+     "product_id": 85867,
+     "printing": "Normal"
+    }
+   }
   },
   "24": {
    "name": "Swirlix",
@@ -257,7 +436,13 @@
    "status": "ok",
    "product_id": 89708,
    "tcg_name": "Swirlix",
-   "tcg_number": "24/39"
+   "tcg_number": "24/39",
+   "variants": {
+    "normal": {
+     "product_id": 89708,
+     "printing": "Normal"
+    }
+   }
   },
   "25": {
    "name": "Farfetch'd",
@@ -267,7 +452,13 @@
    "status": "ok",
    "product_id": 85390,
    "tcg_name": "Farfetch'd",
-   "tcg_number": "25/39"
+   "tcg_number": "25/39",
+   "variants": {
+    "normal": {
+     "product_id": 85390,
+     "printing": "Normal"
+    }
+   }
   },
   "26": {
    "name": "Snorlax",
@@ -277,7 +468,13 @@
    "status": "ok",
    "product_id": 89394,
    "tcg_name": "Snorlax",
-   "tcg_number": "26/39"
+   "tcg_number": "26/39",
+   "variants": {
+    "normal": {
+     "product_id": 89394,
+     "printing": "Normal"
+    }
+   }
   },
   "27": {
    "name": "Miltank",
@@ -287,7 +484,13 @@
    "status": "ok",
    "product_id": 87468,
    "tcg_name": "Miltank",
-   "tcg_number": "27/39"
+   "tcg_number": "27/39",
+   "variants": {
+    "normal": {
+     "product_id": 87468,
+     "printing": "Normal"
+    }
+   }
   },
   "28": {
    "name": "Skitty",
@@ -297,7 +500,13 @@
    "status": "ok",
    "product_id": 89272,
    "tcg_name": "Skitty",
-   "tcg_number": "28/39"
+   "tcg_number": "28/39",
+   "variants": {
+    "normal": {
+     "product_id": 89272,
+     "printing": "Normal"
+    }
+   }
   },
   "29": {
    "name": "Bidoof",
@@ -307,7 +516,13 @@
    "status": "ok",
    "product_id": 83831,
    "tcg_name": "Bidoof",
-   "tcg_number": "29/39"
+   "tcg_number": "29/39",
+   "variants": {
+    "normal": {
+     "product_id": 83831,
+     "printing": "Normal"
+    }
+   }
   },
   "30": {
    "name": "Bunnelby",
@@ -317,7 +532,13 @@
    "status": "ok",
    "product_id": 84047,
    "tcg_name": "Bunnelby",
-   "tcg_number": "30/39"
+   "tcg_number": "30/39",
+   "variants": {
+    "normal": {
+     "product_id": 84047,
+     "printing": "Normal"
+    }
+   }
   },
   "31": {
    "name": "Fletchling",
@@ -327,7 +548,13 @@
    "status": "ok",
    "product_id": 85508,
    "tcg_name": "Fletchling",
-   "tcg_number": "31/39"
+   "tcg_number": "31/39",
+   "variants": {
+    "normal": {
+     "product_id": 85508,
+     "printing": "Normal"
+    }
+   }
   },
   "32": {
    "name": "Furfrou",
@@ -343,7 +570,13 @@
      "suffix": "32",
      "product_id": 85587
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 85587,
+     "printing": "Normal"
+    }
+   }
   },
   "33": {
    "name": "Furfrou",
@@ -359,7 +592,13 @@
      "suffix": "33",
      "product_id": 85588
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 85588,
+     "printing": "Normal"
+    }
+   }
   },
   "34": {
    "name": "Crushing Hammer",
@@ -370,7 +609,17 @@
    "status": "ok",
    "product_id": 84507,
    "tcg_name": "Crushing Hammer",
-   "tcg_number": "34/39"
+   "tcg_number": "34/39",
+   "variants": {
+    "leagueStamp": {
+     "product_id": 126176,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 84507,
+     "printing": "Normal"
+    }
+   }
   },
   "35": {
    "name": "Poké Ball",
@@ -380,7 +629,13 @@
    "status": "ok",
    "product_id": 88194,
    "tcg_name": "Poke Ball",
-   "tcg_number": "35/39"
+   "tcg_number": "35/39",
+   "variants": {
+    "normal": {
+     "product_id": 88194,
+     "printing": "Normal"
+    }
+   }
   },
   "36": {
    "name": "Pokémon Catcher",
@@ -392,7 +647,21 @@
    "status": "ok",
    "product_id": 88211,
    "tcg_name": "Pokemon Catcher",
-   "tcg_number": "36/39"
+   "tcg_number": "36/39",
+   "variants": {
+    "leagueStamp": {
+     "product_id": 177707,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 88211,
+     "printing": "Normal"
+    },
+    "trentOrndorff": {
+     "product_id": 480932,
+     "fuente": "transversal"
+    }
+   }
   },
   "37": {
    "name": "Potion",
@@ -402,7 +671,13 @@
    "status": "ok",
    "product_id": 88349,
    "tcg_name": "Potion",
-   "tcg_number": "37/39"
+   "tcg_number": "37/39",
+   "variants": {
+    "normal": {
+     "product_id": 88349,
+     "printing": "Normal"
+    }
+   }
   },
   "38": {
    "name": "Switch",
@@ -412,7 +687,13 @@
    "status": "ok",
    "product_id": 89723,
    "tcg_name": "Switch",
-   "tcg_number": "38/39"
+   "tcg_number": "38/39",
+   "variants": {
+    "normal": {
+     "product_id": 89723,
+     "printing": "Normal"
+    }
+   }
   },
   "39": {
    "name": "Tierno",
@@ -423,7 +704,17 @@
    "status": "ok",
    "product_id": 89911,
    "tcg_name": "Tierno",
-   "tcg_number": "39/39"
+   "tcg_number": "39/39",
+   "variants": {
+    "leagueStamp": {
+     "product_id": 126201,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 89911,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

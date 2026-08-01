@@ -7,7 +7,12 @@
   "ok": 17,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 24,
+   "resueltas": 24,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -19,7 +24,17 @@
    "status": "ok",
    "product_id": 83905,
    "tcg_name": "Blaziken",
-   "tcg_number": "001/017"
+   "tcg_number": "001/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 83905,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 83905,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Metagross",
@@ -30,7 +45,17 @@
    "status": "ok",
    "product_id": 87336,
    "tcg_name": "Metagross",
-   "tcg_number": "002/017"
+   "tcg_number": "002/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 87336,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 87336,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Rayquaza",
@@ -41,7 +66,17 @@
    "status": "ok",
    "product_id": 88624,
    "tcg_name": "Rayquaza",
-   "tcg_number": "003/017"
+   "tcg_number": "003/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 88624,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 88624,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Sceptile",
@@ -52,7 +87,17 @@
    "status": "ok",
    "product_id": 88946,
    "tcg_name": "Sceptile",
-   "tcg_number": "004/017"
+   "tcg_number": "004/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 88946,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 88946,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Swampert",
@@ -63,7 +108,17 @@
    "status": "ok",
    "product_id": 89677,
    "tcg_name": "Swampert",
-   "tcg_number": "005/017"
+   "tcg_number": "005/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 89677,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 89677,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Beautifly",
@@ -73,7 +128,13 @@
    "status": "ok",
    "product_id": 83756,
    "tcg_name": "Beautifly",
-   "tcg_number": "006/017"
+   "tcg_number": "006/017",
+   "variants": {
+    "normal": {
+     "product_id": 83756,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Masquerain",
@@ -83,7 +144,13 @@
    "status": "ok",
    "product_id": 87245,
    "tcg_name": "Masquerain",
-   "tcg_number": "007/017"
+   "tcg_number": "007/017",
+   "variants": {
+    "normal": {
+     "product_id": 87245,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Murkrow",
@@ -93,7 +160,13 @@
    "status": "ok",
    "product_id": 87650,
    "tcg_name": "Murkrow",
-   "tcg_number": "008/017"
+   "tcg_number": "008/017",
+   "variants": {
+    "normal": {
+     "product_id": 87650,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Pupitar",
@@ -103,7 +176,13 @@
    "status": "ok",
    "product_id": 88448,
    "tcg_name": "Pupitar",
-   "tcg_number": "009/017"
+   "tcg_number": "009/017",
+   "variants": {
+    "normal": {
+     "product_id": 88448,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Torkoal",
@@ -113,7 +192,13 @@
    "status": "ok",
    "product_id": 89967,
    "tcg_name": "Torkoal",
-   "tcg_number": "010/017"
+   "tcg_number": "010/017",
+   "variants": {
+    "normal": {
+     "product_id": 89967,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Larvitar",
@@ -123,7 +208,13 @@
    "status": "ok",
    "product_id": 86636,
    "tcg_name": "Larvitar",
-   "tcg_number": "011/017"
+   "tcg_number": "011/017",
+   "variants": {
+    "normal": {
+     "product_id": 86636,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Minun",
@@ -133,7 +224,13 @@
    "status": "ok",
    "product_id": 87483,
    "tcg_name": "Minun",
-   "tcg_number": "012/017"
+   "tcg_number": "012/017",
+   "variants": {
+    "normal": {
+     "product_id": 87483,
+     "printing": "Normal"
+    }
+   }
   },
   "13": {
    "name": "Plusle",
@@ -143,7 +240,13 @@
    "status": "ok",
    "product_id": 88163,
    "tcg_name": "Plusle",
-   "tcg_number": "013/017"
+   "tcg_number": "013/017",
+   "variants": {
+    "normal": {
+     "product_id": 88163,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Surskit",
@@ -153,7 +256,13 @@
    "status": "ok",
    "product_id": 89647,
    "tcg_name": "Surskit",
-   "tcg_number": "014/017"
+   "tcg_number": "014/017",
+   "variants": {
+    "normal": {
+     "product_id": 89647,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Swellow",
@@ -163,7 +272,13 @@
    "status": "ok",
    "product_id": 89690,
    "tcg_name": "Swellow",
-   "tcg_number": "015/017"
+   "tcg_number": "015/017",
+   "variants": {
+    "normal": {
+     "product_id": 89690,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Armaldo ex",
@@ -184,7 +299,17 @@
      "suffix": "Non-Holo",
      "product_id": 83623
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 97806,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 97806,
+     "printing": "Normal"
+    }
+   }
   },
   "17": {
    "name": "Tyranitar ex",
@@ -205,7 +330,17 @@
      "suffix": "Non-Holo",
      "product_id": 97807
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90124,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 90124,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

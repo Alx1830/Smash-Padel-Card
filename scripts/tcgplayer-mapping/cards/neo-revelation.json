@@ -7,7 +7,12 @@
   "ok": 10,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 10,
+   "resueltas": 10,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "3": {
@@ -24,7 +29,13 @@
      "suffix": "3",
      "product_id": 84141
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 84141,
+     "printing": "Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Entei",
@@ -40,7 +51,13 @@
      "suffix": "6",
      "product_id": 85266
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 85266,
+     "printing": "Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Ho-oh",
@@ -56,7 +73,13 @@
      "suffix": "7",
      "product_id": 86118
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86118,
+     "printing": "Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Raikou",
@@ -72,7 +95,13 @@
      "suffix": "13",
      "product_id": 88529
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 88529,
+     "printing": "Holofoil"
+    }
+   }
   },
   "14": {
    "name": "Suicune",
@@ -88,7 +117,13 @@
      "suffix": "14",
      "product_id": 89597
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 89597,
+     "printing": "Holofoil"
+    }
+   }
   },
   "16": {
    "name": "Celebi",
@@ -104,7 +139,13 @@
      "suffix": "16",
      "product_id": 84142
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 84142,
+     "printing": "Holofoil"
+    }
+   }
   },
   "17": {
    "name": "Entei",
@@ -120,7 +161,13 @@
      "suffix": "17",
      "product_id": 85269
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 85269,
+     "printing": "Holofoil"
+    }
+   }
   },
   "18": {
    "name": "Ho-oh",
@@ -136,7 +183,13 @@
      "suffix": "18",
      "product_id": 86119
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86119,
+     "printing": "Holofoil"
+    }
+   }
   },
   "22": {
    "name": "Raikou",
@@ -152,7 +205,13 @@
      "suffix": "22",
      "product_id": 88530
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 88530,
+     "printing": "Holofoil"
+    }
+   }
   },
   "27": {
    "name": "Suicune",
@@ -168,7 +227,13 @@
      "suffix": "27",
      "product_id": 89599
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 89599,
+     "printing": "Holofoil"
+    }
+   }
   }
  }
 }

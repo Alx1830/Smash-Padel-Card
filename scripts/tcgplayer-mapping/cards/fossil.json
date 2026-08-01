@@ -7,7 +7,12 @@
   "ok": 62,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 112,
+   "resueltas": 109,
+   "sinResolver": 3
+  }
  },
  "cards": {
   "1": {
@@ -25,7 +30,13 @@
      "suffix": "1",
      "product_id": 44418
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 44418,
+     "printing": "Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Articuno",
@@ -41,7 +52,13 @@
      "suffix": "2",
      "product_id": 106518
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 106518,
+     "printing": "Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Ditto",
@@ -57,7 +74,13 @@
      "suffix": "3",
      "product_id": 106519
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 106519,
+     "printing": "Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Dragonite",
@@ -73,7 +96,13 @@
      "suffix": "4",
      "product_id": 106520
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 106520,
+     "printing": "Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Gengar",
@@ -89,7 +118,13 @@
      "suffix": "5",
      "product_id": 106521
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 106521,
+     "printing": "Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Haunter",
@@ -105,7 +140,13 @@
      "suffix": "6",
      "product_id": 106522
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 106522,
+     "printing": "Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Hitmonlee",
@@ -121,7 +162,13 @@
      "suffix": "7",
      "product_id": 106523
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 106523,
+     "printing": "Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Hypno",
@@ -137,7 +184,13 @@
      "suffix": "8",
      "product_id": 106524
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 106524,
+     "printing": "Holofoil"
+    }
+   }
   },
   "9": {
    "name": "Kabutops",
@@ -153,7 +206,13 @@
      "suffix": "9",
      "product_id": 106525
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 106525,
+     "printing": "Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Lapras",
@@ -169,7 +228,13 @@
      "suffix": "10",
      "product_id": 44419
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 44419,
+     "printing": "Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Magneton",
@@ -185,7 +250,13 @@
      "suffix": "11",
      "product_id": 44420
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 44420,
+     "printing": "Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Moltres",
@@ -201,7 +272,13 @@
      "suffix": "12",
      "product_id": 44421
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 44421,
+     "printing": "Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Muk",
@@ -217,7 +294,13 @@
      "suffix": "13",
      "product_id": 44422
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 44422,
+     "printing": "Holofoil"
+    }
+   }
   },
   "14": {
    "name": "Raichu",
@@ -233,7 +316,13 @@
      "suffix": "14",
      "product_id": 44423
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 44423,
+     "printing": "Holofoil"
+    }
+   }
   },
   "15": {
    "name": "Zapdos",
@@ -250,7 +339,13 @@
      "suffix": "15",
      "product_id": 44424
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 44424,
+     "printing": "Holofoil"
+    }
+   }
   },
   "16": {
    "name": "Aerodactyl",
@@ -267,7 +362,17 @@
      "suffix": "16",
      "product_id": 106526
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 106526,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 106526,
+     "printing": "Unlimited"
+    }
+   }
   },
   "17": {
    "name": "Articuno",
@@ -284,7 +389,17 @@
      "suffix": "17",
      "product_id": 44425
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 44425,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44425,
+     "printing": "Unlimited"
+    }
+   }
   },
   "18": {
    "name": "Ditto",
@@ -301,7 +416,17 @@
      "suffix": "18",
      "product_id": 44426
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 44426,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44426,
+     "printing": "Unlimited"
+    }
+   }
   },
   "19": {
    "name": "Dragonite",
@@ -318,7 +443,17 @@
      "suffix": "19",
      "product_id": 44427
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 44427,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44427,
+     "printing": "Unlimited"
+    }
+   }
   },
   "20": {
    "name": "Gengar",
@@ -335,7 +470,17 @@
      "suffix": "20",
      "product_id": 44428
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 44428,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44428,
+     "printing": "Unlimited"
+    }
+   }
   },
   "21": {
    "name": "Haunter",
@@ -352,7 +497,17 @@
      "suffix": "21",
      "product_id": 44429
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 44429,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44429,
+     "printing": "Unlimited"
+    }
+   }
   },
   "22": {
    "name": "Hitmonlee",
@@ -369,7 +524,17 @@
      "suffix": "22",
      "product_id": 44430
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 44430,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44430,
+     "printing": "Unlimited"
+    }
+   }
   },
   "23": {
    "name": "Hypno",
@@ -386,7 +551,17 @@
      "suffix": "23",
      "product_id": 44431
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 44431,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44431,
+     "printing": "Unlimited"
+    }
+   }
   },
   "24": {
    "name": "Kabutops",
@@ -403,7 +578,17 @@
      "suffix": "24",
      "product_id": 44432
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 44432,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44432,
+     "printing": "Unlimited"
+    }
+   }
   },
   "25": {
    "name": "Lapras",
@@ -420,7 +605,17 @@
      "suffix": "25",
      "product_id": 106527
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 106527,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 106527,
+     "printing": "Unlimited"
+    }
+   }
   },
   "26": {
    "name": "Magneton",
@@ -437,7 +632,17 @@
      "suffix": "26",
      "product_id": 106528
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 106528,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 106528,
+     "printing": "Unlimited"
+    }
+   }
   },
   "27": {
    "name": "Moltres",
@@ -454,7 +659,17 @@
      "suffix": "27",
      "product_id": 106529
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 106529,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 106529,
+     "printing": "Unlimited"
+    }
+   }
   },
   "28": {
    "name": "Muk",
@@ -471,7 +686,17 @@
      "suffix": "28",
      "product_id": 106530
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 106530,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 106530,
+     "printing": "Unlimited"
+    }
+   }
   },
   "29": {
    "name": "Raichu",
@@ -488,7 +713,17 @@
      "suffix": "29",
      "product_id": 106531
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 106531,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 106531,
+     "printing": "Unlimited"
+    }
+   }
   },
   "30": {
    "name": "Zapdos",
@@ -505,7 +740,17 @@
      "suffix": "30",
      "product_id": 106532
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 106532,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 106532,
+     "printing": "Unlimited"
+    }
+   }
   },
   "31": {
    "name": "Arbok",
@@ -516,7 +761,17 @@
    "status": "ok",
    "product_id": 44433,
    "tcg_name": "Arbok",
-   "tcg_number": "31/62"
+   "tcg_number": "31/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44433,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44433,
+     "printing": "Unlimited"
+    }
+   }
   },
   "32": {
    "name": "Cloyster",
@@ -527,7 +782,17 @@
    "status": "ok",
    "product_id": 44434,
    "tcg_name": "Cloyster",
-   "tcg_number": "32/62"
+   "tcg_number": "32/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44434,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44434,
+     "printing": "Unlimited"
+    }
+   }
   },
   "33": {
    "name": "Gastly",
@@ -538,7 +803,17 @@
    "status": "ok",
    "product_id": 44435,
    "tcg_name": "Gastly",
-   "tcg_number": "33/62"
+   "tcg_number": "33/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44435,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44435,
+     "printing": "Unlimited"
+    }
+   }
   },
   "34": {
    "name": "Golbat",
@@ -549,7 +824,17 @@
    "status": "ok",
    "product_id": 44436,
    "tcg_name": "Golbat",
-   "tcg_number": "34/62"
+   "tcg_number": "34/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44436,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44436,
+     "printing": "Unlimited"
+    }
+   }
   },
   "35": {
    "name": "Golduck",
@@ -560,7 +845,17 @@
    "status": "ok",
    "product_id": 44437,
    "tcg_name": "Golduck",
-   "tcg_number": "35/62"
+   "tcg_number": "35/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44437,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44437,
+     "printing": "Unlimited"
+    }
+   }
   },
   "36": {
    "name": "Golem",
@@ -571,7 +866,17 @@
    "status": "ok",
    "product_id": 44438,
    "tcg_name": "Golem",
-   "tcg_number": "36/62"
+   "tcg_number": "36/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44438,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44438,
+     "printing": "Unlimited"
+    }
+   }
   },
   "37": {
    "name": "Graveler",
@@ -582,7 +887,17 @@
    "status": "ok",
    "product_id": 44439,
    "tcg_name": "Graveler",
-   "tcg_number": "37/62"
+   "tcg_number": "37/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44439,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44439,
+     "printing": "Unlimited"
+    }
+   }
   },
   "38": {
    "name": "Kingler",
@@ -593,7 +908,17 @@
    "status": "ok",
    "product_id": 44440,
    "tcg_name": "Kingler",
-   "tcg_number": "38/62"
+   "tcg_number": "38/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44440,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44440,
+     "printing": "Unlimited"
+    }
+   }
   },
   "39": {
    "name": "Magmar",
@@ -604,7 +929,17 @@
    "status": "ok",
    "product_id": 44441,
    "tcg_name": "Magmar",
-   "tcg_number": "39/62"
+   "tcg_number": "39/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44441,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44441,
+     "printing": "Unlimited"
+    }
+   }
   },
   "40": {
    "name": "Omastar",
@@ -615,7 +950,17 @@
    "status": "ok",
    "product_id": 44442,
    "tcg_name": "Omastar",
-   "tcg_number": "40/62"
+   "tcg_number": "40/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44442,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44442,
+     "printing": "Unlimited"
+    }
+   }
   },
   "41": {
    "name": "Sandslash",
@@ -626,7 +971,17 @@
    "status": "ok",
    "product_id": 44443,
    "tcg_name": "Sandslash",
-   "tcg_number": "41/62"
+   "tcg_number": "41/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44443,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44443,
+     "printing": "Unlimited"
+    }
+   }
   },
   "42": {
    "name": "Seadra",
@@ -637,7 +992,17 @@
    "status": "ok",
    "product_id": 44444,
    "tcg_name": "Seadra",
-   "tcg_number": "42/62"
+   "tcg_number": "42/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44444,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44444,
+     "printing": "Unlimited"
+    }
+   }
   },
   "43": {
    "name": "Slowbro",
@@ -648,7 +1013,17 @@
    "status": "ok",
    "product_id": 44445,
    "tcg_name": "Slowbro",
-   "tcg_number": "43/62"
+   "tcg_number": "43/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44445,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44445,
+     "printing": "Unlimited"
+    }
+   }
   },
   "44": {
    "name": "Tentacruel",
@@ -659,7 +1034,17 @@
    "status": "ok",
    "product_id": 44446,
    "tcg_name": "Tentacruel",
-   "tcg_number": "44/62"
+   "tcg_number": "44/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44446,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44446,
+     "printing": "Unlimited"
+    }
+   }
   },
   "45": {
    "name": "Weezing",
@@ -670,7 +1055,17 @@
    "status": "ok",
    "product_id": 44447,
    "tcg_name": "Weezing",
-   "tcg_number": "45/62"
+   "tcg_number": "45/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44447,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44447,
+     "printing": "Unlimited"
+    }
+   }
   },
   "46": {
    "name": "Ekans",
@@ -681,7 +1076,17 @@
    "status": "ok",
    "product_id": 44448,
    "tcg_name": "Ekans",
-   "tcg_number": "46/62"
+   "tcg_number": "46/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44448,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44448,
+     "printing": "Unlimited"
+    }
+   }
   },
   "47": {
    "name": "Geodude",
@@ -692,7 +1097,17 @@
    "status": "ok",
    "product_id": 44449,
    "tcg_name": "Geodude",
-   "tcg_number": "47/62"
+   "tcg_number": "47/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44449,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44449,
+     "printing": "Unlimited"
+    }
+   }
   },
   "48": {
    "name": "Grimer",
@@ -703,7 +1118,17 @@
    "status": "ok",
    "product_id": 44450,
    "tcg_name": "Grimer",
-   "tcg_number": "48/62"
+   "tcg_number": "48/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44450,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44450,
+     "printing": "Unlimited"
+    }
+   }
   },
   "49": {
    "name": "Horsea",
@@ -714,7 +1139,17 @@
    "status": "ok",
    "product_id": 44451,
    "tcg_name": "Horsea",
-   "tcg_number": "49/62"
+   "tcg_number": "49/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44451,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44451,
+     "printing": "Unlimited"
+    }
+   }
   },
   "50": {
    "name": "Kabuto",
@@ -726,7 +1161,17 @@
    "status": "ok",
    "product_id": 44452,
    "tcg_name": "Kabuto",
-   "tcg_number": "50/62"
+   "tcg_number": "50/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44452,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44452,
+     "printing": "Unlimited"
+    }
+   }
   },
   "51": {
    "name": "Krabby",
@@ -737,7 +1182,17 @@
    "status": "ok",
    "product_id": 44453,
    "tcg_name": "Krabby",
-   "tcg_number": "51/62"
+   "tcg_number": "51/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44453,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44453,
+     "printing": "Unlimited"
+    }
+   }
   },
   "52": {
    "name": "Omanyte",
@@ -748,7 +1203,17 @@
    "status": "ok",
    "product_id": 44454,
    "tcg_name": "Omanyte",
-   "tcg_number": "52/62"
+   "tcg_number": "52/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44454,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44454,
+     "printing": "Unlimited"
+    }
+   }
   },
   "53": {
    "name": "Psyduck",
@@ -759,7 +1224,17 @@
    "status": "ok",
    "product_id": 44455,
    "tcg_name": "Psyduck",
-   "tcg_number": "53/62"
+   "tcg_number": "53/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44455,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44455,
+     "printing": "Unlimited"
+    }
+   }
   },
   "54": {
    "name": "Shellder",
@@ -770,7 +1245,17 @@
    "status": "ok",
    "product_id": 44456,
    "tcg_name": "Shellder",
-   "tcg_number": "54/62"
+   "tcg_number": "54/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44456,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44456,
+     "printing": "Unlimited"
+    }
+   }
   },
   "55": {
    "name": "Slowpoke",
@@ -781,7 +1266,17 @@
    "status": "ok",
    "product_id": 44457,
    "tcg_name": "Slowpoke",
-   "tcg_number": "55/62"
+   "tcg_number": "55/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44457,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44457,
+     "printing": "Unlimited"
+    }
+   }
   },
   "56": {
    "name": "Tentacool",
@@ -792,7 +1287,17 @@
    "status": "ok",
    "product_id": 44458,
    "tcg_name": "Tentacool",
-   "tcg_number": "56/62"
+   "tcg_number": "56/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44458,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44458,
+     "printing": "Unlimited"
+    }
+   }
   },
   "57": {
    "name": "Zubat",
@@ -803,7 +1308,17 @@
    "status": "ok",
    "product_id": 44459,
    "tcg_name": "Zubat",
-   "tcg_number": "57/62"
+   "tcg_number": "57/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44459,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44459,
+     "printing": "Unlimited"
+    }
+   }
   },
   "58": {
    "name": "Mr. Fuji",
@@ -814,7 +1329,17 @@
    "status": "ok",
    "product_id": 44460,
    "tcg_name": "Mr. Fuji",
-   "tcg_number": "58/62"
+   "tcg_number": "58/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44460,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44460,
+     "printing": "Unlimited"
+    }
+   }
   },
   "59": {
    "name": "Energy Search",
@@ -825,7 +1350,17 @@
    "status": "ok",
    "product_id": 44461,
    "tcg_name": "Energy Search",
-   "tcg_number": "59/62"
+   "tcg_number": "59/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44461,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44461,
+     "printing": "Unlimited"
+    }
+   }
   },
   "60": {
    "name": "Gambler",
@@ -836,7 +1371,17 @@
    "status": "ok",
    "product_id": 44462,
    "tcg_name": "Gambler",
-   "tcg_number": "60/62"
+   "tcg_number": "60/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44462,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44462,
+     "printing": "Unlimited"
+    }
+   }
   },
   "61": {
    "name": "Recycle",
@@ -847,7 +1392,17 @@
    "status": "ok",
    "product_id": 44463,
    "tcg_name": "Recycle",
-   "tcg_number": "61/62"
+   "tcg_number": "61/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44463,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44463,
+     "printing": "Unlimited"
+    }
+   }
   },
   "62": {
    "name": "Mysterious Fossil",
@@ -858,7 +1413,17 @@
    "status": "ok",
    "product_id": 44464,
    "tcg_name": "Mysterious Fossil",
-   "tcg_number": "62/62"
+   "tcg_number": "62/62",
+   "variants": {
+    "firstEdition": {
+     "product_id": 44464,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 44464,
+     "printing": "Unlimited"
+    }
+   }
   }
  }
 }

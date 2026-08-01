@@ -7,7 +7,12 @@
   "ok": 17,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 28,
+   "resueltas": 26,
+   "sinResolver": 2
+  }
  },
  "cards": {
   "1": {
@@ -19,7 +24,17 @@
    "status": "ok",
    "product_id": 83542,
    "tcg_name": "Ampharos",
-   "tcg_number": "001/017"
+   "tcg_number": "001/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 83542,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 83542,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Gallade",
@@ -32,7 +47,25 @@
    "status": "ok",
    "product_id": 85605,
    "tcg_name": "Gallade",
-   "tcg_number": "002/017"
+   "tcg_number": "002/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 85605,
+     "printing": "Holofoil"
+    },
+    "jasonKlaczynski": {
+     "product_id": 479786,
+     "fuente": "transversal"
+    },
+    "michaelPramawat": {
+     "product_id": 480045,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 85605,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Latias",
@@ -43,7 +76,17 @@
    "status": "ok",
    "product_id": 86652,
    "tcg_name": "Latias",
-   "tcg_number": "003/017"
+   "tcg_number": "003/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 86652,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 86652,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Latios",
@@ -54,7 +97,17 @@
    "status": "ok",
    "product_id": 86666,
    "tcg_name": "Latios",
-   "tcg_number": "004/017"
+   "tcg_number": "004/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 86666,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 86666,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Mothim",
@@ -65,7 +118,17 @@
    "status": "ok",
    "product_id": 87581,
    "tcg_name": "Mothim",
-   "tcg_number": "005/017"
+   "tcg_number": "005/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 87581,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 87581,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Delibird",
@@ -75,7 +138,13 @@
    "status": "ok",
    "product_id": 84749,
    "tcg_name": "Delibird",
-   "tcg_number": "006/017"
+   "tcg_number": "006/017",
+   "variants": {
+    "normal": {
+     "product_id": 84749,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Flaaffy",
@@ -85,7 +154,13 @@
    "status": "ok",
    "product_id": 85480,
    "tcg_name": "Flaaffy",
-   "tcg_number": "007/017"
+   "tcg_number": "007/017",
+   "variants": {
+    "normal": {
+     "product_id": 85480,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Kirlia",
@@ -97,7 +172,21 @@
    "status": "ok",
    "product_id": 86467,
    "tcg_name": "Kirlia",
-   "tcg_number": "008/017"
+   "tcg_number": "008/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 86467,
+     "printing": "Holofoil"
+    },
+    "jasonKlaczynski": {
+     "product_id": 479793,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 86467,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Stantler",
@@ -108,7 +197,13 @@
    "status": "ok",
    "product_id": 89505,
    "tcg_name": "Stantler",
-   "tcg_number": "009/017"
+   "tcg_number": "009/017",
+   "variants": {
+    "normal": {
+     "product_id": 89505,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Wormadam Sandy Cloak",
@@ -118,7 +213,13 @@
    "status": "ok",
    "product_id": 90643,
    "tcg_name": "Wormadam Sandy Cloak",
-   "tcg_number": "010/017"
+   "tcg_number": "010/017",
+   "variants": {
+    "normal": {
+     "product_id": 90643,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Burmy Plant Cloak",
@@ -128,7 +229,13 @@
    "status": "ok",
    "product_id": 84050,
    "tcg_name": "Burmy Plant Cloak",
-   "tcg_number": "011/017"
+   "tcg_number": "011/017",
+   "variants": {
+    "normal": {
+     "product_id": 84050,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Burmy Sandy Cloak",
@@ -138,7 +245,13 @@
    "status": "ok",
    "product_id": 84053,
    "tcg_name": "Burmy Sandy Cloak",
-   "tcg_number": "012/017"
+   "tcg_number": "012/017",
+   "variants": {
+    "normal": {
+     "product_id": 84053,
+     "printing": "Normal"
+    }
+   }
   },
   "13": {
    "name": "Corsola",
@@ -148,7 +261,13 @@
    "status": "ok",
    "product_id": 84442,
    "tcg_name": "Corsola",
-   "tcg_number": "013/017"
+   "tcg_number": "013/017",
+   "variants": {
+    "normal": {
+     "product_id": 84442,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Mareep",
@@ -158,7 +277,13 @@
    "status": "ok",
    "product_id": 87202,
    "tcg_name": "Mareep",
-   "tcg_number": "014/017"
+   "tcg_number": "014/017",
+   "variants": {
+    "normal": {
+     "product_id": 87202,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Ralts",
@@ -169,7 +294,13 @@
    "status": "ok",
    "product_id": 88562,
    "tcg_name": "Ralts",
-   "tcg_number": "015/017"
+   "tcg_number": "015/017",
+   "variants": {
+    "normal": {
+     "product_id": 88562,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Sentret",
@@ -179,7 +310,13 @@
    "status": "ok",
    "product_id": 89067,
    "tcg_name": "Sentret",
-   "tcg_number": "016/017"
+   "tcg_number": "016/017",
+   "variants": {
+    "normal": {
+     "product_id": 89067,
+     "printing": "Normal"
+    }
+   }
   },
   "17": {
    "name": "Spinda",
@@ -189,7 +326,13 @@
    "status": "ok",
    "product_id": 89462,
    "tcg_name": "Spinda",
-   "tcg_number": "017/017"
+   "tcg_number": "017/017",
+   "variants": {
+    "normal": {
+     "product_id": 89462,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

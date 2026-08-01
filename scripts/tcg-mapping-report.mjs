@@ -26,6 +26,7 @@ const FLAG = { ok: 0, review: 1, missing: 2 };
 const filas = [];
 const pendientes = [];
 let tot = 0, ok = 0, rev = 0, mis = 0;
+let vTot = 0, vOk = 0;   // variantes: lo que de verdad se colecciona
 
 for (const file of fs.readdirSync(CARDS_DIR)) {
   const j = JSON.parse(fs.readFileSync(path.join(CARDS_DIR, file), "utf8"));
@@ -46,6 +47,8 @@ for (const file of fs.readdirSync(CARDS_DIR)) {
   });
 
   tot += j.summary.total; ok += j.summary.ok; rev += j.summary.review; mis += j.summary.missing;
+  vTot += j.summary.variantes?.total ?? 0;
+  vOk  += j.summary.variantes?.resueltas ?? 0;
   for (const [n, c] of Object.entries(j.cards)) {
     if (c.status === "ok") continue;
     pendientes.push({
@@ -64,7 +67,7 @@ const sinEquivalente = Object.entries(sets)
   .map(([id, e]) => ({ id, nombre: e.name, motivo: e.note }))
   .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
 
-const datos = { filas, pendientes, sinEquivalente, resumen: { tot, ok, rev, mis, sets: filas.length } };
+const datos = { filas, pendientes, sinEquivalente, resumen: { tot, ok, rev, mis, sets: filas.length, vTot, vOk } };
 
 // Los mismos datos para la seccion de admin dentro de la app
 const PUBLIC_JSON = path.resolve(__dirname, "../public/tcg-mapping.json");
@@ -228,6 +231,7 @@ footer { margin-top: 54px; padding-top: 18px; border-top: 1px solid var(--line);
   <div class="stats">
     <div class="stat"><div class="stat-k">Cartas comparadas</div><div class="stat-v">${tot.toLocaleString("es")}</div><div class="stat-sub">en ${filas.length} sets</div></div>
     <div class="stat"><div class="stat-k">Identificadas</div><div class="stat-v good">${pct}%</div><div class="stat-sub">${ok.toLocaleString("es")} cartas</div></div>
+    <div class="stat"><div class="stat-v-wrap"><div class="stat-k">Variantes con precio</div><div class="stat-v ${vOk === vTot ? "good" : ""}">${((vOk / vTot) * 100).toFixed(1)}%</div><div class="stat-sub">${vOk.toLocaleString("es")} de ${vTot.toLocaleString("es")}</div></div></div>
     <div class="stat"><div class="stat-k">Por revisar</div><div class="stat-v ${rev ? "warn" : ""}">${rev}</div><div class="stat-sub">casos ambiguos</div></div>
     <div class="stat"><div class="stat-k">Sin equivalente</div><div class="stat-v ${mis ? "crit" : ""}">${mis}</div><div class="stat-sub">no están en TCGplayer</div></div>
   </div>

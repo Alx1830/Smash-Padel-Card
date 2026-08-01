@@ -7,7 +7,12 @@
   "ok": 15,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 15,
+   "resueltas": 15,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 614370,
    "tcg_name": "Charizard",
-   "tcg_number": "001/015"
+   "tcg_number": "001/015",
+   "variants": {
+    "normal": {
+     "product_id": 614370,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Pikachu",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 614371,
    "tcg_name": "Pikachu",
-   "tcg_number": "002/015"
+   "tcg_number": "002/015",
+   "variants": {
+    "holofoil": {
+     "product_id": 614371,
+     "printing": "Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Miraidon",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 614372,
    "tcg_name": "Miraidon",
-   "tcg_number": "003/015"
+   "tcg_number": "003/015",
+   "variants": {
+    "holofoil": {
+     "product_id": 614372,
+     "printing": "Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Jigglypuff",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 614373,
    "tcg_name": "Jigglypuff",
-   "tcg_number": "004/015"
+   "tcg_number": "004/015",
+   "variants": {
+    "normal": {
+     "product_id": 614373,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Hatenna",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 614374,
    "tcg_name": "Hatenna",
-   "tcg_number": "005/015"
+   "tcg_number": "005/015",
+   "variants": {
+    "normal": {
+     "product_id": 614374,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Dragapult",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 614375,
    "tcg_name": "Dragapult",
-   "tcg_number": "006/015"
+   "tcg_number": "006/015",
+   "variants": {
+    "normal": {
+     "product_id": 614375,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Quaqsire",
@@ -79,7 +120,13 @@
    "product_id": 614376,
    "tcg_name": "Quagsire",
    "tcg_number": "007/015",
-   "note": "nuestro \"Quaqsire\" vs TCG \"Quagsire\""
+   "note": "nuestro \"Quaqsire\" vs TCG \"Quagsire\"",
+   "variants": {
+    "normal": {
+     "product_id": 614376,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Koraidon",
@@ -89,7 +136,13 @@
    "status": "ok",
    "product_id": 614377,
    "tcg_name": "Koraidon",
-   "tcg_number": "008/015"
+   "tcg_number": "008/015",
+   "variants": {
+    "holofoil": {
+     "product_id": 614377,
+     "printing": "Holofoil"
+    }
+   }
   },
   "9": {
    "name": "Umbreon",
@@ -99,7 +152,13 @@
    "status": "ok",
    "product_id": 614378,
    "tcg_name": "Umbreon",
-   "tcg_number": "009/015"
+   "tcg_number": "009/015",
+   "variants": {
+    "normal": {
+     "product_id": 614378,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Hydreigon",
@@ -109,7 +168,13 @@
    "status": "ok",
    "product_id": 614379,
    "tcg_name": "Hydreigon",
-   "tcg_number": "010/015"
+   "tcg_number": "010/015",
+   "variants": {
+    "holofoil": {
+     "product_id": 614379,
+     "printing": "Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Roaring Moon",
@@ -119,7 +184,13 @@
    "status": "ok",
    "product_id": 614380,
    "tcg_name": "Roaring Moon",
-   "tcg_number": "011/015"
+   "tcg_number": "011/015",
+   "variants": {
+    "holofoil": {
+     "product_id": 614380,
+     "printing": "Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Dragonite",
@@ -129,7 +200,13 @@
    "status": "ok",
    "product_id": 614381,
    "tcg_name": "Dragonite",
-   "tcg_number": "012/015"
+   "tcg_number": "012/015",
+   "variants": {
+    "holofoil": {
+     "product_id": 614381,
+     "printing": "Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Eevee",
@@ -139,7 +216,13 @@
    "status": "ok",
    "product_id": 614382,
    "tcg_name": "Eevee",
-   "tcg_number": "013/015"
+   "tcg_number": "013/015",
+   "variants": {
+    "normal": {
+     "product_id": 614382,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Rayquaza",
@@ -149,7 +232,13 @@
    "status": "ok",
    "product_id": 614383,
    "tcg_name": "Rayquaza",
-   "tcg_number": "014/015"
+   "tcg_number": "014/015",
+   "variants": {
+    "normal": {
+     "product_id": 614383,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Drampa",
@@ -159,7 +248,13 @@
    "status": "ok",
    "product_id": 614384,
    "tcg_name": "Drampa",
-   "tcg_number": "015/015"
+   "tcg_number": "015/015",
+   "variants": {
+    "holofoil": {
+     "product_id": 614384,
+     "printing": "Holofoil"
+    }
+   }
   }
  }
 }

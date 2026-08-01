@@ -7,7 +7,12 @@
   "ok": 30,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 30,
+   "resueltas": 30,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 272472,
    "tcg_name": "Abomasnow",
-   "tcg_number": "TG01/TG30"
+   "tcg_number": "TG01/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272472,
+     "printing": "Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Flapple",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 272473,
    "tcg_name": "Flapple",
-   "tcg_number": "TG02/TG30"
+   "tcg_number": "TG02/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272473,
+     "printing": "Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Kingdra",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 272474,
    "tcg_name": "Kingdra",
-   "tcg_number": "TG03/TG30"
+   "tcg_number": "TG03/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272474,
+     "printing": "Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Frosmoth",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 272475,
    "tcg_name": "Frosmoth",
-   "tcg_number": "TG04/TG30"
+   "tcg_number": "TG04/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272475,
+     "printing": "Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Gardevoir",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 272476,
    "tcg_name": "Gardevoir",
-   "tcg_number": "TG05/TG30"
+   "tcg_number": "TG05/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272476,
+     "printing": "Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Wyrdeer",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 272477,
    "tcg_name": "Wyrdeer",
-   "tcg_number": "TG06/TG30"
+   "tcg_number": "TG06/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272477,
+     "printing": "Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Falinks",
@@ -78,7 +119,13 @@
    "status": "ok",
    "product_id": 272478,
    "tcg_name": "Falinks",
-   "tcg_number": "TG07/TG30"
+   "tcg_number": "TG07/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272478,
+     "printing": "Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Kleavor",
@@ -88,7 +135,13 @@
    "status": "ok",
    "product_id": 272479,
    "tcg_name": "Kleavor",
-   "tcg_number": "TG08/TG30"
+   "tcg_number": "TG08/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272479,
+     "printing": "Holofoil"
+    }
+   }
   },
   "9": {
    "name": "Mightyena",
@@ -98,7 +151,13 @@
    "status": "ok",
    "product_id": 272480,
    "tcg_name": "Mightyena",
-   "tcg_number": "TG09/TG30"
+   "tcg_number": "TG09/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272480,
+     "printing": "Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Galarian Obstagoon",
@@ -108,7 +167,13 @@
    "status": "ok",
    "product_id": 272481,
    "tcg_name": "Galarian Obstagoon",
-   "tcg_number": "TG10/TG30"
+   "tcg_number": "TG10/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272481,
+     "printing": "Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Bronzong",
@@ -118,7 +183,13 @@
    "status": "ok",
    "product_id": 272482,
    "tcg_name": "Bronzong",
-   "tcg_number": "TG11/TG30"
+   "tcg_number": "TG11/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272482,
+     "printing": "Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Hoothoot",
@@ -128,7 +199,13 @@
    "status": "ok",
    "product_id": 272483,
    "tcg_name": "Hoothoot",
-   "tcg_number": "TG12/TG30"
+   "tcg_number": "TG12/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272483,
+     "printing": "Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Starmie V",
@@ -138,7 +215,13 @@
    "status": "ok",
    "product_id": 272484,
    "tcg_name": "Starmie V",
-   "tcg_number": "TG13/TG30"
+   "tcg_number": "TG13/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272484,
+     "printing": "Holofoil"
+    }
+   }
   },
   "14": {
    "name": "Ice Rider Calyrex V",
@@ -148,7 +231,13 @@
    "status": "ok",
    "product_id": 272485,
    "tcg_name": "Ice Rider Calyrex V",
-   "tcg_number": "TG14/TG30"
+   "tcg_number": "TG14/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272485,
+     "printing": "Holofoil"
+    }
+   }
   },
   "15": {
    "name": "Ice Rider Calyrex VMAX",
@@ -158,7 +247,13 @@
    "status": "ok",
    "product_id": 272486,
    "tcg_name": "Ice Rider Calyrex VMAX",
-   "tcg_number": "TG15/TG30"
+   "tcg_number": "TG15/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272486,
+     "printing": "Holofoil"
+    }
+   }
   },
   "16": {
    "name": "Galarian Articuno V",
@@ -168,7 +263,13 @@
    "status": "ok",
    "product_id": 272487,
    "tcg_name": "Galarian Articuno V",
-   "tcg_number": "TG16/TG30"
+   "tcg_number": "TG16/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272487,
+     "printing": "Holofoil"
+    }
+   }
   },
   "17": {
    "name": "Shadow Rider Calyrex V",
@@ -178,7 +279,13 @@
    "status": "ok",
    "product_id": 272488,
    "tcg_name": "Shadow Rider Calyrex V",
-   "tcg_number": "TG17/TG30"
+   "tcg_number": "TG17/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272488,
+     "printing": "Holofoil"
+    }
+   }
   },
   "18": {
    "name": "Shadow Rider Calyrex VMAX",
@@ -188,7 +295,13 @@
    "status": "ok",
    "product_id": 272489,
    "tcg_name": "Shadow Rider Calyrex VMAX",
-   "tcg_number": "TG18/TG30"
+   "tcg_number": "TG18/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272489,
+     "printing": "Holofoil"
+    }
+   }
   },
   "19": {
    "name": "Galarian Zapdos V",
@@ -198,7 +311,13 @@
    "status": "ok",
    "product_id": 272491,
    "tcg_name": "Galarian Zapdos V",
-   "tcg_number": "TG19/TG30"
+   "tcg_number": "TG19/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272491,
+     "printing": "Holofoil"
+    }
+   }
   },
   "20": {
    "name": "Galarian Moltres V",
@@ -208,7 +327,13 @@
    "status": "ok",
    "product_id": 272492,
    "tcg_name": "Galarian Moltres V",
-   "tcg_number": "TG20/TG30"
+   "tcg_number": "TG20/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272492,
+     "printing": "Holofoil"
+    }
+   }
   },
   "21": {
    "name": "Zacian V",
@@ -218,7 +343,13 @@
    "status": "ok",
    "product_id": 272493,
    "tcg_name": "Zacian V",
-   "tcg_number": "TG21/TG30"
+   "tcg_number": "TG21/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272493,
+     "printing": "Holofoil"
+    }
+   }
   },
   "22": {
    "name": "Zamazenta V",
@@ -228,7 +359,13 @@
    "status": "ok",
    "product_id": 272494,
    "tcg_name": "Zamazenta V",
-   "tcg_number": "TG22/TG30"
+   "tcg_number": "TG22/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272494,
+     "printing": "Holofoil"
+    }
+   }
   },
   "23": {
    "name": "Garchomp V",
@@ -238,7 +375,13 @@
    "status": "ok",
    "product_id": 272495,
    "tcg_name": "Garchomp V",
-   "tcg_number": "TG23/TG30"
+   "tcg_number": "TG23/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272495,
+     "printing": "Holofoil"
+    }
+   }
   },
   "24": {
    "name": "Allister",
@@ -248,7 +391,13 @@
    "status": "ok",
    "product_id": 272496,
    "tcg_name": "Allister",
-   "tcg_number": "TG24/TG30"
+   "tcg_number": "TG24/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272496,
+     "printing": "Holofoil"
+    }
+   }
   },
   "25": {
    "name": "Bea",
@@ -258,7 +407,13 @@
    "status": "ok",
    "product_id": 272497,
    "tcg_name": "Bea",
-   "tcg_number": "TG25/TG30"
+   "tcg_number": "TG25/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272497,
+     "printing": "Holofoil"
+    }
+   }
   },
   "26": {
    "name": "Melony",
@@ -268,7 +423,13 @@
    "status": "ok",
    "product_id": 272498,
    "tcg_name": "Melony",
-   "tcg_number": "TG26/TG30"
+   "tcg_number": "TG26/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272498,
+     "printing": "Holofoil"
+    }
+   }
   },
   "27": {
    "name": "Milo",
@@ -278,7 +439,13 @@
    "status": "ok",
    "product_id": 272499,
    "tcg_name": "Milo",
-   "tcg_number": "TG27/TG30"
+   "tcg_number": "TG27/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272499,
+     "printing": "Holofoil"
+    }
+   }
   },
   "28": {
    "name": "Piers",
@@ -288,7 +455,13 @@
    "status": "ok",
    "product_id": 272500,
    "tcg_name": "Piers",
-   "tcg_number": "TG28/TG30"
+   "tcg_number": "TG28/TG30",
+   "variants": {
+    "holofoil": {
+     "product_id": 272500,
+     "printing": "Holofoil"
+    }
+   }
   },
   "29": {
    "name": "Ice Rider Calyrex VMAX",
@@ -304,7 +477,13 @@
      "suffix": "Secret",
      "product_id": 272501
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 272501,
+     "printing": "Holofoil"
+    }
+   }
   },
   "30": {
    "name": "Shadow Rider Calyrex VMAX",
@@ -320,7 +499,13 @@
      "suffix": "Secret",
      "product_id": 272502
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 272502,
+     "printing": "Holofoil"
+    }
+   }
   }
  }
 }

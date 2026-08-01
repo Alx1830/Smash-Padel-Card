@@ -7,7 +7,12 @@
   "ok": 12,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 12,
+   "resueltas": 12,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 89378,
    "tcg_name": "Snivy - 1/12",
-   "tcg_number": "001/012"
+   "tcg_number": "001/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 89378,
+     "printing": "Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Maractus",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 87189,
    "tcg_name": "Maractus - 2/12",
-   "tcg_number": "002/012"
+   "tcg_number": "002/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 87189,
+     "printing": "Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Tepig",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 89882,
    "tcg_name": "Tepig - 3/12",
-   "tcg_number": "003/012"
+   "tcg_number": "003/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 89882,
+     "printing": "Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Oshawott",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 87893,
    "tcg_name": "Oshawott - 4/12",
-   "tcg_number": "004/012"
+   "tcg_number": "004/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 87893,
+     "printing": "Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Alomomola",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 83507,
    "tcg_name": "Alomomola - 5/12",
-   "tcg_number": "005/012"
+   "tcg_number": "005/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 83507,
+     "printing": "Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Blitzle",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 83929,
    "tcg_name": "Blitzle - 6/12",
-   "tcg_number": "006/012"
+   "tcg_number": "006/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 83929,
+     "printing": "Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Munna",
@@ -78,7 +119,13 @@
    "status": "ok",
    "product_id": 87642,
    "tcg_name": "Munna - 7/12",
-   "tcg_number": "007/012"
+   "tcg_number": "007/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 87642,
+     "printing": "Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Sandile",
@@ -88,7 +135,13 @@
    "status": "ok",
    "product_id": 88913,
    "tcg_name": "Sandile - 8/12",
-   "tcg_number": "008/012"
+   "tcg_number": "008/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 88913,
+     "printing": "Holofoil"
+    }
+   }
   },
   "9": {
    "name": "Zorua",
@@ -98,7 +151,13 @@
    "status": "ok",
    "product_id": 90758,
    "tcg_name": "Zorua - 9/12",
-   "tcg_number": "009/012"
+   "tcg_number": "009/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 90758,
+     "printing": "Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Klink",
@@ -108,7 +167,13 @@
    "status": "ok",
    "product_id": 86480,
    "tcg_name": "Klink - 10/12",
-   "tcg_number": "010/012"
+   "tcg_number": "010/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 86480,
+     "printing": "Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Pidove",
@@ -118,7 +183,13 @@
    "status": "ok",
    "product_id": 88055,
    "tcg_name": "Pidove - 11/12",
-   "tcg_number": "011/012"
+   "tcg_number": "011/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 88055,
+     "printing": "Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Audino",
@@ -128,7 +199,13 @@
    "status": "ok",
    "product_id": 83660,
    "tcg_name": "Audino - 12/12",
-   "tcg_number": "012/012"
+   "tcg_number": "012/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 83660,
+     "printing": "Holofoil"
+    }
+   }
   }
  }
 }

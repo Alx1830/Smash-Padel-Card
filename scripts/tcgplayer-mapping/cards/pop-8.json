@@ -7,7 +7,12 @@
   "ok": 17,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 33,
+   "resueltas": 30,
+   "sinResolver": 3
+  }
  },
  "cards": {
   "1": {
@@ -19,7 +24,17 @@
    "status": "ok",
    "product_id": 86049,
    "tcg_name": "Heatran",
-   "tcg_number": "001/017"
+   "tcg_number": "001/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 86049,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 86049,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Lucario",
@@ -30,7 +45,17 @@
    "status": "ok",
    "product_id": 86877,
    "tcg_name": "Lucario",
-   "tcg_number": "002/017"
+   "tcg_number": "002/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 86877,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 86877,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Luxray",
@@ -41,7 +66,17 @@
    "status": "ok",
    "product_id": 86948,
    "tcg_name": "Luxray",
-   "tcg_number": "003/017"
+   "tcg_number": "003/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 86948,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 86948,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Probopass",
@@ -52,7 +87,17 @@
    "status": "ok",
    "product_id": 88376,
    "tcg_name": "Probopass",
-   "tcg_number": "004/017"
+   "tcg_number": "004/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 88376,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 88376,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Yanmega",
@@ -63,7 +108,17 @@
    "status": "ok",
    "product_id": 90691,
    "tcg_name": "Yanmega",
-   "tcg_number": "005/017"
+   "tcg_number": "005/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 90691,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 90691,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Cherrim",
@@ -75,7 +130,17 @@
    "status": "ok",
    "product_id": 84253,
    "tcg_name": "Cherrim",
-   "tcg_number": "006/017"
+   "tcg_number": "006/017",
+   "variants": {
+    "normal": {
+     "product_id": 84253,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 84253,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Carnivine",
@@ -87,7 +152,17 @@
    "status": "ok",
    "product_id": 84100,
    "tcg_name": "Carnivine",
-   "tcg_number": "007/017"
+   "tcg_number": "007/017",
+   "variants": {
+    "normal": {
+     "product_id": 84100,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 84100,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Luxio",
@@ -98,7 +173,17 @@
    "status": "ok",
    "product_id": 86941,
    "tcg_name": "Luxio",
-   "tcg_number": "008/017"
+   "tcg_number": "008/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 86941,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 86941,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Night Maintenance",
@@ -108,7 +193,13 @@
    "status": "ok",
    "product_id": 87752,
    "tcg_name": "Night Maintenance",
-   "tcg_number": "009/017"
+   "tcg_number": "009/017",
+   "variants": {
+    "normal": {
+     "product_id": 87752,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Rare Candy",
@@ -118,7 +209,13 @@
    "status": "ok",
    "product_id": 88594,
    "tcg_name": "Rare Candy",
-   "tcg_number": "010/017"
+   "tcg_number": "010/017",
+   "variants": {
+    "normal": {
+     "product_id": 88594,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Roseanne's Research",
@@ -128,7 +225,13 @@
    "status": "ok",
    "product_id": 88816,
    "tcg_name": "Roseanne's Research",
-   "tcg_number": "011/017"
+   "tcg_number": "011/017",
+   "variants": {
+    "normal": {
+     "product_id": 88816,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Chimchar",
@@ -146,7 +249,20 @@
      "suffix": "Cracked Ice Holo",
      "product_id": 616999
     }
-   ]
+   ],
+   "variants": {
+    "crackedIceHolofoil": {
+     "product_id": 616999
+    },
+    "normal": {
+     "product_id": 84287,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 84287,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Croagunk",
@@ -157,7 +273,17 @@
    "status": "ok",
    "product_id": 84475,
    "tcg_name": "Croagunk",
-   "tcg_number": "13/17"
+   "tcg_number": "13/17",
+   "variants": {
+    "holofoil": {
+     "product_id": 84475,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 84475,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Happiny",
@@ -168,7 +294,17 @@
    "status": "ok",
    "product_id": 86007,
    "tcg_name": "Happiny",
-   "tcg_number": "014/017"
+   "tcg_number": "014/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 86007,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 86007,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Piplup",
@@ -178,7 +314,13 @@
    "status": "ok",
    "product_id": 88148,
    "tcg_name": "Piplup",
-   "tcg_number": "015/017"
+   "tcg_number": "015/017",
+   "variants": {
+    "normal": {
+     "product_id": 88148,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Riolu",
@@ -190,7 +332,17 @@
    "status": "ok",
    "product_id": 88755,
    "tcg_name": "Riolu",
-   "tcg_number": "016/017"
+   "tcg_number": "016/017",
+   "variants": {
+    "normal": {
+     "product_id": 88755,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 88755,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "17": {
    "name": "Turtwig",
@@ -200,7 +352,13 @@
    "status": "ok",
    "product_id": 90076,
    "tcg_name": "Turtwig",
-   "tcg_number": "017/017"
+   "tcg_number": "017/017",
+   "variants": {
+    "normal": {
+     "product_id": 90076,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

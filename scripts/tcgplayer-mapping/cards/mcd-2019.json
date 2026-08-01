@@ -7,7 +7,12 @@
   "ok": 12,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 12,
+   "resueltas": 12,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 200960,
    "tcg_name": "Caterpie - 1/12",
-   "tcg_number": "001/012"
+   "tcg_number": "001/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 200960,
+     "printing": "Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Alolan Exeggutor",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 200961,
    "tcg_name": "Alolan Exeggutor - 2/12",
-   "tcg_number": "002/012"
+   "tcg_number": "002/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 200961,
+     "printing": "Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Magmar",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 200963,
    "tcg_name": "Magmar - 3/12",
-   "tcg_number": "003/012"
+   "tcg_number": "003/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 200963,
+     "printing": "Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Alolan Sandshrew",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 200964,
    "tcg_name": "Alolan Sandshrew - 4/12",
-   "tcg_number": "004/012"
+   "tcg_number": "004/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 200964,
+     "printing": "Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Lapras",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 200966,
    "tcg_name": "Lapras - 5/12",
-   "tcg_number": "005/012"
+   "tcg_number": "005/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 200966,
+     "printing": "Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Pikachu",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 200967,
    "tcg_name": "Pikachu - 6/12",
-   "tcg_number": "006/012"
+   "tcg_number": "006/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 200967,
+     "printing": "Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Gastly",
@@ -78,7 +119,13 @@
    "status": "ok",
    "product_id": 200969,
    "tcg_name": "Gastly - 7/12",
-   "tcg_number": "007/012"
+   "tcg_number": "007/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 200969,
+     "printing": "Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Mankey",
@@ -88,7 +135,13 @@
    "status": "ok",
    "product_id": 200971,
    "tcg_name": "Mankey - 8/12",
-   "tcg_number": "008/012"
+   "tcg_number": "008/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 200971,
+     "printing": "Holofoil"
+    }
+   }
   },
   "9": {
    "name": "Onix",
@@ -98,7 +151,13 @@
    "status": "ok",
    "product_id": 200973,
    "tcg_name": "Onix - 9/12",
-   "tcg_number": "009/012"
+   "tcg_number": "009/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 200973,
+     "printing": "Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Alolan Meowth",
@@ -108,7 +167,13 @@
    "status": "ok",
    "product_id": 200975,
    "tcg_name": "Alolan Meowth - 10/12",
-   "tcg_number": "010/012"
+   "tcg_number": "010/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 200975,
+     "printing": "Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Alolan Dugtrio",
@@ -118,7 +183,13 @@
    "status": "ok",
    "product_id": 200976,
    "tcg_name": "Alolan Dugtrio - 11/12",
-   "tcg_number": "011/012"
+   "tcg_number": "011/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 200976,
+     "printing": "Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Eevee",
@@ -128,7 +199,13 @@
    "status": "ok",
    "product_id": 200977,
    "tcg_name": "Eevee - 12/12",
-   "tcg_number": "012/012"
+   "tcg_number": "012/012",
+   "variants": {
+    "holofoil": {
+     "product_id": 200977,
+     "printing": "Holofoil"
+    }
+   }
   }
  }
 }

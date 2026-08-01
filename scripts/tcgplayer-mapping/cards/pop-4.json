@@ -7,7 +7,12 @@
   "ok": 17,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 24,
+   "resueltas": 24,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -19,7 +24,13 @@
    "product_id": 84298,
    "tcg_name": "Chimecho (Delta Species)",
    "tcg_number": "001/017",
-   "note": "nuestro \"Chimecho δ\" vs TCG \"Chimecho\""
+   "note": "nuestro \"Chimecho δ\" vs TCG \"Chimecho\"",
+   "variants": {
+    "normal": {
+     "product_id": 84298,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Deoxys δ",
@@ -31,7 +42,17 @@
    "product_id": 84765,
    "tcg_name": "Deoxys (Delta Species)",
    "tcg_number": "002/017",
-   "note": "nuestro \"Deoxys δ\" vs TCG \"Deoxys\""
+   "note": "nuestro \"Deoxys δ\" vs TCG \"Deoxys\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 84765,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 84765,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Flygon",
@@ -42,7 +63,17 @@
    "status": "ok",
    "product_id": 85524,
    "tcg_name": "Flygon",
-   "tcg_number": "003/017"
+   "tcg_number": "003/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 85524,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 85524,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Mew",
@@ -53,7 +84,17 @@
    "status": "ok",
    "product_id": 87401,
    "tcg_name": "Mew",
-   "tcg_number": "004/017"
+   "tcg_number": "004/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 87401,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 87401,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Sceptile",
@@ -63,7 +104,13 @@
    "status": "ok",
    "product_id": 88948,
    "tcg_name": "Sceptile",
-   "tcg_number": "005/017"
+   "tcg_number": "005/017",
+   "variants": {
+    "normal": {
+     "product_id": 88948,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Combusken",
@@ -74,7 +121,17 @@
    "status": "ok",
    "product_id": 84409,
    "tcg_name": "Combusken",
-   "tcg_number": "006/017"
+   "tcg_number": "006/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 84409,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 84409,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Grovyle",
@@ -84,7 +141,13 @@
    "status": "ok",
    "product_id": 85940,
    "tcg_name": "Grovyle",
-   "tcg_number": "007/017"
+   "tcg_number": "007/017",
+   "variants": {
+    "normal": {
+     "product_id": 85940,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Heal Energy",
@@ -94,7 +157,13 @@
    "status": "ok",
    "product_id": 86038,
    "tcg_name": "Heal Energy",
-   "tcg_number": "008/017"
+   "tcg_number": "008/017",
+   "variants": {
+    "normal": {
+     "product_id": 86038,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Pokémon Fan Club",
@@ -104,7 +173,13 @@
    "status": "ok",
    "product_id": 88226,
    "tcg_name": "Pokemon Fan Club",
-   "tcg_number": "009/017"
+   "tcg_number": "009/017",
+   "variants": {
+    "normal": {
+     "product_id": 88226,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Scramble Energy",
@@ -114,7 +189,13 @@
    "status": "ok",
    "product_id": 88988,
    "tcg_name": "Scramble Energy",
-   "tcg_number": "010/017"
+   "tcg_number": "010/017",
+   "variants": {
+    "normal": {
+     "product_id": 88988,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Mudkip",
@@ -125,7 +206,17 @@
    "status": "ok",
    "product_id": 87613,
    "tcg_name": "Mudkip",
-   "tcg_number": "011/017"
+   "tcg_number": "011/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 87613,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 87613,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Pidgey",
@@ -135,7 +226,13 @@
    "status": "ok",
    "product_id": 88049,
    "tcg_name": "Pidgey",
-   "tcg_number": "012/017"
+   "tcg_number": "012/017",
+   "variants": {
+    "normal": {
+     "product_id": 88049,
+     "printing": "Normal"
+    }
+   }
   },
   "13": {
    "name": "Pikachu",
@@ -146,7 +243,17 @@
    "status": "ok",
    "product_id": 88083,
    "tcg_name": "Pikachu",
-   "tcg_number": "013/017"
+   "tcg_number": "013/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 88083,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 88083,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Squirtle",
@@ -156,7 +263,13 @@
    "status": "ok",
    "product_id": 89493,
    "tcg_name": "Squirtle",
-   "tcg_number": "014/017"
+   "tcg_number": "014/017",
+   "variants": {
+    "normal": {
+     "product_id": 89493,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Treecko δ",
@@ -167,7 +280,13 @@
    "product_id": 90045,
    "tcg_name": "Treecko (Delta Species)",
    "tcg_number": "015/017",
-   "note": "nuestro \"Treecko δ\" vs TCG \"Treecko\""
+   "note": "nuestro \"Treecko δ\" vs TCG \"Treecko\"",
+   "variants": {
+    "normal": {
+     "product_id": 90045,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Wobbuffet",
@@ -178,7 +297,17 @@
    "status": "ok",
    "product_id": 90618,
    "tcg_name": "Wobbuffet",
-   "tcg_number": "016/017"
+   "tcg_number": "016/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 90618,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 90618,
+     "printing": "Normal"
+    }
+   }
   },
   "17": {
    "name": "Deoxys ex",
@@ -188,7 +317,13 @@
    "status": "ok",
    "product_id": 84774,
    "tcg_name": "Deoxys ex",
-   "tcg_number": "017/017"
+   "tcg_number": "017/017",
+   "variants": {
+    "normal": {
+     "product_id": 84774,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

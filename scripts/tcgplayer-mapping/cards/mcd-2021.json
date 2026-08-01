@@ -7,7 +7,12 @@
   "ok": 25,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 50,
+   "resueltas": 50,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -19,7 +24,17 @@
    "status": "ok",
    "product_id": 232316,
    "tcg_name": "Bulbasaur - 1/25",
-   "tcg_number": "001/025"
+   "tcg_number": "001/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232316,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232316,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Chikorita",
@@ -30,7 +45,17 @@
    "status": "ok",
    "product_id": 232317,
    "tcg_name": "Chikorita - 2/25",
-   "tcg_number": "002/025"
+   "tcg_number": "002/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232317,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232317,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Treecko",
@@ -41,7 +66,17 @@
    "status": "ok",
    "product_id": 232318,
    "tcg_name": "Treecko - 3/25",
-   "tcg_number": "003/025"
+   "tcg_number": "003/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232318,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232318,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Turtwig",
@@ -52,7 +87,17 @@
    "status": "ok",
    "product_id": 232319,
    "tcg_name": "Turtwig - 4/25",
-   "tcg_number": "004/025"
+   "tcg_number": "004/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232319,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232319,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Snivy",
@@ -63,7 +108,17 @@
    "status": "ok",
    "product_id": 232320,
    "tcg_name": "Snivy - 5/25",
-   "tcg_number": "005/025"
+   "tcg_number": "005/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232320,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232320,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Chespin",
@@ -74,7 +129,17 @@
    "status": "ok",
    "product_id": 232321,
    "tcg_name": "Chespin - 6/25",
-   "tcg_number": "006/025"
+   "tcg_number": "006/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232321,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232321,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Rowlet",
@@ -85,7 +150,17 @@
    "status": "ok",
    "product_id": 232322,
    "tcg_name": "Rowlet - 7/25",
-   "tcg_number": "007/025"
+   "tcg_number": "007/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232322,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232322,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Grookey",
@@ -96,7 +171,17 @@
    "status": "ok",
    "product_id": 232323,
    "tcg_name": "Grookey - 8/25",
-   "tcg_number": "008/025"
+   "tcg_number": "008/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232323,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232323,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Charmander",
@@ -107,7 +192,17 @@
    "status": "ok",
    "product_id": 232324,
    "tcg_name": "Charmander - 9/25",
-   "tcg_number": "009/025"
+   "tcg_number": "009/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232324,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232324,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Cyndaquil",
@@ -118,7 +213,17 @@
    "status": "ok",
    "product_id": 232325,
    "tcg_name": "Cyndaquil - 10/25",
-   "tcg_number": "010/025"
+   "tcg_number": "010/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232325,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232325,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Torchic",
@@ -129,7 +234,17 @@
    "status": "ok",
    "product_id": 232326,
    "tcg_name": "Torchic - 11/25",
-   "tcg_number": "011/025"
+   "tcg_number": "011/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232326,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232326,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Chimchar",
@@ -140,7 +255,17 @@
    "status": "ok",
    "product_id": 232327,
    "tcg_name": "Chimchar - 12/25",
-   "tcg_number": "012/025"
+   "tcg_number": "012/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232327,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232327,
+     "printing": "Normal"
+    }
+   }
   },
   "13": {
    "name": "Tepig",
@@ -151,7 +276,17 @@
    "status": "ok",
    "product_id": 232328,
    "tcg_name": "Tepig - 13/25",
-   "tcg_number": "013/025"
+   "tcg_number": "013/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232328,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232328,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Fennekin",
@@ -162,7 +297,17 @@
    "status": "ok",
    "product_id": 232329,
    "tcg_name": "Fennekin - 14/25",
-   "tcg_number": "014/025"
+   "tcg_number": "014/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232329,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232329,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Litten",
@@ -173,7 +318,17 @@
    "status": "ok",
    "product_id": 232341,
    "tcg_name": "Litten - 15/25",
-   "tcg_number": "015/025"
+   "tcg_number": "015/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232341,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232341,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Scorbunny",
@@ -184,7 +339,17 @@
    "status": "ok",
    "product_id": 232330,
    "tcg_name": "Scorbunny - 16/25",
-   "tcg_number": "016/025"
+   "tcg_number": "016/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232330,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232330,
+     "printing": "Normal"
+    }
+   }
   },
   "17": {
    "name": "Squirtle",
@@ -195,7 +360,17 @@
    "status": "ok",
    "product_id": 232331,
    "tcg_name": "Squirtle - 17/25",
-   "tcg_number": "017/025"
+   "tcg_number": "017/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232331,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232331,
+     "printing": "Normal"
+    }
+   }
   },
   "18": {
    "name": "Totodile",
@@ -206,7 +381,17 @@
    "status": "ok",
    "product_id": 232332,
    "tcg_name": "Totodile - 18/25",
-   "tcg_number": "018/025"
+   "tcg_number": "018/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232332,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232332,
+     "printing": "Normal"
+    }
+   }
   },
   "19": {
    "name": "Mudkip",
@@ -217,7 +402,17 @@
    "status": "ok",
    "product_id": 232333,
    "tcg_name": "Mudkip - 19/25",
-   "tcg_number": "019/025"
+   "tcg_number": "019/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232333,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232333,
+     "printing": "Normal"
+    }
+   }
   },
   "20": {
    "name": "Piplup",
@@ -228,7 +423,17 @@
    "status": "ok",
    "product_id": 232334,
    "tcg_name": "Piplup - 20/25",
-   "tcg_number": "020/025"
+   "tcg_number": "020/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232334,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232334,
+     "printing": "Normal"
+    }
+   }
   },
   "21": {
    "name": "Oshawott",
@@ -239,7 +444,17 @@
    "status": "ok",
    "product_id": 232335,
    "tcg_name": "Oshawott - 21/25",
-   "tcg_number": "021/025"
+   "tcg_number": "021/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232335,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232335,
+     "printing": "Normal"
+    }
+   }
   },
   "22": {
    "name": "Froakie",
@@ -250,7 +465,17 @@
    "status": "ok",
    "product_id": 232336,
    "tcg_name": "Froakie - 22/25",
-   "tcg_number": "022/025"
+   "tcg_number": "022/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232336,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232336,
+     "printing": "Normal"
+    }
+   }
   },
   "23": {
    "name": "Popplio",
@@ -261,7 +486,17 @@
    "status": "ok",
    "product_id": 232337,
    "tcg_name": "Popplio - 23/25",
-   "tcg_number": "023/025"
+   "tcg_number": "023/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232337,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232337,
+     "printing": "Normal"
+    }
+   }
   },
   "24": {
    "name": "Sobble",
@@ -272,7 +507,17 @@
    "status": "ok",
    "product_id": 232338,
    "tcg_name": "Sobble - 24/25",
-   "tcg_number": "024/025"
+   "tcg_number": "024/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232338,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232338,
+     "printing": "Normal"
+    }
+   }
   },
   "25": {
    "name": "Pikachu",
@@ -283,7 +528,17 @@
    "status": "ok",
    "product_id": 232339,
    "tcg_name": "Pikachu - 25/25",
-   "tcg_number": "025/025"
+   "tcg_number": "025/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 232339,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 232339,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

@@ -7,7 +7,12 @@
   "ok": 8,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 8,
+   "resueltas": 8,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 656263,
    "tcg_name": "Basic Grass Energy - 001",
-   "tcg_number": "1"
+   "tcg_number": "1",
+   "variants": {
+    "normal": {
+     "product_id": 656263,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Basic Fire Energy",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 656264,
    "tcg_name": "Basic Fire Energy - 002",
-   "tcg_number": "2"
+   "tcg_number": "2",
+   "variants": {
+    "normal": {
+     "product_id": 656264,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Basic Water Energy",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 656265,
    "tcg_name": "Basic Water Energy - 003",
-   "tcg_number": "3"
+   "tcg_number": "3",
+   "variants": {
+    "normal": {
+     "product_id": 656265,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Basic Lightning Energy",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 656266,
    "tcg_name": "Basic Lightning Energy - 004",
-   "tcg_number": "4"
+   "tcg_number": "4",
+   "variants": {
+    "normal": {
+     "product_id": 656266,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Basic Psychic Energy",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 656267,
    "tcg_name": "Basic Psychic Energy - 005",
-   "tcg_number": "5"
+   "tcg_number": "5",
+   "variants": {
+    "normal": {
+     "product_id": 656267,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Basic Fighting Energy",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 656268,
    "tcg_name": "Basic Fighting Energy - 006",
-   "tcg_number": "6"
+   "tcg_number": "6",
+   "variants": {
+    "normal": {
+     "product_id": 656268,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Basic Darkness Energy",
@@ -78,7 +119,13 @@
    "status": "ok",
    "product_id": 656269,
    "tcg_name": "Basic Darkness Energy - 007",
-   "tcg_number": "7"
+   "tcg_number": "7",
+   "variants": {
+    "normal": {
+     "product_id": 656269,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Basic Metal Energy",
@@ -88,7 +135,13 @@
    "status": "ok",
    "product_id": 656270,
    "tcg_name": "Basic Metal Energy - 008",
-   "tcg_number": "8"
+   "tcg_number": "8",
+   "variants": {
+    "normal": {
+     "product_id": 656270,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

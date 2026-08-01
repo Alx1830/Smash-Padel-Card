@@ -7,7 +7,12 @@
   "ok": 17,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 26,
+   "resueltas": 25,
+   "sinResolver": 1
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 83735,
    "tcg_name": "Bastiodon",
-   "tcg_number": "001/017"
+   "tcg_number": "001/017",
+   "variants": {
+    "normal": {
+     "product_id": 83735,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Lucario",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 86874,
    "tcg_name": "Lucario",
-   "tcg_number": "002/017"
+   "tcg_number": "002/017",
+   "variants": {
+    "normal": {
+     "product_id": 86874,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Manaphy",
@@ -39,7 +56,17 @@
    "status": "ok",
    "product_id": 87144,
    "tcg_name": "Manaphy",
-   "tcg_number": "003/017"
+   "tcg_number": "003/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 87144,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 87144,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Pachirisu",
@@ -49,7 +76,13 @@
    "status": "ok",
    "product_id": 87898,
    "tcg_name": "Pachirisu",
-   "tcg_number": "004/017"
+   "tcg_number": "004/017",
+   "variants": {
+    "normal": {
+     "product_id": 87898,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Rampardos",
@@ -59,7 +92,13 @@
    "status": "ok",
    "product_id": 88570,
    "tcg_name": "Rampardos",
-   "tcg_number": "005/017"
+   "tcg_number": "005/017",
+   "variants": {
+    "normal": {
+     "product_id": 88570,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Drifloon",
@@ -69,7 +108,13 @@
    "status": "ok",
    "product_id": 84954,
    "tcg_name": "Drifloon",
-   "tcg_number": "006/017"
+   "tcg_number": "006/017",
+   "variants": {
+    "normal": {
+     "product_id": 84954,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Gible",
@@ -80,7 +125,17 @@
    "status": "ok",
    "product_id": 85699,
    "tcg_name": "Gible",
-   "tcg_number": "007/017"
+   "tcg_number": "007/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 85699,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 85699,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Riolu",
@@ -91,7 +146,17 @@
    "status": "ok",
    "product_id": 88752,
    "tcg_name": "Riolu",
-   "tcg_number": "008/017"
+   "tcg_number": "008/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 88752,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 88752,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Pikachu",
@@ -109,7 +174,20 @@
      "suffix": "Pokemon Day Stamped",
      "product_id": 276377
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 88087,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 88087,
+     "printing": "Normal"
+    },
+    "pokemonDayStamp": {
+     "product_id": 276377
+    }
+   }
   },
   "10": {
    "name": "Staravia",
@@ -119,7 +197,13 @@
    "status": "ok",
    "product_id": 89514,
    "tcg_name": "Staravia",
-   "tcg_number": "010/015"
+   "tcg_number": "010/015",
+   "variants": {
+    "normal": {
+     "product_id": 89514,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Bidoof",
@@ -129,7 +213,13 @@
    "status": "ok",
    "product_id": 83826,
    "tcg_name": "Bidoof",
-   "tcg_number": "011/017"
+   "tcg_number": "011/017",
+   "variants": {
+    "normal": {
+     "product_id": 83826,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Buneary",
@@ -139,7 +229,13 @@
    "status": "ok",
    "product_id": 84038,
    "tcg_name": "Buneary",
-   "tcg_number": "012/017"
+   "tcg_number": "012/017",
+   "variants": {
+    "normal": {
+     "product_id": 84038,
+     "printing": "Normal"
+    }
+   }
   },
   "13": {
    "name": "Cherubi",
@@ -149,7 +245,13 @@
    "status": "ok",
    "product_id": 84260,
    "tcg_name": "Cherubi",
-   "tcg_number": "013/017"
+   "tcg_number": "013/017",
+   "variants": {
+    "normal": {
+     "product_id": 84260,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Chimchar",
@@ -160,7 +262,17 @@
    "status": "ok",
    "product_id": 84283,
    "tcg_name": "Chimchar",
-   "tcg_number": "014/017"
+   "tcg_number": "014/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 84283,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 84283,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Piplup",
@@ -172,7 +284,17 @@
    "status": "ok",
    "product_id": 88143,
    "tcg_name": "Piplup",
-   "tcg_number": "015/017"
+   "tcg_number": "015/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 88143,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 88143,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Starly",
@@ -182,7 +304,13 @@
    "status": "ok",
    "product_id": 89521,
    "tcg_name": "Starly",
-   "tcg_number": "016/017"
+   "tcg_number": "016/017",
+   "variants": {
+    "normal": {
+     "product_id": 89521,
+     "printing": "Normal"
+    }
+   }
   },
   "17": {
    "name": "Turtwig",
@@ -193,7 +321,17 @@
    "status": "ok",
    "product_id": 90072,
    "tcg_name": "Turtwig",
-   "tcg_number": "017/017"
+   "tcg_number": "017/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 90072,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 90072,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

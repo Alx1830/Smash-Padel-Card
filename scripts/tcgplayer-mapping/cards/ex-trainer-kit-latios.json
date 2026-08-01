@@ -7,7 +7,12 @@
   "ok": 10,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 10,
+   "resueltas": 10,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 85131,
    "tcg_name": "Electrike",
-   "tcg_number": "1/10"
+   "tcg_number": "1/10",
+   "variants": {
+    "normal": {
+     "product_id": 85131,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Latios",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 86664,
    "tcg_name": "Latios",
-   "tcg_number": "2/10"
+   "tcg_number": "2/10",
+   "variants": {
+    "holofoil": {
+     "product_id": 86664,
+     "printing": "Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Linoone",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 86805,
    "tcg_name": "Linoone",
-   "tcg_number": "3/10"
+   "tcg_number": "3/10",
+   "variants": {
+    "normal": {
+     "product_id": 86805,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Magnemite",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 87076,
    "tcg_name": "Magnemite",
-   "tcg_number": "4/10"
+   "tcg_number": "4/10",
+   "variants": {
+    "normal": {
+     "product_id": 87076,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Magneton",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 87103,
    "tcg_name": "Magneton",
-   "tcg_number": "5/10"
+   "tcg_number": "5/10",
+   "variants": {
+    "normal": {
+     "product_id": 87103,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Pikachu",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 88079,
    "tcg_name": "Pikachu",
-   "tcg_number": "6/10"
+   "tcg_number": "6/10",
+   "variants": {
+    "normal": {
+     "product_id": 88079,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Zigzagoon",
@@ -78,7 +119,13 @@
    "status": "ok",
    "product_id": 90746,
    "tcg_name": "Zigzagoon",
-   "tcg_number": "7/10"
+   "tcg_number": "7/10",
+   "variants": {
+    "normal": {
+     "product_id": 90746,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Potion",
@@ -98,7 +145,13 @@
      "suffix": "Latios",
      "product_id": 88336
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 88335,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Energy Search",
@@ -118,7 +171,13 @@
      "suffix": "Latios",
      "product_id": 85240
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 85239,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Lightning Energy",
@@ -128,7 +187,13 @@
    "status": "ok",
    "product_id": 86760,
    "tcg_name": "Lightning Energy",
-   "tcg_number": "10/10"
+   "tcg_number": "10/10",
+   "variants": {
+    "normal": {
+     "product_id": 86760,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

@@ -7,7 +7,12 @@
   "ok": 102,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 302,
+   "resueltas": 292,
+   "sinResolver": 10
+  }
  },
  "cards": {
   "1": {
@@ -19,7 +24,17 @@
    "status": "ok",
    "product_id": 42346,
    "tcg_name": "Alakazam",
-   "tcg_number": "001/102"
+   "tcg_number": "001/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42346,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42346,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Blastoise",
@@ -30,7 +45,17 @@
    "status": "ok",
    "product_id": 42360,
    "tcg_name": "Blastoise",
-   "tcg_number": "002/102"
+   "tcg_number": "002/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42360,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42360,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Chansey",
@@ -41,7 +66,17 @@
    "status": "ok",
    "product_id": 42371,
    "tcg_name": "Chansey",
-   "tcg_number": "003/102"
+   "tcg_number": "003/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42371,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42371,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Charizard",
@@ -60,7 +95,21 @@
      "suffix": "Black Dot Error",
      "product_id": 657516
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 42382,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 179079,
+     "fuente": "transversal"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42382,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Clefairy",
@@ -71,7 +120,17 @@
    "status": "ok",
    "product_id": 42393,
    "tcg_name": "Clefairy",
-   "tcg_number": "005/102"
+   "tcg_number": "005/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42393,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42393,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Gyarados",
@@ -82,7 +141,17 @@
    "status": "ok",
    "product_id": 42404,
    "tcg_name": "Gyarados",
-   "tcg_number": "006/102"
+   "tcg_number": "006/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42404,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42404,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Hitmonchan",
@@ -93,7 +162,17 @@
    "status": "ok",
    "product_id": 42415,
    "tcg_name": "Hitmonchan",
-   "tcg_number": "007/102"
+   "tcg_number": "007/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42415,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42415,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Machamp",
@@ -104,7 +183,13 @@
    "product_id": 107004,
    "tcg_name": "Machamp - 8/102 (Base Set Shadowless)",
    "origen": "manual",
-   "tcg_set": "Deck Exclusives"
+   "tcg_set": "Deck Exclusives",
+   "variants": {
+    "holofoil": {
+     "product_id": 107004,
+     "printing": "Holofoil"
+    }
+   }
   },
   "9": {
    "name": "Magneton",
@@ -115,7 +200,17 @@
    "status": "ok",
    "product_id": 42433,
    "tcg_name": "Magneton",
-   "tcg_number": "009/102"
+   "tcg_number": "009/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42433,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42433,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Mewtwo",
@@ -126,7 +221,17 @@
    "status": "ok",
    "product_id": 42347,
    "tcg_name": "Mewtwo",
-   "tcg_number": "010/102"
+   "tcg_number": "010/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42347,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42347,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Nidoking",
@@ -137,7 +242,17 @@
    "status": "ok",
    "product_id": 42351,
    "tcg_name": "Nidoking",
-   "tcg_number": "011/102"
+   "tcg_number": "011/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42351,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42351,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Ninetales",
@@ -148,7 +263,17 @@
    "status": "ok",
    "product_id": 42352,
    "tcg_name": "Ninetales",
-   "tcg_number": "012/102"
+   "tcg_number": "012/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42352,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42352,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Poliwrath",
@@ -159,7 +284,17 @@
    "status": "ok",
    "product_id": 42353,
    "tcg_name": "Poliwrath",
-   "tcg_number": "013/102"
+   "tcg_number": "013/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42353,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42353,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "14": {
    "name": "Raichu",
@@ -170,7 +305,17 @@
    "status": "ok",
    "product_id": 42354,
    "tcg_name": "Raichu",
-   "tcg_number": "014/102"
+   "tcg_number": "014/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42354,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42354,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "15": {
    "name": "Venusaur",
@@ -181,7 +326,17 @@
    "status": "ok",
    "product_id": 42355,
    "tcg_name": "Venusaur",
-   "tcg_number": "015/102"
+   "tcg_number": "015/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42355,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42355,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "16": {
    "name": "Zapdos",
@@ -192,7 +347,17 @@
    "status": "ok",
    "product_id": 42356,
    "tcg_name": "Zapdos",
-   "tcg_number": "016/102"
+   "tcg_number": "016/102",
+   "variants": {
+    "holofoil": {
+     "product_id": 42356,
+     "printing": "Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 42356,
+     "printing": "Unlimited Holofoil"
+    }
+   }
   },
   "17": {
    "name": "Beedrill",
@@ -204,7 +369,21 @@
    "status": "ok",
    "product_id": 42357,
    "tcg_name": "Beedrill",
-   "tcg_number": "017/102"
+   "tcg_number": "017/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42357,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42357,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42357,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "18": {
    "name": "Dragonair",
@@ -216,7 +395,21 @@
    "status": "ok",
    "product_id": 42358,
    "tcg_name": "Dragonair",
-   "tcg_number": "018/102"
+   "tcg_number": "018/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42358,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42358,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42358,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "19": {
    "name": "Dugtrio",
@@ -228,7 +421,21 @@
    "status": "ok",
    "product_id": 42359,
    "tcg_name": "Dugtrio",
-   "tcg_number": "019/102"
+   "tcg_number": "019/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42359,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42359,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42359,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "20": {
    "name": "Electabuzz",
@@ -240,7 +447,21 @@
    "status": "ok",
    "product_id": 42361,
    "tcg_name": "Electabuzz",
-   "tcg_number": "020/102"
+   "tcg_number": "020/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42361,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42361,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42361,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "21": {
    "name": "Electrode",
@@ -252,7 +473,21 @@
    "status": "ok",
    "product_id": 42362,
    "tcg_name": "Electrode",
-   "tcg_number": "021/102"
+   "tcg_number": "021/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42362,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42362,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42362,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "22": {
    "name": "Pidgeotto",
@@ -264,7 +499,21 @@
    "status": "ok",
    "product_id": 42363,
    "tcg_name": "Pidgeotto",
-   "tcg_number": "022/102"
+   "tcg_number": "022/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42363,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42363,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42363,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "23": {
    "name": "Arcanine",
@@ -276,7 +525,21 @@
    "status": "ok",
    "product_id": 42364,
    "tcg_name": "Arcanine",
-   "tcg_number": "023/102"
+   "tcg_number": "023/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42364,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42364,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42364,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "24": {
    "name": "Charmeleon",
@@ -288,7 +551,21 @@
    "status": "ok",
    "product_id": 42365,
    "tcg_name": "Charmeleon",
-   "tcg_number": "024/102"
+   "tcg_number": "024/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42365,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42365,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42365,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "25": {
    "name": "Dewgong",
@@ -300,7 +577,21 @@
    "status": "ok",
    "product_id": 42366,
    "tcg_name": "Dewgong",
-   "tcg_number": "025/102"
+   "tcg_number": "025/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42366,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42366,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42366,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "26": {
    "name": "Dratini",
@@ -312,7 +603,21 @@
    "status": "ok",
    "product_id": 42367,
    "tcg_name": "Dratini",
-   "tcg_number": "026/102"
+   "tcg_number": "026/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42367,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42367,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42367,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "27": {
    "name": "Farfetch'd",
@@ -324,7 +629,21 @@
    "status": "ok",
    "product_id": 42368,
    "tcg_name": "Farfetch'd",
-   "tcg_number": "027/102"
+   "tcg_number": "027/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42368,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42368,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42368,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "28": {
    "name": "Growlithe",
@@ -336,7 +655,21 @@
    "status": "ok",
    "product_id": 42369,
    "tcg_name": "Growlithe",
-   "tcg_number": "028/102"
+   "tcg_number": "028/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42369,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42369,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42369,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "29": {
    "name": "Haunter",
@@ -348,7 +681,21 @@
    "status": "ok",
    "product_id": 42370,
    "tcg_name": "Haunter",
-   "tcg_number": "029/102"
+   "tcg_number": "029/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42370,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42370,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42370,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "30": {
    "name": "Ivysaur",
@@ -360,7 +707,21 @@
    "status": "ok",
    "product_id": 42372,
    "tcg_name": "Ivysaur",
-   "tcg_number": "030/102"
+   "tcg_number": "030/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42372,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42372,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42372,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "31": {
    "name": "Jynx",
@@ -372,7 +733,21 @@
    "status": "ok",
    "product_id": 42373,
    "tcg_name": "Jynx",
-   "tcg_number": "031/102"
+   "tcg_number": "031/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42373,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42373,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42373,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "32": {
    "name": "Kadabra",
@@ -384,7 +759,21 @@
    "status": "ok",
    "product_id": 42374,
    "tcg_name": "Kadabra",
-   "tcg_number": "032/102"
+   "tcg_number": "032/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42374,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42374,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42374,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "33": {
    "name": "Kakuna",
@@ -396,7 +785,21 @@
    "status": "ok",
    "product_id": 42375,
    "tcg_name": "Kakuna",
-   "tcg_number": "033/102"
+   "tcg_number": "033/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42375,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42375,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42375,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "34": {
    "name": "Machoke",
@@ -408,7 +811,21 @@
    "status": "ok",
    "product_id": 42376,
    "tcg_name": "Machoke",
-   "tcg_number": "034/102"
+   "tcg_number": "034/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42376,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42376,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42376,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "35": {
    "name": "Magikarp",
@@ -420,7 +837,21 @@
    "status": "ok",
    "product_id": 42377,
    "tcg_name": "Magikarp",
-   "tcg_number": "035/102"
+   "tcg_number": "035/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42377,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42377,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42377,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "36": {
    "name": "Magmar",
@@ -432,7 +863,21 @@
    "status": "ok",
    "product_id": 42378,
    "tcg_name": "Magmar",
-   "tcg_number": "036/102"
+   "tcg_number": "036/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42378,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42378,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42378,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "37": {
    "name": "Nidorino",
@@ -444,7 +889,21 @@
    "status": "ok",
    "product_id": 42379,
    "tcg_name": "Nidorino",
-   "tcg_number": "037/102"
+   "tcg_number": "037/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42379,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42379,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42379,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "38": {
    "name": "Poliwhirl",
@@ -456,7 +915,21 @@
    "status": "ok",
    "product_id": 42380,
    "tcg_name": "Poliwhirl",
-   "tcg_number": "038/102"
+   "tcg_number": "038/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42380,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42380,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42380,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "39": {
    "name": "Porygon",
@@ -468,7 +941,21 @@
    "status": "ok",
    "product_id": 42381,
    "tcg_name": "Porygon",
-   "tcg_number": "039/102"
+   "tcg_number": "039/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42381,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42381,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42381,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "40": {
    "name": "Raticate",
@@ -480,7 +967,21 @@
    "status": "ok",
    "product_id": 42383,
    "tcg_name": "Raticate",
-   "tcg_number": "040/102"
+   "tcg_number": "040/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42383,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42383,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42383,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "41": {
    "name": "Seel",
@@ -492,7 +993,21 @@
    "status": "ok",
    "product_id": 42384,
    "tcg_name": "Seel",
-   "tcg_number": "041/102"
+   "tcg_number": "041/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42384,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42384,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42384,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "42": {
    "name": "Wartortle",
@@ -504,7 +1019,21 @@
    "status": "ok",
    "product_id": 42385,
    "tcg_name": "Wartortle",
-   "tcg_number": "042/102"
+   "tcg_number": "042/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42385,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42385,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42385,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "43": {
    "name": "Abra",
@@ -516,7 +1045,21 @@
    "status": "ok",
    "product_id": 42386,
    "tcg_name": "Abra",
-   "tcg_number": "043/102"
+   "tcg_number": "043/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42386,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42386,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42386,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "44": {
    "name": "Bulbasaur",
@@ -529,7 +1072,21 @@
    "status": "ok",
    "product_id": 42387,
    "tcg_name": "Bulbasaur",
-   "tcg_number": "044/102"
+   "tcg_number": "044/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42387,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42387,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42387,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "45": {
    "name": "Caterpie",
@@ -541,7 +1098,21 @@
    "status": "ok",
    "product_id": 42388,
    "tcg_name": "Caterpie",
-   "tcg_number": "045/102"
+   "tcg_number": "045/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42388,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42388,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42388,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "46": {
    "name": "Charmander",
@@ -554,7 +1125,21 @@
    "status": "ok",
    "product_id": 42389,
    "tcg_name": "Charmander",
-   "tcg_number": "046/102"
+   "tcg_number": "046/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42389,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42389,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42389,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "47": {
    "name": "Diglett",
@@ -566,7 +1151,21 @@
    "status": "ok",
    "product_id": 42390,
    "tcg_name": "Diglett",
-   "tcg_number": "047/102"
+   "tcg_number": "047/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42390,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42390,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42390,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "48": {
    "name": "Doduo",
@@ -578,7 +1177,21 @@
    "status": "ok",
    "product_id": 42391,
    "tcg_name": "Doduo",
-   "tcg_number": "048/102"
+   "tcg_number": "048/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42391,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42391,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42391,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "49": {
    "name": "Drowzee",
@@ -590,7 +1203,21 @@
    "status": "ok",
    "product_id": 42392,
    "tcg_name": "Drowzee",
-   "tcg_number": "049/102"
+   "tcg_number": "049/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42392,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42392,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42392,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "50": {
    "name": "Gastly",
@@ -602,7 +1229,21 @@
    "status": "ok",
    "product_id": 42394,
    "tcg_name": "Gastly",
-   "tcg_number": "050/102"
+   "tcg_number": "050/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42394,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42394,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42394,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "51": {
    "name": "Koffing",
@@ -614,7 +1255,21 @@
    "status": "ok",
    "product_id": 42395,
    "tcg_name": "Koffing",
-   "tcg_number": "051/102"
+   "tcg_number": "051/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42395,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42395,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42395,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "52": {
    "name": "Machop",
@@ -626,7 +1281,21 @@
    "status": "ok",
    "product_id": 42396,
    "tcg_name": "Machop",
-   "tcg_number": "052/102"
+   "tcg_number": "052/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42396,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42396,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42396,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "53": {
    "name": "Magnemite",
@@ -638,7 +1307,21 @@
    "status": "ok",
    "product_id": 42397,
    "tcg_name": "Magnemite",
-   "tcg_number": "053/102"
+   "tcg_number": "053/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42397,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42397,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42397,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "54": {
    "name": "Metapod",
@@ -650,7 +1333,21 @@
    "status": "ok",
    "product_id": 42398,
    "tcg_name": "Metapod",
-   "tcg_number": "054/102"
+   "tcg_number": "054/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42398,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42398,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42398,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "55": {
    "name": "Nidoran ♂",
@@ -663,7 +1360,21 @@
    "product_id": 42399,
    "tcg_name": "Nidoran M",
    "tcg_number": "055/102",
-   "note": "nuestro \"Nidoran ♂\" vs TCG \"Nidoran M\""
+   "note": "nuestro \"Nidoran ♂\" vs TCG \"Nidoran M\"",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42399,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42399,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42399,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "56": {
    "name": "Onix",
@@ -675,7 +1386,21 @@
    "status": "ok",
    "product_id": 42400,
    "tcg_name": "Onix",
-   "tcg_number": "056/102"
+   "tcg_number": "056/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42400,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42400,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42400,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "57": {
    "name": "Pidgey",
@@ -687,7 +1412,21 @@
    "status": "ok",
    "product_id": 42401,
    "tcg_name": "Pidgey",
-   "tcg_number": "057/102"
+   "tcg_number": "057/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42401,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42401,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42401,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "58": {
    "name": "Pikachu",
@@ -707,7 +1446,29 @@
    "status": "ok",
    "product_id": 42402,
    "tcg_name": "Pikachu",
-   "tcg_number": "058/102"
+   "tcg_number": "058/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42402,
+     "printing": "1st Edition Shadowless"
+    },
+    "jumbo": {
+     "product_id": 211500,
+     "fuente": "transversal"
+    },
+    "jumboAlternate": {
+     "product_id": 211500,
+     "fuente": "transversal"
+    },
+    "unlimited": {
+     "product_id": 42402,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42402,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "59": {
    "name": "Poliwag",
@@ -719,7 +1480,21 @@
    "status": "ok",
    "product_id": 42403,
    "tcg_name": "Poliwag",
-   "tcg_number": "059/102"
+   "tcg_number": "059/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42403,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42403,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42403,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "60": {
    "name": "Ponyta",
@@ -731,7 +1506,21 @@
    "status": "ok",
    "product_id": 42405,
    "tcg_name": "Ponyta",
-   "tcg_number": "060/102"
+   "tcg_number": "060/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42405,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42405,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42405,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "61": {
    "name": "Rattata",
@@ -743,7 +1532,21 @@
    "status": "ok",
    "product_id": 42406,
    "tcg_name": "Rattata",
-   "tcg_number": "061/102"
+   "tcg_number": "061/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42406,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42406,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42406,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "62": {
    "name": "Sandshrew",
@@ -755,7 +1558,21 @@
    "status": "ok",
    "product_id": 42407,
    "tcg_name": "Sandshrew",
-   "tcg_number": "062/102"
+   "tcg_number": "062/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42407,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42407,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42407,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "63": {
    "name": "Squirtle",
@@ -768,7 +1585,21 @@
    "status": "ok",
    "product_id": 42408,
    "tcg_name": "Squirtle",
-   "tcg_number": "063/102"
+   "tcg_number": "063/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42408,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42408,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42408,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "64": {
    "name": "Starmie",
@@ -780,7 +1611,21 @@
    "status": "ok",
    "product_id": 42409,
    "tcg_name": "Starmie",
-   "tcg_number": "064/102"
+   "tcg_number": "064/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42409,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42409,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42409,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "65": {
    "name": "Staryu",
@@ -792,7 +1637,21 @@
    "status": "ok",
    "product_id": 42410,
    "tcg_name": "Staryu",
-   "tcg_number": "065/102"
+   "tcg_number": "065/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42410,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42410,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42410,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "66": {
    "name": "Tangela",
@@ -804,7 +1663,21 @@
    "status": "ok",
    "product_id": 42411,
    "tcg_name": "Tangela",
-   "tcg_number": "066/102"
+   "tcg_number": "066/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42411,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42411,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42411,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "67": {
    "name": "Voltorb",
@@ -816,7 +1689,21 @@
    "status": "ok",
    "product_id": 42412,
    "tcg_name": "Voltorb",
-   "tcg_number": "067/102"
+   "tcg_number": "067/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42412,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42412,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42412,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "68": {
    "name": "Vulpix",
@@ -828,7 +1715,21 @@
    "status": "ok",
    "product_id": 42413,
    "tcg_name": "Vulpix",
-   "tcg_number": "068/102"
+   "tcg_number": "068/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42413,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42413,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42413,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "69": {
    "name": "Weedle",
@@ -840,7 +1741,21 @@
    "status": "ok",
    "product_id": 42414,
    "tcg_name": "Weedle",
-   "tcg_number": "069/102"
+   "tcg_number": "069/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42414,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42414,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42414,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "70": {
    "name": "Clefairy Doll",
@@ -852,7 +1767,21 @@
    "status": "ok",
    "product_id": 42416,
    "tcg_name": "Clefairy Doll",
-   "tcg_number": "070/102"
+   "tcg_number": "070/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42416,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42416,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42416,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "71": {
    "name": "Computer Search",
@@ -864,7 +1793,21 @@
    "status": "ok",
    "product_id": 42417,
    "tcg_name": "Computer Search",
-   "tcg_number": "071/102"
+   "tcg_number": "071/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42417,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42417,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42417,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "72": {
    "name": "Devolution Spray",
@@ -876,7 +1819,21 @@
    "status": "ok",
    "product_id": 42418,
    "tcg_name": "Devolution Spray",
-   "tcg_number": "072/102"
+   "tcg_number": "072/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42418,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42418,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42418,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "73": {
    "name": "Impostor Professor Oak",
@@ -889,7 +1846,21 @@
    "product_id": 86271,
    "tcg_name": "Imposter Professor Oak",
    "tcg_number": "073/102",
-   "note": "nuestro \"Impostor Professor Oak\" vs TCG \"Imposter Professor Oak\""
+   "note": "nuestro \"Impostor Professor Oak\" vs TCG \"Imposter Professor Oak\"",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 86271,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 86271,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 86271,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "74": {
    "name": "Item Finder",
@@ -901,7 +1872,21 @@
    "status": "ok",
    "product_id": 42420,
    "tcg_name": "Item Finder",
-   "tcg_number": "074/102"
+   "tcg_number": "074/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42420,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42420,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42420,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "75": {
    "name": "Lass",
@@ -913,7 +1898,21 @@
    "status": "ok",
    "product_id": 42421,
    "tcg_name": "Lass",
-   "tcg_number": "075/102"
+   "tcg_number": "075/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42421,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42421,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42421,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "76": {
    "name": "Pokémon Breeder",
@@ -925,7 +1924,21 @@
    "status": "ok",
    "product_id": 42422,
    "tcg_name": "Pokemon Breeder",
-   "tcg_number": "076/102"
+   "tcg_number": "076/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42422,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42422,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42422,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "77": {
    "name": "Pokémon Trader",
@@ -937,7 +1950,21 @@
    "status": "ok",
    "product_id": 108648,
    "tcg_name": "Pokemon Trader",
-   "tcg_number": "077/102"
+   "tcg_number": "077/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 108648,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 108648,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 108648,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "78": {
    "name": "Scoop Up",
@@ -949,7 +1976,21 @@
    "status": "ok",
    "product_id": 42423,
    "tcg_name": "Scoop Up",
-   "tcg_number": "078/102"
+   "tcg_number": "078/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42423,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42423,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42423,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "79": {
    "name": "Super Energy Removal",
@@ -961,7 +2002,21 @@
    "status": "ok",
    "product_id": 42424,
    "tcg_name": "Super Energy Removal",
-   "tcg_number": "079/102"
+   "tcg_number": "079/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42424,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42424,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42424,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "80": {
    "name": "Defender",
@@ -973,7 +2028,21 @@
    "status": "ok",
    "product_id": 42426,
    "tcg_name": "Defender",
-   "tcg_number": "080/102"
+   "tcg_number": "080/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42426,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42426,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42426,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "81": {
    "name": "Energy Retrieval",
@@ -985,7 +2054,21 @@
    "status": "ok",
    "product_id": 42427,
    "tcg_name": "Energy Retrieval",
-   "tcg_number": "081/102"
+   "tcg_number": "081/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42427,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42427,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42427,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "82": {
    "name": "Full Heal",
@@ -997,7 +2080,21 @@
    "status": "ok",
    "product_id": 42428,
    "tcg_name": "Full Heal",
-   "tcg_number": "082/102"
+   "tcg_number": "082/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42428,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42428,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42428,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "83": {
    "name": "Maintenance",
@@ -1009,7 +2106,21 @@
    "status": "ok",
    "product_id": 42429,
    "tcg_name": "Maintenance",
-   "tcg_number": "083/102"
+   "tcg_number": "083/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42429,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42429,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42429,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "84": {
    "name": "PlusPower",
@@ -1021,7 +2132,21 @@
    "status": "ok",
    "product_id": 42430,
    "tcg_name": "PlusPower",
-   "tcg_number": "084/102"
+   "tcg_number": "084/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42430,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42430,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42430,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "85": {
    "name": "Pokémon Center",
@@ -1033,7 +2158,21 @@
    "status": "ok",
    "product_id": 108646,
    "tcg_name": "Pokemon Center",
-   "tcg_number": "085/102"
+   "tcg_number": "085/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 108646,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 108646,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 108646,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "86": {
    "name": "Pokémon Flute",
@@ -1045,7 +2184,21 @@
    "status": "ok",
    "product_id": 108647,
    "tcg_name": "Pokemon Flute",
-   "tcg_number": "086/102"
+   "tcg_number": "086/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 108647,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 108647,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 108647,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "87": {
    "name": "Pokédex",
@@ -1057,7 +2210,21 @@
    "status": "ok",
    "product_id": 108645,
    "tcg_name": "Pokedex",
-   "tcg_number": "087/102"
+   "tcg_number": "087/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 108645,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 108645,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 108645,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "88": {
    "name": "Professor Oak",
@@ -1069,7 +2236,21 @@
    "status": "ok",
    "product_id": 42431,
    "tcg_name": "Professor Oak",
-   "tcg_number": "088/102"
+   "tcg_number": "088/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42431,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42431,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42431,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "89": {
    "name": "Revive",
@@ -1081,7 +2262,21 @@
    "status": "ok",
    "product_id": 42432,
    "tcg_name": "Revive",
-   "tcg_number": "089/102"
+   "tcg_number": "089/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42432,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42432,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42432,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "90": {
    "name": "Super Potion",
@@ -1093,7 +2288,21 @@
    "status": "ok",
    "product_id": 42434,
    "tcg_name": "Super Potion",
-   "tcg_number": "090/102"
+   "tcg_number": "090/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42434,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42434,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42434,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "91": {
    "name": "Bill",
@@ -1105,7 +2314,21 @@
    "status": "ok",
    "product_id": 42435,
    "tcg_name": "Bill",
-   "tcg_number": "091/102"
+   "tcg_number": "091/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42435,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42435,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42435,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "92": {
    "name": "Energy Removal",
@@ -1117,7 +2340,21 @@
    "status": "ok",
    "product_id": 42436,
    "tcg_name": "Energy Removal",
-   "tcg_number": "092/102"
+   "tcg_number": "092/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42436,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42436,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42436,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "93": {
    "name": "Gust of Wind",
@@ -1129,7 +2366,21 @@
    "status": "ok",
    "product_id": 42437,
    "tcg_name": "Gust of Wind",
-   "tcg_number": "093/102"
+   "tcg_number": "093/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42437,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42437,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42437,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "94": {
    "name": "Potion",
@@ -1141,7 +2392,21 @@
    "status": "ok",
    "product_id": 42438,
    "tcg_name": "Potion",
-   "tcg_number": "094/102"
+   "tcg_number": "094/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42438,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42438,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42438,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "95": {
    "name": "Switch",
@@ -1153,7 +2418,21 @@
    "status": "ok",
    "product_id": 42439,
    "tcg_name": "Switch",
-   "tcg_number": "095/102"
+   "tcg_number": "095/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42439,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42439,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42439,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "96": {
    "name": "Double Colorless Energy",
@@ -1165,7 +2444,21 @@
    "status": "ok",
    "product_id": 42440,
    "tcg_name": "Double Colorless Energy",
-   "tcg_number": "096/102"
+   "tcg_number": "096/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42440,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42440,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42440,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "97": {
    "name": "Fighting Energy",
@@ -1177,7 +2470,21 @@
    "status": "ok",
    "product_id": 42441,
    "tcg_name": "Fighting Energy",
-   "tcg_number": "097/102"
+   "tcg_number": "097/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42441,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42441,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42441,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "98": {
    "name": "Fire Energy",
@@ -1189,7 +2496,21 @@
    "status": "ok",
    "product_id": 42442,
    "tcg_name": "Fire Energy",
-   "tcg_number": "098/102"
+   "tcg_number": "098/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42442,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42442,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42442,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "99": {
    "name": "Grass Energy",
@@ -1201,7 +2522,21 @@
    "status": "ok",
    "product_id": 42443,
    "tcg_name": "Grass Energy",
-   "tcg_number": "099/102"
+   "tcg_number": "099/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42443,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42443,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42443,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "100": {
    "name": "Lightning Energy",
@@ -1213,7 +2548,21 @@
    "status": "ok",
    "product_id": 42348,
    "tcg_name": "Lightning Energy",
-   "tcg_number": "100/102"
+   "tcg_number": "100/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42348,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42348,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42348,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "101": {
    "name": "Psychic Energy",
@@ -1225,7 +2574,21 @@
    "status": "ok",
    "product_id": 42349,
    "tcg_name": "Psychic Energy",
-   "tcg_number": "101/102"
+   "tcg_number": "101/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42349,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42349,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42349,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   },
   "102": {
    "name": "Water Energy",
@@ -1237,7 +2600,21 @@
    "status": "ok",
    "product_id": 42350,
    "tcg_name": "Water Energy",
-   "tcg_number": "102/102"
+   "tcg_number": "102/102",
+   "variants": {
+    "firstEditionShadowless": {
+     "product_id": 42350,
+     "printing": "1st Edition Shadowless"
+    },
+    "unlimited": {
+     "product_id": 42350,
+     "printing": "Unlimited"
+    },
+    "unlimitedShadowless": {
+     "product_id": 42350,
+     "printing": "Unlimited Shadowless"
+    }
+   }
   }
  }
 }

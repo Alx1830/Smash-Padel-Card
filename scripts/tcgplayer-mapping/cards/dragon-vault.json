@@ -7,7 +7,12 @@
   "ok": 21,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 38,
+   "resueltas": 30,
+   "sinResolver": 8
+  }
  },
  "cards": {
   "1": {
@@ -24,7 +29,13 @@
      "suffix": "1",
      "product_id": 84937
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 84937,
+     "printing": "Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Dratini",
@@ -40,7 +51,13 @@
      "suffix": "2",
      "product_id": 84938
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 84938,
+     "printing": "Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Dragonair",
@@ -56,7 +73,13 @@
      "suffix": "3",
      "product_id": 84902
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 84902,
+     "printing": "Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Dragonair",
@@ -72,7 +95,13 @@
      "suffix": "4",
      "product_id": 84903
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 84903,
+     "printing": "Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Dragonite",
@@ -83,7 +112,17 @@
    "status": "ok",
    "product_id": 84915,
    "tcg_name": "Dragonite",
-   "tcg_number": "5/20"
+   "tcg_number": "5/20",
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 153312,
+     "fuente": "transversal"
+    },
+    "holofoil": {
+     "product_id": 84915,
+     "printing": "Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Bagon",
@@ -95,7 +134,17 @@
    "status": "ok",
    "product_id": 83701,
    "tcg_name": "Bagon",
-   "tcg_number": "6/20"
+   "tcg_number": "6/20",
+   "variants": {
+    "holofoil": {
+     "product_id": 83701,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 706572,
+     "fuente": "transversal"
+    }
+   }
   },
   "7": {
    "name": "Shelgon",
@@ -107,7 +156,17 @@
    "status": "ok",
    "product_id": 89130,
    "tcg_name": "Shelgon",
-   "tcg_number": "7/20"
+   "tcg_number": "7/20",
+   "variants": {
+    "holofoil": {
+     "product_id": 89130,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 251201,
+     "fuente": "transversal"
+    }
+   }
   },
   "8": {
    "name": "Salamence",
@@ -120,7 +179,21 @@
    "status": "ok",
    "product_id": 88900,
    "tcg_name": "Salamence",
-   "tcg_number": "8/20"
+   "tcg_number": "8/20",
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 224858,
+     "fuente": "transversal"
+    },
+    "holofoil": {
+     "product_id": 88900,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 227092,
+     "fuente": "transversal"
+    }
+   }
   },
   "9": {
    "name": "Latias",
@@ -131,7 +204,13 @@
    "status": "ok",
    "product_id": 86654,
    "tcg_name": "Latias",
-   "tcg_number": "9/20"
+   "tcg_number": "9/20",
+   "variants": {
+    "holofoil": {
+     "product_id": 86654,
+     "printing": "Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Latios",
@@ -142,7 +221,13 @@
    "status": "ok",
    "product_id": 86668,
    "tcg_name": "Latios",
-   "tcg_number": "10/20"
+   "tcg_number": "10/20",
+   "variants": {
+    "holofoil": {
+     "product_id": 86668,
+     "printing": "Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Rayquaza",
@@ -153,7 +238,13 @@
    "status": "ok",
    "product_id": 88631,
    "tcg_name": "Rayquaza",
-   "tcg_number": "11/20"
+   "tcg_number": "11/20",
+   "variants": {
+    "holofoil": {
+     "product_id": 88631,
+     "printing": "Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Axew",
@@ -169,7 +260,13 @@
      "suffix": "12",
      "product_id": 83670
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 83670,
+     "printing": "Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Axew",
@@ -185,7 +282,13 @@
      "suffix": "13",
      "product_id": 83671
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 83671,
+     "printing": "Holofoil"
+    }
+   }
   },
   "14": {
    "name": "Fraxure",
@@ -201,7 +304,13 @@
      "suffix": "14",
      "product_id": 85559
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 85559,
+     "printing": "Holofoil"
+    }
+   }
   },
   "15": {
    "name": "Fraxure",
@@ -217,7 +326,13 @@
      "suffix": "15",
      "product_id": 85560
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 85560,
+     "printing": "Holofoil"
+    }
+   }
   },
   "16": {
    "name": "Haxorus",
@@ -228,7 +343,13 @@
    "status": "ok",
    "product_id": 86034,
    "tcg_name": "Haxorus",
-   "tcg_number": "16/20"
+   "tcg_number": "16/20",
+   "variants": {
+    "holofoil": {
+     "product_id": 86034,
+     "printing": "Holofoil"
+    }
+   }
   },
   "17": {
    "name": "Druddigon",
@@ -239,7 +360,13 @@
    "status": "ok",
    "product_id": 84979,
    "tcg_name": "Druddigon",
-   "tcg_number": "17/20"
+   "tcg_number": "17/20",
+   "variants": {
+    "holofoil": {
+     "product_id": 84979,
+     "printing": "Holofoil"
+    }
+   }
   },
   "18": {
    "name": "Exp. Share",
@@ -249,7 +376,13 @@
    "status": "ok",
    "product_id": 85366,
    "tcg_name": "Exp. Share",
-   "tcg_number": "18/20"
+   "tcg_number": "18/20",
+   "variants": {
+    "holofoil": {
+     "product_id": 85366,
+     "printing": "Holofoil"
+    }
+   }
   },
   "19": {
    "name": "First Ticket",
@@ -259,7 +392,13 @@
    "status": "ok",
    "product_id": 85470,
    "tcg_name": "First Ticket",
-   "tcg_number": "19/20"
+   "tcg_number": "19/20",
+   "variants": {
+    "holofoil": {
+     "product_id": 85470,
+     "printing": "Holofoil"
+    }
+   }
   },
   "20": {
    "name": "Super Rod",
@@ -273,7 +412,29 @@
    "status": "ok",
    "product_id": 89632,
    "tcg_name": "Super Rod",
-   "tcg_number": "20/20"
+   "tcg_number": "20/20",
+   "variants": {
+    "andrewEstrada": {
+     "product_id": 480992,
+     "fuente": "transversal"
+    },
+    "clementLamberton": {
+     "product_id": 480745,
+     "fuente": "transversal"
+    },
+    "holofoil": {
+     "product_id": 89632,
+     "printing": "Holofoil"
+    },
+    "ianWhiton": {
+     "product_id": 480744,
+     "fuente": "transversal"
+    },
+    "michikazuTsuda": {
+     "product_id": 480991,
+     "fuente": "transversal"
+    }
+   }
   },
   "21": {
    "name": "Kyurem",
@@ -283,7 +444,13 @@
    "status": "ok",
    "product_id": 86563,
    "tcg_name": "Kyurem",
-   "tcg_number": "21/20"
+   "tcg_number": "21/20",
+   "variants": {
+    "holofoil": {
+     "product_id": 86563,
+     "printing": "Holofoil"
+    }
+   }
   }
  }
 }

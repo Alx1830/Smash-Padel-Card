@@ -7,7 +7,12 @@
   "ok": 236,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 456,
+   "resueltas": 438,
+   "sinResolver": 18
+  }
  },
  "cards": {
   "1": {
@@ -19,7 +24,17 @@
    "status": "ok",
    "product_id": 178798,
    "tcg_name": "Tangela",
-   "tcg_number": "1/214"
+   "tcg_number": "1/214",
+   "variants": {
+    "normal": {
+     "product_id": 178798,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178798,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Tangrowth",
@@ -30,7 +45,17 @@
    "status": "ok",
    "product_id": 178799,
    "tcg_name": "Tangrowth",
-   "tcg_number": "2/214"
+   "tcg_number": "2/214",
+   "variants": {
+    "normal": {
+     "product_id": 178799,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178799,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Scyther",
@@ -41,7 +66,17 @@
    "status": "ok",
    "product_id": 178800,
    "tcg_name": "Scyther",
-   "tcg_number": "3/214"
+   "tcg_number": "3/214",
+   "variants": {
+    "normal": {
+     "product_id": 178800,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178800,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Pinsir",
@@ -52,7 +87,17 @@
    "status": "ok",
    "product_id": 178801,
    "tcg_name": "Pinsir",
-   "tcg_number": "4/214"
+   "tcg_number": "4/214",
+   "variants": {
+    "normal": {
+     "product_id": 178801,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178801,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Chikorita",
@@ -69,7 +114,17 @@
      "suffix": "5",
      "product_id": 178802
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178802,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178802,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Chikorita",
@@ -86,7 +141,17 @@
      "suffix": "6",
      "product_id": 178803
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178803,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178803,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Bayleef",
@@ -97,7 +162,17 @@
    "status": "ok",
    "product_id": 178804,
    "tcg_name": "Bayleef",
-   "tcg_number": "7/214"
+   "tcg_number": "7/214",
+   "variants": {
+    "normal": {
+     "product_id": 178804,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178804,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Meganium",
@@ -108,7 +183,17 @@
    "status": "ok",
    "product_id": 178805,
    "tcg_name": "Meganium",
-   "tcg_number": "8/214"
+   "tcg_number": "8/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178805,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178805,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "9": {
    "name": "Spinarak",
@@ -119,7 +204,17 @@
    "status": "ok",
    "product_id": 178806,
    "tcg_name": "Spinarak",
-   "tcg_number": "9/214"
+   "tcg_number": "9/214",
+   "variants": {
+    "normal": {
+     "product_id": 178806,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178806,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Ariados",
@@ -130,7 +225,17 @@
    "status": "ok",
    "product_id": 178807,
    "tcg_name": "Ariados",
-   "tcg_number": "10/214"
+   "tcg_number": "10/214",
+   "variants": {
+    "normal": {
+     "product_id": 178807,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178807,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Hoppip",
@@ -147,7 +252,17 @@
      "suffix": "11",
      "product_id": 178808
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178808,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178808,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Hoppip",
@@ -164,7 +279,17 @@
      "suffix": "12",
      "product_id": 178809
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178809,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178809,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Skiploom",
@@ -175,7 +300,17 @@
    "status": "ok",
    "product_id": 178810,
    "tcg_name": "Skiploom",
-   "tcg_number": "13/214"
+   "tcg_number": "13/214",
+   "variants": {
+    "normal": {
+     "product_id": 178810,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178810,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "14": {
    "name": "Jumpluff",
@@ -187,7 +322,21 @@
    "status": "ok",
    "product_id": 178811,
    "tcg_name": "Jumpluff",
-   "tcg_number": "14/214"
+   "tcg_number": "14/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178811,
+     "printing": "Holofoil"
+    },
+    "leagueStamp": {
+     "product_id": 180301,
+     "fuente": "transversal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178811,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "15": {
    "name": "Pineco",
@@ -198,7 +347,17 @@
    "status": "ok",
    "product_id": 178812,
    "tcg_name": "Pineco",
-   "tcg_number": "15/214"
+   "tcg_number": "15/214",
+   "variants": {
+    "normal": {
+     "product_id": 178812,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178812,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "16": {
    "name": "Shuckle",
@@ -209,7 +368,17 @@
    "status": "ok",
    "product_id": 178813,
    "tcg_name": "Shuckle",
-   "tcg_number": "16/214"
+   "tcg_number": "16/214",
+   "variants": {
+    "normal": {
+     "product_id": 178813,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178813,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "17": {
    "name": "Shuckle-GX",
@@ -219,7 +388,13 @@
    "status": "ok",
    "product_id": 178814,
    "tcg_name": "Shuckle GX",
-   "tcg_number": "17/214"
+   "tcg_number": "17/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178814,
+     "printing": "Holofoil"
+    }
+   }
   },
   "18": {
    "name": "Heracross",
@@ -230,7 +405,17 @@
    "status": "ok",
    "product_id": 178817,
    "tcg_name": "Heracross",
-   "tcg_number": "18/214"
+   "tcg_number": "18/214",
+   "variants": {
+    "normal": {
+     "product_id": 178817,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178817,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "19": {
    "name": "Celebi ◇",
@@ -241,7 +426,13 @@
    "product_id": 178818,
    "tcg_name": "Celebi Prism Star",
    "tcg_number": "19/214",
-   "note": "nuestro \"Celebi ◇\" vs TCG \"Celebi Prism Star\""
+   "note": "nuestro \"Celebi ◇\" vs TCG \"Celebi Prism Star\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 178818,
+     "printing": "Holofoil"
+    }
+   }
   },
   "20": {
    "name": "Treecko",
@@ -252,7 +443,17 @@
    "status": "ok",
    "product_id": 178819,
    "tcg_name": "Treecko",
-   "tcg_number": "20/214"
+   "tcg_number": "20/214",
+   "variants": {
+    "normal": {
+     "product_id": 178819,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178819,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "21": {
    "name": "Grovyle",
@@ -263,7 +464,17 @@
    "status": "ok",
    "product_id": 178820,
    "tcg_name": "Grovyle",
-   "tcg_number": "21/214"
+   "tcg_number": "21/214",
+   "variants": {
+    "normal": {
+     "product_id": 178820,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178820,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "22": {
    "name": "Sceptile-GX",
@@ -273,7 +484,13 @@
    "status": "ok",
    "product_id": 178821,
    "tcg_name": "Sceptile GX",
-   "tcg_number": "22/214"
+   "tcg_number": "22/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178821,
+     "printing": "Holofoil"
+    }
+   }
   },
   "23": {
    "name": "Wurmple",
@@ -290,7 +507,17 @@
      "suffix": "23",
      "product_id": 178824
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178824,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178824,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "24": {
    "name": "Wurmple",
@@ -307,7 +534,17 @@
      "suffix": "24",
      "product_id": 178825
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178825,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178825,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "25": {
    "name": "Silcoon",
@@ -318,7 +555,17 @@
    "status": "ok",
    "product_id": 178826,
    "tcg_name": "Silcoon",
-   "tcg_number": "25/214"
+   "tcg_number": "25/214",
+   "variants": {
+    "normal": {
+     "product_id": 178826,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178826,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "26": {
    "name": "Beautifly",
@@ -329,7 +576,17 @@
    "status": "ok",
    "product_id": 178827,
    "tcg_name": "Beautifly",
-   "tcg_number": "26/214"
+   "tcg_number": "26/214",
+   "variants": {
+    "normal": {
+     "product_id": 178827,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178827,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "27": {
    "name": "Cascoon",
@@ -340,7 +597,17 @@
    "status": "ok",
    "product_id": 178828,
    "tcg_name": "Cascoon",
-   "tcg_number": "27/214"
+   "tcg_number": "27/214",
+   "variants": {
+    "normal": {
+     "product_id": 178828,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178828,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "28": {
    "name": "Dustox",
@@ -351,7 +618,17 @@
    "status": "ok",
    "product_id": 178829,
    "tcg_name": "Dustox",
-   "tcg_number": "28/214"
+   "tcg_number": "28/214",
+   "variants": {
+    "normal": {
+     "product_id": 178829,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178829,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "29": {
    "name": "Nincada",
@@ -362,7 +639,17 @@
    "status": "ok",
    "product_id": 178830,
    "tcg_name": "Nincada",
-   "tcg_number": "29/214"
+   "tcg_number": "29/214",
+   "variants": {
+    "normal": {
+     "product_id": 178830,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178830,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "30": {
    "name": "Ninjask",
@@ -373,7 +660,17 @@
    "status": "ok",
    "product_id": 178831,
    "tcg_name": "Ninjask",
-   "tcg_number": "30/214"
+   "tcg_number": "30/214",
+   "variants": {
+    "normal": {
+     "product_id": 178831,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178831,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "31": {
    "name": "Combee",
@@ -384,7 +681,17 @@
    "status": "ok",
    "product_id": 178832,
    "tcg_name": "Combee",
-   "tcg_number": "31/214"
+   "tcg_number": "31/214",
+   "variants": {
+    "normal": {
+     "product_id": 178832,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178832,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "32": {
    "name": "Vespiquen",
@@ -395,7 +702,17 @@
    "status": "ok",
    "product_id": 178833,
    "tcg_name": "Vespiquen",
-   "tcg_number": "32/214"
+   "tcg_number": "32/214",
+   "variants": {
+    "normal": {
+     "product_id": 178833,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178833,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "33": {
    "name": "Shaymin",
@@ -406,7 +723,17 @@
    "status": "ok",
    "product_id": 178834,
    "tcg_name": "Shaymin",
-   "tcg_number": "33/214"
+   "tcg_number": "33/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178834,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178834,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "34": {
    "name": "Virizion-GX",
@@ -416,7 +743,13 @@
    "status": "ok",
    "product_id": 178835,
    "tcg_name": "Virizion GX",
-   "tcg_number": "34/214"
+   "tcg_number": "34/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178835,
+     "printing": "Holofoil"
+    }
+   }
   },
   "35": {
    "name": "Skiddo",
@@ -427,7 +760,17 @@
    "status": "ok",
    "product_id": 178838,
    "tcg_name": "Skiddo",
-   "tcg_number": "35/214"
+   "tcg_number": "35/214",
+   "variants": {
+    "normal": {
+     "product_id": 178838,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178838,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "36": {
    "name": "Gogoat",
@@ -438,7 +781,17 @@
    "status": "ok",
    "product_id": 178839,
    "tcg_name": "Gogoat",
-   "tcg_number": "36/214"
+   "tcg_number": "36/214",
+   "variants": {
+    "normal": {
+     "product_id": 178839,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178839,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "37": {
    "name": "Tapu Bulu",
@@ -449,7 +802,17 @@
    "status": "ok",
    "product_id": 178840,
    "tcg_name": "Tapu Bulu",
-   "tcg_number": "37/214"
+   "tcg_number": "37/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178840,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178840,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "38": {
    "name": "Moltres",
@@ -462,7 +825,21 @@
    "status": "ok",
    "product_id": 178841,
    "tcg_name": "Moltres",
-   "tcg_number": "38/214"
+   "tcg_number": "38/214",
+   "variants": {
+    "crackedIceHolofoil": {
+     "product_id": 190937,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 178841,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178841,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "39": {
    "name": "Cyndaquil",
@@ -479,7 +856,17 @@
      "suffix": "39",
      "product_id": 178842
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178842,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178842,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "40": {
    "name": "Cyndaquil",
@@ -496,7 +883,17 @@
      "suffix": "40",
      "product_id": 178843
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178843,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178843,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "41": {
    "name": "Quilava",
@@ -507,7 +904,17 @@
    "status": "ok",
    "product_id": 178844,
    "tcg_name": "Quilava",
-   "tcg_number": "41/214"
+   "tcg_number": "41/214",
+   "variants": {
+    "normal": {
+     "product_id": 178844,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178844,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "42": {
    "name": "Typhlosion",
@@ -518,7 +925,17 @@
    "status": "ok",
    "product_id": 178845,
    "tcg_name": "Typhlosion",
-   "tcg_number": "42/214"
+   "tcg_number": "42/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178845,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178845,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "43": {
    "name": "Slugma",
@@ -529,7 +946,17 @@
    "status": "ok",
    "product_id": 178846,
    "tcg_name": "Slugma",
-   "tcg_number": "43/214"
+   "tcg_number": "43/214",
+   "variants": {
+    "normal": {
+     "product_id": 178846,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178846,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "44": {
    "name": "Magcargo-GX",
@@ -540,7 +967,17 @@
    "status": "ok",
    "product_id": 178847,
    "tcg_name": "Magcargo GX",
-   "tcg_number": "44/214"
+   "tcg_number": "44/214",
+   "variants": {
+    "henryBrand": {
+     "product_id": 482082,
+     "fuente": "transversal"
+    },
+    "holofoil": {
+     "product_id": 178847,
+     "printing": "Holofoil"
+    }
+   }
   },
   "45": {
    "name": "Houndour",
@@ -551,7 +988,17 @@
    "status": "ok",
    "product_id": 178850,
    "tcg_name": "Houndour",
-   "tcg_number": "45/214"
+   "tcg_number": "45/214",
+   "variants": {
+    "normal": {
+     "product_id": 178850,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178850,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "46": {
    "name": "Houndoom",
@@ -562,7 +1009,17 @@
    "status": "ok",
    "product_id": 178851,
    "tcg_name": "Houndoom",
-   "tcg_number": "46/214"
+   "tcg_number": "46/214",
+   "variants": {
+    "normal": {
+     "product_id": 178851,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178851,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "47": {
    "name": "Entei",
@@ -574,7 +1031,17 @@
    "status": "ok",
    "product_id": 178852,
    "tcg_name": "Entei",
-   "tcg_number": "47/214"
+   "tcg_number": "47/214",
+   "variants": {
+    "normal": {
+     "product_id": 178852,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178852,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "48": {
    "name": "Heatran",
@@ -585,7 +1052,17 @@
    "status": "ok",
    "product_id": 178853,
    "tcg_name": "Heatran",
-   "tcg_number": "48/214"
+   "tcg_number": "48/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178853,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178853,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "49": {
    "name": "Victini",
@@ -596,7 +1073,17 @@
    "status": "ok",
    "product_id": 178854,
    "tcg_name": "Victini",
-   "tcg_number": "49/214"
+   "tcg_number": "49/214",
+   "variants": {
+    "normal": {
+     "product_id": 178854,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178854,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "50": {
    "name": "Litleo",
@@ -607,7 +1094,17 @@
    "status": "ok",
    "product_id": 178855,
    "tcg_name": "Litleo",
-   "tcg_number": "50/214"
+   "tcg_number": "50/214",
+   "variants": {
+    "normal": {
+     "product_id": 178855,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178855,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "51": {
    "name": "Pyroar",
@@ -618,7 +1115,17 @@
    "status": "ok",
    "product_id": 178856,
    "tcg_name": "Pyroar",
-   "tcg_number": "51/214"
+   "tcg_number": "51/214",
+   "variants": {
+    "normal": {
+     "product_id": 178856,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178856,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "52": {
    "name": "Blacephalon-GX",
@@ -629,7 +1136,17 @@
    "status": "ok",
    "product_id": 178857,
    "tcg_name": "Blacephalon GX",
-   "tcg_number": "52/214"
+   "tcg_number": "52/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178857,
+     "printing": "Holofoil"
+    },
+    "shintaroIto": {
+     "product_id": 482041,
+     "fuente": "transversal"
+    }
+   }
   },
   "53": {
    "name": "Alolan Vulpix",
@@ -640,7 +1157,17 @@
    "status": "ok",
    "product_id": 178860,
    "tcg_name": "Alolan Vulpix",
-   "tcg_number": "53/214"
+   "tcg_number": "53/214",
+   "variants": {
+    "normal": {
+     "product_id": 178860,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178860,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "54": {
    "name": "Slowpoke",
@@ -651,7 +1178,17 @@
    "status": "ok",
    "product_id": 178861,
    "tcg_name": "Slowpoke",
-   "tcg_number": "54/214"
+   "tcg_number": "54/214",
+   "variants": {
+    "normal": {
+     "product_id": 178861,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178861,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "55": {
    "name": "Slowking",
@@ -662,7 +1199,17 @@
    "status": "ok",
    "product_id": 178862,
    "tcg_name": "Slowking",
-   "tcg_number": "55/214"
+   "tcg_number": "55/214",
+   "variants": {
+    "normal": {
+     "product_id": 178862,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178862,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "56": {
    "name": "Lapras",
@@ -673,7 +1220,17 @@
    "status": "ok",
    "product_id": 178863,
    "tcg_name": "Lapras",
-   "tcg_number": "56/214"
+   "tcg_number": "56/214",
+   "variants": {
+    "normal": {
+     "product_id": 178863,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178863,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "57": {
    "name": "Delibird",
@@ -684,7 +1241,17 @@
    "status": "ok",
    "product_id": 178864,
    "tcg_name": "Delibird",
-   "tcg_number": "57/214"
+   "tcg_number": "57/214",
+   "variants": {
+    "normal": {
+     "product_id": 178864,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178864,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "58": {
    "name": "Mantine",
@@ -695,7 +1262,17 @@
    "status": "ok",
    "product_id": 178865,
    "tcg_name": "Mantine",
-   "tcg_number": "58/214"
+   "tcg_number": "58/214",
+   "variants": {
+    "normal": {
+     "product_id": 178865,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178865,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "59": {
    "name": "Suicune",
@@ -707,7 +1284,17 @@
    "status": "ok",
    "product_id": 178866,
    "tcg_name": "Suicune",
-   "tcg_number": "59/214"
+   "tcg_number": "59/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178866,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178866,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "60": {
    "name": "Suicune-GX",
@@ -717,7 +1304,13 @@
    "status": "ok",
    "product_id": 178867,
    "tcg_name": "Suicune GX",
-   "tcg_number": "60/214"
+   "tcg_number": "60/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178867,
+     "printing": "Holofoil"
+    }
+   }
   },
   "61": {
    "name": "Cubchoo",
@@ -728,7 +1321,17 @@
    "status": "ok",
    "product_id": 178870,
    "tcg_name": "Cubchoo",
-   "tcg_number": "61/214"
+   "tcg_number": "61/214",
+   "variants": {
+    "normal": {
+     "product_id": 178870,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178870,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "62": {
    "name": "Beartic",
@@ -739,7 +1342,17 @@
    "status": "ok",
    "product_id": 178871,
    "tcg_name": "Beartic",
-   "tcg_number": "62/214"
+   "tcg_number": "62/214",
+   "variants": {
+    "normal": {
+     "product_id": 178871,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178871,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "63": {
    "name": "White Kyurem",
@@ -750,7 +1363,17 @@
    "status": "ok",
    "product_id": 178872,
    "tcg_name": "White Kyurem",
-   "tcg_number": "63/214"
+   "tcg_number": "63/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178872,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178872,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "64": {
    "name": "Popplio",
@@ -767,7 +1390,17 @@
      "suffix": "64",
      "product_id": 178873
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178873,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178873,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "65": {
    "name": "Popplio",
@@ -784,7 +1417,17 @@
      "suffix": "65",
      "product_id": 178874
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178874,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178874,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "66": {
    "name": "Brionne",
@@ -795,7 +1438,17 @@
    "status": "ok",
    "product_id": 178875,
    "tcg_name": "Brionne",
-   "tcg_number": "66/214"
+   "tcg_number": "66/214",
+   "variants": {
+    "normal": {
+     "product_id": 178875,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178875,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "67": {
    "name": "Primarina",
@@ -806,7 +1459,17 @@
    "status": "ok",
    "product_id": 178876,
    "tcg_name": "Primarina",
-   "tcg_number": "67/214"
+   "tcg_number": "67/214",
+   "variants": {
+    "normal": {
+     "product_id": 178876,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178876,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "68": {
    "name": "Mareanie",
@@ -823,7 +1486,17 @@
      "suffix": "68",
      "product_id": 178877
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178877,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178877,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "69": {
    "name": "Toxapex",
@@ -834,7 +1507,17 @@
    "status": "ok",
    "product_id": 178878,
    "tcg_name": "Toxapex",
-   "tcg_number": "69/214"
+   "tcg_number": "69/214",
+   "variants": {
+    "normal": {
+     "product_id": 178878,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178878,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "70": {
    "name": "Bruxish",
@@ -845,7 +1528,17 @@
    "status": "ok",
    "product_id": 178879,
    "tcg_name": "Bruxish",
-   "tcg_number": "70/214"
+   "tcg_number": "70/214",
+   "variants": {
+    "normal": {
+     "product_id": 178879,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178879,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "71": {
    "name": "Electabuzz",
@@ -856,7 +1549,17 @@
    "status": "ok",
    "product_id": 178880,
    "tcg_name": "Electabuzz",
-   "tcg_number": "71/214"
+   "tcg_number": "71/214",
+   "variants": {
+    "normal": {
+     "product_id": 178880,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178880,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "72": {
    "name": "Electivire",
@@ -867,7 +1570,17 @@
    "status": "ok",
    "product_id": 178881,
    "tcg_name": "Electivire",
-   "tcg_number": "72/214"
+   "tcg_number": "72/214",
+   "variants": {
+    "normal": {
+     "product_id": 178881,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178881,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "73": {
    "name": "Chinchou",
@@ -878,7 +1591,17 @@
    "status": "ok",
    "product_id": 178882,
    "tcg_name": "Chinchou",
-   "tcg_number": "73/214"
+   "tcg_number": "73/214",
+   "variants": {
+    "normal": {
+     "product_id": 178882,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178882,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "74": {
    "name": "Lanturn",
@@ -889,7 +1612,17 @@
    "status": "ok",
    "product_id": 178883,
    "tcg_name": "Lanturn",
-   "tcg_number": "74/214"
+   "tcg_number": "74/214",
+   "variants": {
+    "normal": {
+     "product_id": 178883,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178883,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "75": {
    "name": "Mareep",
@@ -907,7 +1640,17 @@
      "suffix": "75",
      "product_id": 178884
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178884,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178884,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "76": {
    "name": "Mareep",
@@ -924,7 +1667,17 @@
      "suffix": "76",
      "product_id": 178885
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178885,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178885,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "77": {
    "name": "Flaaffy",
@@ -935,7 +1688,17 @@
    "status": "ok",
    "product_id": 178886,
    "tcg_name": "Flaaffy",
-   "tcg_number": "77/214"
+   "tcg_number": "77/214",
+   "variants": {
+    "normal": {
+     "product_id": 178886,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178886,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "78": {
    "name": "Ampharos",
@@ -947,7 +1710,21 @@
    "status": "ok",
    "product_id": 178887,
    "tcg_name": "Ampharos",
-   "tcg_number": "78/214"
+   "tcg_number": "78/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178887,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 178887,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178887,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "79": {
    "name": "Raikou",
@@ -959,7 +1736,17 @@
    "status": "ok",
    "product_id": 178888,
    "tcg_name": "Raikou",
-   "tcg_number": "79/214"
+   "tcg_number": "79/214",
+   "variants": {
+    "normal": {
+     "product_id": 178888,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178888,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "80": {
    "name": "Pachirisu",
@@ -970,7 +1757,17 @@
    "status": "ok",
    "product_id": 178889,
    "tcg_name": "Pachirisu",
-   "tcg_number": "80/214"
+   "tcg_number": "80/214",
+   "variants": {
+    "normal": {
+     "product_id": 178889,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178889,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "81": {
    "name": "Blitzle",
@@ -984,7 +1781,17 @@
    "status": "ok",
    "product_id": 178890,
    "tcg_name": "Blitzle",
-   "tcg_number": "81/214"
+   "tcg_number": "81/214",
+   "variants": {
+    "normal": {
+     "product_id": 178890,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178890,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "82": {
    "name": "Zebstrika",
@@ -999,7 +1806,33 @@
    "status": "ok",
    "product_id": 178891,
    "tcg_name": "Zebstrika",
-   "tcg_number": "82/214"
+   "tcg_number": "82/214",
+   "variants": {
+    "league1StPlaceStamp": {
+     "product_id": 181193,
+     "fuente": "transversal"
+    },
+    "league2NdPlaceStamp": {
+     "product_id": 181194,
+     "fuente": "transversal"
+    },
+    "league3RdPlaceStamp": {
+     "product_id": 181195,
+     "fuente": "transversal"
+    },
+    "league4ThPlaceStamp": {
+     "product_id": 181196,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 178891,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178891,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "83": {
    "name": "Stunfisk",
@@ -1010,7 +1843,17 @@
    "status": "ok",
    "product_id": 178892,
    "tcg_name": "Stunfisk",
-   "tcg_number": "83/214"
+   "tcg_number": "83/214",
+   "variants": {
+    "normal": {
+     "product_id": 178892,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178892,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "84": {
    "name": "Dedenne",
@@ -1027,7 +1870,17 @@
      "suffix": "84",
      "product_id": 178893
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178893,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178893,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "85": {
    "name": "Tapu Koko",
@@ -1038,7 +1891,17 @@
    "status": "ok",
    "product_id": 178894,
    "tcg_name": "Tapu Koko",
-   "tcg_number": "85/214"
+   "tcg_number": "85/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178894,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178894,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "86": {
    "name": "Zeraora-GX",
@@ -1049,7 +1912,17 @@
    "status": "ok",
    "product_id": 178895,
    "tcg_name": "Zeraora GX",
-   "tcg_number": "86/214"
+   "tcg_number": "86/214",
+   "variants": {
+    "harukiMiyamoto": {
+     "product_id": 482126,
+     "fuente": "transversal"
+    },
+    "holofoil": {
+     "product_id": 178895,
+     "printing": "Holofoil"
+    }
+   }
   },
   "87": {
    "name": "Natu",
@@ -1060,7 +1933,17 @@
    "status": "ok",
    "product_id": 178898,
    "tcg_name": "Natu",
-   "tcg_number": "87/214"
+   "tcg_number": "87/214",
+   "variants": {
+    "normal": {
+     "product_id": 178898,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178898,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "88": {
    "name": "Xatu",
@@ -1071,7 +1954,17 @@
    "status": "ok",
    "product_id": 178899,
    "tcg_name": "Xatu",
-   "tcg_number": "88/214"
+   "tcg_number": "88/214",
+   "variants": {
+    "normal": {
+     "product_id": 178899,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178899,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "89": {
    "name": "Espeon",
@@ -1084,7 +1977,21 @@
    "status": "ok",
    "product_id": 178900,
    "tcg_name": "Espeon",
-   "tcg_number": "89/214"
+   "tcg_number": "89/214",
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 229577,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 178900,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178900,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "90": {
    "name": "Unown",
@@ -1101,7 +2008,17 @@
      "suffix": "90",
      "product_id": 178901
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178901,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178901,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "91": {
    "name": "Unown",
@@ -1118,7 +2035,17 @@
      "suffix": "91",
      "product_id": 178902
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178902,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178902,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "92": {
    "name": "Unown",
@@ -1135,7 +2062,17 @@
      "suffix": "92",
      "product_id": 178903
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178903,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178903,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "93": {
    "name": "Wobbuffet",
@@ -1146,7 +2083,17 @@
    "status": "ok",
    "product_id": 178904,
    "tcg_name": "Wobbuffet",
-   "tcg_number": "93/214"
+   "tcg_number": "93/214",
+   "variants": {
+    "normal": {
+     "product_id": 178904,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178904,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "94": {
    "name": "Girafarig",
@@ -1157,7 +2104,17 @@
    "status": "ok",
    "product_id": 178905,
    "tcg_name": "Girafarig",
-   "tcg_number": "94/214"
+   "tcg_number": "94/214",
+   "variants": {
+    "normal": {
+     "product_id": 178905,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178905,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "95": {
    "name": "Shedinja",
@@ -1168,7 +2125,17 @@
    "status": "ok",
    "product_id": 178906,
    "tcg_name": "Shedinja",
-   "tcg_number": "95/214"
+   "tcg_number": "95/214",
+   "variants": {
+    "normal": {
+     "product_id": 178906,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178906,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "96": {
    "name": "Sableye",
@@ -1179,7 +2146,17 @@
    "status": "ok",
    "product_id": 178907,
    "tcg_name": "Sableye",
-   "tcg_number": "96/214"
+   "tcg_number": "96/214",
+   "variants": {
+    "normal": {
+     "product_id": 178907,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178907,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "97": {
    "name": "Giratina",
@@ -1192,7 +2169,25 @@
    "status": "ok",
    "product_id": 178908,
    "tcg_name": "Giratina",
-   "tcg_number": "97/214"
+   "tcg_number": "97/214",
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 228537,
+     "fuente": "transversal"
+    },
+    "holofoil": {
+     "product_id": 178908,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 178908,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178908,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "98": {
    "name": "Sigilyph-GX",
@@ -1202,7 +2197,13 @@
    "status": "ok",
    "product_id": 178909,
    "tcg_name": "Sigilyph GX",
-   "tcg_number": "98/214"
+   "tcg_number": "98/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178909,
+     "printing": "Holofoil"
+    }
+   }
   },
   "99": {
    "name": "Yamask",
@@ -1213,7 +2214,17 @@
    "status": "ok",
    "product_id": 178912,
    "tcg_name": "Yamask",
-   "tcg_number": "99/214"
+   "tcg_number": "99/214",
+   "variants": {
+    "normal": {
+     "product_id": 178912,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178912,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "100": {
    "name": "Cofagrigus",
@@ -1224,7 +2235,17 @@
    "status": "ok",
    "product_id": 178913,
    "tcg_name": "Cofagrigus",
-   "tcg_number": "100/214"
+   "tcg_number": "100/214",
+   "variants": {
+    "normal": {
+     "product_id": 178913,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178913,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "101": {
    "name": "Litwick",
@@ -1235,7 +2256,17 @@
    "status": "ok",
    "product_id": 178914,
    "tcg_name": "Litwick",
-   "tcg_number": "101/214"
+   "tcg_number": "101/214",
+   "variants": {
+    "normal": {
+     "product_id": 178914,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178914,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "102": {
    "name": "Lampent",
@@ -1246,7 +2277,17 @@
    "status": "ok",
    "product_id": 178915,
    "tcg_name": "Lampent",
-   "tcg_number": "102/214"
+   "tcg_number": "102/214",
+   "variants": {
+    "normal": {
+     "product_id": 178915,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178915,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "103": {
    "name": "Chandelure",
@@ -1257,7 +2298,17 @@
    "status": "ok",
    "product_id": 178916,
    "tcg_name": "Chandelure",
-   "tcg_number": "103/214"
+   "tcg_number": "103/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178916,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178916,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "104": {
    "name": "Meloetta",
@@ -1268,7 +2319,17 @@
    "status": "ok",
    "product_id": 178917,
    "tcg_name": "Meloetta",
-   "tcg_number": "104/214"
+   "tcg_number": "104/214",
+   "variants": {
+    "normal": {
+     "product_id": 178917,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178917,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "105": {
    "name": "Mareanie",
@@ -1286,7 +2347,17 @@
      "suffix": "105",
      "product_id": 178918
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178918,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178918,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "106": {
    "name": "Nihilego",
@@ -1297,7 +2368,17 @@
    "status": "ok",
    "product_id": 178919,
    "tcg_name": "Nihilego",
-   "tcg_number": "106/214"
+   "tcg_number": "106/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178919,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178919,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "107": {
    "name": "Poipole",
@@ -1309,7 +2390,17 @@
    "status": "ok",
    "product_id": 178920,
    "tcg_name": "Poipole",
-   "tcg_number": "107/214"
+   "tcg_number": "107/214",
+   "variants": {
+    "normal": {
+     "product_id": 178920,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178920,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "108": {
    "name": "Naganadel",
@@ -1323,7 +2414,29 @@
    "status": "ok",
    "product_id": 178921,
    "tcg_name": "Naganadel",
-   "tcg_number": "108/214"
+   "tcg_number": "108/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178921,
+     "printing": "Holofoil"
+    },
+    "leagueStamp": {
+     "product_id": 184216,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 178921,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178921,
+     "printing": "Reverse Holofoil"
+    },
+    "shintaroIto": {
+     "product_id": 482090,
+     "fuente": "transversal"
+    }
+   }
   },
   "109": {
    "name": "Onix",
@@ -1334,7 +2447,17 @@
    "status": "ok",
    "product_id": 178922,
    "tcg_name": "Onix",
-   "tcg_number": "109/214"
+   "tcg_number": "109/214",
+   "variants": {
+    "normal": {
+     "product_id": 178922,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178922,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "110": {
    "name": "Sudowoodo",
@@ -1345,7 +2468,17 @@
    "status": "ok",
    "product_id": 178923,
    "tcg_name": "Sudowoodo",
-   "tcg_number": "110/214"
+   "tcg_number": "110/214",
+   "variants": {
+    "normal": {
+     "product_id": 178923,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178923,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "111": {
    "name": "Phanpy",
@@ -1356,7 +2489,17 @@
    "status": "ok",
    "product_id": 178924,
    "tcg_name": "Phanpy",
-   "tcg_number": "111/214"
+   "tcg_number": "111/214",
+   "variants": {
+    "normal": {
+     "product_id": 178924,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178924,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "112": {
    "name": "Donphan",
@@ -1367,7 +2510,17 @@
    "status": "ok",
    "product_id": 178925,
    "tcg_name": "Donphan",
-   "tcg_number": "112/214"
+   "tcg_number": "112/214",
+   "variants": {
+    "normal": {
+     "product_id": 178925,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178925,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "113": {
    "name": "Hitmontop",
@@ -1378,7 +2531,17 @@
    "status": "ok",
    "product_id": 178926,
    "tcg_name": "Hitmontop",
-   "tcg_number": "113/214"
+   "tcg_number": "113/214",
+   "variants": {
+    "normal": {
+     "product_id": 178926,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178926,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "114": {
    "name": "Larvitar",
@@ -1395,7 +2558,17 @@
      "suffix": "114",
      "product_id": 178927
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178927,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178927,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "115": {
    "name": "Larvitar",
@@ -1412,7 +2585,17 @@
      "suffix": "115",
      "product_id": 178928
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178928,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178928,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "116": {
    "name": "Pupitar",
@@ -1423,7 +2606,17 @@
    "status": "ok",
    "product_id": 178929,
    "tcg_name": "Pupitar",
-   "tcg_number": "116/214"
+   "tcg_number": "116/214",
+   "variants": {
+    "normal": {
+     "product_id": 178929,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178929,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "117": {
    "name": "Carbink",
@@ -1440,7 +2633,17 @@
      "suffix": "117",
      "product_id": 178930
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178930,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178930,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "118": {
    "name": "Alolan Meowth",
@@ -1451,7 +2654,17 @@
    "status": "ok",
    "product_id": 178931,
    "tcg_name": "Alolan Meowth",
-   "tcg_number": "118/214"
+   "tcg_number": "118/214",
+   "variants": {
+    "normal": {
+     "product_id": 178931,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178931,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "119": {
    "name": "Alolan Persian",
@@ -1462,7 +2675,17 @@
    "status": "ok",
    "product_id": 178932,
    "tcg_name": "Alolan Persian",
-   "tcg_number": "119/214"
+   "tcg_number": "119/214",
+   "variants": {
+    "normal": {
+     "product_id": 178932,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178932,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "120": {
    "name": "Umbreon",
@@ -1474,7 +2697,21 @@
    "status": "ok",
    "product_id": 178933,
    "tcg_name": "Umbreon",
-   "tcg_number": "120/214"
+   "tcg_number": "120/214",
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 229578,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 178933,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178933,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "121": {
    "name": "Tyranitar-GX",
@@ -1484,7 +2721,13 @@
    "status": "ok",
    "product_id": 178934,
    "tcg_name": "Tyranitar GX",
-   "tcg_number": "121/214"
+   "tcg_number": "121/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178934,
+     "printing": "Holofoil"
+    }
+   }
   },
   "122": {
    "name": "Alolan Diglett",
@@ -1495,7 +2738,17 @@
    "status": "ok",
    "product_id": 178937,
    "tcg_name": "Alolan Diglett",
-   "tcg_number": "122/214"
+   "tcg_number": "122/214",
+   "variants": {
+    "normal": {
+     "product_id": 178937,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178937,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "123": {
    "name": "Alolan Dugtrio",
@@ -1506,7 +2759,17 @@
    "status": "ok",
    "product_id": 178938,
    "tcg_name": "Alolan Dugtrio",
-   "tcg_number": "123/214"
+   "tcg_number": "123/214",
+   "variants": {
+    "normal": {
+     "product_id": 178938,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178938,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "124": {
    "name": "Forretress",
@@ -1517,7 +2780,17 @@
    "status": "ok",
    "product_id": 178939,
    "tcg_name": "Forretress",
-   "tcg_number": "124/214"
+   "tcg_number": "124/214",
+   "variants": {
+    "normal": {
+     "product_id": 178939,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178939,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "125": {
    "name": "Steelix",
@@ -1529,7 +2802,21 @@
    "status": "ok",
    "product_id": 178940,
    "tcg_name": "Steelix",
-   "tcg_number": "125/214"
+   "tcg_number": "125/214",
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 245918,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 178940,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178940,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "126": {
    "name": "Scizor",
@@ -1540,7 +2827,17 @@
    "status": "ok",
    "product_id": 178941,
    "tcg_name": "Scizor",
-   "tcg_number": "126/214"
+   "tcg_number": "126/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178941,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178941,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "127": {
    "name": "Dialga",
@@ -1551,7 +2848,17 @@
    "status": "ok",
    "product_id": 178942,
    "tcg_name": "Dialga",
-   "tcg_number": "127/214"
+   "tcg_number": "127/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178942,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178942,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "128": {
    "name": "Durant",
@@ -1562,7 +2869,17 @@
    "status": "ok",
    "product_id": 178943,
    "tcg_name": "Durant",
-   "tcg_number": "128/214"
+   "tcg_number": "128/214",
+   "variants": {
+    "normal": {
+     "product_id": 178943,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178943,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "129": {
    "name": "Cobalion",
@@ -1573,7 +2890,17 @@
    "status": "ok",
    "product_id": 178944,
    "tcg_name": "Cobalion",
-   "tcg_number": "129/214"
+   "tcg_number": "129/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178944,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178944,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "130": {
    "name": "Genesect-GX",
@@ -1583,7 +2910,13 @@
    "status": "ok",
    "product_id": 178945,
    "tcg_name": "Genesect GX",
-   "tcg_number": "130/214"
+   "tcg_number": "130/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178945,
+     "printing": "Holofoil"
+    }
+   }
   },
   "131": {
    "name": "Magearna",
@@ -1594,7 +2927,17 @@
    "status": "ok",
    "product_id": 178948,
    "tcg_name": "Magearna",
-   "tcg_number": "131/214"
+   "tcg_number": "131/214",
+   "variants": {
+    "normal": {
+     "product_id": 178948,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178948,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "132": {
    "name": "Alolan Ninetales-GX",
@@ -1604,7 +2947,13 @@
    "status": "ok",
    "product_id": 178949,
    "tcg_name": "Alolan Ninetales GX",
-   "tcg_number": "132/214"
+   "tcg_number": "132/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178949,
+     "printing": "Holofoil"
+    }
+   }
   },
   "133": {
    "name": "Jigglypuff",
@@ -1615,7 +2964,17 @@
    "status": "ok",
    "product_id": 178952,
    "tcg_name": "Jigglypuff",
-   "tcg_number": "133/214"
+   "tcg_number": "133/214",
+   "variants": {
+    "normal": {
+     "product_id": 178952,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178952,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "134": {
    "name": "Wigglytuff",
@@ -1626,7 +2985,17 @@
    "status": "ok",
    "product_id": 178953,
    "tcg_name": "Wigglytuff",
-   "tcg_number": "134/214"
+   "tcg_number": "134/214",
+   "variants": {
+    "normal": {
+     "product_id": 178953,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178953,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "135": {
    "name": "Marill",
@@ -1637,7 +3006,17 @@
    "status": "ok",
    "product_id": 178954,
    "tcg_name": "Marill",
-   "tcg_number": "135/214"
+   "tcg_number": "135/214",
+   "variants": {
+    "normal": {
+     "product_id": 178954,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178954,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "136": {
    "name": "Azumarill",
@@ -1648,7 +3027,17 @@
    "status": "ok",
    "product_id": 178955,
    "tcg_name": "Azumarill",
-   "tcg_number": "136/214"
+   "tcg_number": "136/214",
+   "variants": {
+    "normal": {
+     "product_id": 178955,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178955,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "137": {
    "name": "Snubbull",
@@ -1659,7 +3048,17 @@
    "status": "ok",
    "product_id": 178956,
    "tcg_name": "Snubbull",
-   "tcg_number": "137/214"
+   "tcg_number": "137/214",
+   "variants": {
+    "normal": {
+     "product_id": 178956,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178956,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "138": {
    "name": "Granbull",
@@ -1670,7 +3069,17 @@
    "status": "ok",
    "product_id": 178957,
    "tcg_name": "Granbull",
-   "tcg_number": "138/214"
+   "tcg_number": "138/214",
+   "variants": {
+    "normal": {
+     "product_id": 178957,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178957,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "139": {
    "name": "Ralts",
@@ -1681,7 +3090,17 @@
    "status": "ok",
    "product_id": 178958,
    "tcg_name": "Ralts",
-   "tcg_number": "139/214"
+   "tcg_number": "139/214",
+   "variants": {
+    "normal": {
+     "product_id": 178958,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178958,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "140": {
    "name": "Kirlia",
@@ -1692,7 +3111,17 @@
    "status": "ok",
    "product_id": 178959,
    "tcg_name": "Kirlia",
-   "tcg_number": "140/214"
+   "tcg_number": "140/214",
+   "variants": {
+    "normal": {
+     "product_id": 178959,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178959,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "141": {
    "name": "Gardevoir",
@@ -1704,7 +3133,21 @@
    "status": "ok",
    "product_id": 178960,
    "tcg_name": "Gardevoir",
-   "tcg_number": "141/214"
+   "tcg_number": "141/214",
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 221301,
+     "fuente": "transversal"
+    },
+    "holofoil": {
+     "product_id": 178960,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178960,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "142": {
    "name": "Dedenne",
@@ -1721,7 +3164,17 @@
      "suffix": "142",
      "product_id": 178961
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178961,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178961,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "143": {
    "name": "Carbink",
@@ -1738,7 +3191,17 @@
      "suffix": "143",
      "product_id": 178962
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178962,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178962,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "144": {
    "name": "Xerneas ◇",
@@ -1749,7 +3212,13 @@
    "product_id": 178963,
    "tcg_name": "Xerneas Prism Star",
    "tcg_number": "144/214",
-   "note": "nuestro \"Xerneas ◇\" vs TCG \"Xerneas Prism Star\""
+   "note": "nuestro \"Xerneas ◇\" vs TCG \"Xerneas Prism Star\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 178963,
+     "printing": "Holofoil"
+    }
+   }
   },
   "145": {
    "name": "Cutiefly",
@@ -1760,7 +3229,17 @@
    "status": "ok",
    "product_id": 178964,
    "tcg_name": "Cutiefly",
-   "tcg_number": "145/214"
+   "tcg_number": "145/214",
+   "variants": {
+    "normal": {
+     "product_id": 178964,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178964,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "146": {
    "name": "Ribombee",
@@ -1771,7 +3250,17 @@
    "status": "ok",
    "product_id": 178965,
    "tcg_name": "Ribombee",
-   "tcg_number": "146/214"
+   "tcg_number": "146/214",
+   "variants": {
+    "normal": {
+     "product_id": 178965,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178965,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "147": {
    "name": "Morelull",
@@ -1782,7 +3271,17 @@
    "status": "ok",
    "product_id": 178966,
    "tcg_name": "Morelull",
-   "tcg_number": "147/214"
+   "tcg_number": "147/214",
+   "variants": {
+    "normal": {
+     "product_id": 178966,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178966,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "148": {
    "name": "Shiinotic",
@@ -1793,7 +3292,17 @@
    "status": "ok",
    "product_id": 178967,
    "tcg_name": "Shiinotic",
-   "tcg_number": "148/214"
+   "tcg_number": "148/214",
+   "variants": {
+    "normal": {
+     "product_id": 178967,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178967,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "149": {
    "name": "Mimikyu-GX",
@@ -1803,7 +3312,13 @@
    "status": "ok",
    "product_id": 178968,
    "tcg_name": "Mimikyu GX",
-   "tcg_number": "149/214"
+   "tcg_number": "149/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178968,
+     "printing": "Holofoil"
+    }
+   }
   },
   "150": {
    "name": "Tapu Lele",
@@ -1814,7 +3329,17 @@
    "status": "ok",
    "product_id": 178971,
    "tcg_name": "Tapu Lele",
-   "tcg_number": "150/214"
+   "tcg_number": "150/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178971,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178971,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "151": {
    "name": "Tapu Fini",
@@ -1825,7 +3350,17 @@
    "status": "ok",
    "product_id": 178972,
    "tcg_name": "Tapu Fini",
-   "tcg_number": "151/214"
+   "tcg_number": "151/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178972,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178972,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "152": {
    "name": "Chansey",
@@ -1836,7 +3371,17 @@
    "status": "ok",
    "product_id": 178973,
    "tcg_name": "Chansey",
-   "tcg_number": "152/214"
+   "tcg_number": "152/214",
+   "variants": {
+    "normal": {
+     "product_id": 178973,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178973,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "153": {
    "name": "Blissey",
@@ -1848,7 +3393,17 @@
    "status": "ok",
    "product_id": 178974,
    "tcg_name": "Blissey",
-   "tcg_number": "153/214"
+   "tcg_number": "153/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178974,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 178974,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "154": {
    "name": "Ditto ◇",
@@ -1859,7 +3414,13 @@
    "product_id": 178975,
    "tcg_name": "Ditto Prism Star",
    "tcg_number": "154/214",
-   "note": "nuestro \"Ditto ◇\" vs TCG \"Ditto Prism Star\""
+   "note": "nuestro \"Ditto ◇\" vs TCG \"Ditto Prism Star\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 178975,
+     "printing": "Holofoil"
+    }
+   }
   },
   "155": {
    "name": "Eevee",
@@ -1871,7 +3432,17 @@
    "status": "ok",
    "product_id": 178976,
    "tcg_name": "Eevee",
-   "tcg_number": "155/214"
+   "tcg_number": "155/214",
+   "variants": {
+    "normal": {
+     "product_id": 178976,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178976,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "156": {
    "name": "Stantler",
@@ -1882,7 +3453,17 @@
    "status": "ok",
    "product_id": 178977,
    "tcg_name": "Stantler",
-   "tcg_number": "156/214"
+   "tcg_number": "156/214",
+   "variants": {
+    "normal": {
+     "product_id": 178977,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178977,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "157": {
    "name": "Smeargle",
@@ -1893,7 +3474,17 @@
    "status": "ok",
    "product_id": 178978,
    "tcg_name": "Smeargle",
-   "tcg_number": "157/214"
+   "tcg_number": "157/214",
+   "variants": {
+    "normal": {
+     "product_id": 178978,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178978,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "158": {
    "name": "Miltank",
@@ -1904,7 +3495,17 @@
    "status": "ok",
    "product_id": 178979,
    "tcg_name": "Miltank",
-   "tcg_number": "158/214"
+   "tcg_number": "158/214",
+   "variants": {
+    "normal": {
+     "product_id": 178979,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178979,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "159": {
    "name": "Lugia-GX",
@@ -1914,7 +3515,13 @@
    "status": "ok",
    "product_id": 178980,
    "tcg_name": "Lugia GX",
-   "tcg_number": "159/214"
+   "tcg_number": "159/214",
+   "variants": {
+    "holofoil": {
+     "product_id": 178980,
+     "printing": "Holofoil"
+    }
+   }
   },
   "160": {
    "name": "Ho-Oh",
@@ -1925,7 +3532,17 @@
    "status": "ok",
    "product_id": 178983,
    "tcg_name": "Ho-Oh",
-   "tcg_number": "160/214"
+   "tcg_number": "160/214",
+   "variants": {
+    "normal": {
+     "product_id": 178983,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178983,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "161": {
    "name": "Kecleon",
@@ -1942,7 +3559,17 @@
      "suffix": "161",
      "product_id": 178984
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178984,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178984,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "162": {
    "name": "Kecleon",
@@ -1959,7 +3586,17 @@
      "suffix": "162",
      "product_id": 178985
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178985,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178985,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "163": {
    "name": "Pikipek",
@@ -1976,7 +3613,17 @@
      "suffix": "163",
      "product_id": 178986
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178986,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178986,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "164": {
    "name": "Pikipek",
@@ -1993,7 +3640,17 @@
      "suffix": "164",
      "product_id": 178987
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 178987,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178987,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "165": {
    "name": "Trumbeak",
@@ -2004,7 +3661,17 @@
    "status": "ok",
    "product_id": 178988,
    "tcg_name": "Trumbeak",
-   "tcg_number": "165/214"
+   "tcg_number": "165/214",
+   "variants": {
+    "normal": {
+     "product_id": 178988,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178988,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "166": {
    "name": "Toucannon",
@@ -2015,7 +3682,17 @@
    "status": "ok",
    "product_id": 178989,
    "tcg_name": "Toucannon",
-   "tcg_number": "166/214"
+   "tcg_number": "166/214",
+   "variants": {
+    "normal": {
+     "product_id": 178989,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178989,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "167": {
    "name": "Adventure Bag",
@@ -2026,7 +3703,17 @@
    "status": "ok",
    "product_id": 178990,
    "tcg_name": "Adventure Bag",
-   "tcg_number": "167/214"
+   "tcg_number": "167/214",
+   "variants": {
+    "normal": {
+     "product_id": 178990,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178990,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "168": {
    "name": "Aether Foundation Employee",
@@ -2037,7 +3724,17 @@
    "status": "ok",
    "product_id": 178991,
    "tcg_name": "Aether Foundation Employee",
-   "tcg_number": "168/214"
+   "tcg_number": "168/214",
+   "variants": {
+    "normal": {
+     "product_id": 178991,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178991,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "169": {
    "name": "Choice Helmet",
@@ -2048,7 +3745,17 @@
    "status": "ok",
    "product_id": 178993,
    "tcg_name": "Choice Helmet",
-   "tcg_number": "169/214"
+   "tcg_number": "169/214",
+   "variants": {
+    "normal": {
+     "product_id": 178993,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178993,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "170": {
    "name": "Counter Gain",
@@ -2059,7 +3766,17 @@
    "status": "ok",
    "product_id": 178995,
    "tcg_name": "Counter Gain",
-   "tcg_number": "170/214"
+   "tcg_number": "170/214",
+   "variants": {
+    "normal": {
+     "product_id": 178995,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178995,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "171": {
    "name": "Custom Catcher",
@@ -2073,7 +3790,29 @@
    "status": "ok",
    "product_id": 178997,
    "tcg_name": "Custom Catcher",
-   "tcg_number": "171/214"
+   "tcg_number": "171/214",
+   "variants": {
+    "harukiMiyamoto": {
+     "product_id": 482049,
+     "fuente": "transversal"
+    },
+    "henryBrand": {
+     "product_id": 482048,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 178997,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178997,
+     "printing": "Reverse Holofoil"
+    },
+    "shintaroIto": {
+     "product_id": 482047,
+     "fuente": "transversal"
+    }
+   }
   },
   "172": {
    "name": "Electropower",
@@ -2088,7 +3827,29 @@
    "status": "ok",
    "product_id": 178999,
    "tcg_name": "Electropower",
-   "tcg_number": "172/214"
+   "tcg_number": "172/214",
+   "variants": {
+    "harukiMiyamoto": {
+     "product_id": 482058,
+     "fuente": "transversal"
+    },
+    "leagueStamp": {
+     "product_id": 181786,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 178999,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 178999,
+     "printing": "Reverse Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 181787,
+     "fuente": "transversal"
+    }
+   }
   },
   "173": {
    "name": "Faba",
@@ -2099,7 +3860,17 @@
    "status": "ok",
    "product_id": 179001,
    "tcg_name": "Faba",
-   "tcg_number": "173/214"
+   "tcg_number": "173/214",
+   "variants": {
+    "normal": {
+     "product_id": 179001,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179001,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "174": {
    "name": "Fairy Charm Grass",
@@ -2111,7 +3882,17 @@
    "product_id": 179003,
    "tcg_name": "Fairy Charm G",
    "tcg_number": "174/214",
-   "note": "nuestro \"Fairy Charm Grass\" vs TCG \"Fairy Charm G\""
+   "note": "nuestro \"Fairy Charm Grass\" vs TCG \"Fairy Charm G\"",
+   "variants": {
+    "normal": {
+     "product_id": 179003,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179003,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "175": {
    "name": "Fairy Charm Psychic",
@@ -2123,7 +3904,17 @@
    "product_id": 179004,
    "tcg_name": "Fairy Charm P",
    "tcg_number": "175/214",
-   "note": "nuestro \"Fairy Charm Psychic\" vs TCG \"Fairy Charm P\""
+   "note": "nuestro \"Fairy Charm Psychic\" vs TCG \"Fairy Charm P\"",
+   "variants": {
+    "normal": {
+     "product_id": 179004,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179004,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "176": {
    "name": "Fairy Charm Fighting",
@@ -2135,7 +3926,17 @@
    "product_id": 179005,
    "tcg_name": "Fairy Charm F",
    "tcg_number": "176/214",
-   "note": "nuestro \"Fairy Charm Fighting\" vs TCG \"Fairy Charm F\""
+   "note": "nuestro \"Fairy Charm Fighting\" vs TCG \"Fairy Charm F\"",
+   "variants": {
+    "normal": {
+     "product_id": 179005,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179005,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "177": {
    "name": "Fairy Charm Dragon",
@@ -2147,7 +3948,17 @@
    "product_id": 179006,
    "tcg_name": "Fairy Charm O",
    "tcg_number": "177/214",
-   "note": "nuestro \"Fairy Charm Dragon\" vs TCG \"Fairy Charm O\""
+   "note": "nuestro \"Fairy Charm Dragon\" vs TCG \"Fairy Charm O\"",
+   "variants": {
+    "normal": {
+     "product_id": 179006,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179006,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "178": {
    "name": "Heat Factory ◇",
@@ -2160,7 +3971,13 @@
    "product_id": 179007,
    "tcg_name": "Heat Factory Prism Star",
    "tcg_number": "178/214",
-   "note": "nuestro \"Heat Factory ◇\" vs TCG \"Heat Factory Prism Star\""
+   "note": "nuestro \"Heat Factory ◇\" vs TCG \"Heat Factory Prism Star\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 179007,
+     "printing": "Holofoil"
+    }
+   }
   },
   "179": {
    "name": "Kahili",
@@ -2171,7 +3988,17 @@
    "status": "ok",
    "product_id": 179008,
    "tcg_name": "Kahili",
-   "tcg_number": "179/214"
+   "tcg_number": "179/214",
+   "variants": {
+    "normal": {
+     "product_id": 179008,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179008,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "180": {
    "name": "Life Forest ◇",
@@ -2182,7 +4009,13 @@
    "product_id": 179011,
    "tcg_name": "Life Forest Prism Star",
    "tcg_number": "180/214",
-   "note": "nuestro \"Life Forest ◇\" vs TCG \"Life Forest Prism Star\""
+   "note": "nuestro \"Life Forest ◇\" vs TCG \"Life Forest Prism Star\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 179011,
+     "printing": "Holofoil"
+    }
+   }
   },
   "181": {
    "name": "Lost Blender",
@@ -2194,7 +4027,21 @@
    "status": "ok",
    "product_id": 179012,
    "tcg_name": "Lost Blender",
-   "tcg_number": "181/214"
+   "tcg_number": "181/214",
+   "variants": {
+    "leagueStamp": {
+     "product_id": 182886,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 179012,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179012,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "182": {
    "name": "Lusamine ◇",
@@ -2205,7 +4052,13 @@
    "product_id": 179014,
    "tcg_name": "Lusamine Prism Star",
    "tcg_number": "182/214",
-   "note": "nuestro \"Lusamine ◇\" vs TCG \"Lusamine Prism Star\""
+   "note": "nuestro \"Lusamine ◇\" vs TCG \"Lusamine Prism Star\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 179014,
+     "printing": "Holofoil"
+    }
+   }
   },
   "183": {
    "name": "Mina",
@@ -2216,7 +4069,17 @@
    "status": "ok",
    "product_id": 179015,
    "tcg_name": "Mina",
-   "tcg_number": "183/214"
+   "tcg_number": "183/214",
+   "variants": {
+    "normal": {
+     "product_id": 179015,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179015,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "184": {
    "name": "Mixed Herbs",
@@ -2227,7 +4090,17 @@
    "status": "ok",
    "product_id": 179017,
    "tcg_name": "Mixed Herbs",
-   "tcg_number": "184/214"
+   "tcg_number": "184/214",
+   "variants": {
+    "normal": {
+     "product_id": 179017,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179017,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "185": {
    "name": "Moomoo Milk",
@@ -2238,7 +4111,17 @@
    "status": "ok",
    "product_id": 179018,
    "tcg_name": "Moomoo Milk",
-   "tcg_number": "185/214"
+   "tcg_number": "185/214",
+   "variants": {
+    "normal": {
+     "product_id": 179018,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179018,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "186": {
    "name": "Morty",
@@ -2249,7 +4132,17 @@
    "status": "ok",
    "product_id": 179019,
    "tcg_name": "Morty",
-   "tcg_number": "186/214"
+   "tcg_number": "186/214",
+   "variants": {
+    "normal": {
+     "product_id": 179019,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179019,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "187": {
    "name": "Net Ball",
@@ -2261,7 +4154,17 @@
    "status": "ok",
    "product_id": 179021,
    "tcg_name": "Net Ball",
-   "tcg_number": "187/214"
+   "tcg_number": "187/214",
+   "variants": {
+    "normal": {
+     "product_id": 179021,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179021,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "188": {
    "name": "Professor Elm's Lecture",
@@ -2274,7 +4177,25 @@
    "status": "ok",
    "product_id": 179023,
    "tcg_name": "Professor Elm's Lecture",
-   "tcg_number": "188/214"
+   "tcg_number": "188/214",
+   "variants": {
+    "leagueStamp": {
+     "product_id": 205307,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 179023,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179023,
+     "printing": "Reverse Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 181263,
+     "fuente": "transversal"
+    }
+   }
   },
   "189": {
    "name": "Sightseer",
@@ -2285,7 +4206,17 @@
    "status": "ok",
    "product_id": 179025,
    "tcg_name": "Sightseer",
-   "tcg_number": "189/214"
+   "tcg_number": "189/214",
+   "variants": {
+    "normal": {
+     "product_id": 179025,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179025,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "190": {
    "name": "Spell Tag",
@@ -2296,7 +4227,17 @@
    "status": "ok",
    "product_id": 179026,
    "tcg_name": "Spell Tag",
-   "tcg_number": "190/214"
+   "tcg_number": "190/214",
+   "variants": {
+    "normal": {
+     "product_id": 179026,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179026,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "191": {
    "name": "Thunder Mountain ◇",
@@ -2308,7 +4249,13 @@
    "product_id": 179028,
    "tcg_name": "Thunder Mountain Prism Star",
    "tcg_number": "191/214",
-   "note": "nuestro \"Thunder Mountain ◇\" vs TCG \"Thunder Mountain Prism Star\""
+   "note": "nuestro \"Thunder Mountain ◇\" vs TCG \"Thunder Mountain Prism Star\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 179028,
+     "printing": "Holofoil"
+    }
+   }
   },
   "192": {
    "name": "Wait and See Hammer",
@@ -2319,7 +4266,17 @@
    "status": "ok",
    "product_id": 179029,
    "tcg_name": "Wait and See Hammer",
-   "tcg_number": "192/214"
+   "tcg_number": "192/214",
+   "variants": {
+    "normal": {
+     "product_id": 179029,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179029,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "193": {
    "name": "Whitney",
@@ -2330,7 +4287,17 @@
    "status": "ok",
    "product_id": 179030,
    "tcg_name": "Whitney",
-   "tcg_number": "193/214"
+   "tcg_number": "193/214",
+   "variants": {
+    "normal": {
+     "product_id": 179030,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179030,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "194": {
    "name": "Memory Energy",
@@ -2341,7 +4308,17 @@
    "status": "ok",
    "product_id": 179032,
    "tcg_name": "Memory Energy",
-   "tcg_number": "194/214"
+   "tcg_number": "194/214",
+   "variants": {
+    "normal": {
+     "product_id": 179032,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 179032,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "195": {
    "name": "Shuckle-GX",
@@ -2357,7 +4334,13 @@
      "suffix": "Full Art",
      "product_id": 178815
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178815,
+     "printing": "Holofoil"
+    }
+   }
   },
   "196": {
    "name": "Sceptile-GX",
@@ -2373,7 +4356,13 @@
      "suffix": "Full Art",
      "product_id": 178822
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178822,
+     "printing": "Holofoil"
+    }
+   }
   },
   "197": {
    "name": "Virizion-GX",
@@ -2389,7 +4378,13 @@
      "suffix": "Full Art",
      "product_id": 178836
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178836,
+     "printing": "Holofoil"
+    }
+   }
   },
   "198": {
    "name": "Magcargo-GX",
@@ -2405,7 +4400,13 @@
      "suffix": "Full Art",
      "product_id": 178848
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178848,
+     "printing": "Holofoil"
+    }
+   }
   },
   "199": {
    "name": "Blacephalon-GX",
@@ -2421,7 +4422,13 @@
      "suffix": "Full Art",
      "product_id": 178858
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178858,
+     "printing": "Holofoil"
+    }
+   }
   },
   "200": {
    "name": "Suicune-GX",
@@ -2437,7 +4444,13 @@
      "suffix": "Full Art",
      "product_id": 178868
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178868,
+     "printing": "Holofoil"
+    }
+   }
   },
   "201": {
    "name": "Zeraora-GX",
@@ -2453,7 +4466,13 @@
      "suffix": "Full Art",
      "product_id": 178896
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178896,
+     "printing": "Holofoil"
+    }
+   }
   },
   "202": {
    "name": "Sigilyph-GX",
@@ -2469,7 +4488,13 @@
      "suffix": "Full Art",
      "product_id": 178910
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178910,
+     "printing": "Holofoil"
+    }
+   }
   },
   "203": {
    "name": "Tyranitar-GX",
@@ -2485,7 +4510,13 @@
      "suffix": "Full Art",
      "product_id": 178935
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178935,
+     "printing": "Holofoil"
+    }
+   }
   },
   "204": {
    "name": "Genesect-GX",
@@ -2501,7 +4532,13 @@
      "suffix": "Full Art",
      "product_id": 178946
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178946,
+     "printing": "Holofoil"
+    }
+   }
   },
   "205": {
    "name": "Alolan Ninetales-GX",
@@ -2517,7 +4554,13 @@
      "suffix": "Full Art",
      "product_id": 178950
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178950,
+     "printing": "Holofoil"
+    }
+   }
   },
   "206": {
    "name": "Mimikyu-GX",
@@ -2533,7 +4576,13 @@
      "suffix": "Full Art",
      "product_id": 178969
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178969,
+     "printing": "Holofoil"
+    }
+   }
   },
   "207": {
    "name": "Lugia-GX",
@@ -2549,7 +4598,13 @@
      "suffix": "Full Art",
      "product_id": 178981
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178981,
+     "printing": "Holofoil"
+    }
+   }
   },
   "208": {
    "name": "Faba",
@@ -2565,7 +4620,13 @@
      "suffix": "Full Art",
      "product_id": 179002
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 179002,
+     "printing": "Holofoil"
+    }
+   }
   },
   "209": {
    "name": "Judge",
@@ -2581,7 +4642,13 @@
      "suffix": "Full Art",
      "product_id": 179010
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 179010,
+     "printing": "Holofoil"
+    }
+   }
   },
   "210": {
    "name": "Kahili",
@@ -2597,7 +4664,13 @@
      "suffix": "Full Art",
      "product_id": 179009
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 179009,
+     "printing": "Holofoil"
+    }
+   }
   },
   "211": {
    "name": "Mina",
@@ -2613,7 +4686,13 @@
      "suffix": "Full Art",
      "product_id": 179016
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 179016,
+     "printing": "Holofoil"
+    }
+   }
   },
   "212": {
    "name": "Morty",
@@ -2629,7 +4708,13 @@
      "suffix": "Full Art",
      "product_id": 179020
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 179020,
+     "printing": "Holofoil"
+    }
+   }
   },
   "213": {
    "name": "Professor Elm's Lecture",
@@ -2645,7 +4730,13 @@
      "suffix": "Full Art",
      "product_id": 179024
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 179024,
+     "printing": "Holofoil"
+    }
+   }
   },
   "214": {
    "name": "Whitney",
@@ -2661,7 +4752,13 @@
      "suffix": "Full Art",
      "product_id": 179031
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 179031,
+     "printing": "Holofoil"
+    }
+   }
   },
   "215": {
    "name": "Shuckle-GX",
@@ -2677,7 +4774,13 @@
      "suffix": "Secret",
      "product_id": 178816
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178816,
+     "printing": "Holofoil"
+    }
+   }
   },
   "216": {
    "name": "Sceptile-GX",
@@ -2693,7 +4796,13 @@
      "suffix": "Secret",
      "product_id": 178823
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178823,
+     "printing": "Holofoil"
+    }
+   }
   },
   "217": {
    "name": "Virizion-GX",
@@ -2709,7 +4818,13 @@
      "suffix": "Secret",
      "product_id": 178837
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178837,
+     "printing": "Holofoil"
+    }
+   }
   },
   "218": {
    "name": "Magcargo-GX",
@@ -2725,7 +4840,13 @@
      "suffix": "Secret",
      "product_id": 178849
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178849,
+     "printing": "Holofoil"
+    }
+   }
   },
   "219": {
    "name": "Blacephalon-GX",
@@ -2741,7 +4862,13 @@
      "suffix": "Secret",
      "product_id": 178859
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178859,
+     "printing": "Holofoil"
+    }
+   }
   },
   "220": {
    "name": "Suicune-GX",
@@ -2757,7 +4884,13 @@
      "suffix": "Secret",
      "product_id": 178869
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178869,
+     "printing": "Holofoil"
+    }
+   }
   },
   "221": {
    "name": "Zeraora-GX",
@@ -2773,7 +4906,13 @@
      "suffix": "Secret",
      "product_id": 178897
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178897,
+     "printing": "Holofoil"
+    }
+   }
   },
   "222": {
    "name": "Sigilyph-GX",
@@ -2789,7 +4928,13 @@
      "suffix": "Secret",
      "product_id": 178911
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178911,
+     "printing": "Holofoil"
+    }
+   }
   },
   "223": {
    "name": "Tyranitar-GX",
@@ -2805,7 +4950,13 @@
      "suffix": "Secret",
      "product_id": 178936
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178936,
+     "printing": "Holofoil"
+    }
+   }
   },
   "224": {
    "name": "Genesect-GX",
@@ -2821,7 +4972,13 @@
      "suffix": "Secret",
      "product_id": 178947
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178947,
+     "printing": "Holofoil"
+    }
+   }
   },
   "225": {
    "name": "Alolan Ninetales-GX",
@@ -2837,7 +4994,13 @@
      "suffix": "Secret",
      "product_id": 178951
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178951,
+     "printing": "Holofoil"
+    }
+   }
   },
   "226": {
    "name": "Mimikyu-GX",
@@ -2853,7 +5016,13 @@
      "suffix": "Secret",
      "product_id": 178970
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178970,
+     "printing": "Holofoil"
+    }
+   }
   },
   "227": {
    "name": "Lugia-GX",
@@ -2869,7 +5038,13 @@
      "suffix": "Secret",
      "product_id": 178982
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178982,
+     "printing": "Holofoil"
+    }
+   }
   },
   "228": {
    "name": "Adventure Bag",
@@ -2885,7 +5060,13 @@
      "suffix": "Secret",
      "product_id": 178992
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178992,
+     "printing": "Holofoil"
+    }
+   }
   },
   "229": {
    "name": "Choice Helmet",
@@ -2901,7 +5082,13 @@
      "suffix": "Secret",
      "product_id": 178994
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178994,
+     "printing": "Holofoil"
+    }
+   }
   },
   "230": {
    "name": "Counter Gain",
@@ -2917,7 +5104,13 @@
      "suffix": "Secret",
      "product_id": 178996
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178996,
+     "printing": "Holofoil"
+    }
+   }
   },
   "231": {
    "name": "Custom Catcher",
@@ -2933,7 +5126,13 @@
      "suffix": "Secret",
      "product_id": 178998
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 178998,
+     "printing": "Holofoil"
+    }
+   }
   },
   "232": {
    "name": "Electropower",
@@ -2949,7 +5148,13 @@
      "suffix": "Secret",
      "product_id": 179000
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 179000,
+     "printing": "Holofoil"
+    }
+   }
   },
   "233": {
    "name": "Lost Blender",
@@ -2965,7 +5170,13 @@
      "suffix": "Secret",
      "product_id": 179013
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 179013,
+     "printing": "Holofoil"
+    }
+   }
   },
   "234": {
    "name": "Net Ball",
@@ -2981,7 +5192,13 @@
      "suffix": "Secret",
      "product_id": 179022
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 179022,
+     "printing": "Holofoil"
+    }
+   }
   },
   "235": {
    "name": "Spell Tag",
@@ -2997,7 +5214,13 @@
      "suffix": "Secret",
      "product_id": 179027
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 179027,
+     "printing": "Holofoil"
+    }
+   }
   },
   "236": {
    "name": "Wait and See Hammer",
@@ -3013,7 +5236,13 @@
      "suffix": "Secret",
      "product_id": 179068
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 179068,
+     "printing": "Holofoil"
+    }
+   }
   }
  }
 }

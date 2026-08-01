@@ -7,7 +7,12 @@
   "ok": 12,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 12,
+   "resueltas": 12,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 83786,
    "tcg_name": "Beldum",
-   "tcg_number": "1/12"
+   "tcg_number": "1/12",
+   "variants": {
+    "normal": {
+     "product_id": 83786,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Electrike",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 85136,
    "tcg_name": "Electrike",
-   "tcg_number": "2/12"
+   "tcg_number": "2/12",
+   "variants": {
+    "normal": {
+     "product_id": 85136,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Grumpig",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 85968,
    "tcg_name": "Grumpig",
-   "tcg_number": "3/12"
+   "tcg_number": "3/12",
+   "variants": {
+    "normal": {
+     "product_id": 85968,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Meowth",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 87319,
    "tcg_name": "Meowth",
-   "tcg_number": "4/12"
+   "tcg_number": "4/12",
+   "variants": {
+    "normal": {
+     "product_id": 87319,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Metang",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 87376,
    "tcg_name": "Metang",
-   "tcg_number": "5/12"
+   "tcg_number": "5/12",
+   "variants": {
+    "normal": {
+     "product_id": 87376,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Plusle",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 88166,
    "tcg_name": "Plusle",
-   "tcg_number": "6/12"
+   "tcg_number": "6/12",
+   "variants": {
+    "holofoil": {
+     "product_id": 88166,
+     "printing": "Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Spoink",
@@ -78,7 +119,13 @@
    "status": "ok",
    "product_id": 89475,
    "tcg_name": "Spoink",
-   "tcg_number": "7/12"
+   "tcg_number": "7/12",
+   "variants": {
+    "normal": {
+     "product_id": 89475,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Energy Search",
@@ -94,7 +141,13 @@
      "suffix": "Plusle",
      "product_id": 85242
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 85242,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Potion",
@@ -110,7 +163,13 @@
      "suffix": "Plusle",
      "product_id": 88339
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 88339,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Professor Cozmo's Discovery",
@@ -120,7 +179,13 @@
    "status": "ok",
    "product_id": 88385,
    "tcg_name": "Professor Cozmo's Discovery",
-   "tcg_number": "10/12"
+   "tcg_number": "10/12",
+   "variants": {
+    "normal": {
+     "product_id": 88385,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Lightning Energy",
@@ -136,7 +201,13 @@
      "suffix": "Plusle",
      "product_id": 86763
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 86763,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Psychic Energy",
@@ -146,7 +217,13 @@
    "status": "ok",
    "product_id": 88420,
    "tcg_name": "Psychic Energy",
-   "tcg_number": "12/12"
+   "tcg_number": "12/12",
+   "variants": {
+    "normal": {
+     "product_id": 88420,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

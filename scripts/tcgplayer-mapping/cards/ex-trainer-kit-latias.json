@@ -7,7 +7,12 @@
   "ok": 10,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 10,
+   "resueltas": 10,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 83694,
    "tcg_name": "Bagon",
-   "tcg_number": "1/10"
+   "tcg_number": "1/10",
+   "variants": {
+    "normal": {
+     "product_id": 83694,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Combusken",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 84403,
    "tcg_name": "Combusken",
-   "tcg_number": "2/10"
+   "tcg_number": "2/10",
+   "variants": {
+    "normal": {
+     "product_id": 84403,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Delcatty",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 84737,
    "tcg_name": "Delcatty",
-   "tcg_number": "3/10"
+   "tcg_number": "3/10",
+   "variants": {
+    "normal": {
+     "product_id": 84737,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Latias",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 86650,
    "tcg_name": "Latias",
-   "tcg_number": "4/10"
+   "tcg_number": "4/10",
+   "variants": {
+    "holofoil": {
+     "product_id": 86650,
+     "printing": "Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Numel",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 87808,
    "tcg_name": "Numel",
-   "tcg_number": "5/10"
+   "tcg_number": "5/10",
+   "variants": {
+    "normal": {
+     "product_id": 87808,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Skitty",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 89263,
    "tcg_name": "Skitty",
-   "tcg_number": "6/10"
+   "tcg_number": "6/10",
+   "variants": {
+    "normal": {
+     "product_id": 89263,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Torchic",
@@ -78,7 +119,13 @@
    "status": "ok",
    "product_id": 89954,
    "tcg_name": "Torchic",
-   "tcg_number": "7/10"
+   "tcg_number": "7/10",
+   "variants": {
+    "normal": {
+     "product_id": 89954,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Potion",
@@ -98,7 +145,13 @@
      "suffix": "Latios",
      "product_id": 88336
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 88335,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Energy Search",
@@ -118,7 +171,13 @@
      "suffix": "Latios",
      "product_id": 85240
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 85239,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Fire Energy",
@@ -128,7 +187,13 @@
    "status": "ok",
    "product_id": 85457,
    "tcg_name": "Fire Energy",
-   "tcg_number": "10/10"
+   "tcg_number": "10/10",
+   "variants": {
+    "normal": {
+     "product_id": 85457,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

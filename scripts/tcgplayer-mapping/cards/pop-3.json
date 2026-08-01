@@ -7,7 +7,12 @@
   "ok": 17,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 24,
+   "resueltas": 23,
+   "sinResolver": 1
+  }
  },
  "cards": {
   "1": {
@@ -19,7 +24,17 @@
    "status": "ok",
    "product_id": 83891,
    "tcg_name": "Blastoise",
-   "tcg_number": "001/017"
+   "tcg_number": "001/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 83891,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 83891,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Flareon",
@@ -30,7 +45,17 @@
    "status": "ok",
    "product_id": 85495,
    "tcg_name": "Flareon",
-   "tcg_number": "002/017"
+   "tcg_number": "002/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 85495,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 85495,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Jolteon",
@@ -41,7 +66,17 @@
    "status": "ok",
    "product_id": 86342,
    "tcg_name": "Jolteon",
-   "tcg_number": "003/017"
+   "tcg_number": "003/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 86342,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 86342,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Minun",
@@ -52,7 +87,17 @@
    "status": "ok",
    "product_id": 87487,
    "tcg_name": "Minun",
-   "tcg_number": "004/017"
+   "tcg_number": "004/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 87487,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 87487,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Plusle",
@@ -63,7 +108,17 @@
    "status": "ok",
    "product_id": 88167,
    "tcg_name": "Plusle",
-   "tcg_number": "005/017"
+   "tcg_number": "005/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 88167,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 88167,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Vaporeon",
@@ -74,7 +129,17 @@
    "status": "ok",
    "product_id": 90283,
    "tcg_name": "Vaporeon",
-   "tcg_number": "006/017"
+   "tcg_number": "006/017",
+   "variants": {
+    "holofoil": {
+     "product_id": 90283,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 90283,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Combusken",
@@ -84,7 +149,13 @@
    "status": "ok",
    "product_id": 84405,
    "tcg_name": "Combusken",
-   "tcg_number": "007/017"
+   "tcg_number": "007/017",
+   "variants": {
+    "normal": {
+     "product_id": 84405,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Donphan",
@@ -94,7 +165,13 @@
    "status": "ok",
    "product_id": 84874,
    "tcg_name": "Donphan",
-   "tcg_number": "008/017"
+   "tcg_number": "008/017",
+   "variants": {
+    "normal": {
+     "product_id": 84874,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Forretress",
@@ -104,7 +181,13 @@
    "status": "ok",
    "product_id": 85549,
    "tcg_name": "Forretress",
-   "tcg_number": "009/017"
+   "tcg_number": "009/017",
+   "variants": {
+    "normal": {
+     "product_id": 85549,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "High Pressure System",
@@ -114,7 +197,13 @@
    "status": "ok",
    "product_id": 86077,
    "tcg_name": "High Pressure System",
-   "tcg_number": "010/017"
+   "tcg_number": "010/017",
+   "variants": {
+    "normal": {
+     "product_id": 86077,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Low Pressure System",
@@ -124,7 +213,13 @@
    "status": "ok",
    "product_id": 86847,
    "tcg_name": "Low Pressure System",
-   "tcg_number": "011/017"
+   "tcg_number": "011/017",
+   "variants": {
+    "normal": {
+     "product_id": 86847,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Ditto",
@@ -134,7 +229,13 @@
    "status": "ok",
    "product_id": 84842,
    "tcg_name": "Ditto",
-   "tcg_number": "012/017"
+   "tcg_number": "012/017",
+   "variants": {
+    "normal": {
+     "product_id": 84842,
+     "printing": "Normal"
+    }
+   }
   },
   "13": {
    "name": "Eevee",
@@ -144,7 +245,13 @@
    "status": "ok",
    "product_id": 85083,
    "tcg_name": "Eevee",
-   "tcg_number": "013/017"
+   "tcg_number": "013/017",
+   "variants": {
+    "normal": {
+     "product_id": 85083,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Ivysaur",
@@ -154,7 +261,13 @@
    "status": "ok",
    "product_id": 86299,
    "tcg_name": "Ivysaur",
-   "tcg_number": "014/017"
+   "tcg_number": "014/017",
+   "variants": {
+    "normal": {
+     "product_id": 86299,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Marshtomp",
@@ -164,7 +277,13 @@
    "status": "ok",
    "product_id": 87236,
    "tcg_name": "Marshtomp",
-   "tcg_number": "015/017"
+   "tcg_number": "015/017",
+   "variants": {
+    "normal": {
+     "product_id": 87236,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Pichu Bros.",
@@ -174,7 +293,13 @@
    "status": "ok",
    "product_id": 88024,
    "tcg_name": "Pichu Bros.",
-   "tcg_number": "016/017"
+   "tcg_number": "016/017",
+   "variants": {
+    "normal": {
+     "product_id": 88024,
+     "printing": "Normal"
+    }
+   }
   },
   "17": {
    "name": "Ho-Oh ex",
@@ -195,7 +320,13 @@
      "suffix": "Non-Holo",
      "product_id": 86129
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 97809,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

@@ -7,7 +7,12 @@
   "ok": 224,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 313,
+   "resueltas": 296,
+   "sinResolver": 17
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 477184,
    "tcg_name": "Sprigatito - 001",
-   "tcg_number": "001"
+   "tcg_number": "001",
+   "variants": {
+    "holofoil": {
+     "product_id": 477184,
+     "printing": "Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Fuecoco",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 477182,
    "tcg_name": "Fuecoco - 002",
-   "tcg_number": "002"
+   "tcg_number": "002",
+   "variants": {
+    "holofoil": {
+     "product_id": 477182,
+     "printing": "Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Quaxly",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 477183,
    "tcg_name": "Quaxly - 003",
-   "tcg_number": "003"
+   "tcg_number": "003",
+   "variants": {
+    "holofoil": {
+     "product_id": 477183,
+     "printing": "Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Mimikyu ex",
@@ -49,7 +72,17 @@
    "status": "ok",
    "product_id": 487435,
    "tcg_name": "Mimikyu ex - 004",
-   "tcg_number": "004"
+   "tcg_number": "004",
+   "variants": {
+    "holofoil": {
+     "product_id": 487435,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 487439,
+     "fuente": "transversal"
+    }
+   }
   },
   "5": {
    "name": "Quaquaval",
@@ -66,7 +99,16 @@
      "suffix": "Prerelease",
      "product_id": 487751
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 487751,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 522650
+    }
+   }
   },
   "6": {
    "name": "Pawmot",
@@ -83,7 +125,16 @@
      "suffix": "Prerelease",
      "product_id": 487752
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 487752,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 522648
+    }
+   }
   },
   "7": {
    "name": "Hawlucha",
@@ -100,7 +151,16 @@
      "suffix": "Prerelease",
      "product_id": 487755
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 487755,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 522649
+    }
+   }
   },
   "8": {
    "name": "Revavroom",
@@ -117,7 +177,16 @@
      "suffix": "Prerelease",
      "product_id": 487756
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 487756,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 515203
+    }
+   }
   },
   "9": {
    "name": "Spidops",
@@ -127,7 +196,13 @@
    "status": "ok",
    "product_id": 491184,
    "tcg_name": "Spidops - 009",
-   "tcg_number": "009"
+   "tcg_number": "009",
+   "variants": {
+    "holofoil": {
+     "product_id": 491184,
+     "printing": "Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Espathra",
@@ -137,7 +212,13 @@
    "status": "ok",
    "product_id": 491185,
    "tcg_name": "Espathra - 010",
-   "tcg_number": "010"
+   "tcg_number": "010",
+   "variants": {
+    "holofoil": {
+     "product_id": 491185,
+     "printing": "Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Arcanine",
@@ -147,7 +228,13 @@
    "status": "ok",
    "product_id": 491186,
    "tcg_name": "Arcanine - 011",
-   "tcg_number": "011"
+   "tcg_number": "011",
+   "variants": {
+    "holofoil": {
+     "product_id": 491186,
+     "printing": "Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Dondozo",
@@ -163,7 +250,13 @@
      "suffix": "Cosmos Holofoil",
      "product_id": 653800
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 491187,
+     "printing": "Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Miraidon",
@@ -180,7 +273,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 490730
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 490719,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 490730
+    }
+   }
   },
   "14": {
    "name": "Koraidon",
@@ -197,7 +299,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 490725
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 490721,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 490725
+    }
+   }
   },
   "15": {
    "name": "Flaaffy",
@@ -207,7 +318,13 @@
    "status": "ok",
    "product_id": 496972,
    "tcg_name": "Flaaffy - 015",
-   "tcg_number": "015"
+   "tcg_number": "015",
+   "variants": {
+    "normal": {
+     "product_id": 496972,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Ampharos ex",
@@ -218,7 +335,13 @@
    "status": "ok",
    "product_id": 484397,
    "tcg_name": "Ampharos ex - 016",
-   "tcg_number": "016"
+   "tcg_number": "016",
+   "variants": {
+    "holofoil": {
+     "product_id": 484397,
+     "printing": "Holofoil"
+    }
+   }
   },
   "17": {
    "name": "Lucario ex",
@@ -228,7 +351,13 @@
    "status": "ok",
    "product_id": 484396,
    "tcg_name": "Lucario ex - 017",
-   "tcg_number": "017"
+   "tcg_number": "017",
+   "variants": {
+    "holofoil": {
+     "product_id": 484396,
+     "printing": "Holofoil"
+    }
+   }
   },
   "18": {
    "name": "Cyclizar ex",
@@ -239,7 +368,17 @@
    "status": "ok",
    "product_id": 496429,
    "tcg_name": "Cyclizar ex - 018",
-   "tcg_number": "018"
+   "tcg_number": "018",
+   "variants": {
+    "holofoil": {
+     "product_id": 496429,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 497721,
+     "fuente": "transversal"
+    }
+   }
   },
   "19": {
    "name": "Baxcalibur",
@@ -256,7 +395,16 @@
      "suffix": "Prerelease",
      "product_id": 501885
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 501885,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 515202
+    }
+   }
   },
   "20": {
    "name": "Tinkaton",
@@ -273,7 +421,16 @@
      "suffix": "Prerelease",
      "product_id": 501888
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 501888,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 512506
+    }
+   }
   },
   "21": {
    "name": "Murkrow",
@@ -290,7 +447,16 @@
      "suffix": "Prerelease",
      "product_id": 501893
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 501893,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 527563
+    }
+   }
   },
   "22": {
    "name": "Pelipper",
@@ -307,7 +473,16 @@
      "suffix": "Prerelease",
      "product_id": 501896
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 501896,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 527564
+    }
+   }
   },
   "23": {
    "name": "Smoliv",
@@ -317,7 +492,13 @@
    "status": "ok",
    "product_id": 500833,
    "tcg_name": "Smoliv - 023",
-   "tcg_number": "023"
+   "tcg_number": "023",
+   "variants": {
+    "holofoil": {
+     "product_id": 500833,
+     "printing": "Holofoil"
+    }
+   }
   },
   "24": {
    "name": "Growlithe",
@@ -327,7 +508,13 @@
    "status": "ok",
    "product_id": 500563,
    "tcg_name": "Growlithe - 024",
-   "tcg_number": "024"
+   "tcg_number": "024",
+   "variants": {
+    "holofoil": {
+     "product_id": 500563,
+     "printing": "Holofoil"
+    }
+   }
   },
   "25": {
    "name": "Tinkatink",
@@ -343,7 +530,13 @@
      "suffix": "Cosmo Holofoil",
      "product_id": 499996
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 499996,
+     "printing": "Holofoil"
+    }
+   }
   },
   "26": {
    "name": "Varoom",
@@ -360,7 +553,16 @@
      "suffix": "Cosmos Holo",
      "product_id": 532538
     }
-   ]
+   ],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 532538
+    },
+    "normal": {
+     "product_id": 532538,
+     "printing": "Normal"
+    }
+   }
   },
   "27": {
    "name": "Pikachu",
@@ -377,7 +579,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 500264
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 500263,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 500264
+    }
+   }
   },
   "28": {
    "name": "Miraidon ex",
@@ -387,7 +598,13 @@
    "status": "ok",
    "product_id": 500062,
    "tcg_name": "Miraidon ex - 028",
-   "tcg_number": "028"
+   "tcg_number": "028",
+   "variants": {
+    "holofoil": {
+     "product_id": 500062,
+     "printing": "Holofoil"
+    }
+   }
   },
   "29": {
    "name": "Koraidon ex",
@@ -397,7 +614,13 @@
    "status": "ok",
    "product_id": 500070,
    "tcg_name": "Koraidon ex - 029",
-   "tcg_number": "029"
+   "tcg_number": "029",
+   "variants": {
+    "holofoil": {
+     "product_id": 500070,
+     "printing": "Holofoil"
+    }
+   }
   },
   "30": {
    "name": "Chien-Pao ex",
@@ -407,7 +630,13 @@
    "status": "ok",
    "product_id": 505534,
    "tcg_name": "Chien-Pao ex - 030",
-   "tcg_number": "030"
+   "tcg_number": "030",
+   "variants": {
+    "holofoil": {
+     "product_id": 505534,
+     "printing": "Holofoil"
+    }
+   }
   },
   "31": {
    "name": "Tinkaton ex",
@@ -417,7 +646,13 @@
    "status": "ok",
    "product_id": 505537,
    "tcg_name": "Tinkaton ex - 031",
-   "tcg_number": "031"
+   "tcg_number": "031",
+   "variants": {
+    "holofoil": {
+     "product_id": 505537,
+     "printing": "Holofoil"
+    }
+   }
   },
   "32": {
    "name": "Annihilape ex",
@@ -427,7 +662,13 @@
    "status": "ok",
    "product_id": 502981,
    "tcg_name": "Annihilape ex - 032",
-   "tcg_number": "032"
+   "tcg_number": "032",
+   "variants": {
+    "holofoil": {
+     "product_id": 502981,
+     "printing": "Holofoil"
+    }
+   }
   },
   "33": {
    "name": "Meowscarada ex",
@@ -437,7 +678,13 @@
    "status": "ok",
    "product_id": 513876,
    "tcg_name": "Meowscarada ex - 033",
-   "tcg_number": "033"
+   "tcg_number": "033",
+   "variants": {
+    "holofoil": {
+     "product_id": 513876,
+     "printing": "Holofoil"
+    }
+   }
   },
   "34": {
    "name": "Skeledirge ex",
@@ -447,7 +694,13 @@
    "status": "ok",
    "product_id": 513831,
    "tcg_name": "Skeledirge ex - 034",
-   "tcg_number": "034"
+   "tcg_number": "034",
+   "variants": {
+    "holofoil": {
+     "product_id": 513831,
+     "printing": "Holofoil"
+    }
+   }
   },
   "35": {
    "name": "Quaquaval ex",
@@ -457,7 +710,13 @@
    "status": "ok",
    "product_id": 513874,
    "tcg_name": "Quaquaval ex - 035",
-   "tcg_number": "035"
+   "tcg_number": "035",
+   "variants": {
+    "holofoil": {
+     "product_id": 513874,
+     "printing": "Holofoil"
+    }
+   }
   },
   "36": {
    "name": "Palafin",
@@ -474,7 +733,16 @@
      "suffix": "Prerelease",
      "product_id": 513424
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 513424,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 513425
+    }
+   }
   },
   "37": {
    "name": "Cleffa",
@@ -491,7 +759,16 @@
      "suffix": "Prerelease",
      "product_id": 512896
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 512896,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 513423
+    }
+   }
   },
   "38": {
    "name": "Togekiss",
@@ -508,7 +785,16 @@
      "suffix": "Prerelease",
      "product_id": 513426
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 513426,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 513427
+    }
+   }
   },
   "39": {
    "name": "Mawile",
@@ -525,7 +811,16 @@
      "suffix": "Prerelease",
      "product_id": 513428
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 513428,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 513429
+    }
+   }
   },
   "40": {
    "name": "Pawmi",
@@ -541,7 +836,13 @@
      "suffix": "Cosmos Holo",
      "product_id": 607764
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 512043,
+     "printing": "Holofoil"
+    }
+   }
   },
   "41": {
    "name": "Paldean Wooper",
@@ -551,7 +852,13 @@
    "status": "ok",
    "product_id": 512049,
    "tcg_name": "Paldean Wooper - 041",
-   "tcg_number": "041"
+   "tcg_number": "041",
+   "variants": {
+    "holofoil": {
+     "product_id": 512049,
+     "printing": "Holofoil"
+    }
+   }
   },
   "42": {
    "name": "Houndstone",
@@ -561,7 +868,13 @@
    "status": "ok",
    "product_id": 512914,
    "tcg_name": "Houndstone - 042",
-   "tcg_number": "042"
+   "tcg_number": "042",
+   "variants": {
+    "holofoil": {
+     "product_id": 512914,
+     "printing": "Holofoil"
+    }
+   }
   },
   "43": {
    "name": "Eevee",
@@ -571,7 +884,13 @@
    "status": "ok",
    "product_id": 512492,
    "tcg_name": "Eevee - 043",
-   "tcg_number": "043"
+   "tcg_number": "043",
+   "variants": {
+    "holofoil": {
+     "product_id": 512492,
+     "printing": "Holofoil"
+    }
+   }
   },
   "44": {
    "name": "Charmander",
@@ -589,7 +908,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 512036
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 512035,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 512036
+    }
+   }
   },
   "45": {
    "name": "Paradise Resort",
@@ -606,7 +934,16 @@
      "suffix": "World Championships 2023",
      "product_id": 518863
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 518863,
+     "printing": "Normal"
+    },
+    "staffStamp": {
+     "product_id": 583700
+    }
+   }
   },
   "46": {
    "name": "Bulbasaur",
@@ -622,7 +959,12 @@
      "suffix": "Cosmos Holo",
      "product_id": 517271
     }
-   ]
+   ],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 517271
+    }
+   }
   },
   "47": {
    "name": "Charmander",
@@ -638,7 +980,12 @@
      "suffix": "Cosmos Holo",
      "product_id": 517272
     }
-   ]
+   ],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 517272
+    }
+   }
   },
   "48": {
    "name": "Squirtle",
@@ -654,7 +1001,12 @@
      "suffix": "Cosmos Holo",
      "product_id": 517273
     }
-   ]
+   ],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 517273
+    }
+   }
   },
   "49": {
    "name": "Zapdos ex",
@@ -665,7 +1017,17 @@
    "status": "ok",
    "product_id": 518869,
    "tcg_name": "Zapdos ex - 049",
-   "tcg_number": "049"
+   "tcg_number": "049",
+   "variants": {
+    "holofoil": {
+     "product_id": 518869,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 520722,
+     "fuente": "transversal"
+    }
+   }
   },
   "50": {
    "name": "Alakazam ex",
@@ -675,7 +1037,13 @@
    "status": "ok",
    "product_id": 518868,
    "tcg_name": "Alakazam ex - 050",
-   "tcg_number": "050"
+   "tcg_number": "050",
+   "variants": {
+    "holofoil": {
+     "product_id": 518868,
+     "printing": "Holofoil"
+    }
+   }
   },
   "51": {
    "name": "Snorlax",
@@ -692,7 +1060,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 517270
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 517175,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 517270
+    }
+   }
   },
   "52": {
    "name": "Mewtwo",
@@ -702,7 +1079,13 @@
    "status": "ok",
    "product_id": 518872,
    "tcg_name": "Mewtwo - 052",
-   "tcg_number": "052"
+   "tcg_number": "052",
+   "variants": {
+    "holofoil": {
+     "product_id": 518872,
+     "printing": "Holofoil"
+    }
+   }
   },
   "53": {
    "name": "Mew ex",
@@ -712,7 +1095,13 @@
    "status": "ok",
    "product_id": 518871,
    "tcg_name": "Mew ex - 053",
-   "tcg_number": "053"
+   "tcg_number": "053",
+   "variants": {
+    "holofoil": {
+     "product_id": 518871,
+     "printing": "Holofoil"
+    }
+   }
   },
   "54": {
    "name": "Greninja ex",
@@ -722,7 +1111,13 @@
    "status": "ok",
    "product_id": 518878,
    "tcg_name": "Greninja ex - 054",
-   "tcg_number": "054"
+   "tcg_number": "054",
+   "variants": {
+    "holofoil": {
+     "product_id": 518878,
+     "printing": "Holofoil"
+    }
+   }
   },
   "55": {
    "name": "Kangaskhan ex",
@@ -732,7 +1127,13 @@
    "status": "ok",
    "product_id": 519482,
    "tcg_name": "Kangaskhan ex - 055",
-   "tcg_number": "055"
+   "tcg_number": "055",
+   "variants": {
+    "holofoil": {
+     "product_id": 519482,
+     "printing": "Holofoil"
+    }
+   }
   },
   "56": {
    "name": "Charizard ex",
@@ -742,7 +1143,13 @@
    "status": "ok",
    "product_id": 521697,
    "tcg_name": "Charizard ex - 056",
-   "tcg_number": "056"
+   "tcg_number": "056",
+   "variants": {
+    "holofoil": {
+     "product_id": 521697,
+     "printing": "Holofoil"
+    }
+   }
   },
   "57": {
    "name": "Chi-Yu",
@@ -759,7 +1166,16 @@
      "suffix": "Prerelease",
      "product_id": 526574
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 526574,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 548552
+    }
+   }
   },
   "58": {
    "name": "Iron Bundle",
@@ -776,7 +1192,16 @@
      "suffix": "Prerelease",
      "product_id": 526586
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 526586,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 548553
+    }
+   }
   },
   "59": {
    "name": "Xatu",
@@ -793,7 +1218,16 @@
      "suffix": "Prerelease",
      "product_id": 526590
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 526590,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 548554
+    }
+   }
   },
   "60": {
    "name": "Aegislash",
@@ -810,7 +1244,16 @@
      "suffix": "Prerelease",
      "product_id": 526610
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 526610,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 548555
+    }
+   }
   },
   "61": {
    "name": "Pineco",
@@ -820,7 +1263,13 @@
    "status": "ok",
    "product_id": 526634,
    "tcg_name": "Pineco - 061",
-   "tcg_number": "061"
+   "tcg_number": "061",
+   "variants": {
+    "holofoil": {
+     "product_id": 526634,
+     "printing": "Holofoil"
+    }
+   }
   },
   "62": {
    "name": "Sinistea",
@@ -830,7 +1279,13 @@
    "status": "ok",
    "product_id": 526638,
    "tcg_name": "Sinistea - 062",
-   "tcg_number": "062"
+   "tcg_number": "062",
+   "variants": {
+    "holofoil": {
+     "product_id": 526638,
+     "printing": "Holofoil"
+    }
+   }
   },
   "63": {
    "name": "Cetitan",
@@ -846,7 +1301,13 @@
      "suffix": "Cosmos Holo",
      "product_id": 561591
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 526640,
+     "printing": "Holofoil"
+    }
+   }
   },
   "64": {
    "name": "Arctibax",
@@ -862,7 +1323,13 @@
      "suffix": "Cosmos Holo",
      "product_id": 561590
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 526646,
+     "printing": "Holofoil"
+    }
+   }
   },
   "65": {
    "name": "Scream Tail",
@@ -879,7 +1346,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 526655
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 526649,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 526655
+    }
+   }
   },
   "66": {
    "name": "Iron Bundle",
@@ -896,7 +1372,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 526657
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 526656,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 526657
+    }
+   }
   },
   "67": {
    "name": "Roaring Moon ex",
@@ -907,7 +1392,17 @@
    "status": "ok",
    "product_id": 527878,
    "tcg_name": "Roaring Moon ex - 067",
-   "tcg_number": "067"
+   "tcg_number": "067",
+   "variants": {
+    "holofoil": {
+     "product_id": 527878,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 529857,
+     "fuente": "transversal"
+    }
+   }
   },
   "68": {
    "name": "Iron Valiant ex",
@@ -918,7 +1413,17 @@
    "status": "ok",
    "product_id": 527879,
    "tcg_name": "Iron Valiant ex - 068",
-   "tcg_number": "068"
+   "tcg_number": "068",
+   "variants": {
+    "holofoil": {
+     "product_id": 527879,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 531864,
+     "fuente": "transversal"
+    }
+   }
   },
   "69": {
    "name": "Fidough",
@@ -928,7 +1433,13 @@
    "status": "ok",
    "product_id": 536070,
    "tcg_name": "Fidough - 069",
-   "tcg_number": "069"
+   "tcg_number": "069",
+   "variants": {
+    "holofoil": {
+     "product_id": 536070,
+     "printing": "Holofoil"
+    }
+   }
   },
   "70": {
    "name": "Greavard",
@@ -938,7 +1449,13 @@
    "status": "ok",
    "product_id": 536072,
    "tcg_name": "Greavard - 070",
-   "tcg_number": "070"
+   "tcg_number": "070",
+   "variants": {
+    "holofoil": {
+     "product_id": 536072,
+     "printing": "Holofoil"
+    }
+   }
   },
   "71": {
    "name": "Maschiff",
@@ -948,7 +1465,13 @@
    "status": "ok",
    "product_id": 536075,
    "tcg_name": "Maschiff - 071",
-   "tcg_number": "071"
+   "tcg_number": "071",
+   "variants": {
+    "holofoil": {
+     "product_id": 536075,
+     "printing": "Holofoil"
+    }
+   }
   },
   "72": {
    "name": "Great Tusk ex",
@@ -958,7 +1481,13 @@
    "status": "ok",
    "product_id": 538684,
    "tcg_name": "Great Tusk ex - 072",
-   "tcg_number": "072"
+   "tcg_number": "072",
+   "variants": {
+    "holofoil": {
+     "product_id": 538684,
+     "printing": "Holofoil"
+    }
+   }
   },
   "73": {
    "name": "Iron Treads ex",
@@ -968,7 +1497,13 @@
    "status": "ok",
    "product_id": 538686,
    "tcg_name": "Iron Treads ex - 073",
-   "tcg_number": "073"
+   "tcg_number": "073",
+   "variants": {
+    "holofoil": {
+     "product_id": 538686,
+     "printing": "Holofoil"
+    }
+   }
   },
   "74": {
    "name": "Charizard ex",
@@ -978,7 +1513,13 @@
    "status": "ok",
    "product_id": 538687,
    "tcg_name": "Charizard ex - 074",
-   "tcg_number": "074"
+   "tcg_number": "074",
+   "variants": {
+    "holofoil": {
+     "product_id": 538687,
+     "printing": "Holofoil"
+    }
+   }
   },
   "75": {
    "name": "Mimikyu",
@@ -995,7 +1536,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 535953
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 535952,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 535953
+    }
+   }
   },
   "76": {
    "name": "Sprigatito",
@@ -1005,7 +1555,13 @@
    "status": "ok",
    "product_id": 537971,
    "tcg_name": "Sprigatito - 076",
-   "tcg_number": "076"
+   "tcg_number": "076",
+   "variants": {
+    "holofoil": {
+     "product_id": 537971,
+     "printing": "Holofoil"
+    }
+   }
   },
   "77": {
    "name": "Floragato",
@@ -1015,7 +1571,13 @@
    "status": "ok",
    "product_id": 537980,
    "tcg_name": "Floragato - 077",
-   "tcg_number": "077"
+   "tcg_number": "077",
+   "variants": {
+    "holofoil": {
+     "product_id": 537980,
+     "printing": "Holofoil"
+    }
+   }
   },
   "78": {
    "name": "Meowscarada ex",
@@ -1026,7 +1588,17 @@
    "status": "ok",
    "product_id": 537978,
    "tcg_name": "Meowscarada ex - 078",
-   "tcg_number": "078"
+   "tcg_number": "078",
+   "variants": {
+    "holofoil": {
+     "product_id": 537978,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 537979,
+     "fuente": "transversal"
+    }
+   }
   },
   "79": {
    "name": "Fuecoco",
@@ -1036,7 +1608,13 @@
    "status": "ok",
    "product_id": 537818,
    "tcg_name": "Fuecoco - 079",
-   "tcg_number": "079"
+   "tcg_number": "079",
+   "variants": {
+    "holofoil": {
+     "product_id": 537818,
+     "printing": "Holofoil"
+    }
+   }
   },
   "80": {
    "name": "Crocalor",
@@ -1046,7 +1624,13 @@
    "status": "ok",
    "product_id": 537981,
    "tcg_name": "Crocalor - 080",
-   "tcg_number": "080"
+   "tcg_number": "080",
+   "variants": {
+    "holofoil": {
+     "product_id": 537981,
+     "printing": "Holofoil"
+    }
+   }
   },
   "81": {
    "name": "Skeledirge ex",
@@ -1057,7 +1641,17 @@
    "status": "ok",
    "product_id": 537975,
    "tcg_name": "Skeledirge ex - 081",
-   "tcg_number": "081"
+   "tcg_number": "081",
+   "variants": {
+    "holofoil": {
+     "product_id": 537975,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 537976,
+     "fuente": "transversal"
+    }
+   }
   },
   "82": {
    "name": "Quaxly",
@@ -1067,7 +1661,13 @@
    "status": "ok",
    "product_id": 537974,
    "tcg_name": "Quaxly - 082",
-   "tcg_number": "082"
+   "tcg_number": "082",
+   "variants": {
+    "holofoil": {
+     "product_id": 537974,
+     "printing": "Holofoil"
+    }
+   }
   },
   "83": {
    "name": "Quaxwell",
@@ -1077,7 +1677,13 @@
    "status": "ok",
    "product_id": 537972,
    "tcg_name": "Quaxwell - 083",
-   "tcg_number": "083"
+   "tcg_number": "083",
+   "variants": {
+    "holofoil": {
+     "product_id": 537972,
+     "printing": "Holofoil"
+    }
+   }
   },
   "84": {
    "name": "Quaquaval ex",
@@ -1088,7 +1694,17 @@
    "status": "ok",
    "product_id": 537973,
    "tcg_name": "Quaquaval ex - 084",
-   "tcg_number": "084"
+   "tcg_number": "084",
+   "variants": {
+    "holofoil": {
+     "product_id": 537973,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 537977,
+     "fuente": "transversal"
+    }
+   }
   },
   "85": {
    "name": "Pikachu with Grey Felt Hat",
@@ -1098,7 +1714,13 @@
    "status": "ok",
    "product_id": 518861,
    "tcg_name": "Pikachu with Grey Felt Hat",
-   "tcg_number": "085"
+   "tcg_number": "085",
+   "variants": {
+    "normal": {
+     "product_id": 518861,
+     "printing": "Normal"
+    }
+   }
   },
   "86": {
    "name": "Mabosstiff ex",
@@ -1109,7 +1731,13 @@
    "status": "ok",
    "product_id": 542255,
    "tcg_name": "Mabosstiff ex - 086",
-   "tcg_number": "086"
+   "tcg_number": "086",
+   "variants": {
+    "holofoil": {
+     "product_id": 542255,
+     "printing": "Holofoil"
+    }
+   }
   },
   "87": {
    "name": "Sprigatito ex",
@@ -1119,7 +1747,13 @@
    "status": "ok",
    "product_id": 542468,
    "tcg_name": "Sprigatito ex - 087",
-   "tcg_number": "087"
+   "tcg_number": "087",
+   "variants": {
+    "holofoil": {
+     "product_id": 542468,
+     "printing": "Holofoil"
+    }
+   }
   },
   "88": {
    "name": "Pikachu",
@@ -1129,7 +1763,13 @@
    "status": "ok",
    "product_id": 542481,
    "tcg_name": "Pikachu - 088",
-   "tcg_number": "088"
+   "tcg_number": "088",
+   "variants": {
+    "holofoil": {
+     "product_id": 542481,
+     "printing": "Holofoil"
+    }
+   }
   },
   "89": {
    "name": "Feraligatr",
@@ -1146,7 +1786,16 @@
      "suffix": "Prerelease",
      "product_id": 543950
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 543950,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 548310
+    }
+   }
   },
   "90": {
    "name": "Metang",
@@ -1163,7 +1812,16 @@
      "suffix": "Prerelease",
      "product_id": 543951
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 543951,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 548311
+    }
+   }
   },
   "91": {
    "name": "Koraidon",
@@ -1180,7 +1838,16 @@
      "suffix": "Prerelease",
      "product_id": 543952
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 543952,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 548308
+    }
+   }
   },
   "92": {
    "name": "Miraidon",
@@ -1197,7 +1864,16 @@
      "suffix": "Prerelease",
      "product_id": 543953
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 543953,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 548309
+    }
+   }
   },
   "93": {
    "name": "Carvanha",
@@ -1207,7 +1883,13 @@
    "status": "ok",
    "product_id": 544183,
    "tcg_name": "Carvanha - 093",
-   "tcg_number": "093"
+   "tcg_number": "093",
+   "variants": {
+    "holofoil": {
+     "product_id": 544183,
+     "printing": "Holofoil"
+    }
+   }
   },
   "94": {
    "name": "Bellibolt",
@@ -1217,7 +1899,13 @@
    "status": "ok",
    "product_id": 544194,
    "tcg_name": "Bellibolt - 094",
-   "tcg_number": "094"
+   "tcg_number": "094",
+   "variants": {
+    "holofoil": {
+     "product_id": 544194,
+     "printing": "Holofoil"
+    }
+   }
   },
   "95": {
    "name": "Cleffa",
@@ -1227,7 +1915,13 @@
    "status": "ok",
    "product_id": 544201,
    "tcg_name": "Cleffa - 095",
-   "tcg_number": "095"
+   "tcg_number": "095",
+   "variants": {
+    "holofoil": {
+     "product_id": 544201,
+     "printing": "Holofoil"
+    }
+   }
   },
   "96": {
    "name": "Cyclizar",
@@ -1237,7 +1931,13 @@
    "status": "ok",
    "product_id": 544214,
    "tcg_name": "Cyclizar - 096",
-   "tcg_number": "096"
+   "tcg_number": "096",
+   "variants": {
+    "holofoil": {
+     "product_id": 544214,
+     "printing": "Holofoil"
+    }
+   }
   },
   "97": {
    "name": "Flutter Mane",
@@ -1254,7 +1954,16 @@
      "suffix": "Pokemon Center",
      "product_id": 543947
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 543946,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 543947
+    }
+   }
   },
   "98": {
    "name": "Iron Thorns",
@@ -1271,7 +1980,16 @@
      "suffix": "Pokemon Center",
      "product_id": 543949
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 543948,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 543949
+    }
+   }
   },
   "99": {
    "name": "Shroodle",
@@ -1281,7 +1999,13 @@
    "status": "ok",
    "product_id": 546450,
    "tcg_name": "Shroodle - 099",
-   "tcg_number": "099"
+   "tcg_number": "099",
+   "variants": {
+    "holofoil": {
+     "product_id": 546450,
+     "printing": "Holofoil"
+    }
+   }
   },
   "100": {
    "name": "Grafaiai ex",
@@ -1292,7 +2016,17 @@
    "status": "ok",
    "product_id": 546448,
    "tcg_name": "Grafaiai ex - 100",
-   "tcg_number": "100"
+   "tcg_number": "100",
+   "variants": {
+    "holofoil": {
+     "product_id": 546448,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 548540,
+     "fuente": "transversal"
+    }
+   }
   },
   "101": {
    "name": "Pikachu",
@@ -1318,7 +2052,13 @@
    "status": "ok",
    "product_id": 525293,
    "tcg_name": "Oddish - 102",
-   "tcg_number": "102"
+   "tcg_number": "102",
+   "variants": {
+    "normal": {
+     "product_id": 525293,
+     "printing": "Normal"
+    }
+   }
   },
   "103": {
    "name": "Houndoom ex",
@@ -1328,7 +2068,13 @@
    "status": "ok",
    "product_id": 546754,
    "tcg_name": "Houndoom ex - 103",
-   "tcg_number": "103"
+   "tcg_number": "103",
+   "variants": {
+    "holofoil": {
+     "product_id": 546754,
+     "printing": "Holofoil"
+    }
+   }
   },
   "104": {
    "name": "Melmetal ex",
@@ -1338,7 +2084,13 @@
    "status": "ok",
    "product_id": 546755,
    "tcg_name": "Melmetal ex - 104",
-   "tcg_number": "104"
+   "tcg_number": "104",
+   "variants": {
+    "holofoil": {
+     "product_id": 546755,
+     "printing": "Holofoil"
+    }
+   }
   },
   "105": {
    "name": "Armarouge ex",
@@ -1351,7 +2103,13 @@
    "tcg_number": "125",
    "note": "nombre casa pero el numero no (nuestro 105, TCG 125)",
    "origen": "manual",
-   "tcg_set": "Battle Academy 2024"
+   "tcg_set": "Battle Academy 2024",
+   "variants": {
+    "holofoil": {
+     "product_id": 556445,
+     "printing": "Holofoil"
+    }
+   }
   },
   "106": {
    "name": "Pikachu ex",
@@ -1362,7 +2120,13 @@
    "product_id": 556443,
    "tcg_name": "Pikachu ex (Pikachu 60)",
    "origen": "manual",
-   "tcg_set": "Battle Academy 2024"
+   "tcg_set": "Battle Academy 2024",
+   "variants": {
+    "holofoil": {
+     "product_id": 556443,
+     "printing": "Holofoil"
+    }
+   }
   },
   "107": {
    "name": "Mareep",
@@ -1376,7 +2140,13 @@
    "product_id": 556926,
    "tcg_name": "Mareep - Pikachu 45",
    "origen": "manual",
-   "tcg_set": "Battle Academy 2024"
+   "tcg_set": "Battle Academy 2024",
+   "variants": {
+    "normal": {
+     "product_id": 556926,
+     "printing": "Normal"
+    }
+   }
   },
   "108": {
    "name": "Flaaffy",
@@ -1391,7 +2161,13 @@
    "tcg_number": "015",
    "note": "nombre casa pero el numero no (nuestro 108, TCG 015)",
    "origen": "manual",
-   "tcg_set": "Battle Academy 2024"
+   "tcg_set": "Battle Academy 2024",
+   "variants": {
+    "normal": {
+     "product_id": 556912,
+     "printing": "Normal"
+    }
+   }
   },
   "109": {
    "name": "Ampharos",
@@ -1403,7 +2179,13 @@
    "product_id": 556880,
    "tcg_name": "Ampharos - Pikachu 28",
    "origen": "manual",
-   "tcg_set": "Battle Academy 2024"
+   "tcg_set": "Battle Academy 2024",
+   "variants": {
+    "normal": {
+     "product_id": 556880,
+     "printing": "Normal"
+    }
+   }
   },
   "110": {
    "name": "Darkrai ex",
@@ -1414,7 +2196,13 @@
    "product_id": 556444,
    "tcg_name": "Darkrai ex (Darkrai)",
    "origen": "manual",
-   "tcg_set": "Battle Academy 2024"
+   "tcg_set": "Battle Academy 2024",
+   "variants": {
+    "holofoil": {
+     "product_id": 556444,
+     "printing": "Holofoil"
+    }
+   }
   },
   "111": {
    "name": "Pawniard",
@@ -1425,7 +2213,13 @@
    "product_id": 556854,
    "tcg_name": "Pawniard - Darkrai Deck",
    "origen": "manual",
-   "tcg_set": "Battle Academy 2024"
+   "tcg_set": "Battle Academy 2024",
+   "variants": {
+    "normal": {
+     "product_id": 556854,
+     "printing": "Normal"
+    }
+   }
   },
   "112": {
    "name": "Bisharp",
@@ -1436,7 +2230,13 @@
    "product_id": 556815,
    "tcg_name": "Bisharp - Darkrai Deck",
    "origen": "manual",
-   "tcg_set": "Battle Academy 2024"
+   "tcg_set": "Battle Academy 2024",
+   "variants": {
+    "normal": {
+     "product_id": 556815,
+     "printing": "Normal"
+    }
+   }
   },
   "113": {
    "name": "Kingambit",
@@ -1449,7 +2249,13 @@
    "tcg_number": "130",
    "note": "nombre casa pero el numero no (nuestro 113, TCG 130)",
    "origen": "manual",
-   "tcg_set": "Battle Academy 2024"
+   "tcg_set": "Battle Academy 2024",
+   "variants": {
+    "normal": {
+     "product_id": 556835,
+     "printing": "Normal"
+    }
+   }
   },
   "114": {
    "name": "Picnicker",
@@ -1464,7 +2270,13 @@
    "status": "ok",
    "product_id": 551687,
    "tcg_name": "Picnicker - 114",
-   "tcg_number": "114"
+   "tcg_number": "114",
+   "variants": {
+    "normal": {
+     "product_id": 551687,
+     "printing": "Normal"
+    }
+   }
   },
   "115": {
    "name": "Thwackey",
@@ -1475,7 +2287,16 @@
    "status": "ok",
    "product_id": 551688,
    "tcg_name": "Thwackey - 115",
-   "tcg_number": "115"
+   "tcg_number": "115",
+   "variants": {
+    "holofoil": {
+     "product_id": 551688,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 563315
+    }
+   }
   },
   "116": {
    "name": "Infernape",
@@ -1486,7 +2307,16 @@
    "status": "ok",
    "product_id": 551689,
    "tcg_name": "Infernape - 116",
-   "tcg_number": "116"
+   "tcg_number": "116",
+   "variants": {
+    "holofoil": {
+     "product_id": 551689,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 563316
+    }
+   }
   },
   "117": {
    "name": "Froslass",
@@ -1497,7 +2327,16 @@
    "status": "ok",
    "product_id": 551691,
    "tcg_name": "Froslass - 117",
-   "tcg_number": "117"
+   "tcg_number": "117",
+   "variants": {
+    "holofoil": {
+     "product_id": 551691,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 563317
+    }
+   }
   },
   "118": {
    "name": "Tatsugiri",
@@ -1508,7 +2347,16 @@
    "status": "ok",
    "product_id": 551692,
    "tcg_name": "Tatsugiri - 118",
-   "tcg_number": "118"
+   "tcg_number": "118",
+   "variants": {
+    "holofoil": {
+     "product_id": 551692,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 563318
+    }
+   }
   },
   "119": {
    "name": "Toxel",
@@ -1518,7 +2366,13 @@
    "status": "ok",
    "product_id": 554293,
    "tcg_name": "Toxel - 119",
-   "tcg_number": "119"
+   "tcg_number": "119",
+   "variants": {
+    "holofoil": {
+     "product_id": 554293,
+     "printing": "Holofoil"
+    }
+   }
   },
   "120": {
    "name": "Pupitar",
@@ -1528,7 +2382,13 @@
    "status": "ok",
    "product_id": 554189,
    "tcg_name": "Pupitar - 120",
-   "tcg_number": "120"
+   "tcg_number": "120",
+   "variants": {
+    "holofoil": {
+     "product_id": 554189,
+     "printing": "Holofoil"
+    }
+   }
   },
   "121": {
    "name": "Revavroom",
@@ -1544,7 +2404,13 @@
      "suffix": "Cosmos Holo",
      "product_id": 560618
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 554296,
+     "printing": "Holofoil"
+    }
+   }
   },
   "122": {
    "name": "Snorlax",
@@ -1554,7 +2420,13 @@
    "status": "ok",
    "product_id": 554297,
    "tcg_name": "Snorlax - 122",
-   "tcg_number": "122"
+   "tcg_number": "122",
+   "variants": {
+    "holofoil": {
+     "product_id": 554297,
+     "printing": "Holofoil"
+    }
+   }
   },
   "123": {
    "name": "Teal Mask Ogerpon",
@@ -1571,7 +2443,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 552786
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 552785,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 552786
+    }
+   }
   },
   "124": {
    "name": "Iono",
@@ -1581,7 +2462,13 @@
    "status": "ok",
    "product_id": 545661,
    "tcg_name": "Iono - 124",
-   "tcg_number": "124"
+   "tcg_number": "124",
+   "variants": {
+    "holofoil": {
+     "product_id": 545661,
+     "printing": "Holofoil"
+    }
+   }
   },
   "125": {
    "name": "Armarouge ex",
@@ -1591,7 +2478,13 @@
    "status": "ok",
    "product_id": 547653,
    "tcg_name": "Armarouge ex - 125",
-   "tcg_number": "125"
+   "tcg_number": "125",
+   "variants": {
+    "holofoil": {
+     "product_id": 547653,
+     "printing": "Holofoil"
+    }
+   }
   },
   "126": {
    "name": "Palafin ex",
@@ -1602,7 +2495,17 @@
    "status": "ok",
    "product_id": 556449,
    "tcg_name": "Palafin ex - 126",
-   "tcg_number": "126"
+   "tcg_number": "126",
+   "variants": {
+    "holofoil": {
+     "product_id": 556449,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 560085,
+     "fuente": "transversal"
+    }
+   }
   },
   "127": {
    "name": "Walking Wake ex",
@@ -1612,7 +2515,13 @@
    "status": "ok",
    "product_id": 554298,
    "tcg_name": "Walking Wake ex - 127",
-   "tcg_number": "127"
+   "tcg_number": "127",
+   "variants": {
+    "holofoil": {
+     "product_id": 554298,
+     "printing": "Holofoil"
+    }
+   }
   },
   "128": {
    "name": "Iron Leaves ex",
@@ -1622,7 +2531,13 @@
    "status": "ok",
    "product_id": 554299,
    "tcg_name": "Iron Leaves ex - 128",
-   "tcg_number": "128"
+   "tcg_number": "128",
+   "variants": {
+    "holofoil": {
+     "product_id": 554299,
+     "printing": "Holofoil"
+    }
+   }
   },
   "129": {
    "name": "Pecharunt",
@@ -1639,7 +2554,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 573720
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 564137,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 573720
+    }
+   }
   },
   "130": {
    "name": "Kingambit",
@@ -1649,7 +2573,13 @@
    "status": "ok",
    "product_id": 562087,
    "tcg_name": "Kingambit - 130",
-   "tcg_number": "130"
+   "tcg_number": "130",
+   "variants": {
+    "holofoil": {
+     "product_id": 562087,
+     "printing": "Holofoil"
+    }
+   }
   },
   "131": {
    "name": "Kingdra ex",
@@ -1659,7 +2589,13 @@
    "status": "ok",
    "product_id": 562019,
    "tcg_name": "Kingdra ex - 131",
-   "tcg_number": "131"
+   "tcg_number": "131",
+   "variants": {
+    "holofoil": {
+     "product_id": 562019,
+     "printing": "Holofoil"
+    }
+   }
   },
   "132": {
    "name": "Greninja ex",
@@ -1669,7 +2605,13 @@
    "status": "ok",
    "product_id": 562018,
    "tcg_name": "Greninja ex - 132",
-   "tcg_number": "132"
+   "tcg_number": "132",
+   "variants": {
+    "holofoil": {
+     "product_id": 562018,
+     "printing": "Holofoil"
+    }
+   }
   },
   "133": {
    "name": "Ledian",
@@ -1680,7 +2622,16 @@
    "status": "ok",
    "product_id": 576970,
    "tcg_name": "Ledian - 133",
-   "tcg_number": "133"
+   "tcg_number": "133",
+   "variants": {
+    "holofoil": {
+     "product_id": 576970,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 580334
+    }
+   }
   },
   "134": {
    "name": "Crabominable",
@@ -1691,7 +2642,16 @@
    "status": "ok",
    "product_id": 576972,
    "tcg_name": "Crabominable - 134",
-   "tcg_number": "134/142"
+   "tcg_number": "134/142",
+   "variants": {
+    "holofoil": {
+     "product_id": 576972,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 580335
+    }
+   }
   },
   "135": {
    "name": "Drifblim",
@@ -1702,7 +2662,16 @@
    "status": "ok",
    "product_id": 576974,
    "tcg_name": "Drifblim - 135",
-   "tcg_number": "135"
+   "tcg_number": "135",
+   "variants": {
+    "holofoil": {
+     "product_id": 576974,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 580336
+    }
+   }
   },
   "136": {
    "name": "Bouffalant",
@@ -1713,7 +2682,16 @@
    "status": "ok",
    "product_id": 576976,
    "tcg_name": "Bouffalant - 136",
-   "tcg_number": "136"
+   "tcg_number": "136",
+   "variants": {
+    "holofoil": {
+     "product_id": 576976,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 580337
+    }
+   }
   },
   "137": {
    "name": "Horsea",
@@ -1729,7 +2707,13 @@
      "suffix": "Cosmo Holo",
      "product_id": 585578
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 585578,
+     "printing": "Holofoil"
+    }
+   }
   },
   "138": {
    "name": "Porygon2",
@@ -1745,7 +2729,12 @@
      "suffix": "Cosmos Holo",
      "product_id": 585577
     }
-   ]
+   ],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 585577
+    }
+   }
   },
   "139": {
    "name": "Latias",
@@ -1761,7 +2750,13 @@
      "suffix": "Cosmo Holo",
      "product_id": 585579
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 585579,
+     "printing": "Holofoil"
+    }
+   }
   },
   "140": {
    "name": "Tinkaton",
@@ -1777,7 +2772,13 @@
      "suffix": "Cosmo Holo",
      "product_id": 585126
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 585126,
+     "printing": "Holofoil"
+    }
+   }
   },
   "141": {
    "name": "Noctowl",
@@ -1794,7 +2795,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 578812
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 578811,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 578812
+    }
+   }
   },
   "142": {
    "name": "Victini ex",
@@ -1804,7 +2814,13 @@
    "status": "ok",
    "product_id": 586179,
    "tcg_name": "Victini ex - 142",
-   "tcg_number": "142"
+   "tcg_number": "142",
+   "variants": {
+    "holofoil": {
+     "product_id": 586179,
+     "printing": "Holofoil"
+    }
+   }
   },
   "143": {
    "name": "Miraidon ex",
@@ -1814,7 +2830,13 @@
    "status": "ok",
    "product_id": 593277,
    "tcg_name": "Miraidon ex - 143",
-   "tcg_number": "143"
+   "tcg_number": "143",
+   "variants": {
+    "holofoil": {
+     "product_id": 593277,
+     "printing": "Holofoil"
+    }
+   }
   },
   "144": {
    "name": "Gouging Fire ex",
@@ -1824,7 +2846,13 @@
    "status": "ok",
    "product_id": 579993,
    "tcg_name": "Gouging Fire ex - 144",
-   "tcg_number": "144"
+   "tcg_number": "144",
+   "variants": {
+    "holofoil": {
+     "product_id": 579993,
+     "printing": "Holofoil"
+    }
+   }
   },
   "145": {
    "name": "Raging Bolt ex",
@@ -1834,7 +2862,13 @@
    "status": "ok",
    "product_id": 583850,
    "tcg_name": "Raging Bolt ex - 145",
-   "tcg_number": "145"
+   "tcg_number": "145",
+   "variants": {
+    "holofoil": {
+     "product_id": 583850,
+     "printing": "Holofoil"
+    }
+   }
   },
   "146": {
    "name": "Iron Crown ex",
@@ -1844,7 +2878,13 @@
    "status": "ok",
    "product_id": 579992,
    "tcg_name": "Iron Crown ex - 146",
-   "tcg_number": "146"
+   "tcg_number": "146",
+   "variants": {
+    "holofoil": {
+     "product_id": 579992,
+     "printing": "Holofoil"
+    }
+   }
   },
   "147": {
    "name": "Iron Boulder ex",
@@ -1854,7 +2894,13 @@
    "status": "ok",
    "product_id": 583851,
    "tcg_name": "Iron Boulder ex - 147",
-   "tcg_number": "147"
+   "tcg_number": "147",
+   "variants": {
+    "holofoil": {
+     "product_id": 583851,
+     "printing": "Holofoil"
+    }
+   }
   },
   "148": {
    "name": "Miraidon",
@@ -1866,7 +2912,13 @@
    "product_id": 490730,
    "tcg_name": "Miraidon - 013 (Pokemon Center Exclusive)",
    "tcg_number": "013",
-   "note": "emparejado por nombre (la numeracion no coincide)"
+   "note": "emparejado por nombre (la numeracion no coincide)",
+   "variants": {
+    "holofoil": {
+     "product_id": 490730,
+     "printing": "Holofoil"
+    }
+   }
   },
   "149": {
    "name": "Pecharunt",
@@ -1876,7 +2928,13 @@
    "status": "ok",
    "product_id": 562025,
    "tcg_name": "Pecharunt - 149",
-   "tcg_number": "149"
+   "tcg_number": "149",
+   "variants": {
+    "holofoil": {
+     "product_id": 562025,
+     "printing": "Holofoil"
+    }
+   }
   },
   "150": {
    "name": "Paradise Resort",
@@ -1893,7 +2951,16 @@
      "suffix": "World Championships 2024",
      "product_id": 578146
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 578146,
+     "printing": "Normal"
+    },
+    "staffStamp": {
+     "product_id": 583726
+    }
+   }
   },
   "151": {
    "name": "Gouging Fire",
@@ -1910,7 +2977,16 @@
      "suffix": "Staff",
      "product_id": 607013
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 594382,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 607013
+    }
+   }
   },
   "152": {
    "name": "Chien-Pao",
@@ -1927,7 +3003,16 @@
      "suffix": "Staff",
      "product_id": 607014
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 594383,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 607014
+    }
+   }
   },
   "153": {
    "name": "Magneton",
@@ -1944,7 +3029,16 @@
      "suffix": "Staff",
      "product_id": 607015
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 594385,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 607015
+    }
+   }
   },
   "154": {
    "name": "Indeedee",
@@ -1961,7 +3055,16 @@
      "suffix": "Staff",
      "product_id": 607016
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 594388,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 607016
+    }
+   }
   },
   "155": {
    "name": "Wooper",
@@ -1971,7 +3074,13 @@
    "status": "ok",
    "product_id": 594389,
    "tcg_name": "Wooper - 155",
-   "tcg_number": "155"
+   "tcg_number": "155",
+   "variants": {
+    "holofoil": {
+     "product_id": 594389,
+     "printing": "Holofoil"
+    }
+   }
   },
   "156": {
    "name": "Quagsire",
@@ -1981,7 +3090,13 @@
    "status": "ok",
    "product_id": 594403,
    "tcg_name": "Quagsire - 156",
-   "tcg_number": "156"
+   "tcg_number": "156",
+   "variants": {
+    "holofoil": {
+     "product_id": 594403,
+     "printing": "Holofoil"
+    }
+   }
   },
   "157": {
    "name": "Zapdos",
@@ -1997,7 +3112,13 @@
      "suffix": "Cosmos Holo",
      "product_id": 594405
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 594405,
+     "printing": "Holofoil"
+    }
+   }
   },
   "158": {
    "name": "Pachirisu",
@@ -2007,7 +3128,13 @@
    "status": "ok",
    "product_id": 594410,
    "tcg_name": "Pachirisu - 158",
-   "tcg_number": "158"
+   "tcg_number": "158",
+   "variants": {
+    "holofoil": {
+     "product_id": 594410,
+     "printing": "Holofoil"
+    }
+   }
   },
   "159": {
    "name": "Magneton",
@@ -2024,7 +3151,16 @@
      "suffix": "Pokémon Center Exclusive",
      "product_id": 594468
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 594386,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 594468
+    }
+   }
   },
   "160": {
    "name": "Squawkabilly ex",
@@ -2034,7 +3170,13 @@
    "status": "ok",
    "product_id": 587945,
    "tcg_name": "Squawkabilly ex - 160",
-   "tcg_number": "160"
+   "tcg_number": "160",
+   "variants": {
+    "holofoil": {
+     "product_id": 587945,
+     "printing": "Holofoil"
+    }
+   }
   },
   "161": {
    "name": "Charizard ex",
@@ -2044,7 +3186,13 @@
    "status": "ok",
    "product_id": 586831,
    "tcg_name": "Charizard ex - 161",
-   "tcg_number": "161"
+   "tcg_number": "161",
+   "variants": {
+    "holofoil": {
+     "product_id": 586831,
+     "printing": "Holofoil"
+    }
+   }
   },
   "162": {
    "name": "Houndstone ex",
@@ -2055,7 +3203,17 @@
    "status": "ok",
    "product_id": 591023,
    "tcg_name": "Houndstone ex",
-   "tcg_number": "162"
+   "tcg_number": "162",
+   "variants": {
+    "holofoil": {
+     "product_id": 591023,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 596423,
+     "fuente": "transversal"
+    }
+   }
   },
   "163": {
    "name": "Cinderace ex",
@@ -2065,7 +3223,13 @@
    "status": "ok",
    "product_id": 596420,
    "tcg_name": "Cinderace ex - 163",
-   "tcg_number": "163"
+   "tcg_number": "163",
+   "variants": {
+    "holofoil": {
+     "product_id": 596420,
+     "printing": "Holofoil"
+    }
+   }
   },
   "164": {
    "name": "Lapras ex",
@@ -2075,7 +3239,13 @@
    "status": "ok",
    "product_id": 596421,
    "tcg_name": "Lapras ex - 164",
-   "tcg_number": "164"
+   "tcg_number": "164",
+   "variants": {
+    "holofoil": {
+     "product_id": 596421,
+     "printing": "Holofoil"
+    }
+   }
   },
   "165": {
    "name": "Terapagos ex",
@@ -2085,7 +3255,13 @@
    "status": "ok",
    "product_id": 596422,
    "tcg_name": "Terapagos ex - 165",
-   "tcg_number": "165"
+   "tcg_number": "165",
+   "variants": {
+    "holofoil": {
+     "product_id": 596422,
+     "printing": "Holofoil"
+    }
+   }
   },
   "166": {
    "name": "Teal Mask Ogerpon ex",
@@ -2095,7 +3271,13 @@
    "status": "ok",
    "product_id": 596439,
    "tcg_name": "Teal Mask Ogerpon ex - 166",
-   "tcg_number": "166"
+   "tcg_number": "166",
+   "variants": {
+    "holofoil": {
+     "product_id": 596439,
+     "printing": "Holofoil"
+    }
+   }
   },
   "167": {
    "name": "Flareon",
@@ -2111,7 +3293,13 @@
      "suffix": "Cosmos Holo",
      "product_id": 611826
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 611826,
+     "printing": "Holofoil"
+    }
+   }
   },
   "168": {
    "name": "Vaporeon",
@@ -2127,7 +3315,13 @@
      "suffix": "Cosmos Holo",
      "product_id": 611827
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 611827,
+     "printing": "Holofoil"
+    }
+   }
   },
   "169": {
    "name": "Jolteon",
@@ -2143,7 +3337,13 @@
      "suffix": "Cosmos Holo",
      "product_id": 653353
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 653353,
+     "printing": "Holofoil"
+    }
+   }
   },
   "170": {
    "name": "Leafeon",
@@ -2159,7 +3359,13 @@
      "suffix": "Cosmos Holo",
      "product_id": 611829
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 611829,
+     "printing": "Holofoil"
+    }
+   }
   },
   "171": {
    "name": "Glaceon",
@@ -2175,7 +3381,13 @@
      "suffix": "Cosmos Holo",
      "product_id": 611830
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 611830,
+     "printing": "Holofoil"
+    }
+   }
   },
   "172": {
    "name": "Sylveon",
@@ -2191,7 +3403,13 @@
      "suffix": "Cosmos Holo",
      "product_id": 611831
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 611831,
+     "printing": "Holofoil"
+    }
+   }
   },
   "173": {
    "name": "Eevee",
@@ -2208,7 +3426,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 610757
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 610758,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 610757
+    }
+   }
   },
   "174": {
    "name": "Eevee ex",
@@ -2218,7 +3445,13 @@
    "status": "ok",
    "product_id": 632083,
    "tcg_name": "Eevee ex - 174",
-   "tcg_number": "174"
+   "tcg_number": "174",
+   "variants": {
+    "holofoil": {
+     "product_id": 632083,
+     "printing": "Holofoil"
+    }
+   }
   },
   "175": {
    "name": "Espeon ex",
@@ -2228,7 +3461,13 @@
    "status": "ok",
    "product_id": 655095,
    "tcg_name": "Espeon ex - 175",
-   "tcg_number": "SVP 175"
+   "tcg_number": "SVP 175",
+   "variants": {
+    "holofoil": {
+     "product_id": 655095,
+     "printing": "Holofoil"
+    }
+   }
   },
   "176": {
    "name": "Umbreon ex",
@@ -2238,7 +3477,13 @@
    "status": "ok",
    "product_id": 655094,
    "tcg_name": "Umbreon ex - 176",
-   "tcg_number": "SVP 176"
+   "tcg_number": "SVP 176",
+   "variants": {
+    "holofoil": {
+     "product_id": 655094,
+     "printing": "Holofoil"
+    }
+   }
   },
   "177": {
    "name": "Bloodmoon Ursaluna ex",
@@ -2249,7 +3494,17 @@
    "status": "ok",
    "product_id": 595473,
    "tcg_name": "Bloodmoon Ursaluna ex - 177",
-   "tcg_number": "177"
+   "tcg_number": "177",
+   "variants": {
+    "holofoil": {
+     "product_id": 595473,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 595474,
+     "fuente": "transversal"
+    }
+   }
   },
   "178": {
    "name": "Kyogre ex",
@@ -2259,7 +3514,13 @@
    "status": "ok",
    "product_id": 619580,
    "tcg_name": "Kyogre ex - 178",
-   "tcg_number": "178"
+   "tcg_number": "178",
+   "variants": {
+    "holofoil": {
+     "product_id": 619580,
+     "printing": "Holofoil"
+    }
+   }
   },
   "179": {
    "name": "Xerneas ex",
@@ -2269,7 +3530,13 @@
    "status": "ok",
    "product_id": 619584,
    "tcg_name": "Xerneas ex - 179",
-   "tcg_number": "179"
+   "tcg_number": "179",
+   "variants": {
+    "holofoil": {
+     "product_id": 619584,
+     "printing": "Holofoil"
+    }
+   }
   },
   "180": {
    "name": "Dialga ex",
@@ -2279,7 +3546,13 @@
    "status": "ok",
    "product_id": 619587,
    "tcg_name": "Dialga ex - 180",
-   "tcg_number": "180"
+   "tcg_number": "180",
+   "variants": {
+    "holofoil": {
+     "product_id": 619587,
+     "printing": "Holofoil"
+    }
+   }
   },
   "181": {
    "name": "N's Darmanitan",
@@ -2296,7 +3569,16 @@
      "suffix": "Prerelease",
      "product_id": 623233
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 623233,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 624484
+    }
+   }
   },
   "182": {
    "name": "Iono's Kilowattrel",
@@ -2313,7 +3595,16 @@
      "suffix": "Prerelease",
      "product_id": 623234
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 623234,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 624482
+    }
+   }
   },
   "183": {
    "name": "Lillie's Ribombee",
@@ -2330,7 +3621,16 @@
      "suffix": "Prerelease",
      "product_id": 623235
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 623235,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 624472
+    }
+   }
   },
   "184": {
    "name": "Hop's Snorlax",
@@ -2347,7 +3647,16 @@
      "suffix": "Prerelease",
      "product_id": 623238
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 623238,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 624485
+    }
+   }
   },
   "185": {
    "name": "Yanma",
@@ -2357,7 +3666,13 @@
    "status": "ok",
    "product_id": 627706,
    "tcg_name": "Yanma - 185",
-   "tcg_number": "185"
+   "tcg_number": "185",
+   "variants": {
+    "holofoil": {
+     "product_id": 627706,
+     "printing": "Holofoil"
+    }
+   }
   },
   "186": {
    "name": "Scraggy",
@@ -2367,7 +3682,13 @@
    "status": "ok",
    "product_id": 627707,
    "tcg_name": "Scraggy - 186",
-   "tcg_number": "186"
+   "tcg_number": "186",
+   "variants": {
+    "holofoil": {
+     "product_id": 627707,
+     "printing": "Holofoil"
+    }
+   }
   },
   "187": {
    "name": "Yanmega",
@@ -2383,7 +3704,13 @@
      "suffix": "Cosmos Holo",
      "product_id": 627724
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 627724,
+     "printing": "Holofoil"
+    }
+   }
   },
   "188": {
    "name": "Scrafty",
@@ -2399,7 +3726,13 @@
      "suffix": "Cosmos Holo",
      "product_id": 627725
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 627725,
+     "printing": "Holofoil"
+    }
+   }
   },
   "189": {
    "name": "N's Zorua",
@@ -2416,7 +3749,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 625182
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 625181,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 625182
+    }
+   }
   },
   "190": {
    "name": "Pikachu",
@@ -2426,7 +3768,13 @@
    "status": "ok",
    "product_id": 562088,
    "tcg_name": "Pikachu - 190",
-   "tcg_number": "190"
+   "tcg_number": "190",
+   "variants": {
+    "normal": {
+     "product_id": 562088,
+     "printing": "Normal"
+    }
+   }
   },
   "191": {
    "name": "Sprigatito",
@@ -2436,7 +3784,13 @@
    "status": "ok",
    "product_id": 595036,
    "tcg_name": "Sprigatito - 191",
-   "tcg_number": "191"
+   "tcg_number": "191",
+   "variants": {
+    "holofoil": {
+     "product_id": 595036,
+     "printing": "Holofoil"
+    }
+   }
   },
   "192": {
    "name": "Fuecoco",
@@ -2446,7 +3800,13 @@
    "status": "ok",
    "product_id": 595038,
    "tcg_name": "Fuecoco - 192",
-   "tcg_number": "192"
+   "tcg_number": "192",
+   "variants": {
+    "holofoil": {
+     "product_id": 595038,
+     "printing": "Holofoil"
+    }
+   }
   },
   "193": {
    "name": "Hop's Zacian ex",
@@ -2457,7 +3817,17 @@
    "status": "ok",
    "product_id": 625631,
    "tcg_name": "Hop's Zacian ex - SVP193",
-   "tcg_number": "SVP193"
+   "tcg_number": "SVP193",
+   "variants": {
+    "holofoil": {
+     "product_id": 625631,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 625633,
+     "fuente": "transversal"
+    }
+   }
   },
   "194": {
    "name": "Iono's Bellibolt ex",
@@ -2467,7 +3837,13 @@
    "status": "ok",
    "product_id": 628320,
    "tcg_name": "Iono's Bellibolt ex - 194",
-   "tcg_number": "194"
+   "tcg_number": "194",
+   "variants": {
+    "holofoil": {
+     "product_id": 628320,
+     "printing": "Holofoil"
+    }
+   }
   },
   "195": {
    "name": "Lillie's Clefairy ex",
@@ -2477,7 +3853,13 @@
    "status": "ok",
    "product_id": 628317,
    "tcg_name": "Lillie's Clefairy ex - 195",
-   "tcg_number": "195"
+   "tcg_number": "195",
+   "variants": {
+    "holofoil": {
+     "product_id": 628317,
+     "printing": "Holofoil"
+    }
+   }
   },
   "196": {
    "name": "Charizard ex",
@@ -2489,7 +3871,17 @@
    "product_id": 641610,
    "tcg_name": "Charizard ex -196",
    "tcg_number": "196",
-   "note": "nuestro \"Charizard ex\" vs TCG \"Charizard ex -196\""
+   "note": "nuestro \"Charizard ex\" vs TCG \"Charizard ex -196\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 641610,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 152944,
+     "fuente": "transversal"
+    }
+   }
   },
   "197": {
    "name": "Koraidon ex",
@@ -2499,7 +3891,13 @@
    "status": "ok",
    "product_id": 634348,
    "tcg_name": "Koraidon ex - 197",
-   "tcg_number": "197"
+   "tcg_number": "197",
+   "variants": {
+    "holofoil": {
+     "product_id": 634348,
+     "printing": "Holofoil"
+    }
+   }
   },
   "198": {
    "name": "Zacian ex",
@@ -2509,7 +3907,13 @@
    "status": "ok",
    "product_id": 632678,
    "tcg_name": "Zacian ex - 198",
-   "tcg_number": "198"
+   "tcg_number": "198",
+   "variants": {
+    "holofoil": {
+     "product_id": 632678,
+     "printing": "Holofoil"
+    }
+   }
   },
   "199": {
    "name": "Zarude",
@@ -2525,7 +3929,12 @@
      "suffix": "Cosmos Holo",
      "product_id": 637662
     }
-   ]
+   ],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 637662
+    }
+   }
   },
   "200": {
    "name": "Eevee",
@@ -2541,7 +3950,12 @@
      "suffix": "Cosmos Holo",
      "product_id": 637077
     }
-   ]
+   ],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 637077
+    }
+   }
   },
   "201": {
    "name": "Zebstrika",
@@ -2557,7 +3971,12 @@
      "suffix": "Cosmos Holo",
      "product_id": 637669
     }
-   ]
+   ],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 637669
+    }
+   }
   },
   "202": {
    "name": "Kangaskhan",
@@ -2573,7 +3992,12 @@
      "suffix": "Cosmos Holo",
      "product_id": 637413
     }
-   ]
+   ],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 637413
+    }
+   }
   },
   "203": {
    "name": "Team Rocket's Wobbuffet",
@@ -2590,7 +4014,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 635468
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 635467,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 635468
+    }
+   }
   },
   "204": {
    "name": "Cynthia’s Garchomp ex",
@@ -2600,7 +4033,13 @@
    "status": "ok",
    "product_id": 637613,
    "tcg_name": "Cynthia's Garchomp ex",
-   "tcg_number": "204"
+   "tcg_number": "204",
+   "variants": {
+    "holofoil": {
+     "product_id": 637613,
+     "printing": "Holofoil"
+    }
+   }
   },
   "205": {
    "name": "Team Rocket’s Mewtwo ex",
@@ -2611,7 +4050,17 @@
    "status": "ok",
    "product_id": 637617,
    "tcg_name": "Team Rocket's Mewtwo ex",
-   "tcg_number": "205"
+   "tcg_number": "205",
+   "variants": {
+    "holofoil": {
+     "product_id": 637617,
+     "printing": "Holofoil"
+    },
+    "jumbo": {
+     "product_id": 639951,
+     "fuente": "transversal"
+    }
+   }
   },
   "206": {
    "name": "Marnie's Morpeko",
@@ -2621,7 +4070,13 @@
    "status": "ok",
    "product_id": 635456,
    "tcg_name": "Marnie’s Morpeko",
-   "tcg_number": "206"
+   "tcg_number": "206",
+   "variants": {
+    "holofoil": {
+     "product_id": 635456,
+     "printing": "Holofoil"
+    }
+   }
   },
   "207": {
    "name": "Steven's Beldum",
@@ -2631,7 +4086,13 @@
    "status": "ok",
    "product_id": 635457,
    "tcg_name": "Steven's Beldum - 207",
-   "tcg_number": "207"
+   "tcg_number": "207",
+   "variants": {
+    "holofoil": {
+     "product_id": 635457,
+     "printing": "Holofoil"
+    }
+   }
   },
   "208": {
    "name": "Victini",
@@ -2641,7 +4102,13 @@
    "status": "ok",
    "product_id": 646169,
    "tcg_name": "Victini - 208",
-   "tcg_number": "208"
+   "tcg_number": "208",
+   "variants": {
+    "holofoil": {
+     "product_id": 646169,
+     "printing": "Holofoil"
+    }
+   }
   },
   "209": {
    "name": "Thundurus",
@@ -2658,7 +4125,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 644834
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 644833,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 644834
+    }
+   }
   },
   "210": {
    "name": "Tornadus",
@@ -2675,7 +4151,16 @@
      "suffix": "Pokemon Center Exclusive",
      "product_id": 644836
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 644835,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 644836
+    }
+   }
   },
   "211": {
    "name": "Gothitelle",
@@ -2685,7 +4170,13 @@
    "status": "ok",
    "product_id": 647306,
    "tcg_name": "Gothitelle - 211",
-   "tcg_number": "211"
+   "tcg_number": "211",
+   "variants": {
+    "holofoil": {
+     "product_id": 647306,
+     "printing": "Holofoil"
+    }
+   }
   },
   "212": {
    "name": "Reuniclus",
@@ -2695,7 +4186,13 @@
    "status": "ok",
    "product_id": 647309,
    "tcg_name": "Reuniclus - 212",
-   "tcg_number": "212"
+   "tcg_number": "212",
+   "variants": {
+    "holofoil": {
+     "product_id": 647309,
+     "printing": "Holofoil"
+    }
+   }
   },
   "213": {
    "name": "Feraligatr",
@@ -2711,7 +4208,13 @@
      "suffix": "Illustration Contest 2024",
      "product_id": 620104
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 620104,
+     "printing": "Normal"
+    }
+   }
   },
   "214": {
    "name": "Pikachu",
@@ -2727,7 +4230,13 @@
      "suffix": "Illustration Contest 2024",
      "product_id": 620106
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 620106,
+     "printing": "Normal"
+    }
+   }
   },
   "215": {
    "name": "Toxtricity ex",
@@ -2743,7 +4252,13 @@
      "suffix": "Illustration Contest 2024",
      "product_id": 620107
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 620107,
+     "printing": "Normal"
+    }
+   }
   },
   "216": {
    "name": "Team Rocket's Mewtwo ex",
@@ -2753,7 +4268,13 @@
    "status": "ok",
    "product_id": 653257,
    "tcg_name": "Team Rocket's Mewtwo ex - 216",
-   "tcg_number": "216"
+   "tcg_number": "216",
+   "variants": {
+    "holofoil": {
+     "product_id": 653257,
+     "printing": "Holofoil"
+    }
+   }
   },
   "217": {
    "name": "Team Rocket's Nidoking ex",
@@ -2763,7 +4284,13 @@
    "status": "ok",
    "product_id": 653258,
    "tcg_name": "Team Rocket's Nidoking ex - 217",
-   "tcg_number": "217"
+   "tcg_number": "217",
+   "variants": {
+    "holofoil": {
+     "product_id": 653258,
+     "printing": "Holofoil"
+    }
+   }
   },
   "218": {
    "name": "Team Rocket's Persian ex",
@@ -2773,7 +4300,13 @@
    "status": "ok",
    "product_id": 653259,
    "tcg_name": "Team Rocket's Persian ex - 218",
-   "tcg_number": "218"
+   "tcg_number": "218",
+   "variants": {
+    "holofoil": {
+     "product_id": 653259,
+     "printing": "Holofoil"
+    }
+   }
   },
   "219": {
    "name": "Black Belt's Training",
@@ -2783,7 +4316,13 @@
    "status": "ok",
    "product_id": 664825,
    "tcg_name": "Black Belt's Training - 219",
-   "tcg_number": "219"
+   "tcg_number": "219",
+   "variants": {
+    "normal": {
+     "product_id": 664825,
+     "printing": "Normal"
+    }
+   }
   },
   "220": {
    "name": "Black Belt's Training",
@@ -2793,7 +4332,13 @@
    "status": "ok",
    "product_id": 664824,
    "tcg_name": "Black Belt's Training - 220",
-   "tcg_number": "220"
+   "tcg_number": "220",
+   "variants": {
+    "normal": {
+     "product_id": 664824,
+     "printing": "Normal"
+    }
+   }
   },
   "221": {
    "name": "Professor's Research",
@@ -2804,7 +4349,13 @@
    "product_id": 664829,
    "tcg_name": "Professor's Research [Professor Birch] - 221",
    "tcg_number": "221",
-   "note": "nuestro \"Professor's Research\" vs TCG \"Professor's Research [Professor Birch]\""
+   "note": "nuestro \"Professor's Research\" vs TCG \"Professor's Research [Professor Birch]\"",
+   "variants": {
+    "normal": {
+     "product_id": 664829,
+     "printing": "Normal"
+    }
+   }
   },
   "222": {
    "name": "Professor's Research",
@@ -2815,7 +4366,13 @@
    "product_id": 664827,
    "tcg_name": "Professor's Research [Professor Kukui] - 222",
    "tcg_number": "222",
-   "note": "nuestro \"Professor's Research\" vs TCG \"Professor's Research [Professor Kukui]\""
+   "note": "nuestro \"Professor's Research\" vs TCG \"Professor's Research [Professor Kukui]\"",
+   "variants": {
+    "normal": {
+     "product_id": 664827,
+     "printing": "Normal"
+    }
+   }
   },
   "223": {
    "name": "Professor's Research",
@@ -2826,7 +4383,13 @@
    "product_id": 664828,
    "tcg_name": "Professor's Research [Professor Magnolia] - 223",
    "tcg_number": "223",
-   "note": "nuestro \"Professor's Research\" vs TCG \"Professor's Research [Professor Magnolia]\""
+   "note": "nuestro \"Professor's Research\" vs TCG \"Professor's Research [Professor Magnolia]\"",
+   "variants": {
+    "normal": {
+     "product_id": 664828,
+     "printing": "Normal"
+    }
+   }
   },
   "224": {
    "name": "Paradise Resort",
@@ -2843,7 +4406,12 @@
      "suffix": "World Championships 2025",
      "product_id": 649232
     }
-   ]
+   ],
+   "variants": {
+    "worldChampionshipsStamp": {
+     "product_id": 649232
+    }
+   }
   }
  }
 }

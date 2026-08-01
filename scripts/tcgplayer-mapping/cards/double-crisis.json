@@ -7,7 +7,12 @@
   "ok": 34,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 66,
+   "resueltas": 66,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -19,7 +24,17 @@
    "status": "ok",
    "product_id": 97047,
    "tcg_name": "Team Magma's Numel",
-   "tcg_number": "1/34"
+   "tcg_number": "1/34",
+   "variants": {
+    "normal": {
+     "product_id": 97047,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97047,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Team Magma's Camerupt",
@@ -30,7 +45,17 @@
    "status": "ok",
    "product_id": 97048,
    "tcg_name": "Team Magma's Camerupt",
-   "tcg_number": "2/34"
+   "tcg_number": "2/34",
+   "variants": {
+    "holofoil": {
+     "product_id": 97048,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 97048,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Team Aqua's Spheal",
@@ -41,7 +66,17 @@
    "status": "ok",
    "product_id": 97049,
    "tcg_name": "Team Aqua's Spheal",
-   "tcg_number": "3/34"
+   "tcg_number": "3/34",
+   "variants": {
+    "normal": {
+     "product_id": 97049,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97049,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Team Aqua's Sealeo",
@@ -52,7 +87,17 @@
    "status": "ok",
    "product_id": 97050,
    "tcg_name": "Team Aqua's Sealeo",
-   "tcg_number": "4/34"
+   "tcg_number": "4/34",
+   "variants": {
+    "normal": {
+     "product_id": 97050,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97050,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Team Aqua's Walrein",
@@ -63,7 +108,17 @@
    "status": "ok",
    "product_id": 97051,
    "tcg_name": "Team Aqua's Walrein",
-   "tcg_number": "5/34"
+   "tcg_number": "5/34",
+   "variants": {
+    "holofoil": {
+     "product_id": 97051,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 97051,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Team Aqua's Kyogre-EX",
@@ -73,7 +128,13 @@
    "status": "ok",
    "product_id": 97052,
    "tcg_name": "Team Aqua's Kyogre EX",
-   "tcg_number": "6/34"
+   "tcg_number": "6/34",
+   "variants": {
+    "holofoil": {
+     "product_id": 97052,
+     "printing": "Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Team Aqua's Grimer",
@@ -84,7 +145,17 @@
    "status": "ok",
    "product_id": 97053,
    "tcg_name": "Team Aqua's Grimer",
-   "tcg_number": "7/34"
+   "tcg_number": "7/34",
+   "variants": {
+    "normal": {
+     "product_id": 97053,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97053,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Team Aqua's Muk",
@@ -95,7 +166,17 @@
    "status": "ok",
    "product_id": 97054,
    "tcg_name": "Team Aqua's Muk",
-   "tcg_number": "8/34"
+   "tcg_number": "8/34",
+   "variants": {
+    "holofoil": {
+     "product_id": 97054,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 97054,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "9": {
    "name": "Team Aqua's Seviper",
@@ -106,7 +187,17 @@
    "status": "ok",
    "product_id": 97055,
    "tcg_name": "Team Aqua's Seviper",
-   "tcg_number": "9/34"
+   "tcg_number": "9/34",
+   "variants": {
+    "normal": {
+     "product_id": 97055,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97055,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Team Magma's Baltoy",
@@ -117,7 +208,17 @@
    "status": "ok",
    "product_id": 97056,
    "tcg_name": "Team Magma's Baltoy",
-   "tcg_number": "10/34"
+   "tcg_number": "10/34",
+   "variants": {
+    "normal": {
+     "product_id": 97056,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97056,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Team Magma's Claydol",
@@ -128,7 +229,17 @@
    "status": "ok",
    "product_id": 97057,
    "tcg_name": "Team Magma's Claydol",
-   "tcg_number": "11/34"
+   "tcg_number": "11/34",
+   "variants": {
+    "holofoil": {
+     "product_id": 97057,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 97057,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Team Magma's Aron",
@@ -139,7 +250,17 @@
    "status": "ok",
    "product_id": 97058,
    "tcg_name": "Team Magma's Aron",
-   "tcg_number": "12/34"
+   "tcg_number": "12/34",
+   "variants": {
+    "normal": {
+     "product_id": 97058,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97058,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Team Magma's Lairon",
@@ -150,7 +271,17 @@
    "status": "ok",
    "product_id": 97059,
    "tcg_name": "Team Magma's Lairon",
-   "tcg_number": "13/34"
+   "tcg_number": "13/34",
+   "variants": {
+    "normal": {
+     "product_id": 97059,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97059,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "14": {
    "name": "Team Magma's Aggron",
@@ -161,7 +292,17 @@
    "status": "ok",
    "product_id": 97060,
    "tcg_name": "Team Magma's Aggron",
-   "tcg_number": "14/34"
+   "tcg_number": "14/34",
+   "variants": {
+    "holofoil": {
+     "product_id": 97060,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 97060,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "15": {
    "name": "Team Magma's Groudon-EX",
@@ -171,7 +312,13 @@
    "status": "ok",
    "product_id": 97061,
    "tcg_name": "Team Magma's Groudon EX",
-   "tcg_number": "15/34"
+   "tcg_number": "15/34",
+   "variants": {
+    "holofoil": {
+     "product_id": 97061,
+     "printing": "Holofoil"
+    }
+   }
   },
   "16": {
    "name": "Team Aqua's Poochyena",
@@ -182,7 +329,17 @@
    "status": "ok",
    "product_id": 97063,
    "tcg_name": "Team Aqua's Poochyena",
-   "tcg_number": "16/34"
+   "tcg_number": "16/34",
+   "variants": {
+    "normal": {
+     "product_id": 97063,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97063,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "17": {
    "name": "Team Magma's Poochyena",
@@ -193,7 +350,17 @@
    "status": "ok",
    "product_id": 97062,
    "tcg_name": "Team Magma's Poochyena",
-   "tcg_number": "17/34"
+   "tcg_number": "17/34",
+   "variants": {
+    "normal": {
+     "product_id": 97062,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97062,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "18": {
    "name": "Team Aqua's Mightyena",
@@ -204,7 +371,17 @@
    "status": "ok",
    "product_id": 97064,
    "tcg_name": "Team Aqua's Mightyena",
-   "tcg_number": "18/34"
+   "tcg_number": "18/34",
+   "variants": {
+    "normal": {
+     "product_id": 97064,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97064,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "19": {
    "name": "Team Magma's Mightyena",
@@ -215,7 +392,17 @@
    "status": "ok",
    "product_id": 97065,
    "tcg_name": "Team Magma's Mightyena",
-   "tcg_number": "19/34"
+   "tcg_number": "19/34",
+   "variants": {
+    "normal": {
+     "product_id": 97065,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97065,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "20": {
    "name": "Team Aqua's Carvanha",
@@ -226,7 +413,17 @@
    "status": "ok",
    "product_id": 97066,
    "tcg_name": "Team Aqua's Carvanha",
-   "tcg_number": "20/34"
+   "tcg_number": "20/34",
+   "variants": {
+    "normal": {
+     "product_id": 97066,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97066,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "21": {
    "name": "Team Aqua's Sharpedo",
@@ -237,7 +434,17 @@
    "status": "ok",
    "product_id": 97067,
    "tcg_name": "Team Aqua's Sharpedo",
-   "tcg_number": "21/34"
+   "tcg_number": "21/34",
+   "variants": {
+    "holofoil": {
+     "product_id": 97067,
+     "printing": "Holofoil"
+    },
+    "reverseHolofoil": {
+     "product_id": 97067,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "22": {
    "name": "Team Magma's Zangoose",
@@ -248,7 +455,17 @@
    "status": "ok",
    "product_id": 97068,
    "tcg_name": "Team Magma's Zangoose",
-   "tcg_number": "22/34"
+   "tcg_number": "22/34",
+   "variants": {
+    "normal": {
+     "product_id": 97068,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97068,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "23": {
    "name": "Aqua Diffuser",
@@ -259,7 +476,17 @@
    "status": "ok",
    "product_id": 97069,
    "tcg_name": "Aqua Diffuser",
-   "tcg_number": "23/34"
+   "tcg_number": "23/34",
+   "variants": {
+    "normal": {
+     "product_id": 97069,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97069,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "24": {
    "name": "Magma Pointer",
@@ -270,7 +497,17 @@
    "status": "ok",
    "product_id": 97070,
    "tcg_name": "Magma Pointer",
-   "tcg_number": "24/34"
+   "tcg_number": "24/34",
+   "variants": {
+    "normal": {
+     "product_id": 97070,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97070,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "25": {
    "name": "Team Aqua Admin",
@@ -281,7 +518,17 @@
    "status": "ok",
    "product_id": 97071,
    "tcg_name": "Team Aqua Admin",
-   "tcg_number": "25/34"
+   "tcg_number": "25/34",
+   "variants": {
+    "normal": {
+     "product_id": 97071,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97071,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "26": {
    "name": "Team Aqua Grunt",
@@ -292,7 +539,17 @@
    "status": "ok",
    "product_id": 97072,
    "tcg_name": "Team Aqua Grunt",
-   "tcg_number": "26/34"
+   "tcg_number": "26/34",
+   "variants": {
+    "normal": {
+     "product_id": 97072,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97072,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "27": {
    "name": "Team Aqua's Great Ball",
@@ -303,7 +560,17 @@
    "status": "ok",
    "product_id": 97073,
    "tcg_name": "Team Aqua's Great Ball",
-   "tcg_number": "27/34"
+   "tcg_number": "27/34",
+   "variants": {
+    "normal": {
+     "product_id": 97073,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97073,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "28": {
    "name": "Team Aqua's Secret Base",
@@ -314,7 +581,17 @@
    "status": "ok",
    "product_id": 97074,
    "tcg_name": "Team Aqua's Secret Base",
-   "tcg_number": "28/34"
+   "tcg_number": "28/34",
+   "variants": {
+    "normal": {
+     "product_id": 97074,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97074,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "29": {
    "name": "Team Magma Admin",
@@ -325,7 +602,17 @@
    "status": "ok",
    "product_id": 97075,
    "tcg_name": "Team Magma Admin",
-   "tcg_number": "29/34"
+   "tcg_number": "29/34",
+   "variants": {
+    "normal": {
+     "product_id": 97075,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97075,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "30": {
    "name": "Team Magma Grunt",
@@ -336,7 +623,17 @@
    "status": "ok",
    "product_id": 97076,
    "tcg_name": "Team Magma Grunt",
-   "tcg_number": "30/34"
+   "tcg_number": "30/34",
+   "variants": {
+    "normal": {
+     "product_id": 97076,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97076,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "31": {
    "name": "Team Magma's Great Ball",
@@ -347,7 +644,17 @@
    "status": "ok",
    "product_id": 97077,
    "tcg_name": "Team Magma's Great Ball",
-   "tcg_number": "31/34"
+   "tcg_number": "31/34",
+   "variants": {
+    "normal": {
+     "product_id": 97077,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97077,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "32": {
    "name": "Team Magma's Secret Base",
@@ -358,7 +665,17 @@
    "status": "ok",
    "product_id": 97078,
    "tcg_name": "Team Magma's Secret Base",
-   "tcg_number": "32/34"
+   "tcg_number": "32/34",
+   "variants": {
+    "normal": {
+     "product_id": 97078,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97078,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "33": {
    "name": "Double Aqua Energy",
@@ -369,7 +686,17 @@
    "status": "ok",
    "product_id": 97079,
    "tcg_name": "Double Aqua Energy",
-   "tcg_number": "33/34"
+   "tcg_number": "33/34",
+   "variants": {
+    "normal": {
+     "product_id": 97079,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97079,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "34": {
    "name": "Double Magma Energy",
@@ -380,7 +707,17 @@
    "status": "ok",
    "product_id": 97080,
    "tcg_name": "Double Magma Energy",
-   "tcg_number": "34/34"
+   "tcg_number": "34/34",
+   "variants": {
+    "normal": {
+     "product_id": 97080,
+     "printing": "Normal"
+    },
+    "reverseHolofoil": {
+     "product_id": 97080,
+     "printing": "Reverse Holofoil"
+    }
+   }
   }
  }
 }

@@ -7,7 +7,12 @@
   "ok": 1,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 1,
+   "resueltas": 1,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "33": {
@@ -19,7 +24,13 @@
    "product_id": 84593,
    "tcg_name": "Dark Exeggcutor",
    "tcg_number": "033/105",
-   "note": "nuestro \"Dark Exeggutor\" vs TCG \"Dark Exeggcutor\""
+   "note": "nuestro \"Dark Exeggutor\" vs TCG \"Dark Exeggcutor\"",
+   "variants": {
+    "normal": {
+     "product_id": 84593,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

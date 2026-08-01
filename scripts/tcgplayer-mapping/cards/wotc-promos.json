@@ -7,7 +7,12 @@
   "ok": 53,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 56,
+   "resueltas": 56,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -25,7 +30,17 @@
      "suffix": "1",
      "product_id": 121772
     }
-   ]
+   ],
+   "variants": {
+    "firstEdition": {
+     "product_id": 121772,
+     "printing": "1st Edition"
+    },
+    "normal": {
+     "product_id": 121772,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Electabuzz",
@@ -41,7 +56,13 @@
      "suffix": "Movie Promo",
      "product_id": 85107
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 85107,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Mewtwo",
@@ -57,7 +78,13 @@
      "suffix": "Movie Promo",
      "product_id": 87414
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 87414,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Pikachu",
@@ -73,7 +100,13 @@
      "suffix": "Movie Promo",
      "product_id": 88066
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 88066,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Dragonite",
@@ -89,7 +122,13 @@
      "suffix": "Movie Promo",
      "product_id": 84909
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 84909,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Arcanine",
@@ -99,7 +138,13 @@
    "status": "ok",
    "product_id": 83578,
    "tcg_name": "Arcanine",
-   "tcg_number": "06/53"
+   "tcg_number": "06/53",
+   "variants": {
+    "normal": {
+     "product_id": 83578,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Jigglypuff",
@@ -109,7 +154,13 @@
    "status": "ok",
    "product_id": 86309,
    "tcg_name": "Jigglypuff",
-   "tcg_number": "07/53"
+   "tcg_number": "07/53",
+   "variants": {
+    "normal": {
+     "product_id": 86309,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Mew",
@@ -129,7 +180,13 @@
      "suffix": "8",
      "product_id": 87394
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 607818,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Mew",
@@ -145,7 +202,13 @@
      "suffix": "9",
      "product_id": 87395
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 87395,
+     "printing": "Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Meowth",
@@ -155,7 +218,13 @@
    "status": "ok",
    "product_id": 87309,
    "tcg_name": "Meowth",
-   "tcg_number": "10/53"
+   "tcg_number": "10/53",
+   "variants": {
+    "holofoil": {
+     "product_id": 87309,
+     "printing": "Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Eevee",
@@ -171,7 +240,13 @@
      "suffix": "JR East Stamp Rally",
      "product_id": 618732
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 85074,
+     "printing": "Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Mewtwo",
@@ -187,7 +262,13 @@
      "suffix": "12",
      "product_id": 87416
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 87416,
+     "printing": "Normal"
+    }
+   }
   },
   "13": {
    "name": "Venusaur",
@@ -197,7 +278,13 @@
    "status": "ok",
    "product_id": 90311,
    "tcg_name": "Venusaur",
-   "tcg_number": "13/53"
+   "tcg_number": "13/53",
+   "variants": {
+    "holofoil": {
+     "product_id": 90311,
+     "printing": "Holofoil"
+    }
+   }
   },
   "14": {
    "name": "Mewtwo",
@@ -213,7 +300,13 @@
      "suffix": "14",
      "product_id": 87417
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 87417,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Cool Porygon",
@@ -223,7 +316,13 @@
    "status": "ok",
    "product_id": 84422,
    "tcg_name": "Cool Porygon",
-   "tcg_number": "15/53"
+   "tcg_number": "15/53",
+   "variants": {
+    "holofoil": {
+     "product_id": 84422,
+     "printing": "Holofoil"
+    }
+   }
   },
   "16": {
    "name": "Computer Error",
@@ -239,7 +338,13 @@
      "suffix": "Rocket's Secret Machine",
      "product_id": 84414
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 84414,
+     "printing": "Normal"
+    }
+   }
   },
   "17": {
    "name": "Dark Persian",
@@ -249,7 +354,13 @@
    "status": "ok",
    "product_id": 84638,
    "tcg_name": "Dark Persian",
-   "tcg_number": "17/53"
+   "tcg_number": "17/53",
+   "variants": {
+    "holofoil": {
+     "product_id": 84638,
+     "printing": "Holofoil"
+    }
+   }
   },
   "18": {
    "name": "Team Rocket's Meowth",
@@ -259,7 +370,13 @@
    "status": "ok",
    "product_id": 89851,
    "tcg_name": "Team Rocket's Meowth",
-   "tcg_number": "18/53"
+   "tcg_number": "18/53",
+   "variants": {
+    "normal": {
+     "product_id": 89851,
+     "printing": "Normal"
+    }
+   }
   },
   "19": {
    "name": "Sabrina's Abra",
@@ -269,7 +386,13 @@
    "status": "ok",
    "product_id": 88862,
    "tcg_name": "Sabrina's Abra",
-   "tcg_number": "19/53"
+   "tcg_number": "19/53",
+   "variants": {
+    "normal": {
+     "product_id": 88862,
+     "printing": "Normal"
+    }
+   }
   },
   "20": {
    "name": "Psyduck",
@@ -279,7 +402,13 @@
    "status": "ok",
    "product_id": 88429,
    "tcg_name": "Psyduck",
-   "tcg_number": "20/53"
+   "tcg_number": "20/53",
+   "variants": {
+    "normal": {
+     "product_id": 88429,
+     "printing": "Normal"
+    }
+   }
   },
   "21": {
    "name": "Moltres",
@@ -289,7 +418,13 @@
    "status": "ok",
    "product_id": 87557,
    "tcg_name": "Moltres",
-   "tcg_number": "21/53"
+   "tcg_number": "21/53",
+   "variants": {
+    "normal": {
+     "product_id": 87557,
+     "printing": "Normal"
+    }
+   }
   },
   "22": {
    "name": "Articuno",
@@ -305,7 +440,13 @@
      "suffix": "22",
      "product_id": 83647
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 83647,
+     "printing": "Normal"
+    }
+   }
   },
   "23": {
    "name": "Zapdos",
@@ -315,7 +456,13 @@
    "status": "ok",
    "product_id": 90713,
    "tcg_name": "Zapdos",
-   "tcg_number": "23/53"
+   "tcg_number": "23/53",
+   "variants": {
+    "normal": {
+     "product_id": 90713,
+     "printing": "Normal"
+    }
+   }
   },
   "24": {
    "name": "_____'s Pikachu",
@@ -325,7 +472,13 @@
    "status": "ok",
    "product_id": 90784,
    "tcg_name": "______'s Pikachu",
-   "tcg_number": "24/53"
+   "tcg_number": "24/53",
+   "variants": {
+    "holofoil": {
+     "product_id": 90784,
+     "printing": "Holofoil"
+    }
+   }
   },
   "25": {
    "name": "Flying Pikachu",
@@ -335,7 +488,13 @@
    "status": "ok",
    "product_id": 85534,
    "tcg_name": "Flying Pikachu",
-   "tcg_number": "25/53"
+   "tcg_number": "25/53",
+   "variants": {
+    "normal": {
+     "product_id": 85534,
+     "printing": "Normal"
+    }
+   }
   },
   "26": {
    "name": "Pikachu",
@@ -351,7 +510,13 @@
      "suffix": "SNAP Promo",
      "product_id": 88068
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 88068,
+     "printing": "Normal"
+    }
+   }
   },
   "27": {
    "name": "Pikachu",
@@ -367,7 +532,13 @@
      "suffix": "27",
      "product_id": 88069
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 88069,
+     "printing": "Normal"
+    }
+   }
   },
   "28": {
    "name": "Surfing Pikachu",
@@ -377,7 +548,13 @@
    "status": "ok",
    "product_id": 89643,
    "tcg_name": "Surfing Pikachu",
-   "tcg_number": "28/53"
+   "tcg_number": "28/53",
+   "variants": {
+    "normal": {
+     "product_id": 89643,
+     "printing": "Normal"
+    }
+   }
   },
   "29": {
    "name": "Marill",
@@ -387,7 +564,13 @@
    "status": "ok",
    "product_id": 87211,
    "tcg_name": "Marill",
-   "tcg_number": "29/53"
+   "tcg_number": "29/53",
+   "variants": {
+    "normal": {
+     "product_id": 87211,
+     "printing": "Normal"
+    }
+   }
   },
   "30": {
    "name": "Togepi",
@@ -397,7 +580,13 @@
    "status": "ok",
    "product_id": 89928,
    "tcg_name": "Togepi",
-   "tcg_number": "30/53"
+   "tcg_number": "30/53",
+   "variants": {
+    "normal": {
+     "product_id": 89928,
+     "printing": "Normal"
+    }
+   }
   },
   "31": {
    "name": "Cleffa",
@@ -407,7 +596,13 @@
    "status": "ok",
    "product_id": 84363,
    "tcg_name": "Cleffa",
-   "tcg_number": "31/53"
+   "tcg_number": "31/53",
+   "variants": {
+    "normal": {
+     "product_id": 84363,
+     "printing": "Normal"
+    }
+   }
   },
   "32": {
    "name": "Smeargle",
@@ -417,7 +612,13 @@
    "status": "ok",
    "product_id": 89353,
    "tcg_name": "Smeargle",
-   "tcg_number": "32/53"
+   "tcg_number": "32/53",
+   "variants": {
+    "normal": {
+     "product_id": 89353,
+     "printing": "Normal"
+    }
+   }
   },
   "33": {
    "name": "Scizor",
@@ -427,7 +628,13 @@
    "status": "ok",
    "product_id": 88960,
    "tcg_name": "Scizor",
-   "tcg_number": "33/53"
+   "tcg_number": "33/53",
+   "variants": {
+    "normal": {
+     "product_id": 88960,
+     "printing": "Normal"
+    }
+   }
   },
   "34": {
    "name": "Entei",
@@ -437,7 +644,13 @@
    "status": "ok",
    "product_id": 85270,
    "tcg_name": "Entei",
-   "tcg_number": "34/53"
+   "tcg_number": "34/53",
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 85270,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "35": {
    "name": "Pichu",
@@ -447,7 +660,13 @@
    "status": "ok",
    "product_id": 88014,
    "tcg_name": "Pichu",
-   "tcg_number": "35/53"
+   "tcg_number": "35/53",
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 88014,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "36": {
    "name": "Igglybuff",
@@ -457,7 +676,13 @@
    "status": "ok",
    "product_id": 86259,
    "tcg_name": "Igglybuff",
-   "tcg_number": "36/53"
+   "tcg_number": "36/53",
+   "variants": {
+    "normal": {
+     "product_id": 86259,
+     "printing": "Normal"
+    }
+   }
   },
   "37": {
    "name": "Hitmontop",
@@ -467,7 +692,13 @@
    "status": "ok",
    "product_id": 86112,
    "tcg_name": "Hitmontop",
-   "tcg_number": "37/53"
+   "tcg_number": "37/53",
+   "variants": {
+    "normal": {
+     "product_id": 86112,
+     "printing": "Normal"
+    }
+   }
   },
   "38": {
    "name": "Unown [J]",
@@ -478,7 +709,13 @@
    "product_id": 90215,
    "tcg_name": "Unown [J]",
    "tcg_number": "38/53",
-   "note": "nuestro \"Unown [J]\" vs TCG \"Unown\""
+   "note": "nuestro \"Unown [J]\" vs TCG \"Unown\"",
+   "variants": {
+    "normal": {
+     "product_id": 90215,
+     "printing": "Normal"
+    }
+   }
   },
   "39": {
    "name": "Misdreavus",
@@ -488,7 +725,13 @@
    "status": "ok",
    "product_id": 87503,
    "tcg_name": "Misdreavus",
-   "tcg_number": "39/53"
+   "tcg_number": "39/53",
+   "variants": {
+    "normal": {
+     "product_id": 87503,
+     "printing": "Normal"
+    }
+   }
   },
   "40": {
    "name": "Pokémon Center",
@@ -498,7 +741,13 @@
    "status": "ok",
    "product_id": 88213,
    "tcg_name": "Pokemon Center",
-   "tcg_number": "40/53"
+   "tcg_number": "40/53",
+   "variants": {
+    "normal": {
+     "product_id": 88213,
+     "printing": "Normal"
+    }
+   }
   },
   "41": {
    "name": "Lucky Stadium",
@@ -508,7 +757,13 @@
    "status": "ok",
    "product_id": 86894,
    "tcg_name": "Lucky Stadium",
-   "tcg_number": "41/53"
+   "tcg_number": "41/53",
+   "variants": {
+    "normal": {
+     "product_id": 86894,
+     "printing": "Normal"
+    }
+   }
   },
   "42": {
    "name": "Pokémon Tower",
@@ -518,7 +773,13 @@
    "status": "ok",
    "product_id": 88240,
    "tcg_name": "Pokemon Tower",
-   "tcg_number": "42/53"
+   "tcg_number": "42/53",
+   "variants": {
+    "normal": {
+     "product_id": 88240,
+     "printing": "Normal"
+    }
+   }
   },
   "43": {
    "name": "Machamp",
@@ -528,7 +789,13 @@
    "status": "ok",
    "product_id": 86961,
    "tcg_name": "Machamp",
-   "tcg_number": "43/53"
+   "tcg_number": "43/53",
+   "variants": {
+    "normal": {
+     "product_id": 86961,
+     "printing": "Normal"
+    }
+   }
   },
   "44": {
    "name": "Magmar",
@@ -538,7 +805,13 @@
    "status": "ok",
    "product_id": 87043,
    "tcg_name": "Magmar",
-   "tcg_number": "44/53"
+   "tcg_number": "44/53",
+   "variants": {
+    "normal": {
+     "product_id": 87043,
+     "printing": "Normal"
+    }
+   }
   },
   "45": {
    "name": "Scyther",
@@ -548,7 +821,13 @@
    "status": "ok",
    "product_id": 88993,
    "tcg_name": "Scyther",
-   "tcg_number": "45/53"
+   "tcg_number": "45/53",
+   "variants": {
+    "normal": {
+     "product_id": 88993,
+     "printing": "Normal"
+    }
+   }
   },
   "46": {
    "name": "Electabuzz",
@@ -558,7 +837,13 @@
    "status": "ok",
    "product_id": 85111,
    "tcg_name": "Electabuzz",
-   "tcg_number": "46/53"
+   "tcg_number": "46/53",
+   "variants": {
+    "normal": {
+     "product_id": 85111,
+     "printing": "Normal"
+    }
+   }
   },
   "47": {
    "name": "Mew",
@@ -574,7 +859,13 @@
      "suffix": "47",
      "product_id": 87397
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 87397,
+     "printing": "Normal"
+    }
+   }
   },
   "48": {
    "name": "Articuno",
@@ -590,7 +881,13 @@
      "suffix": "48",
      "product_id": 83648
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 83648,
+     "printing": "Normal"
+    }
+   }
   },
   "49": {
    "name": "Snorlax",
@@ -600,7 +897,13 @@
    "status": "ok",
    "product_id": 89385,
    "tcg_name": "Snorlax",
-   "tcg_number": "49/53"
+   "tcg_number": "49/53",
+   "variants": {
+    "normal": {
+     "product_id": 89385,
+     "printing": "Normal"
+    }
+   }
   },
   "50": {
    "name": "Celebi",
@@ -610,7 +913,13 @@
    "status": "ok",
    "product_id": 84143,
    "tcg_name": "Celebi",
-   "tcg_number": "50/53"
+   "tcg_number": "50/53",
+   "variants": {
+    "normal": {
+     "product_id": 84143,
+     "printing": "Normal"
+    }
+   }
   },
   "51": {
    "name": "Rapidash",
@@ -631,7 +940,16 @@
      "suffix": "Pokemon Center NY",
      "product_id": 244347
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 88575,
+     "printing": "Normal"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 244347
+    }
+   }
   },
   "52": {
    "name": "Ho-oh",
@@ -648,7 +966,16 @@
      "suffix": "Pokemon Center NY",
      "product_id": 244348
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 86120,
+     "printing": "Normal"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 244348
+    }
+   }
   },
   "53": {
    "name": "Suicune",
@@ -658,7 +985,13 @@
    "status": "ok",
    "product_id": 89601,
    "tcg_name": "Suicune",
-   "tcg_number": "53/53"
+   "tcg_number": "53/53",
+   "variants": {
+    "normal": {
+     "product_id": 89601,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

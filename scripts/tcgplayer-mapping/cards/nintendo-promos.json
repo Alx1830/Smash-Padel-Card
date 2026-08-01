@@ -7,7 +7,12 @@
   "ok": 40,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 50,
+   "resueltas": 49,
+   "sinResolver": 1
+  }
  },
  "cards": {
   "1": {
@@ -25,7 +30,17 @@
      "suffix": "Nintendo Power Magazine",
      "product_id": 86555
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86555,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 86555,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Groudon ex",
@@ -42,7 +57,17 @@
      "suffix": "Nintendo Power Magazine",
      "product_id": 85928
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 85928,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 85928,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Treecko",
@@ -58,7 +83,13 @@
      "suffix": "e-League",
      "product_id": 90031
     }
-   ]
+   ],
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 90031,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Grovyle",
@@ -69,7 +100,13 @@
    "product_id": 85934,
    "tcg_name": "Grovyle - 004 (e-League) [Winner]",
    "tcg_number": "004",
-   "note": "nuestro \"Grovyle\" vs TCG \"Grovyle - 004 (e-League)\""
+   "note": "nuestro \"Grovyle\" vs TCG \"Grovyle - 004 (e-League)\"",
+   "variants": {
+    "normal": {
+     "product_id": 85934,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Mudkip",
@@ -85,7 +122,13 @@
      "suffix": "POP Tournament",
      "product_id": 87608
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 87608,
+     "printing": "Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Torchic",
@@ -101,7 +144,13 @@
      "suffix": "POP Tournament",
      "product_id": 89952
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 89952,
+     "printing": "Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Treecko",
@@ -117,7 +166,13 @@
      "suffix": "POP Tournament",
      "product_id": 90036
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90036,
+     "printing": "Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Torchic",
@@ -133,7 +188,13 @@
      "suffix": "e-League",
      "product_id": 89948
     }
-   ]
+   ],
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 89948,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "9": {
    "name": "Combusken",
@@ -145,7 +206,17 @@
    "product_id": 84399,
    "tcg_name": "Combusken - 009 (e-League) [Winner]",
    "tcg_number": "009",
-   "note": "nuestro \"Combusken\" vs TCG \"Combusken - 009 (e-League)\""
+   "note": "nuestro \"Combusken\" vs TCG \"Combusken - 009 (e-League)\"",
+   "variants": {
+    "jumbo": {
+     "product_id": 211423,
+     "fuente": "transversal"
+    },
+    "normal": {
+     "product_id": 84399,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Mudkip",
@@ -161,7 +232,13 @@
      "suffix": "e-League",
      "product_id": 87604
     }
-   ]
+   ],
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 87604,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Marshtomp",
@@ -172,7 +249,13 @@
    "product_id": 87231,
    "tcg_name": "Marshtomp - 011 (e-League) [Winner]",
    "tcg_number": "011",
-   "note": "nuestro \"Marshtomp\" vs TCG \"Marshtomp - 011 (e-League)\""
+   "note": "nuestro \"Marshtomp\" vs TCG \"Marshtomp - 011 (e-League)\"",
+   "variants": {
+    "normal": {
+     "product_id": 87231,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Pikachu",
@@ -189,7 +272,13 @@
      "suffix": "EX Series Collector's Tin",
      "product_id": 88067
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 88067,
+     "printing": "Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Meowth",
@@ -205,7 +294,13 @@
      "suffix": "EX Series Collector's Tin",
      "product_id": 87310
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 87310,
+     "printing": "Holofoil"
+    }
+   }
   },
   "14": {
    "name": "Latias",
@@ -221,7 +316,13 @@
      "suffix": "Pokemon Heroes: Latios & Latias DVD Release",
      "product_id": 86649
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 86649,
+     "printing": "Normal"
+    }
+   }
   },
   "15": {
    "name": "Latios",
@@ -237,7 +338,13 @@
      "suffix": "Pokemon Heroes: Latios & Latias DVD Release",
      "product_id": 86663
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 86663,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Treecko",
@@ -258,7 +365,17 @@
      "suffix": "Target Promo",
      "product_id": 153316
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90035,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 90035,
+     "printing": "Normal"
+    }
+   }
   },
   "17": {
    "name": "Torchic",
@@ -279,7 +396,17 @@
      "suffix": "Target Promo",
      "product_id": 153317
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 89953,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 89953,
+     "printing": "Normal"
+    }
+   }
   },
   "18": {
    "name": "Mudkip",
@@ -300,7 +427,17 @@
      "suffix": "Target Promo",
      "product_id": 153319
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 87609,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 87609,
+     "printing": "Normal"
+    }
+   }
   },
   "19": {
    "name": "Whismur",
@@ -321,7 +458,17 @@
      "suffix": "Target Promo",
      "product_id": 145343
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90579,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 90579,
+     "printing": "Normal"
+    }
+   }
   },
   "20": {
    "name": "Ludicolo",
@@ -337,7 +484,13 @@
      "suffix": "EX Series Value Pack",
      "product_id": 86896
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86896,
+     "printing": "Holofoil"
+    }
+   }
   },
   "21": {
    "name": "Jirachi",
@@ -353,7 +506,13 @@
      "suffix": "Jirachi: Wish Maker DVD Release",
      "product_id": 86326
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 86326,
+     "printing": "Normal"
+    }
+   }
   },
   "22": {
    "name": "Beldum",
@@ -369,7 +528,13 @@
      "suffix": "e-League",
      "product_id": 83784
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 83784,
+     "printing": "Normal"
+    }
+   }
   },
   "23": {
    "name": "Metang",
@@ -385,7 +550,13 @@
      "suffix": "Stadium Challenge 2004",
      "product_id": 87374
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 87374,
+     "printing": "Normal"
+    }
+   }
   },
   "24": {
    "name": "Chimecho",
@@ -401,7 +572,13 @@
      "suffix": "e-League",
      "product_id": 84293
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 84293,
+     "printing": "Normal"
+    }
+   }
   },
   "25": {
    "name": "Flygon",
@@ -418,7 +595,16 @@
      "suffix": "e-League",
      "product_id": 85523
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 85523,
+     "printing": "Normal"
+    },
+    "winnerStamp": {
+     "product_id": 228158
+    }
+   }
   },
   "26": {
    "name": "Tropical Wind",
@@ -429,7 +615,13 @@
    "product_id": 90053,
    "tcg_name": "Tropical Wind - 026 (2004 World Championships) [Participation]",
    "tcg_number": "026",
-   "note": "nuestro \"Tropical Wind\" vs TCG \"Tropical Wind - 026 (2004 World Championships)\""
+   "note": "nuestro \"Tropical Wind\" vs TCG \"Tropical Wind - 026 (2004 World Championships)\"",
+   "variants": {
+    "normal": {
+     "product_id": 90053,
+     "printing": "Normal"
+    }
+   }
   },
   "27": {
    "name": "Tropical Tidal Wave",
@@ -441,7 +633,13 @@
    "tcg_name": "Tropical Tidal Wave - 027 (2005 World Championships) [Participation]",
    "tcg_number": "27/99",
    "note": "nuestro \"Tropical Tidal Wave\" vs TCG \"Raichu\"",
-   "origen": "manual"
+   "origen": "manual",
+   "variants": {
+    "normal": {
+     "product_id": 90050,
+     "printing": "Normal"
+    }
+   }
   },
   "28": {
    "name": "Championship Arena",
@@ -457,7 +655,13 @@
      "suffix": "2005 World Championships",
      "product_id": 84163
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 84163,
+     "printing": "Normal"
+    }
+   }
   },
   "29": {
    "name": "Celebi",
@@ -473,7 +677,13 @@
      "suffix": "EX Collector's Carry Tin",
      "product_id": 84145
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 84145,
+     "printing": "Holofoil"
+    }
+   }
   },
   "30": {
    "name": "Suicune",
@@ -489,7 +699,13 @@
      "suffix": "EX Collector's Carry Tin",
      "product_id": 89603
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 89603,
+     "printing": "Holofoil"
+    }
+   }
   },
   "31": {
    "name": "Moltres ex",
@@ -505,7 +721,13 @@
      "suffix": "EX Collector's Window Tins",
      "product_id": 87567
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 87567,
+     "printing": "Holofoil"
+    }
+   }
   },
   "32": {
    "name": "Articuno ex",
@@ -521,7 +743,13 @@
      "suffix": "EX Collector's Window Tins",
      "product_id": 83655
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 83655,
+     "printing": "Holofoil"
+    }
+   }
   },
   "33": {
    "name": "Zapdos ex",
@@ -537,7 +765,13 @@
      "suffix": "EX Collector's Window Tins",
      "product_id": 90724
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90724,
+     "printing": "Holofoil"
+    }
+   }
   },
   "34": {
    "name": "Typhlosion",
@@ -553,7 +787,13 @@
      "suffix": "Epic Collection Value Boxes",
      "product_id": 90104
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90104,
+     "printing": "Holofoil"
+    }
+   }
   },
   "35": {
    "name": "Pikachu δ",
@@ -570,7 +810,17 @@
      "suffix": "Value Pack",
      "product_id": 88109
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 88109,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 88109,
+     "printing": "Normal"
+    }
+   }
   },
   "36": {
    "name": "Tropical Tidal Wave",
@@ -581,7 +831,13 @@
    "product_id": 224553,
    "tcg_name": "Tropical Tidal Wave - 036 (2006 World Championships) [Finalist]",
    "tcg_number": "036",
-   "note": "nuestro \"Tropical Tidal Wave\" vs TCG \"Tropical Tidal Wave - 036 (2006 World Championships)\""
+   "note": "nuestro \"Tropical Tidal Wave\" vs TCG \"Tropical Tidal Wave - 036 (2006 World Championships)\"",
+   "variants": {
+    "normal": {
+     "product_id": 224553,
+     "printing": "Normal"
+    }
+   }
   },
   "37": {
    "name": "Kyogre ex",
@@ -597,7 +853,13 @@
      "suffix": "EX Collector's Tins",
      "product_id": 86558
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86558,
+     "printing": "Holofoil"
+    }
+   }
   },
   "38": {
    "name": "Groudon ex",
@@ -613,7 +875,13 @@
      "suffix": "EX Collector's Tins",
      "product_id": 85931
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 85931,
+     "printing": "Holofoil"
+    }
+   }
   },
   "39": {
    "name": "Rayquaza ex",
@@ -629,7 +897,13 @@
      "suffix": "EX Collector's Tin",
      "product_id": 88644
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 88644,
+     "printing": "Holofoil"
+    }
+   }
   },
   "40": {
    "name": "Mew",
@@ -645,7 +919,13 @@
      "suffix": "Trainer's Challenge Set",
      "product_id": 87402
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 87402,
+     "printing": "Holofoil"
+    }
+   }
   }
  }
 }

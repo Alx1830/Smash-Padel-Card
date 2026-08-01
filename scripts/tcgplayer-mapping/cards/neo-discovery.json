@@ -7,7 +7,12 @@
   "ok": 35,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 36,
+   "resueltas": 36,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -24,7 +29,13 @@
      "suffix": "1",
      "product_id": 85316
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 85316,
+     "printing": "Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Forretress",
@@ -40,7 +51,13 @@
      "suffix": "2",
      "product_id": 85542
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 85542,
+     "printing": "Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Hitmontop",
@@ -56,7 +73,13 @@
      "suffix": "3",
      "product_id": 86110
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86110,
+     "printing": "Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Houndoom",
@@ -72,7 +95,13 @@
      "suffix": "4",
      "product_id": 86197
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86197,
+     "printing": "Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Houndour",
@@ -89,7 +118,17 @@
      "suffix": "5",
      "product_id": 86216
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86216,
+     "printing": "Holofoil"
+    },
+    "normal": {
+     "product_id": 86216,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Kabutops",
@@ -105,7 +144,13 @@
      "suffix": "6",
      "product_id": 86389
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86389,
+     "printing": "Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Magnemite",
@@ -121,7 +166,13 @@
      "suffix": "7",
      "product_id": 87064
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 87064,
+     "printing": "Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Politoed",
@@ -137,7 +188,13 @@
      "suffix": "8",
      "product_id": 88246
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 88246,
+     "printing": "Holofoil"
+    }
+   }
   },
   "9": {
    "name": "Poliwrath",
@@ -153,7 +210,13 @@
      "suffix": "9",
      "product_id": 88269
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 88269,
+     "printing": "Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Scizor",
@@ -169,7 +232,13 @@
      "suffix": "10",
      "product_id": 88956
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 88956,
+     "printing": "Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Smeargle",
@@ -185,7 +254,13 @@
      "suffix": "11",
      "product_id": 89350
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 89350,
+     "printing": "Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Tyranitar",
@@ -201,7 +276,13 @@
      "suffix": "12",
      "product_id": 90113
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90113,
+     "printing": "Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Umbreon",
@@ -217,7 +298,13 @@
      "suffix": "13",
      "product_id": 90137
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90137,
+     "printing": "Holofoil"
+    }
+   }
   },
   "14": {
    "name": "Unown [A]",
@@ -228,7 +315,13 @@
    "product_id": 90196,
    "tcg_name": "Unown [A] (14)",
    "tcg_number": "14/75",
-   "note": "nuestro \"Unown [A]\" vs TCG \"Unown\""
+   "note": "nuestro \"Unown [A]\" vs TCG \"Unown\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 90196,
+     "printing": "Holofoil"
+    }
+   }
   },
   "15": {
    "name": "Ursaring",
@@ -244,7 +337,13 @@
      "suffix": "15",
      "product_id": 90249
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90249,
+     "printing": "Holofoil"
+    }
+   }
   },
   "16": {
    "name": "Wobbuffet",
@@ -260,7 +359,13 @@
      "suffix": "16",
      "product_id": 90612
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90612,
+     "printing": "Holofoil"
+    }
+   }
   },
   "17": {
    "name": "Yanma",
@@ -276,7 +381,13 @@
      "suffix": "17",
      "product_id": 90680
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90680,
+     "printing": "Holofoil"
+    }
+   }
   },
   "20": {
    "name": "Espeon",
@@ -292,7 +403,13 @@
      "suffix": "20",
      "product_id": 85320
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 85320,
+     "printing": "Holofoil"
+    }
+   }
   },
   "21": {
    "name": "Forretress",
@@ -308,7 +425,13 @@
      "suffix": "21",
      "product_id": 85545
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 85545,
+     "printing": "Holofoil"
+    }
+   }
   },
   "22": {
    "name": "Hitmontop",
@@ -324,7 +447,13 @@
      "suffix": "22",
      "product_id": 86111
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86111,
+     "printing": "Holofoil"
+    }
+   }
   },
   "23": {
    "name": "Houndoom",
@@ -340,7 +469,13 @@
      "suffix": "23",
      "product_id": 86204
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86204,
+     "printing": "Holofoil"
+    }
+   }
   },
   "24": {
    "name": "Houndour",
@@ -356,7 +491,13 @@
      "suffix": "24",
      "product_id": 86217
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86217,
+     "printing": "Holofoil"
+    }
+   }
   },
   "25": {
    "name": "Kabutops",
@@ -372,7 +513,13 @@
      "suffix": "25",
      "product_id": 86394
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86394,
+     "printing": "Holofoil"
+    }
+   }
   },
   "26": {
    "name": "Magnemite",
@@ -388,7 +535,13 @@
      "suffix": "26",
      "product_id": 87065
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 87065,
+     "printing": "Holofoil"
+    }
+   }
   },
   "27": {
    "name": "Politoed",
@@ -404,7 +557,13 @@
      "suffix": "27",
      "product_id": 88249
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 88249,
+     "printing": "Holofoil"
+    }
+   }
   },
   "28": {
    "name": "Poliwrath",
@@ -420,7 +579,13 @@
      "suffix": "28",
      "product_id": 88274
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 88274,
+     "printing": "Holofoil"
+    }
+   }
   },
   "29": {
    "name": "Scizor",
@@ -436,7 +601,13 @@
      "suffix": "29",
      "product_id": 88958
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 88958,
+     "printing": "Holofoil"
+    }
+   }
   },
   "30": {
    "name": "Smeargle",
@@ -452,7 +623,13 @@
      "suffix": "30",
      "product_id": 89351
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 89351,
+     "printing": "Holofoil"
+    }
+   }
   },
   "31": {
    "name": "Tyranitar",
@@ -468,7 +645,13 @@
      "suffix": "31",
      "product_id": 90116
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90116,
+     "printing": "Holofoil"
+    }
+   }
   },
   "32": {
    "name": "Umbreon",
@@ -484,7 +667,13 @@
      "suffix": "32",
      "product_id": 90142
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90142,
+     "printing": "Holofoil"
+    }
+   }
   },
   "33": {
    "name": "Unown [A]",
@@ -495,7 +684,13 @@
    "product_id": 90197,
    "tcg_name": "Unown [A] (33)",
    "tcg_number": "33/75",
-   "note": "nuestro \"Unown [A]\" vs TCG \"Unown\""
+   "note": "nuestro \"Unown [A]\" vs TCG \"Unown\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 90197,
+     "printing": "Holofoil"
+    }
+   }
   },
   "34": {
    "name": "Ursaring",
@@ -511,7 +706,13 @@
      "suffix": "34",
      "product_id": 90250
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90250,
+     "printing": "Holofoil"
+    }
+   }
   },
   "35": {
    "name": "Wobbuffet",
@@ -527,7 +728,13 @@
      "suffix": "35",
      "product_id": 90614
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90614,
+     "printing": "Holofoil"
+    }
+   }
   },
   "36": {
    "name": "Yanma",
@@ -543,7 +750,13 @@
      "suffix": "36",
      "product_id": 90681
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 90681,
+     "printing": "Holofoil"
+    }
+   }
   },
   "39": {
    "name": "Houndour",
@@ -559,7 +772,13 @@
      "suffix": "39",
      "product_id": 86218
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 86218,
+     "printing": "Holofoil"
+    }
+   }
   }
  }
 }

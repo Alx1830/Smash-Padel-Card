@@ -7,7 +7,12 @@
   "ok": 18,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 18,
+   "resueltas": 18,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 46466,
    "tcg_name": "Mew",
-   "tcg_number": "01/18"
+   "tcg_number": "01/18",
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 46466,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Pidgeot",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 46476,
    "tcg_name": "Pidgeot",
-   "tcg_number": "02/18"
+   "tcg_number": "02/18",
+   "variants": {
+    "normal": {
+     "product_id": 46476,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Onix",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 46477,
    "tcg_name": "Onix",
-   "tcg_number": "03/18"
+   "tcg_number": "03/18",
+   "variants": {
+    "normal": {
+     "product_id": 46477,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Togepi",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 46478,
    "tcg_name": "Togepi",
-   "tcg_number": "04/18"
+   "tcg_number": "04/18",
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 46478,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Ivysaur",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 46479,
    "tcg_name": "Ivysaur",
-   "tcg_number": "05/18"
+   "tcg_number": "05/18",
+   "variants": {
+    "normal": {
+     "product_id": 46479,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Raticate",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 46480,
    "tcg_name": "Raticate",
-   "tcg_number": "06/18"
+   "tcg_number": "06/18",
+   "variants": {
+    "normal": {
+     "product_id": 46480,
+     "printing": "Normal"
+    }
+   }
   },
   "7": {
    "name": "Ledyba",
@@ -78,7 +119,13 @@
    "status": "ok",
    "product_id": 46481,
    "tcg_name": "Ledyba",
-   "tcg_number": "07/18"
+   "tcg_number": "07/18",
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 46481,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Jigglypuff",
@@ -88,7 +135,13 @@
    "status": "ok",
    "product_id": 46482,
    "tcg_name": "Jigglypuff",
-   "tcg_number": "08/18"
+   "tcg_number": "08/18",
+   "variants": {
+    "normal": {
+     "product_id": 46482,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Butterfree",
@@ -98,7 +151,13 @@
    "status": "ok",
    "product_id": 46483,
    "tcg_name": "Butterfree",
-   "tcg_number": "09/18"
+   "tcg_number": "09/18",
+   "variants": {
+    "normal": {
+     "product_id": 46483,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Tentacruel",
@@ -108,7 +167,13 @@
    "status": "ok",
    "product_id": 46467,
    "tcg_name": "Tentacruel",
-   "tcg_number": "10/18"
+   "tcg_number": "10/18",
+   "variants": {
+    "normal": {
+     "product_id": 46467,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Marill",
@@ -118,7 +183,13 @@
    "status": "ok",
    "product_id": 46468,
    "tcg_name": "Marill",
-   "tcg_number": "11/18"
+   "tcg_number": "11/18",
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 46468,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Lapras",
@@ -128,7 +199,13 @@
    "status": "ok",
    "product_id": 46469,
    "tcg_name": "Lapras",
-   "tcg_number": "12/18"
+   "tcg_number": "12/18",
+   "variants": {
+    "normal": {
+     "product_id": 46469,
+     "printing": "Normal"
+    }
+   }
   },
   "13": {
    "name": "Exeggutor",
@@ -138,7 +215,13 @@
    "status": "ok",
    "product_id": 46470,
    "tcg_name": "Exeggutor",
-   "tcg_number": "13/18"
+   "tcg_number": "13/18",
+   "variants": {
+    "normal": {
+     "product_id": 46470,
+     "printing": "Normal"
+    }
+   }
   },
   "14": {
    "name": "Slowking",
@@ -148,7 +231,13 @@
    "status": "ok",
    "product_id": 46471,
    "tcg_name": "Slowking",
-   "tcg_number": "14/18"
+   "tcg_number": "14/18",
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 46471,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "15": {
    "name": "Wartortle",
@@ -158,7 +247,13 @@
    "status": "ok",
    "product_id": 46472,
    "tcg_name": "Wartortle",
-   "tcg_number": "15/18"
+   "tcg_number": "15/18",
+   "variants": {
+    "normal": {
+     "product_id": 46472,
+     "printing": "Normal"
+    }
+   }
   },
   "16": {
    "name": "Lickitung",
@@ -168,7 +263,13 @@
    "status": "ok",
    "product_id": 46473,
    "tcg_name": "Lickitung",
-   "tcg_number": "16/18"
+   "tcg_number": "16/18",
+   "variants": {
+    "normal": {
+     "product_id": 46473,
+     "printing": "Normal"
+    }
+   }
   },
   "17": {
    "name": "Vileplume",
@@ -178,7 +279,13 @@
    "status": "ok",
    "product_id": 46474,
    "tcg_name": "Vileplume",
-   "tcg_number": "17/18"
+   "tcg_number": "17/18",
+   "variants": {
+    "reverseHolofoil": {
+     "product_id": 46474,
+     "printing": "Reverse Holofoil"
+    }
+   }
   },
   "18": {
    "name": "Primeape",
@@ -188,7 +295,13 @@
    "status": "ok",
    "product_id": 46475,
    "tcg_name": "Primeape",
-   "tcg_number": "18/18"
+   "tcg_number": "18/18",
+   "variants": {
+    "normal": {
+     "product_id": 46475,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

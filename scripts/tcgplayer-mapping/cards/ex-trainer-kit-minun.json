@@ -7,7 +7,12 @@
   "ok": 12,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 12,
+   "resueltas": 12,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 83583,
    "tcg_name": "Arcanine",
-   "tcg_number": "1/12"
+   "tcg_number": "1/12",
+   "variants": {
+    "normal": {
+     "product_id": 83583,
+     "printing": "Normal"
+    }
+   }
   },
   "2": {
    "name": "Charmander",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 84212,
    "tcg_name": "Charmander",
-   "tcg_number": "2/12"
+   "tcg_number": "2/12",
+   "variants": {
+    "normal": {
+     "product_id": 84212,
+     "printing": "Normal"
+    }
+   }
   },
   "3": {
    "name": "Charmeleon",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 84228,
    "tcg_name": "Charmeleon",
-   "tcg_number": "3/12"
+   "tcg_number": "3/12",
+   "variants": {
+    "normal": {
+     "product_id": 84228,
+     "printing": "Normal"
+    }
+   }
   },
   "4": {
    "name": "Growlithe",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 85956,
    "tcg_name": "Growlithe",
-   "tcg_number": "4/12"
+   "tcg_number": "4/12",
+   "variants": {
+    "normal": {
+     "product_id": 85956,
+     "printing": "Normal"
+    }
+   }
   },
   "5": {
    "name": "Mareep",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 87200,
    "tcg_name": "Mareep",
-   "tcg_number": "5/12"
+   "tcg_number": "5/12",
+   "variants": {
+    "normal": {
+     "product_id": 87200,
+     "printing": "Normal"
+    }
+   }
   },
   "6": {
    "name": "Minun",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 87486,
    "tcg_name": "Minun",
-   "tcg_number": "6/12"
+   "tcg_number": "6/12",
+   "variants": {
+    "holofoil": {
+     "product_id": 87486,
+     "printing": "Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Vulpix",
@@ -78,7 +119,13 @@
    "status": "ok",
    "product_id": 90439,
    "tcg_name": "Vulpix",
-   "tcg_number": "7/12"
+   "tcg_number": "7/12",
+   "variants": {
+    "normal": {
+     "product_id": 90439,
+     "printing": "Normal"
+    }
+   }
   },
   "8": {
    "name": "Celio's Network",
@@ -88,7 +135,13 @@
    "status": "ok",
    "product_id": 84155,
    "tcg_name": "Celio's Network",
-   "tcg_number": "8/12"
+   "tcg_number": "8/12",
+   "variants": {
+    "normal": {
+     "product_id": 84155,
+     "printing": "Normal"
+    }
+   }
   },
   "9": {
    "name": "Energy Search",
@@ -104,7 +157,13 @@
      "suffix": "Minun",
      "product_id": 85243
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 85243,
+     "printing": "Normal"
+    }
+   }
   },
   "10": {
    "name": "Potion",
@@ -120,7 +179,13 @@
      "suffix": "Minun",
      "product_id": 88340
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 88340,
+     "printing": "Normal"
+    }
+   }
   },
   "11": {
    "name": "Fire Energy",
@@ -130,7 +195,13 @@
    "status": "ok",
    "product_id": 85460,
    "tcg_name": "Fire Energy",
-   "tcg_number": "11/12"
+   "tcg_number": "11/12",
+   "variants": {
+    "normal": {
+     "product_id": 85460,
+     "printing": "Normal"
+    }
+   }
   },
   "12": {
    "name": "Lightning Energy",
@@ -146,7 +217,13 @@
      "suffix": "Minun",
      "product_id": 86764
     }
-   ]
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 86764,
+     "printing": "Normal"
+    }
+   }
   }
  }
 }

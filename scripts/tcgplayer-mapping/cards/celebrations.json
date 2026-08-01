@@ -7,7 +7,12 @@
   "ok": 25,
   "review": 0,
   "missing": 0,
-  "pct": 100
+  "pct": 100,
+  "variantes": {
+   "total": 25,
+   "resueltas": 25,
+   "sinResolver": 0
+  }
  },
  "cards": {
   "1": {
@@ -18,7 +23,13 @@
    "status": "ok",
    "product_id": 250300,
    "tcg_name": "Ho-Oh",
-   "tcg_number": "001/025"
+   "tcg_number": "001/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250300,
+     "printing": "Holofoil"
+    }
+   }
   },
   "2": {
    "name": "Reshiram",
@@ -28,7 +39,13 @@
    "status": "ok",
    "product_id": 250301,
    "tcg_name": "Reshiram",
-   "tcg_number": "002/025"
+   "tcg_number": "002/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250301,
+     "printing": "Holofoil"
+    }
+   }
   },
   "3": {
    "name": "Kyogre",
@@ -38,7 +55,13 @@
    "status": "ok",
    "product_id": 250298,
    "tcg_name": "Kyogre",
-   "tcg_number": "003/025"
+   "tcg_number": "003/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250298,
+     "printing": "Holofoil"
+    }
+   }
   },
   "4": {
    "name": "Palkia",
@@ -48,7 +71,13 @@
    "status": "ok",
    "product_id": 250302,
    "tcg_name": "Palkia",
-   "tcg_number": "004/025"
+   "tcg_number": "004/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250302,
+     "printing": "Holofoil"
+    }
+   }
   },
   "5": {
    "name": "Pikachu",
@@ -58,7 +87,13 @@
    "status": "ok",
    "product_id": 250303,
    "tcg_name": "Pikachu",
-   "tcg_number": "005/025"
+   "tcg_number": "005/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250303,
+     "printing": "Holofoil"
+    }
+   }
   },
   "6": {
    "name": "Flying Pikachu V",
@@ -68,7 +103,13 @@
    "status": "ok",
    "product_id": 250304,
    "tcg_name": "Flying Pikachu V",
-   "tcg_number": "006/025"
+   "tcg_number": "006/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250304,
+     "printing": "Holofoil"
+    }
+   }
   },
   "7": {
    "name": "Flying Pikachu VMAX",
@@ -78,7 +119,13 @@
    "status": "ok",
    "product_id": 250305,
    "tcg_name": "Flying Pikachu VMAX",
-   "tcg_number": "007/025"
+   "tcg_number": "007/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250305,
+     "printing": "Holofoil"
+    }
+   }
   },
   "8": {
    "name": "Surfing Pikachu V",
@@ -88,7 +135,13 @@
    "status": "ok",
    "product_id": 250306,
    "tcg_name": "Surfing Pikachu V",
-   "tcg_number": "008/025"
+   "tcg_number": "008/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250306,
+     "printing": "Holofoil"
+    }
+   }
   },
   "9": {
    "name": "Surfing Pikachu VMAX",
@@ -98,7 +151,13 @@
    "status": "ok",
    "product_id": 250307,
    "tcg_name": "Surfing Pikachu VMAX",
-   "tcg_number": "009/025"
+   "tcg_number": "009/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250307,
+     "printing": "Holofoil"
+    }
+   }
   },
   "10": {
    "name": "Zekrom",
@@ -108,7 +167,13 @@
    "status": "ok",
    "product_id": 250308,
    "tcg_name": "Zekrom",
-   "tcg_number": "010/025"
+   "tcg_number": "010/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250308,
+     "printing": "Holofoil"
+    }
+   }
   },
   "11": {
    "name": "Mew",
@@ -118,7 +183,13 @@
    "status": "ok",
    "product_id": 250309,
    "tcg_name": "Mew",
-   "tcg_number": "011/025"
+   "tcg_number": "011/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250309,
+     "printing": "Holofoil"
+    }
+   }
   },
   "12": {
    "name": "Xerneas",
@@ -128,7 +199,13 @@
    "status": "ok",
    "product_id": 250310,
    "tcg_name": "Xerneas",
-   "tcg_number": "012/025"
+   "tcg_number": "012/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250310,
+     "printing": "Holofoil"
+    }
+   }
   },
   "13": {
    "name": "Cosmog",
@@ -138,7 +215,13 @@
    "status": "ok",
    "product_id": 250311,
    "tcg_name": "Cosmog",
-   "tcg_number": "013/025"
+   "tcg_number": "013/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250311,
+     "printing": "Holofoil"
+    }
+   }
   },
   "14": {
    "name": "Cosmoem",
@@ -148,7 +231,13 @@
    "status": "ok",
    "product_id": 250297,
    "tcg_name": "Cosmoem",
-   "tcg_number": "014/025"
+   "tcg_number": "014/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250297,
+     "printing": "Holofoil"
+    }
+   }
   },
   "15": {
    "name": "Lunala",
@@ -158,7 +247,13 @@
    "status": "ok",
    "product_id": 250312,
    "tcg_name": "Lunala",
-   "tcg_number": "015/025"
+   "tcg_number": "015/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250312,
+     "printing": "Holofoil"
+    }
+   }
   },
   "16": {
    "name": "Zacian V",
@@ -168,7 +263,13 @@
    "status": "ok",
    "product_id": 250313,
    "tcg_name": "Zacian V",
-   "tcg_number": "016/025"
+   "tcg_number": "016/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250313,
+     "printing": "Holofoil"
+    }
+   }
   },
   "17": {
    "name": "Groudon",
@@ -178,7 +279,13 @@
    "status": "ok",
    "product_id": 250314,
    "tcg_name": "Groudon",
-   "tcg_number": "017/025"
+   "tcg_number": "017/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250314,
+     "printing": "Holofoil"
+    }
+   }
   },
   "18": {
    "name": "Zamazenta V",
@@ -188,7 +295,13 @@
    "status": "ok",
    "product_id": 250299,
    "tcg_name": "Zamazenta V",
-   "tcg_number": "018/025"
+   "tcg_number": "018/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250299,
+     "printing": "Holofoil"
+    }
+   }
   },
   "19": {
    "name": "Yveltal",
@@ -198,7 +311,13 @@
    "status": "ok",
    "product_id": 250315,
    "tcg_name": "Yveltal",
-   "tcg_number": "019/025"
+   "tcg_number": "019/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250315,
+     "printing": "Holofoil"
+    }
+   }
   },
   "20": {
    "name": "Dialga",
@@ -208,7 +327,13 @@
    "status": "ok",
    "product_id": 250296,
    "tcg_name": "Dialga",
-   "tcg_number": "020/025"
+   "tcg_number": "020/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250296,
+     "printing": "Holofoil"
+    }
+   }
   },
   "21": {
    "name": "Solgaleo",
@@ -218,7 +343,13 @@
    "status": "ok",
    "product_id": 250316,
    "tcg_name": "Solgaleo",
-   "tcg_number": "021/025"
+   "tcg_number": "021/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250316,
+     "printing": "Holofoil"
+    }
+   }
   },
   "22": {
    "name": "Lugia",
@@ -228,7 +359,13 @@
    "status": "ok",
    "product_id": 250317,
    "tcg_name": "Lugia",
-   "tcg_number": "022/025"
+   "tcg_number": "022/025",
+   "variants": {
+    "holofoil": {
+     "product_id": 250317,
+     "printing": "Holofoil"
+    }
+   }
   },
   "23": {
    "name": "Professor's Research (Professor Oak)",
@@ -239,7 +376,13 @@
    "product_id": 250318,
    "tcg_name": "Professor's Research [Professor Oak]",
    "tcg_number": "023/025",
-   "note": "nuestro \"Professor's Research (Professor Oak)\" vs TCG \"Professor's Research\""
+   "note": "nuestro \"Professor's Research (Professor Oak)\" vs TCG \"Professor's Research\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 250318,
+     "printing": "Holofoil"
+    }
+   }
   },
   "24": {
    "name": "Professor's Research (Professor Oak)",
@@ -250,7 +393,13 @@
    "product_id": 250293,
    "tcg_name": "Professor's Research [Professor Oak] (Full Art)",
    "tcg_number": "024/025",
-   "note": "nuestro \"Professor's Research (Professor Oak)\" vs TCG \"Professor's Research\""
+   "note": "nuestro \"Professor's Research (Professor Oak)\" vs TCG \"Professor's Research\"",
+   "variants": {
+    "holofoil": {
+     "product_id": 250293,
+     "printing": "Holofoil"
+    }
+   }
   },
   "25": {
    "name": "Mew",
@@ -266,7 +415,13 @@
      "suffix": "Secret",
      "product_id": 250295
     }
-   ]
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 250295,
+     "printing": "Holofoil"
+    }
+   }
   }
  }
 }
