@@ -15,6 +15,19 @@ export type CardLanguageCode = (typeof CARD_LANGUAGES)[number]["code"];
  */
 export const DEFAULT_CARD_LANGUAGE = "en";
 
+/**
+ * Idiomas que se pueden registrar en el inventario.
+ *
+ * Es un subconjunto de CARD_LANGUAGES a proposito: el chino se queda fuera
+ * porque en la practica nadie colecciona en chino, y cada idioma de mas es una
+ * fila de contadores mas en cada carta del panel de agregar. Sigue estando en
+ * CARD_LANGUAGES para que las publicaciones de venta que ya existan en chino
+ * conserven su bandera y su nombre.
+ */
+export const INVENTORY_LANGUAGES = CARD_LANGUAGES.filter(
+  l => l.code === "en" || l.code === "es" || l.code === "ja",
+).sort((a, b) => ["en", "es", "ja"].indexOf(a.code) - ["en", "es", "ja"].indexOf(b.code));
+
 /** Código corto para el badge del inventario: EN, ES, JA, ZH. */
 export function languageShort(code?: string | null): string {
   return (code ?? DEFAULT_CARD_LANGUAGE).toUpperCase();

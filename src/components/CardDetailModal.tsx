@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { getVersionLabel, getVersionEffect, getVersionColor, type PokemonCard } from "@/data/pokemon-cards-meta";
 import { getCurrencyForCountry, formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
-import { CARD_LANGUAGES, DEFAULT_CARD_LANGUAGE } from "@/lib/languages";
+import { CARD_LANGUAGES, INVENTORY_LANGUAGES, DEFAULT_CARD_LANGUAGE } from "@/lib/languages";
 import { FlagIcon } from "@/components/FlagIcon";
 import { useScrydexPrice, SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 
@@ -71,7 +71,7 @@ export function invLangKey(
 /* ── Inventory controls ─────────────────────────────────────── */
 export function QtyControl({
   cardId, setId, version, qty, userId, onChange, dark,
-  language = DEFAULT_CARD_LANGUAGE,
+  language = DEFAULT_CARD_LANGUAGE, showFlag = false,
 }: {
   /** `qty` es la cantidad de este idioma, no el total de la carta. */
   cardId: number | string; setId: string; version: string; qty: number;
@@ -80,6 +80,8 @@ export function QtyControl({
   onChange: (langKey: string, qty: number, delta: number, aggKey: string) => void;
   dark?: boolean;
   language?: string;
+  /** Muestra la bandera dentro del control: sirve para apilar uno por idioma. */
+  showFlag?: boolean;
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -125,8 +127,13 @@ export function QtyControl({
   });
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: showFlag ? "6px" : "10px" }}>
       <button style={btnStyle(qty === 0 || loading)} onClick={() => update(-1)} disabled={qty === 0 || loading}>−</button>
+      {showFlag && (
+        <span style={{ display: "inline-flex", opacity: qty > 0 ? 1 : 0.45, flexShrink: 0 }}>
+          <FlagIcon code={language} width={22} />
+        </span>
+      )}
       <span style={{ fontFamily: MONO, fontSize: "14px", color: qty > 0 ? activeQtyColor : (dark ? "#aab0c2" : INK2), minWidth: "20px", textAlign: "center", fontWeight: 600 }}>
         {qty}
       </span>
@@ -255,9 +262,6 @@ export function CardDetailModal({
   const existingListing = cardListings[0];
   const canSell         = hasInInv && cardListings.length < qty;
 
-  /** Idioma sobre el que operan los botones +/− del inventario. */
-  const [invLanguage, setInvLanguage] = useState<string>(DEFAULT_CARD_LANGUAGE);
-  const qtyOfLanguage = inventory[invLangKey(card.id, card.version, setId, invLanguage)] ?? 0;
   /** Desglose por idioma, para mostrar de qué está compuesto el total. */
   const langBreakdown = CARD_LANGUAGES
     .map(l => ({ ...l, n: inventory[invLangKey(card.id, card.version, setId, l.code)] ?? 0 }))
@@ -486,22 +490,6 @@ export function CardDetailModal({
                   <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: DARK2 }}>
                     Inventario
                   </span>
-                  <QtyControl
-                    cardId={card.id} setId={setId} version={card.version}
-                    qty={qtyOfLanguage} language={invLanguage}
-                    userId={userId}
-                    onChange={async (langKey, newQty, delta, aggKey) => {
-                      onInventoryChange(langKey, newQty);
-                      onInventoryChange(aggKey, Math.max(0, qty + delta));
-                      if (qty === 0 && delta > 0 && isWanted && userId) {
-                        const supabase = createClient();
-                        await supabase.from("card_wishlist").delete()
-                          .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId);
-                        onWishlistChange(wishlistCards.filter(w => !(w.card_id === card.id && w.set_id === setId)));
-                      }
-                    }}
-                    dark
-                  />
                   {qty > 0 && (
                     <span style={{ fontFamily: MONO, fontSize: "10px", color: DARK2, letterSpacing: "0.06em" }}>
                       {qty} en total
@@ -509,34 +497,28 @@ export function CardDetailModal({
                   )}
                 </div>
 
-                {/* El idioma es parte de la carta: cada uno tiene su propia cantidad */}
-                <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.14em", textTransform: "uppercase", color: DARK2, display: "block", marginBottom: "6px" }}>
-                  Idioma
-                </span>
-                <div style={{ display: "flex", gap: "6px" }}>
-                  {CARD_LANGUAGES.map(lang => {
-                    const active = invLanguage === lang.code;
-                    const n = inventory[invLangKey(card.id, card.version, setId, lang.code)] ?? 0;
-                    return (
-                      <button
-                        key={lang.code}
-                        onClick={() => setInvLanguage(lang.code)}
-                        title={`${lang.label}${n > 0 ? ` — tienes ${n}` : ""}`}
-                        style={{
-                          flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "5px",
-                          padding: "7px 4px", borderRadius: "8px", cursor: "pointer",
-                          background: active ? "rgba(46,230,193,0.14)" : "rgba(5,7,13,0.05)",
-                          border: active ? `1px solid ${COURT}` : `1px solid ${BORDER_CLR}`,
-                          transition: "all 0.12s",
-                        }}
-                      >
-                        <FlagIcon code={lang.code} width={20} />
-                        <span style={{ fontFamily: MONO, fontSize: "10px", fontWeight: 700, color: n > 0 ? "#15a98e" : DARK2 }}>
-                          {n}
-                        </span>
-                      </button>
-                    );
-                  })}
+                {/* Un contador por idioma, igual que en el panel de agregar */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  {INVENTORY_LANGUAGES.map(lang => (
+                    <QtyControl
+                      key={lang.code}
+                      cardId={card.id} setId={setId} version={card.version}
+                      qty={inventory[invLangKey(card.id, card.version, setId, lang.code)] ?? 0}
+                      language={lang.code} showFlag
+                      userId={userId}
+                      onChange={async (langKey, newQty, delta, aggKey) => {
+                        onInventoryChange(langKey, newQty);
+                        onInventoryChange(aggKey, Math.max(0, qty + delta));
+                        if (qty === 0 && delta > 0 && isWanted && userId) {
+                          const supabase = createClient();
+                          await supabase.from("card_wishlist").delete()
+                            .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId);
+                          onWishlistChange(wishlistCards.filter(w => !(w.card_id === card.id && w.set_id === setId)));
+                        }
+                      }}
+                      dark
+                    />
+                  ))}
                 </div>
                 {langBreakdown.length > 1 && (
                   <p style={{ fontFamily: MONO, fontSize: "9px", color: DARK2, margin: "8px 0 0", letterSpacing: "0.06em" }}>
