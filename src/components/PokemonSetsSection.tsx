@@ -9,9 +9,11 @@ import { SET_CARD_COUNT, loadSetCards } from "@/data/pokemon-cards";
 import {
   COURT, INK0, INK2, BG0, MONO, DISP,
   VERSION_COLOR, VERSION_FULL,
-  QtyControl, CardDetailModal, invKey,
+  QtyControl, CardDetailModal, invKey, invLangKey,
   type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing,
 } from "@/components/CardDetailModal";
+import { CARD_LANGUAGES, DEFAULT_CARD_LANGUAGE } from "@/lib/languages";
+import { FlagIcon } from "@/components/FlagIcon";
 
 /* Lazy-load card data only when a set is opened */
 async function fetchSetCards(setId: string): Promise<PokemonCard[]> {
@@ -21,21 +23,25 @@ async function fetchSetCards(setId: string): Promise<PokemonCard[]> {
 
 /* ── Card (sin efecto 3D, conserva holo/gold/RH en hover) ───── */
 function TiltCard({
-  card, userId, setId, inventory, onInventoryChange, onCardClick,
-  wishlistCards, onWishlistChange,
+  card, userId, setId, inventory, onQtyChange, onCardClick,
+  wishlistCards, onWishlistChange, language,
 }: {
   card: PokemonCard;
   userId?: string;
   setId: string;
   inventory: InventoryMap;
-  onInventoryChange: (key: string, qty: number) => void;
+  onQtyChange: (langKey: string, qty: number, delta: number, aggKey: string) => void;
   onCardClick?: () => void;
   wishlistCards: WishlistCard[];
   onWishlistChange: (cards: WishlistCard[]) => void;
+  language: string;
 }) {
   const [hovered, setHovered] = useState(false);
 
+  /** Total de la carta (todos los idiomas) — decide si sale a color o en gris. */
   const qty = inventory[invKey(card.id, card.version, setId)] ?? 0;
+  /** Lo que editan los botones: solo las copias del idioma seleccionado. */
+  const qtyOfLanguage = inventory[invLangKey(card.id, card.version, setId, language)] ?? 0;
 
   const label = getVersionLabel(card.version);
   const effect = getVersionEffect(card.version);
@@ -153,8 +159,9 @@ function TiltCard({
       {userId && (
         <>
           <QtyControl
-            cardId={card.id} setId={setId} version={card.version} qty={qty}
-            userId={userId} onChange={onInventoryChange}
+            cardId={card.id} setId={setId} version={card.version}
+            qty={qtyOfLanguage} language={language}
+            userId={userId} onChange={onQtyChange}
           />
           <button
             type="button"
@@ -408,6 +415,8 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const [loadingInv,   setLoadingInv]   = useState(false);
   const [invFilter,     setInvFilter]     = useState<InvFilter>("todas");
   const [versionFilter, setVersionFilter] = useState<string>("todas");
+  /** Idioma con el que entran las cartas que se agreguen desde este set. */
+  const [addLanguage,   setAddLanguage]   = useState<string>(DEFAULT_CARD_LANGUAGE);
   const [visibleCount,  setVisibleCount]  = useState<number>(PAGE_SIZE);
   const [selectedCard, setSelectedCard] = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [featuredCards, setFeaturedCards] = useState<FeaturedCard[]>([]);
@@ -469,13 +478,21 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
     const supabase = createClient();
     supabase
       .from("card_inventory")
-      .select("card_id, version, quantity")
+      .select("card_id, version, quantity, language")
       .eq("user_id", userId)
       .eq("set_id", openSetId)
       .then(({ data }) => {
         if (data) {
+          // El mapa guarda dos cosas: la llave por idioma (una fila) y la llave
+          // agregada (la suma de todos los idiomas de esa carta).
           const map: InventoryMap = {};
-          data.forEach(r => { map[invKey(r.card_id, r.version ?? "normal", openSetId)] = r.quantity; });
+          data.forEach(r => {
+            const version = r.version ?? "normal";
+            const lang    = r.language ?? DEFAULT_CARD_LANGUAGE;
+            map[invLangKey(r.card_id, version, openSetId, lang)] = r.quantity;
+            const agg = invKey(r.card_id, version, openSetId);
+            map[agg] = (map[agg] ?? 0) + r.quantity;
+          });
           setInventory(prev => ({ ...prev, ...map }));
         }
         setLoadingInv(false);
@@ -484,6 +501,15 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
 
   const handleInventoryChange = useCallback((key: string, qty: number) => {
     setInventory(prev => ({ ...prev, [key]: qty }));
+  }, []);
+
+  /** QtyControl reporta la fila del idioma y el nuevo total de la carta. */
+  const handleQtyChange = useCallback((langKey: string, qty: number, delta: number, aggKey: string) => {
+    setInventory(prev => ({
+      ...prev,
+      [langKey]: qty,
+      [aggKey]:  Math.max(0, (prev[aggKey] ?? 0) + delta),
+    }));
   }, []);
 
   async function handleAddAllMissingToWishlist() {
@@ -707,6 +733,37 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                         {addingWish === "done" ? "Listo ✓" : addingWish === "loading" ? "Agregando..." : `+ Wishlist restantes (${faltanCount})`}
                       </button>
                     )}
+
+                    {/* Idioma con el que entran las cartas al inventario */}
+                    {userId && (
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginLeft: "auto" }}>
+                        <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: INK2 }}>
+                          Agregar en
+                        </span>
+                        <div style={{ display: "flex", gap: "4px" }}>
+                          {CARD_LANGUAGES.map(lang => {
+                            const active = addLanguage === lang.code;
+                            return (
+                              <button
+                                key={lang.code}
+                                type="button"
+                                onClick={() => setAddLanguage(lang.code)}
+                                title={lang.label}
+                                style={{
+                                  display: "flex", alignItems: "center", padding: "5px 7px",
+                                  borderRadius: "7px", cursor: "pointer",
+                                  background: active ? "rgba(46,230,193,0.16)" : "rgba(255,255,255,0.04)",
+                                  border: active ? `1px solid ${COURT}` : "1px solid rgba(255,255,255,0.1)",
+                                  opacity: active ? 1 : 0.5, transition: "all 0.12s",
+                                }}
+                              >
+                                <FlagIcon code={lang.code} width={22} />
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })()}
@@ -725,7 +782,8 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                     userId={userId}
                     setId={openSet.id}
                     inventory={inventory}
-                    onInventoryChange={handleInventoryChange}
+                    language={addLanguage}
+                    onQtyChange={handleQtyChange}
                     onCardClick={() => setSelectedCard({ card, setId: openSet.id })}
                     wishlistCards={wishlistCards}
                     onWishlistChange={setWishlistCards}

@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { DEFAULT_CARD_LANGUAGE } from "@/lib/languages";
 
 /**
  * Las cartas que entran a un set personalizado son cartas que el jugador tiene,
@@ -23,6 +24,7 @@ export async function ensureInInventory(
     .eq("user_id", userId)
     .eq("card_id", card.card_id)
     .eq("set_id", card.set_id)
+    .eq("language", DEFAULT_CARD_LANGUAGE)
     .eq("version", card.version)
     .maybeSingle();
 
@@ -34,8 +36,9 @@ export async function ensureInInventory(
       card_id:  card.card_id,
       set_id:   card.set_id,
       version:  card.version,
+      language: DEFAULT_CARD_LANGUAGE,
       quantity,
     },
-    { onConflict: "user_id,card_id,set_id,version" },
+    { onConflict: "user_id,card_id,set_id,version,language" },
   );
 }

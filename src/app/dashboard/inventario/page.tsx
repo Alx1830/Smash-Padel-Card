@@ -10,9 +10,11 @@ import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { getVersionLabel } from "@/data/pokemon-cards-meta";
 import { InvTiltCard, SellPopup } from "@/components/InventoryCard";
 import {
-  invKey,
+  invKey, invLangKey,
   type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing,
 } from "@/components/CardDetailModal";
+import { CARD_LANGUAGES, DEFAULT_CARD_LANGUAGE, languageLabel } from "@/lib/languages";
+import { FlagIcon } from "@/components/FlagIcon";
 import { Plus, Search, BadgeDollarSign, Star } from "lucide-react";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { useDashboardUser } from "../DashboardUserContext";
@@ -57,6 +59,9 @@ export default function InventarioPage() {
   const [featuredCards, setFeaturedCards] = useState<FeaturedCard[]>([]);
   const [wishlistCards, setWishlistCards] = useState<WishlistCard[]>([]);
   const [listings,      setListings]      = useState<UserListing[]>([]);
+  /** Idiomas presentes por carta (llave agregada) — expande la grilla en una tarjeta por idioma. */
+  const [cardLanguages, setCardLanguages] = useState<Record<string, string[]>>({});
+  const [totalCards,    setTotalCards]    = useState(0);
 
   const [sets,            setSets]            = useState<{ setId: string; count: number }[]>([]);
   const [loading,         setLoading]         = useState(true);
@@ -68,6 +73,7 @@ export default function InventarioPage() {
   const [fNombre,     setFNombre]     = useState("");
   const [fVariante,   setFVariante]   = useState("");
   const [fSet,        setFSet]        = useState("");
+  const [fIdioma,     setFIdioma]     = useState("");
   const [fDestacados, setFDestacados] = useState(false);
   const [fBulk,       setFBulk]       = useState(false);
   const [fOrden,      setFOrden]      = useState<"precio-desc" | "precio-asc" | "set">("precio-desc");
@@ -87,18 +93,30 @@ export default function InventarioPage() {
 
   async function loadData(uid: string) {
     const [invRes, featRes, wishRes, listRes] = await Promise.all([
-      supabase.from("card_inventory").select("card_id, set_id, version, quantity").eq("user_id", uid).gt("quantity", 0),
+      supabase.from("card_inventory").select("card_id, set_id, version, quantity, language").eq("user_id", uid).gt("quantity", 0),
       supabase.from("featured_cards").select("card_id, set_id").eq("user_id", uid),
       supabase.from("card_wishlist").select("card_id, set_id").eq("user_id", uid),
       supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", uid).eq("status", "active"),
     ]);
+    // Cada fila es una carta en un idioma. El mapa guarda la cantidad de esa
+    // fila y, aparte, el total de la carta sumando todos sus idiomas.
     const invMap: InventoryMap = {};
     const setMap: Record<string, number> = {};
+    const langs: Record<string, string[]> = {};
+    let total = 0;
     for (const row of (invRes.data ?? [])) {
-      invMap[invKey(row.card_id, row.version ?? "normal", row.set_id)] = row.quantity;
+      const version = row.version ?? "normal";
+      const lang    = row.language ?? DEFAULT_CARD_LANGUAGE;
+      invMap[invLangKey(row.card_id, version, row.set_id, lang)] = row.quantity;
+      const agg = invKey(row.card_id, version, row.set_id);
+      invMap[agg] = (invMap[agg] ?? 0) + row.quantity;
+      (langs[agg] ??= []).push(lang);
+      total += row.quantity;
       if (row.set_id) setMap[row.set_id] = (setMap[row.set_id] ?? 0) + 1;
     }
     setInventory(invMap);
+    setCardLanguages(langs);
+    setTotalCards(total);
 
     // Limpiar registros fantasma: featured_cards con card_id en formato string (NaN al convertir)
     const allFeat = (featRes.data ?? []) as FeaturedCard[];
@@ -189,57 +207,75 @@ export default function InventarioPage() {
     }
   }
 
-  async function incrementQty(card: PokemonCard, setId: string) {
+  /** Aplica un delta al mapa: la fila del idioma y el total de la carta. */
+  const applyQtyDelta = useCallback((
+    cardId: number | string, version: string, setId: string, language: string, delta: number,
+  ) => {
+    const langK = invLangKey(cardId, version, setId, language);
+    const aggK  = invKey(cardId, version, setId);
+    setInventory(prev => {
+      const nextLang = Math.max(0, (prev[langK] ?? 0) + delta);
+      const updated  = { ...prev, [aggK]: Math.max(0, (prev[aggK] ?? 0) + delta) };
+      if (nextLang === 0) delete updated[langK];
+      else updated[langK] = nextLang;
+      return updated;
+    });
+    // Un idioma que aún no estaba en esta carta debe aparecer como tarjeta nueva
+    if (delta > 0) {
+      setCardLanguages(prev =>
+        (prev[aggK] ?? []).includes(language)
+          ? prev
+          : { ...prev, [aggK]: [...(prev[aggK] ?? []), language] });
+    }
+    setTotalCards(t => Math.max(0, t + delta));
+  }, []);
+
+  async function incrementQty(card: PokemonCard, setId: string, language: string) {
     if (!userId) return;
-    const key = invKey(card.id, card.version, setId);
-    const current = inventory[key] ?? 0;
-    const next = current + 1;
+    const current = inventory[invLangKey(card.id, card.version, setId, language)] ?? 0;
     await supabase.from("card_inventory").upsert({
       user_id: userId, card_id: card.id, set_id: setId,
-      version: card.version, quantity: next,
-    }, { onConflict: "user_id,card_id,set_id,version" });
-    setInventory(prev => ({ ...prev, [key]: next }));
+      version: card.version, language, quantity: current + 1,
+    }, { onConflict: "user_id,card_id,set_id,version,language" });
+    applyQtyDelta(card.id, card.version, setId, language, 1);
   }
 
-  async function decrementQty(card: PokemonCard, setId: string) {
+  async function decrementQty(card: PokemonCard, setId: string, language: string) {
     if (!userId) return;
-    const key = invKey(card.id, card.version, setId);
-    const current = inventory[key] ?? 0;
+    const current = inventory[invLangKey(card.id, card.version, setId, language)] ?? 0;
     if (current <= 0) return;
-    const next = current - 1;
-    if (next === 0) {
-      await supabase.from("card_inventory")
-        .delete()
-        .eq("user_id", userId)
-        .eq("card_id", card.id)
-        .eq("set_id", setId)
-        .eq("version", card.version);
-      setInventory(prev => {
-        const updated = { ...prev };
-        delete updated[key];
-        return updated;
-      });
-    } else {
-      await supabase.from("card_inventory").update({ quantity: next })
-        .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId).eq("version", card.version);
-      setInventory(prev => ({ ...prev, [key]: next }));
-    }
+    const next  = current - 1;
+    const where = { user_id: userId, card_id: card.id, set_id: setId, version: card.version, language };
+    if (next === 0) await supabase.from("card_inventory").delete().match(where);
+    else            await supabase.from("card_inventory").update({ quantity: next }).match(where);
+    applyQtyDelta(card.id, card.version, setId, language, -1);
   }
 
-  // Build flat list of all cards in inventory
+  // Lista plana del inventario: una entrada por carta Y POR IDIOMA, porque la
+  // misma carta en inglés y en japonés son dos cosas distintas que coleccionar.
   const allInventoryCards = useMemo(() => {
     if (!allCardsLoaded) return [];
-    const result: { card: PokemonCard; setId: string }[] = [];
+    const result: { card: PokemonCard; setId: string; language: string }[] = [];
     for (const { setId } of sets) {
       const cards = setCards[setId] ?? [];
       for (const card of cards) {
-        if ((inventory[invKey(card.id, card.version, setId)] ?? 0) > 0) {
-          result.push({ card, setId });
+        const agg = invKey(card.id, card.version, setId);
+        if ((inventory[agg] ?? 0) <= 0) continue;
+        for (const language of new Set(cardLanguages[agg] ?? [DEFAULT_CARD_LANGUAGE])) {
+          if ((inventory[invLangKey(card.id, card.version, setId, language)] ?? 0) > 0) {
+            result.push({ card, setId, language });
+          }
         }
       }
     }
     return result;
-  }, [allCardsLoaded, sets, setCards, inventory]);
+  }, [allCardsLoaded, sets, setCards, inventory, cardLanguages]);
+
+  /** Idiomas que aparecen en el inventario — alimenta el filtro del sidebar. */
+  const availableLanguages = useMemo(() => {
+    const present = new Set(allInventoryCards.map(c => c.language));
+    return CARD_LANGUAGES.filter(l => present.has(l.code));
+  }, [allInventoryCards]);
 
   // Unique versions from inventory
   const availableVersions = useMemo(() => {
@@ -270,18 +306,19 @@ export default function InventarioPage() {
 
   // Filtered cards
   const filteredCards = useMemo(() => {
-    return allInventoryCards.filter(({ card, setId }) => {
+    return allInventoryCards.filter(({ card, setId, language }) => {
       if (fNombre.trim() && !card.name.toLowerCase().includes(fNombre.trim().toLowerCase())) return false;
       if (fVariante && card.version !== fVariante) return false;
       if (fSet && setId !== fSet) return false;
+      if (fIdioma && language !== fIdioma) return false;
       if (fDestacados && !featuredCards.some(f =>
         (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) &&
         f.set_id === setId
       )) return false;
-      if (fBulk && (inventory[invKey(card.id, card.version, setId)] ?? 0) < 2) return false;
+      if (fBulk && (inventory[invLangKey(card.id, card.version, setId, language)] ?? 0) < 2) return false;
       return true;
     });
-  }, [allInventoryCards, fNombre, fVariante, fSet, fDestacados, fBulk, featuredCards, inventory]);
+  }, [allInventoryCards, fNombre, fVariante, fSet, fIdioma, fDestacados, fBulk, featuredCards, inventory]);
 
   /** Por defecto entran primero las cartas más caras; las sin precio, al final */
   const sortedCards = useMemo(() => {
@@ -297,13 +334,13 @@ export default function InventarioPage() {
     });
   }, [filteredCards, fOrden, priceOf]);
 
-  const hasFilters = fNombre || fVariante || fSet || fDestacados || fBulk;
-  function clearFilters() { setFNombre(""); setFVariante(""); setFSet(""); setFDestacados(false); setFBulk(false); }
+  const hasFilters = fNombre || fVariante || fSet || fIdioma || fDestacados || fBulk;
+  function clearFilters() { setFNombre(""); setFVariante(""); setFSet(""); setFIdioma(""); setFDestacados(false); setFBulk(false); }
 
   // Resetear paginación cuando cambian los filtros
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [fNombre, fVariante, fSet, fDestacados, fBulk, fOrden]);
+  }, [fNombre, fVariante, fSet, fIdioma, fDestacados, fBulk, fOrden]);
 
   // IntersectionObserver para cargar más cartas al hacer scroll
   useEffect(() => {
@@ -325,8 +362,6 @@ export default function InventarioPage() {
     () => sortedCards.slice(0, visibleCount),
     [sortedCards, visibleCount]
   );
-
-  const totalCards = Object.values(inventory).reduce((a, b) => a + b, 0);
 
   const sInput: React.CSSProperties = {
     width: "100%", padding: "8px 10px", borderRadius: "7px",
@@ -633,6 +668,48 @@ export default function InventarioPage() {
                     )}
                   </div>
 
+                  {availableLanguages.length > 1 && (
+                    <>
+                      <div style={sDivider} />
+                      <div>
+                        <label style={sLabel}>Idioma</label>
+                        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                          <button
+                            onClick={() => setFIdioma("")}
+                            style={{
+                              flex: "1 1 auto", padding: "7px 10px", borderRadius: "7px", cursor: "pointer",
+                              fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em",
+                              background: fIdioma === "" ? "rgba(46,230,193,0.14)" : "rgba(255,255,255,0.04)",
+                              border: fIdioma === "" ? `1px solid ${COURT}` : "1px solid rgba(255,255,255,0.1)",
+                              color: fIdioma === "" ? COURT : INK2,
+                            }}
+                          >
+                            Todos
+                          </button>
+                          {availableLanguages.map(lang => {
+                            const active = fIdioma === lang.code;
+                            return (
+                              <button
+                                key={lang.code}
+                                onClick={() => setFIdioma(active ? "" : lang.code)}
+                                title={lang.label}
+                                style={{
+                                  display: "flex", alignItems: "center", padding: "6px 8px",
+                                  borderRadius: "7px", cursor: "pointer",
+                                  background: active ? "rgba(46,230,193,0.14)" : "rgba(255,255,255,0.04)",
+                                  border: active ? `1px solid ${COURT}` : "1px solid rgba(255,255,255,0.1)",
+                                  opacity: active ? 1 : 0.6, transition: "all 0.12s",
+                                }}
+                              >
+                                <FlagIcon code={lang.code} width={22} />
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </>
+                  )}
+
                   <div style={sDivider} />
 
                   {/* Checkbox Destacados */}
@@ -690,10 +767,10 @@ export default function InventarioPage() {
                   </div>
                 ) : (
                   <div className="inv-card-grid">
-                    {visibleCards.map(({ card, setId }) => {
+                    {visibleCards.map(({ card, setId, language }) => {
                       const isFeat   = featuredCards.some(f => (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId);
                       const isListed = listings.some(l => String(l.card_id) === String(card.card_number) && l.set_id === setId && l.version === card.version);
-                      const qty      = inventory[invKey(card.id, card.version, setId)] ?? 0;
+                      const qty      = inventory[invLangKey(card.id, card.version, setId, language)] ?? 0;
 
                       // Scrydex price
                       const sc = SCRYDEX_SET_CODES[setId];
@@ -707,11 +784,28 @@ export default function InventarioPage() {
                       const numStr = `#${String(card.card_number).padStart(3, "0")}`;
 
                       return (
-                        <div key={`${setId}-${card.id}-${card.version}`} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                        <div key={`${setId}-${card.id}-${card.version}-${language}`} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
 
                           {/* Card image area */}
                           <div style={{ position: "relative" }}>
                             <InvTiltCard card={card} onClick={() => setModalCard({ card, setId })} />
+
+                            {/* Idioma de esta copia */}
+                            <div
+                              title={languageLabel(language)}
+                              style={{
+                                position: "absolute", bottom: 6, left: 6, zIndex: 10,
+                                display: "flex", alignItems: "center", gap: "4px",
+                                padding: "3px 6px", borderRadius: "5px",
+                                background: "rgba(5,7,13,0.85)", backdropFilter: "blur(4px)",
+                                pointerEvents: "none",
+                              }}
+                            >
+                              <FlagIcon code={language} width={16} />
+                              <span style={{ fontFamily: MONO, fontSize: "8px", letterSpacing: "0.1em", color: INK0, fontWeight: 700 }}>
+                                {language.toUpperCase()}
+                              </span>
+                            </div>
 
                             {/* En venta badge */}
                             {isListed && (
@@ -768,7 +862,7 @@ export default function InventarioPage() {
                               <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
                                 <button
                                   className="inv-qty-btn"
-                                  onClick={() => decrementQty(card, setId)}
+                                  onClick={() => decrementQty(card, setId, language)}
                                   style={{ color: INK0 }}
                                   title="Quitar uno"
                                 >
@@ -777,7 +871,7 @@ export default function InventarioPage() {
                                 <span className="inv-qty-num">{qty}</span>
                                 <button
                                   className="inv-qty-btn"
-                                  onClick={() => incrementQty(card, setId)}
+                                  onClick={() => incrementQty(card, setId, language)}
                                   style={{ color: COURT, borderColor: `${COURT}44` }}
                                   title="Agregar uno"
                                 >
@@ -817,7 +911,25 @@ export default function InventarioPage() {
         <CardDetailModal
           card={modalCard.card} setId={modalCard.setId} userId={userId}
           inventory={inventory}
-          onInventoryChange={(key, qty) => setInventory(prev => ({ ...prev, [key]: qty }))}
+          onInventoryChange={(key, qty) => {
+            const c   = modalCard.card;
+            const agg = invKey(c.id, c.version, modalCard.setId);
+            // El modal reporta la llave por idioma y la del total por separado.
+            // Solo la del idioma cuenta para el contador y para abrir tarjeta.
+            const lang = CARD_LANGUAGES.find(
+              l => key === invLangKey(c.id, c.version, modalCard.setId, l.code));
+            if (lang) {
+              const delta = qty - (inventory[key] ?? 0);
+              setTotalCards(t => Math.max(0, t + delta));
+            }
+            setInventory(prev => ({ ...prev, [key]: qty }));
+            if (lang && qty > 0) {
+              setCardLanguages(prev =>
+                (prev[agg] ?? []).includes(lang.code)
+                  ? prev
+                  : { ...prev, [agg]: [...(prev[agg] ?? []), lang.code] });
+            }
+          }}
           featuredCards={featuredCards} onFeaturedChange={setFeaturedCards}
           wishlistCards={wishlistCards} onWishlistChange={setWishlistCards}
           userListings={listings} onListingsChange={setListings}
