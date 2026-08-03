@@ -12,6 +12,8 @@ import { InvTiltCard, INV_CARD_KEYFRAMES } from "@/components/InventoryCard";
 import { CURRENCY_SYMBOL, getCurrencyForCountry } from "@/lib/currency";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { PROPOSAL_PREFIX } from "@/lib/trade-messages";
+import { DEFAULT_CARD_LANGUAGE, languageLabel } from "@/lib/languages";
+import { FlagIcon } from "@/components/FlagIcon";
 import { ArrowLeftRight, Inbox, Search, X, Minus, Plus, Send, Heart, MessageCircle, Pencil } from "lucide-react";
 
 const COURT = "#2ee6c1";
@@ -42,7 +44,7 @@ interface Player {
 const PLAYER_COLS =
   "user_id, username, first_name, last_name, photo_url, pais, whatsapp_indicativo, whatsapp_numero";
 
-interface InvRow  { card_id: string; set_id: string; version: string | null; quantity: number }
+interface InvRow  { card_id: string; set_id: string; version: string | null; quantity: number; language: string | null }
 interface WishRow { card_id: string; set_id: string }
 
 /** Entrada resuelta: fila de inventario + metadata de la carta */
@@ -51,6 +53,8 @@ interface Entry {
   card:     PokemonCard;
   set_id:   string;
   version:  string;
+  /** Idioma de esta copia: cada idioma es una fila distinta del inventario */
+  language: string;
   quantity: number;
   /** Precio unitario en USD según Scrydex, o null si no hay dato */
   price:    number | null;
@@ -62,8 +66,8 @@ type PriceMaps = Record<string, Record<string, Record<string, number>>>;
 const usd = (n: number) =>
   `$${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-const rowKey = (r: { card_id: string; set_id: string; version?: string | null }) =>
-  `${r.card_id}::${r.set_id}::${r.version ?? ""}`;
+const rowKey = (r: { card_id: string; set_id: string; version?: string | null; language?: string | null }) =>
+  `${r.card_id}::${r.set_id}::${r.version ?? ""}::${r.language ?? DEFAULT_CARD_LANGUAGE}`;
 
 /* ── Layout angosto ─────────────────────────────────────────── */
 /** Por debajo de 1100px las tres columnas no caben una al lado de otra */
@@ -248,13 +252,13 @@ function TradesPageInner() {
       // Al editar, los valores ya vienen del trade original
       if (!editId) { setOffer(null); setRequest(null); setCash(""); setMessage(""); }
       const [{ data: mine }, { data: myWishData }, { data: wish }, { data: theirs }] = await Promise.all([
-        supabase.from("card_inventory").select("card_id, set_id, version, quantity")
+        supabase.from("card_inventory").select("card_id, set_id, version, quantity, language")
           .eq("user_id", meId).gt("quantity", 0),
         supabase.from("card_wishlist").select("card_id, set_id")
           .eq("user_id", meId),
         supabase.from("card_wishlist").select("card_id, set_id")
           .eq("user_id", peer.user_id),
-        supabase.from("card_inventory").select("card_id, set_id, version, quantity")
+        supabase.from("card_inventory").select("card_id, set_id, version, quantity, language")
           .eq("user_id", peer.user_id).gt("quantity", 0),
       ]);
       if (cancelled) return;
@@ -326,6 +330,7 @@ function TradesPageInner() {
         card,
         set_id: r.set_id,
         version: r.version ?? card.version,
+        language: r.language ?? DEFAULT_CARD_LANGUAGE,
         quantity: r.quantity,
         price: priceOf(card, r.set_id),
       };
@@ -1268,6 +1273,23 @@ function Column({ title, subtitle, accent, entries, selected, onBump, loading, e
                       fontFamily: MONO, fontSize: 9, color: INK0, pointerEvents: "none",
                     }}>
                       x{e.quantity}
+                    </div>
+
+                    {/* Idioma de esta copia: define si el intercambio sirve */}
+                    <div
+                      title={languageLabel(e.language)}
+                      style={{
+                        position: "absolute", bottom: 6, left: 6, zIndex: 10,
+                        display: "flex", alignItems: "center", gap: 4,
+                        padding: "3px 6px", borderRadius: 5,
+                        background: "rgba(5,7,13,0.85)", backdropFilter: "blur(4px)",
+                        pointerEvents: "none",
+                      }}
+                    >
+                      <FlagIcon code={e.language} width={16} />
+                      <span style={{ fontFamily: MONO, fontSize: 8, letterSpacing: "0.1em", color: INK0, fontWeight: 700 }}>
+                        {e.language.toUpperCase()}
+                      </span>
                     </div>
                   </div>
 
