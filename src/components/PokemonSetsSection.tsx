@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
+import { Search, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES, STANDALONE_SETS, type PokemonSet } from "@/data/pokemon-sets";
 import { VERSION_LABEL, getVersionLabel, getVersionEffect, getVersionColor, type PokemonCard, type CardVersion } from "@/data/pokemon-cards-meta";
@@ -419,6 +420,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const [loadingInv,   setLoadingInv]   = useState(false);
   const [invFilter,     setInvFilter]     = useState<InvFilter>("todas");
   const [versionFilter, setVersionFilter] = useState<string>("todas");
+  const [search,        setSearch]        = useState<string>("");
   const [visibleCount,  setVisibleCount]  = useState<number>(PAGE_SIZE);
   const [selectedCard, setSelectedCard] = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [featuredCards, setFeaturedCards] = useState<FeaturedCard[]>([]);
@@ -432,7 +434,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   const openSet    = POKEMON_SERIES.flatMap(s => s.sets).find(s => s.id === openSetId);
   const setSeries  = POKEMON_SERIES.find(s => s.sets.some(x => x.id === openSetId));
 
-  useEffect(() => { setInvFilter("todas"); setVersionFilter("todas"); setAddingWish("idle"); setVisibleCount(PAGE_SIZE); }, [openSetId]);
+  useEffect(() => { setInvFilter("todas"); setVersionFilter("todas"); setSearch(""); setAddingWish("idle"); setVisibleCount(PAGE_SIZE); }, [openSetId]);
 
   /* Fetch featured cards and active listings for logged-in user */
   useEffect(() => {
@@ -652,11 +654,14 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           // Variantes únicas del set, ordenadas
           const setVersions = [...new Set(allCards.map(c => c.version))].sort();
 
+          // El texto busca por nombre y por número (el impreso y el del master set).
+          const q = search.trim().toLowerCase();
           const filteredCards = allCards.filter(card => {
             const qty = inventory[invKey(card.id, card.version, openSet.id)] ?? 0;
             if (invFilter === "tengo"  && qty === 0) return false;
             if (invFilter === "faltan" && qty  >  0) return false;
             if (versionFilter !== "todas" && card.version !== versionFilter) return false;
+            if (q && !`${card.name} ${card.id} ${card.card_number}`.toLowerCase().includes(q)) return false;
             return true;
           });
           const visibleCards = filteredCards.slice(0, visibleCount);
@@ -693,6 +698,33 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
                 };
                 return (
                   <div style={{ display: "flex", gap: "10px", marginBottom: "28px", flexWrap: "wrap", alignItems: "center" }}>
+                    <div style={{ position: "relative", display: "flex", alignItems: "center", flex: "1 1 220px", minWidth: 0, maxWidth: "320px" }}>
+                      <Search size={14} style={{ position: "absolute", left: "12px", color: INK2, pointerEvents: "none" }} />
+                      <input
+                        type="text"
+                        value={search}
+                        onChange={e => { setSearch(e.target.value); setVisibleCount(PAGE_SIZE); }}
+                        placeholder="Buscar carta..."
+                        style={{
+                          ...sSelect,
+                          minWidth: 0, width: "100%", cursor: "text",
+                          padding: "8px 32px 8px 34px",
+                        }}
+                      />
+                      {search && (
+                        <button
+                          type="button"
+                          onClick={() => { setSearch(""); setVisibleCount(PAGE_SIZE); }}
+                          aria-label="Limpiar búsqueda"
+                          style={{
+                            position: "absolute", right: "8px", display: "flex", alignItems: "center",
+                            background: "none", border: "none", padding: "2px", cursor: "pointer", color: INK2,
+                          }}
+                        >
+                          <X size={14} />
+                        </button>
+                      )}
+                    </div>
                     {userId && (
                       <select value={invFilter} onChange={e => { setInvFilter(e.target.value as InvFilter); setVisibleCount(PAGE_SIZE); }} style={sSelect}>
                         <option value="todas" style={{ background: "#0a0e1a" }}>Todas ({allCards.length})</option>
