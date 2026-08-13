@@ -44,13 +44,23 @@ const TOTAL_CHUNKS = 9;
 /**
  * Cuantos productos se piden a la vez y cuanto se espera entre tandas.
  *
- * Un intento anterior lanzo 21.000 peticiones seguidas a infinite-api y
- * TCGplayer respondio 403 a todo. Con 9 chunks cada worker pide ~2.300, y estos
- * numeros dejan el ritmo en ~13 peticiones/s por worker. No subirlos.
+ * Ojo con subirlos: el limite que importa no es el de un worker sino el de los
+ * TRES que corren a la vez en cada lote, porque pegan a la misma API. Con 4 en
+ * paralelo y 300 ms iban a ~13 peticiones/s cada uno —unas 40/s entre los tres—
+ * y TCGplayer empezo a devolver 403 a la mitad del chunk. Con estos numeros son
+ * ~3/s por worker, ~9/s en total.
  */
-const CONCURRENCY  = 4;
-const PAUSA_TANDA  = 300;
-const MAX_403      = 25;   // 403 seguidos antes de abortar el chunk
+const CONCURRENCY  = 2;
+const PAUSA_BASE   = 700;
+const PAUSA_TOPE   = 4000;
+
+/**
+ * Un 403 de TCGplayer es temporal: castiga unos minutos y suelta. Por eso al
+ * recibirlo se espera y se baja el ritmo en vez de abortar — abortar tiraba el
+ * set que estaba a medias y dejaba el chunk sin terminar.
+ */
+const ENFRIAMIENTO     = 90_000;
+const MAX_ENFRIAMIENTOS = 8;   // seguidos sin lograr nada: ahi si es un bloqueo largo
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -153,7 +163,29 @@ function splitChunks(sets) {
 }
 
 // ── Precios ─────────────────────────────────────────────────────────────────
-let seguidos403 = 0;
+/**
+ * Ritmo actual. Sube solo cuando TCGplayer se queja y no vuelve a bajar en toda
+ * la corrida: si ya avisó una vez que vamos rapido, insistir con el ritmo viejo
+ * es volver al mismo 403 unos cientos de productos despues.
+ */
+let pausaTanda    = PAUSA_BASE;
+let enfriamientos = 0;
+let hubo403       = 0;
+
+/** Espera a que se le pase el enojo y baja el ritmo para lo que queda. */
+async function enfriar(status) {
+  hubo403++;
+  enfriamientos++;
+  if (enfriamientos > MAX_ENFRIAMIENTOS) {
+    throw new Error(
+      `TCGplayer sigue devolviendo ${status} despues de ${MAX_ENFRIAMIENTOS} enfriamientos — ` +
+      `esto ya no es un limite de ritmo. Revisar antes de volver a correr.`,
+    );
+  }
+  pausaTanda = Math.min(Math.round(pausaTanda * 1.5), PAUSA_TOPE);
+  console.log(`\n   ⏸️  HTTP ${status} — pausa de ${ENFRIAMIENTO / 1000}s, sigo a ${pausaTanda} ms por tanda`);
+  await sleep(ENFRIAMIENTO);
+}
 
 /** Precio de cada variante del producto, con el nombre del printing como llave. */
 async function fetchPrecios(productId, attempt = 1) {
@@ -172,22 +204,16 @@ async function fetchPrecios(productId, attempt = 1) {
   }
 
   if (res.status === 403 || res.status === 429) {
-    seguidos403++;
-    if (seguidos403 >= MAX_403) {
-      throw new Error(
-        `TCGplayer devolvio ${res.status} ${MAX_403} veces seguidas — se aborta para no insistir. ` +
-        `Bajar CONCURRENCY o subir PAUSA_TANDA.`,
-      );
-    }
-    if (attempt <= 4) { await sleep(attempt * 5000); return fetchPrecios(productId, attempt + 1); }
+    if (attempt <= 3) { await enfriar(res.status); return fetchPrecios(productId, attempt + 1); }
     return { error: `HTTP ${res.status}` };
   }
-  seguidos403 = 0;
 
   if (!res.ok) {
     if (attempt <= 3) { await sleep(attempt * 2000); return fetchPrecios(productId, attempt + 1); }
     return { error: `HTTP ${res.status}` };
   }
+
+  enfriamientos = 0;   // respondio bien: la racha mala se corto
 
   let json;
   try { json = await res.json(); } catch { return { error: "respuesta ilegible" }; }
@@ -220,13 +246,13 @@ function pickPrecio(precios, printing) {
   return null;
 }
 
-/** Corre `tareas` de a CONCURRENCY, con una pausa entre tandas. */
+/** Corre `items` de a CONCURRENCY, esperando el ritmo vigente entre tandas. */
 async function enTandas(items, fn) {
   const out = [];
   for (let i = 0; i < items.length; i += CONCURRENCY) {
     const tanda = items.slice(i, i + CONCURRENCY);
     out.push(...await Promise.all(tanda.map(fn)));
-    if (i + CONCURRENCY < items.length) await sleep(PAUSA_TANDA);
+    if (i + CONCURRENCY < items.length) await sleep(pausaTanda);
   }
   return out;
 }
@@ -289,15 +315,14 @@ async function correrSet(set) {
 
   /** numero de carta → { version: precio } */
   const porCarta = new Map();
-  let ok = 0, sinPrecio = 0, fallos = 0, hechos = 0;
+  let ok = 0, sinPrecio = 0, hechos = 0, deLaPasada = productos.length;
+  let fallidos = [];
 
-  await enTandas(productos, async ([productId, variantes]) => {
+  const pasada = async ([productId, variantes]) => {
     const { precios, error } = await fetchPrecios(productId);
     hechos++;
-    if (hechos % 25 === 0 || hechos === productos.length) {
-      process.stdout.write(`\r   ${hechos}/${productos.length} · ${ok} con precio`);
-    }
-    if (error) { fallos++; return; }
+    if (hechos % 25 === 0) process.stdout.write(`\r   ${hechos}/${deLaPasada} · ${ok} con precio`);
+    if (error) { fallidos.push([productId, variantes]); return; }
 
     for (const { number, version, printing } of variantes) {
       const precio = pickPrecio(precios, printing);
@@ -306,7 +331,21 @@ async function correrSet(set) {
       porCarta.get(number)[version] = precio;
       ok++;
     }
-  });
+  };
+
+  await enTandas(productos, pasada);
+
+  // Segunda pasada: casi todo lo que falla es un 403 pasajero, y a este ritmo
+  // —ya rebajado por los enfriamientos— suele contestar bien.
+  if (fallidos.length) {
+    const reintentar = fallidos;
+    fallidos = [];
+    console.log(`\n   ↻ reintentando ${reintentar.length} productos`);
+    hechos = 0;
+    deLaPasada = reintentar.length;
+    await enTandas(reintentar, pasada);
+  }
+  const fallos = fallidos.length;
 
   const now = new Date().toISOString();
   const rows = [...porCarta.entries()].map(([number, prices]) => ({
@@ -335,7 +374,7 @@ if (PLAN) {
     console.log(` chunk ${i + 1}: ${String(c.productos).padStart(5)} productos · ${String(c.sets.length).padStart(3)} sets`);
   });
   const porWorker = Math.max(...chunks.map(c => c.productos));
-  const seg = (porWorker / CONCURRENCY) * (PAUSA_TANDA / 1000 + 0.15);
+  const seg = (porWorker / CONCURRENCY) * (PAUSA_BASE / 1000 + 0.15);
   console.log(`\nEl chunk mas pesado tiene ${porWorker} productos → ~${(seg / 60).toFixed(1)} min.`);
   const sinCodigo = fs.readdirSync(MAPPING_DIR).filter(f => f.endsWith(".json")).length - todos.length;
   if (sinCodigo > 0) console.log(`⚠️  ${sinCodigo} sets del mapeo se saltan por no tener codigo en SCRYDEX_SET_CODES.`);
@@ -363,4 +402,8 @@ for (const set of objetivo) {
   todasLasFilas.push(...await correrSet(set));
 }
 if (COMPARE) await compararConScrydex(todasLasFilas);
+if (hubo403) {
+  console.log(`\n⚠️  TCGplayer corto ${hubo403} veces; el ritmo termino en ${pausaTanda} ms por tanda.`);
+  console.log("   Si se repite todas las corridas, bajar CONCURRENCY o subir PAUSA_BASE.");
+}
 console.log(`\n🎉 ${todasLasFilas.length} cartas en ${((Date.now() - t0) / 60000).toFixed(1)} min.`);
