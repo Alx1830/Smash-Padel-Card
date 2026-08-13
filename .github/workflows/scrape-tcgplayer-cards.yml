@@ -4,8 +4,13 @@ name: Scrape TCGplayer Card Prices
 # Escribe en tcg_card_prices, no en card_prices: mientras se compara, la app
 # sigue leyendo de Scrydex y esto no toca lo que ve nadie.
 #
-# 9 workers reparten los ~22.200 productos (~2.470 cada uno, ~5 min). No usa
+# 9 chunks reparten los ~22.200 productos (~2.470 cada uno, ~5 min). No usa
 # Playwright, asi que no compite con los runners del ciclo de Scrydex.
+#
+# Van en 3 lotes de 3 encadenados con `needs`, como scrape-prices.yml: pedir 9
+# runners de golpe deja a alguno esperando en cola y el lote entero se marca
+# como corrido sin haber hecho nada. Con lotes, el siguiente arranca recien
+# cuando el anterior termino y siempre hay runners libres para los tres.
 
 on:
   schedule:
@@ -20,30 +25,72 @@ on:
         default: ""
 
 jobs:
-  prices:
+  lote1:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
-      # Un chunk que falle no debe tumbar a los otros ocho: cada uno lleva sus
+      # Un chunk que falle no debe tumbar a los otros: cada uno lleva sus
       # propios sets y lo que guardo queda guardado.
       fail-fast: false
-      # Los 9 a la vez: cada worker sale de una IP distinta, que es justo lo que
-      # evita el 403 que dio pedir todo desde una sola.
-      max-parallel: 9
       matrix:
-        chunk: ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        chunk: ["1", "2", "3"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-
       - name: Install dependencies
         working-directory: scraper
         run: npm install --omit=optional --no-audit --no-fund @supabase/supabase-js
-
       - name: Scrape chunk ${{ matrix.chunk }}
-        # Con workflow_dispatch y un chunk elegido, los demas se saltan
+        if: ${{ github.event.inputs.chunk == '' || github.event.inputs.chunk == matrix.chunk }}
+        working-directory: scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node tcgplayer_card_prices.mjs --chunk ${{ matrix.chunk }}
+
+  lote2:
+    needs: lote1
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        chunk: ["4", "5", "6"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        working-directory: scraper
+        run: npm install --omit=optional --no-audit --no-fund @supabase/supabase-js
+      - name: Scrape chunk ${{ matrix.chunk }}
+        if: ${{ github.event.inputs.chunk == '' || github.event.inputs.chunk == matrix.chunk }}
+        working-directory: scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node tcgplayer_card_prices.mjs --chunk ${{ matrix.chunk }}
+
+  lote3:
+    needs: lote2
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        chunk: ["7", "8", "9"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        working-directory: scraper
+        run: npm install --omit=optional --no-audit --no-fund @supabase/supabase-js
+      - name: Scrape chunk ${{ matrix.chunk }}
         if: ${{ github.event.inputs.chunk == '' || github.event.inputs.chunk == matrix.chunk }}
         working-directory: scraper
         env:
