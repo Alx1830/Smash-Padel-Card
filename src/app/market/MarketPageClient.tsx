@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect, useMemo, useRef } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
@@ -257,9 +257,10 @@ export function MarketPageClient({
 }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const mktMobileRef = useRef<HTMLDivElement>(null);
 
-  const [selectedPais, setSelectedPais] = useState(defaultPais);
+  const [selectedPais, setSelectedPaisRaw] = useState(() => searchParams.get("pais") ?? defaultPais);
   const [listings, setListings]         = useState<Listing[]>([]);
   const [loading, setLoading]           = useState(false);
   const [page, setPage]                 = useState(1);
@@ -270,13 +271,50 @@ export function MarketPageClient({
   const [marketOpen, setMarketOpen]     = useState(false);
   const [authMsg,    setAuthMsg]        = useState<string | null>(null);
 
-  /* Filtros */
-  const [fNombre,   setFNombre]   = useState(() => searchParams.get("card") ?? "");
-  const [fVariante, setFVariante] = useState("");
-  const [fSet,      setFSet]      = useState("");
-  const [fPrecioMin, setFPrecioMin] = useState("");
-  const [fPrecioMax, setFPrecioMax] = useState("");
-  const [fCiudad,   setFCiudad]   = useState("");
+  /* Filtros — estado inicial desde la URL */
+  const [fNombre,    setFNombreRaw]    = useState(() => searchParams.get("card")     ?? "");
+  const [fVariante,  setFVarianteRaw]  = useState(() => searchParams.get("variante") ?? "");
+  const [fSet,       setFSetRaw]       = useState(() => searchParams.get("set")      ?? "");
+  const [fPrecioMin, setFPrecioMinRaw] = useState(() => searchParams.get("min")      ?? "");
+  const [fPrecioMax, setFPrecioMaxRaw] = useState(() => searchParams.get("max")      ?? "");
+  const [fCiudad,    setFCiudadRaw]    = useState(() => searchParams.get("ciudad")   ?? "");
+
+  /* Si el país vino en la URL no se pisa con el del perfil */
+  const paisFromURL = useRef(!!searchParams.get("pais"));
+
+  const updateURL = useCallback((next: {
+    card?: string; variante?: string; set?: string;
+    min?: string; max?: string; ciudad?: string; pais?: string;
+  }) => {
+    const current = {
+      card:     fNombre,
+      variante: fVariante,
+      set:      fSet,
+      min:      fPrecioMin,
+      max:      fPrecioMax,
+      ciudad:   fCiudad,
+      pais:     selectedPais,
+      ...next,
+    };
+    const params = new URLSearchParams();
+    (Object.keys(current) as (keyof typeof current)[]).forEach(k => {
+      if (current[k]) params.set(k, current[k]!);
+    });
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  }, [router, pathname, fNombre, fVariante, fSet, fPrecioMin, fPrecioMax, fCiudad, selectedPais]);
+
+  function setFNombre(v: string)    { setFNombreRaw(v);    updateURL({ card: v }); }
+  function setFVariante(v: string)  { setFVarianteRaw(v);  updateURL({ variante: v }); }
+  function setFSet(v: string)       { setFSetRaw(v);       updateURL({ set: v }); }
+  function setFPrecioMin(v: string) { setFPrecioMinRaw(v); updateURL({ min: v }); }
+  function setFPrecioMax(v: string) { setFPrecioMaxRaw(v); updateURL({ max: v }); }
+  function setFCiudad(v: string)    { setFCiudadRaw(v);    updateURL({ ciudad: v }); }
+  function setSelectedPais(v: string) {
+    paisFromURL.current = true;
+    setSelectedPaisRaw(v);
+    updateURL({ pais: v });
+  }
 
   const ALL_SETS_LIST = useMemo(() => POKEMON_SERIES.flatMap(s => s.sets), []);
 
@@ -312,8 +350,9 @@ export function MarketPageClient({
   const hasFilters = fNombre || fVariante || fSet || fCiudad || fPrecioMin || fPrecioMax;
 
   function clearFilters() {
-    setFNombre(""); setFVariante(""); setFSet(""); setFCiudad("");
-    setFPrecioMin(""); setFPrecioMax("");
+    setFNombreRaw(""); setFVarianteRaw(""); setFSetRaw(""); setFCiudadRaw("");
+    setFPrecioMinRaw(""); setFPrecioMaxRaw("");
+    updateURL({ card: "", variante: "", set: "", min: "", max: "", ciudad: "" });
   }
 
   function handleComprar(listing: Listing, e: React.MouseEvent) {
@@ -335,7 +374,7 @@ export function MarketPageClient({
 
   /* Fetch user's country client-side to avoid cache issues */
   useEffect(() => {
-    if (defaultPais) return;
+    if (defaultPais || paisFromURL.current) return;
     (async () => {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
@@ -345,7 +384,7 @@ export function MarketPageClient({
         .select("pais")
         .eq("user_id", user.id)
         .single();
-      if (data?.pais) setSelectedPais(data.pais);
+      if (data?.pais) setSelectedPaisRaw(data.pais);
     })();
   }, [defaultPais]);
 
