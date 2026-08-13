@@ -44,23 +44,34 @@ const TOTAL_CHUNKS = 9;
 /**
  * Cuantos productos se piden a la vez y cuanto se espera entre tandas.
  *
- * Ojo con subirlos: el limite que importa no es el de un worker sino el de los
- * TRES que corren a la vez en cada lote, porque pegan a la misma API. Con 4 en
- * paralelo y 300 ms iban a ~13 peticiones/s cada uno —unas 40/s entre los tres—
- * y TCGplayer empezo a devolver 403 a la mitad del chunk. Con estos numeros son
- * ~3/s por worker, ~9/s en total.
+ * Deliberadamente lento: la prioridad es no volver a ver un 403, no terminar
+ * rapido. Una peticion cada segundo por worker, tres corriendo a la vez en el
+ * lote, da ~3 peticiones/s contra la API — un ritmo que un navegador con varias
+ * pestanas abiertas produce sin despeinarse.
+ *
+ * El limite que importa no es el de un worker sino el de los TRES juntos, que
+ * pegan a la misma API. Con 4 en paralelo y 300 ms iban a ~40/s entre todos y
+ * TCGplayer corto a la mitad del chunk. No volver a subirlos: el ciclo completo
+ * tarda ~2h30 y esta bien que asi sea.
  */
-const CONCURRENCY  = 2;
-const PAUSA_BASE   = 700;
-const PAUSA_TOPE   = 4000;
+const CONCURRENCY  = 1;
+const PAUSA_BASE   = 1000;
+const PAUSA_TOPE   = 6000;
+
+/**
+ * Los tres workers del lote arrancan a la vez y sin esto pedirian en el mismo
+ * instante toda la corrida, concentrando la carga en picos. Cada uno espera un
+ * poco distinto segun su chunk para quedar intercalados.
+ */
+const ESCALONADO = 20_000;
 
 /**
  * Un 403 de TCGplayer es temporal: castiga unos minutos y suelta. Por eso al
  * recibirlo se espera y se baja el ritmo en vez de abortar — abortar tiraba el
  * set que estaba a medias y dejaba el chunk sin terminar.
  */
-const ENFRIAMIENTO     = 90_000;
-const MAX_ENFRIAMIENTOS = 8;   // seguidos sin lograr nada: ahi si es un bloqueo largo
+const ENFRIAMIENTO      = 180_000;
+const MAX_ENFRIAMIENTOS = 10;   // seguidos sin lograr nada: ahi si es un bloqueo largo
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -391,6 +402,12 @@ if (ONE_SET) {
   const chunk = splitChunks(todos)[CHUNK - 1];
   objetivo = chunk.sets;
   console.log(`▶️  Chunk ${CHUNK}/${TOTAL_CHUNKS} — ${chunk.sets.length} sets, ${chunk.productos} productos`);
+  // Los tres chunks de un lote son consecutivos, asi que el resto los separa
+  const espera = ((CHUNK - 1) % 3) * ESCALONADO;
+  if (espera) {
+    console.log(`   ⏳ arranque escalonado: ${espera / 1000}s para no coincidir con los otros del lote`);
+    await sleep(espera);
+  }
 } else {
   objetivo = todos;
   console.log(`▶️  Todos los sets (${todos.length}) — considera --chunk para repartirlo`);

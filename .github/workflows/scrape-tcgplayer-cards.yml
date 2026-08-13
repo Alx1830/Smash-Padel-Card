@@ -1,11 +1,12 @@
-﻿name: Scrape TCGplayer Card Prices
+name: Scrape TCGplayer Card Prices
 
 # Precios del catalogo general desde la API de TCGplayer, en paralelo a Scrydex.
 # Escribe en tcg_card_prices, no en card_prices: mientras se compara, la app
 # sigue leyendo de Scrydex y esto no toca lo que ve nadie.
 #
-# 9 chunks reparten los ~22.200 productos (~2.470 cada uno, ~5 min). No usa
-# Playwright, asi que no compite con los runners del ciclo de Scrydex.
+# 9 chunks reparten los ~22.200 productos (~2.470 cada uno, ~47 min). El ritmo
+# es lento a proposito: la prioridad es no volver a ver un 403, no terminar
+# rapido. El ciclo completo son ~2h30 y esta bien que asi sea.
 #
 # Van en 3 lotes de 3 encadenados con `needs`, como scrape-prices.yml: pedir 9
 # runners de golpe deja a alguno esperando en cola y el lote entero se marca
@@ -14,9 +15,10 @@
 
 on:
   schedule:
-    # 3am y 3pm Colombia (UTC-5) â€” huecos que no usan los otros scrapers
-    - cron: "0 8 * * *"
-    - cron: "0 20 * * *"
+    # 6am y 6pm Colombia (UTC-5), apenas termina el ciclo de Scrydex: ese arranca
+    # 6:00 y 18:00 UTC y tarda ~4h45, asi que a las 11 y 23 ya libero runners.
+    - cron: "0 11 * * *"
+    - cron: "0 23 * * *"
   workflow_dispatch:
     inputs:
       chunk:
@@ -27,7 +29,7 @@ on:
 jobs:
   lote1:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     strategy:
       # Un chunk que falle no debe tumbar a los otros: cada uno lleva sus
       # propios sets y lo que guardo queda guardado.
@@ -53,7 +55,7 @@ jobs:
   lote2:
     needs: lote1
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
@@ -77,7 +79,7 @@ jobs:
   lote3:
     needs: lote2
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
