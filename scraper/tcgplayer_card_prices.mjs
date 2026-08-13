@@ -1,0 +1,366 @@
+/**
+ * Precios de las cartas del catalogo general desde TCGplayer.
+ *
+ * Es el reemplazo del scraper de Scrydex (bulk_scrape_prices.js): aquel abre un
+ * navegador por cada variante de cada carta —unas 30.000 visitas, ~25 h— y este
+ * pide los mismos datos por API.
+ *
+ * Fuente: infinite-api.tcgplayer.com/price/history/{productId}, que devuelve el
+ * precio POR VARIANTE con su nombre ("Normal", "Reverse Holofoil", "Holofoil").
+ * Es la unica que sirve:
+ *   · el endpoint de `pricepoints` dice "Foil" a secas y no distingue variantes.
+ *   · filtrar `printing` en mp-search-api solo filtra listings — comprobado: el
+ *     marketPrice del producto no cambia, devuelve el mismo para todo printing.
+ *
+ * Escribe en `tcg_card_prices`, una tabla aparte de `card_prices` (Scrydex), para
+ * poder correr las dos fuentes en paralelo y comparar antes de migrar la app.
+ * La llave es la misma (`<codigoScrydex>-<numero>`), asi que migrar despues es
+ * cambiar el nombre de la tabla en el hook.
+ *
+ * Uso:
+ *   node tcgplayer_card_prices.mjs --plan             (solo imprime el reparto)
+ *   node tcgplayer_card_prices.mjs --chunk 1          (1 de 9, como en Actions)
+ *   node tcgplayer_card_prices.mjs --set ancient-origins --dry-run
+ *   node tcgplayer_card_prices.mjs --set ancient-origins --limit 20 --compare
+ *
+ * Variables de entorno: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+ */
+
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { createClient } from "@supabase/supabase-js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT        = path.resolve(__dirname, "..");
+const MAPPING_DIR = path.join(ROOT, "scripts", "tcgplayer-mapping", "cards");
+const HOOK_TS     = path.join(ROOT, "src", "hooks", "useScrydexPrice.ts");
+
+const HISTORY = id => `https://infinite-api.tcgplayer.com/price/history/${id}?range=month`;
+const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36";
+
+const TOTAL_CHUNKS = 9;
+
+/**
+ * Cuantos productos se piden a la vez y cuanto se espera entre tandas.
+ *
+ * Un intento anterior lanzo 21.000 peticiones seguidas a infinite-api y
+ * TCGplayer respondio 403 a todo. Con 9 chunks cada worker pide ~2.300, y estos
+ * numeros dejan el ritmo en ~13 peticiones/s por worker. No subirlos.
+ */
+const CONCURRENCY  = 4;
+const PAUSA_TANDA  = 300;
+const MAX_403      = 25;   // 403 seguidos antes de abortar el chunk
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// ── Argumentos ──────────────────────────────────────────────────────────────
+const args    = process.argv.slice(2);
+const flag    = name => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : null; };
+const CHUNK   = flag("--chunk") ? Number(flag("--chunk")) : null;
+const ONE_SET = flag("--set");
+const LIMIT   = flag("--limit") ? Number(flag("--limit")) : Infinity;
+const DRY_RUN = args.includes("--dry-run");
+const PLAN    = args.includes("--plan");
+const COMPARE = args.includes("--compare");
+
+if (CHUNK !== null && (!Number.isInteger(CHUNK) || CHUNK < 1 || CHUNK > TOTAL_CHUNKS)) {
+  console.error(`❌ --chunk debe ser un entero entre 1 y ${TOTAL_CHUNKS}`);
+  process.exit(1);
+}
+
+const NECESITA_DB = !DRY_RUN && !PLAN;
+const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
+if (NECESITA_DB && (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY)) {
+  console.error("❌ Faltan SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY");
+  process.exit(1);
+}
+const supabase = (NECESITA_DB || COMPARE) && SUPABASE_URL
+  ? createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } })
+  : null;
+
+// ── Codigos de set ──────────────────────────────────────────────────────────
+/**
+ * El codigo de Scrydex sigue siendo la llave de los precios. No es que se siga
+ * usando Scrydex: es que el inventario de todos los usuarios ya apunta a esos
+ * ids, y cambiarlos obligaria a migrar los datos de la gente.
+ */
+function readCodes() {
+  const src = fs.readFileSync(HOOK_TS, "utf8");
+  const block = src.slice(src.indexOf("SCRYDEX_SET_CODES"), src.indexOf("const supabase"));
+  const codes = {};
+  for (const m of block.matchAll(/"([a-z0-9-]+)":\s*"([a-z0-9]+)"/gi)) codes[m[1]] = m[2];
+  return codes;
+}
+
+// ── Trabajo por set ─────────────────────────────────────────────────────────
+/**
+ * Un set se convierte en: la lista de productos que hay que consultar y, por
+ * cada producto, que carta/variante nuestra alimenta.
+ *
+ * Varias variantes comparten producto (normal y reverse de la misma carta viven
+ * en el mismo productId, distinguidas por printing), asi que se agrupa: una
+ * peticion por producto, no por variante.
+ */
+function buildSet(slug, codes) {
+  const file = path.join(MAPPING_DIR, `${slug}.json`);
+  if (!fs.existsSync(file)) return null;
+  const code = codes[slug];
+  if (!code) return null;   // set sin codigo: no tiene donde guardar precios
+
+  const data = JSON.parse(fs.readFileSync(file, "utf8"));
+  /** productId → [{ number, version, printing }] */
+  const productos = new Map();
+
+  for (const [number, card] of Object.entries(data.cards ?? {})) {
+    for (const [version, v] of Object.entries(card.variants ?? {})) {
+      if (!v?.product_id) continue;   // variante que no existe en TCGplayer
+      const key = String(v.product_id);
+      if (!productos.has(key)) productos.set(key, []);
+      productos.get(key).push({ number, version, printing: v.printing ?? null });
+    }
+  }
+
+  return { slug, code, productos };
+}
+
+function loadSets(codes) {
+  const slugs = fs.readdirSync(MAPPING_DIR)
+    .filter(f => f.endsWith(".json"))
+    .map(f => f.replace(/\.json$/, ""))
+    .sort();
+
+  return slugs
+    .map(s => buildSet(s, codes))
+    .filter(s => s && s.productos.size > 0);
+}
+
+/**
+ * Reparte los sets en 9 chunks equilibrados por cantidad de productos, no por
+ * cantidad de sets: un set de 400 cartas y uno de 20 no cuestan lo mismo y con
+ * un reparto por conteo un worker terminaria en 30 s y otro en 20 min.
+ */
+function splitChunks(sets) {
+  const chunks = Array.from({ length: TOTAL_CHUNKS }, () => ({ sets: [], productos: 0 }));
+  for (const set of [...sets].sort((a, b) => b.productos.size - a.productos.size)) {
+    const menor = chunks.reduce((a, b) => (a.productos <= b.productos ? a : b));
+    menor.sets.push(set);
+    menor.productos += set.productos.size;
+  }
+  // Dentro del chunk, orden alfabetico para que el log sea legible
+  chunks.forEach(c => c.sets.sort((a, b) => a.slug.localeCompare(b.slug)));
+  return chunks;
+}
+
+// ── Precios ─────────────────────────────────────────────────────────────────
+let seguidos403 = 0;
+
+/** Precio de cada variante del producto, con el nombre del printing como llave. */
+async function fetchPrecios(productId, attempt = 1) {
+  let res;
+  try {
+    res = await fetch(HISTORY(productId), {
+      headers: {
+        "User-Agent": UA,
+        Origin: "https://www.tcgplayer.com",
+        Referer: "https://www.tcgplayer.com/",
+      },
+    });
+  } catch (err) {
+    if (attempt <= 3) { await sleep(attempt * 2000); return fetchPrecios(productId, attempt + 1); }
+    return { error: err.message };
+  }
+
+  if (res.status === 403 || res.status === 429) {
+    seguidos403++;
+    if (seguidos403 >= MAX_403) {
+      throw new Error(
+        `TCGplayer devolvio ${res.status} ${MAX_403} veces seguidas — se aborta para no insistir. ` +
+        `Bajar CONCURRENCY o subir PAUSA_TANDA.`,
+      );
+    }
+    if (attempt <= 4) { await sleep(attempt * 5000); return fetchPrecios(productId, attempt + 1); }
+    return { error: `HTTP ${res.status}` };
+  }
+  seguidos403 = 0;
+
+  if (!res.ok) {
+    if (attempt <= 3) { await sleep(attempt * 2000); return fetchPrecios(productId, attempt + 1); }
+    return { error: `HTTP ${res.status}` };
+  }
+
+  let json;
+  try { json = await res.json(); } catch { return { error: "respuesta ilegible" }; }
+
+  // result viene del dia mas reciente al mas viejo; el primero es el de hoy
+  const dia = json?.result?.[0];
+  if (!dia?.variants?.length) return { error: "sin historico" };
+
+  const out = {};
+  for (const v of dia.variants) {
+    const precio = Number(v.marketPrice);
+    if (!v.variant || !Number.isFinite(precio) || precio <= 0) continue;
+    out[v.variant] = precio;
+  }
+  return Object.keys(out).length ? { precios: out, fecha: dia.date } : { error: "sin precio" };
+}
+
+/**
+ * Elige el precio de una variante nuestra dentro de lo que devolvio el producto.
+ *
+ * Cuando el mapeo anoto el printing se busca por ese nombre. Cuando no —porque
+ * la variante es un producto aparte, como las Cosmos Holo— el producto entero es
+ * esa variante y trae un solo precio, asi que se toma el unico que haya.
+ */
+function pickPrecio(precios, printing) {
+  if (printing && precios[printing] != null) return precios[printing];
+  const valores = Object.values(precios);
+  if (!printing && valores.length === 1) return valores[0];
+  if (!printing && precios["Normal"] != null) return precios["Normal"];
+  return null;
+}
+
+/** Corre `tareas` de a CONCURRENCY, con una pausa entre tandas. */
+async function enTandas(items, fn) {
+  const out = [];
+  for (let i = 0; i < items.length; i += CONCURRENCY) {
+    const tanda = items.slice(i, i + CONCURRENCY);
+    out.push(...await Promise.all(tanda.map(fn)));
+    if (i + CONCURRENCY < items.length) await sleep(PAUSA_TANDA);
+  }
+  return out;
+}
+
+async function upsert(rows) {
+  if (DRY_RUN) { console.log(`   🧪 dry-run: ${rows.length} filas listas, no se guardan`); return; }
+  for (let i = 0; i < rows.length; i += 500) {
+    const { error } = await supabase
+      .from("tcg_card_prices")
+      .upsert(rows.slice(i, i + 500), { onConflict: "card_id" });
+    if (error) throw new Error(`tcg_card_prices: ${error.message}`);
+  }
+  console.log(`   💾 ${rows.length} filas guardadas`);
+}
+
+// ── Comparacion contra Scrydex ──────────────────────────────────────────────
+/** Cuanto se movería el portafolio si se migrara: mediana de la diferencia. */
+async function compararConScrydex(rows) {
+  if (!supabase) { console.log("\n⚠️  --compare necesita SUPABASE_URL para leer card_prices"); return; }
+  const ids = rows.map(r => r.card_id);
+  const viejos = new Map();
+  for (let i = 0; i < ids.length; i += 200) {
+    const { data } = await supabase
+      .from("card_prices").select("card_id, prices").in("card_id", ids.slice(i, i + 200));
+    (data ?? []).forEach(r => viejos.set(r.card_id, r.prices));
+  }
+
+  const difs = [];
+  let soloTCG = 0, soloScrydex = 0;
+  for (const row of rows) {
+    const antes = viejos.get(row.card_id);
+    if (!antes) { soloTCG++; continue; }
+    for (const [version, nuevo] of Object.entries(row.prices)) {
+      const viejo = antes[version];
+      if (viejo == null || viejo <= 0) { soloTCG++; continue; }
+      difs.push(((nuevo - viejo) / viejo) * 100);
+    }
+    for (const version of Object.keys(antes)) {
+      if (row.prices[version] == null) soloScrydex++;
+    }
+  }
+
+  difs.sort((a, b) => a - b);
+  const mediana = difs.length ? difs[Math.floor(difs.length / 2)] : null;
+  const dentro10 = difs.filter(d => Math.abs(d) <= 10).length;
+
+  console.log("\n📊 Contra Scrydex");
+  console.log(`   ${difs.length} variantes comparables`);
+  if (mediana !== null) {
+    console.log(`   mediana de la diferencia: ${mediana.toFixed(1)} %`);
+    console.log(`   dentro de ±10 %: ${dentro10} (${((dentro10 / difs.length) * 100).toFixed(1)} %)`);
+  }
+  console.log(`   solo en TCGplayer: ${soloTCG} · solo en Scrydex: ${soloScrydex}`);
+}
+
+// ── Un set ──────────────────────────────────────────────────────────────────
+async function correrSet(set) {
+  const productos = [...set.productos.entries()].slice(0, LIMIT);
+  console.log(`\n🃏 ${set.slug} (${set.code}) — ${productos.length} productos`);
+
+  /** numero de carta → { version: precio } */
+  const porCarta = new Map();
+  let ok = 0, sinPrecio = 0, fallos = 0, hechos = 0;
+
+  await enTandas(productos, async ([productId, variantes]) => {
+    const { precios, error } = await fetchPrecios(productId);
+    hechos++;
+    if (hechos % 25 === 0 || hechos === productos.length) {
+      process.stdout.write(`\r   ${hechos}/${productos.length} · ${ok} con precio`);
+    }
+    if (error) { fallos++; return; }
+
+    for (const { number, version, printing } of variantes) {
+      const precio = pickPrecio(precios, printing);
+      if (precio == null) { sinPrecio++; continue; }
+      if (!porCarta.has(number)) porCarta.set(number, {});
+      porCarta.get(number)[version] = precio;
+      ok++;
+    }
+  });
+
+  const now = new Date().toISOString();
+  const rows = [...porCarta.entries()].map(([number, prices]) => ({
+    card_id: `${set.code}-${number}`,
+    prices,
+    updated_at: now,
+  }));
+
+  console.log(`\n   ${rows.length} cartas · ${ok} variantes con precio` +
+    `${sinPrecio ? ` · ${sinPrecio} sin precio` : ""}${fallos ? ` · ${fallos} productos fallaron` : ""}`);
+
+  if (rows.length) await upsert(rows);
+  return rows;
+}
+
+// ── Main ────────────────────────────────────────────────────────────────────
+const codes = readCodes();
+const todos = loadSets(codes);
+
+if (PLAN) {
+  const chunks = splitChunks(todos);
+  const totalProd = todos.reduce((n, s) => n + s.productos.size, 0);
+  console.log(`\n${todos.length} sets con mapeo y codigo · ${totalProd} productos a consultar`);
+  console.log(`Reparto en ${TOTAL_CHUNKS} chunks:\n`);
+  chunks.forEach((c, i) => {
+    console.log(` chunk ${i + 1}: ${String(c.productos).padStart(5)} productos · ${String(c.sets.length).padStart(3)} sets`);
+  });
+  const porWorker = Math.max(...chunks.map(c => c.productos));
+  const seg = (porWorker / CONCURRENCY) * (PAUSA_TANDA / 1000 + 0.15);
+  console.log(`\nEl chunk mas pesado tiene ${porWorker} productos → ~${(seg / 60).toFixed(1)} min.`);
+  const sinCodigo = fs.readdirSync(MAPPING_DIR).filter(f => f.endsWith(".json")).length - todos.length;
+  if (sinCodigo > 0) console.log(`⚠️  ${sinCodigo} sets del mapeo se saltan por no tener codigo en SCRYDEX_SET_CODES.`);
+  process.exit(0);
+}
+
+let objetivo;
+if (ONE_SET) {
+  const set = todos.find(s => s.slug === ONE_SET);
+  if (!set) { console.error(`❌ Set desconocido o sin mapeo: ${ONE_SET}`); process.exit(1); }
+  objetivo = [set];
+  console.log(`▶️  Set suelto: ${ONE_SET}${DRY_RUN ? " (dry-run)" : ""}`);
+} else if (CHUNK !== null) {
+  const chunk = splitChunks(todos)[CHUNK - 1];
+  objetivo = chunk.sets;
+  console.log(`▶️  Chunk ${CHUNK}/${TOTAL_CHUNKS} — ${chunk.sets.length} sets, ${chunk.productos} productos`);
+} else {
+  objetivo = todos;
+  console.log(`▶️  Todos los sets (${todos.length}) — considera --chunk para repartirlo`);
+}
+
+const t0 = Date.now();
+const todasLasFilas = [];
+for (const set of objetivo) {
+  todasLasFilas.push(...await correrSet(set));
+}
+if (COMPARE) await compararConScrydex(todasLasFilas);
+console.log(`\n🎉 ${todasLasFilas.length} cartas en ${((Date.now() - t0) / 60000).toFixed(1)} min.`);

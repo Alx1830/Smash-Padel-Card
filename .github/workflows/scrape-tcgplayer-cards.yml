@@ -1,0 +1,52 @@
+name: Scrape TCGplayer Card Prices
+
+# Precios del catalogo general desde la API de TCGplayer, en paralelo a Scrydex.
+# Escribe en tcg_card_prices, no en card_prices: mientras se compara, la app
+# sigue leyendo de Scrydex y esto no toca lo que ve nadie.
+#
+# 9 workers reparten los ~22.200 productos (~2.470 cada uno, ~5 min). No usa
+# Playwright, asi que no compite con los runners del ciclo de Scrydex.
+
+on:
+  schedule:
+    # 3am y 3pm Colombia (UTC-5) — huecos que no usan los otros scrapers
+    - cron: "0 8 * * *"
+    - cron: "0 20 * * *"
+  workflow_dispatch:
+    inputs:
+      chunk:
+        description: "Correr un solo chunk (1-9). Vacio = los 9."
+        required: false
+        default: ""
+
+jobs:
+  prices:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      # Un chunk que falle no debe tumbar a los otros ocho: cada uno lleva sus
+      # propios sets y lo que guardo queda guardado.
+      fail-fast: false
+      # Los 9 a la vez: cada worker sale de una IP distinta, que es justo lo que
+      # evita el 403 que dio pedir todo desde una sola.
+      max-parallel: 9
+      matrix:
+        chunk: ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        working-directory: scraper
+        run: npm install --omit=optional --no-audit --no-fund @supabase/supabase-js
+
+      - name: Scrape chunk ${{ matrix.chunk }}
+        # Con workflow_dispatch y un chunk elegido, los demas se saltan
+        if: ${{ github.event.inputs.chunk == '' || github.event.inputs.chunk == matrix.chunk }}
+        working-directory: scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node tcgplayer_card_prices.mjs --chunk ${{ matrix.chunk }}
