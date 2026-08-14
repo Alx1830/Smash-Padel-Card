@@ -152,7 +152,7 @@ export default function InventarioPage() {
       const sc = SCRYDEX_SET_CODES[setId];
       if (!sc) return;
       const { data: priceRows } = await supabase
-        .from("card_prices")
+        .from("card_prices_merged")
         .select("card_id, prices")
         .like("card_id", `${sc}-%`);
       if (priceRows) {

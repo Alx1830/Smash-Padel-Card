@@ -72,7 +72,7 @@ export default function MySetEditorPage() {
       const chunks: string[][] = [];
       for (let i = 0; i < ids.length; i += 200) chunks.push(ids.slice(i, i + 200));
       const rows = (await Promise.all(chunks.map(chunk =>
-        supabase.from("card_prices").select("card_id, prices").in("card_id", chunk)
+        supabase.from("card_prices_merged").select("card_id, prices").in("card_id", chunk)
       ))).flatMap(res => res.data ?? []);
       if (rows.length === 0) return;
       setCardPrices(prev => {

@@ -358,7 +358,7 @@ export default function DashboardHome() {
 
       if (priceIds.length > 0) {
         const { data: priceRows } = await supabase
-          .from("card_prices")
+          .from("card_prices_merged")
           .select("card_id, prices")
           .in("card_id", [...new Set(priceIds)]);
 

@@ -69,7 +69,7 @@ export default function MySetsPage() {
           const chunks: string[][] = [];
           for (let i = 0; i < priceIds.length; i += 200) chunks.push(priceIds.slice(i, i + 200));
           const rows = (await Promise.all(chunks.map(chunk =>
-            supabase.from("card_prices").select("card_id, prices").in("card_id", chunk)
+            supabase.from("card_prices_merged").select("card_id, prices").in("card_id", chunk)
           ))).flatMap(res => res.data ?? []);
           for (const row of rows) priceMap[row.card_id] = row.prices as Record<string, number>;
         }

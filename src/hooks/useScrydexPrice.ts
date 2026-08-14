@@ -246,7 +246,7 @@ export function useScrydexPrice({
     const cardId = `${setCode}-${cardNumber}`;
 
     supabase
-      .from("card_prices")
+      .from("card_prices_merged")
       .select("prices")
       .eq("card_id", cardId)
       .single()

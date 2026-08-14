@@ -212,7 +212,7 @@ BEGIN
       COALESCE(SUM(ci.quantity), 0)
     INTO v_total, v_card_count
     FROM card_inventory ci
-    LEFT JOIN card_prices cp
+    LEFT JOIN card_prices_merged cp
       ON cp.card_id = (v_set_codes->>(ci.set_id)) || '-' || split_part(ci.card_id::text, ':', 1)::int::text
     WHERE ci.user_id = rec.user_id
       AND ci.quantity > 0

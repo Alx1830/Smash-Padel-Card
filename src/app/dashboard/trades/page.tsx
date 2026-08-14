@@ -299,7 +299,7 @@ function TradesPageInner() {
         const sc = SCRYDEX_SET_CODES[setId];
         if (!sc) return;
         const { data: priceRows } = await supabase
-          .from("card_prices").select("card_id, prices").like("card_id", `${sc}-%`);
+          .from("card_prices_merged").select("card_id, prices").like("card_id", `${sc}-%`);
         if (cancelled || !priceRows) return;
         const map: Record<string, Record<string, number>> = {};
         for (const row of priceRows) map[row.card_id] = row.prices as Record<string, number>;

@@ -15,16 +15,24 @@ name: Scrape TCGplayer Card Prices
 
 on:
   schedule:
-    # 6am y 6pm Colombia (UTC-5), apenas termina el ciclo de Scrydex: ese arranca
-    # 6:00 y 18:00 UTC y tarda ~4h45, asi que a las 11 y 23 ya libero runners.
-    - cron: "0 11 * * *"
-    - cron: "0 23 * * *"
+    # Cada 6 horas. Medido: 2h20 con 159 sets, ~2h35 con los 172 de ahora, asi
+    # que quedan ~3h20 de margen si una corrida se alarga.
+    # Hora Colombia (UTC-5): 8pm, 2am, 8am, 2pm
+    - cron: "0 1,7,13,19 * * *"
   workflow_dispatch:
     inputs:
       chunk:
         description: "Correr un solo chunk (1-9). Vacio = los 9."
         required: false
         default: ""
+
+# Si una corrida se alarga mas de las 6 horas, la siguiente espera en vez de
+# arrancar encima: dos corridas a la vez son el doble de peticiones a TCGplayer,
+# que es justo lo que provoca el 403. Sin cancel-in-progress, porque tirar una
+# corrida a la mitad deja sets con precios de horas distintas.
+concurrency:
+  group: scrape-tcgplayer-cards
+  cancel-in-progress: false
 
 jobs:
   lote1:
