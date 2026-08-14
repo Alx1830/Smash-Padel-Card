@@ -68,8 +68,10 @@ export const SCRYDEX_SET_CODES: Record<string, string> = {
   "lost-origin":          "swsh11",
   "silver-tempest":       "swsh12",
   "crown-zenith":         "swsh12pt5",
-  "champions-path":       "cpa",
-  "shining-fates":        "shf",
+  // El scraper guarda estos dos como swsh35/swsh45; con cpa/shf la busqueda no
+  // encontraba nada y las cartas salian sin precio aunque estaba guardado.
+  "champions-path":       "swsh35",
+  "shining-fates":        "swsh45",
   "celebrations":         "cel25",
   "pokemon-go":           "pgo",
   "ss-promos":            "swshp",
@@ -189,7 +191,7 @@ export const SCRYDEX_SET_CODES: Record<string, string> = {
   "skyridge":             "ecard3",
 
   // ── Legendary Collection / Neo / Gym / Base ───────────────────────────────
-  "legendary-collection": "lc",
+  "legendary-collection": "base6",   // el scraper lo guarda asi, no como "lc"
   "neo-genesis":          "neo1",
   "neo-discovery":        "neo2",
   "neo-revelation":       "neo3",
