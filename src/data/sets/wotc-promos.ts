@@ -57,5 +57,18 @@ const cards: PokemonCard[] = [
   { id: "052:Ho-oh:Normal", name: "Ho-oh"                                       , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-52/large", version: "normal", card_number: 52 },
   { id: "052:Ho-oh:PokemonCenterStamp", name: "Ho-oh"                                       , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-52/large", version: "pokemonCenterStamp", card_number: 52 },
   { id: "053:Suicune:Normal", name: "Suicune"                                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-53/large", version: "normal", card_number: 53 },
+  { id: "054:Aerodactyl (Prerelease):Normal", name: "Aerodactyl (Prerelease)", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-54/large", version: "normal", card_number: 54 },
+  { id: "055:Brock's Vulpix [W Stamped]:Normal", name: "Brock's Vulpix [W Stamped]", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-55/large", version: "normal", card_number: 55 },
+  { id: "056:Clefable (Prerelease):Normal", name: "Clefable (Prerelease)", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-56/large", version: "normal", card_number: 56 },
+  { id: "057:Dark Arbok [W Stamped]:Normal", name: "Dark Arbok [W Stamped]", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-57/large", version: "normal", card_number: 57 },
+  { id: "058:Dark Charmeleon [W Stamped]:Normal", name: "Dark Charmeleon [W Stamped]", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-58/large", version: "normal", card_number: 58 },
+  { id: "059:Dark Gyarados (Prerelease):Normal", name: "Dark Gyarados (Prerelease)", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-59/large", version: "normal", card_number: 59 },
+  { id: "060:Kabuto [W Stamped]:Normal", name: "Kabuto [W Stamped]", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-60/large", version: "normal", card_number: 60 },
+  { id: "061:Misty's Psyduck [W Stamped]:Normal", name: "Misty's Psyduck [W Stamped]", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-61/large", version: "normal", card_number: 61 },
+  { id: "062:Misty's Seadra (Prerelease):Normal", name: "Misty's Seadra (Prerelease)", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-62/large", version: "normal", card_number: 62 },
+  { id: "063:Pikachu (1) (Misprint):Normal", name: "Pikachu (1) (Misprint)", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-63/large", version: "normal", card_number: 63 },
+  { id: "064:Pikachu (Corocoro Grey Star):Normal", name: "Pikachu (Corocoro Grey Star)", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-64/large", version: "normal", card_number: 64 },
+  { id: "065:Pikachu [W Stamped]:Normal", name: "Pikachu [W Stamped]", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-65/large", version: "normal", card_number: 65 },
+  { id: "066:Wartortle [W Stamped]:Normal", name: "Wartortle [W Stamped]", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/basep-66/large", version: "normal", card_number: 66 },
 ];
 export default cards;

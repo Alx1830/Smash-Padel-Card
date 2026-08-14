@@ -204,6 +204,9 @@ export const SCRYDEX_SET_CODES: Record<string, string> = {
   "fossil":               "base3",
   "base-set-2":           "base4",
   "team-rocket":          "base5",
+  // El scraper lo guarda como basep; sin esta linea el set salia sin precio en
+  // la app aunque el cron los estaba bajando puntualmente.
+  "wotc-promos":          "basep",
 
   // ── POP Series ────────────────────────────────────────────────────────────
   "pop-1": "pop1",
@@ -219,6 +222,16 @@ export const SCRYDEX_SET_CODES: Record<string, string> = {
   // ── Sets de TCGplayer (no existen en Scrydex; ver scripts/tcgplayer-set-lib.mjs) ──
   "prize-pack-series": "pp",
   "misc-cards":        "misc",
+  "league-and-championship-cards":      "lcc",
+  "deck-exclusives":                    "dex",
+  "battle-academy":                     "ba20",
+  "battle-academy-2022":                "ba22",
+  "battle-academy-2024":                "ba24",
+  "ex-battle-stadium":                  "exbs",
+  "my-first-battle":                    "mfb",
+  "trick-or-trade-booster-bundle":      "tot22",
+  "trick-or-trade-booster-bundle-2023": "tot23",
+  "trick-or-trade-booster-bundle-2024": "tot24",
 };
 
 const supabase = createClient(

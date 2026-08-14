@@ -463,7 +463,7 @@ export const SET_CARD_COUNT: Record<string, number> = {
   "gym-challenge": 20,
   "fossil": 30,
   "base-set-2": 131,
-  "wotc-promos": 56,
+  "wotc-promos": 69,
   "jungle": 131,
   "legendary-collection": 226,
   "team-rocket": 169,
