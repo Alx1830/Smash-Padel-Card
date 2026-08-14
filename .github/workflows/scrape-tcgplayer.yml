@@ -1,8 +1,11 @@
-name: Scrape TCGplayer Prices
+name: Scrape TCGplayer Sealed
 
-# Precios de lo que Scrydex no cubre: productos sellados y los sets propios de
-# TCGplayer (Prize Pack Series, Miscellaneous Cards). Usa la API interna, no
-# Playwright, asi que termina en minutos y no consume runners del ciclo normal.
+# Precios de los productos sellados (sealed_products). Usa la API interna, no
+# Playwright, asi que termina en minutos.
+#
+# Prize Pack Series y Miscellaneous Cards salieron de aqui: ahora los cubre
+# scrape-tcgplayer-cards.yml junto con los demas sets, pidiendo el precio de
+# cada variante en vez del marketPrice del producto entero.
 
 on:
   schedule:

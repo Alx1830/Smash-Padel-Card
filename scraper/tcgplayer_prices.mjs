@@ -1,26 +1,27 @@
 /**
- * Refresca precios desde la API interna de TCGplayer.
+ * Precios de los productos sellados desde la API interna de TCGplayer
+ * (sealed_products.market_price).
  *
- * Cubre lo que Scrydex no tiene:
- *   · productos sellados  → sealed_products.market_price
- *   · sets de TCGplayer   → card_prices (Prize Pack Series, Miscellaneous Cards)
+ * Solo sellados: no son cartas —no tienen numero ni variante— asi que no caben
+ * en card_prices ni en el scraper de cartas.
+ *
+ * Prize Pack Series y Miscellaneous Cards se llevaban aqui cuando eran lo unico
+ * que salia de TCGplayer. Ahora los cubre tcgplayer_card_prices.mjs junto con
+ * los demas sets, y mejor: aquel pide el precio de cada variante, mientras que
+ * esto tomaba el marketPrice del producto entero.
  *
  * No usa navegador: es la misma API que alimenta la busqueda del sitio, asi que
- * termina en minutos en vez de horas y no compite con los runners de Playwright.
+ * termina en minutos.
  *
  * Uso:
- *   node tcgplayer_prices.mjs                (todo)
- *   node tcgplayer_prices.mjs --only sealed
- *   node tcgplayer_prices.mjs --only sets
+ *   node tcgplayer_prices.mjs
  *   node tcgplayer_prices.mjs --dry-run
  *
  * Variables de entorno: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
  */
 
 import { createClient } from "@supabase/supabase-js";
-import {
-  TCG_SETS, fetchCatalog, splitVariant, loadMap, sleep,
-} from "../scripts/tcgplayer-set-lib.mjs";
+import { sleep } from "../scripts/tcgplayer-set-lib.mjs";
 
 const SEALED_API = "https://mp-search-api.tcgplayer.com/v1/search/request?q=&isList=false";
 const PAGE_SIZE  = 50;
@@ -28,7 +29,6 @@ const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 
 const args    = process.argv.slice(2);
 const DRY_RUN = args.includes("--dry-run");
-const ONLY    = (() => { const i = args.indexOf("--only"); return i >= 0 ? args[i + 1] : null; })();
 
 const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
 if (!DRY_RUN && (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY)) {
@@ -152,38 +152,7 @@ async function refreshSealed() {
   await upsert("sealed_products", rows, "product_id");
 }
 
-// ── Sets de TCGplayer ───────────────────────────────────────────────────────
-async function refreshSets() {
-  for (const set of TCG_SETS) {
-    console.log(`\n🃏 ${set.name}`);
-    const map = loadMap(set.slug);
-    if (Object.keys(map).length === 0) {
-      console.log("   ⏭️  sin numeracion todavia — corre scripts/scrape-tcgplayer-set.mjs primero");
-      continue;
-    }
-
-    const catalog = await fetchCatalog(set.setName);
-    const now = new Date().toISOString();
-    const rows = [];
-    let sinNumero = 0;
-
-    for (const p of catalog) {
-      const number = map[String(p.productId)];
-      // Un producto que TCGplayer agrego despues del ultimo scrape todavia no
-      // tiene numero en este set; entra cuando se vuelva a correr el generador.
-      if (number == null) { sinNumero++; continue; }
-      if (p.marketPrice == null) continue;
-      const { version } = splitVariant(p.productName);
-      rows.push({ card_id: `${set.code}-${number}`, prices: { [version]: p.marketPrice }, updated_at: now });
-    }
-
-    console.log(`   ${rows.length} precios${sinNumero ? `, ${sinNumero} cartas nuevas sin numerar` : ""}`);
-    await upsert("card_prices", rows, "card_id");
-  }
-}
-
 // ── Main ────────────────────────────────────────────────────────────────────
 const t0 = Date.now();
-if (ONLY !== "sets")   await refreshSealed();
-if (ONLY !== "sealed") await refreshSets();
+await refreshSealed();
 console.log(`\n🎉 Listo en ${((Date.now() - t0) / 60000).toFixed(1)} min.`);
