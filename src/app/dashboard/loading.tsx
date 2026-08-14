@@ -1,3 +1,5 @@
+import { BrandLogo } from "@/components/BrandLogo";
+
 export default function DashboardLoading() {
   return (
     <div style={{
@@ -28,19 +30,7 @@ export default function DashboardLoading() {
 
       {/* Logo */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-        <span style={{
-          fontFamily: "var(--font-archivo)",
-          fontSize: "28px",
-          fontWeight: 800,
-          letterSpacing: "-0.02em",
-          background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
-          animation: "fb-pulse 2s ease-in-out infinite",
-        }}>
-          FaceBinder
-        </span>
+        <BrandLogo height={44} style={{ animation: "fb-pulse 2s ease-in-out infinite" }} />
         <span style={{
           fontFamily: "var(--font-jetbrains)",
           fontSize: "9px",

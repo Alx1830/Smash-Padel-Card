@@ -29,6 +29,7 @@ const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
 
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { FlagIcon } from "@/components/FlagIcon";
+import { BrandLogo } from "@/components/BrandLogo";
 
 interface Listing {
   id: string;
@@ -1112,9 +1113,7 @@ function MarketFooter() {
 
         {/* Bottom bar */}
         <div style={{ position: "relative", zIndex: 10, borderTop: "1px solid rgba(255,255,255,0.06)", padding: "20px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "12px" }}>
-          <span style={{ fontFamily: "var(--font-archivo)", fontSize: "16px", fontWeight: 900, letterSpacing: "0.02em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", userSelect: "none" }}>
-            FaceBinder
-          </span>
+          <BrandLogo height={26} />
           <a href="https://adxmedialab.com" target="_blank" rel="noopener noreferrer" className="mft-pill" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "8px 20px", borderRadius: "999px", fontFamily: "var(--font-jetbrains)", fontSize: "10px", letterSpacing: "0.12em", color: "rgba(201,207,221,0.5)", textTransform: "uppercase", textDecoration: "none" }}>
             Hecho por <span style={{ color: "#2ee6c1" }}>Adxmedialab</span>
           </a>

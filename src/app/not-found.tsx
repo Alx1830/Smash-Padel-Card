@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { Home, Compass } from "lucide-react";
 import Link from "next/link";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -103,14 +104,7 @@ export default function NotFound() {
             display: "inline-block",
             animation: "dot-pulse 2s ease-in-out infinite",
           }} />
-          <span style={{
-            fontFamily: DISP, fontSize: "17px", fontWeight: 900, letterSpacing: "0.02em",
-            background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}>
-            FaceBinder
-          </span>
+          <BrandLogo height={26} />
         </div>
 
         {/* 404 */}

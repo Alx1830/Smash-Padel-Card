@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { isDisposableEmail } from "@/lib/disposable-emails";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -132,14 +133,7 @@ export default function LoginPage() {
 
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: "28px" }}>
-          <span style={{
-            fontFamily: DISP, fontSize: "22px",
-            background: `linear-gradient(135deg, #4ff0ff, ${COURT}, ${BALL})`,
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-            backgroundClip: "text", userSelect: "none",
-          }}>
-            FaceBinder
-          </span>
+          <BrandLogo height={40} style={{ margin: "0 auto" }} />
           <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.08em", margin: "6px 0 0" }}>
             Tu binder digital de Pokémon TCG
           </p>

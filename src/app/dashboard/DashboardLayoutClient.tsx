@@ -11,6 +11,7 @@ import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Penci
 import { useNotifications } from "@/hooks/useNotifications";
 import { usePushPermission } from "@/hooks/usePushPermission";
 import { DashboardUserProvider } from "./DashboardUserContext";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const NotificationBell     = dynamic(() => import("@/components/NotificationBell").then(m => ({ default: m.NotificationBell })), { ssr: false });
 const NotificationsDrawer  = dynamic(() => import("@/components/NotificationsDrawer").then(m => ({ default: m.NotificationsDrawer })), { ssr: false });
@@ -21,7 +22,6 @@ const BG1   = "#0a0e1a";
 const INK0  = "#f5f7fb";
 const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
-const DISP  = "var(--font-archivo)";
 
 /* Desktop sidebar items */
 const SIDEBAR_ITEMS = [
@@ -327,14 +327,7 @@ export function DashboardLayoutClient({
             borderBottom: "1px solid rgba(255,255,255,0.06)",
             display: "flex", alignItems: "center", justifyContent: "space-between",
           }}>
-            <span style={{
-              fontFamily: DISP, fontSize: "17px", fontWeight: 900, letterSpacing: "0.02em",
-              background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-              backgroundClip: "text", userSelect: "none",
-            }}>
-              FaceBinder
-            </span>
+            <BrandLogo height={28} />
             {userId && (
               <div ref={desktopBellRef}>
                 <NotificationBell
@@ -507,14 +500,7 @@ export function DashboardLayoutClient({
         {/* ══ MOBILE TOP BAR ══ */}
         <div className="mob-topbar">
           {/* Logo */}
-          <span style={{
-            fontFamily: DISP, fontSize: "17px", fontWeight: 900, letterSpacing: "0.02em",
-            background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-            backgroundClip: "text", userSelect: "none",
-          }}>
-            FaceBinder
-          </span>
+          <BrandLogo height={26} />
 
           {/* Campana + Avatar */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

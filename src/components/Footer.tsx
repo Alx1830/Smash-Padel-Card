@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const STYLES = `
 @keyframes spc-breathe {
@@ -196,12 +197,7 @@ export function Footer() {
           flexWrap: "wrap", gap: "12px",
         }}>
           {/* Logo */}
-          <span style={{
-            fontFamily: "var(--font-archivo)", fontSize: "16px", fontWeight: 900, letterSpacing: "0.02em",
-            background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-            backgroundClip: "text", userSelect: "none",
-          }}>FaceBinder</span>
+          <BrandLogo height={26} />
 
           {/* Made by */}
           <a href="https://adxmedialab.com" target="_blank" rel="noopener noreferrer" className="spc-pill" style={{

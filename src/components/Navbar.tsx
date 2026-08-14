@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter, usePathname } from "next/navigation";
 import { Bell } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const NotificationsDrawer = dynamic(
   () => import("@/components/NotificationsDrawer").then(m => ({ default: m.NotificationsDrawer })),
@@ -128,15 +129,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
 
         {/* Logo */}
         <Link href={loggedIn ? "/dashboard" : "/"} className="flex items-center shrink-0">
-          <span style={{
-            fontFamily: "var(--font-archivo)", fontSize: "17px", fontWeight: 900,
-            letterSpacing: "0.02em",
-            background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-            backgroundClip: "text", userSelect: "none", pointerEvents: "none",
-          }}>
-            FaceBinder
-          </span>
+          <BrandLogo height={28} style={{ pointerEvents: "none" }} />
         </Link>
 
         {/* Links — hidden on mobile/tablet, visible on desktop */}

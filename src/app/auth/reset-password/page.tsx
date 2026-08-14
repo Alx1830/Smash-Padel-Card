@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -156,9 +157,7 @@ export default function ResetPasswordPage() {
       }}>
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: "28px" }}>
-          <span style={{ fontFamily: DISP, fontSize: "22px", background: `linear-gradient(135deg, #4ff0ff, ${COURT}, ${BALL})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", userSelect: "none" }}>
-            FaceBinder
-          </span>
+          <BrandLogo height={40} style={{ margin: "0 auto" }} />
         </div>
 
         <Suspense fallback={
