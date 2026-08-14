@@ -1,14 +1,9 @@
 -- ============================================================
--- Snapshot horario del portafolio — ejecutar en Supabase SQL Editor
+-- Sincroniza v_set_codes con SCRYDEX_SET_CODES del frontend.
+-- Solo redefine la funcion: no toca pg_cron ni el schedule, que
+-- ya estan creados. Generado desde src/hooks/useScrydexPrice.ts.
 -- ============================================================
--- Paso 1: Habilitar pg_cron (solo si no está habilitado)
--- (También se puede hacer desde Dashboard → Database → Extensions)
-CREATE EXTENSION IF NOT EXISTS pg_cron;
 
--- ============================================================
--- Paso 2: Función que calcula el valor de portafolio de cada
---         usuario y guarda un snapshot por hora en hora Bogotá
--- ============================================================
 CREATE OR REPLACE FUNCTION public.snapshot_hourly_portfolios()
 RETURNS void
 LANGUAGE plpgsql
@@ -246,25 +241,3 @@ BEGIN
   END LOOP;
 END;
 $$;
-
--- ============================================================
--- Paso 3: Programar ejecución cada hora en punto
--- ============================================================
--- Eliminar job anterior si existe (para re-ejecuciones seguras)
-SELECT cron.unschedule('hourly-portfolio-snapshot')
-WHERE EXISTS (
-  SELECT 1 FROM cron.job WHERE jobname = 'hourly-portfolio-snapshot'
-);
-
-SELECT cron.schedule(
-  'hourly-portfolio-snapshot',
-  '0 * * * *',
-  'SELECT public.snapshot_hourly_portfolios()'
-);
-
--- ============================================================
--- Verificación: ver jobs activos
--- ============================================================
-SELECT jobid, jobname, schedule, command, active
-FROM cron.job
-WHERE jobname = 'hourly-portfolio-snapshot';
