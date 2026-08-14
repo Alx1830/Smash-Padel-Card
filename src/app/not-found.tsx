@@ -104,7 +104,7 @@ export default function NotFound() {
             display: "inline-block",
             animation: "dot-pulse 2s ease-in-out infinite",
           }} />
-          <BrandLogo height={30} />
+          <BrandLogo height={36} />
         </div>
 
         {/* 404 */}

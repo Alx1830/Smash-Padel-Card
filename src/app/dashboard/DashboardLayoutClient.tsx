@@ -327,7 +327,7 @@ export function DashboardLayoutClient({
             borderBottom: "1px solid rgba(255,255,255,0.06)",
             display: "flex", alignItems: "center", justifyContent: "space-between",
           }}>
-            <BrandLogo height={32} />
+            <BrandLogo height={38} />
             {userId && (
               <div ref={desktopBellRef}>
                 <NotificationBell
@@ -500,7 +500,7 @@ export function DashboardLayoutClient({
         {/* ══ MOBILE TOP BAR ══ */}
         <div className="mob-topbar">
           {/* Logo */}
-          <BrandLogo height={30} />
+          <BrandLogo height={36} />
 
           {/* Campana + Avatar */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

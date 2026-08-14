@@ -1113,7 +1113,7 @@ function MarketFooter() {
 
         {/* Bottom bar */}
         <div style={{ position: "relative", zIndex: 10, borderTop: "1px solid rgba(255,255,255,0.06)", padding: "20px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "12px" }}>
-          <BrandLogo height={30} />
+          <BrandLogo height={36} />
           <a href="https://adxmedialab.com" target="_blank" rel="noopener noreferrer" className="mft-pill" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "8px 20px", borderRadius: "999px", fontFamily: "var(--font-jetbrains)", fontSize: "10px", letterSpacing: "0.12em", color: "rgba(201,207,221,0.5)", textTransform: "uppercase", textDecoration: "none" }}>
             Hecho por <span style={{ color: "#2ee6c1" }}>Adxmedialab</span>
           </a>

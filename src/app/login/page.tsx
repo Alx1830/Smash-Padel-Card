@@ -133,7 +133,7 @@ export default function LoginPage() {
 
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: "28px" }}>
-          <BrandLogo height={46} style={{ margin: "0 auto" }} />
+          <BrandLogo height={55} style={{ margin: "0 auto" }} />
           <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.08em", margin: "6px 0 0" }}>
             Tu binder digital de Pokémon TCG
           </p>
