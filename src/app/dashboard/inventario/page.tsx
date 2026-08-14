@@ -456,6 +456,13 @@ export default function InventarioPage() {
         }
         .inv-icon-btn:hover { background: rgba(5,7,13,0.92); }
         .inv-icon-btn.active { background: rgba(46,230,193,0.2); }
+        /* Carta publicada: el botón toma el halo redondo que antes era una marca aparte */
+        .inv-icon-btn.selling {
+          border-radius: 50%;
+          background: rgba(5,7,13,0.85);
+          animation: inv-salePulse 2s ease-in-out infinite;
+        }
+        .inv-icon-btn.selling:hover { background: rgba(5,7,13,0.95); }
 
         /* ── Qty controls ── */
         .inv-qty-btn {
@@ -812,23 +819,10 @@ export default function InventarioPage() {
                               </span>
                             </div>
 
-                            {/* En venta badge */}
-                            {isListed && (
-                              <div title="En venta" style={{
-                                position: "absolute", top: 6, right: 6,
-                                width: 30, height: 30, borderRadius: "50%",
-                                background: "rgba(5,7,13,0.85)",
-                                display: "flex", alignItems: "center", justifyContent: "center",
-                                animation: "inv-salePulse 2s ease-in-out infinite",
-                                zIndex: 10, pointerEvents: "none",
-                              }}>
-                                <BadgeDollarSign size={18} color="#d6ff3d" strokeWidth={1.8} />
-                              </div>
-                            )}
-
-                            {/* Estrella + vender (top-left) */}
+                            {/* Estrella + vender (top-left) — el botón de vender avisa por sí solo
+                                cuando la carta está publicada, sin una segunda marca en la esquina */}
                             {userId && (
-                              <div style={{ position: "absolute", top: 6, left: 6, display: "flex", flexDirection: "column", gap: "4px", zIndex: 10 }}>
+                              <div style={{ position: "absolute", top: 6, left: 6, display: "flex", flexDirection: "column", gap: "6px", zIndex: 10 }}>
                                 <button
                                   className={`inv-icon-btn${isFeat ? " active" : ""}`}
                                   onClick={e => { e.stopPropagation(); toggleFeatured(card, setId); }}
@@ -837,11 +831,11 @@ export default function InventarioPage() {
                                   <Star size={13} color={isFeat ? COURT : INK2} strokeWidth={isFeat ? 2.2 : 1.7} fill={isFeat ? COURT : "none"} />
                                 </button>
                                 <button
-                                  className={`inv-icon-btn${isListed ? " active" : ""}`}
+                                  className={`inv-icon-btn${isListed ? " selling" : ""}`}
                                   onClick={e => { e.stopPropagation(); setSellTarget({ card, setId }); }}
-                                  title="Poner en venta"
+                                  title={isListed ? "En venta — editar publicación" : "Poner en venta"}
                                 >
-                                  <BadgeDollarSign size={13} color={isListed ? "#d6ff3d" : INK2} strokeWidth={1.8} />
+                                  <BadgeDollarSign size={isListed ? 16 : 13} color={isListed ? "#d6ff3d" : INK2} strokeWidth={1.8} />
                                 </button>
                               </div>
                             )}
