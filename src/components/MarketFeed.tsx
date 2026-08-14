@@ -8,6 +8,7 @@ import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { getVersionLabel } from "@/data/pokemon-cards-meta";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { FlagIcon } from "@/components/FlagIcon";
+import { tcgCardLink } from "@/lib/tcg-link";
 
 const COURT  = "#2ee6c1";
 const BALL   = "#d6ff3d";
@@ -57,6 +58,7 @@ interface FeedItem {
   created_at: string;
   user_id: string;
   player: PlayerInfo | null;
+  cardNumber: number | string;
   cardName: string;
   cardImage: string;
   setName: string;
@@ -110,7 +112,7 @@ function SkeletonPost({ yellow }: { yellow?: boolean }) {
 
 function PostCard({ item }: { item: FeedItem }) {
   const isWishlist = item.type === "wishlist";
-  const tcgUrl = `https://www.tcgplayer.com/search/pokemon/product?q=${encodeURIComponent([item.cardName, item.setName, item.versionLabel].join(" "))}`;
+  const tcgUrl = tcgCardLink(item.set_id, item.cardNumber, [item.cardName, item.setName, item.versionLabel].join(" "));
   const displayName = item.player?.username ?? "Usuario";
 
   // Listing: WhatsApp para comprar
@@ -282,6 +284,7 @@ async function enrichRows(
       created_at:   r.created_at,
       user_id:      r.user_id,
       player:       playerMap[r.user_id] ?? null,
+      cardNumber:   card?.card_number ?? r.card_id,
       cardName:     card?.name ?? `Carta #${r.card_id}`,
       cardImage:    card?.image ?? "",
       setName:      setInfo?.name ?? r.set_id,

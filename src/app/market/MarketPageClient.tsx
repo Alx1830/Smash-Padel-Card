@@ -29,6 +29,7 @@ const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
 
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { FlagIcon } from "@/components/FlagIcon";
+import { tcgCardLink } from "@/lib/tcg-link";
 import { BrandLogo } from "@/components/BrandLogo";
 
 interface Listing {
@@ -750,7 +751,7 @@ export function MarketPageClient({
                       <div style={{ display: "flex", gap: "6px", marginTop: "auto", paddingTop: "2px" }}>
                         {/* TCGPlayer */}
                         <button
-                          onClick={() => { const w=430,h=600,left=screen.availWidth-w-16,top=screen.availHeight-h-16; window.open(`https://www.tcgplayer.com/search/pokemon/product?q=${encodeURIComponent(tcgQuery)}`,"tcgplayer",`width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`); }}
+                          onClick={() => { const w=430,h=600,left=screen.availWidth-w-16,top=screen.availHeight-h-16; window.open(tcgCardLink(listing.set_id, listing.card_id, tcgQuery),"tcgplayer",`width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`); }}
                           style={{
                             flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "5px",
                             padding: "8px 4px",

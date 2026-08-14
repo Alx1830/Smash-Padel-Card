@@ -9,6 +9,7 @@ import { getCurrencyForCountry, formatPrice, CURRENCY_SYMBOL } from "@/lib/curre
 import { CARD_LANGUAGES, INVENTORY_LANGUAGES, DEFAULT_CARD_LANGUAGE } from "@/lib/languages";
 import { FlagIcon } from "@/components/FlagIcon";
 import { useScrydexPrice, SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
+import { tcgCardLink } from "@/lib/tcg-link";
 
 export const COURT = "#2ee6c1";
 export const INK0  = "#f5f7fb";
@@ -532,7 +533,7 @@ export function CardDetailModal({
                 {/* Ver precios — TCGPlayer */}
                 {(() => {
                   const tcgQuery = [card.name, setInfo?.name ?? "", VERSION_FULL[label] ?? label].filter(Boolean).join(" ");
-                  const tcgUrl   = `https://www.tcgplayer.com/search/pokemon/product?q=${encodeURIComponent(tcgQuery)}`;
+                  const tcgUrl   = tcgCardLink(setId, card.card_number, tcgQuery);
                   return (
                     <button
                       onClick={() => {
