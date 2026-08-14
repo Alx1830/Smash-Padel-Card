@@ -275,8 +275,36 @@ async function fetchPrecios(productId, attempt = 1) {
  */
 function pickPrecio(precios, printing) {
   if (printing && precios[printing] != null) return precios[printing];
+
+  /**
+   * En los sets de WotC el printing que anoto el mapeo muchas veces no existe
+   * tal cual: TCGplayer parte cada carta por tirada. Un "Holofoil" alli sale
+   * como "Unlimited Holofoil" / "1st Edition Holofoil", y en las no holo
+   * directamente como "Unlimited" / "1st Edition". Sin contemplarlo, sets
+   * enteros —Gym Challenge, los cuatro Neo— quedaban en cero.
+   *
+   * Se prefiere siempre la Unlimited: es la tirada comun, la que casi todo el
+   * mundo tiene, y es con la que Scrydex viene alimentando esas cartas, asi que
+   * el valor de los portafolios no se mueve.
+   */
+  if (printing) {
+    const mismoAcabado = Object.keys(precios).filter(v => v.endsWith(printing));
+    if (mismoAcabado.length) {
+      const unlimited = mismoAcabado.find(v => /^unlimited/i.test(v));
+      return precios[unlimited ?? mismoAcabado[0]];
+    }
+    // El printing no aparece ni como sufijo: lo unico que separa a estas
+    // variantes es la tirada, no el acabado.
+    const soloTirada = Object.keys(precios).every(v => /^(unlimited|1st edition|shadowless)/i.test(v));
+    if (soloTirada) {
+      const unlimited = Object.keys(precios).find(v => /^unlimited$/i.test(v))
+        ?? Object.keys(precios).find(v => /^unlimited/i.test(v));
+      if (unlimited) return precios[unlimited];
+    }
+  }
+
   const valores = Object.values(precios);
-  if (!printing && valores.length === 1) return valores[0];
+  if (valores.length === 1) return valores[0];
   if (!printing && precios["Normal"] != null) return precios["Normal"];
   return null;
 }
