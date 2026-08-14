@@ -28,6 +28,18 @@ const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
+/* El monto se escribe con separador de miles "." y decimales con "," (formato es-CO) */
+const parseCash = (raw: string) => {
+  const clean = raw.replace(/\./g, "").replace(",", ".").replace(/[^\d.]/g, "");
+  return parseFloat(clean) || 0;
+};
+const formatCash = (raw: string) => {
+  const clean = raw.replace(/[^\d.,]/g, "").replace(/\./g, "").replace(/,+/g, ",");
+  const [int, ...rest] = clean.split(",");
+  const grouped = int ? Number(int).toLocaleString("es-CO", { maximumFractionDigits: 0 }) : "";
+  return rest.length ? `${grouped},${rest.join("").slice(0, 2)}` : grouped;
+};
+
 const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
 const SET_NAME = (id: string) => ALL_SETS.find(s => s.id === id)?.name ?? id;
 
@@ -234,7 +246,7 @@ function TradesPageInner() {
         pf[mine][`${c.card_id}::${c.set_id}`] = c.quantity;
       }
       setPrefill(pf);
-      setCash(trade.cash_amount ? String(trade.cash_amount) : "");
+      setCash(trade.cash_amount ? formatCash(String(trade.cash_amount).replace(".", ",")) : "");
       // cash_payer se guarda respecto a from_user_id; "to" significa "él me paga"
       const payer = (trade.cash_payer as "from" | "to") ?? "to";
       setCashPayer(isTo ? (payer === "to" ? "from" : "to") : payer);
@@ -418,8 +430,11 @@ function TradesPageInner() {
 
   const offerCount   = Object.values(offer).reduce((a, b) => a + b, 0);
   const requestCount = Object.values(request).reduce((a, b) => a + b, 0);
-  const cashNum      = parseFloat(cash.replace(/[^\d.]/g, "")) || 0;
-  const canSend      = !!peer && !!meId && offerCount > 0 && (requestCount > 0 || cashNum > 0);
+  const cashNum      = parseCash(cash);
+  /* Un trade vale si doy algo (cartas o plata) y recibo algo (cartas o plata) */
+  const iGive        = offerCount > 0 || (cashNum > 0 && cashPayer === "from");
+  const iGet         = requestCount > 0 || (cashNum > 0 && cashPayer === "to");
+  const canSend      = !!peer && !!meId && iGive && iGet;
 
   const entryByKey = useMemo(() => {
     const m: Record<string, Entry> = {};
@@ -916,7 +931,7 @@ function TradesPageInner() {
                   {CURRENCY_SYMBOL[myCurrency] ?? "$"}
                 </span>
                 <input className="trade-input" inputMode="decimal" placeholder="0"
-                  value={cash} onChange={e => setCash(e.target.value)} />
+                  value={cash} onChange={e => setCash(formatCash(e.target.value))} />
               </div>
               {cashNum > 0 && (
                 <div style={{ display: "flex", gap: 6, marginTop: 8 }}>
@@ -1000,7 +1015,9 @@ function TradesPageInner() {
               )}
               {!canSend && !sent && (
                 <p style={{ fontFamily: MONO, fontSize: 10, color: INK2, margin: "8px 0 0", textAlign: "center", lineHeight: 1.5 }}>
-                  Ofrece al menos una carta y pide una carta o un monto.
+                  {!iGive
+                    ? "Ofrece al menos una carta o un monto que tú pagues."
+                    : "Pide al menos una carta o un monto que él pague."}
                 </p>
               )}
               </div>
