@@ -57,7 +57,7 @@ export default function MySetsPage() {
         const allSetIds = [...new Set(cardQueries.flatMap(c => c.map(r => r.set_id)))];
         if (allSetIds.length > 0) await loadManySets(allSetIds);
 
-        // Precios Scrydex de todas las cartas de todos los sets, en una sola consulta por lotes
+        // Precios de mercado de todas las cartas de todos los sets, en una sola consulta por lotes
         const priceIds = [...new Set(cardQueries.flatMap(rows => rows.map(r => {
           const sc = SCRYDEX_SET_CODES[r.set_id];
           if (!sc) return null;

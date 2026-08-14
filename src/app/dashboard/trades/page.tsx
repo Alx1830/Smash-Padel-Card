@@ -56,7 +56,7 @@ interface Entry {
   /** Idioma de esta copia: cada idioma es una fila distinta del inventario */
   language: string;
   quantity: number;
-  /** Precio unitario en USD según Scrydex, o null si no hay dato */
+  /** Precio unitario en USD de mercado, o null si no hay dato */
   price:    number | null;
 }
 
@@ -294,7 +294,7 @@ function TradesPageInner() {
       // mostrar "no tiene cartas".
       setLoadingData(false);
 
-      // Precios Scrydex de los sets involucrados
+      // Precios de mercado de los sets involucrados
       await Promise.all([...needed].map(async setId => {
         const sc = SCRYDEX_SET_CODES[setId];
         if (!sc) return;
@@ -309,7 +309,7 @@ function TradesPageInner() {
     return () => { cancelled = true; };
   }, [peer, meId, supabase, editId]);
 
-  /* ── Precio unitario Scrydex (USD) ────────────────────────── */
+  /* ── Precio unitario de mercado (USD) ─────────────────────── */
   const priceOf = useCallback((card: PokemonCard, setId: string): number | null => {
     const sc = SCRYDEX_SET_CODES[setId];
     if (!sc) return null;

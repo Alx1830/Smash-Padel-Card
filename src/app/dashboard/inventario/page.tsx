@@ -294,7 +294,7 @@ export default function InventarioPage() {
     });
   }, [sets]);
 
-  /** Precio Scrydex de una carta, o null si el set no tiene datos */
+  /** Precio de mercado de una carta, o null si el set no tiene datos */
   const priceOf = useCallback((card: PokemonCard, setId: string): number | null => {
     const sc = SCRYDEX_SET_CODES[setId];
     if (!sc) return null;
@@ -772,7 +772,7 @@ export default function InventarioPage() {
                       const isListed = listings.some(l => String(l.card_id) === String(card.card_number) && l.set_id === setId && l.version === card.version);
                       const qty      = inventory[invLangKey(card.id, card.version, setId, language)] ?? 0;
 
-                      // Scrydex price
+                      // precio de mercado
                       const sc = SCRYDEX_SET_CODES[setId];
                       const pricesForSet = sc ? (setCardPrices[setId] ?? {}) : {};
                       const cardPriceMap = pricesForSet[`${sc}-${card.card_number}`];

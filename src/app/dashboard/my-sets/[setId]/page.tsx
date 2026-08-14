@@ -57,7 +57,7 @@ export default function MySetEditorPage() {
   const uniqueCards = setCards.length;
   const [cardPrices, setCardPrices] = useState<Record<string, Record<string, number>>>({});
 
-  // Precios Scrydex de las cartas del set (por set-número, en lotes)
+  // Precios de mercado de las cartas del set (por set-número, en lotes)
   useEffect(() => {
     const ids = [...new Set(
       setCards

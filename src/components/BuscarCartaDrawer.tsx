@@ -139,7 +139,7 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
     return () => clearTimeout(timer);
   }, [query]);
 
-  /* Precios Scrydex de los resultados (solo ids exactos, en lotes) */
+  /* Precios de mercado de los resultados (solo ids exactos, en lotes) */
   useEffect(() => {
     if (results.length === 0) return;
     const ids = [...new Set(

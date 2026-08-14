@@ -56,7 +56,7 @@ export default function DeckEditorPage() {
   const totalCards = deckCards.reduce((s, c) => s + c.quantity, 0);
   const [cardPrices, setCardPrices] = useState<Record<string, Record<string, number>>>({});
 
-  // Precios Scrydex de las cartas del deck (por set-número, en lotes)
+  // Precios de mercado de las cartas del deck (por set-número, en lotes)
   useEffect(() => {
     const ids = [...new Set(
       deckCards
