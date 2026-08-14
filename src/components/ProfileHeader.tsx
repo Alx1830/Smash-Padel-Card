@@ -219,7 +219,7 @@ function Showcase({ featuredCards, inventoryRows }: {
 }
 
 /* ══ ProfileHeader ══ */
-export function ProfileHeader({ player, hideMobileDetails, hideMobileChart, showProfileLink }: { player: ProfileHeaderData; hideMobileDetails?: boolean; hideMobileChart?: boolean; showProfileLink?: boolean }) {
+export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { player: ProfileHeaderData; hideMobileDetails?: boolean; showProfileLink?: boolean }) {
   const CARD_H     = 416 * 1.2;
   const COVER_H    = 460;
   const NEG_MARGIN = Math.round(CARD_H / 2);
@@ -401,14 +401,14 @@ export function ProfileHeader({ player, hideMobileDetails, hideMobileChart, show
               photoUrl={player.photoUrl} setFavoritoId={player.setFavoritoId}
             />
           </div>
-          {/* En market y wishlist el móvil va directo al listado, sin gráfico */}
-          {player.profileUserId && !hideMobileChart && (
-            <div style={{ marginBottom: "40px" }}>
-              <ProfilePortfolioChart userId={player.profileUserId} cardCount={totalCards} />
-            </div>
-          )}
+          {/* Fuera del perfil, el móvil va directo al contenido: sin gráfico ni destacadas */}
           {!hideMobileDetails && (
             <>
+              {player.profileUserId && (
+                <div style={{ marginBottom: "40px" }}>
+                  <ProfilePortfolioChart userId={player.profileUserId} cardCount={totalCards} />
+                </div>
+              )}
               <div style={{ width: "100%", height: "1px", marginBottom: "40px", background: "rgba(255,255,255,0.06)" }} />
               <h3 style={{ fontFamily: DISP, fontSize: "22px", letterSpacing: "-0.01em", margin: "0 0 16px", color: INK0 }}>
                 Perfil Maestro Pokémon

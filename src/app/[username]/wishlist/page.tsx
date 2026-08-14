@@ -97,7 +97,7 @@ export default async function WishlistPage({
 
   return (
     <main style={{ background: "#05070d", minHeight: "100vh" }}>
-      <ProfileHeader player={profileHeader} hideMobileDetails hideMobileChart showProfileLink />
+      <ProfileHeader player={profileHeader} hideMobileDetails showProfileLink />
       <Suspense>
         <WishlistPageClient
           username={player.username}
