@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Search, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES, STANDALONE_SETS, type PokemonSet } from "@/data/pokemon-sets";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { VERSION_LABEL, getVersionLabel, getVersionEffect, getVersionColor, type PokemonCard, type CardVersion } from "@/data/pokemon-cards-meta";
 import { SET_CARD_COUNT, loadSetCards } from "@/data/pokemon-cards";
 import {
@@ -447,13 +448,12 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
       .then(({ data }) => {
         if (data) setFeaturedCards(data as FeaturedCard[]);
       });
-    supabase
+    fetchAllRows<WishlistCard>((from, to) => supabase
       .from("card_wishlist")
       .select("card_id, set_id")
       .eq("user_id", userId)
-      .then(({ data }) => {
-        if (data) setWishlistCards(data as WishlistCard[]);
-      });
+      .range(from, to)
+    ).then(setWishlistCards);
     supabase
       .from("market_listings")
       .select("id, card_id, set_id, price_cop, version")

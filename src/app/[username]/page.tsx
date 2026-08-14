@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { MobileTabBar } from "@/components/MobileTabBar";
 import { notFound } from "next/navigation";
 import { SET_CARD_COUNT } from "@/data/pokemon-cards";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -66,26 +67,33 @@ export default async function JugadorPage({
 
   if (!data || data.activo === false) notFound();
 
+  type ProfInvRow  = { card_id: string; set_id: string; quantity: number; version?: string };
+  type ProfWishRow = { card_id: number; set_id: string };
+
   // Fetch inventory + featured cards + wishlist in parallel
   // NOTE: no .in("set_id", ...) filter — SET_CARDS is a lazy Proxy, empty on server
   const [
-    { data: invRows }, { data: featuredRows }, { data: wishlistRows },
+    invRows, { data: featuredRows }, wishlistRows,
     { count: decksCount }, { count: mySetsCount },
   ] = data.user_id
     ? await Promise.all([
-        supabase
-          .from("card_inventory")
-          .select("card_id, set_id, quantity, version")
-          .eq("user_id", data.user_id)
-          .gt("quantity", 0),
+        fetchAllRows<ProfInvRow>(
+          (from, to) => supabase
+            .from("card_inventory")
+            .select("card_id, set_id, quantity, version")
+            .eq("user_id", data.user_id!)
+            .gt("quantity", 0)
+            .range(from, to)),
         supabase
           .from("featured_cards")
           .select("card_id, set_id")
           .eq("user_id", data.user_id),
-        supabase
-          .from("card_wishlist")
-          .select("card_id, set_id")
-          .eq("user_id", data.user_id),
+        fetchAllRows<ProfWishRow>(
+          (from, to) => supabase
+            .from("card_wishlist")
+            .select("card_id, set_id")
+            .eq("user_id", data.user_id!)
+            .range(from, to)),
         // Solo el conteo: los sliders cargan sus cartas en cliente, pero la
         // sección debe montarse aunque el jugador no tenga inventario
         supabase
@@ -97,7 +105,7 @@ export default async function JugadorPage({
           .select("id", { count: "exact", head: true })
           .eq("user_id", data.user_id),
       ])
-    : [{ data: null }, { data: null }, { data: null }, { count: 0 }, { count: 0 }];
+    : [[] as ProfInvRow[], { data: null }, [] as ProfWishRow[], { count: 0 }, { count: 0 }];
 
   // Build per-set stats using SET_CARD_COUNT (static, available server-side)
   type SetStats = { unique: number; total: number; totalQty: number };

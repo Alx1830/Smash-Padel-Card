@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { useDashboardUser } from "./DashboardUserContext";
 import { PortfolioChart, type Snapshot, type HourlySnapshot } from "@/components/PortfolioChart";
 import { TopLocalCards } from "@/components/TopLocalCards";
@@ -294,13 +295,16 @@ export default function DashboardHome() {
       const [
         { data: prof },
         { data: followRows },
-        { data: inv },
+        inv,
         { data: snaps },
         { data: hourly },
       ] = await Promise.all([
         supabase.from("players").select("username").eq("user_id", user.id).single(),
         supabase.from("follows").select("follower_id").eq("following_id", user.id),
-        supabase.from("card_inventory").select("card_id, set_id, version, quantity").eq("user_id", user.id).gt("quantity", 0),
+        fetchAllRows<{ card_id: string; set_id: string; version: string | null; quantity: number }>(
+          (from, to) => supabase.from("card_inventory")
+            .select("card_id, set_id, version, quantity")
+            .eq("user_id", user.id).gt("quantity", 0).range(from, to)),
         supabase.from("portfolio_snapshots").select("date, total_usd, card_count").eq("user_id", user.id).order("date", { ascending: false }).limit(366),
         supabase.from("portfolio_hourly_snapshots").select("hour_bucket, total_usd, card_count").eq("user_id", user.id).order("hour_bucket", { ascending: true }),
       ]);

@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { loadManySets, SET_CARDS } from "@/data/pokemon-cards";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { InvTiltCard, INV_CARD_KEYFRAMES } from "@/components/InventoryCard";
@@ -251,22 +252,16 @@ function TradesPageInner() {
       setSent(false);
       // Al editar, los valores ya vienen del trade original
       if (!editId) { setOffer(null); setRequest(null); setCash(""); setMessage(""); }
-      const [{ data: mine }, { data: myWishData }, { data: wish }, { data: theirs }] = await Promise.all([
+      const invOf = (uid: string) => fetchAllRows<InvRow>((from, to) =>
         supabase.from("card_inventory").select("card_id, set_id, version, quantity, language")
-          .eq("user_id", meId).gt("quantity", 0),
+          .eq("user_id", uid).gt("quantity", 0).range(from, to));
+      const wishOf = (uid: string) => fetchAllRows<WishRow>((from, to) =>
         supabase.from("card_wishlist").select("card_id, set_id")
-          .eq("user_id", meId),
-        supabase.from("card_wishlist").select("card_id, set_id")
-          .eq("user_id", peer.user_id),
-        supabase.from("card_inventory").select("card_id, set_id, version, quantity, language")
-          .eq("user_id", peer.user_id).gt("quantity", 0),
+          .eq("user_id", uid).range(from, to));
+      const [myRows, myWishRows, wishRows, peerRows] = await Promise.all([
+        invOf(meId), wishOf(meId), wishOf(peer.user_id), invOf(peer.user_id),
       ]);
       if (cancelled) return;
-
-      const myRows    = (mine       ?? []) as InvRow[];
-      const myWishRows= (myWishData ?? []) as WishRow[];
-      const wishRows  = (wish       ?? []) as WishRow[];
-      const peerRows  = (theirs     ?? []) as InvRow[];
 
       setMyInv(myRows);
       setMyWish(myWishRows);

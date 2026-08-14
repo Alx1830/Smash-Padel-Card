@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionColor, getVersionLabel } from "@/data/pokemon-cards-meta";
 import { invKey, type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing } from "@/components/CardDetailModal";
@@ -56,13 +57,14 @@ export default function CardSearchPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
       setUserId(user.id);
-      const [{ data: featured }, { data: wishlist }, { data: listings }] = await Promise.all([
+      const [{ data: featured }, wishlist, { data: listings }] = await Promise.all([
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", user.id),
-        supabase.from("card_wishlist").select("card_id, set_id").eq("user_id", user.id),
+        fetchAllRows<WishlistCard>((from, to) => supabase.from("card_wishlist")
+          .select("card_id, set_id").eq("user_id", user.id).range(from, to)),
         supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", user.id).eq("status", "active"),
       ]);
       if (featured)  setFeaturedCards(featured as FeaturedCard[]);
-      if (wishlist)  setWishlistCards(wishlist as WishlistCard[]);
+      setWishlistCards(wishlist);
       if (listings)  setUserListings(listings as UserListing[]);
     })();
   }, []);

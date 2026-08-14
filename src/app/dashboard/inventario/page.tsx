@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { getVersionLabel } from "@/data/pokemon-cards-meta";
 import { InvTiltCard, SellPopup } from "@/components/InventoryCard";
 import {
@@ -92,10 +93,14 @@ export default function InventarioPage() {
   const userIdRef = useRef<string | null>(null);
 
   async function loadData(uid: string) {
-    const [invRes, featRes, wishRes, listRes] = await Promise.all([
-      supabase.from("card_inventory").select("card_id, set_id, version, quantity, language").eq("user_id", uid).gt("quantity", 0),
+    const [invRows, featRes, wishRows, listRes] = await Promise.all([
+      fetchAllRows<{ card_id: string; set_id: string; version: string | null; quantity: number; language: string | null }>(
+        (from, to) => supabase.from("card_inventory")
+          .select("card_id, set_id, version, quantity, language")
+          .eq("user_id", uid).gt("quantity", 0).range(from, to)),
       supabase.from("featured_cards").select("card_id, set_id").eq("user_id", uid),
-      supabase.from("card_wishlist").select("card_id, set_id").eq("user_id", uid),
+      fetchAllRows<WishlistCard>((from, to) => supabase.from("card_wishlist")
+        .select("card_id, set_id").eq("user_id", uid).range(from, to)),
       supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", uid).eq("status", "active"),
     ]);
     // Cada fila es una carta en un idioma. El mapa guarda la cantidad de esa
@@ -104,7 +109,7 @@ export default function InventarioPage() {
     const setMap: Record<string, number> = {};
     const langs: Record<string, string[]> = {};
     let total = 0;
-    for (const row of (invRes.data ?? [])) {
+    for (const row of invRows) {
       const version = row.version ?? "normal";
       const lang    = row.language ?? DEFAULT_CARD_LANGUAGE;
       invMap[invLangKey(row.card_id, version, row.set_id, lang)] = row.quantity;
@@ -128,7 +133,7 @@ export default function InventarioPage() {
     }
     setFeaturedCards(allFeat.filter(f => !isNaN(Number(f.card_id))));
 
-    setWishlistCards((wishRes.data ?? []) as WishlistCard[]);
+    setWishlistCards(wishRows);
     setListings((listRes.data ?? []) as UserListing[]);
     const newSets = Object.entries(setMap).map(([setId, count]) => ({ setId, count })).sort((a, b) => b.count - a.count);
     setSets(newSets);

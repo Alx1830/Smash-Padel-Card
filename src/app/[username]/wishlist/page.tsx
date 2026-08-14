@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { Footer } from "@/components/Footer";
 import { MobileTabBar } from "@/components/MobileTabBar";
 import { ProfileHeader } from "@/components/ProfileHeader";
@@ -62,13 +63,17 @@ export default async function WishlistPage({
 
   if (!player) notFound();
 
-  const [{ data: wishlistRows }, { data: featuredRows }, { data: invRows }] = player.user_id
+  const [wishlistRows, { data: featuredRows }, invRows] = player.user_id
     ? await Promise.all([
-        supabase.from("card_wishlist").select("card_id, set_id").eq("user_id", player.user_id),
+        fetchAllRows<{ card_id: number; set_id: string }>((from, to) => supabase
+          .from("card_wishlist").select("card_id, set_id")
+          .eq("user_id", player.user_id!).range(from, to)),
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", player.user_id),
-        supabase.from("card_inventory").select("card_id, set_id, quantity").eq("user_id", player.user_id).gt("quantity", 0),
+        fetchAllRows<{ card_id: string; set_id: string; quantity: number }>((from, to) => supabase
+          .from("card_inventory").select("card_id, set_id, quantity")
+          .eq("user_id", player.user_id!).gt("quantity", 0).range(from, to)),
       ])
-    : [{ data: null }, { data: null }, { data: null }];
+    : [[], { data: null }, []];
 
   const allSets = POKEMON_SERIES.flatMap(s => s.sets);
 

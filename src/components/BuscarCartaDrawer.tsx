@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES, HIDDEN_SETS } from "@/data/pokemon-sets";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { InvTiltCard, SellPopup, INV_CARD_KEYFRAMES } from "@/components/InventoryCard";
 import { invKey, type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing } from "@/components/CardDetailModal";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
@@ -82,22 +83,24 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
   /* Load user data once */
   useEffect(() => {
     (async () => {
-      const [{ data: featured }, { data: wishlist }, { data: listings }, { data: inv }] = await Promise.all([
+      const [{ data: featured }, wishlist, { data: listings }, inv] = await Promise.all([
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", userId),
-        supabase.from("card_wishlist").select("card_id, set_id").eq("user_id", userId),
+        fetchAllRows<WishlistCard>((from, to) => supabase.from("card_wishlist")
+          .select("card_id, set_id").eq("user_id", userId).range(from, to)),
         supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", userId).eq("status", "active"),
-        supabase.from("card_inventory").select("card_id, set_id, version, quantity").eq("user_id", userId).gt("quantity", 0),
+        fetchAllRows<{ card_id: string; set_id: string; version: string | null; quantity: number }>(
+          (from, to) => supabase.from("card_inventory")
+            .select("card_id, set_id, version, quantity")
+            .eq("user_id", userId).gt("quantity", 0).range(from, to)),
       ]);
       if (featured) setFeaturedCards(featured as FeaturedCard[]);
-      if (wishlist) setWishlistCards(wishlist as WishlistCard[]);
+      setWishlistCards(wishlist);
       if (listings) setUserListings(listings as UserListing[]);
-      if (inv) {
-        const invMap: InventoryMap = {};
-        for (const row of inv as { card_id: string; set_id: string; version: string | null; quantity: number }[]) {
-          invMap[invKey(row.card_id, row.version ?? "normal", row.set_id)] = row.quantity;
-        }
-        setInventory(invMap);
+      const invMap: InventoryMap = {};
+      for (const row of inv) {
+        invMap[invKey(row.card_id, row.version ?? "normal", row.set_id)] = row.quantity;
       }
+      setInventory(invMap);
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

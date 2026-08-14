@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { notFound } from "next/navigation";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { Footer } from "@/components/Footer";
 import { MobileTabBar } from "@/components/MobileTabBar";
 import { ProfileHeader } from "@/components/ProfileHeader";
@@ -69,13 +70,15 @@ export default async function UserMarketPage({
 
   if (!player || player.activo === false) notFound();
 
-  const [{ data: listings }, { data: featuredRows }, { data: invRows }] = player.user_id
+  const [{ data: listings }, { data: featuredRows }, invRows] = player.user_id
     ? await Promise.all([
         supabase.from("market_listings").select("id, card_id, set_id, price_cop, currency, version, language, created_at").eq("user_id", player.user_id).eq("status", "active").order("created_at", { ascending: false }),
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", player.user_id),
-        supabase.from("card_inventory").select("card_id, set_id, quantity").eq("user_id", player.user_id).gt("quantity", 0),
+        fetchAllRows<{ card_id: string; set_id: string; quantity: number }>((from, to) => supabase
+          .from("card_inventory").select("card_id, set_id, quantity")
+          .eq("user_id", player.user_id!).gt("quantity", 0).range(from, to)),
       ])
-    : [{ data: null }, { data: null }, { data: null }];
+    : [{ data: null }, { data: null }, []];
 
   const allSets = POKEMON_SERIES.flatMap(s => s.sets);
 

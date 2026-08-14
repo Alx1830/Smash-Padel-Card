@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { loadManySets, SET_CARDS } from "@/data/pokemon-cards";
 import { invKey, type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing } from "@/components/CardDetailModal";
 import dynamic from "next/dynamic";
@@ -78,13 +79,14 @@ export default function DashboardWishlistPage() {
       if (!user) return;
       setUserId(user.id);
 
-      const [{ data: wishlist }, { data: featured }, { data: listings }] = await Promise.all([
-        supabase.from("card_wishlist").select("card_id, set_id").eq("user_id", user.id),
+      const [wishlist, { data: featured }, { data: listings }] = await Promise.all([
+        fetchAllRows<WishlistRow>((from, to) => supabase.from("card_wishlist")
+          .select("card_id, set_id").eq("user_id", user.id).range(from, to)),
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", user.id),
         supabase.from("market_listings").select("id, card_id, set_id, price_cop, currency, version").eq("user_id", user.id).eq("status", "active"),
       ]);
 
-      const wishRows = (wishlist ?? []) as WishlistRow[];
+      const wishRows = wishlist;
       setWishlistRows(wishRows);
       setWishlistCards(wishRows as WishlistCard[]);
       if (featured) setFeaturedCards(featured as FeaturedCard[]);

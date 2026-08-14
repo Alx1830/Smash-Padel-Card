@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { loadManySets, SET_CARDS } from "@/data/pokemon-cards";
 import { invKey, type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing } from "@/components/CardDetailModal";
 import dynamic from "next/dynamic";
@@ -98,7 +99,7 @@ export default function DashboardMarketPage() {
       if (!user) return;
       setUserId(user.id);
 
-      const [{ data: rows }, { data: featured }, { data: wishlist }] = await Promise.all([
+      const [{ data: rows }, { data: featured }, wishlist] = await Promise.all([
         supabase
           .from("market_listings")
           .select("id, card_id, set_id, price_cop, currency, version, language, created_at")
@@ -106,14 +107,15 @@ export default function DashboardMarketPage() {
           .eq("status", "active")
           .order("created_at", { ascending: false }),
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", user.id),
-        supabase.from("card_wishlist").select("card_id, set_id").eq("user_id", user.id),
+        fetchAllRows<WishlistCard>((from, to) => supabase.from("card_wishlist")
+          .select("card_id, set_id").eq("user_id", user.id).range(from, to)),
       ]);
 
       const listingRows = (rows ?? []) as Listing[];
       setListings(listingRows);
       setUserListings(listingRows.map(l => ({ id: l.id, card_id: l.card_id, set_id: l.set_id, price_cop: l.price_cop, currency: l.currency, version: l.version, language: l.language })));
       if (featured) setFeaturedCards(featured as FeaturedCard[]);
-      if (wishlist) setWishlistCards(wishlist as WishlistCard[]);
+      setWishlistCards(wishlist);
 
       // Mostrar grid inmediatamente — sets cargan en background
       setLoading(false);
