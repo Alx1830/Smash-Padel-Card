@@ -129,7 +129,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
 
         {/* Logo */}
         <Link href={loggedIn ? "/dashboard" : "/"} className="flex items-center shrink-0">
-          <BrandLogo height={28} style={{ pointerEvents: "none" }} />
+          <BrandLogo height={32} style={{ pointerEvents: "none" }} />
         </Link>
 
         {/* Links — hidden on mobile/tablet, visible on desktop */}

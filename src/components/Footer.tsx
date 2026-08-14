@@ -197,7 +197,7 @@ export function Footer() {
           flexWrap: "wrap", gap: "12px",
         }}>
           {/* Logo */}
-          <BrandLogo height={26} />
+          <BrandLogo height={30} />
 
           {/* Made by */}
           <a href="https://adxmedialab.com" target="_blank" rel="noopener noreferrer" className="spc-pill" style={{

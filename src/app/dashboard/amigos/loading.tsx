@@ -29,7 +29,7 @@ export default function AmigosLoading() {
       `}</style>
 
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-        <BrandLogo height={44} style={{ animation: "fb-pulse 2s ease-in-out infinite" }} />
+        <BrandLogo height={51} style={{ animation: "fb-pulse 2s ease-in-out infinite" }} />
         <span style={{
           fontFamily: "var(--font-jetbrains)",
           fontSize: "9px",

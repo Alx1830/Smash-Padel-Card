@@ -157,7 +157,7 @@ export default function ResetPasswordPage() {
       }}>
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: "28px" }}>
-          <BrandLogo height={40} style={{ margin: "0 auto" }} />
+          <BrandLogo height={46} style={{ margin: "0 auto" }} />
         </div>
 
         <Suspense fallback={
