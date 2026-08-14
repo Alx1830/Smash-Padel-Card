@@ -45,6 +45,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   other: {
     "google-adsense-account": "ca-pub-7135029542920964",
+    /* Next solo emite la meta estándar; iOS pide además la suya para
+       tomar en cuenta las pantallas de arranque */
+    "apple-mobile-web-app-capable": "yes",
   },
   title: {
     default: "FaceBinder — Tu binder digital de Pokémon TCG",
@@ -92,7 +95,7 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     title: "FaceBinder",
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "black",
     startupImage: APPLE_SPLASH,
   },
   manifest: "/manifest.json",

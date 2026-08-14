@@ -1,6 +1,6 @@
 // FaceBinder Service Worker — push notifications + basic caching
 
-const CACHE = 'fb-v1';
+const CACHE = 'fb-v2';
 const PRECACHE = ['/', '/dashboard', '/market'];
 
 self.addEventListener('install', function(event) {
@@ -22,8 +22,11 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  // Solo cachear GETs de navegación y assets estáticos
   if (event.request.method !== 'GET') return;
+  // Las navegaciones van directo a la red: interceptarlas obliga a esperar a que
+  // arranque el service worker, y en iOS eso alarga la pantalla de inicio sin dar
+  // nada a cambio (esta caché solo servía de respaldo sin conexión).
+  if (event.request.mode === 'navigate') return;
   const url = new URL(event.request.url);
   // No interceptar API calls ni Supabase
   if (url.pathname.startsWith('/api/') || url.hostname.includes('supabase')) return;
