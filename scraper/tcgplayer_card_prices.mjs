@@ -35,6 +35,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT        = path.resolve(__dirname, "..");
 const MAPPING_DIR = path.join(ROOT, "scripts", "tcgplayer-mapping", "cards");
 const HOOK_TS     = path.join(ROOT, "src", "hooks", "useScrydexPrice.ts");
+const BULK_JS     = path.join(__dirname, "bulk_scrape_prices.js");
 
 const HISTORY = id => `https://infinite-api.tcgplayer.com/price/history/${id}?range=month`;
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36";
@@ -105,12 +106,35 @@ const supabase = (NECESITA_DB || COMPARE) && SUPABASE_URL
  * El codigo de Scrydex sigue siendo la llave de los precios. No es que se siga
  * usando Scrydex: es que el inventario de todos los usuarios ya apunta a esos
  * ids, y cambiarlos obligaria a migrar los datos de la gente.
+ *
+ * Los codigos viven en DOS listas que no estan sincronizadas: la del hook (169
+ * sets, la que la app consulta) y la del scraper de Scrydex (178, la que decide
+ * bajo que llave se guarda). Leer solo la del hook dejaba 13 sets fuera
+ * —black-bolt, white-flare, los Trainer Gallery— que si tienen codigo.
+ *
+ * Cuando un set esta en las dos con codigos distintos manda el del hook: es el
+ * que la app va a buscar. Que no coincidan es un bug aparte, senalado abajo.
  */
 function readCodes() {
-  const src = fs.readFileSync(HOOK_TS, "utf8");
-  const block = src.slice(src.indexOf("SCRYDEX_SET_CODES"), src.indexOf("const supabase"));
   const codes = {};
-  for (const m of block.matchAll(/"([a-z0-9-]+)":\s*"([a-z0-9]+)"/gi)) codes[m[1]] = m[2];
+
+  const bulk = fs.readFileSync(BULK_JS, "utf8");
+  for (const m of bulk.matchAll(/\{\s*slug:\s*"([^"]+)",\s*code:\s*"([^"]+)"\s*\}/g)) {
+    codes[m[1]] = m[2];
+  }
+
+  const hook = fs.readFileSync(HOOK_TS, "utf8");
+  const block = hook.slice(hook.indexOf("SCRYDEX_SET_CODES"), hook.indexOf("const supabase"));
+  const discrepan = [];
+  for (const m of block.matchAll(/"([a-z0-9-]+)":\s*"([a-z0-9]+)"/gi)) {
+    if (codes[m[1]] && codes[m[1]] !== m[2]) discrepan.push(`${m[1]} (hook ${m[2]} / scraper ${codes[m[1]]})`);
+    codes[m[1]] = m[2];
+  }
+  if (discrepan.length) {
+    console.log(`⚠️  ${discrepan.length} sets con codigo distinto en cada lista; se usa el del hook:`);
+    discrepan.forEach(d => console.log(`   ${d}`));
+  }
+
   return codes;
 }
 
