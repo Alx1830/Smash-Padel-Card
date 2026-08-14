@@ -40,6 +40,72 @@ export const TCG_SETS = [
     setName: "Miscellaneous Cards & Products", name: "Miscellaneous Cards & Products",
     placeholder: "/pokemon-sets/Miscellaneous-Cards.symbol.png",
   },
+
+  // ── Agrupaciones de TCGplayer sin equivalente en Scrydex (14/08/2026) ──────
+  {
+    slug: "trick-or-trade-booster-bundle", code: "tot22",
+    setName: "Trick or Trade BOOster Bundle", name: "Trick or Trade BOOster Bundle",
+    placeholder: "/pokemon-sets/trick-or-trade-booster-bundle.logo.webp",
+  },
+  {
+    slug: "trick-or-trade-booster-bundle-2023", code: "tot23",
+    setName: "Trick or Trade BOOster Bundle 2023", name: "Trick or Trade BOOster Bundle 2023",
+    placeholder: "/pokemon-sets/trick-or-trade-booster-bundle-2023.logo.webp",
+  },
+  {
+    slug: "trick-or-trade-booster-bundle-2024", code: "tot24",
+    setName: "Trick or Trade BOOster Bundle 2024", name: "Trick or Trade BOOster Bundle 2024",
+    placeholder: "/pokemon-sets/trick-or-trade-booster-bundle-2024.logo.webp",
+  },
+  {
+    slug: "league-and-championship-cards", code: "lcc",
+    setName: "League & Championship Cards", name: "League & Championship Cards",
+    placeholder: "/pokemon-sets/league-and-championship-cards.logo.webp",
+  },
+  {
+    slug: "deck-exclusives", code: "dex",
+    setName: "Deck Exclusives", name: "Deck Exclusives",
+    placeholder: "/pokemon-sets/deck-exclusives.logo.webp",
+  },
+  {
+    slug: "battle-academy", code: "ba20",
+    setName: "Battle Academy", name: "Battle Academy",
+    placeholder: "/pokemon-sets/battle-academy.logo.webp",
+  },
+  {
+    slug: "battle-academy-2022", code: "ba22",
+    setName: "Battle Academy 2022", name: "Battle Academy 2022",
+    placeholder: "/pokemon-sets/battle-academy-2022.logo.webp",
+  },
+  {
+    slug: "battle-academy-2024", code: "ba24",
+    setName: "Battle Academy 2024", name: "Battle Academy 2024",
+    placeholder: "/pokemon-sets/battle-academy-2024.logo.webp",
+  },
+  {
+    slug: "ex-battle-stadium", code: "exbs",
+    setName: "EX Battle Stadium", name: "EX Battle Stadium",
+    placeholder: "/pokemon-sets/ex-battle-stadium.logo.webp",
+  },
+  {
+    slug: "my-first-battle", code: "mfb",
+    setName: "My First Battle", name: "My First Battle",
+    placeholder: "/pokemon-sets/my-first-battle.logo.webp",
+  },
+
+  // Estos dos ya existian en la app (codigo, logo y entrada de serie), pero con
+  // el archivo de cartas vacio: Scrydex nunca los trajo. El catalogo sale de
+  // TCGplayer y el resto del registro se queda como esta.
+  {
+    slug: "sm-promos", code: "smp",
+    setName: "SM Promos", name: "Sun & Moon Promos",
+    placeholder: "/pokemon-sets/Sun-Moon-Promos.symbol.209.png",
+  },
+  {
+    slug: "xy-promos", code: "xyp",
+    setName: "XY Promos", name: "XY Promos",
+    placeholder: "/pokemon-sets/XY-Promos.symbol.143.png",
+  },
 ];
 
 export const MAPS_DIR = path.resolve(__dirname, "tcgplayer-sets");

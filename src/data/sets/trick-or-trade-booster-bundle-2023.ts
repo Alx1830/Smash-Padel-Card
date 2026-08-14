@@ -1,0 +1,36 @@
+import type { PokemonCard } from "@/data/pokemon-cards-meta";
+
+const cards: PokemonCard[] = [
+  { id: "001:Banette:Normal", name: "Banette"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-1/large", version: "normal", card_number: 1 },
+  { id: "002:Chandelure:Normal", name: "Chandelure"                  , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-2/large", version: "normal", card_number: 2 },
+  { id: "003:Dhelmise:Normal", name: "Dhelmise"                    , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-3/large", version: "normal", card_number: 3 },
+  { id: "004:Drifblim:Normal", name: "Drifblim"                    , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-4/large", version: "normal", card_number: 4 },
+  { id: "005:Drifloon:Normal", name: "Drifloon"                    , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-5/large", version: "normal", card_number: 5 },
+  { id: "006:Dusclops:Normal", name: "Dusclops"                    , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-6/large", version: "normal", card_number: 6 },
+  { id: "007:Dusknoir:Normal", name: "Dusknoir"                    , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-7/large", version: "normal", card_number: 7 },
+  { id: "008:Duskull:Normal", name: "Duskull"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-8/large", version: "normal", card_number: 8 },
+  { id: "009:Galarian Runerigus:Normal", name: "Galarian Runerigus"          , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-9/large", version: "normal", card_number: 9 },
+  { id: "010:Gastly:Normal", name: "Gastly"                      , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-10/large", version: "normal", card_number: 10 },
+  { id: "011:Gengar (2022 Copyright Date):Normal", name: "Gengar (2022 Copyright Date)", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-11/large", version: "normal", card_number: 11 },
+  { id: "012:Greavard:Normal", name: "Greavard"                    , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-12/large", version: "normal", card_number: 12 },
+  { id: "013:Haunter:Normal", name: "Haunter"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-13/large", version: "normal", card_number: 13 },
+  { id: "014:Houndoom:Normal", name: "Houndoom"                    , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-14/large", version: "normal", card_number: 14 },
+  { id: "015:Houndstone:Normal", name: "Houndstone"                  , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-15/large", version: "normal", card_number: 15 },
+  { id: "016:Lampent:Normal", name: "Lampent"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-16/large", version: "normal", card_number: 16 },
+  { id: "017:Litwick:Normal", name: "Litwick"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-17/large", version: "normal", card_number: 17 },
+  { id: "018:Lycanroc:Normal", name: "Lycanroc"                    , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-18/large", version: "normal", card_number: 18 },
+  { id: "019:Marshadow:Normal", name: "Marshadow"                   , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-19/large", version: "normal", card_number: 19 },
+  { id: "020:Mimikyu:Normal", name: "Mimikyu"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-20/large", version: "normal", card_number: 20 },
+  { id: "021:Mismagius:Normal", name: "Mismagius"                   , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-21/large", version: "normal", card_number: 21 },
+  { id: "022:Murkrow:Normal", name: "Murkrow"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-22/large", version: "normal", card_number: 22 },
+  { id: "023:Phantump:Normal", name: "Phantump"                    , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-23/large", version: "normal", card_number: 23 },
+  { id: "024:Pikachu:Normal", name: "Pikachu"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-24/large", version: "normal", card_number: 24 },
+  { id: "025:Polteageist:Normal", name: "Polteageist"                 , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-25/large", version: "normal", card_number: 25 },
+  { id: "026:Shuppet:Normal", name: "Shuppet"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-26/large", version: "normal", card_number: 26 },
+  { id: "027:Sinistea:Normal", name: "Sinistea"                    , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-27/large", version: "normal", card_number: 27 },
+  { id: "028:Spectrier:Normal", name: "Spectrier"                   , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-28/large", version: "normal", card_number: 28 },
+  { id: "029:Trevenant:Normal", name: "Trevenant"                   , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-29/large", version: "normal", card_number: 29 },
+  { id: "030:Zubat:Normal", name: "Zubat"                       , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot23-30/large", version: "normal", card_number: 30 },
+];
+
+export default cards;

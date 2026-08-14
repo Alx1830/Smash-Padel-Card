@@ -355,6 +355,16 @@ export const POKEMON_SERIES: PokemonSeries[] = [
     sets: [
       { id: "prize-pack-series",      name: "Prize Pack Series Cards",         logo: `${P}Prize-Pack-Series.logo.png`,                   symbol: `${P}Prize-Pack-Series.symbol.png` },
       { id: "misc-cards",             name: "Miscellaneous Cards & Products",  logo: `${P}Miscellaneous-Cards.logo.png`,                 symbol: `${P}Miscellaneous-Cards.symbol.png` },
+      { id: "league-and-championship-cards", name: "League & Championship Cards", logo: `${P}league-and-championship-cards.logo.webp` },
+      { id: "deck-exclusives",        name: "Deck Exclusives",                 logo: `${P}deck-exclusives.logo.webp` },
+      { id: "battle-academy",         name: "Battle Academy",                  logo: `${P}battle-academy.logo.webp` },
+      { id: "battle-academy-2022",    name: "Battle Academy 2022",             logo: `${P}battle-academy-2022.logo.webp` },
+      { id: "battle-academy-2024",    name: "Battle Academy 2024",             logo: `${P}battle-academy-2024.logo.webp` },
+      { id: "ex-battle-stadium",      name: "EX Battle Stadium",               logo: `${P}ex-battle-stadium.logo.webp` },
+      { id: "my-first-battle",        name: "My First Battle",                 logo: `${P}my-first-battle.logo.webp` },
+      { id: "trick-or-trade-booster-bundle",      name: "Trick or Trade BOOster Bundle",      logo: `${P}trick-or-trade-booster-bundle.logo.webp` },
+      { id: "trick-or-trade-booster-bundle-2023", name: "Trick or Trade BOOster Bundle 2023", logo: `${P}trick-or-trade-booster-bundle-2023.logo.webp` },
+      { id: "trick-or-trade-booster-bundle-2024", name: "Trick or Trade BOOster Bundle 2024", logo: `${P}trick-or-trade-booster-bundle-2024.logo.webp` },
     ],
   },
 ];

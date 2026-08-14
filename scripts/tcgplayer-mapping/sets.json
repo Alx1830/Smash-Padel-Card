@@ -663,7 +663,7 @@
  "sm-promos": {
   "name": "Sun & Moon Promos",
   "code": "smp",
-  "cards_local": 0,
+  "cards_local": 333,
   "tcg_set": "SM Promos",
   "cards_tcg": 333,
   "status": "confirmed",
@@ -822,7 +822,7 @@
  "xy-promos": {
   "name": "XY Promos",
   "code": "xyp",
-  "cards_local": 0,
+  "cards_local": 269,
   "tcg_set": "XY Promos",
   "cards_tcg": 269,
   "status": "confirmed"
@@ -1582,6 +1582,76 @@
   "cards_local": 8,
   "tcg_set": "MEE: Mega Evolution Energies",
   "cards_tcg": 8,
+  "status": "confirmed"
+ },
+ "trick-or-trade-booster-bundle": {
+  "name": "Trick or Trade BOOster Bundle",
+  "code": "tot22",
+  "cards_local": 30,
+  "tcg_set": "Trick or Trade BOOster Bundle",
+  "status": "confirmed"
+ },
+ "trick-or-trade-booster-bundle-2023": {
+  "name": "Trick or Trade BOOster Bundle 2023",
+  "code": "tot23",
+  "cards_local": 30,
+  "tcg_set": "Trick or Trade BOOster Bundle 2023",
+  "status": "confirmed"
+ },
+ "trick-or-trade-booster-bundle-2024": {
+  "name": "Trick or Trade BOOster Bundle 2024",
+  "code": "tot24",
+  "cards_local": 30,
+  "tcg_set": "Trick or Trade BOOster Bundle 2024",
+  "status": "confirmed"
+ },
+ "league-and-championship-cards": {
+  "name": "League & Championship Cards",
+  "code": "lcc",
+  "cards_local": 629,
+  "tcg_set": "League & Championship Cards",
+  "status": "confirmed"
+ },
+ "deck-exclusives": {
+  "name": "Deck Exclusives",
+  "code": "dex",
+  "cards_local": 506,
+  "tcg_set": "Deck Exclusives",
+  "status": "confirmed"
+ },
+ "battle-academy": {
+  "name": "Battle Academy",
+  "code": "ba20",
+  "cards_local": 138,
+  "tcg_set": "Battle Academy",
+  "status": "confirmed"
+ },
+ "battle-academy-2022": {
+  "name": "Battle Academy 2022",
+  "code": "ba22",
+  "cards_local": 138,
+  "tcg_set": "Battle Academy 2022",
+  "status": "confirmed"
+ },
+ "battle-academy-2024": {
+  "name": "Battle Academy 2024",
+  "code": "ba24",
+  "cards_local": 138,
+  "tcg_set": "Battle Academy 2024",
+  "status": "confirmed"
+ },
+ "ex-battle-stadium": {
+  "name": "EX Battle Stadium",
+  "code": "exbs",
+  "cards_local": 49,
+  "tcg_set": "EX Battle Stadium",
+  "status": "confirmed"
+ },
+ "my-first-battle": {
+  "name": "My First Battle",
+  "code": "mfb",
+  "cards_local": 48,
+  "tcg_set": "My First Battle",
   "status": "confirmed"
  }
 }

@@ -1,0 +1,36 @@
+import type { PokemonCard } from "@/data/pokemon-cards-meta";
+
+const cards: PokemonCard[] = [
+  { id: "001:Chandelure:Normal", name: "Chandelure"            , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-1/large", version: "normal", card_number: 1 },
+  { id: "002:Darkrai:CosmosHolofoil", name: "Darkrai"               , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-2/large", version: "cosmosHolofoil", card_number: 2 },
+  { id: "003:Fezandipiti:CosmosHolofoil", name: "Fezandipiti"           , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-3/large", version: "cosmosHolofoil", card_number: 3 },
+  { id: "004:Flutter Mane:CosmosHolofoil", name: "Flutter Mane"          , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-4/large", version: "cosmosHolofoil", card_number: 4 },
+  { id: "005:Fuecoco:Normal", name: "Fuecoco"               , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-5/large", version: "normal", card_number: 5 },
+  { id: "006:Gastly - 102/162:Normal", name: "Gastly - 102/162"      , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-6/large", version: "normal", card_number: 6 },
+  { id: "007:Gengar:CosmosHolofoil", name: "Gengar"                , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-7/large", version: "cosmosHolofoil", card_number: 7 },
+  { id: "008:Gourgeist:Normal", name: "Gourgeist"             , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-8/large", version: "normal", card_number: 8 },
+  { id: "009:Greavard:Normal", name: "Greavard"              , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-9/large", version: "normal", card_number: 9 },
+  { id: "010:Haunter:Normal", name: "Haunter"               , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-10/large", version: "normal", card_number: 10 },
+  { id: "011:Houndoom:Normal", name: "Houndoom"              , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-11/large", version: "normal", card_number: 11 },
+  { id: "012:Houndour - 131/197:Normal", name: "Houndour - 131/197"    , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-12/large", version: "normal", card_number: 12 },
+  { id: "013:Houndstone - 043/091:Normal", name: "Houndstone - 043/091"  , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-13/large", version: "normal", card_number: 13 },
+  { id: "014:Iron Jugulis:Normal", name: "Iron Jugulis"          , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-14/large", version: "normal", card_number: 14 },
+  { id: "015:Lampent:Normal", name: "Lampent"               , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-15/large", version: "normal", card_number: 15 },
+  { id: "016:Litwick:Normal", name: "Litwick"               , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-16/large", version: "normal", card_number: 16 },
+  { id: "017:Mimikyu - 037/091:CosmosHolofoil", name: "Mimikyu - 037/091"     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-17/large", version: "cosmosHolofoil", card_number: 17 },
+  { id: "018:Munkidori:CosmosHolofoil", name: "Munkidori"             , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-18/large", version: "cosmosHolofoil", card_number: 18 },
+  { id: "019:Okidogi:CosmosHolofoil", name: "Okidogi"               , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-19/large", version: "cosmosHolofoil", card_number: 19 },
+  { id: "020:Phantump:Normal", name: "Phantump"              , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-20/large", version: "normal", card_number: 20 },
+  { id: "021:Pikachu - 018/091:CosmosHolofoil", name: "Pikachu - 018/091"     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-21/large", version: "cosmosHolofoil", card_number: 21 },
+  { id: "022:Poltchageist - 021/167:Normal", name: "Poltchageist - 021/167", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-22/large", version: "normal", card_number: 22 },
+  { id: "023:Pumpkaboo:Normal", name: "Pumpkaboo"             , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-23/large", version: "normal", card_number: 23 },
+  { id: "024:Quaxly - 050/193:Normal", name: "Quaxly - 050/193"      , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-24/large", version: "normal", card_number: 24 },
+  { id: "025:Scream Tail:Normal", name: "Scream Tail"           , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-25/large", version: "normal", card_number: 25 },
+  { id: "026:Sinistcha:CosmosHolofoil", name: "Sinistcha"             , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-26/large", version: "cosmosHolofoil", card_number: 26 },
+  { id: "027:Sprigatito - 012/193:Normal", name: "Sprigatito - 012/193"  , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-27/large", version: "normal", card_number: 27 },
+  { id: "028:Teal Mask Ogerpon:CosmosHolofoil", name: "Teal Mask Ogerpon"     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-28/large", version: "cosmosHolofoil", card_number: 28 },
+  { id: "029:Trevenant:Normal", name: "Trevenant"             , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-29/large", version: "normal", card_number: 29 },
+  { id: "030:Umbreon:Normal", name: "Umbreon"               , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/tot24-30/large", version: "normal", card_number: 30 },
+];
+
+export default cards;
