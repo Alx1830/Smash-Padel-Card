@@ -219,7 +219,7 @@ function Showcase({ featuredCards, inventoryRows }: {
 }
 
 /* ══ ProfileHeader ══ */
-export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { player: ProfileHeaderData; hideMobileDetails?: boolean; showProfileLink?: boolean }) {
+export function ProfileHeader({ player, hideMobileDetails, hideMobileChart, showProfileLink }: { player: ProfileHeaderData; hideMobileDetails?: boolean; hideMobileChart?: boolean; showProfileLink?: boolean }) {
   const CARD_H     = 416 * 1.2;
   const COVER_H    = 460;
   const NEG_MARGIN = Math.round(CARD_H / 2);
@@ -401,7 +401,8 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
               photoUrl={player.photoUrl} setFavoritoId={player.setFavoritoId}
             />
           </div>
-          {player.profileUserId && (
+          {/* En market y wishlist el móvil va directo al listado, sin gráfico */}
+          {player.profileUserId && !hideMobileChart && (
             <div style={{ marginBottom: "40px" }}>
               <ProfilePortfolioChart userId={player.profileUserId} cardCount={totalCards} />
             </div>
