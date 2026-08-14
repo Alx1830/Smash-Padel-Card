@@ -1,0 +1,51 @@
+name: Scrape Scrydex (respaldo)
+
+# Lo unico que queda de Scrydex. Ya no recorre los 20.000 precios: corre solo
+# sobre lo que TCGplayer no cubre —sellos de torneo, tiradas viejas de WotC y
+# los sets fuera de su catalogo—, que son ~2.000 variantes.
+#
+# La lista se regenera al principio de cada corrida contra la base, asi que se
+# encoge sola: cada carta que TCGplayer empieza a cubrir deja de visitarse aqui.
+# Cuando la lista quede solo con los sellos (que no existen en TCGplayer), este
+# workflow se puede apagar y esos precios se quedan congelados, que para una
+# carta sellada de hace anios es razonable.
+
+on:
+  schedule:
+    # 1am Colombia (UTC-5). Una vez al dia basta: son cartas que casi no mueven
+    # de precio, y a esa hora no compite con el ciclo de TCGplayer.
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: scrape-scrydex-respaldo
+  cancel-in-progress: false
+
+jobs:
+  respaldo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # En la raiz, que es donde tcg-cobertura-real.mjs resuelve sus imports
+      - name: Install dependencies
+        run: |
+          npm install --no-save --no-audit --no-fund @supabase/supabase-js
+          cd scraper && npm install && npx playwright install chromium --with-deps
+
+      - name: Recalcular que sigue dependiendo de Scrydex
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/tcg-cobertura-real.mjs --escribir-lista
+
+      - name: Scrape del respaldo
+        working-directory: scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node bulk_scrape_prices.js --respaldo

@@ -1,11 +1,14 @@
 name: Scrape Card Prices
 
+# APAGADO. Los precios salen de TCGplayer (scrape-tcgplayer-cards.yml), que hace
+# en 2h35 con 3 runners lo que aqui costaba 4h45 con 19. Lo poco que TCGplayer
+# no cubre lo refresca scrape-scrydex-respaldo.yml, que visita ~2.000 variantes
+# en vez de 20.000.
+#
+# Se conserva el disparo manual: si alguna vez hay que repoblar card_prices
+# entera, esta es la herramienta. No volver a programarlo sin apagar el otro.
+
 on:
-  schedule:
-    # 1am Colombia (UTC-5) = 6am UTC
-    - cron: "0 6 * * *"
-    # 1pm Colombia (UTC-5) = 6pm UTC
-    - cron: "0 18 * * *"
   workflow_dispatch:
 
 jobs:

@@ -15,10 +15,12 @@ name: Scrape TCGplayer Card Prices
 
 on:
   schedule:
-    # Cada 6 horas. Medido: 2h20 con 159 sets, ~2h35 con los 172 de ahora, asi
-    # que quedan ~3h20 de margen si una corrida se alarga.
-    # Hora Colombia (UTC-5): 8pm, 2am, 8am, 2pm
-    - cron: "0 1,7,13,19 * * *"
+    # Cada 3 horas: la corrida dura ~2h35, asi que arranca la siguiente ~25 min
+    # despues de terminar la anterior y la app queda casi siempre fresca.
+    # Si una corrida se pasa de las 3 horas, el `concurrency` de abajo hace que
+    # la siguiente espere y arranque apenas termine, sin solaparse.
+    # Hora Colombia (UTC-5): 8pm, 11pm, 2am, 5am, 8am, 11am, 2pm, 5pm
+    - cron: "0 1,4,7,10,13,16,19,22 * * *"
   workflow_dispatch:
     inputs:
       chunk:

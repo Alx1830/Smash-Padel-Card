@@ -221,6 +221,14 @@ const args = process.argv.slice(2);
 const getArg = (flag) => { const i = args.indexOf(flag); return i !== -1 ? args[i + 1] : null; };
 
 const RUN_ALL   = args.includes("--all");
+/**
+ * Modo respaldo: en vez de los 20.000 precios de siempre, corre solo sobre las
+ * cartas que TCGplayer no cubre —sellos de torneo, tiradas viejas, sets fuera
+ * de su catalogo—, que son las unicas para las que Scrydex sigue haciendo
+ * falta. La lista la genera scripts/tcg-cobertura-real.mjs --escribir-lista.
+ */
+const RESPALDO  = args.includes("--respaldo");
+const RESPALDO_FILE = path.join(__dirname, "scrydex-respaldo.json");
 const SET_SLUG  = getArg("--set");
 const SET_CODE  = getArg("--code");
 const CHUNK_ARG = getArg("--chunk"); // formato "N/TOTAL", ej: "1/5"
@@ -364,12 +372,25 @@ const CHUNKS = {
   ],
 };
 
-if (!RUN_ALL && !CHUNK_ARG && (!SET_SLUG || !SET_CODE)) {
+if (!RUN_ALL && !CHUNK_ARG && !RESPALDO && (!SET_SLUG || !SET_CODE)) {
   console.error("Uso: node bulk_scrape_prices.js --set chaos-rising --code me4");
   console.error("     node bulk_scrape_prices.js --all");
   console.error("     node bulk_scrape_prices.js --chunk 1");
+  console.error("     node bulk_scrape_prices.js --respaldo   (solo lo que TCGplayer no cubre)");
   process.exit(1);
 }
+
+/** { slug: { code, cards: { numero: [versiones] } } }, o null si no es modo respaldo. */
+function loadRespaldo() {
+  if (!RESPALDO) return null;
+  if (!fs.existsSync(RESPALDO_FILE)) {
+    console.error(`No existe ${RESPALDO_FILE}.`);
+    console.error("Generalo con: node scripts/tcg-cobertura-real.mjs --escribir-lista");
+    process.exit(1);
+  }
+  return JSON.parse(fs.readFileSync(RESPALDO_FILE, "utf8"));
+}
+const RESPALDO_LISTA = loadRespaldo();
 
 // ── Supabase ──────────────────────────────────────────────────────────────────
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -497,9 +518,22 @@ async function scrapeSet(page, setSlug, setCode) {
   // Reasignar SET_CODE para que scrapeCard lo use
   global._SET_CODE = setCode;
 
-  const cards = loadSetCards(setSlug);
+  let cards = loadSetCards(setSlug);
+
+  // En modo respaldo se visita solo lo que TCGplayer no cubre: de una carta con
+  // seis variantes puede que haga falta una sola, y cada variante es una visita
+  // de navegador. Filtrar aqui es lo que baja el ciclo de horas a minutos.
+  if (RESPALDO_LISTA) {
+    const pedidas = RESPALDO_LISTA[setSlug]?.cards ?? {};
+    cards = cards
+      .map(c => ({ ...c, versions: c.versions.filter(v => (pedidas[c.number] ?? []).includes(v)) }))
+      .filter(c => c.versions.length > 0);
+    if (cards.length === 0) return { ok: 0, failed: 0, skipped: 0 };
+  }
+
+  const variantes = cards.reduce((n, c) => n + c.versions.length, 0);
   console.log(`\n${"─".repeat(55)}`);
-  console.log(`  Set: ${setSlug} (${setCode}) — ${cards.length} cartas`);
+  console.log(`  Set: ${setSlug} (${setCode}) — ${cards.length} cartas, ${variantes} variantes`);
   console.log(`${"─".repeat(55)}`);
 
   const results = { ok: 0, failed: 0, skipped: 0 };
@@ -556,7 +590,12 @@ async function scrapeSet(page, setSlug, setCode) {
 (async () => {
   let setsToRun;
   let modeLabel;
-  if (CHUNK_ARG) {
+  if (RESPALDO_LISTA) {
+    setsToRun = Object.entries(RESPALDO_LISTA).map(([slug, s]) => ({ slug, code: s.code }));
+    const variantes = Object.values(RESPALDO_LISTA)
+      .reduce((n, s) => n + Object.values(s.cards).reduce((m, vs) => m + vs.length, 0), 0);
+    modeLabel = `Respaldo — ${setsToRun.length} sets, ${variantes} variantes que TCGplayer no cubre`;
+  } else if (CHUNK_ARG) {
     setsToRun = CHUNKS[CHUNK_ARG];
     if (!setsToRun) { console.error(`Chunk inválido: ${CHUNK_ARG}. Usa 1-19.`); process.exit(1); }
     modeLabel = `Chunk ${CHUNK_ARG}/19 (${setsToRun.length} sets)`;

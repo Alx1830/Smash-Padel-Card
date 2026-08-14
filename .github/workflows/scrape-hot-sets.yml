@@ -1,10 +1,10 @@
 name: Scrape Hot Sets
 
+# APAGADO. Existia para refrescar los sets nuevos mas seguido que el ciclo
+# completo de Scrydex; ahora TCGplayer recorre los 172 sets cada 3 horas, asi
+# que esto no aporta nada. Se conserva el disparo manual.
+
 on:
-  schedule:
-    # Cada 3 horas UTC, saltando 6:00 y 18:00 (a esas horas corre el ciclo completo)
-    # Hora Colombia (UTC-5): 7pm, 10pm, 4am, 7am, 10am, 4pm
-    - cron: "0 0,3,9,12,15,21 * * *"
   workflow_dispatch:
 
 jobs:

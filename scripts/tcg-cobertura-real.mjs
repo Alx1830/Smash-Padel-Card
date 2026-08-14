@@ -6,7 +6,15 @@
  * cada variante tiene precio en TCGplayer. Una fila de Scrydex para una carta
  * que la app no lista no le sirve a nadie, y contarla exageraba el hueco.
  *
- * Uso: node scripts/tcg-cobertura-real.mjs [--detalle <slug>]
+ * Uso:
+ *   node scripts/tcg-cobertura-real.mjs
+ *   node scripts/tcg-cobertura-real.mjs --detalle sword-shield
+ *   node scripts/tcg-cobertura-real.mjs --escribir-lista
+ *
+ * Con --escribir-lista deja en scraper/scrydex-respaldo.json exactamente que
+ * cartas y variantes siguen dependiendo de Scrydex, para que su scraper corra
+ * solo sobre eso en vez de sobre los 20.000 de siempre.
+ *
  * Variables de entorno: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
  */
 
@@ -23,6 +31,8 @@ const BULK_JS  = path.join(ROOT, "scraper", "bulk_scrape_prices.js");
 
 const args    = process.argv.slice(2);
 const DETALLE = (() => { const i = args.indexOf("--detalle"); return i >= 0 ? args[i + 1] : null; })();
+const ESCRIBIR = args.includes("--escribir-lista");
+const LISTA_OUT = path.join(ROOT, "scraper", "scrydex-respaldo.json");
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY,
   { auth: { persistSession: false } });
@@ -74,6 +84,8 @@ let total = 0, conTcg = 0, soloScry = 0, sinNada = 0;
 const porSet = new Map();
 const porVariante = new Map();
 const detalle = [];
+/** slug → { code, cards: { numero: [versiones] } } — lo que Scrydex debe seguir cubriendo */
+const lista = {};
 
 for (const slug of fs.readdirSync(SETS_DIR).filter(f => f.endsWith(".ts")).map(f => f.replace(/\.ts$/, ""))) {
   const code = codes[slug];
@@ -92,6 +104,8 @@ for (const slug of fs.readdirSync(SETS_DIR).filter(f => f.endsWith(".ts")).map(f
       porSet.set(slug, (porSet.get(slug) ?? 0) + 1);
       porVariante.set(version, (porVariante.get(version) ?? 0) + 1);
       if (DETALLE === slug) detalle.push(`#${number} ${version}`);
+      if (!lista[slug]) lista[slug] = { code, cards: {} };
+      (lista[slug].cards[number] ??= []).push(version);
     } else {
       sinNada++;
     }
@@ -115,4 +129,11 @@ console.log(`\n═══ Por set ═══`);
 if (DETALLE) {
   console.log(`\n═══ Detalle de ${DETALLE} ═══`);
   console.log("  " + (detalle.join(", ") || "nada"));
+}
+
+if (ESCRIBIR) {
+  const cartas = Object.values(lista).reduce((n, s) => n + Object.keys(s.cards).length, 0);
+  fs.writeFileSync(LISTA_OUT, JSON.stringify(lista, null, 1) + "\n", "utf8");
+  console.log(`\n📝 scraper/scrydex-respaldo.json: ${Object.keys(lista).length} sets, ${cartas} cartas, ${soloScry} variantes`);
+  console.log(`   El scraper de Scrydex corre solo sobre esto con: node bulk_scrape_prices.js --respaldo`);
 }
