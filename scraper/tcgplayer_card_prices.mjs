@@ -380,6 +380,7 @@ async function correrSet(set) {
   const porCarta = new Map();
   let ok = 0, sinPrecio = 0, hechos = 0, deLaPasada = productos.length;
   let fallidos = [];
+  const noEmparejados = new Map();
 
   const pasada = async ([productId, variantes]) => {
     const { precios, error } = await fetchPrecios(productId);
@@ -389,7 +390,14 @@ async function correrSet(set) {
 
     for (const { number, version, printing } of variantes) {
       const precio = pickPrecio(precios, printing);
-      if (precio == null) { sinPrecio++; continue; }
+      if (precio == null) {
+        sinPrecio++;
+        // Que printing se pidio y cual habia: es lo unico que hace falta para
+        // ver un patron como el de WotC sin tener que ir a investigar a mano.
+        const clave = `${printing ?? "(sin printing)"} → ${Object.keys(precios).join(" / ") || "(vacio)"}`;
+        noEmparejados.set(clave, (noEmparejados.get(clave) ?? 0) + 1);
+        continue;
+      }
       if (!porCarta.has(number)) porCarta.set(number, {});
       porCarta.get(number)[version] = precio;
       ok++;
@@ -419,6 +427,14 @@ async function correrSet(set) {
 
   console.log(`\n   ${rows.length} cartas · ${ok} variantes con precio` +
     `${sinPrecio ? ` · ${sinPrecio} sin precio` : ""}${fallos ? ` · ${fallos} productos fallaron` : ""}`);
+
+  // Un set con muchas sin emparejar casi siempre es un printing que TCGplayer
+  // nombra distinto, no cartas sin precio de verdad.
+  if (sinPrecio >= 5) {
+    console.log(`   ⚠️  printings que no casaron:`);
+    [...noEmparejados.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3)
+      .forEach(([k, n]) => console.log(`      ${n}x  ${k.slice(0, 120)}`));
+  }
 
   if (rows.length) await upsert(rows);
   return rows;
