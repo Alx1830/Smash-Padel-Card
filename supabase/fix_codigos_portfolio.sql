@@ -1,8 +1,3 @@
-﻿-- Corrige tres codigos de set que la funcion tenia mal:
---   champions-path cpa -> swsh35 | shining-fates shf -> swsh45 | legendary-collection lc -> base6
--- Sin esto, las cartas de esos sets valen cero en el grafico del portafolio.
--- Reemplaza la funcion completa; no toca el cron ni los snapshots ya guardados.
-
 CREATE OR REPLACE FUNCTION public.snapshot_hourly_portfolios()
 RETURNS void
 LANGUAGE plpgsql
@@ -16,7 +11,7 @@ DECLARE
   v_total NUMERIC;
   v_card_count INT;
 BEGIN
-  -- Mapeo set_id â†’ cÃ³digo Scrydex (espejo de SCRYDEX_SET_CODES del frontend)
+  -- Mapeo set_id → código Scrydex (espejo de SCRYDEX_SET_CODES del frontend)
   v_set_codes := '{
     "mega-evolution":          "me1",
     "phantasmal-flames":       "me2",
@@ -186,8 +181,8 @@ BEGIN
     "pop-9": "pop9"
   }'::jsonb;
 
-  -- hour_bucket: hora actual en BogotÃ¡ (UTC-5), almacenada como si fuera UTC
-  -- Replica exactamente la lÃ³gica JS del dashboard
+  -- hour_bucket: hora actual en Bogotá (UTC-5), almacenada como si fuera UTC
+  -- Replica exactamente la lógica JS del dashboard
   v_hour_bucket := timezone('UTC', date_trunc('hour', NOW() AT TIME ZONE 'America/Bogota'));
 
   -- Procesar cada usuario con inventario activo
