@@ -5,7 +5,7 @@ import { MarketSlider } from "@/components/landing/MarketSlider";
 import { Contador } from "@/components/landing/Contador";
 import { InstalarApp } from "@/components/landing/InstalarApp";
 import { DatosEstructurados } from "@/components/landing/DatosEstructurados";
-import { cartasEnVenta, numerosDeLaCasa } from "@/lib/landing-data";
+import { cartasEnVenta, numerosDeLaCasa, coleccionistasVisibles } from "@/lib/landing-data";
 import type { Metadata } from "next";
 import {
   ShieldCheck, RefreshCw, MapPin, Heart, ArrowLeftRight, LineChart,
@@ -107,8 +107,12 @@ const COMPARACION = {
 };
 
 export default async function LandingPage() {
-  /* Las dos consultas van juntas: la portada no debe esperar dos viajes */
-  const [cartas, cifras] = await Promise.all([cartasEnVenta(18), numerosDeLaCasa()]);
+  /* Las tres consultas van juntas: la portada no debe esperar tres viajes */
+  const [cartas, cifras, gente] = await Promise.all([
+    cartasEnVenta(18),
+    numerosDeLaCasa(),
+    coleccionistasVisibles(8),
+  ]);
 
   /* Un contador en cero da más desconfianza que no tener contador */
   const numeros = [
@@ -136,6 +140,9 @@ export default async function LandingPage() {
         .lp-sellos  { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
         .lp-func    { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
         .lp-pasos   { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+        .lp-gente   { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+        .lp-persona { transition: border-color 0.18s, background 0.18s, transform 0.18s; }
+        .lp-persona:hover { border-color: ${COURT}55 !important; background: rgba(46,230,193,0.05) !important; transform: translateY(-2px); }
         .lp-tabla   { width: 100%; border-collapse: collapse; }
         .lp-tabla th, .lp-tabla td { padding: 13px 14px; text-align: left; }
         .lp-tabla tbody tr { border-top: 1px solid rgba(255,255,255,0.06); }
@@ -146,6 +153,7 @@ export default async function LandingPage() {
           .lp-cifras { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .lp-sellos { grid-template-columns: 1fr; }
           .lp-pasos  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .lp-gente  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
         @media (max-width: 767px) {
           .hero-grid        { flex-direction: column !important; align-items: center !important; padding: 60px 24px 64px !important; gap: 40px !important; }
@@ -157,6 +165,7 @@ export default async function LandingPage() {
           .lp-instalar      { justify-content: center; }
           .lp-tabla-marco   { overflow-x: auto; }
           .lp-tabla         { min-width: 520px; }
+          .lp-gente         { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
         }
       `}</style>
 
@@ -349,6 +358,55 @@ export default async function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ══ QUIÉNES ESTÁN ══ */}
+      {gente.length > 0 && (
+        <section className="lp-seccion" style={{ paddingTop: 0 }}>
+          <div className="lp-wrap">
+            <div style={{ marginBottom: 30, maxWidth: 620 }}>
+              <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                <span style={{ width: 22, height: 1, background: COURT, display: "inline-block" }} />
+                Quiénes están
+              </div>
+              <h2 style={{ fontFamily: DISP, fontSize: "clamp(26px, 4vw, 40px)", color: INK0, margin: "0 0 12px", letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+                Coleccionistas de carne y hueso.
+              </h2>
+              <p style={{ fontFamily: MONO, fontSize: 11.5, color: INK2, margin: 0, lineHeight: 1.8 }}>
+                No hay testimonios inventados en esta página. Hay perfiles: entra y
+                mira qué tienen, qué les falta y de dónde son.
+              </p>
+            </div>
+
+            <div className="lp-gente">
+              {gente.map(p => (
+                <Link key={p.username} href={`/${p.username}`} className="lp-persona" style={{
+                  display: "flex", alignItems: "center", gap: 12, textDecoration: "none",
+                  padding: "12px 14px", borderRadius: 14,
+                  border: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.02)",
+                }}>
+                  {p.foto && (
+                    <img src={p.foto} alt="" width={40} height={40} loading="lazy" decoding="async" style={{
+                      width: 40, height: 40, borderRadius: "50%", objectFit: "cover", flexShrink: 0,
+                      border: `1px solid ${COURT}33`,
+                    }} />
+                  )}
+                  <span style={{ minWidth: 0 }}>
+                    <span style={{
+                      display: "block", fontFamily: MONO, fontSize: 12, color: INK0,
+                      overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                    }}>
+                      @{p.username}
+                    </span>
+                    <span style={{ display: "block", fontFamily: MONO, fontSize: 9.5, color: INK2, marginTop: 2 }}>
+                      {p.cartas.toLocaleString("es-CO")} cartas{p.ciudad ? ` · ${p.ciudad}` : ""}
+                    </span>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ══ CONTRA EL GRUPO DE FACEBOOK ══ */}
       <section className="lp-seccion" style={{

@@ -77,6 +77,34 @@ export async function cartasEnVenta(limite = 18): Promise<CartaEnVenta[]> {
   }
 }
 
+export interface ColeccionistaVisible {
+  username: string;
+  foto: string | null;
+  ciudad: string | null;
+  cartas: number;
+}
+
+/**
+ * Coleccionistas con inventario de verdad, para mostrar en la portada. Vale
+ * más un puñado de perfiles reales que diez testimonios inventados: cada uno
+ * enlaza a su página y el visitante puede ir a comprobar que existe.
+ */
+export async function coleccionistasVisibles(limite = 8): Promise<ColeccionistaVisible[]> {
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.rpc("landing_coleccionistas", { limite });
+    if (!Array.isArray(data)) return [];
+    return (data as Record<string, unknown>[]).map(p => ({
+      username: String(p.username),
+      foto: (p.photo_url as string) ?? null,
+      ciudad: (p.ciudad as string) ?? null,
+      cartas: Number(p.cartas) || 0,
+    }));
+  } catch {
+    return [];
+  }
+}
+
 export interface NumerosDeLaCasa {
   coleccionistas: number;
   cartasRegistradas: number;
