@@ -14,6 +14,7 @@ import { parseProposal } from "@/lib/trade-messages";
 import {
   ArrowLeft, Check, X, Clock, Ban, Pencil, MessageCircle,
   MessagesSquare, Send, ChevronDown, ArrowDownLeft, ArrowUpRight, PackageCheck, Trash2,
+  AlertTriangle,
 } from "lucide-react";
 
 const COURT = "#2ee6c1";
@@ -96,6 +97,8 @@ function SolicitudesPageInner() {
   const [trades, setTrades]   = useState<Trade[]>([]);
   const [players, setPlayers] = useState<Record<string, PlayerLite>>({});
   const [priceMaps, setPriceMaps] = useState<PriceMaps>({});
+  /** Cuántas copias tengo de cada carta del trade: "set_id|card_id" → cantidad */
+  const [misCopias, setMisCopias] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [acting, setActing]   = useState<string | null>(null);
   const [, setCardsReady]     = useState(0);
@@ -127,6 +130,23 @@ function SolicitudesPageInner() {
       const map: Record<string, PlayerLite> = {};
       (pl ?? []).forEach((p: PlayerLite) => { map[p.user_id] = p; });
       setPlayers(map);
+    }
+
+    /* Cuántas tengo de cada carta que aparece en algún trade. Sirve para no
+       aceptar un intercambio en el que entrego algo que no tengo. */
+    const cardIds = [...new Set(rows.flatMap(t => (t.trade_cards ?? []).map(c => String(c.card_id))))];
+    if (cardIds.length) {
+      const { data: invRows } = await supabase
+        .from("card_inventory")
+        .select("card_id, set_id, quantity")
+        .eq("user_id", user.id)
+        .in("card_id", cardIds);
+      const copias: Record<string, number> = {};
+      for (const r of invRows ?? []) {
+        const k = `${r.set_id}|${r.card_id}`;
+        copias[k] = (copias[k] ?? 0) + r.quantity;
+      }
+      setMisCopias(copias);
     }
 
     const setIds = [...new Set(rows.flatMap(t => (t.trade_cards ?? []).map(c => c.set_id)))];
@@ -365,6 +385,7 @@ function SolicitudesPageInner() {
               acting={acting === trade.id}
               findCard={findCard}
               priceOf={priceOf}
+              misCopias={misCopias}
               sideTotal={sideTotal}
               onRespond={respond}
               onReceived={confirmReceived}
@@ -383,7 +404,7 @@ function SolicitudesPageInner() {
 
 /* ── Tarjeta de un intercambio ──────────────────────────────── */
 function TradeCardRow({
-  trade, meId, other, focused, acting, findCard, priceOf, sideTotal, onRespond, onReceived, onHide, onZoom, supabase,
+  trade, meId, other, focused, acting, findCard, priceOf, misCopias, sideTotal, onRespond, onReceived, onHide, onZoom, supabase,
 }: {
   trade: Trade;
   meId: string | null;
@@ -392,6 +413,7 @@ function TradeCardRow({
   acting: boolean;
   findCard: (c: TradeCard) => PokemonCard | undefined;
   priceOf: (card: PokemonCard | undefined, setId: string) => number | null;
+  misCopias: Record<string, number>;
   sideTotal: (cards: TradeCard[]) => number;
   onRespond: (t: Trade, s: "accepted" | "rejected" | "cancelled") => void;
   onReceived: (t: Trade) => void;
@@ -496,9 +518,11 @@ function TradeCardRow({
 
       <div className="sol-cards">
         <CardList label="Tú entregas" accent={RED} cards={iGive} total={giveTotal}
-          findCard={findCard} priceOf={priceOf} onZoom={onZoom} />
+          findCard={findCard} priceOf={priceOf} onZoom={onZoom}
+          misCopias={misCopias} avisarFaltante />
         <CardList label="Tú recibes" accent={COURT} cards={iReceive} total={receiveTotal}
-          findCard={findCard} priceOf={priceOf} onZoom={onZoom} />
+          findCard={findCard} priceOf={priceOf} onZoom={onZoom}
+          misCopias={misCopias} />
       </div>
 
       {/* Resumen de valor */}
@@ -888,13 +912,20 @@ function btnStyle(bg: string, color: string, border?: string): React.CSSProperti
 }
 
 /* ── Lista de cartas de un lado ─────────────────────────────── */
-function CardList({ label, accent, cards, total, findCard, priceOf, onZoom }: {
+function CardList({ label, accent, cards, total, findCard, priceOf, onZoom, misCopias, avisarFaltante }: {
   label: string; accent: string; cards: TradeCard[]; total: number;
   findCard: (c: TradeCard) => PokemonCard | undefined;
   priceOf: (card: PokemonCard | undefined, setId: string) => number | null;
   onZoom: (z: { card: PokemonCard; setId: string; price: number | null }) => void;
+  /** Cuántas copias tengo de cada carta: "set_id|card_id" → cantidad */
+  misCopias: Record<string, number>;
+  /** Solo el lado que entrego avisa en rojo cuando no me alcanzan */
+  avisarFaltante?: boolean;
 }) {
   const missing = cards.some(c => priceOf(findCard(c), c.set_id) == null);
+  const tengo = (c: TradeCard) => misCopias[`${c.set_id}|${String(c.card_id)}`] ?? 0;
+  /** Cuántas de las que me piden no puedo cubrir con lo que tengo */
+  const faltantes = avisarFaltante ? cards.filter(c => tengo(c) < c.quantity).length : 0;
 
   return (
     <div>
@@ -952,10 +983,29 @@ function CardList({ label, accent, cards, total, findCard, priceOf, onZoom }: {
                   }}>
                     {price != null ? usd(price * c.quantity) : "—"}
                   </p>
+                  {/* Cuántas tengo contra cuántas pide el trade. En el lado que
+                      entrego se pone rojo si no me alcanzan. */}
+                  <p style={{
+                    fontFamily: MONO, fontSize: 8, margin: "2px 0 0",
+                    color: avisarFaltante && tengo(c) < c.quantity ? RED : INK2,
+                  }} title={`Tienes ${tengo(c)} en tu inventario · el intercambio usa ${c.quantity}`}>
+                    {tengo(c)}/{c.quantity}
+                  </p>
                 </div>
               );
             })}
           </div>
+          {faltantes > 0 && (
+            <p style={{
+              fontFamily: MONO, fontSize: 8.5, color: RED, margin: "6px 0 0",
+              lineHeight: 1.4, display: "flex", alignItems: "center", gap: 5,
+            }}>
+              <AlertTriangle size={10} />
+              {faltantes === 1
+                ? "Te falta 1 de estas cartas en el inventario"
+                : `Te faltan ${faltantes} de estas cartas en el inventario`}
+            </p>
+          )}
           {missing && (
             <p style={{ fontFamily: MONO, fontSize: 8, color: INK2, margin: "6px 0 0", lineHeight: 1.4 }}>
               El total excluye las cartas sin precio.
