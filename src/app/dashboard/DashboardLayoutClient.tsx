@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { MobileTabBar } from "@/components/MobileTabBar";
-import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Swords, Gamepad2, WalletCards, ArrowLeftRight, Link2, ShieldCheck } from "lucide-react";
+import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Swords, Gamepad2, WalletCards, ArrowLeftRight, Link2, ShieldCheck, Vibrate } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { usePushPermission } from "@/hooks/usePushPermission";
 import { DashboardUserProvider } from "./DashboardUserContext";
@@ -260,6 +260,16 @@ export function DashboardLayoutClient({
           >
             <Link2 size={14} color="#4ff0ff" strokeWidth={1.8} />
             <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Mapeo TCG</span>
+          </a>
+          <a href="/dashboard/admin/test-event" style={{
+            display: "flex", alignItems: "center", gap: "10px",
+            padding: "10px 14px", textDecoration: "none",
+          }}
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(79,240,255,0.07)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+          >
+            <Vibrate size={14} color="#4ff0ff" strokeWidth={1.8} />
+            <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Vibración</span>
           </a>
         </>
       )}
