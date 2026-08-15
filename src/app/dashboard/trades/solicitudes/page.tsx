@@ -334,7 +334,13 @@ function SolicitudesPageInner() {
         /* Propuesta y negociación lado a lado cuando hay ancho */
         .sol-split { display: grid; grid-template-columns: 1fr; gap: 16px; }
         @media (min-width: 1000px) {
-          .sol-split { grid-template-columns: minmax(0, 1fr) 360px; align-items: start; }
+          /* El chat crece con la pantalla en vez de quedarse en 360px fijos */
+          .sol-split { grid-template-columns: minmax(0, 1fr) minmax(340px, 26%); align-items: start; }
+          /* Viendo una sola solicitud las dos tarjetas llegan hasta abajo */
+          .sol-split.sol-full { align-items: stretch; min-height: calc(100vh - 132px); }
+          .sol-split.sol-full > div { height: 100%; display: flex; flex-direction: column; }
+          .sol-full .sol-chat-body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+          .sol-full .sol-chat-msgs { flex: 1; max-height: none; }
         }
       `}</style>
 
@@ -374,7 +380,8 @@ function SolicitudesPageInner() {
             : "Todavía no tienes solicitudes de intercambio."}
         </p>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 1320 }}>
+        // Sin ancho máximo: en el escritorio sobraba media pantalla vacía
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           {visible.map(trade => (
             <TradeCardRow
               key={trade.id}
@@ -469,7 +476,7 @@ function TradeCardRow({
 
   return (
     // La propuesta y la negociación son dos tarjetas hermanas
-    <div className="sol-split">
+    <div className={focused ? "sol-split sol-full" : "sol-split"}>
     <div ref={ref} style={{
       background: "rgba(255,255,255,0.02)",
       border: `1px solid ${focused ? `${COURT}55` : "rgba(255,255,255,0.08)"}`,
@@ -750,7 +757,7 @@ function TradeChat({ tradeId, meId, other, open, onToggle, supabase }: {
     <div style={{
       background: "rgba(255,255,255,0.02)",
       border: "1px solid rgba(255,255,255,0.08)",
-      borderRadius: 14, padding: 18, alignSelf: "start",
+      borderRadius: 14, padding: 18,
     }}>
       <button onClick={onToggle} style={{
         display: "flex", alignItems: "center", gap: 8, width: "100%",
@@ -768,8 +775,8 @@ function TradeChat({ tradeId, meId, other, open, onToggle, supabase }: {
       </button>
 
       {open && (
-        <div style={{ marginTop: 12 }}>
-          <div className="sol-scroll" style={{
+        <div className="sol-chat-body" style={{ marginTop: 12 }}>
+          <div className="sol-scroll sol-chat-msgs" style={{
             maxHeight: 230, overflowY: "auto",
             display: "flex", flexDirection: "column", gap: 8,
             paddingRight: 4,
@@ -924,6 +931,8 @@ function CardList({ label, accent, cards, total, findCard, priceOf, onZoom, misC
 }) {
   const missing = cards.some(c => priceOf(findCard(c), c.set_id) == null);
   const tengo = (c: TradeCard) => misCopias[`${c.set_id}|${String(c.card_id)}`] ?? 0;
+  /** Ancho de cada miniatura: a 58px no se distinguía qué carta era */
+  const CARTA_ANCHO = 78;
   /** Cuántas de las que me piden no puedo cubrir con lo que tengo */
   const faltantes = avisarFaltante ? cards.filter(c => tengo(c) < c.quantity).length : 0;
 
@@ -950,13 +959,13 @@ function CardList({ label, accent, cards, total, findCard, priceOf, onZoom, misC
               const name  = card?.name ?? String(c.card_id).split(":")[1] ?? "Carta";
               const price = priceOf(card, c.set_id);
               return (
-                <div key={i} style={{ width: 58, textAlign: "center" }}>
+                <div key={i} style={{ width: CARTA_ANCHO, textAlign: "center" }}>
                   <button
                     onClick={() => card && onZoom({ card, setId: c.set_id, price })}
                     disabled={!card}
                     title={card ? `Ver ${name}` : name}
                     style={{
-                      position: "relative", width: 58, aspectRatio: "5/7",
+                      position: "relative", width: CARTA_ANCHO, aspectRatio: "5/7",
                       padding: 0, border: "none", background: "transparent",
                       cursor: card ? "zoom-in" : "default", display: "block",
                     }}
@@ -974,11 +983,11 @@ function CardList({ label, accent, cards, total, findCard, priceOf, onZoom, misC
                     )}
                   </button>
                   <p style={{
-                    fontFamily: MONO, fontSize: 8, color: INK2, margin: "4px 0 0",
+                    fontFamily: MONO, fontSize: 9, color: INK2, margin: "5px 0 0",
                     overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                   }} title={name}>{name}</p>
                   <p style={{
-                    fontFamily: MONO, fontSize: 8.5, fontWeight: 700, margin: "1px 0 0",
+                    fontFamily: MONO, fontSize: 9.5, fontWeight: 700, margin: "1px 0 0",
                     color: price != null ? LIME : INK2,
                   }}>
                     {price != null ? usd(price * c.quantity) : "—"}
@@ -986,7 +995,7 @@ function CardList({ label, accent, cards, total, findCard, priceOf, onZoom, misC
                   {/* Cuántas tengo contra cuántas pide el trade. En el lado que
                       entrego se pone rojo si no me alcanzan. */}
                   <p style={{
-                    fontFamily: MONO, fontSize: 8, margin: "2px 0 0",
+                    fontFamily: MONO, fontSize: 9, margin: "2px 0 0",
                     color: avisarFaltante && tengo(c) < c.quantity ? RED : INK2,
                   }} title={`Tienes ${tengo(c)} en tu inventario · el intercambio usa ${c.quantity}`}>
                     {tengo(c)}/{c.quantity}

@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -134,7 +134,10 @@ function TradesPageInner() {
   const [peerInv, setPeerInv]     = useState<InvRow[]>([]);
   const [priceMaps, setPriceMaps] = useState<PriceMaps>({});
   const [cardsReady, setCardsReady] = useState(0); // fuerza re-render al cargar sets
-  const [peerTab, setPeerTab]     = useState<"todo" | "wishlist">("todo");
+  /* Las dos columnas abren en la pestaña útil: de mi lado lo que él necesita,
+     del suyo lo que yo tengo en la wishlist. El inventario completo queda a un
+     clic, pero no es por donde se empieza a armar un intercambio. */
+  const [peerTab, setPeerTab]     = useState<"todo" | "wishlist">("wishlist");
   const [myTab, setMyTab]         = useState<"match" | "todo">("match");
 
   /* ── Navegación en pantallas angostas ─────────────────────── */
@@ -903,8 +906,8 @@ function TradesPageInner() {
               tabs={
                 <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
                   {([
-                    ["todo",     "Todo su inventario", filteredPeerAll.length,    null],
                     ["wishlist", "En mi wishlist",     filteredPeerWanted.length, <Heart key="h" size={11} strokeWidth={2} />],
+                    ["todo",     "Todo su inventario", filteredPeerAll.length,    null],
                   ] as const).map(([val, label, count, icon]) => (
                     <button key={val} onClick={() => setPeerTab(val)} style={{
                       display: "flex", alignItems: "center", gap: 6,
@@ -1290,6 +1293,33 @@ function Column({ title, subtitle, accent, entries, selected, onBump, loading, e
   onBump: (key: string, delta: number, max: number) => void;
   loading: boolean; empty: string; tabs?: React.ReactNode; hidden?: boolean;
 }) {
+  /* Un inventario de 988 cartas pintaba 988 imágenes de golpe y la página se
+     arrastraba. Se muestran de a tandas y la siguiente entra cuando el usuario
+     llega al final de la columna. */
+  const TANDA = 40;
+  const [visibles, setVisibles] = useState(TANDA);
+  const centinela = useRef<HTMLDivElement>(null);
+
+  /* Al cambiar de pestaña o de filtro se vuelve a empezar por arriba. Se ajusta
+     durante el render y no en un efecto: así no hay un pintado intermedio con
+     la lista vieja. */
+  const firma = `${entries[0]?.key ?? ""}|${entries.length}`;
+  const [firmaPrevia, setFirmaPrevia] = useState(firma);
+  if (firmaPrevia !== firma) {
+    setFirmaPrevia(firma);
+    setVisibles(TANDA);
+  }
+
+  useEffect(() => {
+    const el = centinela.current;
+    if (!el || visibles >= entries.length) return;
+    const obs = new IntersectionObserver(([entrada]) => {
+      if (entrada.isIntersecting) setVisibles(n => Math.min(n + TANDA, entries.length));
+    }, { rootMargin: "300px" });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [visibles, entries.length]);
+
   return (
     <div className="trade-panel trade-col" style={hidden ? { display: "none" } : undefined}>
       <div style={{ flexShrink: 0 }}>
@@ -1306,11 +1336,21 @@ function Column({ title, subtitle, accent, entries, selected, onBump, loading, e
         ) : entries.length === 0 ? (
           <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, lineHeight: 1.6 }}>{empty}</p>
         ) : (
-          <div className="trade-grid">
-            {entries.map(e => (
-              <TradeCard key={e.key} entry={e} qty={selected[e.key] ?? 0} accent={accent} onBump={onBump} />
-            ))}
-          </div>
+          <>
+            <div className="trade-grid">
+              {entries.slice(0, visibles).map(e => (
+                <TradeCard key={e.key} entry={e} qty={selected[e.key] ?? 0} accent={accent} onBump={onBump} />
+              ))}
+            </div>
+            {visibles < entries.length && (
+              <div ref={centinela} style={{
+                padding: "14px 0", textAlign: "center",
+                fontFamily: MONO, fontSize: 10, color: INK2, letterSpacing: "0.08em",
+              }}>
+                Cargando más… ({visibles} de {entries.length})
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
