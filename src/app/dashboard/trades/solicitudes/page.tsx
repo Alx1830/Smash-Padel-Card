@@ -339,9 +339,18 @@ function SolicitudesPageInner() {
         @media (min-width: 1000px) {
           /* El chat crece con la pantalla en vez de quedarse en 360px fijos */
           .sol-split { grid-template-columns: minmax(0, 1fr) minmax(340px, 26%); align-items: start; }
-          /* Viendo una sola solicitud las dos tarjetas llegan hasta abajo */
-          .sol-split.sol-full { align-items: stretch; min-height: calc(100vh - 132px); }
-          .sol-split.sol-full > div { height: 100%; min-height: 0; display: flex; flex-direction: column; }
+          /* Viendo una sola solicitud las dos tarjetas ocupan el alto de la
+             pantalla y ni una ni otra estiran la página: el alto es fijo y
+             cada panel se desplaza por dentro. */
+          .sol-split.sol-full { align-items: stretch; height: calc(100vh - 132px); min-height: 460px; }
+          .sol-split.sol-full > div {
+            height: 100%; min-height: 0; overflow: hidden;
+            display: flex; flex-direction: column;
+          }
+          /* La propuesta con muchas cartas rueda dentro de su propia tarjeta */
+          .sol-full .sol-propuesta { overflow-y: auto; }
+          /* Con la negociación plegada no tiene sentido una tarjeta alta y vacía */
+          .sol-full .sol-chat-cerrado { height: auto; align-self: start; }
           .sol-full .sol-chat-body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
           /* El historial ocupa todo lo que sobre y el campo de escribir queda
              pegado al fondo de la tarjeta */
@@ -483,7 +492,7 @@ function TradeCardRow({
   return (
     // La propuesta y la negociación son dos tarjetas hermanas
     <div className={focused ? "sol-split sol-full" : "sol-split"}>
-    <div ref={ref} style={{
+    <div ref={ref} className="sol-propuesta sol-scroll" style={{
       background: "rgba(255,255,255,0.02)",
       border: `1px solid ${focused ? `${COURT}55` : "rgba(255,255,255,0.08)"}`,
       boxShadow: focused ? `0 0 24px ${COURT}22` : "none",
@@ -760,7 +769,7 @@ function TradeChat({ tradeId, meId, other, open, onToggle, supabase }: {
   }
 
   return (
-    <div style={{
+    <div className={open ? "sol-chat" : "sol-chat sol-chat-cerrado"} style={{
       background: "rgba(255,255,255,0.02)",
       border: "1px solid rgba(255,255,255,0.08)",
       borderRadius: 14, padding: 18,
