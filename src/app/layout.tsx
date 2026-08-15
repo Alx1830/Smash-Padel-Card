@@ -45,14 +45,16 @@ const APPLE_SPLASH = [
  * La app se comporta como app: sin zoom al enfocar un campo y sin pellizco que
  * corra el diseño. `maximumScale` frena el zoom automático de Safari; el ancho
  * real lo garantiza la regla de 16px en los campos de globals.css.
- * `viewportFit: "cover"` deja que el fondo llegue hasta el borde de la pantalla.
+ *
+ * Sin `viewportFit: "cover"` a propósito: con él la página se dibujaba debajo
+ * de la barra de estado del iPhone y el logo quedaba encima de la hora y la
+ * señal. El contenido arranca bajo la muesca, que es como se veía antes.
  */
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  viewportFit: "cover",
 };
 
 export const metadata: Metadata = {
