@@ -221,7 +221,10 @@ function InstallWidget() {
             {isInstalled ? "App instalada correctamente" : "Accede como app nativa desde tu inicio"}
           </p>
         </div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: "auto" }}>
+        {/* minHeight = alto de un botón (34px). Los botones se deciden después
+            de hidratar (beforeinstallprompt, display-mode, Notification) y sin
+            el hueco reservado la tarjeta crece y empuja todo el panel. */}
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: "auto", minHeight: "34px" }}>
           {!isInstalled && (
             <button onClick={handleInstall} style={{
               padding: "9px 16px", borderRadius: "9px",
@@ -485,7 +488,10 @@ export default function DashboardHome() {
         {/* Dinero en stock */}
         <div style={CARD_STYLE}>
           <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: 0 }}>Dinero en stock</p>
-          <p style={{ fontFamily: DISP, fontSize: "clamp(22px, 4vw, 32px)", color: COURT, margin: 0, lineHeight: 1.1 }}>
+          {/* 2.2em = dos líneas con line-height 1.1. El valor llega del cliente
+              y en móvil pasa de "—" a "$1.234,56 USD", que envuelve: sin el
+              hueco reservado la tarjeta crece y empuja el panel entero. */}
+          <p style={{ fontFamily: DISP, fontSize: "clamp(22px, 4vw, 32px)", color: COURT, margin: 0, lineHeight: 1.1, minHeight: "2.2em" }}>
             {stockTotal === null ? "—" : stockTotal === 0 ? "$0.00 USD" : formatUSD(stockTotal)}
           </p>
           <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: 0, lineHeight: 1.5 }}>

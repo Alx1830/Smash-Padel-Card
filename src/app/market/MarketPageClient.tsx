@@ -31,6 +31,7 @@ import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { FlagIcon } from "@/components/FlagIcon";
 import { tcgCardLink } from "@/lib/tcg-link";
 import { BrandLogo } from "@/components/BrandLogo";
+import { CardGridSkeleton } from "@/components/CardGridSkeleton";
 
 interface Listing {
   id: string;
@@ -264,7 +265,10 @@ export function MarketPageClient({
 
   const [selectedPais, setSelectedPaisRaw] = useState(() => searchParams.get("pais") ?? defaultPais);
   const [listings, setListings]         = useState<Listing[]>([]);
-  const [loading, setLoading]           = useState(false);
+  /* Arranca en true: el efecto de carga siempre corre en el primer render.
+     Si arrancara en false se pinta el estado vacío ("No hay cartas en venta")
+     y al llegar los datos la página entera salta — eso era el CLS del market. */
+  const [loading, setLoading]           = useState(true);
   const [page, setPage]                 = useState(1);
   const [hasMore, setHasMore]           = useState(true);
   const [previewCard, setPreviewCard]   = useState<PokemonCard | null>(null);
@@ -631,7 +635,7 @@ export function MarketPageClient({
           {/* ── GRID CARDS ── */}
           <div className="mkt-grid-area">
         {loading && listings.length === 0 ? (
-          <div style={{ padding: "80px 0", textAlign: "center", fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em" }}>Cargando...</div>
+          <CardGridSkeleton className="mkt-cards-grid" count={PAGE_SIZE} />
         ) : listings.length === 0 ? (
           <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "80px 40px", textAlign: "center" }}>
             <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.3 }}>◬</div>
@@ -798,16 +802,15 @@ export function MarketPageClient({
 
             {/* Sentinel para infinite scroll */}
             <div ref={sentinelRef} style={{ height: "1px" }} />
-            {loading && (
-              <div style={{ padding: "32px 0", textAlign: "center", fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.1em" }}>
-                Cargando más...
-              </div>
-            )}
-            {!hasMore && listings.length > 0 && (
-              <div style={{ padding: "32px 0", textAlign: "center", fontFamily: MONO, fontSize: "10px", color: "rgba(122,130,152,0.4)", letterSpacing: "0.12em" }}>
-                · FIN DEL MARKET ·
-              </div>
-            )}
+            {/* Pie de la grilla con alto fijo: "Cargando más…" y "Fin del market"
+                se alternan, y sin reservar el hueco cada cambio movía el footer. */}
+            <div style={{ height: "80px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+              {loading ? (
+                <span style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.1em" }}>Cargando más...</span>
+              ) : !hasMore && listings.length > 0 ? (
+                <span style={{ fontFamily: MONO, fontSize: "10px", color: "rgba(122,130,152,0.4)", letterSpacing: "0.12em" }}>· FIN DEL MARKET ·</span>
+              ) : null}
+            </div>
           </>
         )}
           </div>{/* mkt-grid-area */}

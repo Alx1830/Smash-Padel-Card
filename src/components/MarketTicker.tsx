@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
-import { getVersionLabel } from "@/data/pokemon-cards-meta";
+import { getVersionLabel, type PokemonCard } from "@/data/pokemon-cards-meta";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 
 const MONO  = "var(--font-jetbrains)";
@@ -33,30 +33,50 @@ export function MarketTicker() {
           .order("created_at", { ascending: false })
           .limit(60);
 
-        console.log("[MarketTicker] fetch:", { data, error, count: data?.length });
-
         if (error) {
-          console.error("[MarketTicker] error:", error);
           setDebug(`Error Supabase: ${error.message}`);
           return;
         }
         if (!data || data.length === 0) {
-          console.warn("[MarketTicker] 0 active listings");
           setDebug("0 listings activos");
           return;
         }
 
         const setIds = [...new Set(data.map((r: { set_id: string }) => r.set_id))];
-        console.log("[MarketTicker] loading sets:", setIds);
 
-        try { await loadManySets(setIds); } catch (e) { console.error("[MarketTicker] loadManySets:", e); }
+        try { await loadManySets(setIds); } catch { /* sin metadata se cae al card_id crudo */ }
+
+        /* Índices por set, construidos una sola vez: el orden de las tres
+           búsquedas en cascada se conserva (id → número+versión → número). */
+        const indexes = new Map<string, {
+          byId: Map<string, PokemonCard>;
+          byNumVer: Map<string, PokemonCard>;
+          byNum: Map<string, PokemonCard>;
+        }>();
+        for (const setId of setIds) {
+          const byId      = new Map<string, PokemonCard>();
+          const byNumVer  = new Map<string, PokemonCard>();
+          const byNum     = new Map<string, PokemonCard>();
+          for (const c of SET_CARDS[setId] ?? []) {
+            const id  = String(c.id);
+            const num = String(c.card_number);
+            // .find() devuelve la primera coincidencia: no pisar la ya guardada
+            if (!byId.has(id)) byId.set(id, c);
+            const nv = `${num}::${c.version}`;
+            if (!byNumVer.has(nv)) byNumVer.set(nv, c);
+            if (!byNum.has(num)) byNum.set(num, c);
+          }
+          indexes.set(setId, { byId, byNumVer, byNum });
+        }
+        const setById = new Map(ALL_SETS.map(s => [s.id, s]));
 
         const mapped: TickerItem[] = data.map((r: { card_id: string; set_id: string; version: string; price_cop: number; currency: string }) => {
-          const cards   = SET_CARDS[r.set_id] ?? [];
-          const card    = cards.find(c => String(c.id) === String(r.card_id))
-                       ?? cards.find(c => String(c.card_number) === String(r.card_id) && c.version === r.version)
-                       ?? cards.find(c => String(c.card_number) === String(r.card_id));
-          const setInfo = ALL_SETS.find(s => s.id === r.set_id);
+          const idx     = indexes.get(r.set_id);
+          const key     = String(r.card_id);
+          const card    = idx?.byId.get(key)
+                       ?? idx?.byNumVer.get(`${key}::${r.version}`)
+                       ?? idx?.byNum.get(key);
+          const setInfo = setById.get(r.set_id);
           return {
             cardName:     card?.name?.trim() || String(r.card_id).split(":")[0] || "Carta",
             versionLabel: getVersionLabel(card?.version ?? r.version),
@@ -65,10 +85,8 @@ export function MarketTicker() {
           };
         });
 
-        console.log("[MarketTicker] items:", mapped.length);
         setItems(mapped);
       } catch (e) {
-        console.error("[MarketTicker] unexpected:", e);
         setDebug(`Error: ${String(e)}`);
       }
     })();

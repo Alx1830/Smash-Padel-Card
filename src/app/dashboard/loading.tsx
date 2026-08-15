@@ -1,96 +1,58 @@
-import { BrandLogo } from "@/components/BrandLogo";
+const COURT = "#2ee6c1";
+const MONO  = "var(--font-jetbrains)";
 
+/**
+ * Esqueleto del dashboard. Antes era un spinner centrado a 100vh: como el
+ * contenido real se pinta desde arriba, el reemplazo movía la página entera
+ * (CLS 0.3 en móvil). Ahora ocupa el mismo espacio, alineado arriba y con los
+ * mismos paddings (24px móvil / 48px escritorio) y la misma grilla de tarjetas
+ * que /dashboard.
+ */
 export default function DashboardLoading() {
   return (
-    <div style={{
-      minHeight: "100vh",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      background: "#05070d",
-      gap: "32px",
-    }}>
+    <div className="dash-skel-wrap" style={{ minHeight: "100vh" }}>
       <style>{`
-        @keyframes fb-spin {
-          to { transform: rotate(360deg); }
+        @keyframes fb-skel { 0%,100% { opacity: 0.5; } 50% { opacity: 0.85; } }
+        .dash-skel-wrap { padding: 24px; }
+        @media (min-width: 768px) { .dash-skel-wrap { padding: 48px; } }
+        .dash-skel-stats {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 16px;
+          margin-bottom: 40px;
         }
-        @keyframes fb-pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
+        @media (max-width: 900px) { .dash-skel-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        .dash-skel-row {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 16px;
         }
-        @keyframes fb-bar {
-          0%   { width: 0%; }
-          30%  { width: 45%; }
-          60%  { width: 72%; }
-          85%  { width: 88%; }
-          100% { width: 95%; }
+        @media (min-width: 1100px) { .dash-skel-row { grid-template-columns: minmax(0, 1fr) 320px; } }
+        .dash-skel-card {
+          background: rgba(255,255,255,0.02);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 16px;
+          animation: fb-skel 1.6s ease-in-out infinite;
         }
       `}</style>
 
-      {/* Logo */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-        <BrandLogo height={61} style={{ animation: "fb-pulse 2s ease-in-out infinite" }} />
-        <span style={{
-          fontFamily: "var(--font-jetbrains)",
-          fontSize: "9px",
-          letterSpacing: "0.28em",
-          textTransform: "uppercase",
-          color: "#7a8298",
-        }}>
-          Pokémon Card Collector
-        </span>
+      {/* Antetítulo — mismo alto y margen que el del panel real */}
+      <div style={{ marginBottom: "16px", fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: "10px" }}>
+        <span style={{ width: "20px", height: "1px", background: COURT, display: "inline-block" }} />
+        Cargando…
       </div>
 
-      {/* Spinner */}
-      <div style={{ position: "relative", width: "56px", height: "56px" }}>
-        <div style={{
-          position: "absolute", inset: 0,
-          border: "2px solid rgba(46,230,193,0.08)",
-          borderRadius: "50%",
-        }} />
-        <div style={{
-          position: "absolute", inset: 0,
-          border: "2px solid transparent",
-          borderTopColor: "#2ee6c1",
-          borderRightColor: "#4ff0ff",
-          borderRadius: "50%",
-          animation: "fb-spin 0.9s linear infinite",
-        }} />
-        <div style={{
-          position: "absolute", inset: "10px",
-          border: "2px solid transparent",
-          borderTopColor: "#d6ff3d",
-          borderRadius: "50%",
-          animation: "fb-spin 0.6s linear infinite reverse",
-        }} />
+      {/* 4 tarjetas de estadística — mismo alto que las reales */}
+      <div className="dash-skel-stats">
+        {[0, 1, 2, 3].map(i => (
+          <div key={i} className="dash-skel-card" style={{ height: "168px", animationDelay: `${i * 0.1}s` }} />
+        ))}
       </div>
 
-      {/* Barra de progreso */}
-      <div style={{ width: "160px", display: "flex", flexDirection: "column", gap: "8px", alignItems: "center" }}>
-        <div style={{
-          width: "100%", height: "2px",
-          background: "rgba(255,255,255,0.06)",
-          borderRadius: "2px",
-          overflow: "hidden",
-        }}>
-          <div style={{
-            height: "100%",
-            background: "linear-gradient(90deg, #2ee6c1, #4ff0ff)",
-            borderRadius: "2px",
-            animation: "fb-bar 3s ease-out forwards",
-          }} />
-        </div>
-        <p style={{
-          fontFamily: "var(--font-jetbrains)",
-          fontSize: "10px",
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-          color: "#7a8298",
-          margin: 0,
-        }}>
-          Cargando...
-        </p>
+      {/* Gráfico + top local */}
+      <div className="dash-skel-row">
+        <div className="dash-skel-card" style={{ height: "320px" }} />
+        <div className="dash-skel-card" style={{ height: "420px" }} />
       </div>
     </div>
   );

@@ -86,64 +86,33 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // getUser() verifica el JWT criptográficamente contra Supabase Auth.
-  // getSession() solo lee la cookie local — no usar para autorización.
-  const { data: { user } } = await supabase.auth.getUser();
+  // getClaims() verifica la firma del JWT en el propio edge usando el JWKS
+  // (el proyecto usa llaves asimétricas ES256), sin ir por red a Supabase Auth
+  // en cada request. Es una verificación criptográfica real, no getSession().
+  // Si el token fuera legacy HS256, la librería cae sola a la verificación
+  // remota, así que el guard nunca se debilita.
+  // La verificación fuerte con getUser() sigue viva en el layout de servidor.
+  const { data: claims } = await supabase.auth.getClaims();
+  const userId = claims?.claims?.sub ?? null;
 
   // 3. Protect private routes
   const isProtected = PROTECTED.some(p => pathname.startsWith(p));
-  if (!user && isProtected) {
+  if (!userId && isProtected) {
     const url = new URL("/login", request.url);
     url.searchParams.set("next", pathname);
     return NextResponse.redirect(url);
   }
 
   // 4. Redirect logged-in users away from login
-  if (user && pathname === "/login") {
+  if (userId && pathname === "/login") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  // 4b. If user arrives at /onboarding but profile is already complete, send to dashboard
-  if (user && pathname === "/onboarding") {
-    const { data: player } = await supabase
-      .from("players")
-      .select("username, first_name, last_name, pais, tipo_perfil")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-    const profileComplete =
-      player?.username   && player.username.trim()    !== "" &&
-      player?.first_name && player.first_name.trim()  !== "" &&
-      player?.last_name  && player.last_name.trim()   !== "" &&
-      player?.pais       && player.pais.trim()        !== "" &&
-      player?.tipo_perfil && player.tipo_perfil.trim() !== "";
-
-    if (profileComplete) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-    return supabaseResponse; // let them stay on /onboarding
-  }
-
-  // 5. Enforce onboarding: users accessing /dashboard without a complete profile
-  //    must complete the wizard first.
-  if (user && pathname.startsWith("/dashboard")) {
-    const { data: player } = await supabase
-      .from("players")
-      .select("username, first_name, last_name, pais, tipo_perfil")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-    const profileComplete =
-      player?.username   && player.username.trim()   !== "" &&
-      player?.first_name && player.first_name.trim() !== "" &&
-      player?.last_name  && player.last_name.trim()  !== "" &&
-      player?.pais       && player.pais.trim()       !== "" &&
-      player?.tipo_perfil && player.tipo_perfil.trim() !== "";
-
-    if (!profileComplete) {
-      return NextResponse.redirect(new URL("/onboarding", request.url));
-    }
-  }
+  // El guard de onboarding NO vive aquí: hacía una query a `players` en cada
+  // request al dashboard, duplicando la que ya hace el layout de servidor.
+  // - /dashboard  → src/app/dashboard/layout.tsx (datos memoizados con cache())
+  // - /onboarding → la propia página redirige si el perfil ya está completo
+  //   o si no hay sesión.
 
   return supabaseResponse;
 }

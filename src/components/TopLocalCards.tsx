@@ -129,7 +129,9 @@ export function TopLocalCards() {
           <style>{`@keyframes fb-pulse{0%,100%{opacity:.3}50%{opacity:.7}}`}</style>
           {[0, 1, 2, 3, 4].map(i => (
             <div key={i} style={{
-              height: 44, borderRadius: 8, background: "rgba(255,255,255,0.05)",
+              /* 58px = alto real de la fila: miniatura de 30px en 5/7 (42px)
+                 + 7px de padding arriba y abajo + 1px de borde a cada lado */
+              height: 58, borderRadius: 10, background: "rgba(255,255,255,0.05)",
               animation: `fb-pulse 1.4s ease-in-out infinite ${i * 0.1}s`,
             }} />
           ))}

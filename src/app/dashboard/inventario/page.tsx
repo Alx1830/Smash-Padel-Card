@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { useRef, useEffect, useState, useMemo, useCallback } from "react";
+import { memo, useRef, useEffect, useState, useMemo, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
@@ -50,9 +50,13 @@ const SET_META: Record<string, { name: string; logo: string }> = Object.fromEntr
   POKEMON_SERIES.flatMap(s => s.sets).map(s => [s.id, { name: s.name, logo: s.logo }])
 );
 
+function matchesFeatured(f: FeaturedCard, card: PokemonCard, setId: string) {
+  return (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId;
+}
+
 /* ── Main page ───────────────────────────────────────────────── */
 export default function InventarioPage() {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const { userId: ctxUserId } = useDashboardUser();
 
   const [userId,        setUserId]        = useState<string | null>(null);
@@ -72,6 +76,8 @@ export default function InventarioPage() {
 
   // Filters (local state — no URL params needed)
   const [fNombre,     setFNombre]     = useState("");
+  /** El texto tecleado se aplica con retardo: filtrar en cada tecla bloquea el hilo */
+  const [fNombreQuery, setFNombreQuery] = useState("");
   const [fVariante,   setFVariante]   = useState("");
   const [fSet,        setFSet]        = useState("");
   const [fIdioma,     setFIdioma]     = useState("");
@@ -173,6 +179,12 @@ export default function InventarioPage() {
   }
 
   useEffect(() => {
+    if (fNombre === fNombreQuery) return;
+    const t = setTimeout(() => setFNombreQuery(fNombre), 250);
+    return () => clearTimeout(t);
+  }, [fNombre, fNombreQuery]);
+
+  useEffect(() => {
     if (!setDropdownOpen) return;
     function handleClick() { setSetDropdownOpen(false); }
     document.addEventListener("mousedown", handleClick);
@@ -191,12 +203,16 @@ export default function InventarioPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctxUserId]);
 
-  function matchesFeatured(f: FeaturedCard, card: PokemonCard, setId: string) {
-    return (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId;
-  }
+  /** Estado vivo de destacados/inventario para los handlers memoizados */
+  const featuredRef = useRef<FeaturedCard[]>([]);
+  useEffect(() => { featuredRef.current = featuredCards; }, [featuredCards]);
+  const userIdStateRef = useRef<string | null>(null);
+  useEffect(() => { userIdStateRef.current = userId; }, [userId]);
 
-  async function toggleFeatured(card: PokemonCard, setId: string) {
+  const toggleFeatured = useCallback(async (card: PokemonCard, setId: string) => {
+    const userId = userIdStateRef.current;
     if (!userId) return;
+    const featuredCards = featuredRef.current;
     const isFeat = featuredCards.some(f => matchesFeatured(f, card, setId));
     if (isFeat) {
       // Intentar borrar por card_number y por card.id para cubrir ambos formatos
@@ -210,7 +226,7 @@ export default function InventarioPage() {
       await supabase.from("featured_cards").insert({ user_id: userId, card_id: card.card_number, set_id: setId });
       setFeaturedCards(prev => [...prev, { card_id: card.card_number, set_id: setId }]);
     }
-  }
+  }, [supabase]);
 
   /** Aplica un delta al mapa: la fila del idioma y el total de la carta. */
   const applyQtyDelta = useCallback((
@@ -235,26 +251,29 @@ export default function InventarioPage() {
     setTotalCards(t => Math.max(0, t + delta));
   }, []);
 
-  async function incrementQty(card: PokemonCard, setId: string, language: string) {
+  const incrementQty = useCallback(async (card: PokemonCard, setId: string, language: string, current: number) => {
+    const userId = userIdStateRef.current;
     if (!userId) return;
-    const current = inventory[invLangKey(card.id, card.version, setId, language)] ?? 0;
     await supabase.from("card_inventory").upsert({
       user_id: userId, card_id: card.id, set_id: setId,
       version: card.version, language, quantity: current + 1,
     }, { onConflict: "user_id,card_id,set_id,version,language" });
     applyQtyDelta(card.id, card.version, setId, language, 1);
-  }
+  }, [supabase, applyQtyDelta]);
 
-  async function decrementQty(card: PokemonCard, setId: string, language: string) {
+  const decrementQty = useCallback(async (card: PokemonCard, setId: string, language: string, current: number) => {
+    const userId = userIdStateRef.current;
     if (!userId) return;
-    const current = inventory[invLangKey(card.id, card.version, setId, language)] ?? 0;
     if (current <= 0) return;
     const next  = current - 1;
     const where = { user_id: userId, card_id: card.id, set_id: setId, version: card.version, language };
     if (next === 0) await supabase.from("card_inventory").delete().match(where);
     else            await supabase.from("card_inventory").update({ quantity: next }).match(where);
     applyQtyDelta(card.id, card.version, setId, language, -1);
-  }
+  }, [supabase, applyQtyDelta]);
+
+  const openCard = useCallback((card: PokemonCard, setId: string) => setModalCard({ card, setId }), []);
+  const openSell = useCallback((card: PokemonCard, setId: string) => setSellTarget({ card, setId }), []);
 
   // Lista plana del inventario: una entrada por carta Y POR IDIOMA, porque la
   // misma carta en inglés y en japonés son dos cosas distintas que coleccionar.
@@ -309,21 +328,45 @@ export default function InventarioPage() {
     return byCard[vk] ?? byCard[card.version] ?? byCard["normal"] ?? null;
   }, [setCardPrices]);
 
+  /**
+   * Índices de destacados. Se replica la doble comparación original
+   * (`Number(card_id) === card_number` ó `String(card_id) === String(card.id)`)
+   * con dos conjuntos, para no barrer el arreglo en cada tarjeta.
+   */
+  const featuredIndex = useMemo(() => {
+    const byNumber = new Set<string>();
+    const byId     = new Set<string>();
+    for (const f of featuredCards) {
+      const n = Number(f.card_id);
+      if (!isNaN(n)) byNumber.add(`${f.set_id}::${n}`);
+      byId.add(`${f.set_id}::${String(f.card_id)}`);
+    }
+    return { byNumber, byId };
+  }, [featuredCards]);
+
+  const isFeatured = useCallback((card: PokemonCard, setId: string) =>
+    featuredIndex.byNumber.has(`${setId}::${card.card_number}`) ||
+    featuredIndex.byId.has(`${setId}::${String(card.id)}`),
+  [featuredIndex]);
+
+  /** Publicaciones activas, por set + número + versión */
+  const listedKeys = useMemo(() =>
+    new Set(listings.map(l => `${l.set_id}::${String(l.card_id)}::${l.version}`)),
+  [listings]);
+
   // Filtered cards
   const filteredCards = useMemo(() => {
+    const needle = fNombreQuery.trim().toLowerCase();
     return allInventoryCards.filter(({ card, setId, language }) => {
-      if (fNombre.trim() && !card.name.toLowerCase().includes(fNombre.trim().toLowerCase())) return false;
+      if (needle && !card.name.toLowerCase().includes(needle)) return false;
       if (fVariante && card.version !== fVariante) return false;
       if (fSet && setId !== fSet) return false;
       if (fIdioma && language !== fIdioma) return false;
-      if (fDestacados && !featuredCards.some(f =>
-        (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) &&
-        f.set_id === setId
-      )) return false;
+      if (fDestacados && !isFeatured(card, setId)) return false;
       if (fBulk && (inventory[invLangKey(card.id, card.version, setId, language)] ?? 0) < 2) return false;
       return true;
     });
-  }, [allInventoryCards, fNombre, fVariante, fSet, fIdioma, fDestacados, fBulk, featuredCards, inventory]);
+  }, [allInventoryCards, fNombreQuery, fVariante, fSet, fIdioma, fDestacados, fBulk, isFeatured, inventory]);
 
   /** Por defecto entran primero las cartas más caras; las sin precio, al final */
   const sortedCards = useMemo(() => {
@@ -340,12 +383,12 @@ export default function InventarioPage() {
   }, [filteredCards, fOrden, priceOf]);
 
   const hasFilters = fNombre || fVariante || fSet || fIdioma || fDestacados || fBulk;
-  function clearFilters() { setFNombre(""); setFVariante(""); setFSet(""); setFIdioma(""); setFDestacados(false); setFBulk(false); }
+  function clearFilters() { setFNombre(""); setFNombreQuery(""); setFVariante(""); setFSet(""); setFIdioma(""); setFDestacados(false); setFBulk(false); }
 
   // Resetear paginación cuando cambian los filtros
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [fNombre, fVariante, fSet, fIdioma, fDestacados, fBulk, fOrden]);
+  }, [fNombreQuery, fVariante, fSet, fIdioma, fDestacados, fBulk, fOrden]);
 
   // IntersectionObserver para cargar más cartas al hacer scroll
   useEffect(() => {
@@ -779,109 +822,24 @@ export default function InventarioPage() {
                   </div>
                 ) : (
                   <div className="inv-card-grid">
-                    {visibleCards.map(({ card, setId, language }) => {
-                      const isFeat   = featuredCards.some(f => (Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId);
-                      const isListed = listings.some(l => String(l.card_id) === String(card.card_number) && l.set_id === setId && l.version === card.version);
-                      const qty      = inventory[invLangKey(card.id, card.version, setId, language)] ?? 0;
-
-                      // precio de mercado
-                      const sc = SCRYDEX_SET_CODES[setId];
-                      const pricesForSet = sc ? (setCardPrices[setId] ?? {}) : {};
-                      const cardPriceMap = pricesForSet[`${sc}-${card.card_number}`];
-                      const vk = card.version.toLowerCase().replace(/\s+/g, "");
-                      const cardPrice: number | null = cardPriceMap
-                        ? (cardPriceMap[vk] ?? cardPriceMap[card.version] ?? cardPriceMap["normal"] ?? null)
-                        : null;
-
-                      const numStr = `#${String(card.card_number).padStart(3, "0")}`;
-
-                      return (
-                        <div key={`${setId}-${card.id}-${card.version}-${language}`} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-
-                          {/* Card image area */}
-                          <div style={{ position: "relative" }}>
-                            <InvTiltCard card={card} onClick={() => setModalCard({ card, setId })} />
-
-                            {/* Idioma de esta copia */}
-                            <div
-                              title={languageLabel(language)}
-                              style={{
-                                position: "absolute", bottom: 6, left: 6, zIndex: 10,
-                                display: "flex", alignItems: "center", gap: "4px",
-                                padding: "3px 6px", borderRadius: "5px",
-                                background: "rgba(5,7,13,0.85)", backdropFilter: "blur(4px)",
-                                pointerEvents: "none",
-                              }}
-                            >
-                              <FlagIcon code={language} width={16} />
-                              <span style={{ fontFamily: MONO, fontSize: "8px", letterSpacing: "0.1em", color: INK0, fontWeight: 700 }}>
-                                {language.toUpperCase()}
-                              </span>
-                            </div>
-
-                            {/* Estrella + vender (top-left) — el botón de vender avisa por sí solo
-                                cuando la carta está publicada, sin una segunda marca en la esquina */}
-                            {userId && (
-                              <div style={{ position: "absolute", top: 6, left: 6, display: "flex", flexDirection: "column", gap: "6px", zIndex: 10 }}>
-                                <button
-                                  className={`inv-icon-btn${isFeat ? " active" : ""}`}
-                                  onClick={e => { e.stopPropagation(); toggleFeatured(card, setId); }}
-                                  title={isFeat ? "Quitar de destacadas" : "Destacar en perfil"}
-                                >
-                                  <Star size={13} color={isFeat ? COURT : INK2} strokeWidth={isFeat ? 2.2 : 1.7} fill={isFeat ? COURT : "none"} />
-                                </button>
-                                <button
-                                  className={`inv-icon-btn${isListed ? " selling" : ""}`}
-                                  onClick={e => { e.stopPropagation(); setSellTarget({ card, setId }); }}
-                                  title={isListed ? "En venta — editar publicación" : "Poner en venta"}
-                                >
-                                  <BadgeDollarSign size={isListed ? 16 : 13} color={isListed ? "#d6ff3d" : INK2} strokeWidth={1.8} />
-                                </button>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Line 1: #090 Rowlet */}
-                          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "4px", overflow: "hidden", textAlign: "center" }}>
-                            <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2, flexShrink: 0, letterSpacing: "0.04em" }}>
-                              {numStr}
-                            </span>
-                            <span style={{ fontFamily: MONO, fontSize: "11px", color: INK0, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                              {card.name}
-                            </span>
-                          </div>
-
-                          {/* Line 2: precio + qty controls */}
-                          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
-                            <span style={{ fontFamily: MONO, fontSize: "11px", color: cardPrice !== null ? COURT : INK2, fontWeight: 700, flexShrink: 0 }}>
-                              {cardPrice !== null ? `$${cardPrice.toFixed(2)}` : "—"}
-                            </span>
-
-                            {userId && (
-                              <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-                                <button
-                                  className="inv-qty-btn"
-                                  onClick={() => decrementQty(card, setId, language)}
-                                  style={{ color: INK0 }}
-                                  title="Quitar uno"
-                                >
-                                  −
-                                </button>
-                                <span className="inv-qty-num">{qty}</span>
-                                <button
-                                  className="inv-qty-btn"
-                                  onClick={() => incrementQty(card, setId, language)}
-                                  style={{ color: COURT, borderColor: `${COURT}44` }}
-                                  title="Agregar uno"
-                                >
-                                  +
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
+                    {visibleCards.map(({ card, setId, language }) => (
+                      <InvGridCard
+                        key={`${setId}-${card.id}-${card.version}-${language}`}
+                        card={card}
+                        setId={setId}
+                        language={language}
+                        qty={inventory[invLangKey(card.id, card.version, setId, language)] ?? 0}
+                        isFeat={isFeatured(card, setId)}
+                        isListed={listedKeys.has(`${setId}::${String(card.card_number)}::${card.version}`)}
+                        cardPrice={priceOf(card, setId)}
+                        showActions={!!userId}
+                        onOpen={openCard}
+                        onSell={openSell}
+                        onToggleFeatured={toggleFeatured}
+                        onIncrement={incrementQty}
+                        onDecrement={decrementQty}
+                      />
+                    ))}
                   </div>
                 )}
 
@@ -970,3 +928,116 @@ export default function InventarioPage() {
     </div>
   );
 }
+
+/* ── Tarjeta de la grilla ────────────────────────────────────────
+   Memoizada: al tocar +/− en una carta solo se vuelve a pintar esa,
+   no las cincuenta de la página. */
+interface InvGridCardProps {
+  card: PokemonCard;
+  setId: string;
+  language: string;
+  qty: number;
+  isFeat: boolean;
+  isListed: boolean;
+  cardPrice: number | null;
+  showActions: boolean;
+  onOpen: (card: PokemonCard, setId: string) => void;
+  onSell: (card: PokemonCard, setId: string) => void;
+  onToggleFeatured: (card: PokemonCard, setId: string) => void;
+  onIncrement: (card: PokemonCard, setId: string, language: string, qty: number) => void;
+  onDecrement: (card: PokemonCard, setId: string, language: string, qty: number) => void;
+}
+
+const InvGridCard = memo(function InvGridCard({
+  card, setId, language, qty, isFeat, isListed, cardPrice, showActions,
+  onOpen, onSell, onToggleFeatured, onIncrement, onDecrement,
+}: InvGridCardProps) {
+  const numStr = `#${String(card.card_number).padStart(3, "0")}`;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+
+      {/* Card image area */}
+      <div style={{ position: "relative" }}>
+        <InvTiltCard card={card} onClick={() => onOpen(card, setId)} />
+
+        {/* Idioma de esta copia */}
+        <div
+          title={languageLabel(language)}
+          style={{
+            position: "absolute", bottom: 6, left: 6, zIndex: 10,
+            display: "flex", alignItems: "center", gap: "4px",
+            padding: "3px 6px", borderRadius: "5px",
+            background: "rgba(5,7,13,0.85)", backdropFilter: "blur(4px)",
+            pointerEvents: "none",
+          }}
+        >
+          <FlagIcon code={language} width={16} />
+          <span style={{ fontFamily: MONO, fontSize: "8px", letterSpacing: "0.1em", color: INK0, fontWeight: 700 }}>
+            {language.toUpperCase()}
+          </span>
+        </div>
+
+        {/* Estrella + vender (top-left) — el botón de vender avisa por sí solo
+            cuando la carta está publicada, sin una segunda marca en la esquina */}
+        {showActions && (
+          <div style={{ position: "absolute", top: 6, left: 6, display: "flex", flexDirection: "column", gap: "6px", zIndex: 10 }}>
+            <button
+              className={`inv-icon-btn${isFeat ? " active" : ""}`}
+              onClick={e => { e.stopPropagation(); onToggleFeatured(card, setId); }}
+              title={isFeat ? "Quitar de destacadas" : "Destacar en perfil"}
+            >
+              <Star size={13} color={isFeat ? COURT : INK2} strokeWidth={isFeat ? 2.2 : 1.7} fill={isFeat ? COURT : "none"} />
+            </button>
+            <button
+              className={`inv-icon-btn${isListed ? " selling" : ""}`}
+              onClick={e => { e.stopPropagation(); onSell(card, setId); }}
+              title={isListed ? "En venta — editar publicación" : "Poner en venta"}
+            >
+              <BadgeDollarSign size={isListed ? 16 : 13} color={isListed ? "#d6ff3d" : INK2} strokeWidth={1.8} />
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Line 1: #090 Rowlet */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "4px", overflow: "hidden", textAlign: "center" }}>
+        <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2, flexShrink: 0, letterSpacing: "0.04em" }}>
+          {numStr}
+        </span>
+        <span style={{ fontFamily: MONO, fontSize: "11px", color: INK0, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+          {card.name}
+        </span>
+      </div>
+
+      {/* Line 2: precio + qty controls */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
+        <span style={{ fontFamily: MONO, fontSize: "11px", color: cardPrice !== null ? COURT : INK2, fontWeight: 700, flexShrink: 0 }}>
+          {cardPrice !== null ? `$${cardPrice.toFixed(2)}` : "—"}
+        </span>
+
+        {showActions && (
+          <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+            <button
+              className="inv-qty-btn"
+              onClick={() => onDecrement(card, setId, language, qty)}
+              style={{ color: INK0 }}
+              title="Quitar uno"
+            >
+              −
+            </button>
+            <span className="inv-qty-num">{qty}</span>
+            <button
+              className="inv-qty-btn"
+              onClick={() => onIncrement(card, setId, language, qty)}
+              style={{ color: COURT, borderColor: `${COURT}44` }}
+              title="Agregar uno"
+            >
+              +
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});

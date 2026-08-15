@@ -18,6 +18,13 @@ export type Snapshot       = { date: string; total_usd: number; card_count: numb
 export type HourlySnapshot = { hour_bucket: string; total_usd: number; card_count: number };
 type Range = "1D" | "1M" | "3M" | "6M" | "1Y";
 
+/**
+ * Alto reservado para la cabecera del gráfico. Mientras carga solo hay una
+ * línea de etiqueta; con datos aparecen además el valor grande y la variación,
+ * y sin reservar el hueco la tarjeta crecía y empujaba todo el panel (CLS).
+ */
+const HEADER_MIN_H = "56px";
+
 function ChartSVG({ chartData, xLabel, height = 160 }: {
   chartData: { label: string; value: number }[];
   xLabel?: (d: { label: string; value: number }, idx: number, arr: { label: string; value: number }[]) => string;
@@ -159,7 +166,7 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
 
   if (data.length === 0) return (
     <div>
-      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "20px", flexWrap: "wrap", gap: "10px" }}>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "20px", flexWrap: "wrap", gap: "10px", minHeight: HEADER_MIN_H }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
           <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: 0 }}>
             Historial de valor del inventario
@@ -199,7 +206,7 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
   return (
     <div>
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "20px", flexWrap: "wrap", gap: "10px" }}>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "20px", flexWrap: "wrap", gap: "10px", minHeight: HEADER_MIN_H }}>
         <div>
           <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: "0 0 6px" }}>
             {isDay ? `Hoy ${todayUTC} — por hora` : "Historial de valor del inventario"}

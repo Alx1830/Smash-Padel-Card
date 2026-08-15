@@ -2,7 +2,8 @@ import { getAuthedPlayer } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { DashboardLayoutClient } from "./DashboardLayoutClient";
 
-export const dynamic = "force-dynamic";
+/* No hace falta `force-dynamic`: getAuthedPlayer() lee cookies() y eso ya
+   marca el árbol como dinámico. */
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, profile } = await getAuthedPlayer();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { memo, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -41,7 +41,8 @@ const formatCash = (raw: string) => {
 };
 
 const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
-const SET_NAME = (id: string) => ALL_SETS.find(s => s.id === id)?.name ?? id;
+const SET_NAME_BY_ID = new Map(ALL_SETS.map(s => [s.id, s.name]));
+const SET_NAME = (id: string) => SET_NAME_BY_ID.get(id) ?? id;
 
 interface Player {
   user_id:    string;
@@ -168,8 +169,16 @@ function TradesPageInner() {
 
   /* ── Filtros ──────────────────────────────────────────────── */
   const [fNombre, setFNombre]     = useState("");
+  /** El texto tecleado se aplica con retardo: filtrar en cada tecla bloquea el hilo */
+  const [fNombreQuery, setFNombreQuery] = useState("");
   const [fSet, setFSet]           = useState("");
   const [fVariante, setFVariante] = useState("");
+
+  useEffect(() => {
+    if (fNombre === fNombreQuery) return;
+    const t = setTimeout(() => setFNombreQuery(fNombre), 250);
+    return () => clearTimeout(t);
+  }, [fNombre, fNombreQuery]);
 
   /* ── Usuario actual ───────────────────────────────────────── */
   useEffect(() => {
@@ -329,8 +338,22 @@ function TradesPageInner() {
   /* ── Resolución de metadata ───────────────────────────────── */
   const resolve = useCallback((rows: InvRow[]): Entry[] => {
     void cardsReady; // recalcula cuando termina de cargar cada set
+    // Un índice por set en vez de un .find() lineal por cada fila de inventario
+    const byId = new Map<string, Map<string, PokemonCard>>();
+    const indexOf = (setId: string) => {
+      let idx = byId.get(setId);
+      if (!idx) {
+        idx = new Map<string, PokemonCard>();
+        for (const c of SET_CARDS[setId] ?? []) {
+          const k = String(c.id);
+          if (!idx.has(k)) idx.set(k, c); // .find() se quedaba con la primera
+        }
+        byId.set(setId, idx);
+      }
+      return idx;
+    };
     return rows.map(r => {
-      const card = SET_CARDS[r.set_id]?.find(c => String(c.id) === String(r.card_id));
+      const card = indexOf(r.set_id).get(String(r.card_id));
       if (!card) return null;
       return {
         key: rowKey(r),
@@ -387,12 +410,16 @@ function TradesPageInner() {
   const request = requestState ?? initialRequest;
 
   /* ── Filtros aplicados a ambas columnas ───────────────────── */
-  const applyFilters = useCallback((entries: Entry[]) => entries.filter(e => {
-    if (fNombre.trim() && !e.card.name.toLowerCase().includes(fNombre.trim().toLowerCase())) return false;
-    if (fSet && e.set_id !== fSet) return false;
-    if (fVariante && e.card.version !== fVariante) return false;
-    return true;
-  }), [fNombre, fSet, fVariante]);
+  const applyFilters = useCallback((entries: Entry[]) => {
+    const needle = fNombreQuery.trim().toLowerCase();
+    if (!needle && !fSet && !fVariante) return entries;
+    return entries.filter(e => {
+      if (needle && !e.card.name.toLowerCase().includes(needle)) return false;
+      if (fSet && e.set_id !== fSet) return false;
+      if (fVariante && e.card.version !== fVariante) return false;
+      return true;
+    });
+  }, [fNombreQuery, fSet, fVariante]);
 
   const filteredMatches = useMemo(() => applyFilters(matches), [matches, applyFilters]);
   const filteredMine    = useMemo(() => applyFilters(myEntries), [myEntries, applyFilters]);
@@ -411,16 +438,30 @@ function TradesPageInner() {
   }, [myEntries, peerEntries]);
 
   const hasFilters = !!(fNombre || fSet || fVariante);
-  const clearFilters = () => { setFNombre(""); setFSet(""); setFVariante(""); };
+  const clearFilters = () => { setFNombre(""); setFNombreQuery(""); setFSet(""); setFVariante(""); };
 
   /* ── Selección ────────────────────────────────────────────── */
-  const bump = (which: "offer" | "request", key: string, delta: number, max: number) => {
-    const cur = which === "offer" ? offer : request;
-    const next = Math.min(max, Math.max(0, (cur[key] ?? 0) + delta));
-    const copy = { ...cur };
-    if (next === 0) delete copy[key]; else copy[key] = next;
-    (which === "offer" ? setOffer : setRequest)(copy);
-  };
+  /* Los handlers son estables (actualización funcional) para que tocar una
+     carta no obligue a repintar la columna entera. */
+  const bumpOffer = useCallback((key: string, delta: number, max: number) => {
+    setOffer(prev => {
+      const cur  = prev ?? initialOffer;
+      const next = Math.min(max, Math.max(0, (cur[key] ?? 0) + delta));
+      const copy = { ...cur };
+      if (next === 0) delete copy[key]; else copy[key] = next;
+      return copy;
+    });
+  }, [initialOffer]);
+
+  const bumpRequest = useCallback((key: string, delta: number, max: number) => {
+    setRequest(prev => {
+      const cur  = prev ?? initialRequest;
+      const next = Math.min(max, Math.max(0, (cur[key] ?? 0) + delta));
+      const copy = { ...cur };
+      if (next === 0) delete copy[key]; else copy[key] = next;
+      return copy;
+    });
+  }, [initialRequest]);
 
   const dropFrom = (which: "offer" | "request", key: string) => {
     const copy = { ...(which === "offer" ? offer : request) };
@@ -824,7 +865,7 @@ function TradesPageInner() {
                 : "No tienes cartas en tu inventario."}
               entries={myTab === "match" ? filteredMatches : filteredMine}
               selected={offer}
-              onBump={(key, d, max) => bump("offer", key, d, max)}
+              onBump={bumpOffer}
               tabs={
                 <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
                   {([
@@ -858,7 +899,7 @@ function TradesPageInner() {
                 : "Él no tiene ninguna carta de tu wishlist."}
               entries={filteredPeer}
               selected={request}
-              onBump={(key, d, max) => bump("request", key, d, max)}
+              onBump={bumpRequest}
               tabs={
                 <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
                   {([
@@ -1266,10 +1307,23 @@ function Column({ title, subtitle, accent, entries, selected, onBump, loading, e
           <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, lineHeight: 1.6 }}>{empty}</p>
         ) : (
           <div className="trade-grid">
-            {entries.map(e => {
-              const qty = selected[e.key] ?? 0;
-              return (
-                <div key={e.key}>
+            {entries.map(e => (
+              <TradeCard key={e.key} entry={e} qty={selected[e.key] ?? 0} accent={accent} onBump={onBump} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/** Tarjeta de una columna, memoizada: al tocar +/− solo se repinta esa carta */
+const TradeCard = memo(function TradeCard({ entry: e, qty, accent, onBump }: {
+  entry: Entry; qty: number; accent: string;
+  onBump: (key: string, delta: number, max: number) => void;
+}) {
+  return (
+                <div>
                   <div style={{ position: "relative" }}>
                     <InvTiltCard card={e.card} onClick={() => onBump(e.key, qty > 0 ? -qty : 1, e.quantity)} />
                     {qty > 0 && (
@@ -1334,14 +1388,8 @@ function Column({ title, subtitle, accent, entries, selected, onBump, loading, e
                     </button>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    </div>
   );
-}
+});
 
 /* ── Resumen lateral ────────────────────────────────────────── */
 function Summary({ label, accent, count, total, items, entryByKey, onRemove }: {

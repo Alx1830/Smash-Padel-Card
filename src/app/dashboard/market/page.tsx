@@ -25,10 +25,20 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
 const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
+const SET_BY_ID = new Map(ALL_SETS.map(s => [s.id, s]));
+
+/**
+ * Llave del índice de cartas: `set::tipo:número::versión`. Lleva el tipo
+ * porque la comparación original era estricta y un card_id de texto no
+ * cruzaba con un card_number numérico.
+ */
+const cardKey = (setId: string, cardId: number | string, version: string) =>
+  `${setId}::${typeof cardId}:${cardId}::${version}`;
 
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { CARD_LANGUAGES } from "@/lib/languages";
 import { FlagIcon } from "@/components/FlagIcon";
+import { CardGridSkeleton } from "@/components/CardGridSkeleton";
 
 interface Listing {
   id: string;
@@ -51,8 +61,16 @@ export default function DashboardMarketPage() {
   const [userId, setUserId]       = useState<string | null>(null);
 
   const [fNombre,   setFNombre]   = useState("");
+  /** El texto tecleado se aplica con retardo: filtrar en cada tecla bloquea el hilo */
+  const [fNombreQuery, setFNombreQuery] = useState("");
   const [fSet,      setFSet]      = useState("");
   const [fVariante, setFVariante] = useState("");
+
+  useEffect(() => {
+    if (fNombre === fNombreQuery) return;
+    const t = setTimeout(() => setFNombreQuery(fNombre), 250);
+    return () => clearTimeout(t);
+  }, [fNombre, fNombreQuery]);
 
   /* Publicaciones sin idioma (creadas antes de esta función) */
   const [langFixOpen, setLangFixOpen] = useState(false);
@@ -76,17 +94,37 @@ export default function DashboardMarketPage() {
     return [...vs].sort();
   }, [listings]);
 
-  const filtered = useMemo(() => listings.filter(l => {
-    const cards = setCards[l.set_id];
-    const card  = cards?.find((c: any) => c.card_number === l.card_id && c.version === l.version);
-    if (fNombre.trim() && !card?.name?.toLowerCase().includes(fNombre.trim().toLowerCase())) return false;
-    if (fSet && l.set_id !== fSet) return false;
-    if (fVariante && l.version !== fVariante) return false;
-    return true;
-  }), [listings, setCards, fNombre, fSet, fVariante]);
+  const cardIndex = useMemo(() => {
+    const m = new Map<string, any>();
+    for (const [setId, cards] of Object.entries(setCards)) {
+      for (const c of cards ?? []) {
+        const k = cardKey(setId, c.card_number, c.version);
+        if (!m.has(k)) m.set(k, c); // .find() se quedaba con la primera
+      }
+    }
+    return m;
+  }, [setCards]);
+
+  const cardFor = useCallback(
+    (l: { set_id: string; card_id: number | string; version: string }) =>
+      cardIndex.get(cardKey(l.set_id, l.card_id, l.version)),
+    [cardIndex]);
+
+  const filtered = useMemo(() => {
+    const needle = fNombreQuery.trim().toLowerCase();
+    return listings.filter(l => {
+      if (needle && !cardFor(l)?.name?.toLowerCase().includes(needle)) return false;
+      if (fSet && l.set_id !== fSet) return false;
+      if (fVariante && l.version !== fVariante) return false;
+      return true;
+    });
+  }, [listings, cardFor, fNombreQuery, fSet, fVariante]);
+
+  /** Sets presentes en las publicaciones — evita un .some() por opción del select */
+  const setIdsWithListings = useMemo(() => new Set(listings.map(l => l.set_id)), [listings]);
 
   const hasFilters = fNombre || fSet || fVariante;
-  function clearFilters() { setFNombre(""); setFSet(""); setFVariante(""); }
+  function clearFilters() { setFNombre(""); setFNombreQuery(""); setFSet(""); setFVariante(""); }
 
   /* Modal state */
   const [modalTarget, setModalTarget]       = useState<{ card: PokemonCard; setId: string } | null>(null);
@@ -165,8 +203,7 @@ export default function DashboardMarketPage() {
 
   const openModal = async (listing: Listing) => {
     if (!userId) return;
-    const cards = setCards[listing.set_id];
-    const card  = cards?.find((c: any) => c.card_number === listing.card_id && c.version === listing.version);
+    const card = cardFor(listing);
     if (!card) return;
 
     const supabase = createClient();
@@ -260,8 +297,17 @@ export default function DashboardMarketPage() {
 
       <div className="dmkt-body">
         {loading ? (
-          <div style={{ padding: "80px 0", textAlign: "center", fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em" }}>
-            Cargando...
+          /* El esqueleto ocupa el mismo alto que la grilla real (misma clase,
+             mismas columnas por breakpoint) para que no salte al llegar los
+             datos; antes era una línea de texto de 80px. */
+          <div className="dmkt-layout" style={{ marginTop: "28px" }}>
+            <aside className="dmkt-sidebar">
+              <div style={{ height: "300px", borderRadius: "16px", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }} />
+            </aside>
+            <div className="dmkt-grid-area">
+              <style>{`@media (max-width: 767px) { .dmkt-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
+              <CardGridSkeleton className="dmkt-cards-grid" count={12} radius={14} infoHeight={116} />
+            </div>
           </div>
         ) : (
           <div className="dmkt-layout" style={{ marginTop: "28px" }}>
@@ -294,7 +340,7 @@ export default function DashboardMarketPage() {
                   <label style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px" }}>Set</label>
                   <select value={fSet} onChange={e => setFSet(e.target.value)} style={{ width: "100%", padding: "8px 10px", borderRadius: "7px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: INK0, fontFamily: MONO, fontSize: "12px", outline: "none", boxSizing: "border-box", cursor: "pointer", appearance: "none" }}>
                     <option value="" style={{ background: "#0a0e1a" }}>Todos los sets</option>
-                    {ALL_SETS.filter(s => listings.some(l => l.set_id === s.id)).map(s => (
+                    {ALL_SETS.filter(s => setIdsWithListings.has(s.id)).map(s => (
                       <option key={s.id} value={s.id} style={{ background: "#0a0e1a", color: INK0 }}>{s.name}</option>
                     ))}
                   </select>
@@ -319,9 +365,8 @@ export default function DashboardMarketPage() {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="dmkt-cards-grid">
                 <style>{`@media (max-width: 767px) { .dmkt-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
                 {filtered.map(listing => {
-              const cards   = setCards[listing.set_id];
-              const card    = cards?.find((c: any) => c.card_number === listing.card_id && c.version === listing.version);
-              const setInfo = ALL_SETS.find(s => s.id === listing.set_id);
+              const card    = cardFor(listing);
+              const setInfo = SET_BY_ID.get(listing.set_id);
               const verColor = getVersionColor(listing.version);
               const verFull  = getVersionLabel(listing.version);
               const busy     = removing === listing.id;
@@ -456,8 +501,7 @@ export default function DashboardMarketPage() {
             </div>
             <div style={{ overflowY: "auto", padding: "16px 24px 24px", display: "flex", flexDirection: "column", gap: "14px" }}>
               {missingLang.map(listing => {
-                const cards = setCards[listing.set_id];
-                const card  = cards?.find((c: any) => c.card_number === listing.card_id && c.version === listing.version);
+                const card = cardFor(listing);
                 return (
                   <div key={listing.id} style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "10px 12px" }}>
                     <div style={{ position: "relative", width: "40px", height: "56px", borderRadius: "5px", overflow: "hidden", flexShrink: 0, background: "rgba(255,255,255,0.04)" }}>
