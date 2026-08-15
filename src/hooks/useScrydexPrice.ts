@@ -232,6 +232,23 @@ export const SCRYDEX_SET_CODES: Record<string, string> = {
   "trick-or-trade-booster-bundle":      "tot22",
   "trick-or-trade-booster-bundle-2023": "tot23",
   "trick-or-trade-booster-bundle-2024": "tot24",
+
+  // ── Sets que estaban sin código y por eso salían sin precio en toda la app.
+  //    El código sale de la URL de sus propias imágenes (r2.dev/pokemon/<code>-<n>)
+  //    y está verificado contra card_prices_merged.
+  "white-flare":          "rsv10pt5",
+  "black-bolt":           "zsv10pt5",
+  "mega-evo-promos":      "mep",
+  "sv-energies":          "sve",
+  "crown-zenith-gg":      "swsh12pt5gg",
+  "silver-tempest-tg":    "swsh12tg",
+  "lost-origin-tg":       "swsh11tg",
+  "astral-radiance-tg":   "swsh10tg",
+  "brilliant-stars-tg":   "swsh9tg",
+  "futsal-promos":        "fut20",
+  "pokemon-rumble":       "ru1",
+  "nintendo-promos":      "np",
+  "best-of-game":         "bp",
 };
 
 const supabase = createClient(
