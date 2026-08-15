@@ -14,7 +14,7 @@ copiar el de `src/app/dashboard/admin/aprobaciones/page.tsx` o el de
 
 ```
 <div className="xx-page">      fondo #05070d, padding 40px 24px (28px 16px en móvil)
-  <div className="xx-wrap">    max-width 1400px, margin 0 auto
+  <div className="xx-wrap">    max-width 1400px, alineado a la izquierda (sin margin auto)
     cabecera                   antetítulo + h1 + bajada
     filtros / pestañas         píldoras redondas
     grilla                     .xx-grid

@@ -13,6 +13,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
+import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
@@ -64,6 +65,10 @@ export default function AprobacionesPage() {
   const [rechazando, setRechazando] = useState<Listing | null>(null);
   const [motivo, setMotivo]     = useState("");
   const [error, setError]       = useState<string | null>(null);
+  /** Dólar del día, para comparar contra lo que cobra el vendedor */
+  const [trm, setTrm]           = useState<{ cop: number; fecha: string; fuente: string } | null>(null);
+  /** Precio de mercado en USD por set: { setId: { "me2pt5-122": { holofoil: 3.2 } } } */
+  const [precios, setPrecios]   = useState<Record<string, Record<string, Record<string, number>>>>({});
 
   useEffect(() => {
     (async () => {
@@ -76,6 +81,13 @@ export default function AprobacionesPage() {
     })();
   }, [router]);
 
+  useEffect(() => {
+    fetch("/api/trm")
+      .then(r => (r.ok ? r.json() : null))
+      .then(j => { if (j?.cop) setTrm(j); })
+      .catch(() => {});
+  }, []);
+
   const cargar = useCallback(async (estado: Estado) => {
     setCargando(true);
     setError(null);
@@ -86,7 +98,9 @@ export default function AprobacionesPage() {
       const rows = (json.listings ?? []) as Listing[];
       setListings(rows);
       setPendientes(json.pendingCount ?? 0);
-      await loadManySets([...new Set(rows.map(r => r.set_id))]);
+      const setIds = [...new Set(rows.map(r => r.set_id))];
+      await loadManySets(setIds);
+      await cargarPrecios(setIds);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error inesperado");
     }
@@ -96,6 +110,46 @@ export default function AprobacionesPage() {
   useEffect(() => {
     if (!checking) cargar(tab);
   }, [checking, tab, cargar]);
+
+  /** Precio de mercado en USD de cada carta, la misma fuente que el inventario */
+  async function cargarPrecios(setIds: string[]) {
+    const supabase = createClient();
+    await Promise.all(setIds.map(async setId => {
+      const sc = SCRYDEX_SET_CODES[setId];
+      if (!sc) return;
+      const { data } = await supabase
+        .from("card_prices_merged").select("card_id, prices").like("card_id", `${sc}-%`);
+      if (!data) return;
+      const mapa: Record<string, Record<string, number>> = {};
+      for (const fila of data) mapa[fila.card_id] = fila.prices as Record<string, number>;
+      setPrecios(prev => ({ ...prev, [setId]: mapa }));
+    }));
+  }
+
+  /**
+   * Compara lo que cobra el vendedor contra el precio de mercado.
+   * El mercado viene en dólares y casi todos publican en pesos, así que la
+   * comparación pasa por la TRM del día.
+   */
+  function comparar(l: Listing) {
+    const sc = SCRYDEX_SET_CODES[l.set_id];
+    const porCarta = sc ? precios[l.set_id]?.[`${sc}-${l.card_id}`] : undefined;
+    if (!porCarta) return null;
+
+    const vk  = l.version.toLowerCase().replace(/\s+/g, "");
+    const usd = porCarta[vk] ?? porCarta[l.version] ?? porCarta["normal"] ?? null;
+    if (usd === null) return null;
+
+    /* Solo se puede comparar si sabemos pasar su moneda a dólares */
+    const enUsd =
+      l.currency === "USD" ? l.price_cop
+      : l.currency === "COP" && trm ? l.price_cop / trm.cop
+      : null;
+
+    const referenciaCop = trm ? Math.round(usd * trm.cop) : null;
+    const diff = enUsd !== null && usd > 0 ? Math.round(((enUsd - usd) / usd) * 100) : null;
+    return { usd, referenciaCop, diff };
+  }
 
   async function moderar(id: string, action: "approve" | "reject" | "revert", reason?: string) {
     setTrabajando(id);
@@ -132,10 +186,12 @@ export default function AprobacionesPage() {
   return (
     <div className="ap-page">
       <style>{`
-        /* Patrón de página del dashboard: contenedor centrado, cabecera con
-           antetítulo, y grilla que baja de 6 columnas a 2 en el celular */
+        /* Patrón de página del dashboard: cabecera con antetítulo y grilla que
+           baja de 6 columnas a 2 en el celular */
         .ap-page  { min-height: 100vh; background: #05070d; padding: 40px 24px; }
-        .ap-wrap  { max-width: 1400px; margin: 0 auto; }
+        /* Alineado a la izquierda, no centrado: con pocas cartas el contenido
+           quedaba flotando en la mitad de la pantalla */
+        .ap-wrap  { max-width: 1400px; }
 
         .ap-tab { background: none; border: 1px solid rgba(255,255,255,0.12); border-radius: 999px;
                   padding: 7px 16px; cursor: pointer; font-family: ${MONO}; font-size: 10px;
@@ -181,6 +237,11 @@ export default function AprobacionesPage() {
           <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.06em", margin: "8px 0 0" }}>
             Ninguna carta llega al market sin pasar por aquí
           </p>
+          {trm && (
+            <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, letterSpacing: "0.06em", margin: "6px 0 0", opacity: 0.75 }}>
+              Dólar de hoy ${trm.cop.toLocaleString("es-CO")} COP · {trm.fuente}
+            </p>
+          )}
         </div>
 
         {/* Tabs */}
@@ -241,6 +302,29 @@ export default function AprobacionesPage() {
                       title={`@${l.player?.username ?? "—"} · ${new Date(l.created_at).toLocaleDateString("es-CO")}`}>
                       @{l.player?.username ?? "—"} · {new Date(l.created_at).toLocaleDateString("es-CO", { day: "2-digit", month: "short" })}
                     </div>
+
+                    {(() => {
+                      const c = comparar(l);
+                      if (!c) return null;
+                      const color = c.diff === null ? INK2 : c.diff > 15 ? CRIT : c.diff < -15 ? BALL : COURT;
+                      return (
+                        <div style={{ borderTop: "1px dashed rgba(255,255,255,0.1)", paddingTop: 5, display: "flex", flexDirection: "column", gap: 2 }}>
+                          <div style={{ fontFamily: MONO, fontSize: 8, color: INK2, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                            Mercado
+                          </div>
+                          <div style={{ fontFamily: MONO, fontSize: 10, color: INK1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
+                            title={trm ? `US$${c.usd.toFixed(2)} · dólar a $${trm.cop.toLocaleString("es-CO")} (${trm.fuente}, ${trm.fecha})` : undefined}>
+                            US${c.usd.toFixed(2)}
+                            {c.referenciaCop !== null && ` · $${c.referenciaCop.toLocaleString("es-CO")}`}
+                          </div>
+                          {c.diff !== null && (
+                            <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, color }}>
+                              {c.diff > 0 ? "+" : ""}{c.diff}% {c.diff > 0 ? "sobre" : c.diff < 0 ? "bajo" : "en"} mercado
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
 
                     {l.rejection_reason && (
                       <div style={{ fontFamily: MONO, fontSize: 9, color: CRIT, lineHeight: 1.45, background: "rgba(255,93,93,0.07)", border: "1px solid rgba(255,93,93,0.2)", borderRadius: 6, padding: "6px 7px" }}>
