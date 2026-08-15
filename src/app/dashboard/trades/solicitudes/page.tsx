@@ -329,6 +329,9 @@ function SolicitudesPageInner() {
         .sol-scroll::-webkit-scrollbar { width: 7px; }
         .sol-scroll::-webkit-scrollbar-track { background: transparent; }
         .sol-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
+        /* Historial del chat: alto propio en la lista, estirado en la vista de
+           una sola solicitud (más abajo, en .sol-full) */
+        .sol-chat-msgs { max-height: 230px; overflow-y: auto; }
         .sol-cards { display: grid; grid-template-columns: 1fr; gap: 16px; }
         @media (min-width: 640px) { .sol-cards { grid-template-columns: 1fr 1fr; } }
         /* Propuesta y negociación lado a lado cuando hay ancho */
@@ -338,9 +341,12 @@ function SolicitudesPageInner() {
           .sol-split { grid-template-columns: minmax(0, 1fr) minmax(340px, 26%); align-items: start; }
           /* Viendo una sola solicitud las dos tarjetas llegan hasta abajo */
           .sol-split.sol-full { align-items: stretch; min-height: calc(100vh - 132px); }
-          .sol-split.sol-full > div { height: 100%; display: flex; flex-direction: column; }
+          .sol-split.sol-full > div { height: 100%; min-height: 0; display: flex; flex-direction: column; }
           .sol-full .sol-chat-body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-          .sol-full .sol-chat-msgs { flex: 1; max-height: none; }
+          /* El historial ocupa todo lo que sobre y el campo de escribir queda
+             pegado al fondo de la tarjeta */
+          .sol-full .sol-chat-msgs { flex: 1; min-height: 0; max-height: none; }
+          .sol-full .sol-chat-input { margin-top: auto; flex-shrink: 0; }
         }
       `}</style>
 
@@ -776,8 +782,9 @@ function TradeChat({ tradeId, meId, other, open, onToggle, supabase }: {
 
       {open && (
         <div className="sol-chat-body" style={{ marginTop: 12 }}>
+          {/* El alto va por CSS, no en línea: un max-height inline le gana a la
+              regla que lo estira en la vista de una sola solicitud */}
           <div className="sol-scroll sol-chat-msgs" style={{
-            maxHeight: 230, overflowY: "auto",
             display: "flex", flexDirection: "column", gap: 8,
             paddingRight: 4,
           }}>
@@ -842,7 +849,7 @@ function TradeChat({ tradeId, meId, other, open, onToggle, supabase }: {
             <div ref={endRef} />
           </div>
 
-          <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+          <div className="sol-chat-input" style={{ display: "flex", gap: 8, marginTop: 12 }}>
             <input
               value={draft}
               maxLength={1000}
