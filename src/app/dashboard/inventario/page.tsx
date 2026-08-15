@@ -101,7 +101,7 @@ export default function InventarioPage() {
       supabase.from("featured_cards").select("card_id, set_id").eq("user_id", uid),
       fetchAllRows<WishlistCard>((from, to) => supabase.from("card_wishlist")
         .select("card_id, set_id").eq("user_id", uid).range(from, to)),
-      supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", uid).eq("status", "active"),
+      supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", uid).in("status", ["active", "pending"]),
     ]);
     // Cada fila es una carta en un idioma. El mapa guarda la cantidad de esa
     // fila y, aparte, el total de la carta sumando todos sus idiomas.

@@ -87,7 +87,7 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", userId),
         fetchAllRows<WishlistCard>((from, to) => supabase.from("card_wishlist")
           .select("card_id, set_id").eq("user_id", userId).range(from, to)),
-        supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", userId).eq("status", "active"),
+        supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", userId).in("status", ["active", "pending"]),
         fetchAllRows<{ card_id: string; set_id: string; version: string | null; quantity: number }>(
           (from, to) => supabase.from("card_inventory")
             .select("card_id, set_id, version, quantity")

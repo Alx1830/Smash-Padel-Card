@@ -317,7 +317,7 @@ export function CardDetailModal({
       currency: userCurrency,
       version: card.version,
       language: sellLanguage,
-      status: "active",
+      status: "pending",
     }).select("id, card_id, set_id, price_cop, version, currency, language").single();
     if (error) {
       console.error("[sell] insert error:", error.message);

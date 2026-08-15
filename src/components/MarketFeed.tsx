@@ -385,6 +385,15 @@ export function MarketFeed() {
         const [enriched] = await enrichRows([r], "listing", supabase);
         if (enriched) setItems(prev => [enriched, ...prev]);
       })
+      /* Una carta aprobada entra al feed recién cuando el admin la aprueba,
+         y eso llega como UPDATE, no como INSERT */
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "market_listings" }, async payload => {
+        const r   = payload.new as { id: string; card_id: number; set_id: string; price_cop: number; currency: string; version: string; language: string | null; created_at: string; user_id: string; status: string };
+        const old = payload.old as { status?: string };
+        if (r.status !== "active" || old?.status === "active") return;
+        const [enriched] = await enrichRows([r], "listing", supabase);
+        if (enriched) setItems(prev => (prev.some(i => i.id === enriched.id) ? prev : [enriched, ...prev]));
+      })
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "card_wishlist" }, async payload => {
         const r = payload.new as { id: string; card_id: number; set_id: string; version: string; created_at: string; user_id: string };
         const [enriched] = await enrichRows([{ ...r, price_cop: 0, currency: "COP" }], "wishlist", supabase);

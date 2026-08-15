@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { MobileTabBar } from "@/components/MobileTabBar";
-import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Swords, Gamepad2, WalletCards, ArrowLeftRight, Link2 } from "lucide-react";
+import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Swords, Gamepad2, WalletCards, ArrowLeftRight, Link2, ShieldCheck } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { usePushPermission } from "@/hooks/usePushPermission";
 import { DashboardUserProvider } from "./DashboardUserContext";
@@ -52,6 +52,7 @@ export function DashboardLayoutClient({
   const [username, setUsername] = useState<string | null>(initialUsername);
   const [userId,   setUserId]   = useState<string | null>(initialUserId);
   const [isAdmin,  setIsAdmin]  = useState(initialIsAdmin);
+  const [pendingListings, setPendingListings] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [notifDrawerOpen, setNotifDrawerOpen] = useState(false);
   const [notifAnchorRect, setNotifAnchorRect] = useState<DOMRect | null>(null);
@@ -113,6 +114,17 @@ export function DashboardLayoutClient({
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /* Cuántas publicaciones esperan aprobación, para el aviso del menú */
+  useEffect(() => {
+    if (!isAdmin) return;
+    let vivo = true;
+    fetch("/api/admin/listings?status=pending")
+      .then(r => (r.ok ? r.json() : null))
+      .then(j => { if (vivo && j) setPendingListings(j.pendingCount ?? 0); })
+      .catch(() => {});
+    return () => { vivo = false; };
+  }, [isAdmin]);
 
   /* Presence — trackea al usuario en el canal online-users */
   useEffect(() => {
@@ -223,6 +235,21 @@ export function DashboardLayoutClient({
           >
             <Newspaper size={14} color="#4ff0ff" strokeWidth={1.8} />
             <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Feed post</span>
+          </a>
+          <a href="/dashboard/admin/aprobaciones" style={{
+            display: "flex", alignItems: "center", gap: "10px",
+            padding: "10px 14px", textDecoration: "none",
+          }}
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(79,240,255,0.07)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+          >
+            <ShieldCheck size={14} color="#4ff0ff" strokeWidth={1.8} />
+            <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Cartas por aprobar</span>
+            {pendingListings > 0 && (
+              <span style={{ marginLeft: "auto", minWidth: 18, height: 18, borderRadius: 9, background: "#d6ff3d", color: "#05070d", fontFamily: MONO, fontSize: 10, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 5px" }}>
+                {pendingListings > 99 ? "99+" : pendingListings}
+              </span>
+            )}
           </a>
           <a href="/dashboard/admin/mapeo" style={{
             display: "flex", alignItems: "center", gap: "10px",

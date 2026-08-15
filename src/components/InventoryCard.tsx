@@ -199,7 +199,7 @@ export function SellPopup({ card, setId, userId, onPublished, onClose }: {
     setState("saving");
     const { data, error } = await supabase.from("market_listings").insert({
       user_id: userId, card_id: card.card_number, set_id: setId,
-      price_cop: p, version: card.version, status: "active", currency: userCurrency,
+      price_cop: p, version: card.version, status: "pending", currency: userCurrency,
     }).select("id, card_id, set_id, price_cop, version, currency").single();
     if (!error && data) onPublished(data as UserListing);
     setState("done");

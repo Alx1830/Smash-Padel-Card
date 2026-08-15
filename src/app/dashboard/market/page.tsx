@@ -19,6 +19,7 @@ import { getVersionColor, getVersionLabel } from "@/data/pokemon-cards-meta";
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
+const INK1  = "#c9cfdd";
 const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
@@ -38,6 +39,8 @@ interface Listing {
   version: string;
   language: string | null;
   created_at: string;
+  status: string;
+  rejection_reason: string | null;
 }
 
 export default function DashboardMarketPage() {
@@ -102,9 +105,9 @@ export default function DashboardMarketPage() {
       const [{ data: rows }, { data: featured }, wishlist] = await Promise.all([
         supabase
           .from("market_listings")
-          .select("id, card_id, set_id, price_cop, currency, version, language, created_at")
+          .select("id, card_id, set_id, price_cop, currency, version, language, created_at, status, rejection_reason")
           .eq("user_id", user.id)
-          .eq("status", "active")
+          .in("status", ["active", "pending", "rejected"])
           .order("created_at", { ascending: false }),
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", user.id),
         fetchAllRows<WishlistCard>((from, to) => supabase.from("card_wishlist")
@@ -187,7 +190,8 @@ export default function DashboardMarketPage() {
       prev.filter(l => updated.some(u => u.id === l.id))
         .map(l => { const u = updated.find(u => u.id === l.id); return u ? { ...l, price_cop: u.price_cop } : l; })
         .concat(updated.filter(u => !prev.some(l => l.id === u.id))
-          .map(u => ({ id: u.id, card_id: u.card_id, set_id: u.set_id, price_cop: u.price_cop, currency: (u as Listing).currency ?? "COP", version: u.version, language: u.language ?? null, created_at: new Date().toISOString() })))
+          /* Recién publicada desde el modal: nace esperando aprobación */
+          .map(u => ({ id: u.id, card_id: u.card_id, set_id: u.set_id, price_cop: u.price_cop, currency: (u as Listing).currency ?? "COP", version: u.version, language: u.language ?? null, created_at: new Date().toISOString(), status: "pending", rejection_reason: null })))
     );
   }, []);
 
@@ -333,6 +337,32 @@ export default function DashboardMarketPage() {
                     <div style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color: verColor, border: `1px solid ${verColor}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>
                       {verFull}
                     </div>
+                    {listing.status !== "active" && (
+                      <div style={{
+                        position: "absolute", inset: 0, display: "flex", flexDirection: "column",
+                        alignItems: "center", justifyContent: "center", gap: 6, textAlign: "center",
+                        padding: "0 12px", background: "rgba(5,7,13,0.78)",
+                      }}>
+                        <span style={{
+                          fontFamily: MONO, fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase",
+                          fontWeight: 700, padding: "4px 10px", borderRadius: 999,
+                          color: listing.status === "pending" ? "#ffc447" : "#ff5d5d",
+                          border: `1px solid ${listing.status === "pending" ? "rgba(255,196,71,0.5)" : "rgba(255,93,93,0.5)"}`,
+                        }}>
+                          {listing.status === "pending" ? "En revisión" : "Rechazada"}
+                        </span>
+                        {listing.status === "rejected" && listing.rejection_reason && (
+                          <span style={{ fontFamily: MONO, fontSize: 9, color: INK1, lineHeight: 1.5 }}>
+                            {listing.rejection_reason}
+                          </span>
+                        )}
+                        <span style={{ fontFamily: MONO, fontSize: 8, color: INK2, lineHeight: 1.5 }}>
+                          {listing.status === "pending"
+                            ? "Nadie la ve hasta que se apruebe"
+                            : "Cambia el precio para enviarla de nuevo"}
+                        </span>
+                      </div>
+                    )}
                     {listing.language ? (
                       <div style={{ position: "absolute", top: "8px", left: "8px", lineHeight: 1, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "4px" }} title="Idioma">
                         <FlagIcon code={listing.language} width={20} />
