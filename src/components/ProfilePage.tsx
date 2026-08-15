@@ -235,7 +235,7 @@ export function ProfilePage({ player }: { player: PlayerData }) {
             {/* marginRight compensa el fan de destacadas que sobresale de su columna.
                 fixedHeight alinea el borde inferior con la card 3D:
                 columna card = 24 padding + CARD_H; aquí restamos paddingTop 20 y título ~35 */}
-            <div style={{ flex: 1, minWidth: 0, paddingTop: "20px", marginRight: "64px" }}>
+            <div className="pp-hero-chart" style={{ flex: 1, minWidth: 0, paddingTop: "20px", marginRight: "64px" }}>
               {player.profileUserId && (
                 <ProfilePortfolioChart
                   userId={player.profileUserId}
@@ -246,7 +246,7 @@ export function ProfilePage({ player }: { player: PlayerData }) {
             </div>
 
             {/* Showcase — right column, siempre visible */}
-            <div style={{ flex: "0 0 auto", width: "clamp(240px, 26%, 340px)", paddingTop: "20px" }}>
+            <div className="pp-hero-showcase" style={{ flex: "0 0 auto", width: "clamp(240px, 26%, 340px)", paddingTop: "20px" }}>
               <Showcase featuredCards={player.featuredCards ?? []} inventoryRows={player.inventoryRows ?? []} />
             </div>
           </div>
@@ -279,6 +279,13 @@ export function ProfilePage({ player }: { player: PlayerData }) {
           @media (min-width: 768px) {
             .profile-desktop { display: block !important; }
             .profile-mobile  { display: none  !important; }
+          }
+          /* Entre 768 y 1023px las tres columnas no caben: la card 3D escalada
+             y las destacadas dejan al gráfico en unos pocos píxeles. Se va el
+             gráfico y las destacadas ocupan el hueco. */
+          @media (max-width: 1023px) {
+            .pp-hero-chart    { display: none !important; }
+            .pp-hero-showcase { flex: 1 1 auto !important; width: auto !important; max-width: 420px; }
           }
         `}</style>
       </section>

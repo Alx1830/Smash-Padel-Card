@@ -367,7 +367,7 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
               </div>
             </div>
             {/* Igual que en el perfil: fixedHeight alinea el borde inferior con la card 3D */}
-            <div style={{ flex: 1, minWidth: 0, paddingTop: "20px" }}>
+            <div className={player.profileUserId ? "ph-hero-chart" : undefined} style={{ flex: 1, minWidth: 0, paddingTop: "20px" }}>
               {player.profileUserId ? (
                 <ProfilePortfolioChart
                   userId={player.profileUserId}
@@ -386,7 +386,7 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
                 </>
               )}
             </div>
-            <div style={{ flex: "0 0 auto", width: "clamp(240px, 26%, 340px)", paddingTop: "20px" }}>
+            <div className="ph-hero-showcase" style={{ flex: "0 0 auto", width: "clamp(240px, 26%, 340px)", paddingTop: "20px" }}>
               <Showcase featuredCards={featuredCards} inventoryRows={inventoryRows} />
             </div>
           </div>
@@ -426,6 +426,13 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
 
         <style>{`
           @media (min-width: 768px) { .ph-profile-desktop { display: block !important; } .ph-profile-mobile { display: none !important; } }
+          /* Entre 768 y 1023px las tres columnas no caben: la card 3D escalada
+             y las destacadas dejan al gráfico en unos pocos píxeles. Se va el
+             gráfico y las destacadas ocupan el hueco. */
+          @media (max-width: 1023px) {
+            .ph-hero-chart    { display: none !important; }
+            .ph-hero-showcase { flex: 1 1 auto !important; width: auto !important; max-width: 420px; }
+          }
         `}</style>
       </section>
     </div>
