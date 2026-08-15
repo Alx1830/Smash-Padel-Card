@@ -1,6 +1,16 @@
 import Link from "next/link";
 import { HeroSwiper } from "@/components/HeroSwiper";
 import { Footer } from "@/components/Footer";
+import { MarketSlider } from "@/components/landing/MarketSlider";
+import { Contador } from "@/components/landing/Contador";
+import { InstalarApp } from "@/components/landing/InstalarApp";
+import { DatosEstructurados } from "@/components/landing/DatosEstructurados";
+import { cartasEnVenta, numerosDeLaCasa } from "@/lib/landing-data";
+import type { Metadata } from "next";
+import {
+  ShieldCheck, RefreshCw, MapPin, Heart, ArrowLeftRight, LineChart,
+  Layers, Store, Search, Check, Minus, Store as Tienda,
+} from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -11,61 +21,146 @@ const INK2  = "#7a8298";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
-const FEATURES = [
-  { icon: "⬡", color: COURT,     title: "Tu Facebinder digital",       desc: "Crea tu perfil de coleccionista con foto, set favorito, Pokémon favorito y toda tu identidad TCG en una carta personalizada." },
-  { icon: "◉", color: "#a26bff", title: "Inventario completo",          desc: "Lleva el control exacto de cada carta. Marca Normal, Reverse Holo y Holofoil y visualiza tu progreso por set en tiempo real." },
-  { icon: "◈", color: "#4ff0ff", title: "Market de cartas",             desc: "Publica las cartas que te sobran y véndelas a coleccionistas de tu país. Contacto directo por WhatsApp, sin intermediarios." },
-  { icon: "⊕", color: "#ff4fd8", title: "Comunidad de coleccionistas",  desc: "Sigue a otros coleccionistas, mira sus inventarios, descubre qué sets están completando y conecta con la comunidad." },
-  { icon: "◬", color: "#ffd24f", title: "Progreso visual",              desc: "Barra de progreso por set en tu perfil público: únicas / total de cartas, cantidad en inventario y porcentaje completado." },
-  { icon: "◇", color: BALL,      title: "Precios TCGPlayer",            desc: "Consulta el precio de referencia de cada carta en TCGPlayer directamente desde el market sin salir de la plataforma." },
+/* La portada se rearma cada diez minutos: los números y las cartas en venta
+   cambian solos sin volver a desplegar. */
+export const revalidate = 600;
+
+/**
+ * El título y la descripción de la portada apuntan a lo que la gente escribe en
+ * Google: "cartas pokémon colombia", "cuánto vale mi colección", "vender cartas
+ * pokémon". El de layout.tsx es genérico y sirve para el resto del sitio.
+ */
+export const metadata: Metadata = {
+  title: "Cartas Pokémon en Colombia — colecciona, valora, vende e intercambia",
+  description:
+    "La plataforma colombiana para coleccionistas de Pokémon TCG. Registra tu colección carta por carta, mira cuánto vale tu binder en pesos, compra y vende con coleccionistas de tu ciudad e intercambia con la cuenta clara.",
+  alternates: { canonical: "https://facebinder.com" },
+  keywords: [
+    "cartas Pokémon Colombia", "comprar cartas Pokémon Colombia",
+    "vender cartas Pokémon", "intercambiar cartas Pokémon",
+    "cuánto vale mi colección Pokémon", "precio cartas Pokémon en pesos",
+    "coleccionistas Pokémon Colombia", "Pokémon TCG Bogotá",
+    "market cartas Pokémon", "binder digital", "inventario Pokémon TCG",
+  ],
+  openGraph: {
+    type: "website",
+    locale: "es_CO",
+    url: "https://facebinder.com",
+    siteName: "FaceBinder",
+    title: "Cartas Pokémon en Colombia — colecciona, valora, vende e intercambia",
+    description:
+      "Registra tu colección, mira cuánto vale tu binder en pesos y véndelo o cámbialo con coleccionistas de tu ciudad.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "FaceBinder — cartas Pokémon en Colombia" }],
+  },
+};
+
+/** Lo que de verdad hace la plataforma, sin promesas que no podemos cumplir */
+const SELLOS = [
+  { Icon: ShieldCheck, titulo: "Nadie publica sin pasar por revisión",
+    texto: "Cada carta que entra al market la mira una persona antes de que salga. No es un filtro automático." },
+  { Icon: RefreshCw, titulo: "Precios que se actualizan cada 3 horas",
+    texto: "Traemos el precio de TCGplayer y lo pasamos a pesos con la tasa del día. Ni inventado, ni de hace un mes." },
+  { Icon: MapPin, titulo: "Hecho en Colombia, en pesos",
+    texto: "Los precios se publican en la moneda de cada quien y los filtros van por ciudad. Sin conversiones raras." },
 ];
 
-const STEPS = [
-  { num: "01", title: "Crea tu cuenta",        desc: "Regístrate con Google en segundos. Sin formularios largos." },
-  { num: "02", title: "Arma tu perfil",         desc: "Agrega tu foto, set favorito, energía, Pokémon favorito y más." },
-  { num: "03", title: "Registra tu inventario", desc: "Marca cada carta que tienes: Normal, Reverse Holo o Holofoil." },
-  { num: "04", title: "Vende tus cartas",        desc: "Publica lo que te sobra con tu precio en COP y recibe compradores por WhatsApp." },
-  { num: "05", title: "Conecta con otros",       desc: "Sigue coleccionistas, compara progresos y completa tu Master Set." },
+const FUNCIONES = [
+  { Icon: Layers, color: COURT,
+    titulo: "Tu inventario, carta por carta",
+    texto: "Normal, Reverse Holo, Holofoil y las variantes raras que nadie más distingue. Cada copia cuenta, y el progreso del set se llena solo." },
+  { Icon: LineChart, color: "#4ff0ff",
+    titulo: "Cuánto vale tu binder",
+    texto: "Un gráfico con el valor de todo lo que tienes, actualizado cada hora. Sirve para presumir y también para saber cuándo vender." },
+  { Icon: Store, color: BALL,
+    titulo: "Market con precio de referencia",
+    texto: "Publicas desde tu inventario en dos toques. El comprador ve tu precio al lado del precio de mercado y decide con la información en la mano." },
+  { Icon: ArrowLeftRight, color: "#a26bff",
+    titulo: "Intercambios con la cuenta clara",
+    texto: "Los dos ven qué pone cada uno y cuánto suma cada lado. Hay chat para negociar y, al cerrar, el inventario se mueve solo." },
+  { Icon: Heart, color: "#ff4fd8",
+    titulo: "Wishlist que avisa",
+    texto: "Anota la que te falta y olvídate. Cuando alguien la publique te llega la notificación, aunque tengas la app cerrada." },
+  { Icon: Search, color: "#ffd24f",
+    titulo: "Decks, sets propios y perfil público",
+    texto: "Arma mazos, crea tus propios sets y comparte un link con tu colección en vez de mandar cuarenta fotos por WhatsApp." },
 ];
 
-const MARKET_FEATURES = [
-  { label: "Publica en segundos",     desc: "Agrega una carta a la venta desde tu inventario con solo unos toques." },
-  { label: "Precio en COP",           desc: "Pon tu precio en pesos colombianos. Sin conversiones ni complicaciones." },
-  { label: "Contacto por WhatsApp",   desc: "Los compradores te contactan directamente. Sin pagos dentro de la plataforma." },
-  { label: "Filtros inteligentes",    desc: "Busca por nombre, variante, set, rango de precio y ciudad." },
-  { label: "Precio TCGPlayer",        desc: "Consulta el precio de referencia de mercado antes de comprar o vender." },
-  { label: "Por ciudad y país",       desc: "Filtra vendedores cerca de ti. Disponible en más de 30 países de Latinoamérica." },
+const PASOS = [
+  { num: "01", titulo: "Entra con Google",     texto: "Sin formularios largos ni confirmar correos. Diez segundos." },
+  { num: "02", titulo: "Marca lo que tienes",  texto: "Buscas la carta, dices cuántas copias y de qué variante. El resto lo pone la app." },
+  { num: "03", titulo: "Publica o intercambia", texto: "Lo que te sobra va al market con tu precio, o lo cambias con alguien de tu ciudad." },
+  { num: "04", titulo: "Cierran por chat",     texto: "Se ponen de acuerdo dentro de la app o por WhatsApp. Ustedes eligen cómo se ven." },
 ];
 
-export default function LandingPage() {
+/** La competencia real no es TCGplayer: es un grupo de Facebook y un chat */
+const COMPARACION = {
+  columnas: ["FaceBinder", "Grupo de Facebook", "Chat de WhatsApp"],
+  filas: [
+    { que: "Sabes cuánto vale lo que tienes",        valores: [true, false, false] },
+    { que: "Precio de mercado al lado del precio",   valores: [true, false, false] },
+    { que: "La publicación no se pierde entre memes", valores: [true, false, false] },
+    { que: "Te avisan cuando aparece la que buscas", valores: [true, false, false] },
+    { que: "Alguien revisa antes de publicar",       valores: [true, false, false] },
+    { que: "Buscar por set, variante y ciudad",      valores: [true, false, false] },
+    { que: "Hablar directo con el vendedor",         valores: [true, true, true] },
+  ],
+};
+
+export default async function LandingPage() {
+  /* Las dos consultas van juntas: la portada no debe esperar dos viajes */
+  const [cartas, cifras] = await Promise.all([cartasEnVenta(18), numerosDeLaCasa()]);
+
+  /* Un contador en cero da más desconfianza que no tener contador */
+  const numeros = [
+    { valor: cifras.cartasRegistradas, etiqueta: "cartas registradas" },
+    { valor: cifras.sets,              etiqueta: "sets con dueño" },
+    { valor: cifras.cartasEnVenta,     etiqueta: "cartas en venta ahora" },
+    { valor: cifras.ciudades,          etiqueta: "ciudades" },
+  ].filter(n => n.valor > 0);
+
   return (
     <main style={{ background: BG0, color: INK0, overflowX: "hidden" }}>
+      <DatosEstructurados cartasEnVenta={cifras.cartasEnVenta} />
       <style>{`
         @keyframes gridPan  { from { background-position: 0 0; } to { background-position: 80px 80px; } }
         @keyframes float    { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-        @keyframes marquee  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .feature-card:hover { border-color: rgba(255,255,255,0.18) !important; background: rgba(255,255,255,0.05) !important; }
-        .mkt-feat:hover     { background: rgba(46,230,193,0.06) !important; border-color: rgba(46,230,193,0.2) !important; }
+        .feature-card { transition: border-color 0.2s, background 0.2s, transform 0.2s; }
+        .feature-card:hover { border-color: rgba(255,255,255,0.18) !important; background: rgba(255,255,255,0.05) !important; transform: translateY(-3px); }
         .cta-btn   { transition: opacity 0.2s, transform 0.2s; }
         .cta-btn:hover   { opacity: 0.88; transform: translateY(-2px); }
         .ghost-btn { transition: border-color 0.2s, color 0.2s; }
         .ghost-btn:hover { border-color: rgba(255,255,255,0.4) !important; color: ${INK0} !important; }
+        .lp-seccion { padding: 108px 40px; }
+        .lp-wrap    { max-width: 1240px; margin: 0 auto; }
+        .lp-cifras  { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+        .lp-sellos  { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+        .lp-func    { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+        .lp-pasos   { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+        .lp-tabla   { width: 100%; border-collapse: collapse; }
+        .lp-tabla th, .lp-tabla td { padding: 13px 14px; text-align: left; }
+        .lp-tabla tbody tr { border-top: 1px solid rgba(255,255,255,0.06); }
+        .lp-tabla tbody tr:hover { background: rgba(255,255,255,0.02); }
+        /* El punto ciego de la tableta: acá es donde se rompe todo si no se mira */
+        @media (max-width: 1023px) {
+          .lp-func   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .lp-cifras { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .lp-sellos { grid-template-columns: 1fr; }
+          .lp-pasos  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
         @media (max-width: 767px) {
           .hero-grid        { flex-direction: column !important; align-items: center !important; padding: 60px 24px 64px !important; gap: 40px !important; }
           .hero-text        { max-width: 100% !important; text-align: center !important; }
           .hero-btns        { justify-content: center !important; flex-direction: column !important; align-items: center !important; }
           .hero-swiper      { display: flex; justify-content: center; width: 100%; }
-          .features-section { padding: 64px 20px !important; }
-          .market-section   { padding: 64px 20px !important; }
-          .steps-section    { padding: 64px 20px !important; }
-          .cta-section      { padding: 64px 20px !important; }
-          .footer-section   { padding: 28px 20px !important; flex-direction: column !important; align-items: flex-start !important; gap: 20px !important; }
-          .mkt-inner        { flex-direction: column !important; gap: 40px !important; }
-          .steps-grid       { grid-template-columns: 1fr 1fr !important; }
+          .lp-seccion       { padding: 64px 20px; }
+          .lp-func          { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+          .lp-instalar      { justify-content: center; }
+          .lp-tabla-marco   { overflow-x: auto; }
+          .lp-tabla         { min-width: 520px; }
         }
       `}</style>
 
-      {/* ══ HERO ══ */}
+      {/* ══ HERO ══ (no se toca: es la parte que ya funcionaba) */}
       <section style={{ paddingTop: "64px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, zIndex: 0, background: `radial-gradient(ellipse 70% 60% at 20% 50%, rgba(46,230,193,0.18), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 60%, rgba(255,79,216,0.12), transparent 70%), linear-gradient(180deg, #0a1320 0%, ${BG0} 100%)` }} />
         <div style={{ position: "absolute", inset: 0, zIndex: 0, backgroundImage: `linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)`, backgroundSize: "80px 80px", animation: "gridPan 4s linear infinite" }} />
@@ -109,99 +204,280 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ══ FEATURES ══ */}
-      <section className="features-section" style={{ padding: "120px 40px" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: "72px" }}>
-            <div style={{ fontFamily: MONO, fontSize: "11px", color: COURT, letterSpacing: "0.22em", textTransform: "uppercase", marginBottom: "16px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-              <span style={{ width: "24px", height: "1px", background: COURT, display: "inline-block" }} />
-              Todo en un solo lugar
-              <span style={{ width: "24px", height: "1px", background: COURT, display: "inline-block" }} />
+      {/* ══ INSTALAR LA APP ══ */}
+      <section style={{ padding: "0 40px 8px", position: "relative", zIndex: 10 }}>
+        <div className="lp-wrap" style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          gap: 24, flexWrap: "wrap",
+          padding: "22px 26px", borderRadius: 18,
+          border: "1px solid rgba(255,255,255,0.08)",
+          background: "linear-gradient(100deg, rgba(46,230,193,0.06), rgba(255,255,255,0.02))",
+        }}>
+          <div style={{ minWidth: 260, flex: 1 }}>
+            <p style={{ fontFamily: DISP, fontSize: 19, color: INK0, margin: "0 0 5px" }}>
+              Llévala en el celular
+            </p>
+            <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, margin: 0, lineHeight: 1.7, maxWidth: 460 }}>
+              No hay que bajar nada de ninguna tienda. Se instala desde el navegador,
+              queda con su ícono en la pantalla y abre sin barras.
+            </p>
+          </div>
+          <div className="lp-instalar" style={{ display: "flex" }}>
+            <InstalarApp />
+          </div>
+        </div>
+      </section>
+
+      {/* ══ SELLOS ══ */}
+      <section className="lp-seccion" style={{ paddingTop: 72, paddingBottom: 0 }}>
+        <div className="lp-wrap lp-sellos">
+          {SELLOS.map(({ Icon, titulo, texto }) => (
+            <div key={titulo} style={{
+              padding: "20px 22px", borderRadius: 16,
+              border: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.02)",
+            }}>
+              <Icon size={18} color={COURT} strokeWidth={1.8} />
+              <p style={{ fontFamily: DISP, fontSize: 15, color: INK0, margin: "12px 0 6px", lineHeight: 1.3 }}>
+                {titulo}
+              </p>
+              <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, margin: 0, lineHeight: 1.75 }}>
+                {texto}
+              </p>
             </div>
-            <h2 style={{ fontFamily: DISP, fontSize: "clamp(32px, 5vw, 52px)", color: INK0, margin: 0, letterSpacing: "-0.02em", lineHeight: 1.1 }}>
-              La plataforma completa<br />
-              <span style={{ color: INK2, fontFamily: MONO, fontSize: "clamp(13px, 2vw, 16px)", letterSpacing: "0.04em", fontWeight: 400 }}>para coleccionistas de Pokémon TCG</span>
+          ))}
+        </div>
+      </section>
+
+      {/* ══ CIFRAS ══ */}
+      {numeros.length > 0 && (
+        <section className="lp-seccion" style={{ paddingTop: 64, paddingBottom: 0 }}>
+          <div className="lp-wrap lp-cifras">
+            {numeros.map(n => (
+              <div key={n.etiqueta} style={{
+                padding: "22px 20px", borderRadius: 16, textAlign: "center",
+                border: "1px solid rgba(46,230,193,0.12)", background: "rgba(46,230,193,0.03)",
+              }}>
+                <p style={{
+                  fontFamily: DISP, fontSize: "clamp(26px, 4vw, 40px)", margin: 0,
+                  background: `linear-gradient(135deg, ${COURT}, ${BALL})`,
+                  WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent",
+                }}>
+                  <Contador hasta={n.valor} />
+                </p>
+                <p style={{
+                  fontFamily: MONO, fontSize: 10, color: INK2, margin: "6px 0 0",
+                  letterSpacing: "0.14em", textTransform: "uppercase",
+                }}>
+                  {n.etiqueta}
+                </p>
+              </div>
+            ))}
+          </div>
+          <p style={{
+            fontFamily: MONO, fontSize: 10, color: INK2, textAlign: "center",
+            margin: "16px 0 0", letterSpacing: "0.06em",
+          }}>
+            Números de la base, no de un folleto. Se refrescan solos.
+          </p>
+        </section>
+      )}
+
+      {/* ══ CARTAS EN VENTA ══ */}
+      {cartas.length > 0 && (
+        <section className="lp-seccion" style={{ paddingBottom: 72 }}>
+          <div className="lp-wrap" style={{ marginBottom: 26 }}>
+            <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+              <span style={{ width: 22, height: 1, background: COURT, display: "inline-block" }} />
+              En venta ahora mismo
+            </div>
+            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 20, flexWrap: "wrap" }}>
+              <h2 style={{ fontFamily: DISP, fontSize: "clamp(28px, 4.5vw, 46px)", color: INK0, margin: 0, letterSpacing: "-0.02em", lineHeight: 1.08 }}>
+                Estas están puestas<br />
+                <em style={{ fontStyle: "normal", background: `linear-gradient(135deg, ${COURT}, ${BALL})`, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                  por gente de verdad.
+                </em>
+              </h2>
+              <Link href="/market" className="cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 24px", borderRadius: 11, background: `linear-gradient(90deg, ${COURT}, ${BALL})`, color: BG0, fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", textDecoration: "none" }}>
+                Ver todo el market →
+              </Link>
+            </div>
+            <p style={{ fontFamily: MONO, fontSize: 11.5, color: INK2, margin: "14px 0 0", lineHeight: 1.8, maxWidth: 620 }}>
+              Arrastra para ver más. Cada una la publicó un coleccionista y pasó por
+              revisión antes de aparecer acá.
+            </p>
+          </div>
+          <div style={{ maxWidth: 1240, margin: "0 auto" }}>
+            <MarketSlider cartas={cartas} />
+          </div>
+        </section>
+      )}
+
+      {/* ══ FUNCIONES ══ */}
+      <section className="lp-seccion" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="lp-wrap">
+          <div style={{ marginBottom: 48, maxWidth: 640 }}>
+            <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+              <span style={{ width: 22, height: 1, background: COURT, display: "inline-block" }} />
+              Lo que hay adentro
+            </div>
+            <h2 style={{ fontFamily: DISP, fontSize: "clamp(28px, 4.5vw, 46px)", color: INK0, margin: 0, letterSpacing: "-0.02em", lineHeight: 1.08 }}>
+              Seis cosas que antes<br />hacías en tres apps.
             </h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "24px" }}>
-            {FEATURES.map(f => (
-              <div key={f.title} className="feature-card" style={{ padding: "32px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)", transition: "border-color 0.2s, background 0.2s" }}>
-                <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: `${f.color}18`, border: `1px solid ${f.color}33`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", color: f.color, marginBottom: "20px" }}>
-                  {f.icon}
+
+          <div className="lp-func">
+            {FUNCIONES.map(({ Icon, color, titulo, texto }) => (
+              <div key={titulo} className="feature-card" style={{
+                padding: 26, borderRadius: 18,
+                border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)",
+              }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: 11,
+                  background: `${color}16`, border: `1px solid ${color}33`,
+                  display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16,
+                }}>
+                  <Icon size={18} color={color} strokeWidth={1.8} />
                 </div>
-                <h3 style={{ fontFamily: DISP, fontSize: "20px", color: INK0, margin: "0 0 12px", letterSpacing: "-0.01em" }}>{f.title}</h3>
-                <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, lineHeight: 1.8, margin: 0, letterSpacing: "0.04em" }}>{f.desc}</p>
+                <h3 style={{ fontFamily: DISP, fontSize: 18, color: INK0, margin: "0 0 9px", letterSpacing: "-0.01em", lineHeight: 1.25 }}>
+                  {titulo}
+                </h3>
+                <p style={{ fontFamily: MONO, fontSize: 11.5, color: INK2, lineHeight: 1.85, margin: 0 }}>
+                  {texto}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ══ MARKET SHOWCASE ══ */}
-      <section className="market-section" style={{ padding: "120px 40px", background: "rgba(46,230,193,0.025)", borderTop: "1px solid rgba(46,230,193,0.08)", borderBottom: "1px solid rgba(46,230,193,0.08)", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", fontFamily: DISP, fontSize: "clamp(100px, 20vw, 220px)", fontWeight: 900, color: "transparent", WebkitTextStroke: `1px rgba(46,230,193,0.05)`, whiteSpace: "nowrap", pointerEvents: "none", userSelect: "none", letterSpacing: "-0.05em" }}>
-          MARKET
-        </div>
-
-        <div style={{ maxWidth: "1100px", margin: "0 auto", position: "relative" }}>
-          <div style={{ marginBottom: "64px" }}>
-            <div style={{ fontFamily: MONO, fontSize: "11px", color: COURT, letterSpacing: "0.22em", textTransform: "uppercase", marginBottom: "16px", display: "flex", alignItems: "center", gap: "10px" }}>
-              <span style={{ width: "24px", height: "1px", background: COURT, display: "inline-block" }} />
-              Market de cartas
+      {/* ══ CONTRA EL GRUPO DE FACEBOOK ══ */}
+      <section className="lp-seccion" style={{
+        background: "rgba(46,230,193,0.02)",
+        borderTop: "1px solid rgba(46,230,193,0.08)",
+        borderBottom: "1px solid rgba(46,230,193,0.08)",
+      }}>
+        <div className="lp-wrap">
+          <div style={{ marginBottom: 36, maxWidth: 680 }}>
+            <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+              <span style={{ width: 22, height: 1, background: COURT, display: "inline-block" }} />
+              Comparado con lo de siempre
             </div>
-            <div className="mkt-inner" style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "24px", flexWrap: "wrap" }}>
-              <h2 style={{ fontFamily: DISP, fontSize: "clamp(32px, 5vw, 56px)", color: INK0, margin: 0, letterSpacing: "-0.02em", lineHeight: 1.05 }}>
-                Vende tus cartas<br />
-                <em style={{ fontStyle: "normal", background: `linear-gradient(135deg, ${COURT}, ${BALL})`, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>directamente.</em>
-              </h2>
-              <Link href="/market" className="cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: "10px", padding: "13px 28px", borderRadius: "12px", background: `linear-gradient(90deg, ${COURT}, ${BALL})`, color: BG0, fontFamily: MONO, fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em", textDecoration: "none", flexShrink: 0 }}>
-                Ir al Market →
-              </Link>
-            </div>
-            <p style={{ fontFamily: MONO, fontSize: "13px", color: INK2, lineHeight: 1.8, margin: "20px 0 0", letterSpacing: "0.03em", maxWidth: "560px" }}>
-              ¿Tienes cartas que no usas? Publícalas en segundos y conecta con compradores de tu país directamente por WhatsApp. Sin comisiones, sin plataforma de pagos — solo coleccionistas.
+            <h2 style={{ fontFamily: DISP, fontSize: "clamp(28px, 4.5vw, 46px)", color: INK0, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.08 }}>
+              Sin &ldquo;te lo dejo en...&rdquo;,<br />sin capturas borrosas.
+            </h2>
+            <p style={{ fontFamily: MONO, fontSize: 12, color: INK2, margin: 0, lineHeight: 1.85 }}>
+              El grupo de Facebook y el chat siguen sirviendo para hablar. Para todo lo
+              demás se quedan cortos, y eso lo sabe cualquiera que haya intentado vender
+              una carta ahí.
             </p>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px" }}>
-            {MARKET_FEATURES.map(f => (
-              <div key={f.label} className="mkt-feat" style={{ padding: "22px 24px", borderRadius: "14px", border: "1px solid rgba(46,230,193,0.1)", background: "rgba(46,230,193,0.03)", transition: "all 0.2s" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
-                  <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: COURT, flexShrink: 0, display: "inline-block" }} />
-                  <span style={{ fontFamily: MONO, fontSize: "11px", color: COURT, letterSpacing: "0.1em", textTransform: "uppercase" }}>{f.label}</span>
-                </div>
-                <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, lineHeight: 1.7, margin: 0, letterSpacing: "0.03em" }}>{f.desc}</p>
+          <div className="lp-tabla-marco" style={{
+            borderRadius: 16, border: "1px solid rgba(255,255,255,0.08)",
+            background: "rgba(255,255,255,0.02)", overflow: "hidden",
+          }}>
+            <table className="lp-tabla">
+              <thead>
+                <tr style={{ background: "rgba(255,255,255,0.03)" }}>
+                  <th style={{ fontFamily: MONO, fontSize: 9.5, color: INK2, letterSpacing: "0.14em", textTransform: "uppercase", fontWeight: 400 }} />
+                  {COMPARACION.columnas.map((c, i) => (
+                    <th key={c} style={{
+                      fontFamily: MONO, fontSize: 9.5, letterSpacing: "0.12em",
+                      textTransform: "uppercase", textAlign: "center",
+                      color: i === 0 ? COURT : INK2, fontWeight: i === 0 ? 700 : 400,
+                      whiteSpace: "nowrap",
+                    }}>
+                      {c}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {COMPARACION.filas.map(f => (
+                  <tr key={f.que}>
+                    <td style={{ fontFamily: MONO, fontSize: 11.5, color: INK1, lineHeight: 1.6 }}>
+                      {f.que}
+                    </td>
+                    {f.valores.map((v, i) => (
+                      <td key={i} style={{ textAlign: "center" }}>
+                        {v
+                          ? <Check size={15} color={i === 0 ? COURT : INK2} strokeWidth={2.4} style={{ display: "inline-block", verticalAlign: "middle" }} />
+                          : <Minus size={14} color="rgba(255,255,255,0.16)" strokeWidth={2.2} style={{ display: "inline-block", verticalAlign: "middle" }} />}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ CÓMO EMPIEZA ══ */}
+      <section className="lp-seccion">
+        <div className="lp-wrap">
+          <div style={{ marginBottom: 48, maxWidth: 560 }}>
+            <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+              <span style={{ width: 22, height: 1, background: COURT, display: "inline-block" }} />
+              Cómo empieza
+            </div>
+            <h2 style={{ fontFamily: DISP, fontSize: "clamp(28px, 4.5vw, 46px)", color: INK0, margin: 0, letterSpacing: "-0.02em", lineHeight: 1.08 }}>
+              De cero a tu primera<br />carta publicada.
+            </h2>
+          </div>
+
+          <div className="lp-pasos">
+            {PASOS.map(p => (
+              <div key={p.num} style={{
+                padding: "22px 20px", borderRadius: 16,
+                border: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.02)",
+              }}>
+                <span style={{
+                  fontFamily: DISP, fontSize: 30, letterSpacing: "-0.03em",
+                  color: "transparent", WebkitTextStroke: `1px ${COURT}66`,
+                }}>
+                  {p.num}
+                </span>
+                <h4 style={{ fontFamily: DISP, fontSize: 16, color: INK0, margin: "10px 0 8px" }}>
+                  {p.titulo}
+                </h4>
+                <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, lineHeight: 1.8, margin: 0 }}>
+                  {p.texto}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ══ CÓMO FUNCIONA ══ */}
-      <section className="steps-section" style={{ padding: "120px 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: "72px" }}>
-            <div style={{ fontFamily: MONO, fontSize: "11px", color: COURT, letterSpacing: "0.22em", textTransform: "uppercase", marginBottom: "16px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-              <span style={{ width: "24px", height: "1px", background: COURT, display: "inline-block" }} />
-              Proceso
-              <span style={{ width: "24px", height: "1px", background: COURT, display: "inline-block" }} />
-            </div>
-            <h2 style={{ fontFamily: DISP, fontSize: "clamp(32px, 5vw, 52px)", color: INK0, margin: 0, letterSpacing: "-0.02em" }}>
-              Empieza en minutos
-            </h2>
+      {/* ══ CIERRE ══ */}
+      <section className="lp-seccion" style={{
+        borderTop: "1px solid rgba(255,255,255,0.06)",
+        background: "radial-gradient(ellipse 60% 100% at 50% 100%, rgba(46,230,193,0.10), transparent 70%)",
+      }}>
+        <div className="lp-wrap" style={{ textAlign: "center", maxWidth: 720 }}>
+          <Tienda size={22} color={COURT} strokeWidth={1.6} />
+          <h2 style={{ fontFamily: DISP, fontSize: "clamp(30px, 5vw, 52px)", color: INK0, margin: "18px 0 14px", letterSpacing: "-0.02em", lineHeight: 1.05 }}>
+            ¿Cuánto vale tu binder?<br />
+            <em style={{ fontStyle: "normal", background: `linear-gradient(135deg, ${COURT}, ${BALL})`, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              Averígualo hoy.
+            </em>
+          </h2>
+          <p style={{ fontFamily: MONO, fontSize: 12.5, color: INK2, lineHeight: 1.9, margin: "0 auto 30px", maxWidth: 520 }}>
+            Registrar la primera carta toma menos de lo que llevas leyendo esta página.
+            Y el gráfico arranca solo apenas la marques.
+          </p>
+          <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
+            <Link href="/login" className="cta-btn" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 38px", borderRadius: 12, background: `linear-gradient(90deg, ${COURT}, ${BALL})`, color: BG0, fontFamily: MONO, fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textDecoration: "none", boxShadow: `0 0 40px ${COURT}33` }}>
+              Crear mi Facebinder →
+            </Link>
+            <Link href="/market" className="ghost-btn" style={{ display: "inline-flex", alignItems: "center", padding: "15px 28px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.15)", color: INK2, fontFamily: MONO, fontSize: 13, letterSpacing: "0.08em", textDecoration: "none" }}>
+              Mirar sin cuenta →
+            </Link>
           </div>
-          <div className="steps-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "32px" }}>
-            {STEPS.map((s, i) => (
-              <div key={s.num} style={{ position: "relative" }}>
-                {i < STEPS.length - 1 && (
-                  <div style={{ position: "absolute", top: "7px", left: "calc(100% - 16px)", width: "32px", height: "1px", background: `linear-gradient(90deg, ${COURT}60, transparent)`, display: "none" }} className="step-connector" />
-                )}
-                <div style={{ fontFamily: MONO, fontSize: "11px", color: COURT, letterSpacing: "0.2em", marginBottom: "12px" }}>{s.num}</div>
-                <h4 style={{ fontFamily: DISP, fontSize: "17px", color: INK0, margin: "0 0 10px" }}>{s.title}</h4>
-                <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, lineHeight: 1.8, margin: 0, letterSpacing: "0.03em" }}>{s.desc}</p>
-              </div>
-            ))}
-          </div>
+          <p style={{ fontFamily: MONO, fontSize: 10.5, color: INK2, margin: "26px 0 0", letterSpacing: "0.06em" }}>
+            Hecho en Colombia, por alguien que también cuenta las que le faltan.
+          </p>
         </div>
       </section>
 

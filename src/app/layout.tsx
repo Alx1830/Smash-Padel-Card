@@ -55,6 +55,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  /* Va aquí y no en metadata: Next avisa por consola si se declara allá */
+  themeColor: "#2ee6c1",
 };
 
 export const metadata: Metadata = {
@@ -115,7 +117,6 @@ export const metadata: Metadata = {
     startupImage: APPLE_SPLASH,
   },
   manifest: "/manifest.json",
-  themeColor: "#2ee6c1",
   robots: {
     index: true,
     follow: true,
