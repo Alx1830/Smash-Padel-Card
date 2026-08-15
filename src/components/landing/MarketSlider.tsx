@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { MapPin } from "lucide-react";
+import { useMediaQuery } from "@/lib/use-media-query";
 import type { CartaEnVenta } from "@/lib/landing-data";
 
 const COURT = "#2ee6c1";
@@ -20,18 +21,41 @@ export function MarketSlider({ cartas }: { cartas: CartaEnVenta[] }) {
   const pista = useRef<HTMLDivElement>(null);
   const [quieto, setQuieto] = useState(false);
   const arrastre = useRef<{ x: number; scroll: number } | null>(null);
+  const enPantalla = useRef(false);
+  const sinMovimiento = useMediaQuery("(prefers-reduced-motion: reduce)");
 
+  /* El carrusel solo se mueve cuando se está viendo: dejarlo corriendo en una
+     pestaña de fondo o fuera de la vista es gastar batería por nada. */
   useEffect(() => {
-    if (quieto || !cartas.length) return;
     const el = pista.current;
     if (!el) return;
-    const id = setInterval(() => {
-      /* Al llegar al final vuelve al principio en vez de frenar en seco */
-      const fin = el.scrollWidth - el.clientWidth - 4;
-      el.scrollTo({ left: el.scrollLeft >= fin ? 0 : el.scrollLeft + 1.4, behavior: "auto" });
-    }, 24);
-    return () => clearInterval(id);
-  }, [quieto, cartas.length]);
+    const obs = new IntersectionObserver(([e]) => { enPantalla.current = e.isIntersecting; }, { threshold: 0.15 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (quieto || sinMovimiento || !cartas.length) return;
+    const el = pista.current;
+    if (!el) return;
+
+    let vivo = true;
+    let anterior = performance.now();
+    const paso = (ahora: number) => {
+      if (!vivo) return;
+      const dt = ahora - anterior;
+      anterior = ahora;
+      /* Va atado al reloj, no al número de cuadros: en una pantalla de 120Hz
+         corría al doble de velocidad que en una de 60. */
+      if (enPantalla.current && document.visibilityState === "visible") {
+        const fin = el.scrollWidth - el.clientWidth - 4;
+        el.scrollLeft = el.scrollLeft >= fin ? 0 : el.scrollLeft + (dt * 0.055);
+      }
+      requestAnimationFrame(paso);
+    };
+    const id = requestAnimationFrame(paso);
+    return () => { vivo = false; cancelAnimationFrame(id); };
+  }, [quieto, sinMovimiento, cartas.length]);
 
   if (!cartas.length) return null;
 
