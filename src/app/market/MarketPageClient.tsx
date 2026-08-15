@@ -595,20 +595,20 @@ export function MarketPageClient({
           .mkt-sidebar { width: 260px; flex-shrink: 0; }
           .mkt-grid-area { flex: 1; min-width: 0; }
           @media (max-width: 1023px) {
-            .mkt-layout { flex-direction: column; }
+            /* align-items: stretch — con flex-start el área se encogía al ancho
+               de su contenido y la grilla quedaba pegada a la izquierda */
+            .mkt-layout { flex-direction: column; align-items: stretch; }
             .mkt-sidebar { display: none; }
+            .mkt-grid-area { width: 100%; }
             .mkt-cards-grid {
-              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
               gap: 12px !important;
-              max-width: 480px;
-              margin: 0 auto;
-              width: 100%;
             }
           }
-          @media (max-width: 400px) {
+          @media (max-width: 767px) {
             .mkt-cards-grid {
-              grid-template-columns: 1fr !important;
-              max-width: 320px;
+              grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              gap: 10px !important;
             }
           }
         `}</style>

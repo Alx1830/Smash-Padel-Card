@@ -28,18 +28,19 @@ export default function MarketLoading() {
         .mkl-sidebar { width: 260px; flex-shrink: 0; }
         .mkl-grid-area { flex: 1; min-width: 0; }
         @media (max-width: 1023px) {
-          .mkl-layout  { flex-direction: column; }
+          .mkl-layout  { flex-direction: column; align-items: stretch; }
           .mkl-sidebar { display: none; }
+          .mkl-grid-area { width: 100%; }
           .mkl-cards-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
             gap: 12px !important;
-            max-width: 480px;
-            margin: 0 auto;
-            width: 100%;
           }
         }
-        @media (max-width: 400px) {
-          .mkl-cards-grid { grid-template-columns: 1fr !important; max-width: 320px; }
+        @media (max-width: 767px) {
+          .mkl-cards-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 10px !important;
+          }
         }
       `}</style>
 
