@@ -276,11 +276,16 @@ function SolicitudesPageInner() {
         }
       }
 
-      // Lo que llega deja de estar en la wishlist
-      if (iReceive.length) {
+      /* Lo que llega deja de estar en la wishlist. El trigger de la base hace
+         lo mismo ante cualquier entrada al inventario (ver
+         supabase/wishlist_auto_remove.sql); esto queda por si el trigger no
+         alcanzó a correr y para que la pantalla se refresque al instante.
+         Va con set_id: sin él borraba la misma carta de todos los sets. */
+      for (const c of iReceive) {
         await supabase.from("card_wishlist").delete()
           .eq("user_id", meId)
-          .in("card_id", [...new Set(iReceive.map(c => String(c.card_id)))]);
+          .eq("card_id", String(c.card_id))
+          .eq("set_id", c.set_id);
       }
 
       const field = isReceived ? "to_received_at" : "from_received_at";
