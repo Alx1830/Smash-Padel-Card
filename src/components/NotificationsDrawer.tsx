@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { X, Bell, CheckCheck, UserPlus, UserCheck, ShoppingBag, MessagesSquare, Check, ArrowLeftRight } from "lucide-react";
+import { X, Bell, UserPlus, UserCheck, ShoppingBag, MessagesSquare, Check, ArrowLeftRight } from "lucide-react";
 import type { AppNotification } from "@/types/notifications";
 
 const COURT = "#2ee6c1";
@@ -61,6 +61,29 @@ export function NotificationsDrawer({
 }: NotificationsDrawerProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const router   = useRouter();
+
+  /* Cuáles estaban sin leer al abrir. Se congela porque abajo se marcan todas
+     como leídas: sin esta foto, el resaltado desaparecería ante los ojos del
+     usuario y no alcanzaría a ver cuáles eran nuevas. */
+  const [noLeidasAlAbrir, setNoLeidasAlAbrir] = useState<Set<string>>(
+    () => new Set(notifications.filter(n => !n.read).map(n => n.id)),
+  );
+  const sinLeer = (id: string) => noLeidasAlAbrir.has(id);
+  const nuevas  = noLeidasAlAbrir.size;
+
+  /* Abrir la campanita ya cuenta como leerlas: tener que apretar además
+     "Todo leído" era un paso de más para despejar el globito rojo. */
+  const yaMarcadas = useRef(false);
+  useEffect(() => {
+    if (loading || yaMarcadas.current) return;
+    yaMarcadas.current = true;
+    /* Si las notificaciones llegaron después de abrir el panel, la foto se
+       toma ahora — antes no había nada que fotografiar. */
+    setNoLeidasAlAbrir(prev =>
+      prev.size > 0 ? prev : new Set(notifications.filter(n => !n.read).map(n => n.id)),
+    );
+    if (unreadCount > 0) markAllRead().catch(() => {});
+  }, [loading, unreadCount, markAllRead, notifications]);
 
   /* Compute popup position */
   const popupStyle: React.CSSProperties = (() => {
@@ -210,23 +233,18 @@ export function NotificationsDrawer({
             <span style={{ fontFamily: DISP, fontSize: "15px", fontWeight: 700, color: INK0 }}>
               Notificaciones
             </span>
-            {unreadCount > 0 && (
+            {nuevas > 0 && (
               <span style={{
                 background: "#ef4444", color: "#fff",
                 fontFamily: MONO, fontSize: "10px", fontWeight: 700,
                 borderRadius: 10, padding: "1px 6px", lineHeight: 1.4,
               }}>
-                {unreadCount > 9 ? "9+" : unreadCount}
+                {nuevas > 9 ? "9+" : nuevas}
               </span>
             )}
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-            {unreadCount > 0 && (
-              <button className="np-mark-all" onClick={markAllRead} title="Marcar todo como leído">
-                <CheckCheck size={13} />
-                Todo leído
-              </button>
-            )}
+            {/* Ya no hay botón "Todo leído": abrir el panel las marca solas */}
             <button
               onClick={onClose}
               style={{
@@ -271,21 +289,23 @@ export function NotificationsDrawer({
           ) : (
             notifications.map((notif) => {
               const { color, Icon } = notifMeta(notif.type);
+              /* El resaltado sale de la foto tomada al abrir, no de notif.read */
+              const nueva = sinLeer(notif.id);
               return (
               <div
                 key={notif.id}
                 className="np-item"
                 onClick={() => handleNotifClick(notif.id, notif.data)}
-                style={{ background: notif.read ? "transparent" : `${color}08` }}
+                style={{ background: nueva ? `${color}08` : "transparent" }}
               >
                 <div style={{
                   width: 28, height: 28, borderRadius: "50%", flexShrink: 0,
-                  background: notif.read ? "rgba(255,255,255,0.04)" : `${color}18`,
-                  border: `1px solid ${notif.read ? "rgba(255,255,255,0.06)" : color + "40"}`,
+                  background: nueva ? `${color}18` : "rgba(255,255,255,0.04)",
+                  border: `1px solid ${nueva ? color + "40" : "rgba(255,255,255,0.06)"}`,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  opacity: notif.read ? 0.5 : 1,
+                  opacity: nueva ? 1 : 0.5,
                 }}>
-                  <Icon size={13} color={notif.read ? INK2 : color} strokeWidth={2} />
+                  <Icon size={13} color={nueva ? color : INK2} strokeWidth={2} />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{
@@ -293,8 +313,8 @@ export function NotificationsDrawer({
                     justifyContent: "space-between", gap: 8, marginBottom: 2,
                   }}>
                     <p style={{
-                      fontFamily: DISP, fontSize: "12px", fontWeight: notif.read ? 400 : 600,
-                      color: notif.read ? "rgba(245,247,251,0.7)" : INK0,
+                      fontFamily: DISP, fontSize: "12px", fontWeight: nueva ? 600 : 400,
+                      color: nueva ? INK0 : "rgba(245,247,251,0.7)",
                       margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                     }}>
                       {notif.title}

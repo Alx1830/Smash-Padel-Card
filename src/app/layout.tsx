@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Archivo_Black } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -40,6 +40,20 @@ const APPLE_SPLASH = [
   { url: "/splash/apple-splash-750x1334.png",  media: "(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" },
   { url: "/splash/apple-splash-640x1136.png",  media: "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" },
 ];
+
+/**
+ * La app se comporta como app: sin zoom al enfocar un campo y sin pellizco que
+ * corra el diseño. `maximumScale` frena el zoom automático de Safari; el ancho
+ * real lo garantiza la regla de 16px en los campos de globals.css.
+ * `viewportFit: "cover"` deja que el fondo llegue hasta el borde de la pantalla.
+ */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

@@ -142,3 +142,27 @@ html, body {
     rgba(57, 255, 20, 0.03) 21px
   );
 }
+
+/* Safari en iPhone hace zoom automático al enfocar un campo cuya letra mide
+   menos de 16px, y la página queda corrida. Se arregla en el origen: en el
+   celular todos los campos de texto escriben a 16px. El `maximum-scale=1` del
+   viewport ayuda, pero Safari lo ignora en varias versiones, así que la regla
+   que de verdad lo evita es esta.
+
+   Solo aplica al tamaño de la letra que uno escribe; el placeholder y el resto
+   del diseño se mantienen. */
+@media (max-width: 767px) {
+  input[type="text"],
+  input[type="search"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="number"],
+  input[type="date"],
+  input:not([type]),
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
