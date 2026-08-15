@@ -130,25 +130,44 @@ export default function AprobacionesPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#05070d", padding: "40px 24px" }}>
+    <div className="ap-page">
       <style>{`
+        /* Patrón de página del dashboard: contenedor centrado, cabecera con
+           antetítulo, y grilla que baja de 6 columnas a 2 en el celular */
+        .ap-page  { min-height: 100vh; background: #05070d; padding: 40px 24px; }
+        .ap-wrap  { max-width: 1400px; margin: 0 auto; }
+
         .ap-tab { background: none; border: 1px solid rgba(255,255,255,0.12); border-radius: 999px;
-                  padding: 8px 18px; cursor: pointer; font-family: ${MONO}; font-size: 11px;
-                  letter-spacing: 0.1em; color: ${INK2}; transition: all 0.15s; }
+                  padding: 7px 16px; cursor: pointer; font-family: ${MONO}; font-size: 10px;
+                  letter-spacing: 0.1em; color: ${INK2}; transition: all 0.15s; white-space: nowrap; }
         .ap-tab:hover { border-color: rgba(46,230,193,0.4); color: ${INK0}; }
         .ap-tab.on { border-color: ${COURT}; color: ${COURT}; background: rgba(46,230,193,0.08); }
-        .ap-act { display: inline-flex; align-items: center; gap: 6px; border-radius: 8px;
-                  padding: 8px 14px; cursor: pointer; font-family: ${MONO}; font-size: 11px;
-                  font-weight: 600; letter-spacing: 0.06em; border: 1px solid transparent;
-                  transition: opacity 0.15s; }
+
+        .ap-act { display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+                  border-radius: 7px; padding: 7px 10px; cursor: pointer; font-family: ${MONO};
+                  font-size: 10px; font-weight: 600; letter-spacing: 0.04em;
+                  border: 1px solid transparent; transition: opacity 0.15s; flex: 1; }
         .ap-act:disabled { opacity: 0.45; cursor: default; }
         .ap-approve { background: linear-gradient(90deg, ${COURT}, ${BALL}); color: #05070d; }
-        .ap-reject  { background: rgba(255,93,93,0.1); border-color: rgba(255,93,93,0.4); color: ${CRIT}; }
+        /* Rechazar va solo con el icono al lado de Aprobar: la acción principal
+           es la que se lee, y así entra en una columna angosta */
+        .ap-reject  { background: rgba(255,93,93,0.1); border-color: rgba(255,93,93,0.4); color: ${CRIT};
+                      flex: 0 0 auto; padding: 7px 9px; }
         .ap-revert  { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); color: ${INK1}; }
-        .ap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+
+        /* minmax(0, 1fr) y no 1fr: si no, la columna no baja del ancho de su
+           contenido y la grilla desborda en móvil */
+        .ap-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
+        @media (max-width: 1500px) { .ap-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+        @media (max-width: 1240px) { .ap-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (max-width: 1023px) { .ap-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (max-width: 767px) {
+          .ap-page { padding: 28px 16px; }
+          .ap-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+        }
       `}</style>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+      <div className="ap-wrap">
 
         {/* Header */}
         <div style={{ marginBottom: "28px" }}>
@@ -156,7 +175,7 @@ export default function AprobacionesPage() {
             <span style={{ width: "22px", height: "1px", background: COURT, display: "inline-block" }} />
             Panel Admin
           </div>
-          <h1 style={{ fontFamily: DISP, fontSize: "32px", fontWeight: 700, color: INK0, margin: 0, letterSpacing: "-0.01em" }}>
+          <h1 style={{ fontFamily: DISP, fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 700, color: INK0, margin: 0, letterSpacing: "-0.01em" }}>
             Cartas por aprobar
           </h1>
           <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.06em", margin: "8px 0 0" }}>
@@ -195,58 +214,57 @@ export default function AprobacionesPage() {
               const { card, setName } = datosCarta(l);
               const verColor = getVersionColor(l.version);
               return (
-                <div key={l.id} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                  <div style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)" }}>
+                <div key={l.id} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                  <div style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)", flexShrink: 0 }}>
                     {card?.image && (
-                      <img src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", inset: 0 }} />
+                      <img src={card.image} alt={card.name} loading="lazy" decoding="async"
+                        style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", inset: 0 }} />
                     )}
+                    {/* Precio sobre la imagen: es el dato que se mira al moderar */}
+                    <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "16px 8px 6px", background: "linear-gradient(180deg, transparent, rgba(5,7,13,0.92))", fontFamily: MONO, fontSize: 12, fontWeight: 700, color: COURT, textAlign: "center" }}>
+                      {CURRENCY_SYMBOL[l.currency] ?? "$"}{formatPrice(l.price_cop, l.currency)}
+                      <span style={{ fontSize: 8, color: INK2, marginLeft: 3 }}>{l.currency}</span>
+                    </div>
                   </div>
 
-                  <div style={{ padding: "12px 14px 14px", display: "flex", flexDirection: "column", gap: 8, flex: 1 }}>
-                    <div>
-                      <div style={{ fontFamily: MONO, fontSize: 12, color: INK0, fontWeight: 600 }}>
-                        {card?.name ?? `Carta #${l.card_id}`}
-                      </div>
-                      <div style={{ fontFamily: MONO, fontSize: 10, color: INK2, marginTop: 3 }}>{setName}</div>
-                      <div style={{ fontFamily: MONO, fontSize: 9, color: verColor, marginTop: 3, letterSpacing: "0.08em" }}>
-                        {getVersionLabel(l.version)}{l.language ? ` · ${l.language.toUpperCase()}` : ""}
-                      </div>
+                  <div style={{ padding: "8px 9px 9px", display: "flex", flexDirection: "column", gap: 5, flex: 1 }}>
+                    <div style={{ fontFamily: MONO, fontSize: 11, color: INK0, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {card?.name ?? `Carta #${l.card_id}`}
                     </div>
-
-                    <div style={{ fontFamily: MONO, fontSize: 15, color: COURT, fontWeight: 700 }}>
-                      {CURRENCY_SYMBOL[l.currency] ?? "$"}{formatPrice(l.price_cop, l.currency)} <span style={{ fontSize: 9, color: INK2 }}>{l.currency}</span>
+                    <div style={{ fontFamily: MONO, fontSize: 9, color: INK2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {setName}
                     </div>
-
-                    <div style={{ fontFamily: MONO, fontSize: 10, color: INK2 }}>
-                      @{l.player?.username ?? "—"}
-                      {l.player?.ciudad ? ` · ${l.player.ciudad}` : ""}
-                      <br />
-                      {new Date(l.created_at).toLocaleDateString("es-CO", { day: "2-digit", month: "short", year: "numeric" })}
+                    <div style={{ fontFamily: MONO, fontSize: 8, color: verColor, letterSpacing: "0.06em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {getVersionLabel(l.version)}{l.language ? ` · ${l.language.toUpperCase()}` : ""}
+                    </div>
+                    <div style={{ fontFamily: MONO, fontSize: 9, color: INK2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
+                      title={`@${l.player?.username ?? "—"} · ${new Date(l.created_at).toLocaleDateString("es-CO")}`}>
+                      @{l.player?.username ?? "—"} · {new Date(l.created_at).toLocaleDateString("es-CO", { day: "2-digit", month: "short" })}
                     </div>
 
                     {l.rejection_reason && (
-                      <div style={{ fontFamily: MONO, fontSize: 10, color: CRIT, lineHeight: 1.5, background: "rgba(255,93,93,0.07)", border: "1px solid rgba(255,93,93,0.2)", borderRadius: 8, padding: "8px 10px" }}>
+                      <div style={{ fontFamily: MONO, fontSize: 9, color: CRIT, lineHeight: 1.45, background: "rgba(255,93,93,0.07)", border: "1px solid rgba(255,93,93,0.2)", borderRadius: 6, padding: "6px 7px" }}>
                         {l.rejection_reason}
                       </div>
                     )}
 
-                    <div style={{ display: "flex", gap: 6, marginTop: "auto", paddingTop: 6, flexWrap: "wrap" }}>
+                    <div style={{ display: "flex", gap: 5, marginTop: "auto", paddingTop: 4 }}>
                       {tab !== "active" && (
                         <button className="ap-act ap-approve" disabled={trabajando === l.id}
-                          onClick={() => moderar(l.id, "approve")}>
-                          <Check size={13} /> Aprobar
+                          onClick={() => moderar(l.id, "approve")} title="Aprobar">
+                          <Check size={12} /> Aprobar
                         </button>
                       )}
                       {tab === "active" && (
                         <button className="ap-act ap-revert" disabled={trabajando === l.id}
-                          onClick={() => moderar(l.id, "revert")}>
-                          <Undo2 size={13} /> A revisión
+                          onClick={() => moderar(l.id, "revert")} title="Sacar del market y volver a revisión">
+                          <Undo2 size={12} /> Revisar
                         </button>
                       )}
                       {tab !== "rejected" && (
                         <button className="ap-act ap-reject" disabled={trabajando === l.id}
-                          onClick={() => { setRechazando(l); setMotivo(""); }}>
-                          <X size={13} /> Rechazar
+                          onClick={() => { setRechazando(l); setMotivo(""); }} title="Rechazar con un motivo">
+                          <X size={12} />
                         </button>
                       )}
                     </div>
