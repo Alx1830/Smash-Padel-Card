@@ -65,3 +65,18 @@ su contenido y la grilla desborda el celular.
   `#7a8298`.
 - Estado vacío: caja con borde punteado, icono de lucide y una línea explicando
   qué hacer.
+
+## Barras fijas y `overflow-x`
+
+`html`, `body` y cualquier contenedor que envuelva la página usan
+`overflow-x: clip`, **nunca** `overflow-x: hidden`. Con `hidden` el navegador
+convierte ese elemento en el contenedor de scroll y en iOS las barras
+`position: fixed` (la de arriba y `MobileTabBar`) dejan de estar pegadas a la
+pantalla: se van rodando con el contenido y quedan cortando la página por la
+mitad. `clip` recorta lo que se desborde igual, pero no crea contenedor de
+scroll.
+
+Por la misma razón, ningún ancestro de una barra fija puede tener `transform`,
+`filter`, `backdrop-filter`, `perspective` ni `will-change` de esas
+propiedades: cualquiera de ellas vuelve al ancestro el marco de referencia del
+`fixed`.

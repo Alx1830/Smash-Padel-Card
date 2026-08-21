@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
+/* NUNCA usar `overflow-x: hidden` aquí: en iOS convierte al body en el
+   contenedor de scroll y todo lo `position: fixed` (la barra de arriba y la
+   barra de pestañas de abajo) se va con la página en vez de quedarse pegado a
+   la pantalla. `clip` recorta igual pero no crea contenedor de scroll. */
 html, body {
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100vw;
 }
 

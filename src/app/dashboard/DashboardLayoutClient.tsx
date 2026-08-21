@@ -311,7 +311,7 @@ export function DashboardLayoutClient({
           margin-left: 260px;
           min-height: 100vh;
           background: #05070d;
-          overflow-x: hidden;
+          overflow-x: clip;
           max-width: calc(100vw - 260px);
         }
         /* ── MOBILE top bar + bottom tabs ── */
