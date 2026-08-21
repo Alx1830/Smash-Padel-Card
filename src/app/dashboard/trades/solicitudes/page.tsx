@@ -14,7 +14,7 @@ import { parseProposal } from "@/lib/trade-messages";
 import {
   ArrowLeft, Check, X, Clock, Ban, Pencil, MessageCircle,
   MessagesSquare, Send, ChevronDown, ArrowDownLeft, ArrowUpRight, PackageCheck, Trash2,
-  AlertTriangle,
+  AlertTriangle, ChevronLeft, ChevronRight,
 } from "lucide-react";
 
 const COURT = "#2ee6c1";
@@ -102,7 +102,7 @@ function SolicitudesPageInner() {
   const [loading, setLoading] = useState(true);
   const [acting, setActing]   = useState<string | null>(null);
   const [, setCardsReady]     = useState(0);
-  const [zoom, setZoom]       = useState<{ card: PokemonCard; setId: string; price: number | null } | null>(null);
+  const [zoom, setZoom]       = useState<{ items: ZoomItem[]; index: number } | null>(null);
 
   const load = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -419,7 +419,7 @@ function SolicitudesPageInner() {
         </div>
       )}
 
-      {zoom && <CardZoom {...zoom} onClose={() => setZoom(null)} />}
+      {zoom && <CardZoom items={zoom.items} index={zoom.index} onClose={() => setZoom(null)} />}
     </div>
   );
 }
@@ -440,7 +440,7 @@ function TradeCardRow({
   onRespond: (t: Trade, s: "accepted" | "rejected" | "cancelled") => void;
   onReceived: (t: Trade) => void;
   onHide: (t: Trade) => void;
-  onZoom: (z: { card: PokemonCard; setId: string; price: number | null }) => void;
+  onZoom: (z: { items: ZoomItem[]; index: number }) => void;
   supabase: ReturnType<typeof createClient>;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -934,12 +934,18 @@ function btnStyle(bg: string, color: string, border?: string): React.CSSProperti
   };
 }
 
+/**
+ * Una carta dentro del visor. El visor recibe la lista completa del lado que se
+ * tocó para poder pasar a la siguiente sin cerrarse.
+ */
+type ZoomItem = { key: string; card: PokemonCard; setId: string; price: number | null };
+
 /* ── Lista de cartas de un lado ─────────────────────────────── */
 function CardList({ label, accent, cards, total, findCard, priceOf, onZoom, misCopias, avisarFaltante }: {
   label: string; accent: string; cards: TradeCard[]; total: number;
   findCard: (c: TradeCard) => PokemonCard | undefined;
   priceOf: (card: PokemonCard | undefined, setId: string) => number | null;
-  onZoom: (z: { card: PokemonCard; setId: string; price: number | null }) => void;
+  onZoom: (z: { items: ZoomItem[]; index: number }) => void;
   /** Cuántas copias tengo de cada carta: "set_id|card_id" → cantidad */
   misCopias: Record<string, number>;
   /** Solo el lado que entrego avisa en rojo cuando no me alcanzan */
@@ -951,6 +957,11 @@ function CardList({ label, accent, cards, total, findCard, priceOf, onZoom, misC
   const CARTA_ANCHO = 78;
   /** Cuántas de las que me piden no puedo cubrir con lo que tengo */
   const faltantes = avisarFaltante ? cards.filter(c => tengo(c) < c.quantity).length : 0;
+  /** Las cartas que sí se pueden ver, en orden: es lo que recorren las flechas */
+  const zoomables: ZoomItem[] = cards.flatMap((c, i) => {
+    const card = findCard(c);
+    return card ? [{ key: String(i), card, setId: c.set_id, price: priceOf(card, c.set_id) }] : [];
+  });
 
   return (
     <div>
@@ -977,7 +988,7 @@ function CardList({ label, accent, cards, total, findCard, priceOf, onZoom, misC
               return (
                 <div key={i} style={{ width: CARTA_ANCHO, textAlign: "center" }}>
                   <button
-                    onClick={() => card && onZoom({ card, setId: c.set_id, price })}
+                    onClick={() => card && onZoom({ items: zoomables, index: zoomables.findIndex(z => z.key === `${i}`) })}
                     disabled={!card}
                     title={card ? `Ver ${name}` : name}
                     style={{
@@ -1043,14 +1054,39 @@ function CardList({ label, accent, cards, total, findCard, priceOf, onZoom, misC
 }
 
 /* ── Modal de carta ─────────────────────────────────────────── */
-function CardZoom({ card, setId, price, onClose }: {
-  card: PokemonCard; setId: string; price: number | null; onClose: () => void;
+function CardZoom({ items, index, onClose }: {
+  items: ZoomItem[]; index: number; onClose: () => void;
 }) {
+  /** Empieza en la carta que se tocó y de ahí se mueve con las flechas */
+  const [i, setI] = useState(Math.max(0, index));
+  const total = items.length;
+  const item  = items[Math.min(i, total - 1)];
+
+  const go = useCallback((paso: number) => {
+    // Da la vuelta: de la última pasa a la primera y al revés
+    setI(prev => (prev + paso + total) % total);
+  }, [total]);
+
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape")     onClose();
+      if (e.key === "ArrowRight") go(1);
+      if (e.key === "ArrowLeft")  go(-1);
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [onClose, go]);
+
+  if (!item) return null;
+  const { card, setId, price } = item;
+
+  const flecha: React.CSSProperties = {
+    position: "absolute", top: "50%", transform: "translateY(-50%)",
+    width: 42, height: 42, borderRadius: "50%", cursor: "pointer",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    background: "rgba(5,7,13,0.85)", border: "1px solid rgba(255,255,255,0.15)",
+    color: INK0,
+  };
 
   return (
     <div
@@ -1061,10 +1097,24 @@ function CardZoom({ card, setId, price, onClose }: {
         display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
       }}
     >
-      <div onClick={e => e.stopPropagation()} style={{ maxWidth: 340, width: "100%", textAlign: "center" }}>
-        <img src={card.image} alt={card.name} style={{
-          width: "100%", borderRadius: 12, boxShadow: "0 24px 70px rgba(0,0,0,0.8)",
-        }} />
+      <div onClick={e => e.stopPropagation()} style={{ position: "relative", maxWidth: 340, width: "100%", textAlign: "center" }}>
+        <div style={{ position: "relative" }}>
+          <img src={card.image} alt={card.name} style={{
+            width: "100%", borderRadius: 12, boxShadow: "0 24px 70px rgba(0,0,0,0.8)",
+          }} />
+          {total > 1 && (
+            <>
+              <button onClick={() => go(-1)} title="Carta anterior"
+                style={{ ...flecha, left: -20 }}>
+                <ChevronLeft size={20} />
+              </button>
+              <button onClick={() => go(1)} title="Carta siguiente"
+                style={{ ...flecha, right: -20 }}>
+                <ChevronRight size={20} />
+              </button>
+            </>
+          )}
+        </div>
 
         <p style={{ fontFamily: DISP, fontSize: 20, color: INK0, margin: "16px 0 4px" }}>
           {card.name}
@@ -1092,8 +1142,14 @@ function CardZoom({ card, setId, price, onClose }: {
           )}
         </div>
 
+        {total > 1 && (
+          <p style={{ fontFamily: MONO, fontSize: 10, color: INK2, margin: "12px 0 0", letterSpacing: "0.08em" }}>
+            {i + 1} / {total}
+          </p>
+        )}
+
         <button onClick={onClose} style={{
-          marginTop: 18, padding: "9px 18px", borderRadius: 9, cursor: "pointer",
+          marginTop: 14, padding: "9px 18px", borderRadius: 9, cursor: "pointer",
           background: "transparent", border: "1px solid rgba(255,255,255,0.15)",
           color: INK2, fontFamily: MONO, fontSize: 10,
           letterSpacing: "0.08em", textTransform: "uppercase",
