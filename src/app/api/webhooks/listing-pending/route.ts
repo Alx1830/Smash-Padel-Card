@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseAdmin } from '@/lib/supabase/admin';
 import { webpush } from '@/lib/web-push';
 import webpushLib from 'web-push';
 
@@ -7,11 +7,6 @@ import webpushLib from 'web-push';
  * Avisa a los admins de que hay una carta esperando aprobación.
  * Lo dispara un trigger de market_listings cuando entra una fila pendiente.
  */
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 interface WebhookPayload {
   record: {

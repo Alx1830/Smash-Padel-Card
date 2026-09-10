@@ -8,7 +8,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { createClient as createAdminClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 import { ArrowLeft, Clock, CalendarDays } from "lucide-react";
 import { fechaLarga, minutosDeLectura, nombreAutor, extractoAuto, type PostAuthor } from "@/lib/posts";
 import { PostBody } from "@/components/PostBody";
@@ -23,15 +23,15 @@ const DISP  = "var(--font-archivo)";
 /** Una noticia nueva puede tardar hasta un minuto en aparecer. */
 export const revalidate = 60;
 
-function admin() {
-  return createAdminClient(
+function publico() {
+  return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 }
 
 async function traerPost(slug: string) {
-  const { data: post } = await admin()
+  const { data: post } = await publico()
     .from("admin_posts")
     .select("id, slug, title, excerpt, cover_url, content_html, content, media_url, status, published_at, created_at, user_id")
     .eq("slug", slug)
@@ -41,7 +41,7 @@ async function traerPost(slug: string) {
   if (!post) return null;
 
   const { data: autor } = post.user_id
-    ? await admin().from("players").select("username, first_name, last_name, photo_url").eq("user_id", post.user_id).maybeSingle()
+    ? await publico().from("players").select("username, first_name, last_name, photo_url").eq("user_id", post.user_id).maybeSingle()
     : { data: null };
 
   return { post, autor: (autor ?? null) as PostAuthor | null };

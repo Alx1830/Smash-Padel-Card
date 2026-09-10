@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from '@/lib/supabase/admin';
 import { createClient as createServerClient } from "@/lib/supabase/server";
 
 /**
@@ -10,11 +10,6 @@ import { createClient as createServerClient } from "@/lib/supabase/server";
  * legibles por RLS para nadie más que su dueño — el admin las ve solo por aquí,
  * y siempre después de comprobar el rol.
  */
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-);
 
 const ESTADOS = ["pending", "active", "rejected"] as const;
 type Estado = (typeof ESTADOS)[number];

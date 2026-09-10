@@ -3,7 +3,7 @@
  */
 import type { Metadata } from "next";
 import Link from "next/link";
-import { createClient as createAdminClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 import { Newspaper, ArrowLeft } from "lucide-react";
 import { fechaLarga } from "@/lib/posts";
 
@@ -23,12 +23,12 @@ export const metadata: Metadata = {
 };
 
 export default async function NoticiasPage() {
-  const admin = createAdminClient(
+  const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
-  const { data: posts } = await admin
+  const { data: posts } = await supabase
     .from("admin_posts")
     .select("id, slug, title, excerpt, cover_url, published_at, created_at")
     .eq("status", "published")
