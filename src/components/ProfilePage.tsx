@@ -13,6 +13,7 @@ import { getVersionLabel, getVersionEffect, getVersionColor } from "@/data/pokem
 import type { InventoryMap, FeaturedCard as FeaturedCardModal, WishlistCard as WishlistCardModal, UserListing } from "@/components/CardDetailModal";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { slugifySetName } from "@/lib/slug";
+import { GrillaProgresiva } from "@/components/GrillaProgresiva";
 import dynamic from "next/dynamic";
 const CardDetailModal = dynamic(
   () => import("@/components/CardDetailModal").then(m => ({ default: m.CardDetailModal })),
@@ -1345,13 +1346,16 @@ function SetExpandedPanel({
               No tienes cartas de este set
             </div>
           ) : (
-            <div style={{ maxHeight: "580px", overflowY: ownedCards.length > 6 ? "auto" : "visible", paddingRight: ownedCards.length > 6 ? "6px" : "0", scrollbarWidth: "thin", scrollbarColor: `${COURT_C}44 transparent` }}>
-              <div className="prof-cards-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "20px 16px", justifyItems: "center" }}>
-                {ownedCards.map(({ card, qty }) => (
-                  <MiniCard key={String(card.id)} cardId={card.id} setId={set.id} quantity={qty} />
-                ))}
-              </div>
-            </div>
+            <GrillaProgresiva
+              items={ownedCards}
+              claveDe={({ card }) => String(card.id)}
+              className="prof-cards-grid"
+              estiloGrilla={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "20px 16px", justifyItems: "center" }}
+            >
+              {({ card, qty }) => (
+                <MiniCard cardId={card.id} setId={set.id} quantity={qty} />
+              )}
+            </GrillaProgresiva>
           )}
         </div>
 
@@ -1366,23 +1370,27 @@ function SetExpandedPanel({
               ¡Tienes el set completo! 🎉
             </div>
           ) : (
-            <div style={{ maxHeight: "580px", overflowY: missingCards.length > 6 ? "auto" : "visible", paddingRight: missingCards.length > 6 ? "6px" : "0", scrollbarWidth: "thin", scrollbarColor: `${COURT_C}44 transparent` }}>
-              <div className="prof-cards-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "20px 16px", justifyItems: "center" }}>
-                {missingCards.map(card => (
-                  <div key={`${card.id}`} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                    <div style={{ position: "relative", width: "160px", height: "224px", borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 24px rgba(0,0,0,0.6)", filter: "grayscale(1) opacity(0.45)" }}>
-                      <img src={card.image} alt={card.name} loading="eager" fetchPriority="high" decoding="async" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
-                    </div>
-                    <span style={{ fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.06em", color: INK2_C, textAlign: "center" }}>
-                      #{String(card.card_number).padStart(3, "0")} {card.name}
-                    </span>
-                    <span style={{ fontFamily: MONO_C, fontSize: "9px", color: INK2_C, textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                      {getVersionLabel(card.version)}
-                    </span>
+            <GrillaProgresiva
+              items={missingCards}
+              claveDe={(card) => String(card.id)}
+              className="prof-cards-grid"
+              estiloGrilla={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "20px 16px", justifyItems: "center" }}
+            >
+              {(card) => (
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                  <div style={{ position: "relative", width: "160px", height: "224px", borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 24px rgba(0,0,0,0.6)", filter: "grayscale(1) opacity(0.45)" }}>
+                    {/* Las que faltan son decoración: nunca con prioridad. */}
+                    <img src={card.image} alt={card.name} loading="lazy" decoding="async" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
                   </div>
-                ))}
-              </div>
-            </div>
+                  <span style={{ fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.06em", color: INK2_C, textAlign: "center" }}>
+                    #{String(card.card_number).padStart(3, "0")} {card.name}
+                  </span>
+                  <span style={{ fontFamily: MONO_C, fontSize: "9px", color: INK2_C, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                    {getVersionLabel(card.version)}
+                  </span>
+                </div>
+              )}
+            </GrillaProgresiva>
           )}
         </div>
       </div>

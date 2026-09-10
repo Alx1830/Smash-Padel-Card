@@ -135,9 +135,11 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
   const isDay = range === "1D";
   const data  = isDay ? hourlyData : historicData;
 
+  /* El historial ya no depende de que el dueño entre: lo arma la base cada
+     noche (`consolidar_portfolio_diario`). Vacío = colección recién creada. */
   const emptyMsg = isDay
     ? "Aún no hay datos de hoy. Vuelve en unos minutos."
-    : "El historial se irá construyendo día a día con tus visitas";
+    : "Todavía no hay historial. Se guarda un valor por día desde la primera carta.";
 
   const rangeButtons = (
     <div style={{ display: "flex", gap: "6px" }}>
