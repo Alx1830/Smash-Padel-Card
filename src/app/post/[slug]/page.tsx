@@ -9,9 +9,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
-import { ArrowLeft, Clock, CalendarDays } from "lucide-react";
+import { ArrowLeft, Clock, CalendarDays, Newspaper } from "lucide-react";
 import { fechaLarga, minutosDeLectura, nombreAutor, extractoAuto, etiquetaCategoria, type PostAuthor } from "@/lib/posts";
 import { PostBody } from "@/components/PostBody";
+import { Comentarios } from "@/components/post/Comentarios";
+import { Encuesta, type EncuestaDatos } from "@/components/post/Encuesta";
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
@@ -44,7 +46,72 @@ async function traerPost(slug: string) {
     ? await publico().from("players").select("username, first_name, last_name, photo_url").eq("user_id", post.user_id).maybeSingle()
     : { data: null };
 
-  return { post, autor: (autor ?? null) as PostAuthor | null };
+  // La encuesta es opcional: la mayoría de las notas no tiene.
+  const { data: encuesta } = await publico()
+    .from("post_polls")
+    .select("id, question, closes_at, post_poll_options(id, label, orden)")
+    .eq("post_id", post.id)
+    .maybeSingle();
+
+  const datosEncuesta: EncuestaDatos | null = encuesta
+    ? {
+        id: encuesta.id,
+        question: encuesta.question,
+        closes_at: encuesta.closes_at,
+        opciones: [...(encuesta.post_poll_options ?? [])]
+          .sort((a, b) => a.orden - b.orden)
+          .map((o) => ({ id: o.id, label: o.label })),
+      }
+    : null;
+
+  return { post, autor: (autor ?? null) as PostAuthor | null, encuesta: datosEncuesta };
+}
+
+interface Relacionada {
+  id: string;
+  slug: string | null;
+  title: string;
+  excerpt: string | null;
+  cover_url: string | null;
+  category: string | null;
+  published_at: string | null;
+  created_at: string;
+}
+
+/**
+ * Las tres que se muestran al final.
+ *
+ * Primero las de la misma sección, que es lo que de verdad interesa a quien
+ * acaba de leer; si no alcanzan, se completa con las más recientes. Sin ese
+ * relleno, una nota de una sección con una sola publicación no mostraría nada.
+ */
+async function traerRelacionadas(post: { id: string; category: string | null }): Promise<Relacionada[]> {
+  const campos = "id, slug, title, excerpt, cover_url, category, published_at, created_at";
+
+  const { data: mismas } = await publico()
+    .from("admin_posts").select(campos)
+    .eq("status", "published")
+    .eq("category", post.category ?? "novedades")
+    .neq("id", post.id)
+    .order("published_at", { ascending: false })
+    .limit(3);
+
+  const elegidas = (mismas ?? []) as Relacionada[];
+  if (elegidas.length >= 3) return elegidas;
+
+  const { data: otras } = await publico()
+    .from("admin_posts").select(campos)
+    .eq("status", "published")
+    .neq("id", post.id)
+    .order("published_at", { ascending: false })
+    .limit(6);
+
+  const vistas = new Set(elegidas.map((n) => n.id));
+  for (const n of (otras ?? []) as Relacionada[]) {
+    if (elegidas.length === 3) break;
+    if (!vistas.has(n.id)) { elegidas.push(n); vistas.add(n.id); }
+  }
+  return elegidas;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -76,12 +143,38 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+/** Foto + nombre del autor, enlazados a su perfil. */
+function FirmaAutor({ autor }: { autor: PostAuthor | null }) {
+  const contenido = (
+    <>
+      {autor?.photo_url ? (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img src={autor.photo_url} alt="" loading="lazy" decoding="async" className="pd-avatar" />
+      ) : (
+        <span className="pd-avatar pd-avatar-letra">
+          {nombreAutor(autor).charAt(0).toUpperCase()}
+        </span>
+      )}
+      <span style={{ color: INK0, fontSize: 12 }}>{nombreAutor(autor)}</span>
+    </>
+  );
+
+  const estilo: React.CSSProperties = {
+    display: "flex", alignItems: "center", gap: 9, textDecoration: "none",
+  };
+
+  return autor?.username
+    ? <Link href={`/${autor.username}`} className="pd-firma" style={estilo}>{contenido}</Link>
+    : <span style={estilo}>{contenido}</span>;
+}
+
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const resultado = await traerPost(slug);
   if (!resultado) notFound();
 
-  const { post, autor } = resultado;
+  const { post, autor, encuesta } = resultado;
+  const relacionadas = await traerRelacionadas(post);
   const cuerpo = post.content_html ?? post.content ?? "";
   const portada = post.cover_url ?? post.media_url;
   const fecha = post.published_at ?? post.created_at;
@@ -89,6 +182,52 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   return (
     <div style={{ minHeight: "100vh", background: BG0, padding: "40px 24px 90px" }}>
       <article style={{ maxWidth: 760, margin: "0 auto" }}>
+        <style>{`
+          .pd-media { position: relative; overflow: hidden; width: 100%; aspect-ratio: 16 / 9;
+            border-radius: 14px; border: 1px solid rgba(255,255,255,0.07);
+            background: #0a0e18; margin-bottom: 30px; }
+          .pd-media-fondo, .pd-media-foto { position: absolute; inset: 0;
+            width: 100%; height: 100%; display: block; }
+          .pd-media-fondo { object-fit: cover; filter: blur(26px) saturate(1.35) brightness(0.7);
+            transform: scale(1.25); }
+          .pd-media-foto { object-fit: contain; }
+          .pd-avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover;
+            border: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
+          .pd-avatar-letra { display: flex; align-items: center; justify-content: center;
+            background: rgba(46,230,193,0.12); color: ${COURT};
+            font-family: ${DISP}; font-size: 13px; font-weight: 700; }
+
+          .pd-firma:hover span { color: ${COURT}; }
+          .pd-firma:hover .pd-avatar { border-color: ${COURT}; }
+
+          .pd-girando { animation: pd-giro 900ms linear infinite; }
+          @keyframes pd-giro { to { transform: rotate(360deg); } }
+
+          /* Relacionadas: tres tarjetas parejas, dos en tablet, una en celular. */
+          .pd-rel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+          .pd-rel-card { display: flex; flex-direction: column; border-radius: 12px; overflow: hidden;
+            text-decoration: none; border: 1px solid rgba(255,255,255,0.07);
+            background: rgba(255,255,255,0.02); transition: border-color 140ms; }
+          .pd-rel-card:hover { border-color: ${COURT}55; }
+          .pd-rel-img { position: relative; width: 100%; aspect-ratio: 16 / 10;
+            overflow: hidden; background: #0a0e18; }
+          .pd-rel-img img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+          .pd-rel-img .fondo { object-fit: cover; filter: blur(20px) saturate(1.3) brightness(0.7);
+            transform: scale(1.25); }
+          .pd-rel-img .foto { object-fit: contain; }
+          .pd-rel-txt { padding: 12px 13px 14px; display: flex; flex-direction: column; gap: 7px; }
+          .pd-rel-cat { font-family: ${MONO}; font-size: 9px; letter-spacing: 0.16em;
+            text-transform: uppercase; color: ${COURT}; }
+          .pd-rel-tit { font-family: ${DISP}; font-size: 14px; font-weight: 600; color: ${INK0};
+            margin: 0; line-height: 1.32;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+          @media (max-width: 1023px) { .pd-rel { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+          @media (max-width: 767px), (pointer: coarse) {
+            .pd-media { aspect-ratio: 4 / 3; margin-bottom: 22px; }
+            .pd-rel { grid-template-columns: minmax(0, 1fr); }
+          }
+        `}</style>
 
         <Link href="/post" style={{
           display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none",
@@ -124,7 +263,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           margin: "20px 0 28px", paddingBottom: 20, borderBottom: "1px solid rgba(255,255,255,0.08)",
           fontFamily: MONO, fontSize: 11, color: INK2,
         }}>
-          <span>Por {nombreAutor(autor)}</span>
+          {/* La firma lleva al perfil del autor. Sin usuario no hay adónde ir,
+              así que en ese caso queda como texto. */}
+          <FirmaAutor autor={autor} />
           <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <CalendarDays size={12} /> {fechaLarga(fecha)}
           </span>
@@ -134,22 +275,69 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
 
         {portada && (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img src={portada} alt="" loading="eager" decoding="async"
-               style={{ width: "100%", borderRadius: 14, border: "1px solid rgba(255,255,255,0.07)", marginBottom: 30 }} />
+          /* La misma caja que la portada de /post: la foto entera sobre una
+             copia difuminada, para que una carta vertical no estire la nota. */
+          <div className="pd-media">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={portada} alt="" aria-hidden fetchPriority="high" decoding="async" className="pd-media-fondo" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={portada} alt="" fetchPriority="high" decoding="async" className="pd-media-foto" />
+          </div>
         )}
 
         <PostBody html={cuerpo} />
 
+        {encuesta && encuesta.opciones.length > 0 && <Encuesta datos={encuesta} />}
+
         <div style={{ marginTop: 44, paddingTop: 22, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-          <Link href="/dashboard" style={{
+          <Link href="/post" style={{
             display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 20px",
             borderRadius: 9, background: COURT, color: BG0, textDecoration: "none",
             fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: "0.08em",
           }}>
-            Ir a FaceBinder
+            <Newspaper size={14} /> Ver noticias
           </Link>
         </div>
+
+        {relacionadas.length > 0 && (
+          <section style={{ marginTop: 46 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+              <h2 style={{
+                fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: "0.18em",
+                textTransform: "uppercase", color: COURT, margin: 0,
+              }}>
+                Seguí leyendo
+              </h2>
+              <span style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.09)" }} />
+            </div>
+
+            <div className="pd-rel">
+              {relacionadas.map((n) => (
+                <Link key={n.id} href={`/post/${n.slug}`} className="pd-rel-card">
+                  <div className="pd-rel-img">
+                    {n.cover_url && (
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={n.cover_url} alt="" aria-hidden loading="lazy" decoding="async" className="fondo" />
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={n.cover_url} alt="" loading="lazy" decoding="async" className="foto" />
+                      </>
+                    )}
+                  </div>
+                  <div className="pd-rel-txt">
+                    <span className="pd-rel-cat">{etiquetaCategoria(n.category)}</span>
+                    <h3 className="pd-rel-tit">{n.title}</h3>
+                    <span style={{ fontFamily: MONO, fontSize: 9.5, color: INK2 }}>
+                      {fechaLarga(n.published_at ?? n.created_at)}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <Comentarios postId={post.id} />
       </article>
     </div>
   );

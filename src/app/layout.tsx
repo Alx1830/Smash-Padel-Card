@@ -143,8 +143,12 @@ export default async function RootLayout({
   } catch { /* no-op: Navbar falls back to client fetch */ }
 
   return (
-    <html lang="es" className={`${jetbrainsMono.variable} ${archiveBlack.variable} h-full`} style={{ overflowX: "hidden" }} suppressHydrationWarning>
-      <body className="min-h-full flex flex-col antialiased" style={{ overflowX: "hidden", maxWidth: "100vw" }} suppressHydrationWarning>
+    /* El recorte horizontal lo pone globals.css con `overflow-x: clip`. Acá no
+       va nada: un `hidden` en línea gana por especificidad y en iOS convierte
+       al body en el contenedor de scroll, con lo que la barra de pestañas y la
+       de arriba dejan de estar pegadas a la pantalla y se van con la página. */
+    <html lang="es" className={`${jetbrainsMono.variable} ${archiveBlack.variable} h-full`} suppressHydrationWarning>
+      <body className="min-h-full flex flex-col antialiased" style={{ maxWidth: "100vw" }} suppressHydrationWarning>
         <MarketTickerWrapper />
         <Navbar {...navProps} />
         {children}

@@ -1,6 +1,6 @@
 // FaceBinder Service Worker — push notifications + basic caching
 
-const CACHE = 'fb-v2';
+const CACHE = 'fb-v3';
 const PRECACHE = ['/', '/dashboard', '/market'];
 
 self.addEventListener('install', function(event) {
@@ -59,10 +59,26 @@ self.addEventListener('push', function(event) {
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
   var url = (event.notification.data && event.notification.data.url) || '/dashboard';
+
+  // Tocar la notificacion tiene que abrir la noticia, no la ultima pantalla
+  // que quedo abierta. Antes, con la app ya abierta en el celular, se enfocaba
+  // esa ventana y ahi terminaba: el usuario veia el panel y nunca la nota. Por
+  // eso ahora, si la ventana existe pero esta en otra direccion, se la navega.
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(list) {
       for (var i = 0; i < list.length; i++) {
-        if (list[i].url.indexOf(url) !== -1 && 'focus' in list[i]) return list[i].focus();
+        var c = list[i];
+        if (c.url.indexOf(url) !== -1) return 'focus' in c ? c.focus() : undefined;
+      }
+      for (var j = 0; j < list.length; j++) {
+        var w = list[j];
+        if ('navigate' in w) {
+          return w.focus().then(function(f) {
+            return (f || w).navigate(url);
+          }).catch(function() {
+            return clients.openWindow ? clients.openWindow(url) : undefined;
+          });
+        }
       }
       if (clients.openWindow) return clients.openWindow(url);
     })

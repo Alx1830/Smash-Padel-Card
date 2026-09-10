@@ -22,7 +22,10 @@ const securityHeaders = [
       `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://www.google-analytics.com https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev https://images.pokemontcg.io https://www.tcgplayer.com https://cdn.binderforge.com https://pagead2.googlesyndication.com`,
       "worker-src 'self' blob:",
       "manifest-src 'self'",
-      "frame-src https://www.youtube.com https://www.tcgplayer.com",
+      // El editor incrusta los videos con la versión sin cookies, así que
+      // los dos dominios tienen que estar: si falta, el navegador deja un
+      // recuadro gris en lugar del video, sin decir por qué.
+      "frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.tcgplayer.com",
       "object-src 'none'",
       "upgrade-insecure-requests",
     ].join("; "),

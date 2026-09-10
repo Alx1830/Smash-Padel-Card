@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -10,9 +10,10 @@ import TextAlign from "@tiptap/extension-text-align";
 import Youtube from "@tiptap/extension-youtube";
 import Highlight from "@tiptap/extension-highlight";
 import DOMPurify from "dompurify";
-import { Eye, Save, Send, Trash2, ExternalLink, Bell, BellOff } from "lucide-react";
+import { Eye, Save, Send, Trash2, ExternalLink, Bell, BellOff, ImageUp, Loader2, X, BarChart3, Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { POST_TAGS, POST_ATTR, POST_CATEGORIAS, CATEGORIA_POR_DEFECTO, slugify, extractoAuto, minutosDeLectura, type Post, type PostCategoria } from "@/lib/posts";
+import { aWebp, peso } from "@/lib/imagen-webp";
 import { PostEditorToolbar } from "./PostEditorToolbar";
 
 const COURT = "#2ee6c1";
@@ -34,6 +35,13 @@ const etiqueta: React.CSSProperties = {
   fontFamily: MONO, fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase",
   color: INK2, display: "block", marginBottom: 7,
 };
+
+/**
+ * Una opción de la encuesta. Las que ya existen conservan su `id`: si se
+ * borraran para reinsertarlas, cada corrección de una coma se llevaría puestos
+ * los votos, porque los votos apuntan al id de la opción.
+ */
+interface Opcion { id?: string; label: string }
 
 /** Saneado del cuerpo. Corre siempre antes de guardar, nunca al leer. */
 function sanear(html: string): string {
@@ -57,7 +65,16 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
   const [direccion, setDireccion] = useState(post?.slug ?? "");
   const [tocoDireccion, setTocoDireccion] = useState(Boolean(post?.slug));
   const [avisar,   setAvisar]   = useState(!post?.notified_at);
+  // La encuesta se guarda aparte del post, después de tener su id.
+  const [pregunta, setPregunta] = useState("");
+  const [opciones, setOpciones] = useState<Opcion[]>([{ label: "" }, { label: "" }]);
+  const [cerrada, setCerrada]   = useState(false);
+  const [encuestaId, setEncuestaId] = useState<string | null>(null);
+  const [borradas, setBorradas] = useState<string[]>([]);
+
+  const [subiendo, setSubiendo] = useState(false);
   const [guardando, setGuardando] = useState(false);
+  const archivoRef = useRef<HTMLInputElement>(null);
   const [vistaPrevia, setVistaPrevia] = useState(false);
   const [mensaje, setMensaje] = useState<{ tipo: "ok" | "error"; texto: string } | null>(null);
 
@@ -77,6 +94,112 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
     content: post?.content_html ?? post?.content ?? "",
     editorProps: { attributes: { class: "post-editor-cuerpo" } },
   });
+
+  /** Trae la encuesta guardada, si esta publicación ya tiene una. */
+  useEffect(() => {
+    if (!post) return;
+    let vivo = true;
+    (async () => {
+      const { data } = await supabase
+        .from("post_polls")
+        .select("id, question, closes_at, post_poll_options(id, label, orden)")
+        .eq("post_id", post.id)
+        .maybeSingle();
+      if (!vivo || !data) return;
+      setEncuestaId(data.id);
+      setPregunta(data.question);
+      setCerrada(Boolean(data.closes_at && new Date(data.closes_at) <= new Date()));
+      const ops = [...(data.post_poll_options ?? [])].sort((a, b) => a.orden - b.orden);
+      if (ops.length) setOpciones(ops.map((o) => ({ id: o.id, label: o.label })));
+    })();
+    return () => { vivo = false; };
+  }, [supabase, post]);
+
+  /**
+   * Guarda, cambia o borra la encuesta de la publicación.
+   *
+   * Sin pregunta o con menos de dos opciones no hay encuesta: si había una, se
+   * borra. Es la forma de sacarla sin un botón aparte.
+   */
+  async function guardarEncuesta(postId: string) {
+    const texto = pregunta.trim();
+    const validas = opciones.filter((o) => o.label.trim());
+
+    if (!texto || validas.length < 2) {
+      if (encuestaId) {
+        await supabase.from("post_polls").delete().eq("id", encuestaId);
+        setEncuestaId(null);
+      }
+      return;
+    }
+
+    const { data: enc, error: errEnc } = await supabase
+      .from("post_polls")
+      .upsert({ post_id: postId, question: texto, closes_at: cerrada ? new Date().toISOString() : null },
+              { onConflict: "post_id" })
+      .select("id")
+      .single();
+    if (errEnc || !enc) throw new Error(errEnc?.message ?? "No se pudo guardar la encuesta");
+    setEncuestaId(enc.id);
+
+    if (borradas.length) {
+      await supabase.from("post_poll_options").delete().in("id", borradas);
+      setBorradas([]);
+    }
+
+    const viejas = validas.filter((o) => o.id);
+    const nuevas = validas.filter((o) => !o.id);
+
+    for (const o of viejas) {
+      await supabase.from("post_poll_options")
+        .update({ label: o.label.trim(), orden: validas.indexOf(o) })
+        .eq("id", o.id!);
+    }
+    if (nuevas.length) {
+      await supabase.from("post_poll_options").insert(
+        nuevas.map((o) => ({ poll_id: enc.id, label: o.label.trim(), orden: validas.indexOf(o) }))
+      );
+    }
+
+    const { data: frescas } = await supabase
+      .from("post_poll_options").select("id, label, orden").eq("poll_id", enc.id).order("orden");
+    if (frescas) setOpciones(frescas.map((o) => ({ id: o.id, label: o.label })));
+  }
+
+  /**
+   * Elegir una imagen: se convierte a WebP acá mismo y se sube a R2 ya
+   * liviana. La dirección que devuelve el servidor queda en el campo de
+   * portada, así que también se puede pegar una a mano como siempre.
+   */
+  async function subirPortada(file: File) {
+    setSubiendo(true);
+    setMensaje(null);
+    try {
+      const lista = await aWebp(file);
+
+      const form = new FormData();
+      form.append("archivo", lista.archivo);
+      form.append("nombre", titulo || direccion || "portada");
+      if (portada.trim()) form.append("anterior", portada.trim());
+
+      const res  = await fetch("/api/admin/posts/cover", { method: "POST", body: form });
+      const info = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(info?.error ?? `Error ${res.status}`);
+
+      setPortada(info.url);
+      setMensaje({
+        tipo: "ok",
+        texto: lista.esWebp
+          ? `Imagen subida: ${peso(lista.pesoOriginal)} → ${peso(lista.archivo.size)} en WebP.`
+          : `Imagen subida (${peso(lista.archivo.size)}). Este navegador no exporta WebP, quedó en su formato original.`,
+      });
+    } catch (e) {
+      setMensaje({ tipo: "error", texto: e instanceof Error ? e.message : "No se pudo subir la imagen" });
+    } finally {
+      setSubiendo(false);
+      if (archivoRef.current) archivoRef.current.value = "";
+    }
+  }
 
   /** El título propone la dirección hasta que el admin la escribe a mano. */
   function cambiarTitulo(v: string) {
@@ -122,6 +245,15 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
           : `No se pudo guardar: ${error.message}`,
       });
       setGuardando(false);
+      return;
+    }
+
+    try {
+      await guardarEncuesta(data.id);
+    } catch (e) {
+      setMensaje({ tipo: "error", texto: e instanceof Error ? e.message : "La publicación se guardó, pero la encuesta no." });
+      setGuardando(false);
+      router.refresh();
       return;
     }
 
@@ -188,6 +320,8 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
         .post-editor-cuerpo mark { background: ${LIME}; color: #05070d; padding: 0 3px; border-radius: 3px; }
         .post-editor-cuerpo pre { background: rgba(255,255,255,0.05); padding: 12px 14px;
           border-radius: 8px; overflow-x: auto; font-size: 12px; }
+        .post-girando { animation: post-giro 900ms linear infinite; }
+        @keyframes post-giro { to { transform: rotate(360deg); } }
         .post-editor-cuerpo p.is-editor-empty:first-child::before {
           content: attr(data-placeholder); float: left; height: 0; pointer-events: none; color: #4a5164; }
       `}</style>
@@ -195,9 +329,40 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
       {/* Portada, título y bajada */}
       <div style={{ display: "grid", gap: 14 }}>
         <div>
-          <label style={etiqueta} htmlFor="post-portada">Imagen de portada (dirección https)</label>
-          <input id="post-portada" style={campo} value={portada} placeholder="https://..."
-                 onChange={(e) => setPortada(e.target.value)} />
+          <label style={etiqueta} htmlFor="post-portada">Imagen de portada</label>
+
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+            <input id="post-portada" style={{ ...campo, flex: 1, minWidth: 220 }} value={portada}
+                   placeholder="Subí una imagen o pegá una dirección https"
+                   onChange={(e) => setPortada(e.target.value)} />
+
+            <input ref={archivoRef} type="file" accept="image/*" hidden
+                   onChange={(e) => { const f = e.target.files?.[0]; if (f) subirPortada(f); }} />
+
+            <button type="button" onClick={() => archivoRef.current?.click()} disabled={subiendo}
+                    style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 16px", borderRadius: 9,
+                             border: `1px solid ${COURT}55`, background: "rgba(46,230,193,0.06)", color: COURT,
+                             fontFamily: MONO, fontSize: 12, cursor: subiendo ? "default" : "pointer",
+                             whiteSpace: "nowrap", opacity: subiendo ? 0.6 : 1 }}>
+              {subiendo
+                ? <><Loader2 size={14} className="post-girando" /> Subiendo…</>
+                : <><ImageUp size={14} /> Subir imagen</>}
+            </button>
+
+            {portada.trim() && !subiendo && (
+              <button type="button" onClick={() => setPortada("")} title="Quitar la portada"
+                      style={{ display: "flex", alignItems: "center", padding: 11, borderRadius: 9,
+                               border: "1px solid rgba(255,255,255,0.14)", background: "transparent",
+                               color: INK2, cursor: "pointer" }}>
+                <X size={14} />
+              </button>
+            )}
+          </div>
+
+          <span style={{ display: "block", fontFamily: MONO, fontSize: 10, color: INK2, marginTop: 7, lineHeight: 1.6 }}>
+            Se convierte a WebP y se achica a 1600px antes de subirla, así pesa poco y carga rápido en el celular.
+          </span>
+
           {portada.trim() && (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img src={portada} alt="" loading="lazy" decoding="async"
@@ -258,6 +423,60 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
         <EditorContent editor={editor} />
         <div style={{ padding: "8px 14px", borderTop: "1px solid rgba(255,255,255,0.06)", fontFamily: MONO, fontSize: 10, color: INK2, letterSpacing: "0.1em" }}>
           {minutos} min de lectura
+        </div>
+      </div>
+
+      {/* Encuesta */}
+      <div style={{ border: "1px solid rgba(255,255,255,0.09)", borderRadius: 12, padding: "16px 18px", background: "rgba(255,255,255,0.02)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 4 }}>
+          <BarChart3 size={14} color={COURT} />
+          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: COURT }}>
+            Encuesta (opcional)
+          </span>
+        </div>
+        <span style={{ display: "block", fontFamily: MONO, fontSize: 10, color: INK2, marginBottom: 13, lineHeight: 1.6 }}>
+          Aparece al final de la nota. Solo pueden votar quienes tengan cuenta, y cada uno vota una vez.
+          Dejá la pregunta vacía para que no haya encuesta.
+        </span>
+
+        <input style={campo} value={pregunta} placeholder="¿Vas a comprar sobres de 30th Celebration?"
+               onChange={(e) => setPregunta(e.target.value)} />
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 10 }}>
+          {opciones.map((o, i) => (
+            <div key={o.id ?? `nueva-${i}`} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <input style={{ ...campo, flex: 1 }} value={o.label} placeholder={`Opción ${i + 1}`}
+                     onChange={(e) => setOpciones(opciones.map((x, j) => j === i ? { ...x, label: e.target.value } : x))} />
+              {opciones.length > 2 && (
+                <button type="button" title="Quitar esta opción"
+                        onClick={() => {
+                          if (o.id) setBorradas([...borradas, o.id]);
+                          setOpciones(opciones.filter((_, j) => j !== i));
+                        }}
+                        style={{ display: "flex", padding: 11, borderRadius: 9, cursor: "pointer",
+                                 border: "1px solid rgba(255,255,255,0.14)", background: "transparent", color: INK2 }}>
+                  <X size={13} />
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 14, alignItems: "center", marginTop: 11 }}>
+          {opciones.length < 6 && (
+            <button type="button" onClick={() => setOpciones([...opciones, { label: "" }])}
+                    style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 9,
+                             border: "1px solid rgba(255,255,255,0.14)", background: "transparent", color: INK1,
+                             fontFamily: MONO, fontSize: 11, cursor: "pointer" }}>
+              <Plus size={12} /> Agregar opción
+            </button>
+          )}
+
+          <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontFamily: MONO, fontSize: 11, color: INK1 }}>
+            <input type="checkbox" checked={cerrada} onChange={(e) => setCerrada(e.target.checked)}
+                   style={{ accentColor: COURT, width: 15, height: 15 }} />
+            Cerrar la votación (se siguen viendo los resultados)
+          </label>
         </div>
       </div>
 

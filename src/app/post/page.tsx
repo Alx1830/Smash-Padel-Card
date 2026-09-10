@@ -9,7 +9,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
-import { Newspaper, ArrowLeft } from "lucide-react";
+import { Newspaper, ArrowLeft, Megaphone } from "lucide-react";
 import { fechaLarga, etiquetaCategoria, POST_CATEGORIAS } from "@/lib/posts";
 
 const COURT = "#2ee6c1";
@@ -41,6 +41,30 @@ interface Nota {
 
 const cuando = (n: Nota) => n.published_at ?? n.created_at;
 
+/**
+ * La foto de una nota, en una caja de proporción fija.
+ *
+ * Las portadas no vienen todas iguales: una foto apaisada de un torneo y el
+ * escaneo vertical de una carta conviven en la misma grilla. Recortar a lo
+ * ancho le corta la cabeza a la carta, así que la imagen va entera (`contain`)
+ * sobre una copia de sí misma difuminada, que rellena el borde con su propio
+ * color. Ninguna portada queda con franjas negras ni recortada.
+ */
+function Media({ src, clase, prioritaria = false }: { src: string | null; clase: string; prioritaria?: boolean }) {
+  if (!src) return <div className={`${clase} np-sinfoto`} />;
+  const carga = prioritaria
+    ? { fetchPriority: "high" as const }
+    : { loading: "lazy" as const };
+  return (
+    <div className={`${clase} np-media`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt="" aria-hidden decoding="async" {...carga} className="np-media-fondo" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt="" decoding="async" {...carga} className="np-media-foto" />
+    </div>
+  );
+}
+
 /** Categoría + fecha, la línea que encabeza cada tarjeta. */
 function Meta({ nota, size = 10 }: { nota: Nota; size?: number }) {
   return (
@@ -62,12 +86,7 @@ function Meta({ nota, size = 10 }: { nota: Nota; size?: number }) {
 function Portada({ nota }: { nota: Nota }) {
   return (
     <Link href={`/post/${nota.slug}`} className="np-lead">
-      {nota.cover_url ? (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img src={nota.cover_url} alt="" fetchPriority="high" decoding="async" className="np-lead-img" />
-      ) : (
-        <div className="np-lead-img np-sinfoto" />
-      )}
+      <Media src={nota.cover_url} clase="np-lead-img" prioritaria />
       <div className="np-lead-txt">
         <Meta nota={nota} size={11} />
         <h2 className="np-lead-tit">{nota.title}</h2>
@@ -81,34 +100,30 @@ function Portada({ nota }: { nota: Nota }) {
 function Fila({ nota }: { nota: Nota }) {
   return (
     <Link href={`/post/${nota.slug}`} className="np-fila">
-      {nota.cover_url ? (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img src={nota.cover_url} alt="" loading="lazy" decoding="async" className="np-fila-img" />
-      ) : (
-        <div className="np-fila-img np-sinfoto" />
-      )}
+      <Media src={nota.cover_url} clase="np-fila-img" />
       <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 0 }}>
         <Meta nota={nota} size={9} />
         <h3 className="np-fila-tit">{nota.title}</h3>
+        {nota.excerpt && <p className="np-fila-baj">{nota.excerpt}</p>}
       </div>
     </Link>
   );
 }
 
-/** Las de las secciones de abajo. */
-function Tarjeta({ nota }: { nota: Nota }) {
+/**
+ * La nota que abre una sección: foto grande con el título escrito encima.
+ *
+ * El degradado no es decoración — es lo que garantiza que el titular se lea
+ * sobre una foto clara. Sin él hay portadas donde el texto desaparece.
+ */
+function Destacada({ nota }: { nota: Nota }) {
   return (
-    <Link href={`/post/${nota.slug}`} className="np-card">
-      {nota.cover_url ? (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img src={nota.cover_url} alt="" loading="lazy" decoding="async" className="np-card-img" />
-      ) : (
-        <div className="np-card-img np-sinfoto" />
-      )}
-      <div className="np-card-txt">
+    <Link href={`/post/${nota.slug}`} className="np-dest">
+      <Media src={nota.cover_url} clase="np-dest-img" />
+      <span className="np-dest-velo" />
+      <div className="np-dest-txt">
         <Meta nota={nota} size={9} />
-        <h3 className="np-card-tit">{nota.title}</h3>
-        {nota.excerpt && <p className="np-card-baj">{nota.excerpt}</p>}
+        <h3 className="np-dest-tit">{nota.title}</h3>
       </div>
     </Link>
   );
@@ -142,9 +157,18 @@ export default async function NoticiasPage() {
     <div className="np-page">
       <style>{`
         .np-page { min-height: 100vh; background: ${BG0}; padding: 40px 24px 90px; }
-        .np-wrap { max-width: 1400px; }
+        .np-wrap { max-width: 1400px; margin: 0 auto; }
 
         .np-sinfoto { background: linear-gradient(135deg, rgba(46,230,193,0.10), rgba(255,255,255,0.03)); }
+
+        /* Caja de foto: la imagen entera sobre su propia copia difuminada.
+           El blur vive acá adentro y no envuelve a ninguna barra fija. */
+        .np-media { position: relative; overflow: hidden; background: #0a0e18; }
+        .np-media-fondo, .np-media-foto { position: absolute; inset: 0;
+          width: 100%; height: 100%; display: block; }
+        .np-media-fondo { object-fit: cover; filter: blur(26px) saturate(1.35) brightness(0.7);
+          transform: scale(1.25); }
+        .np-media-foto { object-fit: contain; }
 
         /* Bloque de arriba: principal + columna de cuatro */
         .np-hero { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
@@ -154,54 +178,88 @@ export default async function NoticiasPage() {
           border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02);
           transition: border-color 140ms; }
         .np-lead:hover { border-color: ${COURT}55; }
-        .np-lead-img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+        .np-lead-img { width: 100%; aspect-ratio: 16 / 9; max-height: 400px; }
         .np-lead-txt { padding: 20px 22px 24px; display: flex; flex-direction: column; gap: 12px; }
         .np-lead-tit { font-family: ${DISP}; font-size: clamp(21px, 2.6vw, 31px); font-weight: 700;
           color: ${INK0}; margin: 0; line-height: 1.22; }
         .np-lead-baj { font-family: ${MONO}; font-size: 12.5px; color: ${INK1}; margin: 0; line-height: 1.7;
           display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
-        .np-col { display: flex; flex-direction: column; gap: 14px; }
+        .np-col { display: flex; flex-direction: column; gap: 12px; }
+        .np-col > .np-fila { flex: 1 1 0; align-items: start; }
         .np-fila { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 13px;
-          text-decoration: none; padding-bottom: 14px;
+          text-decoration: none; padding-bottom: 12px;
           border-bottom: 1px solid rgba(255,255,255,0.07); }
         .np-col > .np-fila:last-child { border-bottom: 0; padding-bottom: 0; }
-        .np-fila-img { width: 104px; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; display: block; }
+        .np-fila-img { width: 104px; aspect-ratio: 4 / 3; border-radius: 10px; }
         .np-fila-tit { font-family: ${DISP}; font-size: 14.5px; font-weight: 600; color: ${INK0};
           margin: 0; line-height: 1.34;
+          display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .np-fila-baj { font-family: ${MONO}; font-size: 10.5px; color: ${INK2}; margin: 0; line-height: 1.6;
           display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         .np-fila:hover .np-fila-tit { color: ${COURT}; }
 
-        /* Secciones */
-        .np-sec { margin-bottom: 42px; }
-        .np-sec-cab { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-        .np-sec-tit { font-family: ${DISP}; font-size: 19px; font-weight: 700; color: ${INK0}; margin: 0; }
-        .np-sec-linea { flex: 1; height: 1px; background: rgba(255,255,255,0.09); }
+        /* ---------- Secciones ----------
+           Van de a dos columnas, como los bloques de un diario: cada una abre
+           con una nota grande y sigue con el resto en lista. La raya de arriba
+           marca dónde empieza cada bloque. */
+        /* Abajo van tres columnas: dos de secciones y una de publicidad. */
+        .np-abajo { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 30px;
+          align-items: start; }
+        .np-secs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 40px 30px; min-width: 0; }
 
-        .np-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
-        @media (max-width: 1240px) { .np-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-        @media (max-width: 1023px) { .np-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        /* El aviso queda a la vista mientras se recorren las secciones. */
+        .np-ads { position: sticky; top: 20px; }
+        .np-ad { width: 300px; height: 250px; border-radius: 13px;
+          border: 1px dashed rgba(255,255,255,0.15); background: rgba(255,255,255,0.02);
+          display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; }
+        .np-ad-tit { font-family: ${MONO}; font-size: 11px; letter-spacing: 0.14em;
+          text-transform: uppercase; color: ${INK2}; }
+        .np-ad-med { font-family: ${MONO}; font-size: 10px; color: rgba(122,130,152,0.7); }
+        .np-sec { min-width: 0; }
+        .np-sec-cab { border-top: 2px solid ${COURT}; padding-top: 11px; margin-bottom: 14px; }
+        .np-sec-tit { font-family: ${DISP}; font-size: 15px; font-weight: 700; color: ${COURT};
+          margin: 0; letter-spacing: 0.14em; text-transform: uppercase; }
 
-        .np-card { display: flex; flex-direction: column; text-decoration: none; border-radius: 13px;
-          overflow: hidden; border: 1px solid rgba(255,255,255,0.07);
-          background: rgba(255,255,255,0.02); transition: border-color 140ms; }
-        .np-card:hover { border-color: ${COURT}55; }
-        .np-card-img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; }
-        .np-card-txt { padding: 13px 15px 16px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
-        .np-card-tit { font-family: ${DISP}; font-size: 15px; font-weight: 600; color: ${INK0};
-          margin: 0; line-height: 1.32;
-          display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        .np-card-baj { font-family: ${MONO}; font-size: 11px; color: ${INK2}; margin: 0; line-height: 1.65;
+        .np-dest { position: relative; display: block; overflow: hidden; border-radius: 13px;
+          text-decoration: none; border: 1px solid rgba(255,255,255,0.07); }
+        .np-dest-img { width: 100%; aspect-ratio: 16 / 9; max-height: 260px; }
+        .np-dest-velo { position: absolute; inset: 0; pointer-events: none;
+          background: linear-gradient(to top,
+            rgba(5,7,13,0.95) 0%, rgba(5,7,13,0.82) 30%,
+            rgba(5,7,13,0.32) 62%, rgba(5,7,13,0.06) 100%); }
+        .np-dest-txt { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+          padding: 14px 16px 15px; display: flex; flex-direction: column; gap: 8px; }
+        .np-dest-tit { font-family: ${DISP}; font-size: 16px; font-weight: 700; color: ${INK0};
+          margin: 0; line-height: 1.3;
           display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .np-dest:hover .np-dest-tit { color: ${COURT}; }
+
+        .np-sec-lista { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+        .np-sec-lista > .np-fila:last-child { border-bottom: 0; padding-bottom: 0; }
+
+        /* Entre 1024 y 1240 el aviso al costado dejaría las secciones muy
+           angostas, así que baja a lo ancho. */
+        @media (max-width: 1240px) {
+          .np-abajo { grid-template-columns: minmax(0, 1fr); }
+          .np-ads { position: static; display: flex; justify-content: center; }
+        }
 
         @media (max-width: 1023px) {
           .np-hero { grid-template-columns: minmax(0, 1fr); gap: 26px; margin-bottom: 38px; }
+          .np-secs { grid-template-columns: minmax(0, 1fr); gap: 34px; }
+          .np-dest-img { max-height: 300px; }
         }
         @media (max-width: 767px), (pointer: coarse) {
           .np-page { padding: 28px 16px 90px; }
-          .np-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+          .np-lead-img { aspect-ratio: 4 / 3; max-height: none; }
+          .np-col > .np-fila { flex: 0 0 auto; align-items: start; }
           .np-fila { grid-template-columns: 88px minmax(0, 1fr); }
           .np-fila-img { width: 88px; }
+          .np-fila-baj { display: none; }
+          .np-ad { width: 100%; max-width: 300px; height: 250px; }
+          .np-fila-tit { -webkit-line-clamp: 3; }
           .np-sec { margin-bottom: 34px; }
         }
       `}</style>
@@ -210,23 +268,10 @@ export default async function NoticiasPage() {
         <Link href="/dashboard" style={{
           display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none",
           fontFamily: MONO, fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase",
-          color: INK2, marginBottom: 22,
+          color: INK2, marginBottom: 30,
         }}>
           <ArrowLeft size={13} /> Volver
         </Link>
-
-        <div style={{ marginBottom: 30 }}>
-          <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-            <span style={{ width: 22, height: 1, background: COURT, display: "inline-block" }} />
-            FaceBinder
-          </div>
-          <h1 style={{ fontFamily: DISP, fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 700, color: INK0, margin: 0 }}>
-            Noticias
-          </h1>
-          <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, margin: "8px 0 0" }}>
-            Sets nuevos, novedades del market y todo lo que pasa en la comunidad
-          </p>
-        </div>
 
         {!principal ? (
           <div style={{
@@ -249,18 +294,34 @@ export default async function NoticiasPage() {
               )}
             </div>
 
-            {secciones.map((s) => (
-              <section key={s.id} className="np-sec">
-                <div className="np-sec-cab">
-                  <span style={{ width: 3, height: 17, background: COURT, borderRadius: 2 }} />
-                  <h2 className="np-sec-tit">{s.label}</h2>
-                  <span className="np-sec-linea" />
+            <div className="np-abajo">
+              <div className="np-secs">
+              {secciones.map((s) => (
+                <section key={s.id} className="np-sec">
+                  <div className="np-sec-cab">
+                    <h2 className="np-sec-tit">{s.label}</h2>
+                  </div>
+                  <Destacada nota={s.notas[0]} />
+                  {s.notas.length > 1 && (
+                    <div className="np-sec-lista">
+                      {s.notas.slice(1).map((n) => <Fila key={n.id} nota={n} />)}
+                    </div>
+                  )}
+                </section>
+              ))}
+              </div>
+
+              {/* Columna de publicidad. Por ahora es el hueco reservado: el
+                  formato es el de siempre, 300x250, para que entre cualquier
+                  aviso sin rehacer la página. */}
+              <aside className="np-ads">
+                <div className="np-ad">
+                  <Megaphone size={20} color={INK2} />
+                  <span className="np-ad-tit">Espacio publicitario</span>
+                  <span className="np-ad-med">300 &times; 250</span>
                 </div>
-                <div className="np-grid">
-                  {s.notas.map((n) => <Tarjeta key={n.id} nota={n} />)}
-                </div>
-              </section>
-            ))}
+              </aside>
+            </div>
           </>
         )}
       </div>

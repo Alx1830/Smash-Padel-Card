@@ -123,7 +123,7 @@ export default async function LandingPage() {
   ].filter(n => n.valor > 0);
 
   return (
-    <main style={{ background: BG0, color: INK0, overflowX: "hidden" }}>
+    <main style={{ background: BG0, color: INK0, overflowX: "clip" }}>
       <DatosEstructurados cartasEnVenta={cifras.cartasEnVenta} />
       <style>{`
         @keyframes gridPan  { from { background-position: 0 0; } to { background-position: 80px 80px; } }
