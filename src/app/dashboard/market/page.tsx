@@ -237,7 +237,7 @@ export default function DashboardMarketPage() {
       <style>{`
         .dmkt-header { padding: 24px 20px 0; }
         .dmkt-body   { padding: 24px 20px 64px; }
-        @media (min-width: 768px) {
+        @media (min-width: 768px) and (pointer: fine) {
           .dmkt-header { padding: 48px 48px 0; }
           .dmkt-body   { padding: 32px 48px 80px; }
         }
@@ -292,7 +292,7 @@ export default function DashboardMarketPage() {
         .dmkt-layout { display: flex; gap: 32px; align-items: flex-start; }
         .dmkt-sidebar { width: 220px; flex-shrink: 0; }
         .dmkt-grid-area { flex: 1; min-width: 0; }
-        @media (max-width: 1023px) { .dmkt-layout { flex-direction: column; } .dmkt-sidebar { display: none; } }
+        @media (max-width: 1023px), (pointer: coarse) { .dmkt-layout { flex-direction: column; } .dmkt-sidebar { display: none; } }
       `}</style>
 
       <div className="dmkt-body">
@@ -305,7 +305,7 @@ export default function DashboardMarketPage() {
               <div style={{ height: "300px", borderRadius: "16px", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }} />
             </aside>
             <div className="dmkt-grid-area">
-              <style>{`@media (max-width: 767px) { .dmkt-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
+              <style>{`@media (max-width: 767px), (pointer: coarse) { .dmkt-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
               <CardGridSkeleton className="dmkt-cards-grid" count={12} radius={14} infoHeight={116} />
             </div>
           </div>
@@ -363,7 +363,7 @@ export default function DashboardMarketPage() {
                 </div>
               ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="dmkt-cards-grid">
-                <style>{`@media (max-width: 767px) { .dmkt-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
+                <style>{`@media (max-width: 767px), (pointer: coarse) { .dmkt-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
                 {filtered.map(listing => {
               const card    = cardFor(listing);
               const setInfo = SET_BY_ID.get(listing.set_id);

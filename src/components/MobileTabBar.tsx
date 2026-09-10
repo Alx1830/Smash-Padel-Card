@@ -73,7 +73,7 @@ export function MobileTabBar({ username: initialUsername }: { username?: string 
     <>
       <style>{`
         .mob-tabbar { display: none; }
-        @media (max-width: 1023px) {
+        @media (max-width: 1023px), (pointer: coarse) {
           .mob-tabbar {
             display: flex;
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;

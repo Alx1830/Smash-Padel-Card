@@ -258,25 +258,25 @@ export default function DeckEditorPage() {
     <div style={{ minHeight: "100vh" }}>
       <style>{`
         .deck-editor-header { padding: 24px 20px 0; }
-        @media (min-width: 768px) { .deck-editor-header { padding: 48px 48px 0; } }
+        @media (min-width: 768px) and (pointer: fine) { .deck-editor-header { padding: 48px 48px 0; } }
         .deck-editor-body { padding: 0 20px 80px; }
-        @media (min-width: 768px) { .deck-editor-body { padding: 0 48px 80px; } }
+        @media (min-width: 768px) and (pointer: fine) { .deck-editor-body { padding: 0 48px 80px; } }
         .deck-cards-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 10px;
         }
         @media (min-width: 480px)  { .deck-cards-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-        @media (min-width: 768px)  { .deck-cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-        @media (min-width: 1200px) { .deck-cards-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+        @media (min-width: 768px) and (pointer: fine)  { .deck-cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (min-width: 1200px) and (pointer: fine) { .deck-cards-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
         .picker-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 12px;
         }
         @media (min-width: 480px)  { .picker-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-        @media (min-width: 768px)  { .picker-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
-        @media (min-width: 1200px) { .picker-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
+        @media (min-width: 768px) and (pointer: fine)  { .picker-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+        @media (min-width: 1200px) and (pointer: fine) { .picker-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
       `}</style>
 
       {/* Header */}

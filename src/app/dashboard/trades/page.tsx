@@ -658,7 +658,7 @@ function TradesPageInner() {
         }
 
         /* Escritorio: la página no scrollea, cada columna sí */
-        @media (min-width: 1100px) {
+        @media (min-width: 1100px) and (pointer: fine) {
           .trade-page {
             height: 100vh; min-height: 0;
             display: flex; flex-direction: column;

@@ -412,7 +412,7 @@ export default function PerfilPage() {
     <div className="page-container" style={{ maxWidth: "1100px" }}>
       <style>{`
         .page-container { padding: 24px; }
-        @media (min-width: 768px) { .page-container { padding: 48px; } }
+        @media (min-width: 768px) and (pointer: fine) { .page-container { padding: 48px; } }
         .perfil-sections { display: flex; gap: 48px; align-items: flex-start; flex-wrap: wrap; }
         .perfil-section  { flex: 1; min-width: 280px; }
         .perfil-grid-2   { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }

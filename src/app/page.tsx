@@ -148,14 +148,14 @@ export default async function LandingPage() {
         .lp-tabla tbody tr { border-top: 1px solid rgba(255,255,255,0.06); }
         .lp-tabla tbody tr:hover { background: rgba(255,255,255,0.02); }
         /* El punto ciego de la tableta: acá es donde se rompe todo si no se mira */
-        @media (max-width: 1023px) {
+        @media (max-width: 1023px), (pointer: coarse) {
           .lp-func   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .lp-cifras { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .lp-sellos { grid-template-columns: 1fr; }
           .lp-pasos  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .lp-gente  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
-        @media (max-width: 767px) {
+        @media (max-width: 767px), (pointer: coarse) {
           .hero-grid        { flex-direction: column !important; align-items: center !important; padding: 60px 24px 64px !important; gap: 40px !important; }
           .hero-text        { max-width: 100% !important; text-align: center !important; }
           .hero-btns        { justify-content: center !important; flex-direction: column !important; align-items: center !important; }

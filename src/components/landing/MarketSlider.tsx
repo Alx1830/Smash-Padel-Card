@@ -102,7 +102,7 @@ export function MarketSlider({ cartas }: { cartas: CartaEnVenta[] }) {
         }
         .ms-marco::before { left: 0;  background: linear-gradient(90deg, #05070d, transparent); }
         .ms-marco::after  { right: 0; background: linear-gradient(270deg, #05070d, transparent); }
-        @media (max-width: 767px) {
+        @media (max-width: 767px), (pointer: coarse) {
           .ms-carta { width: 132px; }
           .ms-marco::before, .ms-marco::after { width: 40px; }
         }

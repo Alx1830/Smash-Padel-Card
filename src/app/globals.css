@@ -155,7 +155,7 @@ html, body {
 
    Solo aplica al tamaño de la letra que uno escribe; el placeholder y el resto
    del diseño se mantienen. */
-@media (max-width: 767px) {
+@media (max-width: 767px), (pointer: coarse) {
   input[type="text"],
   input[type="search"],
   input[type="email"],

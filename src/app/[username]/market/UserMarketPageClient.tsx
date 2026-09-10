@@ -168,7 +168,7 @@ export function UserMarketPageClient({
 
       {/* ══ HEADER SECTION ══ */}
       <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 24px 16px" }} className="um-section-header">
-        <style>{`@media (min-width: 1024px) { .um-section-header { padding: 32px 80px 16px !important; } }`}</style>
+        <style>{`@media (min-width: 1024px) and (pointer: fine) { .um-section-header { padding: 32px 80px 16px !important; } }`}</style>
         <div style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
           <span style={{ width: "18px", height: "1px", background: COURT, display: "inline-block" }} />
           <Link href={`/${username}`} style={{ color: COURT, textDecoration: "none" }}>@{username}</Link>
@@ -188,11 +188,11 @@ export function UserMarketPageClient({
       {/* ══ BODY ══ */}
       <section style={{ padding: "32px 24px 80px" }} className="um-body">
         <style>{`
-          @media (min-width: 1024px) { .um-body { padding: 48px 80px 80px !important; } }
+          @media (min-width: 1024px) and (pointer: fine) { .um-body { padding: 48px 80px 80px !important; } }
           .um-layout { display: flex; gap: 32px; align-items: flex-start; }
           .um-sidebar { width: 240px; flex-shrink: 0; }
           .um-grid-area { flex: 1; min-width: 0; }
-          @media (max-width: 1023px) { .um-layout { flex-direction: column; } .um-sidebar { display: none; } }
+          @media (max-width: 1023px), (pointer: coarse) { .um-layout { flex-direction: column; } .um-sidebar { display: none; } }
         `}</style>
 
         <div className="um-layout">
@@ -274,7 +274,7 @@ export function UserMarketPageClient({
               </div>
             ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="um-cards-grid">
-                <style>{`@media (max-width: 767px) { .um-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
+                <style>{`@media (max-width: 767px), (pointer: coarse) { .um-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
                 {filtered.map(({ card, set, listing }) => {
                   const color = getVersionColor(listing.version);
                   const label = getVersionLabel(listing.version);

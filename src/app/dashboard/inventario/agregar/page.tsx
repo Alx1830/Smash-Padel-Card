@@ -19,7 +19,7 @@ export default async function AgregarInventarioPage() {
     <div style={{ minHeight: "100vh" }}>
       <style>{`
         .agregar-header { padding: 24px 20px 0; }
-        @media (min-width: 768px) { .agregar-header { padding: 48px 48px 0; } }
+        @media (min-width: 768px) and (pointer: fine) { .agregar-header { padding: 48px 48px 0; } }
       `}</style>
       <div className="agregar-header">
         <Link href="/dashboard/inventario" style={{

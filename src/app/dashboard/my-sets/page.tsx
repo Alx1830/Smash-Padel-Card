@@ -116,9 +116,9 @@ export default function MySetsPage() {
     <div style={{ minHeight: "100vh" }}>
       <style>{`
         .msets-header { padding: 24px 20px 0; }
-        @media (min-width: 768px) { .msets-header { padding: 48px 48px 0; } }
+        @media (min-width: 768px) and (pointer: fine) { .msets-header { padding: 48px 48px 0; } }
         .msets-body { padding: 0 20px 80px; }
-        @media (min-width: 768px) { .msets-body { padding: 0 48px 80px; } }
+        @media (min-width: 768px) and (pointer: fine) { .msets-body { padding: 0 48px 80px; } }
         /* Dos columnas en móvil. minmax(0, …) y no 1fr a secas: con 1fr la
            columna nunca baja del ancho de su contenido y el grid desborda. */
         .mysets-grid {
@@ -128,7 +128,7 @@ export default function MySetsPage() {
         }
         .mysets-grid > * { min-width: 0; }
         @media (min-width: 640px)  { .mysets-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; } }
-        @media (min-width: 1024px) { .mysets-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; } }
+        @media (min-width: 1024px) and (pointer: fine) { .mysets-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; } }
         @keyframes mset-shimmer {
           0%   { background-position: 200% 0; }
           100% { background-position: -200% 0; }

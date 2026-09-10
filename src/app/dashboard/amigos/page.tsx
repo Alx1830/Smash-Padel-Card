@@ -47,7 +47,7 @@ export default async function AmigosPage() {
     <div className="page-container" style={{ minHeight: "100vh" }}>
       <style>{`
         .page-container { padding: 24px; }
-        @media (min-width: 768px) { .page-container { padding: 48px; } }
+        @media (min-width: 768px) and (pointer: fine) { .page-container { padding: 48px; } }
 
         .amigos-grid {
           display: grid;
@@ -74,10 +74,10 @@ export default async function AmigosPage() {
           transform-origin: top left;
           transform: scale(0.82);
         }
-        @media (min-width: 1024px) and (max-width: 1279px) {
+        @media (min-width: 1024px) and (pointer: fine) and (max-width: 1279px) {
           .amigos-card-wrap { transform: scale(0.68); }
         }
-        @media (max-width: 1023px) {
+        @media (max-width: 1023px), (pointer: coarse) {
           .amigos-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
           .amigos-card-wrap { transform: scale(0.64); }
         }

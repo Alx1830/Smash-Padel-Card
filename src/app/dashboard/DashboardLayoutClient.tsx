@@ -318,7 +318,7 @@ export function DashboardLayoutClient({
         .mob-topbar  { display: none; }
         .mob-content { padding-bottom: 0; }
 
-        @media (max-width: 1023px) {
+        @media (max-width: 1023px), (pointer: coarse) {
           /* Hide desktop sidebar entirely */
           .dash-sidebar { display: none; }
           .dash-main {

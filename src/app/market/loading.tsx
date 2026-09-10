@@ -18,16 +18,16 @@ export default function MarketLoading() {
         @keyframes fb-skel { 0%,100% { opacity: 0.55; } 50% { opacity: 0.9; } }
         .mkl-cover-desktop { display: none; }
         .mkl-cover-mobile  { display: block; }
-        @media (min-width: 768px) {
+        @media (min-width: 768px) and (pointer: fine) {
           .mkl-cover-desktop { display: block; }
           .mkl-cover-mobile  { display: none; }
         }
         .mkl-body { padding: 48px 24px 80px; }
-        @media (min-width: 1024px) { .mkl-body { padding: 64px 80px 80px; } }
+        @media (min-width: 1024px) and (pointer: fine) { .mkl-body { padding: 64px 80px 80px; } }
         .mkl-layout  { display: flex; gap: 32px; align-items: flex-start; }
         .mkl-sidebar { width: 260px; flex-shrink: 0; }
         .mkl-grid-area { flex: 1; min-width: 0; }
-        @media (max-width: 1023px) {
+        @media (max-width: 1023px), (pointer: coarse) {
           .mkl-layout  { flex-direction: column; align-items: stretch; }
           .mkl-sidebar { display: none; }
           .mkl-grid-area { width: 100%; }
@@ -36,7 +36,7 @@ export default function MarketLoading() {
             gap: 12px !important;
           }
         }
-        @media (max-width: 767px) {
+        @media (max-width: 767px), (pointer: coarse) {
           .mkl-cards-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             gap: 10px !important;

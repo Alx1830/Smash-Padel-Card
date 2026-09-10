@@ -170,7 +170,7 @@ export default function DashboardWishlistPage() {
       <style>{`
         .dwish-header { padding: 24px 20px 0; }
         .dwish-body   { padding: 24px 20px 64px; }
-        @media (min-width: 768px) {
+        @media (min-width: 768px) and (pointer: fine) {
           .dwish-header { padding: 48px 48px 0; }
           .dwish-body   { padding: 32px 48px 80px; }
         }
@@ -197,7 +197,7 @@ export default function DashboardWishlistPage() {
         .dwish-layout { display: flex; gap: 32px; align-items: flex-start; }
         .dwish-sidebar { width: 220px; flex-shrink: 0; }
         .dwish-grid-area { flex: 1; min-width: 0; }
-        @media (max-width: 1023px) {
+        @media (max-width: 1023px), (pointer: coarse) {
           .dwish-layout { flex-direction: column; }
           .dwish-sidebar { width: 100% !important; }
           .dwish-sidebar > div { position: static !important; }
@@ -263,7 +263,7 @@ export default function DashboardWishlistPage() {
                 </div>
               ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="dwish-cards-grid">
-                <style>{`@media (max-width: 767px) { .dwish-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
+                <style>{`@media (max-width: 767px), (pointer: coarse) { .dwish-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
                 {filtered.map(({ card, set, row }) => {
                   const version = card?.version ?? "normal";
                   const verColor = getVersionColor(version);

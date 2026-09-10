@@ -455,16 +455,16 @@ export default function InventarioPage() {
 
         /* ── Layout ── */
         .inv-page-padding { padding: 24px 20px 0; }
-        @media (min-width: 768px) { .inv-page-padding { padding: 48px 48px 0; } }
+        @media (min-width: 768px) and (pointer: fine) { .inv-page-padding { padding: 48px 48px 0; } }
 
         .inv-body { padding: 0 20px 80px; }
-        @media (min-width: 768px) { .inv-body { padding: 0 48px 80px; } }
+        @media (min-width: 768px) and (pointer: fine) { .inv-body { padding: 0 48px 80px; } }
 
         .inv-layout { display: flex; gap: 32px; align-items: flex-start; }
         .inv-sidebar { width: 220px; flex-shrink: 0; }
         .inv-grid-area { flex: 1; min-width: 0; }
         .inv-filters-toggle { display: none; }
-        @media (max-width: 1023px) {
+        @media (max-width: 1023px), (pointer: coarse) {
           .inv-layout { flex-direction: column; gap: 16px; }
           .inv-sidebar { width: 100% !important; }
           .inv-sidebar > div { position: static !important; }
@@ -487,7 +487,7 @@ export default function InventarioPage() {
           gap: 12px;
         }
         @media (min-width: 640px)  { .inv-card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; } }
-        @media (min-width: 1280px) { .inv-card-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; } }
+        @media (min-width: 1280px) and (pointer: fine) { .inv-card-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; } }
 
         /* ── Icon overlay buttons ── */
         .inv-icon-btn {

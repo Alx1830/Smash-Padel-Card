@@ -216,8 +216,8 @@ export default function AprobacionesPage() {
         .ap-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
         @media (max-width: 1500px) { .ap-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
         @media (max-width: 1240px) { .ap-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-        @media (max-width: 1023px) { .ap-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-        @media (max-width: 767px) {
+        @media (max-width: 1023px), (pointer: coarse) { .ap-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (max-width: 767px), (pointer: coarse) {
           .ap-page { padding: 28px 16px; }
           .ap-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
         }

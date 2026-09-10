@@ -122,9 +122,9 @@ export default function DecksPage() {
     <div style={{ minHeight: "100vh" }}>
       <style>{`
         .decks-header { padding: 24px 20px 0; }
-        @media (min-width: 768px) { .decks-header { padding: 48px 48px 0; } }
+        @media (min-width: 768px) and (pointer: fine) { .decks-header { padding: 48px 48px 0; } }
         .decks-body { padding: 0 20px 80px; }
-        @media (min-width: 768px) { .decks-body { padding: 0 48px 80px; } }
+        @media (min-width: 768px) and (pointer: fine) { .decks-body { padding: 0 48px 80px; } }
         @keyframes deck-shimmer {
           0%   { background-position: 200% 0; }
           100% { background-position: -200% 0; }

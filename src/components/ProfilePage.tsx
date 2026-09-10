@@ -200,7 +200,7 @@ export function ProfilePage({ player }: { player: PlayerData }) {
         </div>
 
         <style>{`
-          @media (min-width: 768px) {
+          @media (min-width: 768px) and (pointer: fine) {
             .cover-desktop { display: block !important; }
             .cover-mobile  { display: none  !important; }
           }
@@ -276,14 +276,14 @@ export function ProfilePage({ player }: { player: PlayerData }) {
         </div>
 
         <style>{`
-          @media (min-width: 768px) {
+          @media (min-width: 768px) and (pointer: fine) {
             .profile-desktop { display: block !important; }
             .profile-mobile  { display: none  !important; }
           }
           /* Entre 768 y 1023px las tres columnas no caben: la card 3D escalada
              y las destacadas dejan al gráfico en unos pocos píxeles. Se va el
              gráfico y las destacadas ocupan el hueco. */
-          @media (max-width: 1023px) {
+          @media (max-width: 1023px), (pointer: coarse) {
             .pp-hero-chart    { display: none !important; }
             .pp-hero-showcase { flex: 1 1 auto !important; width: auto !important; max-width: 420px; }
           }
@@ -1560,11 +1560,11 @@ function CollectionSection({
 
       <style>{`
         /* Tablet */
-        @media (max-width: 1023px) and (min-width: 768px) {
+        @media (max-width: 1023px) and (min-width: 768px) and (pointer: fine) {
           .coll-outer { padding: 40px 32px 0 !important; gap: 32px !important; }
         }
         /* Mobile */
-        @media (max-width: 767px) {
+        @media (max-width: 767px), (pointer: coarse) {
           .coll-outer { padding: 16px 16px 0 !important; grid-template-columns: 1fr !important; gap: 16px !important; }
           .prof-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 16px 12px !important; }
           .showcase-wrap { margin-bottom: 16px !important; }

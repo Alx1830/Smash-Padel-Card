@@ -14,20 +14,20 @@ export default function DashboardLoading() {
       <style>{`
         @keyframes fb-skel { 0%,100% { opacity: 0.5; } 50% { opacity: 0.85; } }
         .dash-skel-wrap { padding: 24px; }
-        @media (min-width: 768px) { .dash-skel-wrap { padding: 48px; } }
+        @media (min-width: 768px) and (pointer: fine) { .dash-skel-wrap { padding: 48px; } }
         .dash-skel-stats {
           display: grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
           gap: 16px;
           margin-bottom: 40px;
         }
-        @media (max-width: 900px) { .dash-skel-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 900px), (pointer: coarse) { .dash-skel-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
         .dash-skel-row {
           display: grid;
           grid-template-columns: 1fr;
           gap: 16px;
         }
-        @media (min-width: 1100px) { .dash-skel-row { grid-template-columns: minmax(0, 1fr) 320px; } }
+        @media (min-width: 1100px) and (pointer: fine) { .dash-skel-row { grid-template-columns: minmax(0, 1fr) 320px; } }
         .dash-skel-card {
           background: rgba(255,255,255,0.02);
           border: 1px solid rgba(255,255,255,0.08);

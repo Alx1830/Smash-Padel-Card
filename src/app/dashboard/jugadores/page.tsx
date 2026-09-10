@@ -56,7 +56,7 @@ export default function AmigosPage() {
     <div className="page-container" style={{ minHeight: "100vh" }}>
       <style>{`
         .page-container { padding: 24px; }
-        @media (min-width: 768px) { .page-container { padding: 48px; } }
+        @media (min-width: 768px) and (pointer: fine) { .page-container { padding: 48px; } }
       `}</style>
       <div style={{ marginBottom: "48px" }}>
         <div style={{

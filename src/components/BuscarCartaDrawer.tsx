@@ -280,7 +280,7 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
           .buscar-grid { gap: 10px; }
         }
         @media (min-width: 640px)  { .buscar-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; } }
-        @media (min-width: 1280px) { .buscar-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; } }
+        @media (min-width: 1280px) and (pointer: fine) { .buscar-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; } }
         ${INV_CARD_KEYFRAMES}
         .buscar-spinner {
           width: 28px; height: 28px; border-radius: 50%;

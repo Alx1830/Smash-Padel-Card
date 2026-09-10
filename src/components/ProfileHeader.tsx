@@ -347,7 +347,7 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
             z-index: 2;
           }
           .ver-perfil-btn:hover { animation-duration: 1s; }
-          @media (min-width: 768px) { .ph-cover-desktop { display: block !important; } .ph-cover-mobile { display: none !important; } }
+          @media (min-width: 768px) and (pointer: fine) { .ph-cover-desktop { display: block !important; } .ph-cover-mobile { display: none !important; } }
         `}</style>
       </section>
 
@@ -425,11 +425,11 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
         </div>
 
         <style>{`
-          @media (min-width: 768px) { .ph-profile-desktop { display: block !important; } .ph-profile-mobile { display: none !important; } }
+          @media (min-width: 768px) and (pointer: fine) { .ph-profile-desktop { display: block !important; } .ph-profile-mobile { display: none !important; } }
           /* Entre 768 y 1023px las tres columnas no caben: la card 3D escalada
              y las destacadas dejan al gráfico en unos pocos píxeles. Se va el
              gráfico y las destacadas ocupan el hueco. */
-          @media (max-width: 1023px) {
+          @media (max-width: 1023px), (pointer: coarse) {
             .ph-hero-chart    { display: none !important; }
             .ph-hero-showcase { flex: 1 1 auto !important; width: auto !important; max-width: 420px; }
           }

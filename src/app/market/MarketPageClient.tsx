@@ -576,7 +576,7 @@ export function MarketPageClient({
         </div>
 
         <style>{`
-          @media (min-width: 768px) {
+          @media (min-width: 768px) and (pointer: fine) {
             .mkt-cover-desktop { display: block !important; }
             .mkt-cover-mobile  { display: none  !important; }
           }
@@ -590,11 +590,11 @@ export function MarketPageClient({
       {/* ══ LISTINGS + SIDEBAR ══ */}
       <section style={{ padding: "48px 24px 80px" }} className="mkt-body-section">
         <style>{`
-          @media (min-width: 1024px) { .mkt-body-section { padding: 64px 80px 80px !important; } }
+          @media (min-width: 1024px) and (pointer: fine) { .mkt-body-section { padding: 64px 80px 80px !important; } }
           .mkt-layout { display: flex; gap: 32px; align-items: flex-start; }
           .mkt-sidebar { width: 260px; flex-shrink: 0; }
           .mkt-grid-area { flex: 1; min-width: 0; }
-          @media (max-width: 1023px) {
+          @media (max-width: 1023px), (pointer: coarse) {
             /* align-items: stretch — con flex-start el área se encogía al ancho
                de su contenido y la grilla quedaba pegada a la izquierda */
             .mkt-layout { flex-direction: column; align-items: stretch; }
@@ -605,7 +605,7 @@ export function MarketPageClient({
               gap: 12px !important;
             }
           }
-          @media (max-width: 767px) {
+          @media (max-width: 767px), (pointer: coarse) {
             .mkt-cards-grid {
               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
               gap: 10px !important;
@@ -844,7 +844,7 @@ export function MarketPageClient({
           border-top: 1px solid rgba(255,255,255,0.07);
           padding-bottom: env(safe-area-inset-bottom);
         }
-        @media (max-width: 1023px) {
+        @media (max-width: 1023px), (pointer: coarse) {
           .mkt-filter-btn { display: flex; align-items: center; }
           .mkt-mob-tabbar { display: flex; }
           .mkt-body-section { padding-bottom: 96px !important; }

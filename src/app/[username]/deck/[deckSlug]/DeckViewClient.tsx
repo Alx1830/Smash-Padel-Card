@@ -94,7 +94,7 @@ export function DeckViewClient({
 
       {/* ══ HEADER SECTION ══ */}
       <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 24px 16px" }} className="dk-section-header">
-        <style>{`@media (min-width: 1024px) { .dk-section-header { padding: 32px 80px 16px !important; } }`}</style>
+        <style>{`@media (min-width: 1024px) and (pointer: fine) { .dk-section-header { padding: 32px 80px 16px !important; } }`}</style>
         <div style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: PINK, display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
           <span style={{ width: "18px", height: "1px", background: PINK, display: "inline-block" }} />
           <Link href={`/${username}`} style={{ color: PINK, textDecoration: "none" }}>@{username}</Link>
@@ -118,7 +118,7 @@ export function DeckViewClient({
       {/* ══ BODY ══ */}
       <section style={{ padding: "32px 24px 80px" }} className="dk-body">
         <style>{`
-          @media (min-width: 1024px) { .dk-body { padding: 48px 80px 80px !important; } }
+          @media (min-width: 1024px) and (pointer: fine) { .dk-body { padding: 48px 80px 80px !important; } }
           @keyframes dk-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
           .dk-skeleton {
             background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.04) 75%);
@@ -126,7 +126,7 @@ export function DeckViewClient({
             animation: dk-shimmer 1.4s ease-in-out infinite;
             border-radius: 8px;
           }
-          @media (max-width: 767px) { .dk-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }
+          @media (max-width: 767px), (pointer: coarse) { .dk-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }
         `}</style>
 
         {!setsLoaded && rows.length > 0 ? (

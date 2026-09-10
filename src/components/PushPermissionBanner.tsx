@@ -87,7 +87,7 @@ export function PushPermissionBanner({ onDismiss }: PushPermissionBannerProps) {
         .push-banner.leaving {
           animation: push-banner-out 0.28s ease forwards;
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1024px) and (pointer: fine) {
           .push-banner {
             bottom: 24px;
             left: calc(260px + 16px);

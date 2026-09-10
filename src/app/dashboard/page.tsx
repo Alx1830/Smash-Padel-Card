@@ -438,14 +438,14 @@ export default function DashboardHome() {
     <div className="dash-home-wrap" style={{ minHeight: "100vh" }}>
       <style>{`
         .dash-home-wrap { padding: 24px; }
-        @media (min-width: 768px) { .dash-home-wrap { padding: 48px; } }
+        @media (min-width: 768px) and (pointer: fine) { .dash-home-wrap { padding: 48px; } }
         .stats-grid {
           display: grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
           gap: 16px;
           margin-bottom: 40px;
         }
-        @media (max-width: 900px) {
+        @media (max-width: 900px), (pointer: coarse) {
           .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
         @media (max-width: 480px) {
@@ -457,7 +457,7 @@ export default function DashboardHome() {
           gap: 16px;
           margin-bottom: 40px;
         }
-        @media (min-width: 1100px) {
+        @media (min-width: 1100px) and (pointer: fine) {
           .portfolio-row { grid-template-columns: minmax(0, 1fr) 320px; }
         }
       `}</style>

@@ -336,7 +336,7 @@ function SolicitudesPageInner() {
         @media (min-width: 640px) { .sol-cards { grid-template-columns: 1fr 1fr; } }
         /* Propuesta y negociación lado a lado cuando hay ancho */
         .sol-split { display: grid; grid-template-columns: 1fr; gap: 16px; }
-        @media (min-width: 1000px) {
+        @media (min-width: 1000px) and (pointer: fine) {
           /* El chat crece con la pantalla en vez de quedarse en 360px fijos */
           .sol-split { grid-template-columns: minmax(0, 1fr) minmax(340px, 26%); align-items: start; }
           /* Viendo una sola solicitud las dos tarjetas ocupan el alto de la

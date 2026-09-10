@@ -203,7 +203,7 @@ export function WishlistPageClient({
 
       {/* ══ HEADER SECTION ══ */}
       <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 24px 16px" }} className="wl-section-header">
-        <style>{`@media (min-width: 1024px) { .wl-section-header { padding: 32px 80px 16px !important; } }`}</style>
+        <style>{`@media (min-width: 1024px) and (pointer: fine) { .wl-section-header { padding: 32px 80px 16px !important; } }`}</style>
         <div style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
           <span style={{ width: "18px", height: "1px", background: COURT, display: "inline-block" }} />
           <Link href={`/${username}`} style={{ color: COURT, textDecoration: "none" }}>@{username}</Link>
@@ -224,11 +224,11 @@ export function WishlistPageClient({
       {/* ══ BODY ══ */}
       <section style={{ padding: "32px 24px 80px" }} className="wl-body">
         <style>{`
-          @media (min-width: 1024px) { .wl-body { padding: 48px 80px 80px !important; } }
+          @media (min-width: 1024px) and (pointer: fine) { .wl-body { padding: 48px 80px 80px !important; } }
           .wl-layout { display: flex; gap: 32px; align-items: flex-start; }
           .wl-sidebar { width: 240px; flex-shrink: 0; }
           .wl-grid-area { flex: 1; min-width: 0; }
-          @media (max-width: 1023px) {
+          @media (max-width: 1023px), (pointer: coarse) {
             .wl-layout { flex-direction: column; }
             .wl-sidebar { width: 100% !important; }
             .wl-sidebar > div { position: static !important; }
@@ -326,7 +326,7 @@ export function WishlistPageClient({
               </div>
             ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="wl-cards-grid">
-                <style>{`@media (max-width: 767px) { .wl-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
+                <style>{`@media (max-width: 767px), (pointer: coarse) { .wl-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
                 {filtered.map((item, i) => {
                   const color    = getVersionColor(item.card.version);
                   const label    = getVersionLabel(item.card.version);

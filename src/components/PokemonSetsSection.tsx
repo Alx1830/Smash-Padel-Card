@@ -836,7 +836,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
         .tcg-card-wrap { width: 240px; }
         .tcg-card-body { width: 240px; height: 336px; overflow: hidden; position: relative; background: linear-gradient(135deg, #0e1420 0%, #161d2e 50%, #0e1420 100%); }
         .pks-thumb:not(.pks-thumb--open):not(.pks-thumb--gray):hover { background: rgba(46,230,193,0.05) !important; }
-        @media (max-width: 767px) {
+        @media (max-width: 767px), (pointer: coarse) {
           .pks-header { padding: 48px 12px 32px !important; }
           .pks-body   { padding: 0 12px !important; }
           .pks-cards-grid {

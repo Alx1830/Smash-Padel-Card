@@ -271,25 +271,25 @@ export default function MySetEditorPage() {
     <div style={{ minHeight: "100vh" }}>
       <style>{`
         .mset-editor-header { padding: 24px 20px 0; }
-        @media (min-width: 768px) { .mset-editor-header { padding: 48px 48px 0; } }
+        @media (min-width: 768px) and (pointer: fine) { .mset-editor-header { padding: 48px 48px 0; } }
         .mset-editor-body { padding: 0 20px 80px; }
-        @media (min-width: 768px) { .mset-editor-body { padding: 0 48px 80px; } }
+        @media (min-width: 768px) and (pointer: fine) { .mset-editor-body { padding: 0 48px 80px; } }
         .mset-cards-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 10px;
         }
         @media (min-width: 480px)  { .mset-cards-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-        @media (min-width: 768px)  { .mset-cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-        @media (min-width: 1200px) { .mset-cards-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+        @media (min-width: 768px) and (pointer: fine)  { .mset-cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (min-width: 1200px) and (pointer: fine) { .mset-cards-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
         .mpicker-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 12px;
         }
         @media (min-width: 480px)  { .mpicker-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-        @media (min-width: 768px)  { .mpicker-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
-        @media (min-width: 1200px) { .mpicker-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
+        @media (min-width: 768px) and (pointer: fine)  { .mpicker-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+        @media (min-width: 1200px) and (pointer: fine) { .mpicker-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
 
         /* Cifras y botones: apilados en movil, en una sola linea a la derecha
            en pantallas anchas. Antes iban siempre en fila y se apretaban. */
@@ -305,7 +305,7 @@ export default function MySetEditorPage() {
         .mset-stat-value { font-size: 20px; font-weight: 700; line-height: 1.1; }
         .mset-buttons { display: flex; gap: 10px; }
         .mset-buttons > button { flex: 1 1 0; justify-content: center; white-space: nowrap; }
-        @media (min-width: 768px) {
+        @media (min-width: 768px) and (pointer: fine) {
           .mset-actions { flex-direction: row; align-items: center; width: auto; gap: 10px; }
           .mset-stats { gap: 18px; margin-right: 6px; text-align: right; }
           .mset-stat-value { font-size: 18px; }

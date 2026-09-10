@@ -419,7 +419,7 @@ export default function AdminUsersPage() {
     <div className="adm-wrap" style={{ minHeight: "100vh" }}>
       <style>{`
         .adm-wrap { padding: 24px; }
-        @media (min-width: 768px) { .adm-wrap { padding: 48px; } }
+        @media (min-width: 768px) and (pointer: fine) { .adm-wrap { padding: 48px; } }
 
         /* Rejilla tipo hoja de cálculo */
         .adm-sheet {
