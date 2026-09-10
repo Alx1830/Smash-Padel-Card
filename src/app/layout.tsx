@@ -1,7 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Archivo_Black } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
 import { getAuthedPlayer } from "@/lib/supabase/server";
 import { Navbar } from "@/components/Navbar";
@@ -150,8 +148,6 @@ export default async function RootLayout({
         <MarketTickerWrapper />
         <Navbar {...navProps} />
         {children}
-        <Analytics />
-        <SpeedInsights />
         <Script id="sw-register" strategy="afterInteractive">{`
           if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js').catch(function() {});

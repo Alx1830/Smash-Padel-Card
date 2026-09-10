@@ -1,10 +1,44 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
-// ── Rate limiting in-memory ───────────────────────────────────────────────────
+// ── Rate limiting ─────────────────────────────────────────────────────────────
+// En Cloudflare el conteo lo lleva el rate limiter nativo (bindings RL_* en
+// wrangler.jsonc), no un Map: cada isolate tiene su propia memoria, asi que un
+// contador local no protege nada. El Map sobrevive solo como reserva para
+// `next dev`, donde los bindings no existen.
+type Limiter = { limit: (opts: { key: string }) => Promise<{ success: boolean }> };
+
+const RATE_LIMITED: Record<string, { binding: string; limit: number; windowMs: number }> = {
+  "/login":              { binding: "RL_LOGIN",          limit: 15, windowMs: 60_000 },
+  "/api/auth":           { binding: "RL_API_AUTH",       limit: 15, windowMs: 60_000 },
+  "/api/push/subscribe": { binding: "RL_PUSH_SUBSCRIBE", limit: 5,  windowMs: 60_000 },
+  "/api/webhooks":       { binding: "RL_WEBHOOKS",       limit: 30, windowMs: 60_000 },
+  "/api/admin":          { binding: "RL_ADMIN",          limit: 20, windowMs: 60_000 },
+};
+
+// En proxy hay que pedir el contexto en modo async: el sincrono no esta
+// inicializado en ese bundle y devuelve nada. El aviso importa — la primera
+// version fallaba en silencio y dejaba el rate limit sin efecto en produccion.
+async function getLimiter(binding: string): Promise<Limiter | null> {
+  try {
+    const { env } = await getCloudflareContext({ async: true });
+    const limiter = (env as unknown as Record<string, Limiter | undefined>)?.[binding];
+    if (!limiter) {
+      console.warn(`[rate-limit] binding ${binding} no disponible; cayendo al contador local`);
+      return null;
+    }
+    return limiter;
+  } catch (err) {
+    console.warn(`[rate-limit] sin contexto de Cloudflare (${String(err)}); contador local`);
+    return null; // next dev
+  }
+}
+
+// ── Reserva en memoria, solo para desarrollo local ────────────────────────────
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
-function rateLimit(key: string, limit: number, windowMs: number): boolean {
+function rateLimitLocal(key: string, limit: number, windowMs: number): boolean {
   const now = Date.now();
   const entry = rateLimitMap.get(key);
   if (!entry || now > entry.resetAt) {
@@ -25,19 +59,10 @@ function maybeCleanup() {
   }
 }
 
-// ── Rate limit config ─────────────────────────────────────────────────────────
-const RATE_LIMITED: Record<string, { limit: number; windowMs: number }> = {
-  "/login":              { limit: 15,  windowMs: 60_000 },
-  "/api/auth":           { limit: 15,  windowMs: 60_000 },
-  "/api/push/subscribe": { limit: 5,   windowMs: 60_000 },
-  "/api/webhooks":       { limit: 30,  windowMs: 60_000 },
-  "/api/admin":          { limit: 20,  windowMs: 60_000 },
-};
-
 // ── Protected routes ──────────────────────────────────────────────────────────
 const PROTECTED = ["/dashboard", "/admin"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Rate limiting
@@ -45,10 +70,17 @@ export async function middleware(request: NextRequest) {
   for (const [path, cfg] of Object.entries(RATE_LIMITED)) {
     if (pathname.startsWith(path)) {
       const ip =
+        request.headers.get("cf-connecting-ip") ??
         request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
         request.headers.get("x-real-ip") ??
         "unknown";
-      if (!rateLimit(`${ip}:${path}`, cfg.limit, cfg.windowMs)) {
+
+      const limiter = await getLimiter(cfg.binding);
+      const permitido = limiter
+        ? (await limiter.limit({ key: `${ip}:${path}` })).success
+        : rateLimitLocal(`${ip}:${path}`, cfg.limit, cfg.windowMs);
+
+      if (!permitido) {
         return new NextResponse(
           JSON.stringify({ error: "Too Many Requests" }),
           {

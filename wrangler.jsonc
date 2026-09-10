@@ -1,0 +1,48 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "facebinder",
+  "account_id": "f41f124769343cd4354765d6a149a75a",
+  "compatibility_date": "2025-09-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  "services": [
+    { "binding": "WORKER_SELF_REFERENCE", "service": "facebinder" }
+  ],
+
+  // Cache de paginas ISR (portada, market, perfiles, wishlists).
+  "r2_buckets": [
+    { "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "facebinder-next-cache" }
+  ],
+
+  // Rate limit del middleware. El Map en memoria no sirve en Workers: cada
+  // isolate tiene el suyo y el contador arranca casi siempre en cero. KV
+  // tampoco (1.000 escrituras/dia en el plan gratuito), asi que va el limiter
+  // nativo, que solo admite periodos de 10 o 60s — los cinco limites del
+  // middleware ya eran de 60s, calzan sin cambiarlos.
+  "ratelimits": [
+    { "name": "RL_LOGIN",         "namespace_id": "1001", "simple": { "limit": 15, "period": 60 } },
+    { "name": "RL_API_AUTH",      "namespace_id": "1002", "simple": { "limit": 15, "period": 60 } },
+    { "name": "RL_PUSH_SUBSCRIBE","namespace_id": "1003", "simple": { "limit": 5,  "period": 60 } },
+    { "name": "RL_WEBHOOKS",      "namespace_id": "1004", "simple": { "limit": 30, "period": 60 } },
+    { "name": "RL_ADMIN",         "namespace_id": "1005", "simple": { "limit": 20, "period": 60 } }
+  ],
+
+  // SQLite es el unico backend de Durable Objects del plan gratuito.
+  "durable_objects": {
+    "bindings": [
+      { "name": "NEXT_CACHE_DO_QUEUE", "class_name": "DOQueueHandler" },
+      { "name": "NEXT_TAG_CACHE_DO_SHARDED", "class_name": "DOShardedTagCache" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["DOQueueHandler", "DOShardedTagCache"] }
+  ],
+
+  "observability": { "enabled": true }
+}

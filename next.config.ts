@@ -35,6 +35,11 @@ const nextConfig: NextConfig = {
     staleTimes: { dynamic: 30, static: 180 },
   },
   images: {
+    // Cloudflare no tiene el optimizador de Vercel: las dos alternativas
+    // (binding IMAGES o loader propio) pasan por Image Transformations, que se
+    // cobra. Como las cartas ya estan en WebP y con el tamano final en R2, se
+    // sirven tal cual. Revisar si algun dia se paga el plan.
+    unoptimized: true,
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 7,
     remotePatterns: [
@@ -79,7 +84,7 @@ export default withPWA({
   runtimeCaching: [
     /* App shell — JS/CSS del sitio: red primero, caché como fallback */
     {
-      urlPattern: /^https:\/\/(www\.)?facebinder\.(com|vercel\.app)\/_next\/.*/i,
+      urlPattern: /^https:\/\/(www\.)?(facebinder\.com|[a-z0-9-]+\.workers\.dev)\/_next\/.*/i,
       handler: "StaleWhileRevalidate",
       options: {
         cacheName: "next-static",

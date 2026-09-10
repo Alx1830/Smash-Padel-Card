@@ -6,6 +6,9 @@ import type { NextRequest } from "next/server";
 const ALLOWED_ORIGINS = [
   "https://facebinder.com",
   "https://www.facebinder.com",
+  // Despliegue de prueba en Cloudflare. Sale de la lista cuando el dominio
+  // apunte al Worker y Vercel se apague.
+  "https://facebinder.alexistorres1830.workers.dev",
   "https://facebinder.vercel.app",
   "http://localhost:3000",
   "http://localhost:3001",
