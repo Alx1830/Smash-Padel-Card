@@ -9,8 +9,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
-import { Newspaper, ArrowLeft, Megaphone } from "lucide-react";
+import { Newspaper, ArrowLeft } from "lucide-react";
 import { fechaLarga, etiquetaCategoria, POST_CATEGORIAS } from "@/lib/posts";
+import { EspacioPublicitario } from "@/components/post/EspacioPublicitario";
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
@@ -204,8 +205,12 @@ export default async function NoticiasPage() {
            con una nota grande y sigue con el resto en lista. La raya de arriba
            marca dónde empieza cada bloque. */
         /* Abajo van tres columnas: dos de secciones y una de publicidad. */
-        .np-abajo { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 30px;
+        /* La segunda columna se mide por su contenido, no en 300px fijos: cuando el aviso no se
+           dibuja —que es lo que ve cualquiera que no sea admin— la columna
+           mide cero y las secciones ocupan todo el ancho. */
+        .np-abajo { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 30px;
           align-items: start; }
+        .np-abajo:not(:has(.np-ads)) { grid-template-columns: minmax(0, 1fr); gap: 0; }
         .np-secs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 40px 30px; min-width: 0; }
 
@@ -311,16 +316,10 @@ export default async function NoticiasPage() {
               ))}
               </div>
 
-              {/* Columna de publicidad. Por ahora es el hueco reservado: el
-                  formato es el de siempre, 300x250, para que entre cualquier
-                  aviso sin rehacer la página. */}
-              <aside className="np-ads">
-                <div className="np-ad">
-                  <Megaphone size={20} color={INK2} />
-                  <span className="np-ad-tit">Espacio publicitario</span>
-                  <span className="np-ad-med">300 &times; 250</span>
-                </div>
-              </aside>
+              {/* Columna de publicidad. El hueco reservado solo lo ve un
+                  admin; para el público la columna no existe hasta que haya
+                  un aviso de verdad. */}
+              <EspacioPublicitario />
             </div>
           </>
         )}
