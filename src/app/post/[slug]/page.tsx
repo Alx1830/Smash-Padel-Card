@@ -10,7 +10,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { ArrowLeft, Clock, CalendarDays } from "lucide-react";
-import { fechaLarga, minutosDeLectura, nombreAutor, extractoAuto, type PostAuthor } from "@/lib/posts";
+import { fechaLarga, minutosDeLectura, nombreAutor, extractoAuto, etiquetaCategoria, type PostAuthor } from "@/lib/posts";
 import { PostBody } from "@/components/PostBody";
 
 const COURT = "#2ee6c1";
@@ -33,7 +33,7 @@ function publico() {
 async function traerPost(slug: string) {
   const { data: post } = await publico()
     .from("admin_posts")
-    .select("id, slug, title, excerpt, cover_url, content_html, content, media_url, status, published_at, created_at, user_id")
+    .select("id, slug, title, excerpt, cover_url, content_html, content, media_url, category, status, published_at, created_at, user_id")
     .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();
@@ -90,12 +90,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     <div style={{ minHeight: "100vh", background: BG0, padding: "40px 24px 90px" }}>
       <article style={{ maxWidth: 760, margin: "0 auto" }}>
 
-        <Link href="/dashboard" style={{
+        <Link href="/post" style={{
           display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none",
           fontFamily: MONO, fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase",
           color: INK2, marginBottom: 26,
         }}>
-          <ArrowLeft size={13} /> Volver
+          <ArrowLeft size={13} /> Noticias
         </Link>
 
         <div style={{
@@ -103,7 +103,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           color: COURT, display: "flex", alignItems: "center", gap: 10, marginBottom: 12,
         }}>
           <span style={{ width: 22, height: 1, background: COURT, display: "inline-block" }} />
-          Noticias
+          {etiquetaCategoria(post.category)}
         </div>
 
         <h1 style={{

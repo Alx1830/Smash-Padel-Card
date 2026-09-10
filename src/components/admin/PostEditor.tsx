@@ -12,7 +12,7 @@ import Highlight from "@tiptap/extension-highlight";
 import DOMPurify from "dompurify";
 import { Eye, Save, Send, Trash2, ExternalLink, Bell, BellOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { POST_TAGS, POST_ATTR, slugify, extractoAuto, minutosDeLectura, type Post } from "@/lib/posts";
+import { POST_TAGS, POST_ATTR, POST_CATEGORIAS, CATEGORIA_POR_DEFECTO, slugify, extractoAuto, minutosDeLectura, type Post, type PostCategoria } from "@/lib/posts";
 import { PostEditorToolbar } from "./PostEditorToolbar";
 
 const COURT = "#2ee6c1";
@@ -53,6 +53,7 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
   const [titulo,   setTitulo]   = useState(post?.title ?? "");
   const [bajada,   setBajada]   = useState(post?.excerpt ?? "");
   const [portada,  setPortada]  = useState(post?.cover_url ?? post?.media_url ?? "");
+  const [categoria, setCategoria] = useState<PostCategoria>(post?.category ?? CATEGORIA_POR_DEFECTO);
   const [direccion, setDireccion] = useState(post?.slug ?? "");
   const [tocoDireccion, setTocoDireccion] = useState(Boolean(post?.slug));
   const [avisar,   setAvisar]   = useState(!post?.notified_at);
@@ -100,6 +101,7 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
       slug: ruta,
       excerpt: bajada.trim() || extractoAuto(cuerpo),
       cover_url: portada.trim() || null,
+      category: categoria,
       content_html: cuerpo,
       status: estado,
       published_at: estado === "published" ? (post?.published_at ?? new Date().toISOString()) : null,
@@ -207,6 +209,27 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
           <label style={etiqueta} htmlFor="post-titulo">Título</label>
           <input id="post-titulo" style={{ ...campo, fontFamily: DISP, fontSize: 20, fontWeight: 700 }}
                  value={titulo} placeholder="Llegó Pitch Black" onChange={(e) => cambiarTitulo(e.target.value)} />
+        </div>
+
+        <div>
+          <label style={etiqueta}>Sección</label>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {POST_CATEGORIAS.map((c) => {
+              const activa = c.id === categoria;
+              return (
+                <button key={c.id} type="button" onClick={() => setCategoria(c.id)}
+                        style={{
+                          padding: "7px 14px", borderRadius: 999, cursor: "pointer",
+                          fontFamily: MONO, fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase",
+                          background: activa ? COURT : "rgba(255,255,255,0.03)",
+                          color: activa ? "#05070d" : INK2,
+                          border: `1px solid ${activa ? COURT : "rgba(255,255,255,0.09)"}`,
+                        }}>
+                  {c.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div>

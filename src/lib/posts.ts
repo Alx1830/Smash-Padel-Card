@@ -17,12 +17,34 @@ export interface Post {
   /** Cuerpo de los posts viejos, en texto plano con algo de HTML suelto. */
   content: string | null;
   media_url: string | null;
+  category: PostCategoria;
   status: "draft" | "published";
   published_at: string | null;
   created_at: string;
   updated_at: string;
   notified_at: string | null;
   user_id: string | null;
+}
+
+/**
+ * Las categorías son una lista cerrada: la base tiene el mismo check, así que
+ * agregar una acá sin agregarla allá hace fallar el guardado.
+ */
+export const POST_CATEGORIAS = [
+  { id: "novedades", label: "Novedades" },
+  { id: "sets",      label: "Sets" },
+  { id: "market",    label: "Market" },
+  { id: "guias",     label: "Guías" },
+  { id: "torneos",   label: "Torneos" },
+  { id: "comunidad", label: "Comunidad" },
+] as const;
+
+export type PostCategoria = (typeof POST_CATEGORIAS)[number]["id"];
+
+export const CATEGORIA_POR_DEFECTO: PostCategoria = "novedades";
+
+export function etiquetaCategoria(id: string | null | undefined): string {
+  return POST_CATEGORIAS.find((c) => c.id === id)?.label ?? "Novedades";
 }
 
 export interface PostAuthor {

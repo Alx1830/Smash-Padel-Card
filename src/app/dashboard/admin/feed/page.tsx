@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { Plus, PenLine, Bell, FileText, ExternalLink } from "lucide-react";
-import { fechaLarga } from "@/lib/posts";
+import { fechaLarga, etiquetaCategoria } from "@/lib/posts";
 
 const COURT = "#2ee6c1";
 const LIME  = "#d6ff3d";
@@ -35,7 +35,7 @@ export default async function AdminFeedPage() {
 
   const { data: posts } = await admin
     .from("admin_posts")
-    .select("id, slug, title, excerpt, cover_url, status, published_at, created_at, notified_at")
+    .select("id, slug, title, excerpt, cover_url, category, status, published_at, created_at, notified_at")
     .order("created_at", { ascending: false });
 
   const lista = posts ?? [];
@@ -111,6 +111,13 @@ export default async function AdminFeedPage() {
                         border: publicado ? "none" : `1px solid ${LIME}55`,
                       }}>
                         {publicado ? "Publicada" : "Borrador"}
+                      </span>
+                      <span style={{
+                        fontFamily: MONO, fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase",
+                        padding: "3px 8px", borderRadius: 20, color: INK2,
+                        border: "1px solid rgba(255,255,255,0.10)",
+                      }}>
+                        {etiquetaCategoria(p.category)}
                       </span>
                       {p.notified_at && (
                         <span title="Ya se avisó a los usuarios" style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: MONO, fontSize: 9, color: INK2 }}>
