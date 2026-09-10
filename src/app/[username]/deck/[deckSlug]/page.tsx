@@ -25,6 +25,7 @@ async function loadDeck(username: string, deckSlug: string) {
     .from("decks")
     .select("id, name, description")
     .eq("user_id", player.user_id)
+    .eq("is_public", true)
     .order("created_at", { ascending: false });
 
   const deck = (decks ?? []).find(d => slugifySetName(d.name) === deckSlug);
@@ -32,7 +33,7 @@ async function loadDeck(username: string, deckSlug: string) {
 
   const { data: cards } = await supabase
     .from("deck_cards")
-    .select("card_id, set_id, version, quantity, position")
+    .select("card_id, set_id, version, needed, quantity, position")
     .eq("deck_id", deck.id)
     .order("position", { ascending: true });
 
@@ -110,7 +111,7 @@ export default async function DeckPage({
           username={player.username}
           deckName={deck.name}
           description={deck.description ?? ""}
-          rows={cards as { card_id: string; set_id: string; version: string; quantity: number; position: number }[]}
+          rows={cards as { card_id: string; set_id: string; version: string; needed: number; quantity: number; position: number }[]}
           allSets={ALL_SETS.map(s => ({ id: s.id, name: s.name, logo: s.logo }))}
         />
       </Suspense>

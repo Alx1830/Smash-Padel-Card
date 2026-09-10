@@ -22,7 +22,7 @@ const BG0    = "#05070d";
 const MONO   = "var(--font-jetbrains)";
 const DISP   = "var(--font-archivo)";
 
-interface Row { card_id: string; set_id: string; version: string; quantity: number; position: number; }
+interface Row { card_id: string; set_id: string; version: string; needed: number; quantity: number; position: number; }
 interface SetInfo { id: string; name: string; logo: string; }
 
 function CardPriceTag({ card, setId }: { card: PokemonCard; setId: string }) {
@@ -62,7 +62,8 @@ export function DeckViewClient({
 
   // Sale de las filas, no de las cartas resueltas: se puede mostrar antes de
   // que terminen de cargar los sets
-  const totalCopias = useMemo(() => rows.reduce((s, r) => s + r.quantity, 0), [rows]);
+  // El deck son las copias que pide, tenga o no conseguidas todas
+  const totalCopias = useMemo(() => rows.reduce((s, r) => s + (r.needed ?? 1), 0), [rows]);
 
   useEffect(() => {
     const ids = [...new Set(rows.map(r => r.set_id))];
@@ -75,8 +76,8 @@ export function DeckViewClient({
       const cards = SET_CARDS[r.set_id];
       const card  = cards?.find(c => c.id === r.card_id && c.version === r.version);
       const set   = allSets.find(s => s.id === r.set_id);
-      return card && set ? { card, set, set_id: r.set_id, quantity: r.quantity } : null;
-    }).filter(Boolean) as { card: NonNullable<ReturnType<typeof SET_CARDS[string]["find"]>>; set: SetInfo; set_id: string; quantity: number }[];
+      return card && set ? { card, set, set_id: r.set_id, quantity: r.quantity, needed: r.needed ?? 1 } : null;
+    }).filter(Boolean) as { card: NonNullable<ReturnType<typeof SET_CARDS[string]["find"]>>; set: SetInfo; set_id: string; quantity: number; needed: number }[];
   }, [rows, allSets, setsLoaded]);
 
   return (
@@ -157,7 +158,7 @@ export function DeckViewClient({
                 <div key={i} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
                   <div
                     onClick={() => setPreviewCard(item.card as PokemonCard)}
-                    style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)", flexShrink: 0, cursor: "pointer", filter: item.quantity === 0 ? "grayscale(1) brightness(0.75)" : "none" }}
+                    style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)", flexShrink: 0, cursor: "pointer", filter: item.quantity === 0 ? "grayscale(1) brightness(0.75)" : item.quantity < item.needed ? "grayscale(0.55) brightness(0.9)" : "none" }}
                   >
                     <img
                       src={item.card.image}
@@ -174,9 +175,9 @@ export function DeckViewClient({
                       <span style={{ fontSize: "28px", opacity: 0.3 }}>🃏</span>
                       <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", textAlign: "center", padding: "0 8px" }}>{item.card.name}</span>
                     </div>
-                    {item.quantity !== 1 && (
+                    {(item.needed !== 1 || item.quantity !== 1) && (
                       <div style={{ position: "absolute", top: "8px", right: "8px", fontFamily: MONO, fontSize: "10px", fontWeight: 700, color: item.quantity === 0 ? INK2 : "#05070d", background: item.quantity === 0 ? "rgba(5,7,13,0.85)" : PINK, border: item.quantity === 0 ? "1px solid rgba(122,130,152,0.5)" : "none", borderRadius: "6px", padding: "2px 7px" }}>
-                        {item.quantity === 0 ? "falta" : `×${item.quantity}`}
+                        {item.quantity} / {item.needed}
                       </div>
                     )}
                     <div style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>{label}</div>

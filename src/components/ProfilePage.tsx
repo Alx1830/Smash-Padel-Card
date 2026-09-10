@@ -998,16 +998,17 @@ function DecksSlider({ profileUserId, username }: { profileUserId?: string; user
        */
       const { data } = await supabase
         .from("decks")
-        .select("id, name, cover_card_image, deck_cards(quantity)")
+        .select("id, name, cover_card_image, deck_cards(needed)")
         .eq("user_id", profileUserId)
+        .eq("is_public", true)
         .order("created_at", { ascending: false });
 
       setDecks((data ?? []).map(d => ({
         id: d.id,
         name: d.name,
         cover_card_image: d.cover_card_image,
-        card_count: ((d.deck_cards ?? []) as { quantity: number }[])
-          .reduce((s, c) => s + (c.quantity ?? 0), 0),
+        card_count: ((d.deck_cards ?? []) as { needed: number }[])
+          .reduce((s, c) => s + (c.needed ?? 0), 0),
       })));
       setLoaded(true);
     })();

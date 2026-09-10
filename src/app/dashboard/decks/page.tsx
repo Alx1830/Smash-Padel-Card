@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
-import { Plus, Layers } from "lucide-react";
+import { Plus, Layers, EyeOff } from "lucide-react";
 import Link from "next/link";
 
 const COURT = "#2ee6c1";
@@ -20,6 +20,8 @@ interface Deck {
   cover_card_image: string | null;
   created_at: string;
   card_count: number;
+  owned_count: number;
+  is_public: boolean;
   price: number;
 }
 
@@ -41,14 +43,14 @@ export default function DecksPage() {
 
       const { data } = await supabase
         .from("decks")
-        .select("id, name, description, cover_card_image, created_at")
+        .select("id, name, description, cover_card_image, created_at, is_public")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
       if (data) {
         const cardQueries = await Promise.all(data.map(deck =>
           supabase.from("deck_cards")
-            .select("card_id, set_id, version, quantity, position")
+            .select("card_id, set_id, version, needed, quantity, position")
             .eq("deck_id", deck.id)
             .order("position", { ascending: true })
             .then(r => r.data ?? [])
@@ -76,8 +78,9 @@ export default function DecksPage() {
 
         const decksWithCards = data.map((deck, i) => {
           const deckCardRows = cardQueries[i] ?? [];
-          const card_count = deckCardRows.reduce((s, r) => s + r.quantity, 0);
-          // Valor total del deck: cada carta × su cantidad (mínimo 1 para las que faltan)
+          const card_count  = deckCardRows.reduce((s, r) => s + (r.needed ?? 1), 0);
+          const owned_count = deckCardRows.reduce((s, r) => s + Math.min(r.quantity, r.needed ?? 1), 0);
+          // Valor total del deck: cada carta por las copias que pide
           const price = deckCardRows.reduce((sum, r) => {
             const sc = SCRYDEX_SET_CODES[r.set_id];
             const card = (SET_CARDS[r.set_id] ?? []).find(c => c.id === r.card_id && c.version === r.version);
@@ -86,9 +89,9 @@ export default function DecksPage() {
             if (!map) return sum;
             const vk = card.version.toLowerCase().replace(/\s+/g, "");
             const p = map[vk] ?? map[card.version] ?? map["normal"] ?? null;
-            return p !== null ? sum + p * Math.max(r.quantity, 1) : sum;
+            return p !== null ? sum + p * (r.needed ?? 1) : sum;
           }, 0);
-          return { ...deck, card_count, price };
+          return { ...deck, card_count, owned_count, price };
         });
         setDecks(decksWithCards);
       }
@@ -103,9 +106,9 @@ export default function DecksPage() {
       user_id: userId,
       name: newName.trim(),
       description: newDesc.trim() || null,
-    }).select("id, name, description, cover_card_image, created_at").single();
+    }).select("id, name, description, cover_card_image, created_at, is_public").single();
     if (!error && data) {
-      setDecks(prev => [{ ...data, card_count: 0, price: 0 }, ...prev]);
+      setDecks(prev => [{ ...data, card_count: 0, owned_count: 0, price: 0 }, ...prev]);
       setCreating(false);
       setNewName("");
       setNewDesc("");
@@ -227,9 +230,20 @@ export default function DecksPage() {
                       <Layers size={48} color={COURT} strokeWidth={1.2} />
                     </div>
                   )}
+                  {!deck.is_public && (
+                    <div title="No se muestra en tu perfil" style={{ position: "absolute", top: 8, left: 8, display: "inline-flex", alignItems: "center", gap: "4px", background: "rgba(5,7,13,0.85)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "999px", padding: "3px 8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", textTransform: "uppercase", color: INK2 }}>
+                      <EyeOff size={10} />
+                      Oculto
+                    </div>
+                  )}
                 </div>
                 <div style={{ marginTop: "10px", textAlign: "center" }}>
                   <p style={{ fontFamily: DISP, fontSize: "15px", color: INK0, fontWeight: 700, margin: "0 0 3px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{deck.name}</p>
+                  {deck.card_count > 0 && (
+                    <p style={{ fontFamily: MONO, fontSize: "10px", color: deck.owned_count >= deck.card_count ? COURT : INK2, margin: "0 0 4px" }}>
+                      {deck.owned_count} / {deck.card_count} conseguidas
+                    </p>
+                  )}
                   <p style={{ fontFamily: MONO, fontSize: "12px", color: deck.price > 0 ? COURT : INK2, fontWeight: 700, margin: 0 }}>
                     {deck.price > 0 ? <>${deck.price.toFixed(2)} <span style={{ fontSize: "9px", color: INK2, fontWeight: 400 }}>USD</span></> : "—"}
                   </p>

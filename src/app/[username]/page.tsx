@@ -99,7 +99,8 @@ export default async function JugadorPage({
         supabase
           .from("decks")
           .select("id", { count: "exact", head: true })
-          .eq("user_id", data.user_id),
+          .eq("user_id", data.user_id)
+          .eq("is_public", true),
         supabase
           .from("my_sets")
           .select("id", { count: "exact", head: true })
