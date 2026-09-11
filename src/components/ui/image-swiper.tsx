@@ -167,11 +167,21 @@ export const ImageSwiper: React.FC<ImageSwiperProps> = ({
             transform: `perspective(var(--card-perspective)) translateZ(calc(-1 * var(--card-z-offset) * var(--i))) translateY(calc(var(--card-y-offset) * var(--i))) translateX(var(--swipe-x, 0px)) rotateY(var(--swipe-rotate, 0deg))`
           } as React.CSSProperties}
         >
+          {/* Solo la carta de arriba se ve; las otras nueve estan tapadas detras.
+              Sin esta distincion el navegador pedia las diez con la misma
+              prioridad y la unica visible —que es el elemento mas grande de la
+              portada— llegaba ultima: 1,9 MB peleandose por el mismo ancho de
+              banda en un celular. */}
           <img
             src={imageList[originalIndex]}
             alt={`Card ${originalIndex + 1}`}
             className="w-full h-full object-cover select-none pointer-events-none"
             draggable={false}
+            width={cardWidth}
+            height={cardHeight}
+            fetchPriority={displayIndex === 0 ? "high" : "low"}
+            loading={displayIndex === 0 ? "eager" : "lazy"}
+            decoding="async"
           />
         </article>
       ))}

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
-import { Plus, PenLine, Bell, FileText, ExternalLink } from "lucide-react";
+import { Plus, PenLine, Bell, FileText, ExternalLink, CalendarClock } from "lucide-react";
 import { fechaLarga, etiquetaCategoria } from "@/lib/posts";
 
 const COURT = "#2ee6c1";
@@ -35,7 +35,7 @@ export default async function AdminFeedPage() {
 
   const { data: posts } = await admin
     .from("admin_posts")
-    .select("id, slug, title, excerpt, cover_url, category, status, published_at, created_at, notified_at")
+    .select("id, slug, title, excerpt, cover_url, category, status, published_at, scheduled_at, created_at, notified_at")
     .order("created_at", { ascending: false });
 
   const lista = posts ?? [];
@@ -90,6 +90,10 @@ export default async function AdminFeedPage() {
           <div className="afeed-grid">
             {lista.map((p) => {
               const publicado = p.status === "published";
+              /* Una programada no es un borrador: está escrita, aprobada y con
+                 hora puesta. Merece su propia etiqueta o se pierde entre los
+                 borradores a medio hacer. */
+              const programada = p.status === "scheduled";
               return (
                 <div key={p.id} style={{
                   display: "flex", flexDirection: "column", borderRadius: 12,
@@ -106,11 +110,11 @@ export default async function AdminFeedPage() {
                       <span style={{
                         fontFamily: MONO, fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase",
                         padding: "3px 8px", borderRadius: 20,
-                        color: publicado ? BG0 : LIME,
+                        color: publicado ? BG0 : programada ? COURT : LIME,
                         background: publicado ? COURT : "transparent",
-                        border: publicado ? "none" : `1px solid ${LIME}55`,
+                        border: publicado ? "none" : `1px solid ${programada ? COURT : LIME}55`,
                       }}>
-                        {publicado ? "Publicada" : "Borrador"}
+                        {publicado ? "Publicada" : programada ? "Programada" : "Borrador"}
                       </span>
                       <span style={{
                         fontFamily: MONO, fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase",
@@ -119,6 +123,12 @@ export default async function AdminFeedPage() {
                       }}>
                         {etiquetaCategoria(p.category)}
                       </span>
+                      {programada && p.scheduled_at && (
+                        <span title="Sale sola a esta hora" style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: MONO, fontSize: 9, color: COURT }}>
+                          <CalendarClock size={10} />
+                          {new Date(p.scheduled_at).toLocaleString("es-CO", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                        </span>
+                      )}
                       {p.notified_at && (
                         <span title="Ya se avisó a los usuarios" style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: MONO, fontSize: 9, color: INK2 }}>
                           <Bell size={10} /> avisada

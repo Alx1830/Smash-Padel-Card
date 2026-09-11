@@ -1,0 +1,23 @@
+# FaceBinder
+
+> Plataforma colombiana para coleccionistas de Pokémon TCG. Cada persona
+> registra su colección carta por carta, ve cuánto vale su binder en pesos
+> colombianos, y compra, vende o intercambia con otros coleccionistas del país.
+
+Los precios vienen de TCGplayer y se actualizan cada tres horas, convertidos a
+pesos con la tasa oficial del día. Toda publicación del market pasa por
+revisión humana antes de aparecer. La plataforma no cobra comisión: el pago y
+la entrega los acuerdan directamente las dos personas.
+
+## Páginas
+
+- [Inicio](https://facebinder.com): qué es FaceBinder y cómo funciona.
+- [Market](https://facebinder.com/market): cartas en venta, con precios en pesos y filtros por ciudad.
+- [Noticias](https://facebinder.com/post): sets nuevos, rotaciones, torneos y precios de Pokémon TCG.
+- [Feed de noticias](https://facebinder.com/post/feed.xml): las últimas notas en RSS.
+- [Mapa del sitio](https://facebinder.com/sitemap.xml): todas las páginas públicas.
+
+## Notas
+
+- El panel (`/dashboard/`) es privado y requiere sesión.
+- Los perfiles públicos viven en la raíz: `https://facebinder.com/<usuario>`.

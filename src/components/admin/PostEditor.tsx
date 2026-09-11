@@ -10,11 +10,12 @@ import TextAlign from "@tiptap/extension-text-align";
 import Youtube from "@tiptap/extension-youtube";
 import Highlight from "@tiptap/extension-highlight";
 import DOMPurify from "dompurify";
-import { Eye, Save, Send, Trash2, ExternalLink, Bell, BellOff, ImageUp, Loader2, X, BarChart3, Plus } from "lucide-react";
+import { Eye, Save, Send, Trash2, ExternalLink, Bell, BellOff, ImageUp, Loader2, X, BarChart3, Plus, CalendarClock } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { POST_TAGS, POST_ATTR, POST_CATEGORIAS, CATEGORIA_POR_DEFECTO, slugify, extractoAuto, minutosDeLectura, type Post, type PostCategoria } from "@/lib/posts";
 import { aWebp, peso } from "@/lib/imagen-webp";
 import { PostEditorToolbar } from "./PostEditorToolbar";
+import { SliderFotos } from "./slider-extension";
 
 const COURT = "#2ee6c1";
 const LIME  = "#d6ff3d";
@@ -54,6 +55,14 @@ function sanear(html: string): string {
   });
 }
 
+/** De la fecha guardada al formato que entiende el campo del navegador. */
+function paraElCampo(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
 export function PostEditor({ post, authorId }: { post: Post | null; authorId: string }) {
   const router = useRouter();
   const supabase = createClient();
@@ -76,6 +85,11 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
   const [guardando, setGuardando] = useState(false);
   const archivoRef = useRef<HTMLInputElement>(null);
   const [vistaPrevia, setVistaPrevia] = useState(false);
+
+  /* La fecha va en el formato del campo del navegador (sin zona) y se manda en
+     hora del equipo: el admin escribe "las 9 de la mañana" pensando en la hora
+     de acá, no en UTC. */
+  const [cuando, setCuando] = useState(() => paraElCampo(post?.scheduled_at ?? null));
   const [mensaje, setMensaje] = useState<{ tipo: "ok" | "error"; texto: string } | null>(null);
 
   const editor = useEditor({
@@ -87,6 +101,7 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
       }),
       Image.configure({ HTMLAttributes: { loading: "lazy", decoding: "async" } }),
       Youtube.configure({ controls: true, nocookie: true }),
+      SliderFotos,
       Highlight,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({ placeholder: "Escribí la noticia acá. Usá la barra de arriba para dar formato." }),
@@ -207,10 +222,24 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
     if (!tocoDireccion) setDireccion(slugify(v));
   }
 
-  async function guardar(estado: "draft" | "published") {
+  async function guardar(estado: "draft" | "published" | "scheduled") {
     if (!titulo.trim()) {
       setMensaje({ tipo: "error", texto: "Falta el título." });
       return;
+    }
+
+    /* Programar sin fecha, o para una hora que ya pasó, es un modo silencioso
+       de que la nota no salga nunca: mejor frenarlo acá. */
+    const fecha = cuando ? new Date(cuando) : null;
+    if (estado === "scheduled") {
+      if (!fecha || Number.isNaN(fecha.getTime())) {
+        setMensaje({ tipo: "error", texto: "Elegí la fecha y la hora en que debe salir." });
+        return;
+      }
+      if (fecha.getTime() <= Date.now()) {
+        setMensaje({ tipo: "error", texto: "Esa hora ya pasó. Elegí una futura, o publicá ahora mismo." });
+        return;
+      }
     }
     const cuerpo = sanear(editor?.getHTML() ?? "");
     const ruta = (direccion.trim() ? slugify(direccion) : slugify(titulo)) || `post-${Date.now()}`;
@@ -228,6 +257,7 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
       content_html: cuerpo,
       status: estado,
       published_at: estado === "published" ? (post?.published_at ?? new Date().toISOString()) : null,
+      scheduled_at: estado === "scheduled" ? fecha!.toISOString() : null,
     };
 
     const consulta = post
@@ -275,7 +305,14 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
         texto: `Publicado. Avisamos a ${info?.notificados ?? 0} usuarios (${info?.push ?? 0} por push).`,
       });
     } else {
-      setMensaje({ tipo: "ok", texto: estado === "published" ? "Publicado, sin avisar." : "Borrador guardado." });
+      setMensaje({
+        tipo: "ok",
+        texto:
+          estado === "published" ? "Publicado, sin avisar."
+          : estado === "scheduled"
+            ? `Programada para el ${fecha!.toLocaleString("es-CO", { dateStyle: "long", timeStyle: "short" })}. Sale sola y avisa a todos.`
+            : "Borrador guardado.",
+      });
     }
 
     setGuardando(false);
@@ -523,6 +560,48 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
           {mensaje.texto}
         </div>
       )}
+
+      {/* Programar la salida */}
+      <div style={{ border: "1px solid rgba(255,255,255,0.09)", borderRadius: 12, padding: "16px 18px", background: "rgba(255,255,255,0.02)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 4 }}>
+          <CalendarClock size={14} color={COURT} />
+          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: COURT }}>
+            Programar la salida (opcional)
+          </span>
+        </div>
+        <span style={{ display: "block", fontFamily: MONO, fontSize: 10, color: INK2, marginBottom: 13, lineHeight: 1.6 }}>
+          La nota queda guardada y sale sola a la hora que elijas, avisando a todos como si la publicaras a mano.
+          Hasta entonces nadie la ve. La hora es la de tu equipo, y puede salir hasta cinco minutos después.
+        </span>
+
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+          <input type="datetime-local" value={cuando} style={{ ...campo, flex: 1, minWidth: 220 }}
+                 onChange={(e) => setCuando(e.target.value)} />
+
+          <button type="button" onClick={() => guardar("scheduled")} disabled={guardando || !cuando}
+                  style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 18px", borderRadius: 9,
+                           border: `1px solid ${COURT}55`, background: "rgba(46,230,193,0.06)", color: COURT,
+                           fontFamily: MONO, fontSize: 12, whiteSpace: "nowrap",
+                           cursor: guardando || !cuando ? "default" : "pointer", opacity: guardando || !cuando ? 0.5 : 1 }}>
+            <CalendarClock size={14} /> Programar
+          </button>
+
+          {cuando && (
+            <button type="button" onClick={() => setCuando("")} title="Quitar la programación"
+                    style={{ display: "flex", alignItems: "center", padding: 11, borderRadius: 9,
+                             border: "1px solid rgba(255,255,255,0.14)", background: "transparent", color: INK2, cursor: "pointer" }}>
+              <X size={14} />
+            </button>
+          )}
+        </div>
+
+        {post?.status === "scheduled" && post.scheduled_at && (
+          <span style={{ display: "block", fontFamily: MONO, fontSize: 11, color: COURT, marginTop: 11 }}>
+            Programada para el {new Date(post.scheduled_at).toLocaleString("es-CO", { dateStyle: "long", timeStyle: "short" })}.
+            Guardala como borrador para cancelar la salida.
+          </span>
+        )}
+      </div>
 
       {/* Acciones */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" }}>

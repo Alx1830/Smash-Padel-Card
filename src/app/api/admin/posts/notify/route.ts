@@ -18,14 +18,24 @@ import { extractoAuto } from "@/lib/posts";
 
 export async function POST(request: NextRequest) {
   // 1. Quién llama
-  const supabase = await createServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Sin sesión" }, { status: 401 });
+  //
+  // Dos maneras válidas: un admin con sesión, que es cuando alguien aprieta
+  // "Publicar"; o la base de datos con el secreto de webhook, que es cuando
+  // sale una publicación programada y no hay nadie sentado frente a la pantalla.
+  const secreto = request.headers.get("x-webhook-secret");
+  const esperado = process.env.SUPABASE_WEBHOOK_SECRET;
+  const desdeLaBase = Boolean(esperado) && secreto === esperado;
 
-  const { data: perfil } = await supabaseAdmin
-    .from("players").select("role").eq("user_id", user.id).single();
-  if (perfil?.role !== "admin") {
-    return NextResponse.json({ error: "Solo un admin puede avisar" }, { status: 403 });
+  if (!desdeLaBase) {
+    const supabase = await createServerClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Sin sesión" }, { status: 401 });
+
+    const { data: perfil } = await supabaseAdmin
+      .from("players").select("role").eq("user_id", user.id).single();
+    if (perfil?.role !== "admin") {
+      return NextResponse.json({ error: "Solo un admin puede avisar" }, { status: 403 });
+    }
   }
 
   // 2. Qué publicación

@@ -13,6 +13,7 @@ import { ArrowLeft, Clock, CalendarDays, Newspaper } from "lucide-react";
 import { fechaLarga, minutosDeLectura, nombreAutor, extractoAuto, soloTexto, etiquetaCategoria, type PostAuthor } from "@/lib/posts";
 import { PostBody } from "@/components/PostBody";
 import { Comentarios } from "@/components/post/Comentarios";
+import { FlechasSlider } from "@/components/post/FlechasSlider";
 import { Encuesta, type EncuestaDatos } from "@/components/post/Encuesta";
 import { SITIO, EDITOR, migas, DatosJson } from "@/lib/seo";
 
@@ -320,6 +321,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         )}
 
         <PostBody html={cuerpo} />
+        <FlechasSlider />
 
         {encuesta && encuesta.opciones.length > 0 && <Encuesta datos={encuesta} />}
 

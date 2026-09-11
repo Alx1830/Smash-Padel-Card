@@ -3,6 +3,7 @@ import { loadManySets, SET_CARDS } from "@/data/pokemon-cards";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { getVersionLabel } from "@/data/pokemon-cards-meta";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
+import { fotoChica } from "@/lib/foto-carta";
 
 /**
  * Datos reales para la página de inicio. Se leen en el servidor y se cachean
@@ -65,7 +66,8 @@ export async function cartasEnVenta(limite = 18): Promise<CartaEnVenta[]> {
         variante: getVersionLabel(carta.version),
         set: ALL_SETS.find(s => s.id === r.set_id)?.name ?? r.set_id,
         precio: `${CURRENCY_SYMBOL[moneda] ?? "$"}${formatPrice(r.price_cop, moneda)}`,
-        imagen: carta.image,
+        /* El carrusel las muestra chiquitas: no hace falta la original */
+        imagen: fotoChica(carta.image),
         ciudad: r.player?.ciudad ?? null,
         vendedor: r.player?.username ?? null,
       });

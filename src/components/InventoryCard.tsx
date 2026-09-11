@@ -6,6 +6,7 @@ import { getVersionLabel, getVersionColor, getVersionEffect } from "@/data/pokem
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import type { UserListing } from "@/components/CardDetailModal";
 import { getCurrencyForCountry } from "@/lib/currency";
+import { fotoChica } from "@/lib/foto-carta";
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
@@ -97,7 +98,7 @@ export function InvTiltCard({ card, onClick }: { card: PokemonCard; onClick: () 
         position: "absolute", inset: 0, borderRadius: "8px", overflow: "hidden",
         boxShadow: shadowStyle,
       }}>
-        <img src={card.image} alt={card.name} loading="lazy" style={{ objectFit: "contain", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+        <img src={fotoChica(card.image)} alt={card.name} loading="lazy" style={{ objectFit: "contain", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
 
         {isRH && (
           <div style={{

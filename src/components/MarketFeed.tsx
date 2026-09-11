@@ -9,6 +9,7 @@ import { getVersionLabel } from "@/data/pokemon-cards-meta";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { FlagIcon } from "@/components/FlagIcon";
 import { tcgCardLink } from "@/lib/tcg-link";
+import { fotoChica } from "@/lib/foto-carta";
 
 const COURT  = "#2ee6c1";
 const BALL   = "#d6ff3d";
@@ -184,7 +185,7 @@ function PostCard({ item }: { item: FeedItem }) {
       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
         <div style={{ width: 112, height: 180, borderRadius: 8, overflow: "hidden", flexShrink: 0, position: "relative", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
           {item.cardImage ? (
-            <img src={item.cardImage} alt={item.cardName} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+            <img src={fotoChica(item.cardImage)} alt={item.cardName} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
           ) : (
             <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <span style={{ fontSize: 20 }}>🃏</span>

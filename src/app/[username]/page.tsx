@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import { traerJugador } from "./jugador";
 import { createClient } from "@/lib/supabase/server";
-import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { ProfilePage } from "@/components/ProfilePage";
 import { Footer } from "@/components/Footer";
 import { MobileTabBar } from "@/components/MobileTabBar";
@@ -11,21 +11,15 @@ import { fetchAllRows } from "@/lib/fetch-all-rows";
 export const revalidate = 300;
 export const dynamicParams = true;
 
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ username: string }>;
 }): Promise<Metadata> {
   const { username } = await params;
-  const adminClient = createAdminClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-  const { data } = await adminClient
-    .from("players")
-    .select("username, first_name, last_name")
-    .ilike("username", username)
-    .single();
+  const data = await traerJugador(username);
+  if (!data) notFound();
 
   const display = data?.first_name
     ? `${data.first_name}${data.last_name ? " " + data.last_name : ""}`
@@ -55,17 +49,13 @@ export default async function JugadorPage({
   const { username } = await params;
   const supabase = await createClient();
 
-  const adminClient = createAdminClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-
-  const [{ data }, { data: { user } }] = await Promise.all([
-    adminClient.from("players").select("*").ilike("username", username).single(),
+  /* Ya lo resolvió `generateMetadata`: acá sale de memoria, sin otra consulta */
+  const [data, { data: { user } }] = await Promise.all([
+    traerJugador(username),
     supabase.auth.getUser(),
   ]);
 
-  if (!data || data.activo === false) notFound();
+  if (!data) notFound();
 
   type ProfInvRow  = { card_id: string; set_id: string; quantity: number; version?: string };
   type ProfWishRow = { card_id: number; set_id: string };

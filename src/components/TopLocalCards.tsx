@@ -7,6 +7,7 @@ import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel } from "@/data/pokemon-cards-meta";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { Store } from "lucide-react";
+import { fotoChica } from "@/lib/foto-carta";
 
 const COURT = "#2ee6c1";
 const LIME  = "#d6ff3d";
@@ -164,7 +165,7 @@ export function TopLocalCards() {
                 }}>{i + 1}</span>
 
                 {card?.image
-                  ? <img src={card.image} alt="" loading="lazy" style={{
+                  ? <img src={fotoChica(card.image)} alt="" loading="lazy" style={{
                       width: 30, aspectRatio: "5/7", objectFit: "contain",
                       borderRadius: 4, flexShrink: 0,
                     }} />

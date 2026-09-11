@@ -15,6 +15,7 @@ import {
   type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing,
 } from "@/components/CardDetailModal";
 import { INVENTORY_LANGUAGES, DEFAULT_CARD_LANGUAGE } from "@/lib/languages";
+import { fotoChica } from "@/lib/foto-carta";
 
 /* Lazy-load card data only when a set is opened */
 async function fetchSetCards(setId: string): Promise<PokemonCard[]> {
@@ -95,7 +96,7 @@ function TiltCard({
           boxShadow: shadowStyle,
           transition: "opacity 0.3s ease",
         }}>
-          <img src={card.image} alt={card.name} loading="lazy" decoding="async" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+          <img src={fotoChica(card.image)} alt={card.name} loading="lazy" decoding="async" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
 
           {isRH && !isGray && (
             <div style={{

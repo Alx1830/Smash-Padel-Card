@@ -18,8 +18,12 @@ export interface Post {
   content: string | null;
   media_url: string | null;
   category: PostCategoria;
-  status: "draft" | "published";
+  /** `scheduled` se comporta como borrador para el público: la web solo
+   *  muestra `published`. La pasa a publicada el trabajo de la base. */
+  status: "draft" | "scheduled" | "published";
   published_at: string | null;
+  /** Cuándo debe salir sola. Solo tiene valor con `status: "scheduled"`. */
+  scheduled_at: string | null;
   created_at: string;
   updated_at: string;
   notified_at: string | null;
@@ -65,6 +69,13 @@ export const POST_TAGS = [
 export const POST_ATTR = [
   "href", "src", "alt", "title", "target", "rel", "class",
   "width", "height", "allow", "allowfullscreen", "frameborder", "style",
+  /* Sin `loading` y `decoding` el saneado los borraba y un carrusel de
+     trescientas fotos las pedía todas de una. `data-slider` y `data-imagenes`
+     son la marca del carrusel: sin ellas se guarda una fila de fotos suelta
+     que al volver a abrir la nota ya no se puede editar como carrusel. */
+  "loading", "decoding",
+  "data-slider", "data-imagenes", "data-leyenda",
+  "data-youtube-video",
 ];
 
 /**

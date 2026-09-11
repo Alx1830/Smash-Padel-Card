@@ -4,7 +4,7 @@ import type { Editor } from "@tiptap/react";
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough, Highlighter,
   Heading2, Heading3, List, ListOrdered, Quote, Code2, Minus,
-  Link2, Link2Off, ImagePlus, CirclePlay, Undo2, Redo2,
+  Link2, Link2Off, ImagePlus, GalleryHorizontal, CirclePlay, Undo2, Redo2,
   AlignLeft, AlignCenter, AlignRight,
 } from "lucide-react";
 
@@ -74,6 +74,55 @@ export function PostEditorToolbar({ editor }: { editor: Editor | null }) {
     editor.chain().focus().setImage({ src: url.trim(), alt }).run();
   }
 
+  /**
+   * Un carrusel: varias fotos en una fila que se desliza.
+   *
+   * Se pegan todas las direcciones juntas, separadas por coma o una por línea,
+   * porque el caso que lo pidió son las casi trescientas cartas de un set: de a
+   * una sería inusable. Si ya hay un carrusel seleccionado, se editan sus fotos
+   * en vez de agregar otro.
+   */
+  function ponerCarrusel() {
+    if (!editor) return;
+
+    const BR = String.fromCharCode(10);
+    const SEPARADORES = new RegExp("[" + BR + ",\r]+");
+
+    const actuales = editor.isActive("sliderFotos")
+      ? String(editor.getAttributes("sliderFotos").imagenes ?? "")
+      : "";
+
+    const pegado = window.prompt(
+      "Direcciones de las fotos, separadas por coma o una por línea",
+      actuales.split(",").join(BR)
+    );
+    if (pegado === null) return;
+
+    const urls = pegado
+      .split(SEPARADORES)
+      .map((u) => u.trim())
+      .filter((u) => /^https?:\/\//i.test(u));
+
+    if (urls.length === 0) {
+      /* Vaciar el cuadro es cómo se saca un carrusel, sin botón aparte */
+      if (editor.isActive("sliderFotos")) editor.chain().focus().deleteSelection().run();
+      return;
+    }
+
+    const leyenda = window.prompt(
+      "Texto debajo del carrusel (opcional)",
+      editor.isActive("sliderFotos") ? String(editor.getAttributes("sliderFotos").leyenda ?? "") : ""
+    ) ?? "";
+
+    const atributos = { imagenes: urls.join(","), leyenda: leyenda.trim() };
+
+    if (editor.isActive("sliderFotos")) {
+      editor.chain().focus().updateAttributes("sliderFotos", atributos).run();
+    } else {
+      editor.chain().focus().insertContent({ type: "sliderFotos", attrs: atributos }).run();
+    }
+  }
+
   function ponerVideo() {
     if (!editor) return;
     const url = window.prompt("Dirección del video de YouTube");
@@ -117,6 +166,7 @@ export function PostEditorToolbar({ editor }: { editor: Editor | null }) {
       <Boton titulo="Enlace" onClick={ponerEnlace} activa={editor.isActive("link")}><Link2 {...ico} /></Boton>
       <Boton titulo="Quitar enlace" onClick={() => editor.chain().focus().unsetLink().run()} deshabilitada={!editor.isActive("link")}><Link2Off {...ico} /></Boton>
       <Boton titulo="Imagen" onClick={ponerImagen}><ImagePlus {...ico} /></Boton>
+      <Boton titulo="Carrusel de fotos" onClick={ponerCarrusel} activa={editor.isActive("sliderFotos")}><GalleryHorizontal {...ico} /></Boton>
       <Boton titulo="Video de YouTube" onClick={ponerVideo}><CirclePlay {...ico} /></Boton>
 
       <Separador />
