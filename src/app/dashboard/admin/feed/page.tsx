@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { Plus, PenLine, Bell, FileText, ExternalLink, CalendarClock } from "lucide-react";
-import { fechaLarga, etiquetaCategoria } from "@/lib/posts";
+import { fechaLarga, fechaYHora, etiquetaCategoria } from "@/lib/posts";
 
 const COURT = "#2ee6c1";
 const LIME  = "#d6ff3d";
@@ -126,7 +126,7 @@ export default async function AdminFeedPage() {
                       {programada && p.scheduled_at && (
                         <span title="Sale sola a esta hora" style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: MONO, fontSize: 9, color: COURT }}>
                           <CalendarClock size={10} />
-                          {new Date(p.scheduled_at).toLocaleString("es-CO", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                          {fechaYHora(p.scheduled_at)}
                         </span>
                       )}
                       {p.notified_at && (

@@ -12,7 +12,7 @@ import Highlight from "@tiptap/extension-highlight";
 import DOMPurify from "dompurify";
 import { Eye, Save, Send, Trash2, ExternalLink, Bell, BellOff, ImageUp, Loader2, X, BarChart3, Plus, CalendarClock } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { POST_TAGS, POST_ATTR, POST_CATEGORIAS, CATEGORIA_POR_DEFECTO, slugify, extractoAuto, minutosDeLectura, type Post, type PostCategoria } from "@/lib/posts";
+import { POST_TAGS, POST_ATTR, POST_CATEGORIAS, CATEGORIA_POR_DEFECTO, slugify, extractoAuto, minutosDeLectura, type Post, type PostCategoria, ZONA_COLOMBIA, DESFASE_COLOMBIA, fechaYHoraLarga } from "@/lib/posts";
 import { aWebp, peso } from "@/lib/imagen-webp";
 import { PostEditorToolbar } from "./PostEditorToolbar";
 import { SliderFotos } from "./slider-extension";
@@ -55,12 +55,27 @@ function sanear(html: string): string {
   });
 }
 
-/** De la fecha guardada al formato que entiende el campo del navegador. */
+/**
+ * De la fecha guardada al formato del campo, leída en hora de Colombia.
+ *
+ * Se usa la hora de Colombia y no la del equipo a propósito: el panel se dibuja
+ * en el servidor de Cloudflare, que trabaja en hora universal, y con la del
+ * equipo una nota puesta a las 9 de la mañana se anunciaba como las 2 de la
+ * tarde. Ahora el editor, la tarjeta del panel y la base hablan de lo mismo.
+ */
 function paraElCampo(iso: string | null): string {
   if (!iso) return "";
-  const d = new Date(iso);
-  const p = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+  /* en-CA da "2026-09-11, 09:00", que es casi el formato del campo */
+  const partes = new Date(iso).toLocaleString("en-CA", {
+    timeZone: ZONA_COLOMBIA, year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", hour12: false,
+  });
+  return partes.replace(", ", "T").replace(/,/g, "");
+}
+
+/** Lo que el admin escribió, entendido como hora de Colombia. */
+function desdeElCampo(valor: string): Date {
+  return new Date(`${valor}:00${DESFASE_COLOMBIA}`);
 }
 
 export function PostEditor({ post, authorId }: { post: Post | null; authorId: string }) {
@@ -230,7 +245,7 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
 
     /* Programar sin fecha, o para una hora que ya pasó, es un modo silencioso
        de que la nota no salga nunca: mejor frenarlo acá. */
-    const fecha = cuando ? new Date(cuando) : null;
+    const fecha = cuando ? desdeElCampo(cuando) : null;
     if (estado === "scheduled") {
       if (!fecha || Number.isNaN(fecha.getTime())) {
         setMensaje({ tipo: "error", texto: "Elegí la fecha y la hora en que debe salir." });
@@ -310,7 +325,7 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
         texto:
           estado === "published" ? "Publicado, sin avisar."
           : estado === "scheduled"
-            ? `Programada para el ${fecha!.toLocaleString("es-CO", { dateStyle: "long", timeStyle: "short" })}. Sale sola y avisa a todos.`
+            ? `Programada para el ${fechaYHoraLarga(fecha!.toISOString())}. Sale sola y avisa a todos.`
             : "Borrador guardado.",
       });
     }
@@ -578,7 +593,7 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
         </div>
         <span style={{ display: "block", fontFamily: MONO, fontSize: 10, color: INK2, marginBottom: 13, lineHeight: 1.6 }}>
           La nota queda guardada y sale sola a la hora que elijas, avisando a todos como si la publicaras a mano.
-          Hasta entonces nadie la ve. La hora es la de tu equipo, y puede salir hasta cinco minutos después.
+          Hasta entonces nadie la ve. La hora es la de Colombia, y puede salir hasta cinco minutos después.
         </span>
 
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
@@ -604,7 +619,7 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
 
         {post?.status === "scheduled" && post.scheduled_at && (
           <span style={{ display: "block", fontFamily: MONO, fontSize: 11, color: COURT, marginTop: 11 }}>
-            Programada para el {new Date(post.scheduled_at).toLocaleString("es-CO", { dateStyle: "long", timeStyle: "short" })}.
+            Programada para el {fechaYHoraLarga(post.scheduled_at)}.
             Guardala como borrador para cancelar la salida.
           </span>
         )}

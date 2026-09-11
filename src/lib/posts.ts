@@ -119,6 +119,33 @@ export function minutosDeLectura(html: string): number {
   return Math.max(1, Math.round(palabras / 200));
 }
 
+/**
+ * Colombia va cinco horas detrás del meridiano, y no mueve el reloj en todo el
+ * año: no hay horario de verano desde 1993. Por eso el desfase se puede
+ * escribir fijo, sin librería de zonas horarias.
+ *
+ * Hace falta porque las páginas del panel se dibujan en el servidor de
+ * Cloudflare, que trabaja en hora universal: una nota programada a las 9 de la
+ * mañana se mostraba como las 2 de la tarde.
+ */
+export const ZONA_COLOMBIA = "America/Bogota";
+export const DESFASE_COLOMBIA = "-05:00";
+
+/** Fecha y hora como se leen en Colombia, sin importar dónde corra esto. */
+export function fechaYHora(iso: string): string {
+  return new Date(iso).toLocaleString("es-CO", {
+    day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
+    timeZone: ZONA_COLOMBIA,
+  });
+}
+
+/** Lo mismo, escrito largo: "11 de septiembre de 2026, 9:00 a. m." */
+export function fechaYHoraLarga(iso: string): string {
+  return new Date(iso).toLocaleString("es-CO", {
+    dateStyle: "long", timeStyle: "short", timeZone: ZONA_COLOMBIA,
+  });
+}
+
 export function fechaLarga(iso: string): string {
   return new Date(iso).toLocaleDateString("es-CO", {
     day: "numeric", month: "long", year: "numeric", timeZone: "America/Bogota",
