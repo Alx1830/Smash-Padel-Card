@@ -188,14 +188,24 @@ html, body {
   /* La barra fija de iOS se despega si un ancestro crea contenedor de
      scroll vertical; acá el scroll es solo horizontal, que no molesta. */
   overscroll-behavior-x: contain;
+  /* Sin esto el flex estira cada foto hasta la altura de la más alta: en un
+     carrusel donde conviven cartas verticales y cajas casi cuadradas, las
+     cajas salían deformadas a lo largo. */
+  align-items: flex-start;
 }
 .post-slider-fila::-webkit-scrollbar { height: 6px; }
 .post-slider-fila::-webkit-scrollbar-track { background: rgba(255,255,255,0.06); border-radius: 3px; }
 .post-slider-fila::-webkit-scrollbar-thumb { background: #2ee6c166; border-radius: 3px; }
 .post-slider .post-slider-fila img {
-  flex: 0 0 auto; width: 150px; height: auto; margin: 0;
+  /* Manda la altura y el ancho se acomoda solo: así una caja apaisada y una
+     carta vertical quedan parejas de arriba abajo, cada una con su propia
+     proporción. Al revés —ancho fijo— la fila queda con los bordes de abajo
+     desparejos y se ve descuidada. */
+  flex: 0 0 auto; height: 210px; width: auto; max-width: none; margin: 0;
+  object-fit: contain;
   scroll-snap-align: start; border-radius: 10px;
   border: 1px solid rgba(255,255,255,0.07);
+  cursor: zoom-in;
 }
 .post-slider-leyenda {
   display: block; font-size: 11px; color: #7a8298; margin-top: 8px;
@@ -216,5 +226,5 @@ html, body {
 @media (pointer: coarse) {
   /* En el celular se desliza con el dedo: las flechas estorban */
   .post-slider-flecha { display: none; }
-  .post-slider .post-slider-fila img { width: 122px; }
+  .post-slider .post-slider-fila img { height: 168px; }
 }

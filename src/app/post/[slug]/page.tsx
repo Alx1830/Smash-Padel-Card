@@ -14,6 +14,7 @@ import { fechaLarga, minutosDeLectura, nombreAutor, extractoAuto, soloTexto, eti
 import { PostBody } from "@/components/PostBody";
 import { Comentarios } from "@/components/post/Comentarios";
 import { FlechasSlider } from "@/components/post/FlechasSlider";
+import { VisorFotos } from "@/components/post/VisorFotos";
 import { Encuesta, type EncuestaDatos } from "@/components/post/Encuesta";
 import { SITIO, EDITOR, migas, DatosJson } from "@/lib/seo";
 
@@ -322,6 +323,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
         <PostBody html={cuerpo} />
         <FlechasSlider />
+        <VisorFotos />
 
         {encuesta && encuesta.opciones.length > 0 && <Encuesta datos={encuesta} />}
 

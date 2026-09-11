@@ -37,7 +37,9 @@ export function PostBody({ html }: { html: string }) {
           font-style: italic; color: ${INK0}; line-height: 1.6; }
         .post-cuerpo blockquote p:last-child { margin-bottom: 0; }
         .post-cuerpo img { max-width: 100%; height: auto; border-radius: 12px;
-          border: 1px solid rgba(255,255,255,0.07); margin: 24px 0; display: block; }
+          border: 1px solid rgba(255,255,255,0.07); margin: 24px 0; display: block;
+          /* Tocarla la abre grande; el dedito de "clic acá" lo pone el cursor */
+          cursor: zoom-in; }
         .post-cuerpo figure { margin: 24px 0; }
         .post-cuerpo figure img { margin: 0 0 8px; }
         .post-cuerpo figcaption { font-size: 11px; color: ${INK2}; text-align: center; }
