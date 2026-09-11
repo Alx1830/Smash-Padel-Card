@@ -3,6 +3,9 @@
 # dependencies
 /node_modules
 scraper/node_modules
+# El armado de noticias es una herramienta de trabajo local, no parte del
+# sitio: no se publica en el repo.
+bot-noticias/
 /.pnp
 .pnp.*
 .yarn/*

@@ -28,9 +28,19 @@ export async function HeroSwiper() {
      entonces la carta que se precargo no es la que termina arriba. En su lugar
      la tanda se corre segun la hora, asi que la portada se renueva pero es la
      misma para todos los que la ven en ese momento. */
+  /* Una misma carta figura varias veces en el set, una por variante (normal,
+     reverse, holo), y todas apuntan a la misma foto: sin filtrar, el mazo
+     mostraba la misma carta dos o tres veces. Se deja una por foto. */
+  const vistas = new Set<string>();
+  const unicas = cards.filter((c: { image: string }) => {
+    if (!c.image || vistas.has(c.image)) return false;
+    vistas.add(c.image);
+    return true;
+  });
+
   const tanda = await tandaActual();
-  const desde = cards.length > 0 ? (tanda * 10) % cards.length : 0;
-  const rotadas = [...cards.slice(desde), ...cards.slice(0, desde)];
+  const desde = unicas.length > 0 ? (tanda * 10) % unicas.length : 0;
+  const rotadas = [...unicas.slice(desde), ...unicas.slice(0, desde)];
   /* La de arriba en su tamaño original, porque es la que se mira; las nueve de
      atrás en copia chica, porque solo se les ve el borde. Son 1,9 MB contra
      unos 600 KB, sin que cambie nada en pantalla. */
