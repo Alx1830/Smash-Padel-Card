@@ -77,6 +77,9 @@ export const metadata: Metadata = {
     "coleccionismo Pokémon", "organizar cartas", "master set", "FaceBinder",
   ],
   authors: [{ name: "FaceBinder", url: BASE_URL }],
+  alternates: {
+    types: { "application/rss+xml": [{ url: "/post/feed.xml", title: "Noticias de FaceBinder" }] },
+  },
   creator: "Adxmedialab",
   openGraph: {
     type: "website",
@@ -115,10 +118,23 @@ export const metadata: Metadata = {
     startupImage: APPLE_SPLASH,
   },
   manifest: "/manifest.json",
+  /* El código que da Search Console al elegir "etiqueta HTML". Si se verifica
+     por DNS en Cloudflare no hace falta y la variable puede quedar vacía. */
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+    : undefined,
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true },
+    googleBot: {
+      index: true,
+      follow: true,
+      /* Sin techo en el texto ni en la foto que Google puede mostrar: es lo que
+         permite el fragmento largo y la miniatura grande en una noticia. */
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
   },
 };
 
@@ -142,6 +158,21 @@ export default async function RootLayout({
     }
   } catch { /* no-op: Navbar falls back to client fetch */ }
 
+  /* Quiénes somos, para todo el sitio. Es lo que le permite a Google armar la
+     ficha de la marca y lo que firma cada noticia como publicada por FaceBinder. */
+  const organizacion = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "FaceBinder",
+    url: BASE_URL,
+    logo: `${BASE_URL}/favicon.png`,
+    description:
+      "Plataforma colombiana para coleccionistas de Pokémon TCG: inventario, valor del binder en pesos, market e intercambios.",
+    areaServed: { "@type": "Country", name: "Colombia" },
+  };
+
+  const ga = process.env.NEXT_PUBLIC_GA_ID;
+
   return (
     /* El recorte horizontal lo pone globals.css con `overflow-x: clip`. Acá no
        va nada: un `hidden` en línea gana por especificidad y en iOS convierte
@@ -149,6 +180,11 @@ export default async function RootLayout({
        de arriba dejan de estar pegadas a la pantalla y se van con la página. */
     <html lang="es" className={`${jetbrainsMono.variable} ${archiveBlack.variable} h-full`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col antialiased" style={{ maxWidth: "100vw" }} suppressHydrationWarning>
+        <script
+          type="application/ld+json"
+          /* Constantes nuestras, nada que escriba un visitante */
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizacion) }}
+        />
         <MarketTickerWrapper />
         <Navbar {...navProps} />
         {children}
@@ -157,6 +193,19 @@ export default async function RootLayout({
             navigator.serviceWorker.register('/sw.js').catch(function() {});
           }
         `}</Script>
+        {/* Google Analytics 4. Sin la variable no se carga nada: en desarrollo
+            no queremos ensuciar las métricas con visitas propias. */}
+        {ga && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga}`} strategy="afterInteractive" />
+            <Script id="ga4" strategy="afterInteractive">{`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${ga}');
+            `}</Script>
+          </>
+        )}
         <Script
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7135029542920964"
           crossOrigin="anonymous"

@@ -12,6 +12,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Newspaper, ArrowLeft } from "lucide-react";
 import { fechaLarga, etiquetaCategoria, POST_CATEGORIAS } from "@/lib/posts";
 import { EspacioPublicitario } from "@/components/post/EspacioPublicitario";
+import { SITIO, EDITOR, migas, DatosJson } from "@/lib/seo";
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
@@ -24,9 +25,29 @@ const DISP  = "var(--font-archivo)";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Noticias",
-  description: "Novedades, guías y anuncios de FaceBinder: sets nuevos, cambios en el market y todo lo que pasa en la comunidad.",
-  alternates: { canonical: "/post" },
+  title: "Noticias de Pokémon TCG — sets, rotaciones y torneos",
+  description:
+    "Novedades de Pokémon TCG en español: sets que salen, rotación de formato, resultados de torneos, precios y lo que pasa en la comunidad colombiana de coleccionistas.",
+  alternates: {
+    canonical: "/post",
+    /* El feed deja que Google y los lectores de noticias se enteren de una
+       nota nueva sin esperar a que pase el rastreador por la portada. */
+    types: { "application/rss+xml": [{ url: "/post/feed.xml", title: "Noticias de FaceBinder" }] },
+  },
+  keywords: [
+    "noticias Pokémon TCG", "sets nuevos Pokémon", "rotación Pokémon TCG",
+    "torneos Pokémon Colombia", "cartas Pokémon novedades", "Pokémon TCG español",
+  ],
+  openGraph: {
+    type: "website",
+    locale: "es_CO",
+    siteName: "FaceBinder",
+    url: "https://facebinder.com/post",
+    title: "Noticias de Pokémon TCG — sets, rotaciones y torneos",
+    description:
+      "Novedades de Pokémon TCG en español: sets que salen, rotación de formato, torneos y precios.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Noticias de Pokémon TCG en FaceBinder" }],
+  },
 };
 
 interface Nota {
@@ -154,8 +175,38 @@ export default async function NoticiasPage() {
     }))
     .filter((s) => s.notas.length > 0);
 
+  /* La portada le dice a Google, en orden, cuáles son las notas del momento.
+     Sin esto cada noticia se descubre sola y tarda mucho más en indexarse. */
+  const datosPortada = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "Noticias de Pokémon TCG",
+      description:
+        "Novedades, guías y anuncios de Pokémon TCG: sets nuevos, rotaciones, torneos y lo que pasa en la comunidad colombiana.",
+      url: `${SITIO}/post`,
+      inLanguage: "es-CO",
+      isPartOf: { "@type": "WebSite", name: "FaceBinder", url: SITIO },
+      publisher: EDITOR,
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: lista.slice(0, 30).map((n, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          url: `${SITIO}/post/${n.slug}`,
+          name: n.title,
+        })),
+      },
+    },
+    migas([
+      { nombre: "Inicio", url: "" },
+      { nombre: "Noticias", url: "/post" },
+    ]),
+  ];
+
   return (
     <div className="np-page">
+      <DatosJson datos={datosPortada} />
       <style>{`
         .np-page { min-height: 100vh; background: ${BG0}; padding: 40px 24px 90px; }
         .np-wrap { max-width: 1400px; margin: 0 auto; }

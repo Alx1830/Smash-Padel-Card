@@ -10,10 +10,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { ArrowLeft, Clock, CalendarDays, Newspaper } from "lucide-react";
-import { fechaLarga, minutosDeLectura, nombreAutor, extractoAuto, etiquetaCategoria, type PostAuthor } from "@/lib/posts";
+import { fechaLarga, minutosDeLectura, nombreAutor, extractoAuto, soloTexto, etiquetaCategoria, type PostAuthor } from "@/lib/posts";
 import { PostBody } from "@/components/PostBody";
 import { Comentarios } from "@/components/post/Comentarios";
 import { Encuesta, type EncuestaDatos } from "@/components/post/Encuesta";
+import { SITIO, EDITOR, migas, DatosJson } from "@/lib/seo";
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
@@ -35,7 +36,7 @@ function publico() {
 async function traerPost(slug: string) {
   const { data: post } = await publico()
     .from("admin_posts")
-    .select("id, slug, title, excerpt, cover_url, content_html, content, media_url, category, status, published_at, created_at, user_id")
+    .select("id, slug, title, excerpt, cover_url, content_html, content, media_url, category, status, published_at, created_at, updated_at, user_id")
     .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();
@@ -135,9 +136,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: "article",
       title,
       description,
+      siteName: "FaceBinder",
+      locale: "es_CO",
       url: `https://facebinder.com/post/${post.slug}`,
       publishedTime: post.published_at ?? post.created_at,
-      images: [{ url: imagen, alt: title }],
+      modifiedTime: post.updated_at ?? post.published_at ?? post.created_at,
+      section: etiquetaCategoria(post.category),
+      authors: [nombreAutor(resultado.autor)],
+      images: [{ url: imagen, width: 1200, height: 630, alt: title }],
     },
     twitter: { card: "summary_large_image", title, description, images: [imagen] },
   };
@@ -179,8 +185,36 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const portada = post.cover_url ?? post.media_url;
   const fecha = post.published_at ?? post.created_at;
 
+  /* Lo que Google lee para entender que esto es una noticia y no una página
+     cualquiera: quién la firma, cuándo salió y qué medio la publica. */
+  const datosNota = [
+    {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      mainEntityOfPage: { "@type": "WebPage", "@id": `${SITIO}/post/${post.slug}` },
+      headline: post.title.slice(0, 110),
+      description: post.excerpt?.trim() || extractoAuto(cuerpo, 155),
+      image: portada ? [portada] : [`${SITIO}/og-image.png`],
+      datePublished: fecha,
+      dateModified: post.updated_at ?? fecha,
+      inLanguage: "es-CO",
+      articleSection: etiquetaCategoria(post.category),
+      wordCount: soloTexto(cuerpo).split(/\s+/).filter(Boolean).length,
+      author: autor?.username
+        ? { "@type": "Person", name: nombreAutor(autor), url: `${SITIO}/${autor.username}` }
+        : { "@type": "Person", name: nombreAutor(autor) },
+      publisher: EDITOR,
+    },
+    migas([
+      { nombre: "Inicio", url: "" },
+      { nombre: "Noticias", url: "/post" },
+      { nombre: post.title, url: `/post/${post.slug}` },
+    ]),
+  ];
+
   return (
     <div style={{ minHeight: "100vh", background: BG0, padding: "40px 24px 90px" }}>
+      <DatosJson datos={datosNota} />
       <article style={{ maxWidth: 760, margin: "0 auto" }}>
         <style>{`
           .pd-media { position: relative; overflow: hidden; width: 100%; aspect-ratio: 16 / 9;
@@ -299,6 +333,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </Link>
         </div>
 
+        <Comentarios postId={post.id} />
+
         {relacionadas.length > 0 && (
           <section style={{ marginTop: 46 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
@@ -337,7 +373,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </section>
         )}
 
-        <Comentarios postId={post.id} />
       </article>
     </div>
   );
