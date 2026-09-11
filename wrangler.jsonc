@@ -17,7 +17,13 @@
 
   // Cache de paginas ISR (portada, market, perfiles, wishlists).
   "r2_buckets": [
-    { "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "facebinder-next-cache" }
+    { "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "facebinder-next-cache" },
+    // Las imagenes (cartas, logos, portadas de las noticias). Se habla con el
+    // bucket por el binding y no con el SDK de Amazon: ese, por dentro, intenta
+    // leer archivos de configuracion del disco, y en Workers no hay disco. Daba
+    // "[unenv] fs.readFile is not implemented yet" al subir una portada. De
+    // paso no hace falta firmar nada ni tener las llaves en el servidor.
+    { "binding": "IMAGENES_BUCKET", "bucket_name": "facebinder-cards" }
   ],
 
   // Rate limit del middleware. El Map en memoria no sirve en Workers: cada
