@@ -351,6 +351,13 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
         .post-editor-cuerpo blockquote { margin: 18px 0; padding: 4px 0 4px 16px;
           border-left: 2px solid ${COURT}; color: ${INK0}; font-style: italic; }
         .post-editor-cuerpo img { max-width: 100%; border-radius: 10px; margin: 8px 0; }
+        /* El carrusel trae sus medidas de globals.css: sin esto la regla de
+           arriba le ganaba por orden y las fotos salían apiladas y enormes,
+           que es justo lo que el carrusel viene a evitar. */
+        .post-editor-cuerpo .post-slider img { margin: 0; }
+        .post-editor-cuerpo .post-slider { cursor: grab; }
+        .post-editor-cuerpo .post-slider.ProseMirror-selectednode {
+          outline: 2px solid ${COURT}; outline-offset: 3px; border-radius: 12px; }
         .post-editor-cuerpo iframe { max-width: 100%; aspect-ratio: 16 / 9; height: auto;
           border: 0; border-radius: 10px; margin: 8px 0; }
         .post-editor-cuerpo hr { border: 0; border-top: 1px solid rgba(255,255,255,0.12); margin: 24px 0; }
