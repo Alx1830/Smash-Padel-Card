@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { MobileTabBar } from "@/components/MobileTabBar";
-import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Swords, Gamepad2, WalletCards, ArrowLeftRight, Link2, ShieldCheck } from "lucide-react";
+import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Swords, Gamepad2, WalletCards, ArrowLeftRight, Link2, ShieldCheck, Dices } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { usePushPermission } from "@/hooks/usePushPermission";
 import { DashboardUserProvider } from "./DashboardUserContext";
@@ -398,7 +398,8 @@ export function DashboardLayoutClient({
                 const decksActive = pathname.startsWith("/dashboard/decks");
                 const mySetsActive = pathname.startsWith("/dashboard/my-sets");
                 const tradesActive = pathname.startsWith("/dashboard/trades");
-                const intActive = decksActive || mySetsActive || tradesActive;
+                const juegoActive = pathname.startsWith("/dashboard/juego");
+                const intActive = decksActive || mySetsActive || tradesActive || juegoActive;
                 return (
                   <div key="interactivo" style={{ marginBottom: "4px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 14px 6px" }}>
@@ -426,6 +427,13 @@ export function DashboardLayoutClient({
                       >
                         <ArrowLeftRight size={14} color={tradesActive ? COURT : INK2} strokeWidth={1.8} />
                         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: tradesActive ? COURT : "rgba(245,247,251,0.65)" }}>Intercambios</span>
+                      </Link>
+                      <Link href="/dashboard/juego" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: juegoActive ? `${COURT}18` : "transparent", border: juegoActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                        onMouseEnter={e => { if (!juegoActive) e.currentTarget.style.background = `${COURT}10`; }}
+                        onMouseLeave={e => { if (!juegoActive) e.currentTarget.style.background = "transparent"; }}
+                      >
+                        <Dices size={14} color={juegoActive ? COURT : INK2} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: juegoActive ? COURT : "rgba(245,247,251,0.65)" }}>Higher Or Lower</span>
                       </Link>
                     </div>
                   </div>

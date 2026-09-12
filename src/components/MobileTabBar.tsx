@@ -6,8 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import {
   House, UserRoundPen, LayoutGrid, Store, Gamepad2,
-  Swords, WalletCards, ArrowLeftRight, BookSearch,
-} from "lucide-react";
+  Swords, WalletCards, ArrowLeftRight, BookSearch, Dices } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const LIME  = "#d6ff3d";
@@ -61,7 +60,8 @@ export function MobileTabBar({ username: initialUsername }: { username?: string 
                     || pathname === "/dashboard/market/wishlist";
   const intActive    = pathname.startsWith("/dashboard/decks")
                     || pathname.startsWith("/dashboard/my-sets")
-                    || pathname.startsWith("/dashboard/trades");
+                    || pathname.startsWith("/dashboard/trades")
+                    || pathname.startsWith("/dashboard/juego");
   const invActive    = pathname === "/dashboard/inventario"
                     || pathname === "/dashboard/inventario/cards"
                     || pathname === "/dashboard/inventario/agregar";
@@ -101,6 +101,7 @@ export function MobileTabBar({ username: initialUsername }: { username?: string 
               <PopupLink href="/dashboard/decks"   Icon={Swords}         label="Decks"        onClick={() => setInteractivoOpen(false)} />
               <PopupLink href="/dashboard/my-sets" Icon={WalletCards}    label="Mis Sets"     onClick={() => setInteractivoOpen(false)} />
               <PopupLink href="/dashboard/trades"  Icon={ArrowLeftRight} label="Intercambios" onClick={() => setInteractivoOpen(false)} />
+              <PopupLink href="/dashboard/juego"   Icon={Dices}          label="Higher Or Lower"        onClick={() => setInteractivoOpen(false)} />
             </Popup>
           )}
           <TabButton label="Interactivo" Icon={Gamepad2} active={intActive}
