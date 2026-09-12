@@ -7,7 +7,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { MobileTabBar } from "@/components/MobileTabBar";
-import { House, UserRoundPen, UsersRound, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Newspaper, Swords, Gamepad2, WalletCards, ArrowLeftRight, Link2, ShieldCheck, Dices } from "lucide-react";
+import { Wrench, House, UserRoundPen, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Swords, Gamepad2, WalletCards, ArrowLeftRight, Dices, Newspaper } from "lucide-react";
+import { ENLACES_ADMIN, ADMIN_COLOR } from "@/components/admin/enlaces";
+import { MenuAdminMovil } from "@/components/admin/MenuAdminMovil";
 import { useNotifications } from "@/hooks/useNotifications";
 import { usePushPermission } from "@/hooks/usePushPermission";
 import { DashboardUserProvider } from "./DashboardUserContext";
@@ -213,56 +215,6 @@ export function DashboardLayoutClient({
         <Pencil size={14} color={COURT} strokeWidth={1.8} />
         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Editar perfil</span>
       </a>
-      {isAdmin && (
-        <>
-          <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-          <a href="/dashboard/users" style={{
-            display: "flex", alignItems: "center", gap: "10px",
-            padding: "10px 14px", textDecoration: "none",
-          }}
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(79,240,255,0.07)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-          >
-            <UsersRound size={14} color="#4ff0ff" strokeWidth={1.8} />
-            <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Usuarios</span>
-          </a>
-          <a href="/dashboard/admin/feed" style={{
-            display: "flex", alignItems: "center", gap: "10px",
-            padding: "10px 14px", textDecoration: "none",
-          }}
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(79,240,255,0.07)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-          >
-            <Newspaper size={14} color="#4ff0ff" strokeWidth={1.8} />
-            <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Feed post</span>
-          </a>
-          <a href="/dashboard/admin/aprobaciones" style={{
-            display: "flex", alignItems: "center", gap: "10px",
-            padding: "10px 14px", textDecoration: "none",
-          }}
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(79,240,255,0.07)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-          >
-            <ShieldCheck size={14} color="#4ff0ff" strokeWidth={1.8} />
-            <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Cartas por aprobar</span>
-            {pendingListings > 0 && (
-              <span style={{ marginLeft: "auto", minWidth: 18, height: 18, borderRadius: 9, background: "#d6ff3d", color: "#05070d", fontFamily: MONO, fontSize: 10, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 5px" }}>
-                {pendingListings > 99 ? "99+" : pendingListings}
-              </span>
-            )}
-          </a>
-          <a href="/dashboard/admin/mapeo" style={{
-            display: "flex", alignItems: "center", gap: "10px",
-            padding: "10px 14px", textDecoration: "none",
-          }}
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(79,240,255,0.07)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-          >
-            <Link2 size={14} color="#4ff0ff" strokeWidth={1.8} />
-            <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", background: "linear-gradient(135deg, #4ff0ff, #2ee6c1, #d6ff3d)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Mapeo TCG</span>
-          </a>
-        </>
-      )}
       <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
       <button onClick={handleLogout} style={{
         width: "100%", display: "flex", alignItems: "center", gap: "10px",
@@ -399,7 +351,8 @@ export function DashboardLayoutClient({
                 const mySetsActive = pathname.startsWith("/dashboard/my-sets");
                 const tradesActive = pathname.startsWith("/dashboard/trades");
                 const juegoActive = pathname.startsWith("/dashboard/juego");
-                const intActive = decksActive || mySetsActive || tradesActive || juegoActive;
+                const noticiasActive = pathname.startsWith("/post");
+                const intActive = decksActive || mySetsActive || tradesActive || juegoActive || noticiasActive;
                 return (
                   <div key="interactivo" style={{ marginBottom: "4px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 14px 6px" }}>
@@ -434,6 +387,13 @@ export function DashboardLayoutClient({
                       >
                         <Dices size={14} color={juegoActive ? COURT : INK2} strokeWidth={1.8} />
                         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: juegoActive ? COURT : "rgba(245,247,251,0.65)" }}>Higher Or Lower</span>
+                      </Link>
+                      <Link href="/post" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: noticiasActive ? `${COURT}18` : "transparent", border: noticiasActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                        onMouseEnter={e => { if (!noticiasActive) e.currentTarget.style.background = `${COURT}10`; }}
+                        onMouseLeave={e => { if (!noticiasActive) e.currentTarget.style.background = "transparent"; }}
+                      >
+                        <Newspaper size={14} color={noticiasActive ? COURT : INK2} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: noticiasActive ? COURT : "rgba(245,247,251,0.65)" }}>Noticias</span>
                       </Link>
                     </div>
                   </div>
@@ -505,6 +465,34 @@ export function DashboardLayoutClient({
                 </Link>
               );
             })}
+
+            {isAdmin && (
+              <div style={{ marginTop: "10px", paddingTop: "10px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 14px 6px" }}>
+                  <Wrench size={20} color={ADMIN_COLOR} strokeWidth={1.8} style={{ flexShrink: 0 }} />
+                  <span style={{ fontFamily: MONO, fontSize: "12px", letterSpacing: "0.08em", textTransform: "uppercase", color: ADMIN_COLOR }}>Admin</span>
+                </div>
+                <div style={{ paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "2px" }}>
+                  {ENLACES_ADMIN.map(({ href, label, Icon }) => {
+                    const aqui = pathname.startsWith(href);
+                    return (
+                      <Link key={href} href={href} style={{
+                        display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px",
+                        borderRadius: "8px", textDecoration: "none", transition: "all 0.15s",
+                        background: aqui ? "rgba(79,240,255,0.12)" : "transparent",
+                        border: aqui ? "1px solid rgba(79,240,255,0.25)" : "1px solid transparent",
+                      }}
+                        onMouseEnter={e => { if (!aqui) e.currentTarget.style.background = "rgba(79,240,255,0.07)"; }}
+                        onMouseLeave={e => { if (!aqui) e.currentTarget.style.background = "transparent"; }}
+                      >
+                        <Icon size={14} color={ADMIN_COLOR} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: aqui ? ADMIN_COLOR : "rgba(245,247,251,0.65)" }}>{label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </nav>
 
           {/* Avatar menu — desktop */}
@@ -575,6 +563,9 @@ export function DashboardLayoutClient({
         {/* ══ MAIN CONTENT ══ */}
         <main className="dash-main" style={{ flex: 1 }}>
           <DashboardUserProvider userId={userId} isAdmin={isAdmin}>{children}</DashboardUserProvider>
+          {/* En el celular estas herramientas no caben en ningún menú: se
+              abren deslizando desde el borde izquierdo. */}
+          {isAdmin && <MenuAdminMovil />}
         </main>
       </div>
 
