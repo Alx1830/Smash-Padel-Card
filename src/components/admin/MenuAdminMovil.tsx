@@ -71,8 +71,8 @@ export function MenuAdminMovil() {
     };
   }, []);
 
-  /* Al llegar a la página elegida el cajón sobra. */
-  useEffect(cerrar, [pathname, cerrar]);
+  /* No hace falta cerrarlo al cambiar de página: cada enlace ya lo cierra al
+     tocarlo, que es la única manera de irse desde acá. */
 
   return (
     <>

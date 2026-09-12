@@ -15,7 +15,8 @@
  */
 
 import { useState } from "react";
-import { Bell, Send, Smartphone, TriangleAlert, Check } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+import { Bell, Send, Smartphone, TriangleAlert, Check, CalendarClock } from "lucide-react";
 
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
@@ -55,15 +56,22 @@ export function EnviarAviso() {
   const [enviando, setEnviando] = useState(false);
   const [error, setError]       = useState<string | null>(null);
   const [hecho, setHecho]       = useState<Resultado | null>(null);
+  /* "ahora" lo manda de una; "luego" lo deja anotado y lo saca el reloj de la
+     base, el mismo que publica las noticias programadas. */
+  const [cuando, setCuando]     = useState<"ahora" | "luego">("ahora");
+  const [fecha, setFecha]       = useState("");
+  const [programado, setProgramado] = useState<string | null>(null);
 
   const urlFinal = destino === "otra" ? otraUrl.trim() : destino;
   const completo = titulo.trim().length > 0 && mensaje.trim().length > 0
-                && urlFinal.startsWith("/") && !urlFinal.startsWith("//");
+                && urlFinal.startsWith("/") && !urlFinal.startsWith("//")
+                && (cuando === "ahora" || fecha.length > 0);
 
   const enviar = async () => {
     setEnviando(true);
     setError(null);
     try {
+      if (cuando === "luego") { await programar(); return; }
       const res = await fetch("/api/admin/notificar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -81,6 +89,33 @@ export function EnviarAviso() {
     } finally {
       setEnviando(false);
     }
+  };
+
+  /**
+   * Lo deja anotado para más tarde.
+   *
+   * La hora llega del campo como hora local de quien lo escribe, que es la de
+   * Colombia; se guarda con su huso para que el reloj de la base no la
+   * interprete como UTC y lo mande cinco horas antes.
+   */
+  const programar = async () => {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    const { error: err } = await supabase.from("avisos_programados").insert({
+      titulo: titulo.trim(),
+      mensaje: mensaje.trim(),
+      destino: urlFinal,
+      scheduled_at: new Date(fecha).toISOString(),
+      created_by: user?.id ?? null,
+    });
+    if (err) throw new Error(err.message);
+    setProgramado(new Date(fecha).toLocaleString("es-CO", {
+      dateStyle: "long", timeStyle: "short", timeZone: "America/Bogota",
+    }));
+    setTitulo("");
+    setMensaje("");
+    setFecha("");
+    setConfirmando(false);
   };
 
   return (
@@ -104,6 +139,14 @@ export function EnviarAviso() {
           gap: 10px; font-family: ${MONO}; font-size: 10px; letter-spacing: 0.14em;
           text-transform: uppercase; color: ${INK2}; margin-bottom: 7px; }
         .nt-cuenta { font-size: 10px; }
+
+        .nt-cuando { display: flex; gap: 8px; flex-wrap: wrap; }
+        .nt-pildora { display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+          background: none; border: 1px solid rgba(255,255,255,0.12); border-radius: 999px;
+          padding: 8px 15px; font-family: ${MONO}; font-size: 10px; letter-spacing: 0.1em;
+          text-transform: uppercase; color: ${INK2}; transition: all 0.15s; }
+        .nt-pildora:hover { border-color: rgba(46,230,193,0.4); color: ${INK0}; }
+        .nt-pildora.on { border-color: ${COURT}; color: ${COURT}; background: rgba(46,230,193,0.08); }
 
         .nt-btn { display: inline-flex; align-items: center; gap: 9px; border: 0;
           border-radius: 9px; padding: 13px 24px; cursor: pointer; font-family: ${MONO};
@@ -150,6 +193,16 @@ export function EnviarAviso() {
                 {hecho.campana === 1 ? "persona" : "personas"} y llegó al celular de{" "}
                 <strong style={{ color: INK0 }}>{hecho.push}</strong> de{" "}
                 {hecho.suscritos} {hecho.suscritos === 1 ? "suscrito" : "suscritos"}.
+              </p>
+            </div>
+          )}
+
+          {programado && (
+            <div style={{ border: `1px solid ${BALL}55`, background: "rgba(214,255,61,0.07)", borderRadius: 11, padding: "14px 16px", display: "flex", gap: 11, alignItems: "flex-start" }}>
+              <CalendarClock size={16} color={BALL} style={{ flexShrink: 0, marginTop: 2 }} />
+              <p style={{ fontFamily: MONO, fontSize: 11, color: INK1, margin: 0, lineHeight: 1.7 }}>
+                Aviso programado para el <strong style={{ color: INK0 }}>{programado}</strong>.
+                Sale solo; no hace falta dejar la página abierta.
               </p>
             </div>
           )}
@@ -234,6 +287,41 @@ export function EnviarAviso() {
             )}
           </div>
 
+          {/* Cuándo sale */}
+          <div>
+            <p className="nt-etiqueta"><span>Cuándo sale</span></p>
+            <div className="nt-cuando">
+              <button
+                className={"nt-pildora" + (cuando === "ahora" ? " on" : "")}
+                onClick={() => setCuando("ahora")}
+              >
+                <Send size={12} /> Ahora
+              </button>
+              <button
+                className={"nt-pildora" + (cuando === "luego" ? " on" : "")}
+                onClick={() => setCuando("luego")}
+              >
+                <CalendarClock size={12} /> Programar
+              </button>
+            </div>
+
+            {cuando === "luego" && (
+              <>
+                <input
+                  type="datetime-local"
+                  className="nt-campo"
+                  style={{ marginTop: 10 }}
+                  value={fecha}
+                  onChange={(e) => setFecha(e.target.value)}
+                />
+                <p style={{ fontFamily: MONO, fontSize: 10, color: INK2, margin: "7px 0 0", lineHeight: 1.7 }}>
+                  Hora de Colombia. Un reloj de la base revisa cada cinco minutos,
+                  así que puede salir hasta cinco minutos después de la hora fijada.
+                </p>
+              </>
+            )}
+          </div>
+
           {/* Cómo se va a ver */}
           {(titulo.trim() || mensaje.trim()) && (
             <div>
@@ -261,12 +349,13 @@ export function EnviarAviso() {
           {confirmando ? (
             <div style={{ border: `1px solid ${BALL}55`, background: "rgba(214,255,61,0.06)", borderRadius: 11, padding: "16px 18px" }}>
               <p style={{ fontFamily: MONO, fontSize: 11, color: INK1, margin: "0 0 14px", lineHeight: 1.8 }}>
-                Esto le llega a <strong style={{ color: INK0 }}>todos los usuarios</strong> y
-                no se puede deshacer. ¿Lo mando?
+                {cuando === "ahora"
+                  ? <>Esto le llega a <strong style={{ color: INK0 }}>todos los usuarios</strong> ahora mismo y no se puede deshacer. ¿Lo mando?</>
+                  : <>Queda anotado para salir a la hora que elegiste, a <strong style={{ color: INK0 }}>todos los usuarios</strong>. ¿Lo programo?</>}
               </p>
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 <button className="nt-btn" onClick={enviar} disabled={enviando}>
-                  <Send size={14} /> {enviando ? "Enviando…" : "Sí, enviar"}
+                  <Send size={14} /> {enviando ? "Un momento…" : cuando === "ahora" ? "Sí, enviar" : "Sí, programar"}
                 </button>
                 <button className="nt-btn gris" onClick={() => setConfirmando(false)} disabled={enviando}>
                   Mejor no
@@ -277,10 +366,12 @@ export function EnviarAviso() {
             <div>
               <button
                 className="nt-btn"
-                onClick={() => { setHecho(null); setConfirmando(true); }}
+                onClick={() => { setHecho(null); setProgramado(null); setConfirmando(true); }}
                 disabled={!completo}
               >
-                <Smartphone size={14} /> Enviar a todos
+                {cuando === "ahora"
+                  ? <><Smartphone size={14} /> Enviar a todos</>
+                  : <><CalendarClock size={14} /> Programar aviso</>}
               </button>
             </div>
           )}
