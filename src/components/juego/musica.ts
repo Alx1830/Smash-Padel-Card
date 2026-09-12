@@ -28,7 +28,7 @@ export function registrarPistas(
   batalla = laBatalla;
   derrota = laDerrota;
   if (batalla) { batalla.loop = true; batalla.volume = 0.38; }
-  if (derrota) { derrota.volume = 0.24; }
+  if (derrota) { derrota.volume = 0.2; }
 }
 
 /**

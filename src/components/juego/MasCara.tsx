@@ -21,7 +21,7 @@
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { Play, Timer, Trophy, RotateCcw, Medal, Volume2, VolumeX } from "lucide-react";
+import { Play, Timer, Trophy, RotateCcw, Medal, Volume2, VolumeX, Check } from "lucide-react";
 import { musica, interruptor, registrarPistas } from "./musica";
 
 const MONO  = "var(--font-jetbrains)";
@@ -257,20 +257,6 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
       <audio ref={pistaDerrota} src="/juego/fail.mp3" preload="auto" />
 
       <div className="jg-wrap">
-        {/* Cabecera */}
-        <div className="jg-cabeza">
-            <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-              <span style={{ width: 22, height: 1, background: COURT, display: "inline-block" }} />
-              Interactivo
-            </div>
-            <h1 style={{ fontFamily: DISP, fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 700, color: INK0, margin: 0, letterSpacing: "-0.01em" }}>
-              Higher Or Lower
-            </h1>
-            <p style={{ fontFamily: MONO, fontSize: 11, color: INK2, letterSpacing: "0.06em", margin: "8px 0 0" }}>
-              Dos cartas, diez segundos. Señala la más cara y sigue; si fallas, se acaba
-            </p>
-        </div>
-
         {sonido && sonidoBloqueado && (
           <p className="jg-aviso">
             Tu navegador bloqueó la música. Revisa que la pestaña no esté silenciada
@@ -283,17 +269,6 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
         <div className={"jg-escena" + (acerto === true ? " bien" : acerto === false ? " mal" : "")}>
           <div className="jg-paisaje" aria-hidden />
 
-          {/* Dentro del escenario y arriba: es un mando del juego, no de la
-              página, y se llega a él sin salir de lo que se está mirando. */}
-          <button
-            className="jg-sonido"
-            onClick={cambiarSonido}
-            aria-label={sonido ? "Apagar la música" : "Encender la música"}
-            title={sonido ? "Apagar la música" : "Encender la música"}
-          >
-            {sonido ? <Volume2 size={16} /> : <VolumeX size={16} />}
-            <span>{sonido ? "Sonido" : "Silencio"}</span>
-          </button>
 
           {fase === "inicio" && <Inicio onJugar={empezar} />}
           {fase === "cargando" && <Cargando avance={avance} />}
@@ -338,6 +313,24 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
           )}
 
           {fase === "fin" && <Final puntaje={puntaje} motivo={motivo} onJugar={empezar} />}
+
+          {/* El pie del escenario. El sonido va acá abajo y no arriba porque
+              en el celular se le montaba a la carta izquierda. */}
+          <div className="jg-pie">
+            <span className="jg-aciertos">
+              <Check size={13} />
+              Acertadas <strong>{puntaje}</strong>
+            </span>
+            <button
+              className="jg-sonido"
+              onClick={cambiarSonido}
+              aria-label={sonido ? "Apagar la música" : "Encender la música"}
+              title={sonido ? "Apagar la música" : "Encender la música"}
+            >
+              {sonido ? <Volume2 size={16} /> : <VolumeX size={16} />}
+              <span>{sonido ? "Sonido" : "Silencio"}</span>
+            </button>
+          </div>
         </div>
 
         <Ranking puestos={ranking} />
@@ -390,6 +383,9 @@ function Marcador({ puntaje, restante }: { puntaje: number; restante: number }) 
       <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 8 }}>
         <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.1em", color: INK1 }}>
           RONDA <strong style={{ color: INK0 }}>{puntaje + 1}</strong>
+        </span>
+        <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.1em", color: INK2, marginLeft: "auto" }}>
+          ¿Cuál vale más?
         </span>
         <span className={apurado ? "jg-tictac" : ""} style={{ display: "inline-flex", alignItems: "center", gap: 7, fontFamily: MONO, fontSize: 11, letterSpacing: "0.1em", color: apurado ? CRIT : INK1 }}>
           <Timer size={13} /> {restante.toFixed(1)}s
@@ -497,16 +493,25 @@ function servible(ronda: Ronda): Promise<boolean> {
 }
 
 const ESTILOS = `
-  .jg-page { min-height: 100vh; background: #05070d; padding: 40px 24px; }
+  .jg-page { min-height: 100vh; background: #05070d; padding: 22px 24px 40px; }
   /* Centrado, al revés que el resto del panel: un juego mirando a la
      izquierda con media pantalla vacía al lado se ve desbalanceado. */
-  .jg-wrap { max-width: 1320px; margin: 0 auto; }
+  .jg-wrap { max-width: 1480px; margin: 0 auto; }
 
-  .jg-cabeza { text-align: center; margin-bottom: 20px; }
-  .jg-cabeza > div:first-child { justify-content: center; }
 
-  .jg-sonido { position: absolute; top: 14px; right: 14px; z-index: 2;
-    display: inline-flex; align-items: center; gap: 8px;
+  /* El pie del escenario: el conteo a un lado y el sonido al otro. */
+  .jg-pie { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 14px; background: linear-gradient(transparent, rgba(5,7,13,0.75) 55%); }
+
+  .jg-aciertos { display: inline-flex; align-items: center; gap: 7px;
+    font-family: ${MONO}; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: ${INK1};
+    background: rgba(5,7,13,0.7); border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px; padding: 8px 14px; }
+  .jg-aciertos strong { color: ${COURT}; font-size: 13px; }
+
+  .jg-sonido { display: inline-flex; align-items: center; gap: 8px;
     background: rgba(5,7,13,0.7); border: 1px solid rgba(255,255,255,0.18);
     border-radius: 999px; padding: 8px 14px; cursor: pointer; color: ${INK1};
     font-family: ${MONO}; font-size: 10px; letter-spacing: 0.1em;
@@ -515,7 +520,7 @@ const ESTILOS = `
 
   .jg-aviso { font-family: ${MONO}; font-size: 10.5px; line-height: 1.7; color: ${BALL};
     background: rgba(214,255,61,0.07); border: 1px solid rgba(214,255,61,0.25);
-    border-radius: 9px; padding: 10px 13px; margin: 0 0 14px; max-width: 620px; }
+    border-radius: 9px; padding: 10px 13px; margin: 0 auto 14px; max-width: 620px; }
 
   /* El tablero: el juego a la izquierda y el ranking al costado derecho, a la
      misma altura. El ranking se mide en 320px fijos porque su contenido es
@@ -525,7 +530,7 @@ const ESTILOS = `
 
   /* Acompaña el alto del escenario y, si diez nombres no entran, se recorre
      por dentro en vez de estirar la página. */
-  .jg-ranking { height: clamp(420px, 68vh, 700px); display: flex;
+  .jg-ranking { height: clamp(520px, 82vh, 900px); display: flex;
     flex-direction: column; min-height: 0; }
   .jg-ranking > div:last-child { overflow-y: auto; min-height: 0; }
 
@@ -533,7 +538,7 @@ const ESTILOS = `
      alto va acotado para que en un monitor alto no haya que bajar a ver las
      cartas, ni queden aplastadas en un portátil. */
   .jg-escena { position: relative; width: 100%;
-    height: clamp(420px, 68vh, 700px);
+    height: clamp(520px, 82vh, 900px);
     border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.09);
     display: flex; align-items: center; justify-content: center; padding: 24px; }
   .jg-paisaje { position: absolute; inset: 0; z-index: 0;
@@ -542,7 +547,9 @@ const ESTILOS = `
     image-rendering: pixelated;
     /* Oscurecido para que las cartas y el texto se lean sobre el cielo. */
     filter: brightness(0.62) saturate(1.1); }
-  .jg-escena > *:not(.jg-paisaje) { position: relative; z-index: 1; }
+  /* Todo lo que va encima del paisaje se apila por delante. El pie queda
+     fuera: él se ancla abajo por su cuenta y esta regla se lo deshacía. */
+  .jg-escena > *:not(.jg-paisaje):not(.jg-pie) { position: relative; z-index: 1; }
 
   /* El borde del escenario avisa antes que ningún texto si estuvo bien o mal. */
   .jg-escena.bien { animation: jg-bien 850ms ease-out; }
@@ -562,10 +569,13 @@ const ESTILOS = `
 
   /* El juego se centra y crece con la pantalla, pero las cartas nunca pasan de
      un tamaño cómodo de mirar de una sola ojeada. */
-  .jg-juego { width: 100%; max-width: 640px; height: 100%;
-    display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+  .jg-juego { width: 100%; max-width: 820px; height: 100%;
+    display: flex; flex-direction: column; justify-content: center; gap: 14px;
+    /* Lugar abajo para el pie, que va por encima de todo. */
+    padding-bottom: 46px; }
   .jg-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px; min-height: 0; }
+    gap: 18px; min-height: 0; justify-items: center; }
+  .jg-grid > .jg-carta { width: 100%; }
 
   .jg-carta { position: relative; padding: 0; border: 2px solid rgba(255,255,255,0.22);
     border-radius: 12px; background: rgba(5,7,13,0.35); cursor: pointer; overflow: hidden;
@@ -606,7 +616,7 @@ const ESTILOS = `
   @keyframes jg-tictac { 50% { opacity: 0.35; } }
 
   /* Los carteles de inicio, carga y final: mismo marco para los tres. */
-  .jg-panel { background: rgba(5,7,13,0.72); border: 1px solid rgba(255,255,255,0.12);
+  .jg-panel { margin-bottom: 34px; background: rgba(5,7,13,0.72); border: 1px solid rgba(255,255,255,0.12);
     border-radius: 12px; padding: 26px 24px; max-width: 470px; text-align: center;
     display: flex; flex-direction: column; align-items: center; gap: 14px;
     backdrop-filter: blur(2px); }
@@ -641,10 +651,16 @@ const ESTILOS = `
   }
 
   @media (max-width: 767px), (pointer: coarse) {
-    .jg-page { padding: 28px 16px; }
-    .jg-sonido { top: 10px; right: 10px; padding: 7px 11px; }
-    .jg-escena { height: clamp(400px, 62vh, 560px); padding: 16px 12px; }
-    .jg-grid { gap: 10px; }
+    .jg-page { padding: 28px 12px; }
+    /* Más alto y con menos aire a los lados: en el celular lo único que
+       importa es que las dos cartas se vean grandes. */
+    .jg-escena { height: clamp(440px, 70vh, 640px); padding: 12px 8px; }
+    .jg-juego { gap: 10px; padding-bottom: 44px; }
+    .jg-grid { gap: 8px; }
+    .jg-marcador { padding: 8px 10px; }
+    .jg-pie { padding: 8px 10px; }
+    .jg-aciertos, .jg-sonido { padding: 7px 11px; font-size: 9.5px; }
+    .jg-sonido span { display: none; }
     .jg-sello { font-size: 32px; }
   }
 
