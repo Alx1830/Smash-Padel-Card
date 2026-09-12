@@ -11,7 +11,8 @@ import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
 import { Newspaper, ArrowLeft } from "lucide-react";
 import { fechaLarga, etiquetaCategoria, POST_CATEGORIAS } from "@/lib/posts";
-import { EspacioPublicitario } from "@/components/post/EspacioPublicitario";
+import { AnuncioColumna, AnuncioAncho } from "@/components/post/Anuncio";
+import { MobileTabBar } from "@/components/MobileTabBar";
 import { SITIO, EDITOR, migas, DatosJson } from "@/lib/seo";
 
 const COURT = "#2ee6c1";
@@ -265,14 +266,10 @@ export default async function NoticiasPage() {
         .np-secs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 40px 30px; min-width: 0; }
 
-        /* El aviso queda a la vista mientras se recorren las secciones. */
-        .np-ads { position: sticky; top: 20px; }
-        .np-ad { width: 300px; height: 250px; border-radius: 13px;
-          border: 1px dashed rgba(255,255,255,0.15); background: rgba(255,255,255,0.02);
-          display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; }
-        .np-ad-tit { font-family: ${MONO}; font-size: 11px; letter-spacing: 0.14em;
-          text-transform: uppercase; color: ${INK2}; }
-        .np-ad-med { font-family: ${MONO}; font-size: 10px; color: rgba(122,130,152,0.7); }
+        /* El aviso llega hasta donde terminan las secciones: la columna se
+           estira y el bloque de AdSense se adapta a ese alto. Un aviso
+           vertical alto rinde más que un cuadrado perdido al comienzo. */
+        .np-ads { align-self: stretch; display: flex; }
         .np-sec { min-width: 0; }
         .np-sec-cab { border-top: 2px solid ${COURT}; padding-top: 11px; margin-bottom: 14px; }
         .np-sec-tit { font-family: ${DISP}; font-size: 15px; font-weight: 700; color: ${COURT};
@@ -299,7 +296,10 @@ export default async function NoticiasPage() {
            angostas, así que baja a lo ancho. */
         @media (max-width: 1240px) {
           .np-abajo { grid-template-columns: minmax(0, 1fr); }
-          .np-ads { position: static; display: flex; justify-content: center; }
+          /* Acá la columna se esconde en vez de bajar a lo ancho: un aviso
+             vertical en un celular queda enorme y tapa la lectura. El de la
+             franja de arriba cubre estas pantallas. */
+          .np-ads { display: none; }
         }
 
         @media (max-width: 1023px) {
@@ -314,7 +314,6 @@ export default async function NoticiasPage() {
           .np-fila { grid-template-columns: 88px minmax(0, 1fr); }
           .np-fila-img { width: 88px; }
           .np-fila-baj { display: none; }
-          .np-ad { width: 100%; max-width: 300px; height: 250px; }
           .np-fila-tit { -webkit-line-clamp: 3; }
           .np-sec { margin-bottom: 34px; }
         }
@@ -350,6 +349,9 @@ export default async function NoticiasPage() {
               )}
             </div>
 
+            {/* El único aviso que ve un celular: el de la columna no cabe ahí. */}
+            <AnuncioAncho separacion={30} />
+
             <div className="np-abajo">
               <div className="np-secs">
               {secciones.map((s) => (
@@ -367,14 +369,14 @@ export default async function NoticiasPage() {
               ))}
               </div>
 
-              {/* Columna de publicidad. El hueco reservado solo lo ve un
-                  admin; para el público la columna no existe hasta que haya
-                  un aviso de verdad. */}
-              <EspacioPublicitario />
+              {/* Columna de publicidad, solo en pantallas anchas. */}
+              <AnuncioColumna />
             </div>
           </>
         )}
       </div>
+
+      <MobileTabBar />
     </div>
   );
 }

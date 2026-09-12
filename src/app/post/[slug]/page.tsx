@@ -12,10 +12,12 @@ import { createClient } from "@supabase/supabase-js";
 import { ArrowLeft, Clock, CalendarDays, Newspaper } from "lucide-react";
 import { fechaLarga, minutosDeLectura, nombreAutor, extractoAuto, soloTexto, etiquetaCategoria, type PostAuthor } from "@/lib/posts";
 import { PostBody } from "@/components/PostBody";
+import { MobileTabBar } from "@/components/MobileTabBar";
 import { Comentarios } from "@/components/post/Comentarios";
 import { FlechasSlider } from "@/components/post/FlechasSlider";
 import { VisorFotos } from "@/components/post/VisorFotos";
 import { Encuesta, type EncuestaDatos } from "@/components/post/Encuesta";
+import { AnuncioAncho } from "@/components/post/Anuncio";
 import { SITIO, EDITOR, migas, DatosJson } from "@/lib/seo";
 
 const COURT = "#2ee6c1";
@@ -325,6 +327,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <FlechasSlider />
         <VisorFotos />
 
+        {/* Al terminar de leer, no antes: el lector vino por el texto. */}
+        <AnuncioAncho separacion={38} />
+
         {encuesta && encuesta.opciones.length > 0 && <Encuesta datos={encuesta} />}
 
         <div style={{ marginTop: 44, paddingTop: 22, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
@@ -338,6 +343,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
 
         <Comentarios postId={post.id} />
+
+        <AnuncioAncho separacion={38} />
 
         {relacionadas.length > 0 && (
           <section style={{ marginTop: 46 }}>
@@ -378,6 +385,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         )}
 
       </article>
+
+      <MobileTabBar />
     </div>
   );
 }
