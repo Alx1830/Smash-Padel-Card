@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { useDashboardUser } from "@/app/dashboard/DashboardUserContext";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel } from "@/data/pokemon-cards-meta";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
@@ -30,6 +31,10 @@ interface TopCard {
 
 /** Las 5 cartas más caras publicadas en el país del usuario */
 export function TopLocalCards() {
+  /* Quién es el visitante ya lo averiguó el panel al entrar. Preguntárselo de
+     nuevo a Supabase hacía que varios pedidos se pelearan por el mismo
+     cerrojo del token, y el que perdía tiraba un error en la consola. */
+  const { userId } = useDashboardUser();
   const [cards, setCards]     = useState<TopCard[]>([]);
   const [pais, setPais]       = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,12 +44,11 @@ export function TopLocalCards() {
     const supabase = createClient();
     let cancelled = false;
 
-    (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user || cancelled) { setLoading(false); return; }
+    if (!userId) { setLoading(false); return; }
 
+    (async () => {
       const { data: me } = await supabase
-        .from("players").select("pais").eq("user_id", user.id).maybeSingle();
+        .from("players").select("pais").eq("user_id", userId).maybeSingle();
       if (cancelled) return;
       const myPais = me?.pais ?? null;
       setPais(myPais);
@@ -102,7 +106,7 @@ export function TopLocalCards() {
     })();
 
     return () => { cancelled = true; };
-  }, []);
+  }, [userId]);
 
   return (
     <div style={{

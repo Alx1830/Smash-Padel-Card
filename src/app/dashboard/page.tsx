@@ -8,6 +8,8 @@ import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { useDashboardUser } from "./DashboardUserContext";
 import { PortfolioChart, type Snapshot, type HourlySnapshot } from "@/components/PortfolioChart";
 import { TopLocalCards } from "@/components/TopLocalCards";
+import { MuroActividad } from "@/components/feed/MuroActividad";
+import { MuroNoticias } from "@/components/feed/MuroNoticias";
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
@@ -217,7 +219,7 @@ function InstallWidget() {
           <p style={{ fontFamily: DISP, fontSize: "18px", color: INK0, margin: "0 0 4px" }}>
             {isIOS ? "Guardar en iOS" : "Instalar en Android"}
           </p>
-          <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: 0, lineHeight: 1.5 }}>
+          <p className="st-pie">
             {isInstalled ? "App instalada correctamente" : "Accede como app nativa desde tu inicio"}
           </p>
         </div>
@@ -424,21 +426,30 @@ export default function DashboardHome() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctxUserId]);
 
-  const CARD_STYLE: React.CSSProperties = {
-    background: "rgba(255,255,255,0.02)",
-    border: "1px solid rgba(255,255,255,0.08)",
-    borderRadius: "16px",
-    padding: "24px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  };
 
   return (
     <div className="dash-home-wrap" style={{ minHeight: "100vh" }}>
       <style>{`
         .dash-home-wrap { padding: 24px; }
         @media (min-width: 768px) and (pointer: fine) { .dash-home-wrap { padding: 48px; } }
+        .st-card { background: rgba(255,255,255,0.02);
+          border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
+          padding: 24px; display: flex; flex-direction: column; gap: 10px; }
+        .st-rotulo { font-family: ${MONO}; font-size: 9px; color: ${INK2};
+          letter-spacing: 0.18em; text-transform: uppercase; margin: 0; }
+        .st-numero { font-family: ${DISP}; font-size: clamp(28px, 5vw, 40px);
+          color: ${INK0}; margin: 0; line-height: 1; }
+        /* El valor llega del cliente y pasa de "—" a "$1.234,56 USD", que
+           envuelve: sin el hueco reservado la tarjeta crece y empuja el panel. */
+        .st-plata { font-size: clamp(22px, 4vw, 32px); color: ${COURT};
+          line-height: 1.1; min-height: 2.2em; }
+        .st-pie { font-family: ${MONO}; font-size: 10px; color: ${INK2};
+          margin: 0; line-height: 1.5; }
+        .st-accion { margin-top: auto; align-self: flex-start; font-family: ${MONO};
+          font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+          color: ${COURT}; background: none; border: 1px solid ${COURT}44;
+          border-radius: 7px; padding: 6px 14px; cursor: pointer; }
+
         .stats-grid {
           display: grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -446,11 +457,42 @@ export default function DashboardHome() {
           margin-bottom: 40px;
         }
         @media (max-width: 900px), (pointer: coarse) {
-          .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
+            margin-bottom: 24px; }
+
+          /* En el celular estas cuatro tarjetas son un dato y poco más: lo que
+             importa está debajo. Se aprietan todo lo que se puede sin que el
+             número pierda protagonismo. */
+          .st-card { padding: 12px 13px; gap: 4px; border-radius: 13px; }
+          .st-rotulo { font-size: 8.5px; letter-spacing: 0.14em; }
+          .st-numero { font-size: 26px; }
+          /* El valor en dólares entra en una línea con esta letra, así que ya
+             no hace falta reservarle dos. */
+          .st-plata { font-size: 19px; min-height: 0; }
+          .st-pie { font-size: 9px; line-height: 1.4; }
+          .st-accion { padding: 4px 10px; font-size: 9px; margin-top: 2px; }
+
+          /* El número y su etiqueta comparten renglón: dos líneas de alto en
+             vez de cuatro, que es lo que ocupaba antes cada tarjeta. */
+          .st-card.fila { display: grid; grid-template-columns: auto minmax(0, 1fr);
+            align-items: center; column-gap: 10px; row-gap: 3px; }
+          .st-card.fila .st-numero { grid-row: span 2; }
+          .st-card.fila .st-rotulo,
+          .st-card.fila .st-pie { align-self: center; }
+          .st-card.fila .st-accion { grid-column: 2; margin-top: 0; }
         }
         @media (max-width: 480px) {
           .stats-grid { grid-template-columns: 1fr 1fr; }
         }
+        /* Dos columnas parejas en pantalla ancha, una debajo de otra en el
+           celular: ninguno de los dos muros se lee bien a media pantalla. */
+        .muros-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px; margin-bottom: 40px; }
+        @media (max-width: 1023px), (pointer: coarse) {
+          .muros-row { grid-template-columns: minmax(0, 1fr); gap: 12px;
+            margin-bottom: 24px; }
+        }
+
         .portfolio-row {
           display: grid;
           grid-template-columns: 1fr;
@@ -472,49 +514,55 @@ export default function DashboardHome() {
       <div className="stats-grid">
 
         {/* Seguidores */}
-        <div style={CARD_STYLE}>
-          <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: 0 }}>Seguidores</p>
-          <p style={{ fontFamily: DISP, fontSize: "clamp(28px, 5vw, 40px)", color: INK0, margin: 0, lineHeight: 1 }}>
+        <div className="st-card fila">
+          <p className="st-rotulo">Seguidores</p>
+          <p className="st-numero">
             {followerCount ?? "—"}
           </p>
           <button
             onClick={() => setShowFollowers(true)}
-            style={{ marginTop: "auto", alignSelf: "flex-start", fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: COURT, background: "none", border: `1px solid ${COURT}44`, borderRadius: "7px", padding: "6px 14px", cursor: "pointer" }}
+            className="st-accion"
           >
             Ver todos →
           </button>
         </div>
 
         {/* Dinero en stock */}
-        <div style={CARD_STYLE}>
-          <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: 0 }}>Dinero en stock</p>
+        <div className="st-card fila">
+          <p className="st-rotulo">Dinero en stock</p>
           {/* 2.2em = dos líneas con line-height 1.1. El valor llega del cliente
               y en móvil pasa de "—" a "$1.234,56 USD", que envuelve: sin el
               hueco reservado la tarjeta crece y empuja el panel entero. */}
-          <p style={{ fontFamily: DISP, fontSize: "clamp(22px, 4vw, 32px)", color: COURT, margin: 0, lineHeight: 1.1, minHeight: "2.2em" }}>
+          <p className="st-numero st-plata">
             {stockTotal === null ? "—" : stockTotal === 0 ? "$0.00 USD" : formatUSD(stockTotal)}
           </p>
-          <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: 0, lineHeight: 1.5 }}>
+          <p className="st-pie">
             Valor total de tus cartas
           </p>
         </div>
 
         {/* Cartas en inventario */}
-        <div style={CARD_STYLE}>
-          <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: 0 }}>Cartas en inventario</p>
-          <p style={{ fontFamily: DISP, fontSize: "clamp(28px, 5vw, 40px)", color: INK0, margin: 0, lineHeight: 1 }}>
+        <div className="st-card fila">
+          <p className="st-rotulo">Cartas en inventario</p>
+          <p className="st-numero">
             {cardCount ?? "—"}
           </p>
-          <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: 0 }}>
+          <p className="st-pie">
             {cardCount === 1 ? "carta registrada" : "cartas registradas"}
           </p>
         </div>
 
         {/* Instalar app */}
-        <div style={CARD_STYLE}>
+        <div className="st-card">
           <InstallWidget />
         </div>
 
+      </div>
+
+      {/* Los dos muros: qué mueve la gente y qué salió publicado */}
+      <div className="muros-row">
+        <MuroActividad />
+        <MuroNoticias />
       </div>
 
       {/* Gráfico histórico + lo que más se vende cerca */}
