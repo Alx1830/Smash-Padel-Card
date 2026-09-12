@@ -472,26 +472,32 @@ export default function DashboardHome() {
           .st-pie { font-size: 9px; line-height: 1.4; }
           .st-accion { padding: 4px 10px; font-size: 9px; margin-top: 2px; }
 
-          /* El número y su etiqueta comparten renglón: dos líneas de alto en
-             vez de cuatro, que es lo que ocupaba antes cada tarjeta. */
-          .st-card.fila { display: grid; grid-template-columns: auto minmax(0, 1fr);
-            align-items: center; column-gap: 10px; row-gap: 3px; }
-          .st-card.fila .st-numero { grid-row: span 2; }
-          .st-card.fila .st-rotulo,
-          .st-card.fila .st-pie { align-self: center; }
-          .st-card.fila .st-accion { grid-column: 2; margin-top: 0; }
         }
         @media (max-width: 480px) {
           .stats-grid { grid-template-columns: 1fr 1fr; }
         }
-        /* Dos columnas parejas en pantalla ancha, una debajo de otra en el
-           celular: ninguno de los dos muros se lee bien a media pantalla. */
-        .muros-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 16px; margin-bottom: 40px; }
-        @media (max-width: 1023px), (pointer: coarse) {
-          .muros-row { grid-template-columns: minmax(0, 1fr); gap: 12px;
-            margin-bottom: 24px; }
+        /* El tablero: los datos propios a la izquierda y los dos muros al
+           costado, cada uno a lo alto de la columna. */
+        .dash-tablero { display: grid; gap: 16px;
+          grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr);
+          align-items: stretch; }
+        .dash-izq { min-width: 0; display: flex; flex-direction: column; }
+
+
+        /* Debajo de 1500px tres columnas dejan los muros ilegibles: bajan a lo
+           ancho, de a dos. */
+        @media (max-width: 1500px) {
+          .dash-tablero { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+          .dash-izq { grid-column: 1 / -1; }
         }
+        /* Y en el celular, uno debajo del otro. */
+        @media (max-width: 1023px), (pointer: coarse) {
+          .dash-tablero { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+        }
+
+        /* Con los muros al costado, la columna izquierda queda angosta: las
+           cuatro tarjetas se acomodan de a dos y el gráfico deja de compartir
+           renglón con el top de ventas. */
 
         .portfolio-row {
           display: grid;
@@ -502,6 +508,32 @@ export default function DashboardHome() {
         @media (min-width: 1100px) and (pointer: fine) {
           .portfolio-row { grid-template-columns: minmax(0, 1fr) 320px; }
         }
+
+        /* En monitor ancho el panel entra entero en la pantalla: la página no
+           se desplaza y cada columna se recorre por dentro. Es lo que deja las
+           cuatro columnas empezando y terminando a la misma altura. */
+        @media (min-width: 1501px) and (pointer: fine) {
+          .dash-home-wrap { height: 100vh; overflow: hidden;
+            display: flex; flex-direction: column; }
+          .dash-tablero { flex: 1; min-height: 0; }
+
+          /* Dos filas: las cuatro tarjetas ocupan lo que necesitan y el resto
+             se lo lleva el renglón de abajo. */
+          .dash-izq { display: grid; grid-template-rows: auto minmax(0, 1fr);
+            gap: 16px; min-height: 0; }
+          .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr));
+            margin-bottom: 0; }
+          .portfolio-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            min-height: 0; margin-bottom: 0; }
+          /* El top de ventas se recorre por dentro si no entra, en vez de
+             estirar la columna y desalinear la cuadrícula. */
+          .portfolio-row > * { min-height: 0; overflow-y: auto; }
+
+          /* El dibujo se queda con el alto que sobre bajo el encabezado. */
+          .dash-grafico { display: flex; flex-direction: column; }
+          .dash-grafico > * { flex: 1; min-height: 0;
+            display: flex; flex-direction: column; }
+        }
       `}</style>
 
       {/* Header dentro del área del grid */}
@@ -510,11 +542,14 @@ export default function DashboardHome() {
         Panel de control
       </div>
 
+      <div className="dash-tablero">
+        {/* Columna izquierda: los datos propios */}
+        <div className="dash-izq">
       {/* 4 en fila */}
       <div className="stats-grid">
 
         {/* Seguidores */}
-        <div className="st-card fila">
+        <div className="st-card">
           <p className="st-rotulo">Seguidores</p>
           <p className="st-numero">
             {followerCount ?? "—"}
@@ -528,7 +563,7 @@ export default function DashboardHome() {
         </div>
 
         {/* Dinero en stock */}
-        <div className="st-card fila">
+        <div className="st-card">
           <p className="st-rotulo">Dinero en stock</p>
           {/* 2.2em = dos líneas con line-height 1.1. El valor llega del cliente
               y en móvil pasa de "—" a "$1.234,56 USD", que envuelve: sin el
@@ -542,7 +577,7 @@ export default function DashboardHome() {
         </div>
 
         {/* Cartas en inventario */}
-        <div className="st-card fila">
+        <div className="st-card">
           <p className="st-rotulo">Cartas en inventario</p>
           <p className="st-numero">
             {cardCount ?? "—"}
@@ -559,15 +594,9 @@ export default function DashboardHome() {
 
       </div>
 
-      {/* Los dos muros: qué mueve la gente y qué salió publicado */}
-      <div className="muros-row">
-        <MuroActividad />
-        <MuroNoticias />
-      </div>
-
       {/* Gráfico histórico + lo que más se vende cerca */}
       <div className="portfolio-row">
-        <div style={{
+        <div className="dash-grafico" style={{
           background: "rgba(255,255,255,0.02)",
           border: "1px solid rgba(255,255,255,0.08)",
           borderRadius: "16px",
@@ -576,10 +605,18 @@ export default function DashboardHome() {
         }}>
           <PortfolioChart
             snapshots={snapshots} hourlySnapshots={hourlySnapshots}
-            loading={chartLoading} defaultRange="1M"
+            /* 300 es el alto que usa cuando no hay columna que se lo dé:
+               el mismo del gráfico del perfil. */
+            loading={chartLoading} defaultRange="1M" estirar chartHeight={300}
           />
         </div>
         <TopLocalCards />
+      </div>
+        </div>
+
+        {/* Las dos columnas de la derecha, a lo alto */}
+        <MuroActividad />
+        <MuroNoticias />
       </div>
 
       {/* Popup seguidores */}

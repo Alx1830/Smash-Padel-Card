@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 const COURT = "#2ee6c1";
@@ -25,17 +25,18 @@ type Range = "1D" | "1M" | "3M" | "6M" | "1Y";
  */
 const HEADER_MIN_H = "56px";
 
-function ChartSVG({ chartData, xLabel, height = 160 }: {
+function ChartSVG({ chartData, xLabel, height = 160, width = 600 }: {
   chartData: { label: string; value: number }[];
   xLabel?: (d: { label: string; value: number }, idx: number, arr: { label: string; value: number }[]) => string;
   height?: number;
+  width?: number;
 }) {
   const vals   = chartData.map(s => s.value);
   const minVal = Math.min(...vals);
   const maxVal = Math.max(...vals);
   const range_ = maxVal - minVal || 1;
 
-  const W = 600, H = height, PAD = { t: 16, r: 16, b: 32, l: 64 };
+  const W = width, H = height, PAD = { t: 16, r: 16, b: 32, l: 64 };
   const iW = W - PAD.l - PAD.r;
   const iH = H - PAD.t - PAD.b;
 
@@ -99,13 +100,48 @@ function ChartSVG({ chartData, xLabel, height = 160 }: {
   );
 }
 
-export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount, defaultRange = "1D", chartHeight = 160 }: {
+export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount, defaultRange = "1D", chartHeight = 160, estirar = false }: {
   snapshots: Snapshot[]; hourlySnapshots: HourlySnapshot[]; loading?: boolean;
   cardCount?: number | null;
   defaultRange?: Range;
   chartHeight?: number;
+  /** Que el dibujo ocupe todo el alto libre de su caja, en vez de su alto natural. */
+  estirar?: boolean;
 }) {
   const [range, setRange] = useState<Range>(defaultRange);
+
+  /* Con `estirar`, el alto no se sabe de antemano: se mide el hueco que queda
+     debajo del encabezado y se le pasa al dibujo, que recalcula sus escalas.
+     Estirar el SVG con CSS habría deformado también los números de los ejes. */
+  const hueco = useRef<HTMLDivElement>(null);
+  const [alto, setAlto] = useState(chartHeight);
+  const [ancho, setAncho] = useState(600);
+
+  useEffect(() => {
+    const caja = hueco.current;
+    if (!estirar || !caja) return;
+
+    /* El ancho se mide siempre: el dibujo se arma sobre el ancho real de la
+       caja, y por eso los números de los ejes y las fechas se leen del mismo
+       tamaño en una columna angosta que en un monitor. Con el ancho fijo de
+       600 el navegador encogía el dibujo entero y el texto quedaba diminuto.
+
+       El alto es otra cosa: solo se mide donde la caja tiene alto propio que
+       repartir. En una pantalla angosta el alto lo pone el dibujo, así que
+       medirlo para dibujar era perseguirse la cola —el hueco daba casi cero y
+       el gráfico terminaba aplastado en el medio. Ahí vale el alto pedido. */
+    const anchas = window.matchMedia("(min-width: 1501px) and (pointer: fine)");
+
+    const cinta = new ResizeObserver(([entrada]) => {
+      const largo = Math.round(entrada.contentRect.width);
+      if (largo > 120) setAncho(largo);
+      if (!anchas.matches) { setAlto(chartHeight); return; }
+      const libre = Math.round(entrada.contentRect.height);
+      if (libre > 80) setAlto(libre);
+    });
+    cinta.observe(caja);
+    return () => cinta.disconnect();
+  }, [estirar, chartHeight]);
 
   // Vista diaria: datos horarios de hoy en hora Colombia
   const todayUTC = new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" });
@@ -226,7 +262,10 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
         {rangeButtons}
       </div>
 
-      <ChartSVG chartData={data} xLabel={xLabel} height={chartHeight} />
+      <div ref={hueco} style={estirar ? { flex: 1, minHeight: 0, display: "flex", alignItems: "stretch" } : undefined}>
+        <ChartSVG chartData={data} xLabel={xLabel}
+                  height={estirar ? alto : chartHeight} width={estirar ? ancho : 600} />
+      </div>
     </div>
   );
 }

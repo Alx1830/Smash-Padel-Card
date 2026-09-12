@@ -259,6 +259,24 @@ export function DashboardLayoutClient({
           border-right: 1px solid rgba(255,255,255,0.06);
           display: flex; flex-direction: column;
         }
+        /* Las barras de desplazamiento, finas y del color de la casa, igual que
+           las de los muros del panel. La del navegador es gruesa y clara, y en
+           un fondo oscuro se lleva la mirada más que el contenido.
+
+           Se declaran dos veces porque cada navegador entiende una: Firefox
+           lee scrollbar-width y el resto los ::-webkit-scrollbar. */
+        .dash-main, .dash-main * { scrollbar-width: thin;
+          scrollbar-color: rgba(255,255,255,0.16) transparent; }
+        .dash-main ::-webkit-scrollbar,
+        .dash-main::-webkit-scrollbar { width: 6px; height: 6px; }
+        .dash-main ::-webkit-scrollbar-track,
+        .dash-main::-webkit-scrollbar-track { background: transparent; }
+        .dash-main ::-webkit-scrollbar-thumb,
+        .dash-main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.16);
+          border-radius: 3px; }
+        .dash-main ::-webkit-scrollbar-thumb:hover,
+        .dash-main::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.28); }
+
         .dash-main {
           margin-left: 260px;
           min-height: 100vh;
