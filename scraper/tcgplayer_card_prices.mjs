@@ -320,13 +320,34 @@ async function enTandas(items, fn) {
   return out;
 }
 
+/**
+ * Tamano del lote de escritura y reintentos.
+ *
+ * Supabase devuelve "Gateway Timeout" cada tanto cuando el upsert es grande, y
+ * con 500 filas pasaba seguido: el chunk moria despues de 40 min de scraping
+ * por un tropiezo de un segundo del servidor. 200 filas tarda menos y el
+ * reintento con espera creciente cubre el resto — un 504 no es un dato malo,
+ * es el servidor pidiendo un momento.
+ */
+const LOTE_ESCRITURA = 200;
+const REINTENTOS_DB  = 5;
+
+/** Escribe un lote reintentando los errores pasajeros del servidor. */
+async function upsertLote(table, lote, onConflict) {
+  for (let intento = 1; intento <= REINTENTOS_DB; intento++) {
+    const { error } = await supabase.from(table).upsert(lote, { onConflict });
+    if (!error) return;
+    if (intento === REINTENTOS_DB) throw new Error(`${table}: ${error.message}`);
+    const espera = 3000 * 2 ** (intento - 1);   // 3s, 6s, 12s, 24s
+    console.log(`   ↻ ${table}: ${error.message} — reintento ${intento}/${REINTENTOS_DB - 1} en ${espera / 1000}s`);
+    await sleep(espera);
+  }
+}
+
 async function upsert(rows) {
   if (DRY_RUN) { console.log(`   🧪 dry-run: ${rows.length} filas listas, no se guardan`); return; }
-  for (let i = 0; i < rows.length; i += 500) {
-    const { error } = await supabase
-      .from("tcg_card_prices")
-      .upsert(rows.slice(i, i + 500), { onConflict: "card_id" });
-    if (error) throw new Error(`tcg_card_prices: ${error.message}`);
+  for (let i = 0; i < rows.length; i += LOTE_ESCRITURA) {
+    await upsertLote("tcg_card_prices", rows.slice(i, i + LOTE_ESCRITURA), "card_id");
   }
   console.log(`   💾 ${rows.length} filas guardadas`);
 }

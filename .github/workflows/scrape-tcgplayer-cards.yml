@@ -63,7 +63,13 @@ jobs:
         run: node tcgplayer_card_prices.mjs --chunk ${{ matrix.chunk }}
 
   lote2:
+    # Un lote que falle no debe llevarse el siguiente: los chunks son
+    # independientes y perder el lote3 entero por un tropiezo en el lote2 deja
+    # tres novenas partes del catalogo sin precio hasta la corrida siguiente.
+    # `!cancelled()` arranca igual despues de un fallo, pero respeta la
+    # cancelacion manual.
     needs: lote1
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     strategy:
@@ -88,6 +94,7 @@ jobs:
 
   lote3:
     needs: lote2
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     strategy:

@@ -39,11 +39,29 @@ if (!DRY_RUN && (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY)) {
 const supabase = DRY_RUN ? null
   : createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } });
 
+/**
+ * Tamano del lote de escritura y reintentos.
+ *
+ * Con 500 filas de un golpe Supabase devolvia "Gateway Timeout" cada tanto y el
+ * scraper moria al final, tirando la corrida entera por un tropiezo pasajero
+ * del servidor. 200 filas tarda menos y el reintento con espera creciente cubre
+ * el resto.
+ */
+const LOTE_ESCRITURA = 200;
+const REINTENTOS_DB  = 5;
+
 async function upsert(table, rows, onConflict) {
   if (DRY_RUN) { console.log(`   🧪 dry-run: ${rows.length} filas para ${table}`); return; }
-  for (let i = 0; i < rows.length; i += 500) {
-    const { error } = await supabase.from(table).upsert(rows.slice(i, i + 500), { onConflict });
-    if (error) throw new Error(`${table}: ${error.message}`);
+  for (let i = 0; i < rows.length; i += LOTE_ESCRITURA) {
+    const lote = rows.slice(i, i + LOTE_ESCRITURA);
+    for (let intento = 1; intento <= REINTENTOS_DB; intento++) {
+      const { error } = await supabase.from(table).upsert(lote, { onConflict });
+      if (!error) break;
+      if (intento === REINTENTOS_DB) throw new Error(`${table}: ${error.message}`);
+      const espera = 3000 * 2 ** (intento - 1);   // 3s, 6s, 12s, 24s
+      console.log(`   ↻ ${table}: ${error.message} — reintento ${intento}/${REINTENTOS_DB - 1} en ${espera / 1000}s`);
+      await sleep(espera);
+    }
   }
   console.log(`   💾 ${rows.length} filas en ${table}`);
 }
