@@ -15,6 +15,8 @@ export interface Post {
   cover_url: string | null;
   /** Copia JPEG de 1200x630 de la portada, la que se ve al compartir el enlace */
   og_image_url?: string | null;
+  /** Lecturas contadas desde el navegador; ver components/post/Lecturas.tsx */
+  views?: number | null;
   content_html: string | null;
   /** Cuerpo de los posts viejos, en texto plano con algo de HTML suelto. */
   content: string | null;

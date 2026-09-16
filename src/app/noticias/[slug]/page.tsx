@@ -16,6 +16,8 @@ import { MobileTabBar } from "@/components/MobileTabBar";
 import { Comentarios } from "@/components/post/Comentarios";
 import { FlechasSlider } from "@/components/post/FlechasSlider";
 import { VisorFotos } from "@/components/post/VisorFotos";
+import { Compartir } from "@/components/post/Compartir";
+import { Lecturas } from "@/components/post/Lecturas";
 import { Encuesta, type EncuestaDatos } from "@/components/post/Encuesta";
 import { SITIO, EDITOR, migas, DatosJson } from "@/lib/seo";
 
@@ -39,7 +41,7 @@ function publico() {
 async function traerPost(slug: string) {
   const { data: post } = await publico()
     .from("admin_posts")
-    .select("id, slug, title, excerpt, cover_url, og_image_url, content_html, content, media_url, category, status, published_at, created_at, updated_at, user_id")
+    .select("id, slug, title, excerpt, cover_url, og_image_url, content_html, content, media_url, category, status, published_at, created_at, updated_at, user_id, views")
     .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();
@@ -255,6 +257,30 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           .pd-girando { animation: pd-giro 900ms linear infinite; }
           @keyframes pd-giro { to { transform: rotate(360deg); } }
 
+          /* Compartir: la fila de redes al terminar la nota. Cada botón guarda
+             el color de su red en --color y solo lo saca al pasar por encima:
+             cinco logos a todo color pelean con la nota. */
+          .pd-compartir { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+          .pd-compartir-tit { font-family: ${MONO}; font-size: 10px; letter-spacing: 0.18em;
+            text-transform: uppercase; color: ${INK2}; }
+          .pd-compartir-fila { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+          .pd-share { display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            height: 36px; min-width: 36px; padding: 0 10px; border-radius: 999px;
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.09);
+            color: #c9cfdd; cursor: pointer; text-decoration: none;
+            font-family: ${MONO}; font-size: 11px; letter-spacing: 0.08em;
+            transition: color 140ms, border-color 140ms, background 140ms; }
+          .pd-share:hover { color: var(--color); border-color: var(--color);
+            background: rgba(255,255,255,0.05); }
+          .pd-share:focus-visible { outline: 2px solid var(--color); outline-offset: 2px; }
+          .pd-share-texto { padding: 0 16px; }
+          @media (max-width: 480px) {
+            /* En el celular el botón del sistema ya ofrece todas las apps, así
+               que el texto sobra y los logos entran en una sola fila. */
+            .pd-share-texto span { display: none; }
+            .pd-share-texto { padding: 0 10px; }
+          }
+
           /* Relacionadas: tres tarjetas parejas, dos en tablet, una en celular. */
           .pd-rel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
           .pd-rel-card { display: flex; flex-direction: column; border-radius: 12px; overflow: hidden;
@@ -324,6 +350,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <Clock size={12} /> {minutosDeLectura(cuerpo)} min de lectura
           </span>
+          <Lecturas slug={post.slug ?? ""} inicial={post.views ?? 0} />
         </div>
 
         {portada && (
@@ -343,7 +370,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
         {encuesta && encuesta.opciones.length > 0 && <Encuesta datos={encuesta} />}
 
-        <div style={{ marginTop: 44, paddingTop: 22, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+        <div style={{
+          marginTop: 44, paddingTop: 22, borderTop: "1px solid rgba(255,255,255,0.08)",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          gap: 18, flexWrap: "wrap",
+        }}>
           <Link href="/noticias" style={{
             display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 20px",
             borderRadius: 9, background: COURT, color: BG0, textDecoration: "none",
@@ -351,6 +382,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           }}>
             <Newspaper size={14} /> Ver noticias
           </Link>
+
+          <Compartir url={`${SITIO}/noticias/${post.slug}`} titulo={post.title} />
         </div>
 
         <Comentarios postId={post.id} />
