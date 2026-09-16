@@ -39,7 +39,7 @@ function publico() {
 async function traerPost(slug: string) {
   const { data: post } = await publico()
     .from("admin_posts")
-    .select("id, slug, title, excerpt, cover_url, content_html, content, media_url, category, status, published_at, created_at, updated_at, user_id")
+    .select("id, slug, title, excerpt, cover_url, og_image_url, content_html, content, media_url, category, status, published_at, created_at, updated_at, user_id")
     .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();
@@ -129,7 +129,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { post } = resultado;
   const title = post.title;
   const description = post.excerpt?.trim() || extractoAuto(post.content_html ?? post.content ?? "", 155);
-  const imagen = post.cover_url ?? post.media_url ?? "/og-brand.png";
+  /**
+   * La foto de la vista previa al compartir el enlace.
+   *
+   * Es una copia aparte de la portada, en JPEG y de 1200x630, y hay dos razones
+   * para eso. WhatsApp no dibuja vista previa con WebP, que es justo el formato
+   * en el que conviene guardar la portada del sitio. Y las portadas vienen de
+   * cualquier medida: declarar 1200x630 con una imagen más chica hace que
+   * Facebook descarte la foto y mande el enlace pelado.
+   *
+   * Si una nota todavía no tiene la copia —se arman con
+   * `scripts/generar-portadas-sociales.mjs`— se manda la portada tal cual, sin
+   * mentir la medida, que es mejor que no mandar nada.
+   */
+  const social = post.og_image_url?.trim();
+  const imagen = social || post.cover_url || post.media_url || "/og-brand.png";
+  const medida = social ? { width: 1200, height: 630 } : {};
 
   return {
     title,
@@ -146,7 +161,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       modifiedTime: post.updated_at ?? post.published_at ?? post.created_at,
       section: etiquetaCategoria(post.category),
       authors: [nombreAutor(resultado.autor)],
-      images: [{ url: imagen, width: 1200, height: 630, alt: title }],
+      images: [{ url: imagen, ...medida, alt: title, type: social ? "image/jpeg" : undefined }],
     },
     twitter: { card: "summary_large_image", title, description, images: [imagen] },
   };

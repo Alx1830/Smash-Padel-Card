@@ -65,6 +65,61 @@ export async function aWebp(file: File): Promise<ImagenLista> {
   };
 }
 
+/* La medida que piden todas las redes para la tarjeta grande de vista previa.
+   Por debajo de 600x315 la degradan a la miniatura cuadrada. */
+const SOCIAL_ANCHO = 1200;
+const SOCIAL_ALTO  = 630;
+
+/**
+ * La copia de la portada que se ve al compartir el enlace por WhatsApp, X o
+ * Facebook.
+ *
+ * Va en JPEG aunque el sitio use WebP: **WhatsApp no dibuja vista previa con
+ * WebP**, y el enlace sale pelado. Y va en 1200x630 exactos porque declarar esa
+ * medida con una imagen más chica hace que Facebook descarte la foto.
+ *
+ * La imagen va entera sobre una copia de sí misma difuminada, igual que en la
+ * portada del sitio: recortar a 1200x630 le corta la cabeza a una carta
+ * vertical, que es media portada de este sitio.
+ */
+export async function aPortadaSocial(file: File): Promise<File> {
+  const img = await cargar(file);
+
+  const lienzo = document.createElement("canvas");
+  lienzo.width  = SOCIAL_ANCHO;
+  lienzo.height = SOCIAL_ALTO;
+
+  const ctx = lienzo.getContext("2d");
+  if (!ctx) throw new Error("El navegador no pudo procesar la imagen");
+
+  /* El fondo: la foto estirada para llenar, difuminada. `filter` no está en
+     todos los navegadores; donde no está queda el estirado sin difuminar, que
+     sigue siendo mejor que una franja negra. */
+  const llenar = Math.max(SOCIAL_ANCHO / img.naturalWidth, SOCIAL_ALTO / img.naturalHeight);
+  try { ctx.filter = "blur(26px) brightness(0.7) saturate(1.3)"; } catch { /* sin difuminado */ }
+  dibujar(ctx, img, llenar);
+  try { ctx.filter = "none"; } catch { /* nada que reponer */ }
+
+  /* Y encima, la foto entera */
+  const entrar = Math.min(SOCIAL_ANCHO / img.naturalWidth, SOCIAL_ALTO / img.naturalHeight);
+  dibujar(ctx, img, entrar);
+
+  const blob = await new Promise<Blob | null>((resolve) =>
+    lienzo.toBlob(resolve, "image/jpeg", 0.82)
+  );
+  if (!blob) throw new Error("No se pudo armar la imagen para compartir");
+
+  const base = file.name.replace(/\.[^.]+$/, "") || "portada";
+  return new File([blob], `${base}-social.jpg`, { type: "image/jpeg" });
+}
+
+/** Pinta la imagen centrada, escalada por el factor que se le pase. */
+function dibujar(ctx: CanvasRenderingContext2D, img: HTMLImageElement, escala: number) {
+  const ancho = img.naturalWidth * escala;
+  const alto  = img.naturalHeight * escala;
+  ctx.drawImage(img, (SOCIAL_ANCHO - ancho) / 2, (SOCIAL_ALTO - alto) / 2, ancho, alto);
+}
+
 /** "1.4 MB", para mostrarle al admin qué pasó con su archivo. */
 export function peso(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;

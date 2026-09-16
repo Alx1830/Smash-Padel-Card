@@ -13,7 +13,7 @@ import DOMPurify from "dompurify";
 import { Eye, Save, Send, Trash2, ExternalLink, Bell, BellOff, ImageUp, Loader2, X, BarChart3, Plus, CalendarClock } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { POST_TAGS, POST_ATTR, POST_CATEGORIAS, CATEGORIA_POR_DEFECTO, slugify, extractoAuto, minutosDeLectura, type Post, type PostCategoria, ZONA_COLOMBIA, DESFASE_COLOMBIA, fechaYHoraLarga } from "@/lib/posts";
-import { aWebp, peso } from "@/lib/imagen-webp";
+import { aWebp, aPortadaSocial, peso } from "@/lib/imagen-webp";
 import { PostEditorToolbar } from "./PostEditorToolbar";
 import { SliderFotos } from "./slider-extension";
 import { EmbedSocial } from "./embed-social-extension";
@@ -86,6 +86,10 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
   const [titulo,   setTitulo]   = useState(post?.title ?? "");
   const [bajada,   setBajada]   = useState(post?.excerpt ?? "");
   const [portada,  setPortada]  = useState(post?.cover_url ?? post?.media_url ?? "");
+  /* La copia de la portada que se ve al compartir el enlace. Se arma sola al
+     subir una imagen; si la portada se pega a mano, queda vacía y el sitio
+     manda la portada tal cual. */
+  const [portadaSocial, setPortadaSocial] = useState(post?.og_image_url ?? "");
   const [categoria, setCategoria] = useState<PostCategoria>(post?.category ?? CATEGORIA_POR_DEFECTO);
   const [direccion, setDireccion] = useState(post?.slug ?? "");
   const [tocoDireccion, setTocoDireccion] = useState(Boolean(post?.slug));
@@ -209,9 +213,11 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
     try {
       const lista = await aWebp(file);
 
+      const nombre = titulo || direccion || "portada";
+
       const form = new FormData();
       form.append("archivo", lista.archivo);
-      form.append("nombre", titulo || direccion || "portada");
+      form.append("nombre", nombre);
       if (portada.trim()) form.append("anterior", portada.trim());
 
       const res  = await fetch("/api/admin/posts/cover", { method: "POST", body: form });
@@ -219,6 +225,21 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
       if (!res.ok) throw new Error(info?.error ?? `Error ${res.status}`);
 
       setPortada(info.url);
+
+      /* Y la copia para compartir, que va aparte porque tiene otro formato y
+         otra medida. Que falle no puede tumbar la subida: la nota se guarda
+         igual y lo único que se pierde es la vista previa linda del enlace. */
+      try {
+        const social = await aPortadaSocial(file);
+        const formSocial = new FormData();
+        formSocial.append("archivo", social);
+        formSocial.append("nombre", `${nombre}-social`);
+        if (portadaSocial.trim()) formSocial.append("anterior", portadaSocial.trim());
+
+        const resSocial  = await fetch("/api/admin/posts/cover", { method: "POST", body: formSocial });
+        const infoSocial = await resSocial.json().catch(() => null);
+        if (resSocial.ok && infoSocial?.url) setPortadaSocial(infoSocial.url);
+      } catch { /* sin copia social; la nota se publica igual */ }
       setMensaje({
         tipo: "ok",
         texto: lista.esWebp
@@ -270,6 +291,7 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
       slug: ruta,
       excerpt: bajada.trim() || extractoAuto(cuerpo),
       cover_url: portada.trim() || null,
+      og_image_url: portadaSocial.trim() || null,
       category: categoria,
       content_html: cuerpo,
       status: estado,
