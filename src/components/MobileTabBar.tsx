@@ -32,10 +32,15 @@ export function MobileTabBar({ username: initialUsername }: { username?: string 
     if (initialUsername) return;
     const supabase = createClient();
     supabase.auth.getUser().then(async ({ data: { user } }) => {
-      if (!user) return;
-      const { data } = await supabase
-        .from("players").select("username").eq("user_id", user.id).maybeSingle();
-      setUsername(data?.username ?? null);
+      if (user) {
+        const { data } = await supabase
+          .from("players").select("username").eq("user_id", user.id).maybeSingle();
+        setUsername(data?.username ?? null);
+      }
+      /* La barra se dibuja haya sesión o no. El market local y las noticias son
+         páginas públicas: quien entra sin haber iniciado sesión también necesita
+         cómo moverse, y los enlaces que piden cuenta lo llevan al ingreso. Antes
+         se salía de acá sin marcar listo y la barra no aparecía nunca. */
       setReady(true);
     });
   }, [initialUsername]);

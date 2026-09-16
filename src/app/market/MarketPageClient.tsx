@@ -13,7 +13,7 @@ const ModalTiltCard = dynamic(
   { ssr: false }
 );
 import { CITIES_BY_COUNTRY } from "@/data/cities";
-import { House, UserRoundPen, HeartHandshake, LayoutGrid, Store, SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal, X } from "lucide-react";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 
@@ -30,6 +30,7 @@ const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { FlagIcon } from "@/components/FlagIcon";
 import { PieGrande } from "@/components/PieGrande";
+import { MobileTabBar } from "@/components/MobileTabBar";
 import { tcgCardLink } from "@/lib/tcg-link";
 import { CardGridSkeleton } from "@/components/CardGridSkeleton";
 
@@ -261,7 +262,6 @@ export function MarketPageClient({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const mktMobileRef = useRef<HTMLDivElement>(null);
 
   const [selectedPais, setSelectedPaisRaw] = useState(() => searchParams.get("pais") ?? defaultPais);
   const [listings, setListings]         = useState<Listing[]>([]);
@@ -274,7 +274,6 @@ export function MarketPageClient({
   const [previewCard, setPreviewCard]   = useState<PokemonCard | null>(null);
   const sentinelRef                     = useRef<HTMLDivElement>(null);
   const [filterOpen, setFilterOpen]     = useState(false);
-  const [marketOpen, setMarketOpen]     = useState(false);
   const [authMsg,    setAuthMsg]        = useState<string | null>(null);
 
   /* Filtros — estado inicial desde la URL */
@@ -368,15 +367,6 @@ export function MarketPageClient({
     if (waLink === "#") { setAuthMsg("Este vendedor no tiene WhatsApp configurado."); return; }
     window.open(waLink, "_blank");
   }
-
-  /* Close market popup on outside click */
-  useEffect(() => {
-    function onOutside(e: MouseEvent) {
-      if (!mktMobileRef.current?.contains(e.target as Node)) setMarketOpen(false);
-    }
-    document.addEventListener("mousedown", onOutside);
-    return () => document.removeEventListener("mousedown", onOutside);
-  }, []);
 
   /* Fetch user's country client-side to avoid cache issues */
   useEffect(() => {
@@ -834,19 +824,8 @@ export function MarketPageClient({
           transition: background 0.2s;
         }
         .mkt-filter-btn:hover { background: rgba(46,230,193,0.18); }
-        .mkt-mob-tabbar {
-          display: none;
-          position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
-          align-items: stretch; height: 72px;
-          background: rgba(10,14,26,0.95);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-top: 1px solid rgba(255,255,255,0.07);
-          padding-bottom: env(safe-area-inset-bottom);
-        }
         @media (max-width: 1023px), (pointer: coarse) {
           .mkt-filter-btn { display: flex; align-items: center; }
-          .mkt-mob-tabbar { display: flex; }
           .mkt-body-section { padding-bottom: 96px !important; }
         }
       `}</style>
@@ -901,77 +880,10 @@ export function MarketPageClient({
         </div>
       )}
 
-      {/* ══ MOBILE BOTTOM TAB BAR ══ */}
-      <nav className="mkt-mob-tabbar">
-        {[
-          { href: "/dashboard",            label: "Inicio",     Icon: House,          highlight: false },
-          { href: "/dashboard/perfil",     label: "Perfil",     Icon: UserRoundPen,   highlight: false },
-          { href: "/dashboard/inventario", label: "Inventario", Icon: LayoutGrid,     highlight: true  },
-          { href: "/dashboard/amigos",     label: "Amigos",     Icon: HeartHandshake, highlight: false },
-          { href: "/market",               label: "Market",     Icon: Store,          highlight: false },
-        ].map(({ href, label, Icon, highlight }) => {
-          const isMarket = label === "Market";
-          const active   = isMarket
-            ? pathname === "/dashboard/market" || pathname === "/market"
-            : pathname === href;
-          const color  = active ? COURT : highlight ? `${COURT}80` : INK2;
-          const iconSz = highlight ? 26 : 22;
-
-          if (isMarket) {
-            return (
-              <div key="market" ref={mktMobileRef} style={{ flex: 1, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                {marketOpen && (
-                  <div style={{
-                    position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)",
-                    width: 180, background: "#0d1520",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    borderRadius: "12px", overflow: "hidden",
-                    boxShadow: "0 8px 40px rgba(0,0,0,0.6)", zIndex: 200,
-                  }}>
-                    <div style={{ padding: "8px 12px 6px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                      <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, textTransform: "uppercase", letterSpacing: "0.15em", margin: 0 }}>Market</p>
-                    </div>
-                    <Link href="/dashboard/market" onClick={() => setMarketOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}>
-                      <Store size={14} color={COURT} strokeWidth={1.8} />
-                      <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>En venta</span>
-                    </Link>
-                    <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-                    <Link href="/market" onClick={() => setMarketOpen(false)} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", textDecoration: "none", color: "rgba(245,247,251,0.75)" }}>
-                      <Store size={14} color="#d6ff3d" strokeWidth={1.8} />
-                      <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em" }}>Market local</span>
-                    </Link>
-                  </div>
-                )}
-                <button onClick={() => setMarketOpen(o => !o)} style={{
-                  flex: 1, width: "100%", height: "100%", display: "flex", flexDirection: "column",
-                  alignItems: "center", justifyContent: "center", gap: "4px",
-                  background: "transparent", border: "none", cursor: "pointer", position: "relative", paddingBottom: "4px",
-                }}>
-                  {active && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
-                  <Icon size={iconSz} color={color} strokeWidth={active ? 2.2 : 1.7} />
-                  <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color, fontWeight: active ? 600 : 400 }}>
-                    {label}
-                  </span>
-                </button>
-              </div>
-            );
-          }
-
-          return (
-            <Link key={href} href={href} style={{
-              flex: 1, display: "flex", flexDirection: "column",
-              alignItems: "center", justifyContent: "center", gap: "4px",
-              textDecoration: "none", position: "relative", paddingBottom: "4px",
-            }}>
-              {active && <span style={{ position: "absolute", top: 8, width: 4, height: 4, borderRadius: "50%", background: COURT }} />}
-              <Icon size={iconSz} color={color} strokeWidth={active ? 2.2 : 1.7} style={{ position: "relative" }} />
-              <span style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", color, fontWeight: active ? 600 : 400, position: "relative" }}>
-                {label}
-              </span>
-            </Link>
-          );
-        })}
-      </nav>
+      {/* La barra de abajo es la del sitio, no una copia: acá había una propia
+          y se quedó vieja — seguía mostrando "Amigos" cuando el resto de la app
+          ya tenía "Interactivo". */}
+      <MobileTabBar />
 
       {/* ══ LIGHTBOX — ModalTiltCard con efectos 3D ══ */}
       {previewCard && (
