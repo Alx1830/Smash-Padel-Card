@@ -228,3 +228,23 @@ html, body {
   .post-slider-flecha { display: none; }
   .post-slider .post-slider-fila img { height: 168px; }
 }
+
+/* ── Video de Instagram, TikTok o X ─────────────────────────────
+   Estas tres redes avisan cuánto mide el video por mensaje, y el que
+   escucha ese mensaje es el script de cada una — que la política de
+   seguridad del sitio no deja cargar. Así que el alto va fijo, uno por
+   red, tomado de la medida con la que cada una lo publica. Si una nota
+   queda un poco más larga que el recuadro, se desplaza adentro. */
+.post-embed { margin: 26px 0; display: flex; justify-content: center; }
+.post-embed iframe {
+  width: 100%; border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; background: #05070d; display: block;
+}
+.post-embed[data-embed="instagram"] iframe { max-width: 540px; height: 640px; }
+.post-embed[data-embed="tiktok"]    iframe { max-width: 340px; height: 740px; }
+.post-embed[data-embed="x"]         iframe { max-width: 550px; height: 620px; }
+
+@media (max-width: 767px) {
+  .post-embed[data-embed="instagram"] iframe { height: 560px; }
+  .post-embed[data-embed="tiktok"]    iframe { height: 660px; }
+}

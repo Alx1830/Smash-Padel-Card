@@ -16,6 +16,7 @@ import { POST_TAGS, POST_ATTR, POST_CATEGORIAS, CATEGORIA_POR_DEFECTO, slugify, 
 import { aWebp, peso } from "@/lib/imagen-webp";
 import { PostEditorToolbar } from "./PostEditorToolbar";
 import { SliderFotos } from "./slider-extension";
+import { EmbedSocial } from "./embed-social-extension";
 
 const COURT = "#2ee6c1";
 const LIME  = "#d6ff3d";
@@ -117,6 +118,7 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
       Image.configure({ HTMLAttributes: { loading: "lazy", decoding: "async" } }),
       Youtube.configure({ controls: true, nocookie: true }),
       SliderFotos,
+      EmbedSocial,
       Highlight,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({ placeholder: "Escribí la noticia acá. Usá la barra de arriba para dar formato." }),

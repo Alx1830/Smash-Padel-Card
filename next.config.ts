@@ -25,7 +25,7 @@ const securityHeaders = [
       // El editor incrusta los videos con la versión sin cookies, así que
       // los dos dominios tienen que estar: si falta, el navegador deja un
       // recuadro gris en lugar del video, sin decir por qué.
-      "frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.tcgplayer.com",
+      "frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.tcgplayer.com https://www.instagram.com https://instagram.com https://www.tiktok.com https://platform.twitter.com https://platform.x.com",
       "object-src 'none'",
       "upgrade-insecure-requests",
     ].join("; "),

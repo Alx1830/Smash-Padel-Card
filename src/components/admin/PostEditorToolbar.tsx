@@ -4,9 +4,10 @@ import type { Editor } from "@tiptap/react";
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough, Highlighter,
   Heading2, Heading3, List, ListOrdered, Quote, Code2, Minus,
-  Link2, Link2Off, ImagePlus, GalleryHorizontal, CirclePlay, Undo2, Redo2,
+  Link2, Link2Off, ImagePlus, GalleryHorizontal, CirclePlay, Clapperboard, Undo2, Redo2,
   AlignLeft, AlignCenter, AlignRight,
 } from "lucide-react";
+import { leerEnlaceSocial } from "@/lib/embed-social";
 
 const COURT = "#2ee6c1";
 const INK1 = "#c9cfdd";
@@ -130,6 +131,41 @@ export function PostEditorToolbar({ editor }: { editor: Editor | null }) {
     editor.commands.setYoutubeVideo({ src: url.trim(), width: 640, height: 360 });
   }
 
+  /**
+   * Un video de Instagram, TikTok o X. Un botón solo para las tres: se pega el
+   * enlace tal como lo copió el navegador y acá se reconoce de cuál es, que es
+   * menos trabajo que elegir la red antes de pegar.
+   */
+  function ponerVideoSocial() {
+    if (!editor) return;
+
+    const editando = editor.isActive("embedSocial");
+    const pegado = window.prompt(
+      "Enlace del video de Instagram, TikTok o X",
+      editando ? "" : "https://"
+    );
+    if (pegado === null || !pegado.trim()) return;
+
+    const video = leerEnlaceSocial(pegado);
+    if (!video) {
+      window.alert(
+        "Ese enlace no se reconoce.\n\n" +
+        "Sirven los largos: instagram.com/p/... o /reel/..., " +
+        "tiktok.com/@usuario/video/... y x.com/usuario/status/...\n\n" +
+        "Los cortos (vm.tiktok.com, t.co) no traen el número del video: " +
+        "abrilo en el navegador y copiá la dirección de la barra."
+      );
+      return;
+    }
+
+    const atributos = { red: video.red, id: video.id };
+    if (editando) {
+      editor.chain().focus().updateAttributes("embedSocial", atributos).run();
+    } else {
+      editor.chain().focus().insertContent({ type: "embedSocial", attrs: atributos }).run();
+    }
+  }
+
   return (
     <div
       style={{
@@ -168,6 +204,7 @@ export function PostEditorToolbar({ editor }: { editor: Editor | null }) {
       <Boton titulo="Imagen" onClick={ponerImagen}><ImagePlus {...ico} /></Boton>
       <Boton titulo="Carrusel de fotos" onClick={ponerCarrusel} activa={editor.isActive("sliderFotos")}><GalleryHorizontal {...ico} /></Boton>
       <Boton titulo="Video de YouTube" onClick={ponerVideo}><CirclePlay {...ico} /></Boton>
+      <Boton titulo="Video de Instagram, TikTok o X" onClick={ponerVideoSocial} activa={editor.isActive("embedSocial")}><Clapperboard {...ico} /></Boton>
 
       <Separador />
 

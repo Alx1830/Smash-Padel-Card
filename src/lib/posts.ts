@@ -76,6 +76,9 @@ export const POST_ATTR = [
   "loading", "decoding",
   "data-slider", "data-imagenes", "data-leyenda",
   "data-youtube-video",
+  /* La marca del video de Instagram, TikTok o X: sin ella el saneado deja un
+     iframe suelto que ya no se puede volver a editar desde la barra. */
+  "data-embed", "data-embed-id", "scrolling",
 ];
 
 /**
