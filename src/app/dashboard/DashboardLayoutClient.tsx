@@ -68,6 +68,7 @@ export function DashboardLayoutClient({
   const showPushBanner = !!userId && permissionState === "default" && !pushBannerDismissed;
   const menuRef        = useRef<HTMLDivElement>(null);
   const mobileRef      = useRef<HTMLDivElement>(null);
+  const navRef        = useRef<HTMLElement>(null);
   const desktopBellRef = useRef<HTMLDivElement>(null);
   const mobileBellRef  = useRef<HTMLDivElement>(null);
 
@@ -79,6 +80,43 @@ export function DashboardLayoutClient({
   }
 
   /* Verificar suscripción push al montar — iOS revoca silenciosamente */
+  /**
+   * Los velos de arriba y de abajo de la lista de herramientas.
+   *
+   * Con la cuenta de admin la columna no entra en la pantalla y hay que
+   * desplazarla, pero cortada a ras del borde no se ve que siga: parece que la
+   * última herramienta es la última que hay. Los velos se encienden solo del
+   * lado por el que queda contenido, así que también dicen hacia dónde ir.
+   *
+   * Se tocan las clases a mano en vez de guardarlas en el estado porque esto
+   * corre en cada cuadro del desplazamiento: pasarlo por React sería redibujar
+   * la barra entera para cambiar un degradado.
+   */
+  useEffect(() => {
+    const nav = navRef.current;
+    const caja = nav?.parentElement;
+    if (!nav || !caja) return;
+
+    const revisar = () => {
+      const sobra = nav.scrollHeight - nav.clientHeight;
+      caja.classList.toggle("hay-arriba", nav.scrollTop > 4);
+      caja.classList.toggle("hay-abajo", sobra > 4 && nav.scrollTop < sobra - 4);
+    };
+
+    revisar();
+    nav.addEventListener("scroll", revisar, { passive: true });
+    /* La lista cambia de alto cuando se abre un submenú o al entrar como
+       admin, y eso no dispara scroll: hay que volver a medir. */
+    const cinta = new ResizeObserver(revisar);
+    cinta.observe(nav);
+    for (const hijo of Array.from(nav.children)) cinta.observe(hijo);
+
+    return () => {
+      nav.removeEventListener("scroll", revisar);
+      cinta.disconnect();
+    };
+  }, []);
+
   useEffect(() => {
     if (!userId || typeof window === "undefined") return;
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
@@ -265,17 +303,43 @@ export function DashboardLayoutClient({
 
            Se declaran dos veces porque cada navegador entiende una: Firefox
            lee scrollbar-width y el resto los ::-webkit-scrollbar. */
-        .dash-main, .dash-main * { scrollbar-width: thin;
+        .dash-main, .dash-main *, .dash-nav { scrollbar-width: thin;
           scrollbar-color: rgba(255,255,255,0.16) transparent; }
         .dash-main ::-webkit-scrollbar,
-        .dash-main::-webkit-scrollbar { width: 6px; height: 6px; }
+        .dash-main::-webkit-scrollbar,
+        .dash-nav::-webkit-scrollbar { width: 6px; height: 6px; }
         .dash-main ::-webkit-scrollbar-track,
-        .dash-main::-webkit-scrollbar-track { background: transparent; }
+        .dash-main::-webkit-scrollbar-track,
+        .dash-nav::-webkit-scrollbar-track { background: transparent; }
         .dash-main ::-webkit-scrollbar-thumb,
-        .dash-main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.16);
+        .dash-main::-webkit-scrollbar-thumb,
+        .dash-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.16);
           border-radius: 3px; }
         .dash-main ::-webkit-scrollbar-thumb:hover,
-        .dash-main::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.28); }
+        .dash-main::-webkit-scrollbar-thumb:hover,
+        .dash-nav::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.28); }
+
+        /* ── La lista de herramientas, cuando no entra ──────────────────
+           La barra fina de arriba se hereda; lo que se agrega acá son los
+           dos velos que avisan que la lista sigue. Están siempre puestos y
+           solo se les prende la opacidad, así que el desplazamiento no
+           mueve nada de sitio. */
+        .dash-nav-caja { position: relative; flex: 1; min-height: 0; display: flex; }
+        .dash-nav { flex: 1; min-height: 0; overflow-y: auto; padding: 16px 10px;
+          /* Sin esto, al llegar al final de la lista el navegador le pasa el
+             desplazamiento a la página de al lado y la columna arrastra la
+             noticia que se estaba leyendo. */
+          overscroll-behavior-y: contain; }
+        .dash-nav-velo {
+          position: absolute; left: 0; right: 0; height: 26px; z-index: 2;
+          pointer-events: none; opacity: 0; transition: opacity 160ms;
+        }
+        .dash-nav-velo.arriba { top: 0;
+          background: linear-gradient(to bottom, ${BG1} 15%, rgba(10,14,26,0)); }
+        .dash-nav-velo.abajo { bottom: 0;
+          background: linear-gradient(to top, ${BG1} 15%, rgba(10,14,26,0)); }
+        .dash-nav-caja.hay-arriba .dash-nav-velo.arriba { opacity: 1; }
+        .dash-nav-caja.hay-abajo  .dash-nav-velo.abajo  { opacity: 1; }
 
         .dash-main {
           margin-left: 260px;
@@ -337,7 +401,10 @@ export function DashboardLayoutClient({
           </div>
 
           {/* Nav */}
-          <nav style={{ flex: 1, padding: "16px 10px", overflowY: "auto" }}>
+          <div className="dash-nav-caja">
+            <span className="dash-nav-velo arriba" aria-hidden />
+            <span className="dash-nav-velo abajo" aria-hidden />
+            <nav ref={navRef} className="dash-nav">
             {SIDEBAR_ITEMS.map(({ href, label, Icon }) => {
               const isMarket = label === "Market";
               const isPerfil = label === "Perfil";
@@ -369,7 +436,7 @@ export function DashboardLayoutClient({
                 const mySetsActive = pathname.startsWith("/dashboard/my-sets");
                 const tradesActive = pathname.startsWith("/dashboard/trades");
                 const juegoActive = pathname.startsWith("/dashboard/juego");
-                const noticiasActive = pathname.startsWith("/post");
+                const noticiasActive = pathname.startsWith("/noticias");
                 const intActive = decksActive || mySetsActive || tradesActive || juegoActive || noticiasActive;
                 return (
                   <div key="interactivo" style={{ marginBottom: "4px" }}>
@@ -406,7 +473,7 @@ export function DashboardLayoutClient({
                         <Dices size={14} color={juegoActive ? COURT : INK2} strokeWidth={1.8} />
                         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: juegoActive ? COURT : "rgba(245,247,251,0.65)" }}>Higher Or Lower</span>
                       </Link>
-                      <Link href="/post" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: noticiasActive ? `${COURT}18` : "transparent", border: noticiasActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                      <Link href="/noticias" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: noticiasActive ? `${COURT}18` : "transparent", border: noticiasActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
                         onMouseEnter={e => { if (!noticiasActive) e.currentTarget.style.background = `${COURT}10`; }}
                         onMouseLeave={e => { if (!noticiasActive) e.currentTarget.style.background = "transparent"; }}
                       >
@@ -511,7 +578,8 @@ export function DashboardLayoutClient({
                 </div>
               </div>
             )}
-          </nav>
+            </nav>
+          </div>
 
           {/* Avatar menu — desktop */}
           <div ref={menuRef} style={{ padding: "12px 10px", borderTop: "1px solid rgba(255,255,255,0.06)", position: "relative" }}>
