@@ -20,6 +20,8 @@ const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
 const INK2  = "#7a8298";
 
+/* Tres primero, que es lo que entra en pantalla, y de a seis despues. */
+const PRIMERAS = 3;
 const DE_A = 6;
 
 interface Nota {
@@ -47,13 +49,14 @@ export function MuroNoticias() {
     if (pidiendo.current) return;
     pidiendo.current = true;
 
+    const cuantas = ultima.current === null ? PRIMERAS : DE_A;
     const supabase = createClient();
     let q = supabase
       .from("admin_posts")
       .select("id, slug, title, excerpt, cover_url, category, published_at, created_at")
       .eq("status", "published")
       .order("published_at", { ascending: false })
-      .limit(DE_A);
+      .limit(cuantas);
 
     if (ultima.current) q = q.lt("published_at", ultima.current);
 
@@ -65,22 +68,28 @@ export function MuroNoticias() {
         ?? llegaron[llegaron.length - 1].created_at;
       setNotas((antes) => [...antes, ...llegaron]);
     }
-    if (llegaron.length < DE_A) setQuedan(false);
+    if (llegaron.length < cuantas) setQuedan(false);
     setPrimera(false);
     pidiendo.current = false;
   }, []);
 
+  /* La primera tanda se pide al montar. Antes la disparaba el observador, pero
+     el muro vive al final del panel: esperar a que viera el centinela sumaba la
+     hidratacion de toda la pagina antes del primer pedido. */
+  useEffect(() => { traer(); }, [traer]);
+
+  /* El observador entra en juego recien con la primera tanda ya pintada. Si se
+     montara antes veria el centinela a la vista y pediria la segunda tanda en
+     paralelo con la primera, que es justo lo que se quiere evitar. */
   useEffect(() => {
     const centinela = fondo.current;
-    if (!centinela) return;
-    /* El propio observador dispara la primera tanda: el centinela arranca a la
-       vista, así que no hace falta pedirla aparte. */
+    if (!centinela || primera) return;
     const ojo = new IntersectionObserver((entradas) => {
       if (entradas[0].isIntersecting) traer();
     }, { rootMargin: "220px" });
     ojo.observe(centinela);
     return () => ojo.disconnect();
-  }, [traer]);
+  }, [traer, primera]);
 
   return (
     <section className="mu-caja">

@@ -34,6 +34,15 @@ const INK0  = "#f5f7fb";
 const INK1  = "#c9cfdd";
 const INK2  = "#7a8298";
 
+/**
+ * La primera tanda es la mitad porque es la que se ve.
+ *
+ * El panel dispara al montarse una cascada de consultas suyas (inventario,
+ * precios, snapshots) y el muro hacia fila detras: su consulta tarda 38 ms pero
+ * tardaba seis segundos en aparecer. Pidiendo cinco al principio la respuesta
+ * baja a la mitad y hay que bajar cinco chunks de cartas en vez de diez.
+ */
+const PRIMERAS = 5;
 const DE_A = 10;
 const COMENTARIO_MAX = 600;
 
@@ -58,6 +67,14 @@ interface Comentario {
   user_id: string;
   body: string;
   created_at: string;
+  /** El comentario al que responde, si es una respuesta. */
+  parent_id: string | null;
+}
+
+/** Quien escribio: vive en `players`, no en `feed_comments`. */
+interface Autor {
+  username: string;
+  photo_url: string | null;
 }
 
 interface CartaTanda {
@@ -72,6 +89,10 @@ export function MuroActividad() {
 
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [comentarios, setComentarios] = useState<Record<string, Comentario[]>>({});
+  /* Los autores de los comentarios, por user_id. Se piden aparte porque
+     `feed_comments` guarda solo el id y el nombre y la foto viven en
+     `players`; sin esto el comentario salia como un texto sin firma. */
+  const [autores, setAutores] = useState<Record<string, Autor>>({});
   const [abierto, setAbierto] = useState<string | null>(null);
   const [quedan, setQuedan] = useState(true);
   const [primera, setPrimera] = useState(true);
@@ -84,14 +105,42 @@ export function MuroActividad() {
   const fondo = useRef<HTMLDivElement>(null);
   const pidiendo = useRef(false);
   const ultima = useRef<string | null>(null);
+  /** A quienes ya se les pregunto el nombre, hayan aparecido o no. */
+  const vistos = useRef<Set<string>>(new Set());
+
+  /**
+   * Busca en `players` los autores que todavia no estan en memoria.
+   *
+   * Se guarda lo ya visto porque una misma persona comenta en varias
+   * publicaciones y no tiene sentido volver a preguntar por ella.
+   */
+  const traerAutores = useCallback(async (ids: string[]) => {
+    const faltan = [...new Set(ids)].filter((id) => !vistos.current.has(id));
+    if (!faltan.length) return;
+    faltan.forEach((id) => vistos.current.add(id));
+
+    const supabase = createClient();
+    const { data } = await supabase
+      .from("players")
+      .select("user_id, username, photo_url")
+      .in("user_id", faltan);
+    if (!data?.length) return;
+
+    const nuevos: Record<string, Autor> = {};
+    for (const p of data as { user_id: string; username: string; photo_url: string | null }[]) {
+      nuevos[p.user_id] = { username: p.username, photo_url: p.photo_url };
+    }
+    setAutores((antes) => ({ ...antes, ...nuevos }));
+  }, []);
 
   const traer = useCallback(async () => {
     if (pidiendo.current) return;
     pidiendo.current = true;
 
+    const cuantas = ultima.current === null ? PRIMERAS : DE_A;
     const supabase = createClient();
     const { data } = await supabase.rpc("feed_actividad", {
-      limite: DE_A,
+      limite: cuantas,
       antes: ultima.current,
     });
     const llegaron = (data ?? []) as Evento[];
@@ -100,51 +149,68 @@ export function MuroActividad() {
       ultima.current = llegaron[llegaron.length - 1].created_at;
       setEventos((antes) => [...antes, ...llegaron]);
 
-      /* Los sets, antes de pintar, para que las miniaturas no salgan vacías. */
+      /* Los sets y los comentarios van por su cuenta, sin frenar el pintado:
+         la publicacion ya tiene quien, que y cuando, que es lo que se lee
+         primero. La miniatura y el hilo entran cuando llegan. */
       loadManySets([...new Set(llegaron.map((e) => e.set_id))])
         .then(() => setSetsListos((n) => n + 1))
         .catch(() => { /* sin metadata se pinta el hueco */ });
 
-      const { data: coms } = await supabase
+      supabase
         .from("feed_comments")
-        .select("id, evento_id, user_id, body, created_at")
+        .select("id, evento_id, user_id, body, created_at, parent_id")
         .in("evento_id", llegaron.map((e) => e.id))
-        .order("created_at");
-
-      if (coms?.length) {
-        const porEvento: Record<string, Comentario[]> = {};
-        for (const c of coms as Comentario[]) (porEvento[c.evento_id] ??= []).push(c);
-        setComentarios((antes) => ({ ...antes, ...porEvento }));
-      }
+        .order("created_at")
+        .then(({ data: coms }) => {
+          if (!coms?.length) return;
+          const porEvento: Record<string, Comentario[]> = {};
+          for (const c of coms as Comentario[]) (porEvento[c.evento_id] ??= []).push(c);
+          setComentarios((antes) => ({ ...antes, ...porEvento }));
+          traerAutores((coms as Comentario[]).map((c) => c.user_id));
+        });
     }
-    if (llegaron.length < DE_A) setQuedan(false);
+    if (llegaron.length < cuantas) setQuedan(false);
     setPrimera(false);
     pidiendo.current = false;
-  }, []);
+  }, [traerAutores]);
 
+  /* La primera tanda se pide al montar y no cuando el centinela entra en
+     pantalla: el muro vive al final del panel, y esperar a que el observador
+     lo viera sumaba la hidratacion de toda la pagina antes del primer pedido. */
+  useEffect(() => { traer(); }, [traer]);
+
+  /* El observador entra en juego recien con la primera tanda ya pintada. Si se
+     montara antes veria el centinela a la vista y pediria la segunda tanda en
+     paralelo con la primera, que es justo lo que se quiere evitar. */
   useEffect(() => {
     const centinela = fondo.current;
-    if (!centinela) return;
+    if (!centinela || primera) return;
     const ojo = new IntersectionObserver((entradas) => {
       if (entradas[0].isIntersecting) traer();
     }, { rootMargin: "220px" });
     ojo.observe(centinela);
     return () => ojo.disconnect();
-  }, [traer]);
+  }, [traer, primera]);
 
-  const comentar = async (evento: Evento, texto: string) => {
+  const comentar = async (evento: Evento, texto: string, parentId: string | null = null) => {
     if (!userId) return;
     const supabase = createClient();
     const { data, error } = await supabase
       .from("feed_comments")
-      .insert({ evento_tipo: evento.tipo, evento_id: evento.id, user_id: userId, body: texto })
-      .select("id, evento_id, user_id, body, created_at")
+      .insert({
+        evento_tipo: evento.tipo, evento_id: evento.id,
+        user_id: userId, body: texto, parent_id: parentId,
+      })
+      .select("id, evento_id, user_id, body, created_at, parent_id")
       .single();
     if (error || !data) return;
     setComentarios((antes) => ({
       ...antes,
       [evento.id]: [...(antes[evento.id] ?? []), data as Comentario],
     }));
+    /* La firma propia, por si es el primer comentario que escribe en la sesion:
+       sin esto el comentario recien puesto sale sin nombre hasta recargar. */
+    traerAutores([userId]);
   };
 
   return (
@@ -161,10 +227,11 @@ export function MuroActividad() {
             key={`${e.tipo}-${e.id}`}
             evento={e}
             comentarios={comentarios[e.id] ?? []}
+            autores={autores}
             abierto={abierto === e.id}
             puedeComentar={Boolean(userId)}
             onAbrir={() => setAbierto(abierto === e.id ? null : e.id)}
-            onComentar={(texto) => comentar(e, texto)}
+            onComentar={(texto, parentId) => comentar(e, texto, parentId)}
             onMirar={setMirando}
           />
         ))}
@@ -198,17 +265,20 @@ export function MuroActividad() {
 
 /* ── Una publicación ────────────────────────────────────────────────────── */
 
-function Publicacion({ evento, comentarios, abierto, puedeComentar, onAbrir, onComentar, onMirar }: {
+function Publicacion({ evento, comentarios, autores, abierto, puedeComentar, onAbrir, onComentar, onMirar }: {
   evento: Evento;
   comentarios: Comentario[];
+  autores: Record<string, Autor>;
   abierto: boolean;
   puedeComentar: boolean;
   onAbrir: () => void;
-  onComentar: (texto: string) => void;
+  onComentar: (texto: string, parentId: string | null) => void;
   onMirar: (url: string) => void;
 }) {
   const [texto, setTexto] = useState("");
   const [enviando, setEnviando] = useState(false);
+  /** A cual comentario se le esta respondiendo, si a alguno. */
+  const [respondiendo, setRespondiendo] = useState<string | null>(null);
   const [tanda, setTanda] = useState<CartaTanda[] | null>(null);
   const [cargandoTanda, setCargandoTanda] = useState(false);
 
@@ -220,10 +290,17 @@ function Publicacion({ evento, comentarios, abierto, puedeComentar, onAbrir, onC
     const limpio = texto.trim();
     if (!limpio || enviando) return;
     setEnviando(true);
-    await onComentar(limpio);
+    await onComentar(limpio, respondiendo);
     setTexto("");
+    setRespondiendo(null);
     setEnviando(false);
   };
+
+  /* El hilo se arma en dos niveles: los comentarios sueltos y, debajo de cada
+     uno, sus respuestas. Mas profundidad no aporta y en el celular no entra. */
+  const raiz = comentarios.filter((c) => !c.parent_id);
+  const respuestas: Record<string, Comentario[]> = {};
+  for (const c of comentarios) if (c.parent_id) (respuestas[c.parent_id] ??= []).push(c);
 
   /** Las otras cartas de la misma tanda, solo cuando alguien las pide. */
   const verTanda = async () => {
@@ -320,23 +397,47 @@ function Publicacion({ evento, comentarios, abierto, puedeComentar, onAbrir, onC
 
       {abierto && (
         <div className="ma-hilo">
-          {comentarios.map((c) => (
-            <p key={c.id} className="ma-comentario">{c.body}</p>
+          {raiz.map((c) => (
+            <div key={c.id}>
+              <Comentario
+                comentario={c}
+                autor={autores[c.user_id]}
+                puedeResponder={puedeComentar}
+                onResponder={() => setRespondiendo(respondiendo === c.id ? null : c.id)}
+              />
+              {(respuestas[c.id] ?? []).length > 0 && (
+                <div className="ma-respuestas">
+                  {respuestas[c.id].map((r) => (
+                    <Comentario key={r.id} comentario={r} autor={autores[r.user_id]} puedeResponder={false} />
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
 
           {puedeComentar ? (
-            <div className="ma-escribir">
-              <input
-                value={texto}
-                maxLength={COMENTARIO_MAX}
-                onChange={(ev) => setTexto(ev.target.value)}
-                onKeyDown={(ev) => { if (ev.key === "Enter") enviar(); }}
-                placeholder="Escribe algo…"
-                className="ma-campo"
-              />
-              <button onClick={enviar} disabled={!texto.trim() || enviando} className="ma-enviar" aria-label="Enviar">
-                <Send size={13} />
-              </button>
+            <div>
+              {respondiendo && (
+                <p className="ma-respondiendo">
+                  Respondiendo a {autores[comentarios.find((c) => c.id === respondiendo)?.user_id ?? ""]?.username ?? "el comentario"}
+                  <button onClick={() => setRespondiendo(null)} aria-label="Cancelar respuesta">
+                    <X size={11} />
+                  </button>
+                </p>
+              )}
+              <div className="ma-escribir">
+                <input
+                  value={texto}
+                  maxLength={COMENTARIO_MAX}
+                  onChange={(ev) => setTexto(ev.target.value)}
+                  onKeyDown={(ev) => { if (ev.key === "Enter") enviar(); }}
+                  placeholder={respondiendo ? "Escribe tu respuesta…" : "Escribe algo…"}
+                  className="ma-campo"
+                />
+                <button onClick={enviar} disabled={!texto.trim() || enviando} className="ma-enviar" aria-label="Enviar">
+                  <Send size={13} />
+                </button>
+              </div>
             </div>
           ) : (
             <p className="ma-comentario" style={{ color: INK2 }}>Entra con tu cuenta para comentar.</p>
@@ -344,6 +445,43 @@ function Publicacion({ evento, comentarios, abierto, puedeComentar, onAbrir, onC
         </div>
       )}
     </article>
+  );
+}
+
+/* ── Un comentario ──────────────────────────────────────────────────────── */
+
+/**
+ * Un comentario con su firma: quien, cuando y que dijo.
+ *
+ * Antes se pintaba solo el cuerpo y un comentario quedaba como un texto suelto
+ * del que no se sabia quien lo habia escrito ni cuando.
+ */
+function Comentario({ comentario, autor, puedeResponder, onResponder }: {
+  comentario: Comentario;
+  autor: Autor | undefined;
+  puedeResponder: boolean;
+  onResponder?: () => void;
+}) {
+  const nombre = autor?.username ?? "alguien";
+  return (
+    <div className="ma-comentario">
+      <header className="ma-com-firma">
+        {autor?.photo_url
+          /* eslint-disable-next-line @next/next/no-img-element */
+          ? <img src={autor.photo_url} alt="" loading="lazy" className="ma-com-avatar" />
+          : <span className="ma-com-avatar ma-inicial">{nombre.charAt(0).toUpperCase()}</span>}
+        {autor
+          ? <Link href={`/${autor.username}`} className="ma-com-nombre">{nombre}</Link>
+          : <span className="ma-com-nombre">{nombre}</span>}
+        <time className="ma-com-cuando" dateTime={comentario.created_at}>
+          {haceCuanto(comentario.created_at)}
+        </time>
+      </header>
+      <p className="ma-com-texto">{comentario.body}</p>
+      {puedeResponder && onResponder && (
+        <button className="ma-responder" onClick={onResponder}>Responder</button>
+      )}
+    </div>
   );
 }
 
@@ -437,6 +575,33 @@ const ESTILOS = `
   .ma-comentario { font-family: ${MONO}; font-size: 10.5px; color: ${INK1}; margin: 0;
     line-height: 1.6; background: rgba(255,255,255,0.03); border-radius: 8px;
     padding: 7px 9px; word-break: break-word; }
+
+  /* La firma del comentario: quien y cuando, arriba del texto. */
+  .ma-com-firma { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+  .ma-com-avatar { width: 17px; height: 17px; border-radius: 50%; object-fit: cover;
+    border: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; font-size: 8px; }
+  .ma-com-nombre { font-family: ${MONO}; font-size: 10px; color: ${INK0};
+    text-decoration: none; }
+  .ma-com-nombre:hover { color: ${COURT}; }
+  .ma-com-cuando { margin-left: auto; font-family: ${MONO}; font-size: 8.5px; color: ${INK2};
+    flex-shrink: 0; }
+  .ma-com-texto { margin: 0; }
+
+  .ma-responder { margin-top: 5px; cursor: pointer; background: none; border: 0; padding: 0;
+    font-family: ${MONO}; font-size: 9px; color: ${INK2}; transition: color 0.15s; }
+  .ma-responder:hover { color: ${COURT}; }
+
+  /* Las respuestas cuelgan del comentario con una linea al costado: se ve de
+     que es respuesta sin tener que leerla. */
+  .ma-respuestas { margin: 7px 0 0 14px; padding-left: 10px;
+    border-left: 1px solid rgba(255,255,255,0.09);
+    display: flex; flex-direction: column; gap: 7px; }
+
+  .ma-respondiendo { display: flex; align-items: center; gap: 7px; margin: 0 0 6px;
+    font-family: ${MONO}; font-size: 9px; color: ${COURT}; }
+  .ma-respondiendo button { display: flex; cursor: pointer; background: none; border: 0;
+    padding: 0; color: ${INK2}; }
+  .ma-respondiendo button:hover { color: ${INK0}; }
 
   .ma-escribir { display: flex; gap: 7px; }
   .ma-campo { flex: 1; min-width: 0; background: rgba(255,255,255,0.03);
