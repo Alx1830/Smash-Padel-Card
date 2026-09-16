@@ -106,6 +106,11 @@ export const TCG_SETS = [
     setName: "XY Promos", name: "XY Promos",
     placeholder: "/pokemon-sets/XY-Promos.symbol.143.png",
   },
+  {
+    slug: "30th-celebration", code: "me30",
+    setName: "ME: 30th Celebration", name: "30th Celebration",
+    placeholder: "/pokemon-sets/30th-celebration.logo.webp",
+  },
 ];
 
 export const MAPS_DIR = path.resolve(__dirname, "tcgplayer-sets");

@@ -20,6 +20,7 @@ const path = require("path");
 // ── Mapeo completo slug local → código Scrydex ────────────────────────────────
 const ALL_SETS = [
   // Mega Evolution
+  { slug: "30th-celebration",        code: "me30"       },
   { slug: "pitch-black",             code: "me5"        },
   { slug: "chaos-rising",            code: "me4"        },
   { slug: "perfect-order",           code: "me3"        },
