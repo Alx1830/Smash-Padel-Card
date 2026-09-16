@@ -13,6 +13,15 @@ import { BrandLogo } from "@/components/BrandLogo";
  * reconoce como tal.
  */
 const STYLES = `
+/* El pie grande ocupa pantallas enteras: en el celular y la tableta obliga a
+   desplazar un buen rato después de terminar de leer, y ahí abajo ya está la
+   barra de pestañas para moverse. Se deja solo en la portada del sitio, que es
+   donde cumple de verdad su papel de invitar a registrarse. */
+.pie-grande-movil-no { display: none; }
+@media (min-width: 1024px) and (pointer: fine) {
+  .pie-grande-movil-no { display: block; }
+}
+
   @keyframes mft-breathe {
     0%   { transform: translate(-50%,-50%) scale(1);    opacity: 0.5; }
     100% { transform: translate(-50%,-50%) scale(1.12); opacity: 0.9; }
@@ -84,7 +93,7 @@ export function PieGrande({ palabra = "MARKET" }: { palabra?: string }) {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
-      <footer style={{ position: "relative", background: "#05070d", overflow: "hidden", maxWidth: "100%", paddingTop: "80px" }}>
+      <footer className="pie-grande-movil-no" style={{ position: "relative", background: "#05070d", overflow: "hidden", maxWidth: "100%", paddingTop: "80px" }}>
 
         {/* Aurora glow */}
         <div className="mft-breathe" style={{ position: "absolute", left: "50%", top: "50%", width: "70vw", height: "50vh", borderRadius: "50%", background: "radial-gradient(circle, rgba(46,230,193,0.1) 0%, rgba(214,255,61,0.04) 50%, transparent 70%)", filter: "blur(60px)", pointerEvents: "none", zIndex: 0 }} />

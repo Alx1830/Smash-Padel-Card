@@ -5,6 +5,15 @@ import Link from "next/link";
 import { BrandLogo } from "@/components/BrandLogo";
 
 const STYLES = `
+/* El pie grande ocupa pantallas enteras: en el celular y la tableta obliga a
+   desplazar un buen rato después de terminar de leer, y ahí abajo ya está la
+   barra de pestañas para moverse. Se deja solo en la portada del sitio, que es
+   donde cumple de verdad su papel de invitar a registrarse. */
+.pie-grande-movil-no { display: none; }
+@media (min-width: 1024px) and (pointer: fine) {
+  .pie-grande-movil-no { display: block; }
+}
+
 @keyframes spc-breathe {
   0%   { transform: translate(-50%,-50%) scale(1);   opacity: 0.5; }
   100% { transform: translate(-50%,-50%) scale(1.12); opacity: 0.9; }
@@ -79,7 +88,13 @@ const NAV_LINKS = [
   { label: "Market",      href: "/dashboard/market" },
 ];
 
-export function Footer() {
+/**
+ * `enMovil` deja el pie a la vista en el celular y la tableta. Solo lo pide la
+ * portada del sitio: en el resto de las páginas se ve únicamente en pantallas
+ * grandes, porque ocupa varias pantallas de alto y en un teléfono obliga a
+ * desplazar un rato largo después de terminar de leer.
+ */
+export function Footer({ enMovil = false }: { enMovil?: boolean } = {}) {
   const wrapperRef  = useRef<HTMLElement>(null);
   const bigTextRef  = useRef<HTMLDivElement>(null);
   const headingRef  = useRef<HTMLHeadingElement>(null);
@@ -112,7 +127,7 @@ export function Footer() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
-      <footer ref={wrapperRef} style={{ position: "relative", background: "#05070d", overflow: "hidden", maxWidth: "100%", paddingTop: "80px" }}>
+      <footer ref={wrapperRef} className={enMovil ? undefined : "pie-grande-movil-no"} style={{ position: "relative", background: "#05070d", overflow: "hidden", maxWidth: "100%", paddingTop: "80px" }}>
 
         {/* Aurora glow */}
         <div className="spc-breathe" style={{

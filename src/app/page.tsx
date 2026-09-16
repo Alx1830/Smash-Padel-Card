@@ -539,7 +539,7 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer enMovil />
     </main>
   );
 }
