@@ -3,7 +3,7 @@
  *
  * Dos avisos por usuario: la fila en `notifications` (la campana de la app) y,
  * si tiene el celular suscrito, la notificación push. Las dos llevan el título
- * del post y abren /post/<slug>.
+ * del post y abren /noticias/<slug>.
  *
  * Solo un admin puede dispararlo: se valida la sesión del que llama contra
  * `players.role`, porque la ruta usa la llave de servicio para escribir en
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Todavía es un borrador" }, { status: 400 });
   }
 
-  const url = `/post/${post.slug}`;
+  const url = `/noticias/${post.slug}`;
   const resumen = post.excerpt?.trim() || extractoAuto(post.content_html ?? "", 120) || "Entrá para leerla";
 
   // 3. La campana, para todos

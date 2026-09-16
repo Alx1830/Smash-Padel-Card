@@ -62,7 +62,7 @@ export function MobileTabBar({ username: initialUsername }: { username?: string 
                     || pathname.startsWith("/dashboard/my-sets")
                     || pathname.startsWith("/dashboard/trades")
                     || pathname.startsWith("/dashboard/juego")
-                    || pathname.startsWith("/post");
+                    || pathname.startsWith("/noticias");
   const invActive    = pathname === "/dashboard/inventario"
                     || pathname === "/dashboard/inventario/cards"
                     || pathname === "/dashboard/inventario/agregar";
@@ -103,7 +103,7 @@ export function MobileTabBar({ username: initialUsername }: { username?: string 
               <PopupLink href="/dashboard/my-sets" Icon={WalletCards}    label="Mis Sets"     onClick={() => setInteractivoOpen(false)} />
               <PopupLink href="/dashboard/trades"  Icon={ArrowLeftRight} label="Intercambios" onClick={() => setInteractivoOpen(false)} />
               <PopupLink href="/dashboard/juego"   Icon={Dices}          label="Higher Or Lower"        onClick={() => setInteractivoOpen(false)} />
-              <PopupLink href="/post"             Icon={Newspaper}      label="Noticias"     onClick={() => setInteractivoOpen(false)} />
+              <PopupLink href="/noticias"             Icon={Newspaper}      label="Noticias"     onClick={() => setInteractivoOpen(false)} />
             </Popup>
           )}
           <TabButton label="Interactivo" Icon={Gamepad2} active={intActive}

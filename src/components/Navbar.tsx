@@ -19,7 +19,7 @@ const NAV_LINKS_GUEST = [
   { label: "INICIO",     href: "/" },
   { label: "INVENTARIO", href: "/dashboard/inventario" },
   { label: "MARKET",     href: "/market" },
-  { label: "NOTICIAS",   href: "/post" },
+  { label: "NOTICIAS",   href: "/noticias" },
 ];
 
 interface NavbarProps {
@@ -122,7 +122,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
     { label: "INTERCAMBIOS", href: "/dashboard/trades" },
     { label: "WISHLIST",   href: "/dashboard/market/wishlist" },
     { label: "MARKET",     href: "/market" },
-    { label: "NOTICIAS",   href: "/post" },
+    { label: "NOTICIAS",   href: "/noticias" },
   ];
 
   return (

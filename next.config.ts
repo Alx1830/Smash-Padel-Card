@@ -61,6 +61,17 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  /* La portada de noticias vivía en /post y pasó a /noticias. Las direcciones
+     viejas se siguen encontrando por ahí —en Google, en los avisos que ya se
+     enviaron y en lo que la gente compartió por WhatsApp—, así que se redirigen
+     en vez de dar 404. Es permanente para que el buscador traslade la
+     antigüedad de cada nota a la dirección nueva en vez de empezar de cero. */
+  async redirects() {
+    return [
+      { source: "/post", destination: "/noticias", permanent: true },
+      { source: "/post/:path*", destination: "/noticias/:path*", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

@@ -470,7 +470,7 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
         <div>
           <label style={etiqueta} htmlFor="post-slug">Dirección de la publicación</label>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-            <span style={{ fontFamily: MONO, fontSize: 12, color: INK2 }}>facebinder.com/post/</span>
+            <span style={{ fontFamily: MONO, fontSize: 12, color: INK2 }}>facebinder.com/noticias/</span>
             <input id="post-slug" style={{ ...campo, flex: 1, minWidth: 180 }} value={direccion}
                    placeholder="llego-pitch-black"
                    onChange={(e) => { setTocoDireccion(true); setDireccion(e.target.value); }} />
@@ -651,7 +651,7 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
         </button>
 
         {post?.status === "published" && post.slug && (
-          <a href={`/post/${post.slug}`} target="_blank" rel="noopener noreferrer"
+          <a href={`/noticias/${post.slug}`} target="_blank" rel="noopener noreferrer"
              style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 18px", borderRadius: 9,
                       border: "1px solid rgba(255,255,255,0.14)", color: INK1, fontFamily: MONO, fontSize: 12, textDecoration: "none" }}>
             <ExternalLink size={14} /> Ver publicada

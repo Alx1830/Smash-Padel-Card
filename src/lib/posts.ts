@@ -1,5 +1,5 @@
 /**
- * Publicaciones del feed: una noticia con dirección propia en /post/<slug>.
+ * Publicaciones del feed: una noticia con dirección propia en /noticias/<slug>.
  *
  * El cuerpo se guarda como HTML ya saneado (el editor lo pasa por DOMPurify
  * antes de escribir), y solo un admin puede insertar o editar — lo garantiza

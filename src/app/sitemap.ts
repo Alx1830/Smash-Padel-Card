@@ -30,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const fijas: MetadataRoute.Sitemap = [
     { url: BASE,              lastModified: ahora, changeFrequency: "daily",  priority: 1 },
     { url: `${BASE}/market`,  lastModified: ahora, changeFrequency: "hourly", priority: 0.9 },
-    { url: `${BASE}/post`,    lastModified: ahora, changeFrequency: "daily",  priority: 0.9 },
+    { url: `${BASE}/noticias`,    lastModified: ahora, changeFrequency: "daily",  priority: 0.9 },
     { url: `${BASE}/login`,   lastModified: ahora, changeFrequency: "monthly", priority: 0.3 },
   ];
 
@@ -49,7 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .limit(2000);
 
     notas = (data ?? []).map(n => ({
-      url: `${BASE}/post/${n.slug}`,
+      url: `${BASE}/noticias/${n.slug}`,
       lastModified: new Date((n.updated_at ?? n.published_at ?? n.created_at) as string),
       changeFrequency: "weekly" as const,
       priority: 0.8,

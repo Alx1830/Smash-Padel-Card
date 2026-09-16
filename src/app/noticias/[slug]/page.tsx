@@ -1,5 +1,5 @@
 /**
- * La noticia con dirección propia: facebinder.com/post/<slug>.
+ * La noticia con dirección propia: facebinder.com/noticias/<slug>.
  *
  * Se dibuja en el servidor para que WhatsApp y los buscadores vean el título,
  * la bajada y la portada sin ejecutar nada. Es pública: quien llega desde la
@@ -17,7 +17,6 @@ import { Comentarios } from "@/components/post/Comentarios";
 import { FlechasSlider } from "@/components/post/FlechasSlider";
 import { VisorFotos } from "@/components/post/VisorFotos";
 import { Encuesta, type EncuestaDatos } from "@/components/post/Encuesta";
-import { AnuncioAncho } from "@/components/post/Anuncio";
 import { SITIO, EDITOR, migas, DatosJson } from "@/lib/seo";
 
 const COURT = "#2ee6c1";
@@ -135,14 +134,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title,
     description,
-    alternates: { canonical: `/post/${post.slug}` },
+    alternates: { canonical: `/noticias/${post.slug}` },
     openGraph: {
       type: "article",
       title,
       description,
       siteName: "FaceBinder",
       locale: "es_CO",
-      url: `https://facebinder.com/post/${post.slug}`,
+      url: `https://facebinder.com/noticias/${post.slug}`,
       publishedTime: post.published_at ?? post.created_at,
       modifiedTime: post.updated_at ?? post.published_at ?? post.created_at,
       section: etiquetaCategoria(post.category),
@@ -195,7 +194,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     {
       "@context": "https://schema.org",
       "@type": "NewsArticle",
-      mainEntityOfPage: { "@type": "WebPage", "@id": `${SITIO}/post/${post.slug}` },
+      mainEntityOfPage: { "@type": "WebPage", "@id": `${SITIO}/noticias/${post.slug}` },
       headline: post.title.slice(0, 110),
       description: post.excerpt?.trim() || extractoAuto(cuerpo, 155),
       image: portada ? [portada] : [`${SITIO}/og-image.png`],
@@ -211,8 +210,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     },
     migas([
       { nombre: "Inicio", url: "" },
-      { nombre: "Noticias", url: "/post" },
-      { nombre: post.title, url: `/post/${post.slug}` },
+      { nombre: "Noticias", url: "/noticias" },
+      { nombre: post.title, url: `/noticias/${post.slug}` },
     ]),
   ];
 
@@ -267,7 +266,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           }
         `}</style>
 
-        <Link href="/post" style={{
+        <Link href="/noticias" style={{
           display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none",
           fontFamily: MONO, fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase",
           color: INK2, marginBottom: 26,
@@ -327,13 +326,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <FlechasSlider />
         <VisorFotos />
 
-        {/* Al terminar de leer, no antes: el lector vino por el texto. */}
-        <AnuncioAncho separacion={38} />
-
         {encuesta && encuesta.opciones.length > 0 && <Encuesta datos={encuesta} />}
 
         <div style={{ marginTop: 44, paddingTop: 22, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-          <Link href="/post" style={{
+          <Link href="/noticias" style={{
             display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 20px",
             borderRadius: 9, background: COURT, color: BG0, textDecoration: "none",
             fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: "0.08em",
@@ -343,8 +339,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
 
         <Comentarios postId={post.id} />
-
-        <AnuncioAncho separacion={38} />
 
         {relacionadas.length > 0 && (
           <section style={{ marginTop: 46 }}>
@@ -360,7 +354,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
             <div className="pd-rel">
               {relacionadas.map((n) => (
-                <Link key={n.id} href={`/post/${n.slug}`} className="pd-rel-card">
+                <Link key={n.id} href={`/noticias/${n.slug}`} className="pd-rel-card">
                   <div className="pd-rel-img">
                     {n.cover_url && (
                       <>

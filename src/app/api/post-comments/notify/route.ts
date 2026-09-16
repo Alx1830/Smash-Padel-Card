@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
   const quien  = nombreAutor((autor ?? null) as PostAuthor | null);
   const titulo = `${quien} comentó "${post?.title ?? "una noticia"}"`;
   const cuerpo = comentario.body.length > 120 ? `${comentario.body.slice(0, 120)}…` : comentario.body;
-  const url    = `/post/${post?.slug ?? ""}`;
+  const url    = `/noticias/${post?.slug ?? ""}`;
 
   // 4. La campana
   const { error: errNotif } = await supabaseAdmin.from("notifications").insert(

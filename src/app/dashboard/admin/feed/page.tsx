@@ -162,7 +162,7 @@ export default async function AdminFeedPage() {
                         <PenLine size={12} /> Editar
                       </Link>
                       {publicado && p.slug && (
-                        <a href={`/post/${p.slug}`} target="_blank" rel="noopener noreferrer"
+                        <a href={`/noticias/${p.slug}`} target="_blank" rel="noopener noreferrer"
                            title="Ver publicada" aria-label="Ver publicada"
                            style={{
                              display: "flex", alignItems: "center", justifyContent: "center", width: 36, height: 34,

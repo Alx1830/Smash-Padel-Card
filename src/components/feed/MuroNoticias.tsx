@@ -96,12 +96,12 @@ export function MuroNoticias() {
       <header className="mu-cabeza">
         <Newspaper size={14} color={COURT} strokeWidth={1.8} />
         <h2 className="mu-titulo">Noticias</h2>
-        <Link href="/post" className="mu-vertodo">Ver todas →</Link>
+        <Link href="/noticias" className="mu-vertodo">Ver todas →</Link>
       </header>
 
       <div className="mu-lista">
         {notas.map((n) => (
-          <Link key={n.id} href={`/post/${n.slug}`} className="mn-nota">
+          <Link key={n.id} href={`/noticias/${n.slug}`} className="mn-nota">
             {n.cover_url && (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img src={n.cover_url} alt="" loading="lazy" decoding="async" className="mn-foto" />

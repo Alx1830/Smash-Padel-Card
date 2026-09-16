@@ -33,7 +33,7 @@ const MENSAJE_MAX = 180;
 /** A dónde puede llevar un aviso. Son las secciones que le sirven a un usuario. */
 const DESTINOS = [
   { url: "/dashboard",                 label: "Inicio del panel" },
-  { url: "/post",                      label: "Noticias" },
+  { url: "/noticias",                      label: "Noticias" },
   { url: "/dashboard/market",          label: "Market" },
   { url: "/dashboard/market/wishlist", label: "Mi wishlist" },
   { url: "/dashboard/inventario",      label: "Mi colección" },
@@ -276,7 +276,7 @@ export function EnviarAviso() {
                   style={{ marginTop: 9 }}
                   value={otraUrl}
                   onChange={(e) => setOtraUrl(e.target.value)}
-                  placeholder="/post/nombre-de-la-nota"
+                  placeholder="/noticias/nombre-de-la-nota"
                 />
                 <p style={{ fontFamily: MONO, fontSize: 10, color: INK2, margin: "7px 0 0", lineHeight: 1.7 }}>
                   Una dirección de la app, empezando con barra. No se puede mandar a

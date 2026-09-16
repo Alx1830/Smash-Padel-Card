@@ -78,7 +78,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "FaceBinder", url: BASE_URL }],
   alternates: {
-    types: { "application/rss+xml": [{ url: "/post/feed.xml", title: "Noticias de FaceBinder" }] },
+    types: { "application/rss+xml": [{ url: "/noticias/feed.xml", title: "Noticias de FaceBinder" }] },
   },
   creator: "Adxmedialab",
   openGraph: {
@@ -138,6 +138,16 @@ export const metadata: Metadata = {
   },
 };
 
+/* La etiqueta de Google Analytics de facebinder.com. No es un secreto: viaja en
+   el HTML de cualquiera que abra la página, igual que el identificador de
+   AdSense. Va escrita acá y no en una variable de entorno porque las
+   NEXT_PUBLIC_ se hornean al compilar, y una que falte en la sección de build de
+   Cloudflare deja el sitio sin medir sin avisar de nada.
+
+   La variable de entorno sigue mandando si está puesta, para poder apuntar a
+   otra propiedad sin tocar el código. */
+const GA_POR_DEFECTO = "G-31ZST50EW8";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -171,7 +181,13 @@ export default async function RootLayout({
     areaServed: { "@type": "Country", name: "Colombia" },
   };
 
-  const ga = process.env.NEXT_PUBLIC_GA_ID;
+
+
+  /* En desarrollo no se mide: si no, cada recarga mientras se trabaja entra
+     como visita y las métricas del sitio dejan de querer decir algo. */
+  const ga = process.env.NODE_ENV === "production"
+    ? (process.env.NEXT_PUBLIC_GA_ID ?? GA_POR_DEFECTO)
+    : process.env.NEXT_PUBLIC_GA_ID;
 
   return (
     /* El recorte horizontal lo pone globals.css con `overflow-x: clip`. Acá no

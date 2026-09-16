@@ -1,5 +1,5 @@
 /**
- * Feed RSS de las noticias: facebinder.com/post/feed.xml
+ * Feed RSS de las noticias: facebinder.com/noticias/feed.xml
  *
  * Es la vía rápida para que una nota nueva se conozca afuera. Google Noticias,
  * los lectores de feeds y los servicios que reenvían a redes lo consultan solos
@@ -39,7 +39,7 @@ export async function GET() {
   const items = notas.map((n) => {
     const fecha = new Date((n.published_at ?? n.created_at) as string).toUTCString();
     const resumen = n.excerpt?.trim() || extractoAuto(n.content_html ?? n.content ?? "", 300);
-    const url = `${SITIO}/post/${n.slug}`;
+    const url = `${SITIO}/noticias/${n.slug}`;
     return `    <item>
       <title>${xml(n.title)}</title>
       <link>${url}</link>
@@ -57,7 +57,7 @@ export async function GET() {
   <channel>
     <title>Noticias de Pokémon TCG · FaceBinder</title>
     <link>${SITIO}/post</link>
-    <atom:link href="${SITIO}/post/feed.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="${SITIO}/noticias/feed.xml" rel="self" type="application/rss+xml" />
     <description>Sets nuevos, rotaciones, torneos y precios de Pokémon TCG, en español.</description>
     <language>es-CO</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
