@@ -13,6 +13,7 @@ import { ArrowLeft, Clock, CalendarDays, Newspaper } from "lucide-react";
 import { fechaLarga, minutosDeLectura, nombreAutor, extractoAuto, soloTexto, etiquetaCategoria, type PostAuthor } from "@/lib/posts";
 import { PostBody } from "@/components/PostBody";
 import { MobileTabBar } from "@/components/MobileTabBar";
+import { PieLegal } from "@/components/PieLegal";
 import { Comentarios } from "@/components/post/Comentarios";
 import { FlechasSlider } from "@/components/post/FlechasSlider";
 import { VisorFotos } from "@/components/post/VisorFotos";
@@ -428,6 +429,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       </article>
 
+      <PieLegal />
       <MobileTabBar />
     </div>
   );

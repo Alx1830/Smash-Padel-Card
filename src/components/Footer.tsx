@@ -83,9 +83,19 @@ const MarqueeItem = () => (
 
 const NAV_LINKS = [
   { label: "Inicio",      href: "/" },
-  { label: "Amigos",      href: "/dashboard/amigos" },
-  { label: "Inventario",  href: "/dashboard/inventario" },
-  { label: "Market",      href: "/dashboard/market" },
+  { label: "Sets",        href: "/sets" },
+  { label: "Noticias",    href: "/noticias" },
+  { label: "Market",      href: "/market" },
+];
+
+/* Las páginas que explican qué es el sitio y bajo qué reglas funciona. Van en
+   la barra de abajo, chiquitas, pero tienen que estar: sin ellas el sitio no
+   dice quién lo hace ni qué hace con los datos de quien se registra. */
+const LEGAL_LINKS = [
+  { label: "Acerca de",  href: "/acerca" },
+  { label: "Contacto",   href: "/contacto" },
+  { label: "Privacidad", href: "/privacidad" },
+  { label: "Términos",   href: "/terminos" },
 ];
 
 /**
@@ -225,9 +235,23 @@ export function Footer({ enMovil = false }: { enMovil?: boolean } = {}) {
             Hecho por <span style={{ color: "#2ee6c1" }}>Adxmedialab</span>
           </a>
 
+          {/* Legales */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "14px" }}>
+            {LEGAL_LINKS.map(({ label, href }) => (
+              <Link key={href} href={href} style={{
+                fontFamily: "var(--font-jetbrains)", fontSize: "10px",
+                color: "rgba(122,130,152,0.85)", letterSpacing: "0.12em",
+                textTransform: "uppercase", textDecoration: "none",
+              }}>
+                {label}
+              </Link>
+            ))}
+          </div>
+
           {/* Copyright */}
-          <span style={{ fontFamily: "var(--font-jetbrains)", fontSize: "10px", color: "rgba(122,130,152,0.7)", letterSpacing: "0.12em" }}>
-            © 2026 FACEBINDER · Pokémon TCG
+          <span style={{ fontFamily: "var(--font-jetbrains)", fontSize: "10px", color: "rgba(122,130,152,0.7)", letterSpacing: "0.12em", maxWidth: "420px", lineHeight: 1.6 }}>
+            © 2026 FACEBINDER · Sitio independiente de coleccionistas, sin
+            relación con Nintendo, Creatures, GAME FREAK ni The Pokémon Company.
           </span>
         </div>
       </footer>

@@ -16,7 +16,12 @@ export default function robots(): MetadataRoute.Robots {
       /* Las redes necesitan leer la página para armar la tarjeta del enlace */
       { userAgent: ["facebookexternalhit", "Twitterbot", "WhatsApp", "LinkedInBot"], allow: "/" },
     ],
-    sitemap: "https://facebinder.com/sitemap.xml",
+    /* Dos mapas: el general y el de las fichas de carta, que por volumen va
+       aparte y es a su vez un índice con un archivo por set. */
+    sitemap: [
+      "https://facebinder.com/sitemap.xml",
+      "https://facebinder.com/sitemap-cartas.xml",
+    ],
     host: "https://facebinder.com",
   };
 }

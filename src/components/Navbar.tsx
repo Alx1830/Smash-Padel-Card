@@ -15,9 +15,11 @@ const NotificationsDrawer = dynamic(
   { ssr: false }
 );
 
+/* "SETS" es el catálogo público: para quien todavía no tiene cuenta, es lo
+   único que puede mirar de verdad antes de registrarse, así que va arriba. */
 const NAV_LINKS_GUEST = [
   { label: "INICIO",     href: "/" },
-  { label: "INVENTARIO", href: "/dashboard/inventario" },
+  { label: "SETS",       href: "/sets" },
   { label: "MARKET",     href: "/market" },
   { label: "NOTICIAS",   href: "/noticias" },
 ];

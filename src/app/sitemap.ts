@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@supabase/supabase-js";
+import { SETS_PUBLICOS } from "@/lib/catalogo";
 
 /**
  * Cliente anónimo, sin cookies a propósito. Con el cliente de servidor el mapa
@@ -31,8 +32,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: BASE,              lastModified: ahora, changeFrequency: "daily",  priority: 1 },
     { url: `${BASE}/market`,  lastModified: ahora, changeFrequency: "hourly", priority: 0.9 },
     { url: `${BASE}/noticias`,    lastModified: ahora, changeFrequency: "daily",  priority: 0.9 },
+    { url: `${BASE}/sets`,    lastModified: ahora, changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE}/login`,   lastModified: ahora, changeFrequency: "monthly", priority: 0.3 },
+    /* Las cuatro de siempre: sin ellas un sitio parece abandonado, y los
+       programas de publicidad las piden explícitamente. */
+    { url: `${BASE}/acerca`,     lastModified: ahora, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE}/contacto`,   lastModified: ahora, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE}/privacidad`, lastModified: ahora, changeFrequency: "yearly",  priority: 0.3 },
+    { url: `${BASE}/terminos`,   lastModified: ahora, changeFrequency: "yearly",  priority: 0.3 },
   ];
+
+  /* Un set por dirección. Las cartas van aparte, en `/sitemap-cartas`: son
+     decenas de miles y no entran en el mismo archivo. */
+  const sets: MetadataRoute.Sitemap = SETS_PUBLICOS.map(set => ({
+    url: `${BASE}/sets/${set.id}`,
+    lastModified: ahora,
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
 
   /* Las noticias son lo que Google puede traer por búsquedas que no tienen que
      ver con la marca ("cuándo sale tal set", "rotación 2027"). Sin esto el mapa
@@ -80,5 +97,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     /* Sin base de datos el mapa sale igual, solo con las páginas fijas */
   }
 
-  return [...fijas, ...notas, ...perfiles];
+  return [...fijas, ...sets, ...notas, ...perfiles];
 }

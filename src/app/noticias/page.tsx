@@ -17,6 +17,7 @@ import { fechaLarga, etiquetaCategoria, POST_CATEGORIAS, CATEGORIA_POR_DEFECTO }
 import { SliderPortada } from "@/components/post/SliderPortada";
 import { MediaNota } from "@/components/post/MediaNota";
 import { MobileTabBar } from "@/components/MobileTabBar";
+import { PieLegal } from "@/components/PieLegal";
 import { PieGrande } from "@/components/PieGrande";
 import { SITIO, EDITOR, migas, DatosJson } from "@/lib/seo";
 
@@ -396,6 +397,7 @@ export default async function NoticiasPage({
 
       <PieGrande palabra="NOTICIAS" />
 
+      <PieLegal />
       <MobileTabBar />
     </div>
   );

@@ -1,0 +1,245 @@
+/**
+ * El código con el que cada set viaja en la tabla de precios: el `card_id` de
+ * `card_prices_merged` es `<código>-<número de carta>` ("me30-12").
+ *
+ * Vivía dentro de `src/hooks/useScrydexPrice.ts`, que es un archivo
+ * `"use client"`. Desde un componente de servidor no se puede leer un valor
+ * exportado por un módulo de cliente —Next entrega una referencia, no el
+ * objeto—, y las páginas públicas de carta y de set lo necesitan mientras arman
+ * el HTML. Por eso la tabla se mudó acá, a un módulo sin bando, y el hook la
+ * vuelve a exportar para no tocar a quienes ya la importaban de allá.
+ *
+ * El nombre dice Scrydex por historia: hoy los precios los trae TCGplayer y
+ * estos códigos siguen siendo la llave.
+ */
+export const SCRYDEX_SET_CODES: Record<string, string> = {
+  // ── Mega Evolution Series ─────────────────────────────────────────────────
+  "mega-evolution":       "me1",
+  "phantasmal-flames":    "me2",
+  "ascended-heroes":      "me2pt5",
+  "perfect-order":        "me3",
+  "chaos-rising":         "me4",
+  "pitch-black":          "me5",
+
+  // ── Scarlet & Violet Series ───────────────────────────────────────────────
+  "scarlet-violet":       "sv1",
+  "paldea-evolved":       "sv2",
+  "obsidian-flames":      "sv3",
+  "sv-151":               "sv3pt5",
+  "paradox-rift":         "sv4",
+  "paldean-fates":        "sv4pt5",
+  "temporal-forces":      "sv5",
+  "twilight-masquerade":  "sv6",
+  "shrouded-fable":       "sv6pt5",
+  "stellar-crown":        "sv7",
+  "surging-sparks":       "sv8",
+  "prismatic-evolutions": "sv8pt5",
+  "journey-together":     "sv9",
+  "destined-rivals":      "sv10",
+  "sv-promos":            "svp",
+  "mcd-2021":             "mcd21",
+  "mcd-2022":             "mcd22",
+  "mcd-2023":             "mcd23",
+  "mcd-2024":             "mcd24",
+  "tcg-classic-venusaur":  "clv",
+  "tcg-classic-charizard": "clc",
+  "tcg-classic-blastoise": "clb",
+  "poke-card-creator":    "wb1",
+
+  // ── Sword & Shield Series ─────────────────────────────────────────────────
+  "sword-shield":         "swsh1",
+  "rebel-clash":          "swsh2",
+  "darkness-ablaze":      "swsh3",
+  "vivid-voltage":        "swsh4",
+  "battle-styles":        "swsh5",
+  "chilling-reign":       "swsh6",
+  "evolving-skies":       "swsh7",
+  "fusion-strike":        "swsh8",
+  "brilliant-stars":      "swsh9",
+  "astral-radiance":      "swsh10",
+  "lost-origin":          "swsh11",
+  "silver-tempest":       "swsh12",
+  "crown-zenith":         "swsh12pt5",
+  // El scraper guarda estos dos como swsh35/swsh45; con cpa/shf la busqueda no
+  // encontraba nada y las cartas salian sin precio aunque estaba guardado.
+  "champions-path":       "swsh35",
+  "shining-fates":        "swsh45",
+  "celebrations":         "cel25",
+  "pokemon-go":           "pgo",
+  "ss-promos":            "swshp",
+  "mcd-25th":             "mcd25",
+
+  // ── Sun & Moon Series ─────────────────────────────────────────────────────
+  "sun-moon":             "sm1",
+  "guardians-rising":     "sm2",
+  "burning-shadows":      "sm3",
+  "crimson-invasion":     "sm4",
+  "ultra-prism":          "sm5",
+  "forbidden-light":      "sm6",
+  "celestial-storm":      "sm7",
+  "lost-thunder":         "sm8",
+  "team-up":              "sm9",
+  "unbroken-bonds":       "sm10",
+  "unified-minds":        "sm11",
+  "cosmic-eclipse":       "sm12",
+  "shining-legends":      "sm35",
+  "dragon-majesty":       "sm75",
+  "hidden-fates":         "sm115",
+  "detective-pikachu":    "det1",
+  "sm-promos":            "smp",
+  "mcd-2017":             "mcd17",
+  "mcd-2018":             "mcd18",
+  "mcd-2019":             "mcd19",
+
+  // ── XY Series ─────────────────────────────────────────────────────────────
+  "xy":                   "xy1",
+  "xy-flashfire":         "xy2",
+  "furious-fists":        "xy3",
+  "phantom-forces":       "xy4",
+  "primal-clash":         "xy5",
+  "roaring-skies":        "xy6",
+  "ancient-origins":      "xy7",
+  "xy-breakthrough":      "xy8",
+  "breakpoint":           "xy9",
+  "fates-collide":        "xy10",
+  "steam-siege":          "xy11",
+  "evolutions":           "xy12",
+  "double-crisis":        "dc1",
+  "generations":          "g1",
+  "kalos-starter":        "xy0",
+  "xy-promos":            "xyp",
+  "mcd-2014":             "mcd14",
+  "mcd-2015":             "mcd15",
+  "mcd-2016":             "mcd16",
+
+  // ── Black & White Series ──────────────────────────────────────────────────
+  "black-white":          "bw1",
+  "emerging-powers":      "bw2",
+  "noble-victories":      "bw3",
+  "next-destinies":       "bw4",
+  "dark-explorers":       "bw5",
+  "dragons-exalted":      "bw6",
+  "boundaries-crossed":   "bw7",
+  "plasma-storm":         "bw8",
+  "plasma-freeze":        "bw9",
+  "plasma-blast":         "bw10",
+  "legendary-treasures":  "bw11",
+  "radiant-collection":   "rc1",
+  "dragon-vault":         "dv1",
+  "bw-promos":            "bwp",
+  "mcd-2011":             "mcd11",
+  "mcd-2012":             "mcd12",
+  "mcd-2013":             "mcd13",
+
+  // ── HeartGold SoulSilver Series ───────────────────────────────────────────
+  "heartgold-soulsilver": "hgss1",
+  "hs-unleashed":         "hgss2",
+  "hs-undaunted":         "hgss3",
+  "hs-triumphant":        "hgss4",
+  "call-of-legends":      "col1",
+  "hgss-promos":          "hsp",
+
+  // ── Platinum Series ───────────────────────────────────────────────────────
+  "platinum":             "pl1",
+  "platinum-rr":          "pl2",
+  "platinum-sv":          "pl3",
+  "platinum-arceus":      "pl4",
+
+  // ── Diamond & Pearl Series ────────────────────────────────────────────────
+  "diamond-pearl":        "dp1",
+  "mysterious-treasures": "dp2",
+  "secret-wonders":       "dp3",
+  "great-encounters":     "dp4",
+  "majestic-dawn":        "dp5",
+  "legends-awakened":     "dp6",
+  "stormfront":           "dp7",
+  "dp-promos":            "dpp",
+
+  // ── EX Ruby & Sapphire Series ─────────────────────────────────────────────
+  "ex-ruby-sapphire":       "ex1",
+  "ex-sandstorm":           "ex2",
+  "ex-dragon":              "ex3",
+  "ex-team-magma-aqua":     "ex4",
+  "ex-hidden-legends":      "ex5",
+  "ex-firered-leafgreen":   "ex6",
+  "ex-team-rocket-returns": "ex7",
+  "ex-deoxys":              "ex8",
+  "ex-emerald":             "ex9",
+  "ex-unseen-forces":       "ex10",
+  "ex-delta-species":       "ex11",
+  "ex-legend-maker":        "ex12",
+  "ex-holon-phantoms":      "ex13",
+  "ex-crystal-guardians":   "ex14",
+  "ex-dragon-frontiers":    "ex15",
+  "ex-power-keepers":       "ex16",
+  "ex-trainer-kit-latias":  "tk1a",
+  "ex-trainer-kit-latios":  "tk1b",
+  "ex-trainer-kit-plusle":  "tk2a",
+  "ex-trainer-kit-minun":   "tk2b",
+
+  // ── e-Card Series ─────────────────────────────────────────────────────────
+  "expedition":           "ecard1",
+  "aquapolis":            "ecard2",
+  "skyridge":             "ecard3",
+
+  // ── Legendary Collection / Neo / Gym / Base ───────────────────────────────
+  "legendary-collection": "base6",   // el scraper lo guarda asi, no como "lc"
+  "neo-genesis":          "neo1",
+  "neo-discovery":        "neo2",
+  "neo-revelation":       "neo3",
+  "neo-destiny":          "neo4",
+  "southern-islands":     "si1",
+  "gym-heroes":           "gym1",
+  "gym-challenge":        "gym2",
+  "base-set":             "base1",
+  "jungle":               "base2",
+  "fossil":               "base3",
+  "base-set-2":           "base4",
+  "team-rocket":          "base5",
+  // El scraper lo guarda como basep; sin esta linea el set salia sin precio en
+  // la app aunque el cron los estaba bajando puntualmente.
+  "wotc-promos":          "basep",
+
+  // ── POP Series ────────────────────────────────────────────────────────────
+  "pop-1": "pop1",
+  "pop-2": "pop2",
+  "pop-3": "pop3",
+  "pop-4": "pop4",
+  "pop-5": "pop5",
+  "pop-6": "pop6",
+  "pop-7": "pop7",
+  "pop-8": "pop8",
+  "pop-9": "pop9",
+
+  // ── Sets de TCGplayer (no existen en Scrydex; ver scripts/tcgplayer-set-lib.mjs) ──
+  "prize-pack-series": "pp",
+  "misc-cards":        "misc",
+  "league-and-championship-cards":      "lcc",
+  "deck-exclusives":                    "dex",
+  "battle-academy":                     "ba20",
+  "battle-academy-2022":                "ba22",
+  "battle-academy-2024":                "ba24",
+  "ex-battle-stadium":                  "exbs",
+  "my-first-battle":                    "mfb",
+  "30th-celebration":                   "me30",
+  "trick-or-trade-booster-bundle":      "tot22",
+  "trick-or-trade-booster-bundle-2023": "tot23",
+  "trick-or-trade-booster-bundle-2024": "tot24",
+
+  // ── Sets que estaban sin código y por eso salían sin precio en toda la app.
+  //    El código sale de la URL de sus propias imágenes (r2.dev/pokemon/<code>-<n>)
+  //    y está verificado contra card_prices_merged.
+  "white-flare":          "rsv10pt5",
+  "black-bolt":           "zsv10pt5",
+  "mega-evo-promos":      "mep",
+  "sv-energies":          "sve",
+  "crown-zenith-gg":      "swsh12pt5gg",
+  "silver-tempest-tg":    "swsh12tg",
+  "lost-origin-tg":       "swsh11tg",
+  "astral-radiance-tg":   "swsh10tg",
+  "brilliant-stars-tg":   "swsh9tg",
+  "futsal-promos":        "fut20",
+  "pokemon-rumble":       "ru1",
+  "nintendo-promos":      "np",
+  "best-of-game":         "bp",
+};

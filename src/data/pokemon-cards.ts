@@ -322,6 +322,16 @@ export const SET_CARDS: Record<string, PokemonCard[]> = new Proxy(CACHE, {
   get(target, key: string) { return target[key] ?? []; },
 });
 
+/**
+ * Los sets que tienen archivo de cartas.
+ *
+ * Diez de los que lista `POKEMON_SERIES` todavía no lo tienen: existen como
+ * nombre y logo, pero no hay ni una carta cargada. Las páginas públicas y los
+ * mapas del sitio los filtran con esto, porque anunciarle a Google una
+ * dirección que devuelve 404 es peor que no anunciarla.
+ */
+export const SETS_CON_CARTAS = new Set(Object.keys(SET_LOADERS));
+
 /** Load a set's cards into memory. Safe to call multiple times. */
 export async function loadSetCards(setId: string): Promise<PokemonCard[]> {
   if (CACHE[setId]) return CACHE[setId];
