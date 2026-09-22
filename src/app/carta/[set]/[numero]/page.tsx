@@ -115,7 +115,7 @@ export default async function CartaPage({ params }: Props) {
     <div className="ca-page">
       <style>{`
         .ca-page { min-height: 100vh; background: #05070d; padding: 40px 24px; }
-        .ca-wrap { max-width: 1400px; }
+        .ca-wrap { max-width: 1400px; margin: 0 auto; }
 
         /* Foto a la izquierda y datos a la derecha; en el celular, uno debajo
            del otro con la foto arriba. */

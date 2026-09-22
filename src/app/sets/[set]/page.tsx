@@ -95,7 +95,7 @@ export default async function SetPage({ params }: Props) {
     <div className="se-page">
       <style>{`
         .se-page { min-height: 100vh; background: #05070d; padding: 40px 24px; }
-        .se-wrap { max-width: 1400px; }
+        .se-wrap { max-width: 1400px; margin: 0 auto; }
 
         .se-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
         @media (max-width: 1500px) { .se-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }

@@ -1,0 +1,36 @@
+import type { PokemonCard } from "@/data/pokemon-cards-meta";
+
+const cards: PokemonCard[] = [
+  { id: "001:Arceus VSTAR:Normal", name: "Arceus VSTAR"                       , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-1/large", version: "normal", card_number: 1 },
+  { id: "002:Buzzwole GX:Normal", name: "Buzzwole GX"                        , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-2/large", version: "normal", card_number: 2 },
+  { id: "003:Charizard:Normal", name: "Charizard"                          , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-3/large", version: "normal", card_number: 3 },
+  { id: "004:Crobat G:Normal", name: "Crobat G"                           , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-4/large", version: "normal", card_number: 4 },
+  { id: "005:Dark Tyranitar:Normal", name: "Dark Tyranitar"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-5/large", version: "normal", card_number: 5 },
+  { id: "006:Darkrai & Cresselia Legend (Bottom):Normal", name: "Darkrai & Cresselia Legend (Bottom)", image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-6/large", version: "normal", card_number: 6 },
+  { id: "007:Darkrai & Cresselia Legend (Top):Normal", name: "Darkrai & Cresselia Legend (Top)"   , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-7/large", version: "normal", card_number: 7 },
+  { id: "008:Delcatty:Normal", name: "Delcatty"                           , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-8/large", version: "normal", card_number: 8 },
+  { id: "009:Erika's Jigglypuff:Normal", name: "Erika's Jigglypuff"                 , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-9/large", version: "normal", card_number: 9 },
+  { id: "010:Genesect EX (Team Plasma):Normal", name: "Genesect EX (Team Plasma)"          , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-10/large", version: "normal", card_number: 10 },
+  { id: "011:Gengar (Prime):Normal", name: "Gengar (Prime)"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-11/large", version: "normal", card_number: 11 },
+  { id: "012:Greninja BREAK:Normal", name: "Greninja BREAK"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-12/large", version: "normal", card_number: 12 },
+  { id: "013:Lugia:Normal", name: "Lugia"                              , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-13/large", version: "normal", card_number: 13 },
+  { id: "014:M Gardevoir EX:Normal", name: "M Gardevoir EX"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-14/large", version: "normal", card_number: 14 },
+  { id: "015:Magikarp:Normal", name: "Magikarp"                           , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-15/large", version: "normal", card_number: 15 },
+  { id: "016:Metagross (Delta Species):Normal", name: "Metagross (Delta Species)"          , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-16/large", version: "normal", card_number: 16 },
+  { id: "017:Mew VMAX:Normal", name: "Mew VMAX"                           , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-17/large", version: "normal", card_number: 17 },
+  { id: "018:Misty:Normal", name: "Misty"                              , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-18/large", version: "normal", card_number: 18 },
+  { id: "019:N:Normal", name: "N"                                  , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-19/large", version: "normal", card_number: 19 },
+  { id: "020:Palkia LV.X:Normal", name: "Palkia LV.X"                        , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-20/large", version: "normal", card_number: 20 },
+  { id: "021:Pikachu:Normal", name: "Pikachu"                            , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-21/large", version: "normal", card_number: 21 },
+  { id: "022:Pikachu & Zekrom GX:Normal", name: "Pikachu & Zekrom GX"                , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-22/large", version: "normal", card_number: 22 },
+  { id: "023:Raikou:Normal", name: "Raikou"                             , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-23/large", version: "normal", card_number: 23 },
+  { id: "024:Rayquaza EX:Normal", name: "Rayquaza EX"                        , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-24/large", version: "normal", card_number: 24 },
+  { id: "025:Scizor ex:Normal", name: "Scizor ex"                          , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-25/large", version: "normal", card_number: 25 },
+  { id: "026:Shining Celebi:Normal", name: "Shining Celebi"                     , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-26/large", version: "normal", card_number: 26 },
+  { id: "027:Sneasel:Normal", name: "Sneasel"                            , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-27/large", version: "normal", card_number: 27 },
+  { id: "028:Solgaleo GX:Normal", name: "Solgaleo GX"                        , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-28/large", version: "normal", card_number: 28 },
+  { id: "029:Uxie:Normal", name: "Uxie"                               , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-29/large", version: "normal", card_number: 29 },
+  { id: "030:Zacian V:Normal", name: "Zacian V"                           , image: "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon/me30c-30/large", version: "normal", card_number: 30 },
+];
+
+export default cards;

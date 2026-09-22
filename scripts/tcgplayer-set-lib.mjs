@@ -111,6 +111,11 @@ export const TCG_SETS = [
     setName: "ME: 30th Celebration", name: "30th Celebration",
     placeholder: "/pokemon-sets/30th-celebration.logo.webp",
   },
+  {
+    slug: "30th-celebration-classic-collection", code: "me30c",
+    setName: "ME: 30th Celebration Classic Collection", name: "30th Celebration Classic Collection",
+    placeholder: "/pokemon-sets/30th-celebration-classic-collection.logo.webp",
+  },
 ];
 
 export const MAPS_DIR = path.resolve(__dirname, "tcgplayer-sets");

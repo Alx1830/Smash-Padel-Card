@@ -222,6 +222,7 @@ export const SCRYDEX_SET_CODES: Record<string, string> = {
   "ex-battle-stadium":                  "exbs",
   "my-first-battle":                    "mfb",
   "30th-celebration":                   "me30",
+  "30th-celebration-classic-collection": "me30c",
   "trick-or-trade-booster-bundle":      "tot22",
   "trick-or-trade-booster-bundle-2023": "tot23",
   "trick-or-trade-booster-bundle-2024": "tot24",

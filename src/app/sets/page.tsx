@@ -47,7 +47,7 @@ export default function SetsPage() {
     <div className="st-page">
       <style>{`
         .st-page { min-height: 100vh; background: #05070d; padding: 40px 24px; }
-        .st-wrap { max-width: 1400px; }
+        .st-wrap { max-width: 1400px; margin: 0 auto; }
 
         /* minmax(0, 1fr) y nunca 1fr a secas: con 1fr la columna no baja del
            ancho de su contenido y la grilla desborda el celular. */

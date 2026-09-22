@@ -21,6 +21,7 @@ const path = require("path");
 const ALL_SETS = [
   // Mega Evolution
   { slug: "30th-celebration",        code: "me30"       },
+  { slug: "30th-celebration-classic-collection", code: "me30c" },
   { slug: "pitch-black",             code: "me5"        },
   { slug: "chaos-rising",            code: "me4"        },
   { slug: "perfect-order",           code: "me3"        },
