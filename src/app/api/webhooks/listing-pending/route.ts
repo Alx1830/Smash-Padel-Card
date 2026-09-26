@@ -36,6 +36,12 @@ export async function POST(request: NextRequest) {
   const { user_id: sellerId, status } = payload.record ?? {};
   if (status !== 'pending') return NextResponse.json({ ok: true, skipped: true });
 
+  /* La de un vendedor de confianza entra pendiente y se aprueba en el acto; el
+     webhook llega después con la foto vieja, así que se mira el estado real */
+  const { data: actual } = await supabaseAdmin
+    .from('market_listings').select('status').eq('id', payload.record.id).maybeSingle();
+  if (actual?.status !== 'pending') return NextResponse.json({ ok: true, skipped: true });
+
   const { data: seller } = await supabaseAdmin
     .from('players').select('username').eq('user_id', sellerId).single();
 

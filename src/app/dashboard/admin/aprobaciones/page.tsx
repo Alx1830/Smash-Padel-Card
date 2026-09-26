@@ -17,7 +17,7 @@ import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
-import { Check, X, Undo2, Clock } from "lucide-react";
+import { Check, X, Undo2, Clock, ShieldCheck, UserPlus, UserMinus } from "lucide-react";
 
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
@@ -31,6 +31,15 @@ const INK2  = "#7a8298";
 const ALL_SETS = POKEMON_SERIES.flatMap(s => s.sets);
 
 type Estado = "pending" | "active" | "rejected";
+type Tab = Estado | "confiables";
+
+/** Vendedor cuyas cartas salen al market sin pasar por la cola */
+interface Confiable {
+  user_id: string;
+  created_at: string;
+  activas: number;
+  player: { username: string; pais: string | null; ciudad: string | null } | null;
+}
 
 interface Listing {
   id: string;
@@ -48,16 +57,17 @@ interface Listing {
   player: { username: string; pais: string | null; ciudad: string | null } | null;
 }
 
-const TABS: { id: Estado; label: string }[] = [
-  { id: "pending",  label: "Por aprobar" },
-  { id: "active",   label: "Publicadas" },
-  { id: "rejected", label: "Rechazadas" },
+const TABS: { id: Tab; label: string }[] = [
+  { id: "pending",    label: "Por aprobar" },
+  { id: "active",     label: "Publicadas" },
+  { id: "rejected",   label: "Rechazadas" },
+  { id: "confiables", label: "De confianza" },
 ];
 
 export default function AprobacionesPage() {
   const router   = useRouter();
   const [checking, setChecking] = useState(true);
-  const [tab, setTab]           = useState<Estado>("pending");
+  const [tab, setTab]           = useState<Tab>("pending");
   const [listings, setListings] = useState<Listing[]>([]);
   const [pendientes, setPendientes] = useState(0);
   const [cargando, setCargando] = useState(true);
@@ -65,6 +75,12 @@ export default function AprobacionesPage() {
   const [rechazando, setRechazando] = useState<Listing | null>(null);
   const [motivo, setMotivo]     = useState("");
   const [error, setError]       = useState<string | null>(null);
+  /** Ids de los vendedores de confianza, para marcar sus cartas en la grilla */
+  const [confiables, setConfiables] = useState<string[]>([]);
+  /** La lista completa, solo en la pestaña "De confianza" */
+  const [vendedores, setVendedores] = useState<Confiable[]>([]);
+  const [nuevoUsuario, setNuevoUsuario] = useState("");
+  const [aviso, setAviso]       = useState<string | null>(null);
   /** Dólar del día, para comparar contra lo que cobra el vendedor */
   const [trm, setTrm]           = useState<{ cop: number; fecha: string; fuente: string } | null>(null);
   /** Precio de mercado en USD por set: { setId: { "me2pt5-122": { holofoil: 3.2 } } } */
@@ -88,16 +104,24 @@ export default function AprobacionesPage() {
       .catch(() => {});
   }, []);
 
-  const cargar = useCallback(async (estado: Estado) => {
+  const cargar = useCallback(async (estado: Tab) => {
     setCargando(true);
     setError(null);
     try {
       const res  = await fetch(`/api/admin/listings?status=${estado}`);
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "No se pudo cargar");
+      setPendientes(json.pendingCount ?? 0);
+      if (estado === "confiables") {
+        const lista = (json.confiables ?? []) as Confiable[];
+        setVendedores(lista);
+        setConfiables(lista.map(v => v.user_id));
+        setCargando(false);
+        return;
+      }
+      setConfiables(json.confiables ?? []);
       const rows = (json.listings ?? []) as Listing[];
       setListings(rows);
-      setPendientes(json.pendingCount ?? 0);
       const setIds = [...new Set(rows.map(r => r.set_id))];
       await loadManySets(setIds);
       await cargarPrecios(setIds);
@@ -169,6 +193,40 @@ export default function AprobacionesPage() {
     setTrabajando(null);
   }
 
+  /**
+   * Confiar en un vendedor: lo que publique sale directo al market, y lo que
+   * tenía esperando se aprueba ya. Quitarlo devuelve sus cartas nuevas a la cola.
+   */
+  async function cambiarConfianza(confiar: boolean, datos: { user_id?: string; username?: string }, etiqueta: string) {
+    const pregunta = confiar
+      ? `¿Publicar directo las cartas de ${etiqueta}? Lo que tenga esperando se aprueba ahora.`
+      : `¿Quitar a ${etiqueta} de confianza? Sus cartas nuevas volverán a pasar por aquí.`;
+    if (!window.confirm(pregunta)) return;
+
+    setTrabajando(datos.user_id ?? "nuevo");
+    setError(null);
+    setAviso(null);
+    try {
+      const res  = await fetch("/api/admin/listings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: confiar ? "trust" : "untrust", ...datos }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "No se pudo aplicar");
+      if (confiar) {
+        setAviso(json.aprobadas
+          ? `${etiqueta} ya publica directo · ${json.aprobadas} ${json.aprobadas === 1 ? "carta aprobada" : "cartas aprobadas"}`
+          : `${etiqueta} ya publica directo`);
+        setNuevoUsuario("");
+      }
+      await cargar(tab);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error inesperado");
+    }
+    setTrabajando(null);
+  }
+
   function datosCarta(l: Listing) {
     const card = SET_CARDS[l.set_id]?.find(c => c.card_number === l.card_id && c.version === l.version)
               ?? SET_CARDS[l.set_id]?.find(c => c.card_number === l.card_id);
@@ -209,11 +267,16 @@ export default function AprobacionesPage() {
            es la que se lee, y así entra en una columna angosta */
         .ap-reject  { background: rgba(255,93,93,0.1); border-color: rgba(255,93,93,0.4); color: ${CRIT};
                       flex: 0 0 auto; padding: 7px 9px; }
+        .ap-trust   { background: rgba(46,230,193,0.08); border-color: rgba(46,230,193,0.35); color: ${COURT};
+                      flex: 0 0 auto; padding: 7px 9px; }
         .ap-revert  { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); color: ${INK1}; }
 
         /* minmax(0, 1fr) y no 1fr: si no, la columna no baja del ancho de su
            contenido y la grilla desborda en móvil */
         .ap-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
+        .ap-users { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+        @media (max-width: 1023px) { .ap-users { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 767px)  { .ap-users { grid-template-columns: minmax(0, 1fr); } }
         @media (max-width: 1500px) { .ap-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
         @media (max-width: 1240px) { .ap-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
         @media (max-width: 1023px), (pointer: coarse) { .ap-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
@@ -235,7 +298,7 @@ export default function AprobacionesPage() {
             Cartas por aprobar
           </h1>
           <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, letterSpacing: "0.06em", margin: "8px 0 0" }}>
-            Ninguna carta llega al market sin pasar por aquí
+            Ninguna carta llega al market sin pasar por aquí, salvo las de vendedores de confianza
           </p>
           {trm && (
             <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, letterSpacing: "0.06em", margin: "6px 0 0", opacity: 0.75 }}>
@@ -247,7 +310,7 @@ export default function AprobacionesPage() {
         {/* Tabs */}
         <div style={{ display: "flex", gap: "8px", marginBottom: "24px", flexWrap: "wrap" }}>
           {TABS.map(t => (
-            <button key={t.id} className={`ap-tab${tab === t.id ? " on" : ""}`} onClick={() => setTab(t.id)}>
+            <button key={t.id} className={`ap-tab${tab === t.id ? " on" : ""}`} onClick={() => { setTab(t.id); setAviso(null); }}>
               {t.label}
               {t.id === "pending" && pendientes > 0 && (
                 <span style={{ marginLeft: 8, color: BALL, fontWeight: 700 }}>{pendientes}</span>
@@ -259,8 +322,69 @@ export default function AprobacionesPage() {
         {error && (
           <p style={{ fontFamily: MONO, fontSize: "11px", color: CRIT, marginBottom: 16 }}>✕ {error}</p>
         )}
+        {aviso && (
+          <p style={{ fontFamily: MONO, fontSize: "11px", color: COURT, marginBottom: 16 }}>{aviso}</p>
+        )}
 
-        {cargando ? (
+        {tab === "confiables" ? (
+          <>
+            {/* Agregar por nombre de usuario, para no tener que esperar a que publique */}
+            <form
+              onSubmit={e => {
+                e.preventDefault();
+                const u = nuevoUsuario.trim().replace(/^@/, "");
+                if (u) cambiarConfianza(true, { username: u }, `@${u}`);
+              }}
+              style={{ display: "flex", gap: 8, marginBottom: 20, maxWidth: 420 }}
+            >
+              <input
+                value={nuevoUsuario}
+                onChange={e => setNuevoUsuario(e.target.value)}
+                placeholder="@usuario"
+                style={{ flex: 1, minWidth: 0, padding: "9px 12px", borderRadius: 8, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", color: INK0, fontFamily: MONO, fontSize: 12, outline: "none" }}
+              />
+              <button type="submit" className="ap-act ap-approve" style={{ flex: "0 0 auto" }}
+                disabled={!nuevoUsuario.trim() || trabajando === "nuevo"}>
+                <UserPlus size={12} /> Agregar
+              </button>
+            </form>
+
+            {cargando ? (
+              <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em" }}>Cargando...</p>
+            ) : vendedores.length === 0 ? (
+              <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: 16, padding: "60px 30px", textAlign: "center" }}>
+                <ShieldCheck size={26} color={INK2} strokeWidth={1.6} />
+                <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.08em", margin: "14px 0 0" }}>
+                  Nadie publica directo todavía. Agrega un usuario arriba o toca el escudo en una de sus cartas.
+                </p>
+              </div>
+            ) : (
+              <div className="ap-users">
+                {vendedores.map(v => {
+                  const nombre = `@${v.player?.username ?? "—"}`;
+                  const lugar  = [v.player?.ciudad, v.player?.pais].filter(Boolean).join(", ");
+                  return (
+                    <div key={v.user_id} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "12px 14px", display: "flex", alignItems: "center", gap: 12 }}>
+                      <ShieldCheck size={18} color={COURT} strokeWidth={1.8} style={{ flexShrink: 0 }} />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontFamily: MONO, fontSize: 12, color: INK0, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {nombre}
+                        </div>
+                        <div style={{ fontFamily: MONO, fontSize: 9, color: INK2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginTop: 3 }}>
+                          {v.activas} en el market · desde {new Date(v.created_at).toLocaleDateString("es-CO", { day: "2-digit", month: "short" })}{lugar ? ` · ${lugar}` : ""}
+                        </div>
+                      </div>
+                      <button className="ap-act ap-reject" disabled={trabajando === v.user_id}
+                        onClick={() => cambiarConfianza(false, { user_id: v.user_id }, nombre)} title="Quitar de confianza">
+                        <UserMinus size={12} />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        ) : cargando ? (
           <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em" }}>Cargando...</p>
         ) : listings.length === 0 ? (
           <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: 16, padding: "60px 30px", textAlign: "center" }}>
@@ -298,8 +422,9 @@ export default function AprobacionesPage() {
                     <div style={{ fontFamily: MONO, fontSize: 8, color: verColor, letterSpacing: "0.06em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                       {getVersionLabel(l.version)}{l.language ? ` · ${l.language.toUpperCase()}` : ""}
                     </div>
-                    <div style={{ fontFamily: MONO, fontSize: 9, color: INK2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
-                      title={`@${l.player?.username ?? "—"} · ${new Date(l.created_at).toLocaleDateString("es-CO")}`}>
+                    <div style={{ fontFamily: MONO, fontSize: 9, color: confiables.includes(l.user_id) ? COURT : INK2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
+                      title={`@${l.player?.username ?? "—"}${confiables.includes(l.user_id) ? " · de confianza" : ""} · ${new Date(l.created_at).toLocaleDateString("es-CO")}`}>
+                      {confiables.includes(l.user_id) && <ShieldCheck size={9} style={{ verticalAlign: "-1px", marginRight: 3 }} />}
                       @{l.player?.username ?? "—"} · {new Date(l.created_at).toLocaleDateString("es-CO", { day: "2-digit", month: "short" })}
                     </div>
 
@@ -349,6 +474,13 @@ export default function AprobacionesPage() {
                         <button className="ap-act ap-reject" disabled={trabajando === l.id}
                           onClick={() => { setRechazando(l); setMotivo(""); }} title="Rechazar con un motivo">
                           <X size={12} />
+                        </button>
+                      )}
+                      {tab === "pending" && !confiables.includes(l.user_id) && (
+                        <button className="ap-act ap-trust" disabled={trabajando === l.user_id}
+                          onClick={() => cambiarConfianza(true, { user_id: l.user_id }, `@${l.player?.username ?? "este vendedor"}`)}
+                          title="Publicar directo las cartas de este vendedor">
+                          <ShieldCheck size={12} />
                         </button>
                       )}
                     </div>
