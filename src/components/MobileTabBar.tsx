@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { usePegadoAlVisor } from "@/hooks/usePegadoAlVisor";
 import {
   House, UserRoundPen, LayoutGrid, Store, Gamepad2,
   Swords, WalletCards, ArrowLeftRight, BookSearch, Dices, Newspaper } from "lucide-react";
@@ -27,6 +28,11 @@ export function MobileTabBar({ username: initialUsername }: { username?: string 
 
   const mktRef = useRef<HTMLDivElement>(null);
   const intRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+
+  /* iOS a veces deja la barra flotando en la mitad de la pantalla al bajar;
+     esto la vuelve a pegar abajo. Ver el hook antes de tocarlo. */
+  usePegadoAlVisor(navRef, { activo: ready });
 
   useEffect(() => {
     if (initialUsername) return;
@@ -95,7 +101,7 @@ export function MobileTabBar({ username: initialUsername }: { username?: string 
         }
       `}</style>
 
-      <nav className="mob-tabbar">
+      <nav ref={navRef} className="mob-tabbar">
         <TabLink href="/dashboard" label="Inicio" Icon={House} active={inicioActive} />
         <TabLink href={perfilHref} label="Perfil" Icon={UserRoundPen} active={perfilActive} />
         <TabLink href="/dashboard/inventario" label="Inventario" Icon={LayoutGrid} active={invActive} highlight />

@@ -72,6 +72,14 @@ su contenido y la grilla desborda el celular.
 
 ## Barras fijas y `overflow-x`
 
+**IMPORTANTE:** en móvil y tablet la barra de abajo (`MobileTabBar`) queda
+**siempre** fija al fondo de la pantalla, pase lo que pase. Se rompió tres
+veces. Además de las reglas de CSS de abajo, la sostiene
+`src/hooks/usePegadoAlVisor.ts`, que la vuelve a pegar cuando iOS despega el
+visor (después del teclado o con el scroll infinito): **no quitarlo**, y usarlo
+en cualquier elemento `position: fixed` nuevo que deba quedar pegado a la
+pantalla en el celular.
+
 `html`, `body` y cualquier contenedor que envuelva la página usan
 `overflow-x: clip`, **nunca** `overflow-x: hidden`. Con `hidden` el navegador
 convierte ese elemento en el contenedor de scroll y en iOS las barras

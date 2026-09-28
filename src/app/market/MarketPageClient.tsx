@@ -31,6 +31,7 @@ import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { FlagIcon } from "@/components/FlagIcon";
 import { PieGrande } from "@/components/PieGrande";
 import { MobileTabBar } from "@/components/MobileTabBar";
+import { usePegadoAlVisor } from "@/hooks/usePegadoAlVisor";
 import { tcgCardLink } from "@/lib/tcg-link";
 import { CardGridSkeleton } from "@/components/CardGridSkeleton";
 
@@ -274,6 +275,9 @@ export function MarketPageClient({
   const [previewCard, setPreviewCard]   = useState<PokemonCard | null>(null);
   const sentinelRef                     = useRef<HTMLDivElement>(null);
   const [filterOpen, setFilterOpen]     = useState(false);
+  const filtroBtnRef                   = useRef<HTMLButtonElement>(null);
+  /* El botón FILTRO es fixed como la barra de abajo: en iOS se corría igual. */
+  usePegadoAlVisor(filtroBtnRef, { ancla: "centro", base: "translateY(-50%)" });
   const [authMsg,    setAuthMsg]        = useState<string | null>(null);
 
   /* Filtros — estado inicial desde la URL */
@@ -831,7 +835,7 @@ export function MarketPageClient({
       `}</style>
 
       {/* Botón flotante FILTRO (solo móvil) */}
-      <button className="mkt-filter-btn" onClick={() => setFilterOpen(true)}>
+      <button ref={filtroBtnRef} className="mkt-filter-btn" onClick={() => setFilterOpen(true)}>
         <SlidersHorizontal size={13} color="#2ee6c1" style={{ marginBottom: 6, transform: "rotate(90deg)" }} />
         Filtro
       </button>
