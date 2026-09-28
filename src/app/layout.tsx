@@ -4,6 +4,7 @@ import Script from "next/script";
 import { getAuthedPlayer } from "@/lib/supabase/server";
 import { Navbar } from "@/components/Navbar";
 import { MarketTickerWrapper } from "@/components/MarketTickerWrapper";
+import { RastreoVisitas } from "@/components/RastreoVisitas";
 import "./globals.css";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -204,6 +205,8 @@ export default async function RootLayout({
         <MarketTickerWrapper />
         <Navbar {...navProps} />
         {children}
+        {/* Quién está en la página ahora: alimenta el panel de admin "En vivo" */}
+        <RastreoVisitas />
         <Script id="sw-register" strategy="afterInteractive">{`
           if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js').catch(function() {});

@@ -1,4 +1,4 @@
-import { UsersRound, Newspaper, ShieldCheck, BellRing } from "lucide-react";
+import { UsersRound, Newspaper, ShieldCheck, BellRing, Radio } from "lucide-react";
 
 /**
  * Las herramientas del panel de administración, en un solo lugar.
@@ -13,6 +13,7 @@ import { UsersRound, Newspaper, ShieldCheck, BellRing } from "lucide-react";
  */
 export const ENLACES_ADMIN = [
   { href: "/dashboard/users",                label: "Usuarios",          Icon: UsersRound },
+  { href: "/dashboard/admin/en-vivo",        label: "En vivo",           Icon: Radio },
   { href: "/dashboard/admin/feed",           label: "Feed post",         Icon: Newspaper },
   { href: "/dashboard/admin/aprobaciones",   label: "Cartas por aprobar", Icon: ShieldCheck },
   { href: "/dashboard/admin/notificaciones", label: "Enviar aviso",      Icon: BellRing },
