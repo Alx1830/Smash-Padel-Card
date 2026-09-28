@@ -3,14 +3,14 @@
  "tcg_set": "ME: Mega Evolution Promo",
  "code": null,
  "summary": {
-  "total": 71,
-  "ok": 71,
+  "total": 110,
+  "ok": 110,
   "review": 0,
   "missing": 0,
   "pct": 100,
   "variantes": {
-   "total": 99,
-   "resueltas": 97,
+   "total": 146,
+   "resueltas": 144,
    "sinResolver": 2
   }
  },
@@ -1084,6 +1084,159 @@
     }
    }
   },
+  "55": {
+   "name": "Treecko",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 709969,
+   "tcg_name": "Treecko -  055",
+   "tcg_number": "055",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 709969,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "56": {
+   "name": "Torchic",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 709970,
+   "tcg_name": "Torchic -  056",
+   "tcg_number": "056",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 709970,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "57": {
+   "name": "Mudkip",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 709971,
+   "tcg_name": "Mudkip -  057",
+   "tcg_number": "057",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 709971,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "58": {
+   "name": "Chespin",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 709972,
+   "tcg_name": "Chespin -  058",
+   "tcg_number": "058",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 709972,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "59": {
+   "name": "Fennekin",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 709973,
+   "tcg_name": "Fennekin -  059",
+   "tcg_number": "059",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 709973,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "60": {
+   "name": "Froakie",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 709974,
+   "tcg_name": "Froakie -  060",
+   "tcg_number": "060",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 709974,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "61": {
+   "name": "Sprigatito",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 709975,
+   "tcg_name": "Sprigatito -  061",
+   "tcg_number": "061",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 709975,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "62": {
+   "name": "Fuecoco",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 709976,
+   "tcg_name": "Fuecoco -  062",
+   "tcg_number": "062",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 709976,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "63": {
+   "name": "Quaxly",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 709977,
+   "tcg_name": "Quaxly -  063",
+   "tcg_number": "063",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 709977,
+     "printing": "Holofoil"
+    }
+   }
+  },
   "64": {
    "name": "Serperior",
    "versions": [
@@ -1451,6 +1604,596 @@
     },
     "pokemonCenterStamp": {
      "product_id": 694695
+    }
+   }
+  },
+  "81": {
+   "name": "Mega Greninja ex",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 704879,
+   "tcg_name": "Mega Greninja ex - 081",
+   "tcg_number": "081",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 704879,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "82": {
+   "name": "Miraidon",
+   "versions": [
+    "expansionStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 706135,
+   "tcg_name": "Miraidon - 082 (Pitch Black Stamped)",
+   "tcg_number": "082",
+   "variant_products": [
+    {
+     "suffix": "Staff",
+     "product_id": 707534
+    }
+   ],
+   "variants": {
+    "expansionStamp": {
+     "product_id": 706135,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 707534,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "83": {
+   "name": "Slowbro",
+   "versions": [
+    "expansionStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 706129,
+   "tcg_name": "Slowbro - 083 (Pitch Black Stamped)",
+   "tcg_number": "083",
+   "variant_products": [
+    {
+     "suffix": "Staff",
+     "product_id": 707701
+    }
+   ],
+   "variants": {
+    "expansionStamp": {
+     "product_id": 706129,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 707701,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "84": {
+   "name": "Dhelmise",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 706137,
+   "tcg_name": "Dhelmise - 084 (Prerelease)",
+   "tcg_number": "084",
+   "variant_products": [
+    {
+     "suffix": "Staff",
+     "product_id": 707703
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 706137,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 707703,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "85": {
+   "name": "Bastiodon",
+   "versions": [
+    "expansionStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 706133,
+   "tcg_name": "Bastiodon - 085 (Pitch Black Stamped)",
+   "tcg_number": "085",
+   "variant_products": [
+    {
+     "suffix": "Staff",
+     "product_id": 707702
+    }
+   ],
+   "variants": {
+    "expansionStamp": {
+     "product_id": 706133,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 707702,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "86": {
+   "name": "Slowpoke",
+   "versions": [
+    "cosmosHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 706130,
+   "tcg_name": "Slowpoke - 086 (Cosmos Holo)",
+   "tcg_number": "086",
+   "variant_products": [],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 706130,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "87": {
+   "name": "Binacle",
+   "versions": [
+    "cosmosHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 706131,
+   "tcg_name": "Binacle - 087 (Cosmos Holo)",
+   "tcg_number": "087",
+   "variant_products": [],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 706131,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "88": {
+   "name": "Zarude",
+   "versions": [
+    "holofoil",
+    "pokemonCenterStamp"
+   ],
+   "status": "ok",
+   "product_id": 706193,
+   "tcg_name": "Zarude - 088",
+   "tcg_number": "088",
+   "variant_products": [
+    {
+     "suffix": "Pokemon Center Exclusive",
+     "product_id": 706199
+    }
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 706193,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 706199,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "89": {
+   "name": "Mega Zeraora ex",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 710754,
+   "tcg_name": "Mega Zeraora ex - 089",
+   "tcg_number": "089",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 710754,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "90": {
+   "name": "Mega Darkrai ex",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 710756,
+   "tcg_name": "Mega Darkrai ex - 090",
+   "tcg_number": "090",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 710756,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "91": {
+   "name": "Mega Dragonite ex",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 710757,
+   "tcg_name": "Mega Dragonite ex - 091",
+   "tcg_number": "091",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 710757,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "92": {
+   "name": "Paradise Resort",
+   "versions": [
+    "worldChampionshipsStamp",
+    "worldChampionshipsStaffStamp"
+   ],
+   "status": "ok",
+   "product_id": 714597,
+   "tcg_name": "Paradise Resort - 092 (World Championships 2026)",
+   "tcg_number": "092",
+   "variant_products": [
+    {
+     "suffix": "World Championships 2026 Staff",
+     "product_id": 714598
+    }
+   ],
+   "variants": {
+    "worldChampionshipsStamp": {
+     "product_id": 714597,
+     "printing": "Normal"
+    },
+    "worldChampionshipsStaffStamp": {
+     "product_id": 714598,
+     "printing": "Normal"
+    }
+   }
+  },
+  "93": {
+   "name": "Pikachu",
+   "versions": [
+    "normal",
+    "winnerStamp"
+   ],
+   "status": "ok",
+   "product_id": 712963,
+   "tcg_name": "Pikachu - 093",
+   "tcg_number": "093",
+   "variant_products": [
+    {
+     "suffix": "Winner",
+     "product_id": 716740
+    }
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 712963,
+     "printing": "Normal"
+    },
+    "winnerStamp": {
+     "product_id": 716740,
+     "printing": "Normal"
+    }
+   }
+  },
+  "94": {
+   "name": "Alolan Exeggutor",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713262,
+   "tcg_name": "Alolan Exeggutor - 094 (30th Celebration)",
+   "tcg_number": "094",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713262,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "95": {
+   "name": "Lucario",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713263,
+   "tcg_name": "Lucario - 095 (30th Celebration)",
+   "tcg_number": "095",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713263,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "96": {
+   "name": "Moltres",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713264,
+   "tcg_name": "Moltres - 096 (30th Celebration)",
+   "tcg_number": "096",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713264,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "97": {
+   "name": "Articuno",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713265,
+   "tcg_name": "Articuno - 097 (30th Celebration)",
+   "tcg_number": "097",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713265,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "98": {
+   "name": "Zapdos",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713266,
+   "tcg_name": "Zapdos - 098 (30th Celebration)",
+   "tcg_number": "098",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713266,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "99": {
+   "name": "Greninja ex",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713268,
+   "tcg_name": "Greninja ex - 099 (30th Celebration)",
+   "tcg_number": "099",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713268,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "100": {
+   "name": "Sylveon ex",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713267,
+   "tcg_name": "Sylveon ex - 100 (30th Celebration)",
+   "tcg_number": "100",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713267,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "101": {
+   "name": "Nidorina",
+   "versions": [
+    "holofoil",
+    "pokemonCenterStamp"
+   ],
+   "status": "ok",
+   "product_id": 713260,
+   "tcg_name": "Nidorina - 101 (30th Celebration)",
+   "tcg_number": "101",
+   "variant_products": [
+    {
+     "suffix": "30th Celebration Pokemon Center Exclusive",
+     "product_id": 713261
+    }
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 713260,
+     "printing": "Holofoil"
+    },
+    "pokemonCenterStamp": {
+     "product_id": 713261,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "102": {
+   "name": "Victini",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713286,
+   "tcg_name": "Victini - 102 (30th Celebration)",
+   "tcg_number": "102",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713286,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "103": {
+   "name": "Zeraora",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713285,
+   "tcg_name": "Zeraora - 103 (30th Celebration)",
+   "tcg_number": "103",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713285,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "104": {
+   "name": "Mewtwo",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713289,
+   "tcg_name": "Mewtwo - 104 (30th Celebration)",
+   "tcg_number": "104",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713289,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "105": {
+   "name": "Mew",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713288,
+   "tcg_name": "Mew - 105 (30th Celebration)",
+   "tcg_number": "105",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713288,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "106": {
+   "name": "Ditto",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713287,
+   "tcg_name": "Ditto - 106 (30th Celebration)",
+   "tcg_number": "106",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713287,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "107": {
+   "name": "Pikachu ex",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713257,
+   "tcg_name": "Pikachu ex - 107 (30th Celebration)",
+   "tcg_number": "107",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713257,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "108": {
+   "name": "Espeon ex",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713258,
+   "tcg_name": "Espeon ex - 108 (30th Celebration)",
+   "tcg_number": "108",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713258,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "109": {
+   "name": "Pikachu ex",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713256,
+   "tcg_name": "Pikachu ex - 109 (30th Celebration)",
+   "tcg_number": "109",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713256,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "110": {
+   "name": "Umbreon ex",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713259,
+   "tcg_name": "Umbreon ex - 110 (30th Celebration)",
+   "tcg_number": "110",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713259,
+     "printing": "Holofoil"
     }
    }
   }

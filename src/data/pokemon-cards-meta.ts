@@ -121,7 +121,7 @@ export const SET_CARD_COUNT: Record<string, number> = {
   "phantasmal-flames": 224,
   "mega-evolution": 310,
   "mega-evolution-promo": 59,
-  "mega-evo-promos": 59,
+  "mega-evo-promos": 110,
   "destined-rivals": 409,
   "black-bolt": 392,
   "white-flare": 405,

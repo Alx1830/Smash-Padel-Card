@@ -506,7 +506,7 @@ export const SET_CARD_COUNT: Record<string, number> = {
   "white-flare": 405,
   "journey-together": 369,
   "perfect-order": 203,
-  "mega-evo-promos": 71,
+  "mega-evo-promos": 110,
   "sv-energies": 16,
   "mega-evolution-energies": 8,
   "futsal-promos": 5,
