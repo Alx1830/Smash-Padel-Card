@@ -26,7 +26,7 @@ export default function PrivacidadPage() {
         antetitulo="Legal"
         titulo="Política de privacidad"
         bajada="Qué guardamos, por qué, y cómo pedir que lo borremos."
-        actualizado="21 de septiembre de 2026"
+        actualizado="27 de septiembre de 2026"
       >
         <p>
           Esta política explica cómo FaceBinder (<a href={SITIO}>facebinder.com</a>)
@@ -119,6 +119,22 @@ export default function PrivacidadPage() {
           cualquier extensión de bloqueo sin que el sitio deje de funcionar.
         </p>
         <p>
+          Además llevamos una <strong>medición propia de visitas</strong>, para
+          saber cuánta gente hay en el sitio en cada momento y qué secciones se
+          usan. Tu navegador guarda un código al azar que no dice nada de vos, y
+          con él registramos las páginas que abrís y cuándo, cuánto tiempo pasás
+          en ellas, de dónde llegaste (por ejemplo, un enlace de WhatsApp), el
+          tipo de equipo, el sistema operativo, el navegador, el idioma y el
+          tamaño de la pantalla, y la ciudad y el país <em>aproximados</em> desde
+          donde te conectás, que nos da Cloudflare. <strong>No guardamos tu
+          dirección IP ni tu ubicación exacta</strong>, y no pedimos permiso de
+          GPS. Si tenés la sesión iniciada, esas visitas quedan asociadas a tu
+          cuenta. Estos datos solo los ven los administradores del sitio, para
+          estadísticas y para mejorarlo; no se publican ni se comparten con
+          nadie. Si borrás los datos del sitio en tu navegador, el código se
+          pierde y empezás de cero.
+        </p>
+        <p>
           <strong>Hoy el sitio no muestra publicidad.</strong> Si en el futuro
           se activan anuncios de Google AdSense, esos anuncios usan cookies
           propias de Google para elegir qué mostrar; se puede desactivar la
@@ -144,6 +160,11 @@ export default function PrivacidadPage() {
           personales y tu contenido dentro de los 30 días siguientes; puede
           quedar alguna copia en respaldos técnicos por un tiempo corto más,
           hasta que esos respaldos se sobrescriben.
+        </p>
+        <p>
+          El registro de visitas se conserva para poder comparar la actividad
+          del sitio a lo largo del tiempo. Si borramos tu cuenta, esas visitas
+          dejan de estar asociadas a vos y quedan solo como datos anónimos.
         </p>
 
         <h2>Tus derechos</h2>

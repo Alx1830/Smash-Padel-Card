@@ -74,8 +74,14 @@ export function RastreoVisitas() {
   async function avisar(extra: { pagina_nueva?: boolean } = {}) {
     if (!activo.current || !idRef.current) return;
 
-    const sesionNueva = !leer(sessionStorage, CLAVE_SESION);
-    if (sesionNueva) guardar(sessionStorage, CLAVE_SESION, "1");
+    /* Una visita = lo que dura la pestaña abierta. El "1" es de la versión
+       anterior, que no llevaba código: se le da uno sin contarla como nueva. */
+    let sesionId = leer(sessionStorage, CLAVE_SESION);
+    const sesionNueva = !sesionId;
+    if (!sesionId || sesionId.length < 30) {
+      sesionId = crypto.randomUUID();
+      guardar(sessionStorage, CLAVE_SESION, sesionId);
+    }
 
     const geo = await pedirGeo();
     const params = new URLSearchParams(location.search);
@@ -85,6 +91,7 @@ export function RastreoVisitas() {
     await createClient().rpc("registrar_visita", {
       p: {
         visitante_id:    idRef.current,
+        sesion_id:       sesionId,
         ruta:            location.pathname,
         titulo:          document.title,
         pagina_nueva:    extra.pagina_nueva ?? false,
