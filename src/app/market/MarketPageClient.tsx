@@ -414,7 +414,10 @@ export function MarketPageClient({
         .from("market_listings")
         .select("id, card_id, set_id, price_cop, currency, version, language, created_at, user_id")
         .eq("status", "active")
+        .order("price_cop", { ascending: false })
+        // Desempate fijo: con precios repetidos, el scroll infinito no repite ni salta cartas entre páginas
         .order("created_at", { ascending: false })
+        .order("id", { ascending: true })
         .range(from, to);
 
       if (userIds) q = (q as any).in("user_id", userIds);
