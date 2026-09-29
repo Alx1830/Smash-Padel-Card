@@ -17,6 +17,7 @@ import { aWebp, aPortadaSocial, peso } from "@/lib/imagen-webp";
 import { PostEditorToolbar } from "./PostEditorToolbar";
 import { SliderFotos } from "./slider-extension";
 import { EmbedSocial } from "./embed-social-extension";
+import { SelectorFecha } from "./SelectorFecha";
 
 const COURT = "#2ee6c1";
 const LIME  = "#d6ff3d";
@@ -659,10 +660,9 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
           Hasta entonces nadie la ve. La hora es la de Colombia, y puede salir hasta cinco minutos después.
         </span>
 
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-          <input type="datetime-local" value={cuando} style={{ ...campo, flex: 1, minWidth: 220 }}
-                 onChange={(e) => setCuando(e.target.value)} />
+        <SelectorFecha valor={cuando} onChange={setCuando} />
 
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginTop: 14 }}>
           <button type="button" onClick={() => guardar("scheduled")} disabled={guardando || !cuando}
                   style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 18px", borderRadius: 9,
                            border: `1px solid ${COURT}55`, background: "rgba(46,230,193,0.06)", color: COURT,
