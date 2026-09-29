@@ -86,10 +86,13 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
   const [titulo,   setTitulo]   = useState(post?.title ?? "");
   const [bajada,   setBajada]   = useState(post?.excerpt ?? "");
   const [portada,  setPortada]  = useState(post?.cover_url ?? post?.media_url ?? "");
-  /* La copia de la portada que se ve al compartir el enlace. Se arma sola al
-     subir una imagen; si la portada se pega a mano, queda vacía y el sitio
-     manda la portada tal cual. */
+  /* La copia de la portada que se ve al compartir el enlace (JPEG 1200x630).
+     Se arma sola al subir una imagen, y al guardar se rehace si la portada ya
+     no es la misma de la que salió: sin esto, pegar una portada a mano dejaba
+     la nota compartiéndose con la foto vieja, o sin foto en WhatsApp. */
   const [portadaSocial, setPortadaSocial] = useState(post?.og_image_url ?? "");
+  /** De qué portada salió `portadaSocial` */
+  const [socialDe, setSocialDe] = useState(post?.og_image_url ? (post.cover_url ?? post.media_url ?? "") : "");
   const [categoria, setCategoria] = useState<PostCategoria>(post?.category ?? CATEGORIA_POR_DEFECTO);
   const [direccion, setDireccion] = useState(post?.slug ?? "");
   const [tocoDireccion, setTocoDireccion] = useState(Boolean(post?.slug));
@@ -226,20 +229,11 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
 
       setPortada(info.url);
 
-      /* Y la copia para compartir, que va aparte porque tiene otro formato y
-         otra medida. Que falle no puede tumbar la subida: la nota se guarda
-         igual y lo único que se pierde es la vista previa linda del enlace. */
+      /* Y la copia para compartir. Que falle no puede tumbar la subida: al
+         guardar se vuelve a intentar desde la portada ya subida. */
       try {
-        const social = await aPortadaSocial(file);
-        const formSocial = new FormData();
-        formSocial.append("archivo", social);
-        formSocial.append("nombre", `${nombre}-social`);
-        if (portadaSocial.trim()) formSocial.append("anterior", portadaSocial.trim());
-
-        const resSocial  = await fetch("/api/admin/posts/cover", { method: "POST", body: formSocial });
-        const infoSocial = await resSocial.json().catch(() => null);
-        if (resSocial.ok && infoSocial?.url) setPortadaSocial(infoSocial.url);
-      } catch { /* sin copia social; la nota se publica igual */ }
+        await armarSocial(file, info.url);
+      } catch { /* se reintenta al guardar */ }
       setMensaje({
         tipo: "ok",
         texto: lista.esWebp
@@ -251,6 +245,49 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
     } finally {
       setSubiendo(false);
       if (archivoRef.current) archivoRef.current.value = "";
+    }
+  }
+
+  /**
+   * Arma la copia de compartir de `file`, la sube y la anota como hecha a
+   * partir de `deLaPortada`. Devuelve su dirección.
+   */
+  async function armarSocial(file: File, deLaPortada: string): Promise<string> {
+    const social = await aPortadaSocial(file);
+    const form = new FormData();
+    form.append("archivo", social);
+    form.append("nombre", `${titulo || direccion || "portada"}-social`);
+    if (portadaSocial.trim()) form.append("anterior", portadaSocial.trim());
+
+    const res  = await fetch("/api/admin/posts/cover", { method: "POST", body: form });
+    const info = await res.json().catch(() => null);
+    if (!res.ok || !info?.url) throw new Error(info?.error ?? "No se pudo subir la copia para compartir");
+
+    setPortadaSocial(info.url);
+    setSocialDe(deLaPortada);
+    return info.url;
+  }
+
+  /**
+   * La copia de compartir que corresponde a la portada actual: la que ya hay
+   * si salió de esta misma portada, o una nueva hecha a partir de ella. Una
+   * portada pegada a mano se baja por el servidor, porque el navegador no deja
+   * dibujar en un canvas una imagen de otro sitio.
+   *
+   * Si no se puede armar devuelve null, y la página manda la portada tal cual:
+   * mejor eso que compartir la foto de otra portada.
+   */
+  async function socialParaGuardar(actual: string): Promise<string | null> {
+    if (!actual) return null;
+    if (portadaSocial.trim() && socialDe === actual) return portadaSocial.trim();
+    try {
+      const res = await fetch(`/api/admin/posts/cover?traer=${encodeURIComponent(actual)}`);
+      if (!res.ok) return null;
+      const blob = await res.blob();
+      const file = new File([blob], "portada", { type: blob.type });
+      return await armarSocial(file, actual);
+    } catch {
+      return null;
     }
   }
 
@@ -285,13 +322,15 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
     setGuardando(true);
     setMensaje(null);
 
+    const social = await socialParaGuardar(portada.trim());
+
     const fila = {
       user_id: authorId,
       title: titulo.trim(),
       slug: ruta,
       excerpt: bajada.trim() || extractoAuto(cuerpo),
       cover_url: portada.trim() || null,
-      og_image_url: portadaSocial.trim() || null,
+      og_image_url: social,
       category: categoria,
       content_html: cuerpo,
       status: estado,

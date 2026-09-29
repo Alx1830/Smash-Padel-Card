@@ -36,6 +36,44 @@ async function esAdmin(): Promise<boolean> {
   return perfil?.role === "admin";
 }
 
+/**
+ * Devuelve los bytes de una imagen que está en otro sitio.
+ *
+ * La usa el editor cuando la portada se pegó como dirección en vez de subirse:
+ * para armar la copia de compartir tiene que dibujarla en un canvas, y el
+ * navegador no deja leer los píxeles de una imagen ajena sin CORS. Desde acá
+ * no hay esa restricción. Es solo para admin, igual que la subida.
+ */
+export async function GET(request: NextRequest) {
+  if (!(await esAdmin())) {
+    return NextResponse.json({ error: "Solo un admin puede traer imágenes" }, { status: 403 });
+  }
+
+  const url = request.nextUrl.searchParams.get("traer") ?? "";
+  if (!/^https:\/\//i.test(url)) {
+    return NextResponse.json({ error: "La dirección tiene que empezar con https" }, { status: 400 });
+  }
+
+  let res: Response;
+  try {
+    res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0 (FaceBinder)" } });
+  } catch {
+    return NextResponse.json({ error: "No se pudo bajar la imagen" }, { status: 502 });
+  }
+
+  const tipo = res.headers.get("content-type")?.split(";")[0].trim() ?? "";
+  if (!res.ok || !tipo.startsWith("image/")) {
+    return NextResponse.json({ error: "La dirección no devolvió una imagen" }, { status: 502 });
+  }
+
+  const bytes = await res.arrayBuffer();
+  if (bytes.byteLength > TOPE * 2) {
+    return NextResponse.json({ error: "La imagen es demasiado pesada" }, { status: 413 });
+  }
+
+  return new NextResponse(bytes, { headers: { "Content-Type": tipo, "Cache-Control": "no-store" } });
+}
+
 export async function POST(request: NextRequest) {
   if (!(await esAdmin())) {
     return NextResponse.json({ error: "Solo un admin puede subir imágenes" }, { status: 403 });
