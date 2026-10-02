@@ -355,7 +355,7 @@ export const POKEMON_SERIES: PokemonSeries[] = [
     icon: `${P}Prize-Pack-Series.symbol.png`,
     standalone: true,
     sets: [
-      { id: "prize-pack-series",      name: "Prize Pack Series Cards",         logo: `${P}Prize-Pack-Series.logo.png`,                   symbol: `${P}Prize-Pack-Series.symbol.png` },
+      { id: "prize-pack-series",      name: "Prize Pack Series Cards",         logo: `${P}Prize-Pack-Series.play-pokemon.png`,            symbol: `${P}Prize-Pack-Series.symbol.png` },
       { id: "misc-cards",             name: "Miscellaneous Cards & Products",  logo: `${P}Miscellaneous-Cards.logo.png`,                 symbol: `${P}Miscellaneous-Cards.symbol.png` },
       { id: "league-and-championship-cards", name: "League & Championship Cards", logo: `${P}league-and-championship-cards.logo.webp` },
       { id: "deck-exclusives",        name: "Deck Exclusives",                 logo: `${P}deck-exclusives.logo.webp` },
