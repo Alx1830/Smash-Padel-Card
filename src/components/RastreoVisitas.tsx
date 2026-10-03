@@ -20,7 +20,9 @@ import { leerDispositivo, esRobot } from "@/lib/dispositivo";
 
 const INTERVALO = 30_000;
 const CLAVE_ID     = "fb-visitante";
+const INACTIVIDAD = 30 * 60_000;
 const CLAVE_SESION = "fb-sesion";
+const CLAVE_ULTIMO = "fb-sesion-ultimo";
 const CLAVE_GEO    = "fb-geo";
 
 type Geo = { pais: string | null; region: string | null; ciudad: string | null };
@@ -74,14 +76,21 @@ export function RastreoVisitas() {
   async function avisar(extra: { pagina_nueva?: boolean } = {}) {
     if (!activo.current || !idRef.current) return;
 
-    /* Una visita = lo que dura la pestaña abierta. El "1" es de la versión
-       anterior, que no llevaba código: se le da uno sin contarla como nueva. */
+    /* Una visita = la pestaña abierta, hasta que pasen 30 min sin avisar (la
+       regla de Analytics). Sin el corte, una pestaña que nunca se cierra y el
+       computador que se duerme de noche sumaban días a la misma visita. El
+       "1" es de la versión anterior, que no llevaba código: se le da uno sin
+       contarla como nueva. */
+    const ahora = Date.now();
+    const ultimo = Number(leer(sessionStorage, CLAVE_ULTIMO)) || 0;
     let sesionId = leer(sessionStorage, CLAVE_SESION);
-    const sesionNueva = !sesionId;
-    if (!sesionId || sesionId.length < 30) {
+    const vencida = !!sesionId && ultimo > 0 && ahora - ultimo > INACTIVIDAD;
+    const sesionNueva = !sesionId || vencida;
+    if (!sesionId || sesionId.length < 30 || vencida) {
       sesionId = crypto.randomUUID();
       guardar(sessionStorage, CLAVE_SESION, sesionId);
     }
+    guardar(sessionStorage, CLAVE_ULTIMO, String(ahora));
 
     const geo = await pedirGeo();
     const params = new URLSearchParams(location.search);
@@ -94,7 +103,8 @@ export function RastreoVisitas() {
         sesion_id:       sesionId,
         ruta:            location.pathname,
         titulo:          document.title,
-        pagina_nueva:    extra.pagina_nueva ?? false,
+        /* Una visita nueva siempre abre su página, aunque venga de un latido */
+        pagina_nueva:    sesionNueva || (extra.pagina_nueva ?? false),
         sesion_nueva:    sesionNueva,
         en_primer_plano: document.visibilityState === "visible",
         referido:        sesionNueva ? referido() : null,
