@@ -17,6 +17,11 @@
  *   node --env-file=.env.local scripts/add-missing-cards.mjs \
  *     --slug wotc-promos --tcg-set "WoTC Promo" --code basep [--dry-run]
  *
+ * --numero-real: en vez del siguiente numero libre, usa el numero impreso que
+ * trae TCGplayer ("Basic Fire Energy - 010" → 10). Es lo que va en los sets que
+ * vinieron de Scrydex, numerados por numero real. Si ese numero ya esta
+ * ocupado, aborta sin escribir nada.
+ *
  * Requiere en .env.local: R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY.
  */
 
@@ -44,6 +49,7 @@ const DRY_RUN = args.includes("--dry-run");
 const SLUG    = getArg("--slug");
 const TCG_SET = getArg("--tcg-set");
 const CODE    = getArg("--code");
+const NUMERO_REAL = args.includes("--numero-real");
 
 if (!SLUG || !TCG_SET || !CODE) {
   console.error("❌ Faltan --slug, --tcg-set y --code");
@@ -79,7 +85,8 @@ for (const c of Object.values(mapping.cards)) {
 }
 
 const setSrc  = fs.readFileSync(setFile, "utf8");
-const maxNum  = Math.max(...[...setSrc.matchAll(/card_number:\s*(\d+)/g)].map(m => +m[1]));
+const numeros = [...setSrc.matchAll(/card_number:\s*(\d+)/g)].map(m => +m[1]);
+const maxNum  = Math.max(...numeros);
 
 console.log(`📚 ${SLUG}: ${Object.keys(mapping.cards).length} cartas, numero mas alto ${maxNum}`);
 
@@ -88,6 +95,21 @@ const catalogo = await fetchCatalog(TCG_SET);
 const faltan = catalogo.filter(p => !usados.has(p.productId));
 console.log(`   TCGplayer tiene ${catalogo.length}; faltan ${faltan.length}`);
 if (faltan.length === 0) { console.log("✅ Nada que agregar."); process.exit(0); }
+
+// "Basic Fire Energy - 010 (30th Celebration)" → 10
+const numeroImpreso = p => {
+  const n = parseInt(p.customAttributes?.number ?? p.productName.match(/ - (\d+)/)?.[1], 10);
+  return Number.isFinite(n) ? n : null;
+};
+if (NUMERO_REAL) {
+  const ocupados = new Set(numeros);
+  const malos = faltan.filter(p => { const n = numeroImpreso(p); return n == null || ocupados.has(n); });
+  if (malos.length) {
+    console.error(`❌ Sin numero o con numero ya ocupado:\n${malos.map(p => `   ${p.productName}`).join("\n")}`);
+    process.exit(1);
+  }
+  faltan.sort((a, b) => numeroImpreso(a) - numeroImpreso(b));
+}
 
 // ── Imagen ──────────────────────────────────────────────────────────────────
 async function subirImagen(productId, key, intento = 1) {
@@ -123,9 +145,14 @@ const filas = [];
 let numero = maxNum, sinFoto = 0;
 
 for (const p of faltan) {
-  numero++;
+  numero = NUMERO_REAL ? numeroImpreso(p) : numero + 1;
   const key = imageKeyFor(CODE, numero);
-  const { name, version } = splitVariant(p.productName);
+  let { name, version } = splitVariant(p.productName);
+  if (NUMERO_REAL) {
+    // El numero ya va en card_number; "(30th Celebration)" es procedencia, no variante.
+    name = name.replace(/ - \d+(\/\d+)?/, "").replace(/\s*\(30th Celebration\)$/i, "").trim();
+    if (version === "normal" && p.foilOnly) version = "holofoil";
+  }
 
   const img = await subirImagen(p.productId, key);
   if (!img.ok) sinFoto++;
@@ -138,11 +165,11 @@ for (const p of faltan) {
     tcgName: p.productName,
     precio: p.marketPrice ?? null,
   });
-  console.log(`   ${String(numero).padStart(3)}  ${p.productName}${img.ok ? "" : "  (sin foto)"}`);
+  console.log(`   ${String(numero).padStart(3)}  ${p.productName}  →  ${name} [${version}]${img.ok ? "" : "  (sin foto)"}`);
 }
 
 if (DRY_RUN) {
-  console.log(`\n🧪 --dry-run: no se escribio nada. ${filas.length} cartas irian de ${maxNum + 1} a ${numero}.`);
+  console.log(`\n🧪 --dry-run: no se escribio nada. ${filas.length} cartas irian de ${filas[0].numero} a ${numero}.`);
   process.exit(0);
 }
 
@@ -154,7 +181,7 @@ const nuevasFilas = filas.map(f =>
 ).join("\n");
 
 fs.writeFileSync(setFile, setSrc.replace(/\n\];/, `\n${nuevasFilas}\n];`), "utf8");
-console.log(`\n📝 src/data/sets/${SLUG}.ts — +${filas.length} cartas (ahora ${maxNum + filas.length} numeros)`);
+console.log(`\n📝 src/data/sets/${SLUG}.ts — +${filas.length} cartas (hasta el ${Math.max(maxNum, numero)})`);
 
 for (const f of filas) {
   mapping.cards[String(f.numero)] = {
@@ -163,9 +190,9 @@ for (const f of filas) {
     status: "ok",
     product_id: f.productId,
     tcg_name: f.tcgName,
-    tcg_number: null,
+    tcg_number: NUMERO_REAL ? String(f.numero) : null,
     variant_products: [],
-    variants: { [f.version]: { product_id: f.productId, printing: "Normal" } },
+    variants: { [f.version]: { product_id: f.productId, printing: f.version === "holofoil" ? "Holofoil" : "Normal" } },
   };
 }
 const total = Object.keys(mapping.cards).length;

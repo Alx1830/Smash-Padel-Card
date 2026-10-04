@@ -34,7 +34,9 @@ import { createClient } from "@supabase/supabase-js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT        = path.resolve(__dirname, "..");
 const MAPPING_DIR = path.join(ROOT, "scripts", "tcgplayer-mapping", "cards");
-const HOOK_TS     = path.join(ROOT, "src", "hooks", "useScrydexPrice.ts");
+// La tabla vivia en src/hooks/useScrydexPrice.ts hasta el 21/09/2026; seguir
+// leyendola alla dejo 12 sets (pp, misc, battle academy...) sin precio nuevo.
+const HOOK_TS     = path.join(ROOT, "src", "data", "set-codes.ts");
 const BULK_JS     = path.join(__dirname, "bulk_scrape_prices.js");
 
 const HISTORY = id => `https://infinite-api.tcgplayer.com/price/history/${id}?range=month`;
@@ -124,7 +126,8 @@ function readCodes() {
   }
 
   const hook = fs.readFileSync(HOOK_TS, "utf8");
-  const block = hook.slice(hook.indexOf("SCRYDEX_SET_CODES"), hook.indexOf("const supabase"));
+  const block = hook.slice(hook.indexOf("SCRYDEX_SET_CODES"));
+  if (!block) throw new Error(`No encontre SCRYDEX_SET_CODES en ${HOOK_TS}`);
   const discrepan = [];
   for (const m of block.matchAll(/"([a-z0-9-]+)":\s*"([a-z0-9]+)"/gi)) {
     if (codes[m[1]] && codes[m[1]] !== m[2]) discrepan.push(`${m[1]} (hook ${m[2]} / scraper ${codes[m[1]]})`);

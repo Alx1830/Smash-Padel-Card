@@ -508,7 +508,7 @@ export const SET_CARD_COUNT: Record<string, number> = {
   "perfect-order": 203,
   "mega-evo-promos": 110,
   "sv-energies": 16,
-  "mega-evolution-energies": 8,
+  "mega-evolution-energies": 16,
   "futsal-promos": 5,
   "mcd-2019": 12,
   "mcd-2018": 12,

@@ -1,16 +1,16 @@
 {
  "set": "mega-evolution-energies",
  "tcg_set": "MEE: Mega Evolution Energies",
- "code": null,
+ "code": "mee",
  "summary": {
-  "total": 8,
-  "ok": 8,
+  "total": 16,
+  "ok": 16,
   "review": 0,
   "missing": 0,
   "pct": 100,
   "variantes": {
-   "total": 8,
-   "resueltas": 8,
+   "total": 16,
+   "resueltas": 16,
    "sinResolver": 0
   }
  },
@@ -140,6 +140,142 @@
     "normal": {
      "product_id": 656270,
      "printing": "Normal"
+    }
+   }
+  },
+  "9": {
+   "name": "Basic Grass Energy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713248,
+   "tcg_name": "Basic Grass Energy - 009 (30th Celebration)",
+   "tcg_number": "9",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713248,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "10": {
+   "name": "Basic Fire Energy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713249,
+   "tcg_name": "Basic Fire Energy - 010 (30th Celebration)",
+   "tcg_number": "10",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713249,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "11": {
+   "name": "Basic Water Energy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713250,
+   "tcg_name": "Basic Water Energy - 011 (30th Celebration)",
+   "tcg_number": "11",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713250,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "12": {
+   "name": "Basic Lightning Energy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713251,
+   "tcg_name": "Basic Lightning Energy - 012 (30th Celebration)",
+   "tcg_number": "12",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713251,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "13": {
+   "name": "Basic Psychic Energy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713252,
+   "tcg_name": "Basic Psychic Energy - 013 (30th Celebration)",
+   "tcg_number": "13",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713252,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "14": {
+   "name": "Basic Fighting Energy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713253,
+   "tcg_name": "Basic Fighting Energy - 014 (30th Celebration)",
+   "tcg_number": "14",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713253,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "15": {
+   "name": "Basic Darkness Energy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713254,
+   "tcg_name": "Basic Darkness Energy - 015 (30th Celebration)",
+   "tcg_number": "15",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713254,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "16": {
+   "name": "Basic Metal Energy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 713255,
+   "tcg_name": "Basic Metal Energy - 016 (30th Celebration)",
+   "tcg_number": "16",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 713255,
+     "printing": "Holofoil"
     }
    }
   }

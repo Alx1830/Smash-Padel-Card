@@ -234,6 +234,7 @@ export const SCRYDEX_SET_CODES: Record<string, string> = {
   "black-bolt":           "zsv10pt5",
   "mega-evo-promos":      "mep",
   "sv-energies":          "sve",
+  "mega-evolution-energies": "mee",
   "crown-zenith-gg":      "swsh12pt5gg",
   "silver-tempest-tg":    "swsh12tg",
   "lost-origin-tg":       "swsh11tg",
