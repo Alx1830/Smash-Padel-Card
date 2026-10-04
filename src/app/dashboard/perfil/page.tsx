@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { CustomSelect } from "@/components/ui/custom-select";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { CITIES_BY_COUNTRY } from "@/data/cities";
+import { aAvatarWebp } from "@/lib/imagen-webp";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -34,25 +35,6 @@ interface PerfilForm {
 const SET_OPTS = POKEMON_SERIES.flatMap(series =>
   series.sets.map(set => ({ value: set.id, label: `${series.name} — ${set.name}` }))
 );
-
-async function compressImage(file: File, maxPx = 480, quality = 0.82): Promise<Blob> {
-  return new Promise((resolve, reject) => {
-    const img = new window.Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
-      const w = Math.round(img.width * scale);
-      const h = Math.round(img.height * scale);
-      const canvas = document.createElement("canvas");
-      canvas.width = w; canvas.height = h;
-      canvas.getContext("2d")!.drawImage(img, 0, 0, w, h);
-      canvas.toBlob(blob => blob ? resolve(blob) : reject("compress failed"), "image/webp", quality);
-    };
-    img.onerror = reject;
-    img.src = url;
-  });
-}
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -329,7 +311,7 @@ export default function PerfilPage() {
     const localUrl = URL.createObjectURL(file);
     setPreview(localUrl);
     try {
-      const compressed = await compressImage(file);
+      const compressed = await aAvatarWebp(file);
       const path = `${uid}.webp`;
       const { error: storageError } = await supabase.storage
         .from("avatars").upload(path, compressed, { upsert: true, contentType: "image/webp" });

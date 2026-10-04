@@ -7,6 +7,8 @@ import { createClient } from "@/lib/supabase/client";
 import { CustomSelect } from "@/components/ui/custom-select";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { CITIES_BY_COUNTRY } from "@/data/cities";
+import { aAvatarWebp } from "@/lib/imagen-webp";
+import { UserRound } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -171,29 +173,6 @@ const PAISES_OPTS = [
 
 const USERNAME_RE = /^[a-zA-Z0-9_-]{3,20}$/;
 
-async function compressImage(file: File, maxPx = 480, quality = 0.82): Promise<Blob> {
-  return new Promise((resolve, reject) => {
-    const img = new window.Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
-      const w = Math.round(img.width * scale);
-      const h = Math.round(img.height * scale);
-      const canvas = document.createElement("canvas");
-      canvas.width = w; canvas.height = h;
-      canvas.getContext("2d")!.drawImage(img, 0, 0, w, h);
-      canvas.toBlob(
-        blob => blob ? resolve(blob) : reject("compress failed"),
-        "image/webp",
-        quality
-      );
-    };
-    img.onerror = reject;
-    img.src = url;
-  });
-}
-
 // ── Sub-components ────────────────────────────────────────────────────────────
 
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
@@ -281,15 +260,15 @@ export default function OnboardingPage() {
 
       const { data: player } = await supabase
         .from("players")
-        .select("username, first_name, last_name, pais, tipo_perfil")
+        .select("username, first_name, last_name, pais, tipo_perfil, ciudad, edad, whatsapp_indicativo, whatsapp_numero, pokemon_favorito, energia_favorita, set_favorito, photo_url")
         .eq("user_id", user.id)
         .maybeSingle();
 
-      const complete =
+      const datosCompletos =
         player?.username && player?.first_name && player?.last_name &&
         player?.pais && player?.tipo_perfil;
 
-      if (complete) { router.replace("/dashboard"); return; }
+      if (datosCompletos && player?.photo_url) { router.replace("/dashboard"); return; }
 
       // Pre-fill if partial data exists
       if (player) {
@@ -300,8 +279,18 @@ export default function OnboardingPage() {
           last_name:   player.last_name   ?? "",
           pais:        player.pais        ?? "",
           tipo_perfil: player.tipo_perfil ?? "",
+          ciudad:              player.ciudad              ?? "",
+          edad:                player.edad != null ? String(player.edad) : "",
+          whatsapp_indicativo: player.whatsapp_indicativo ?? "",
+          whatsapp_numero:     player.whatsapp_numero     ?? "",
+          pokemon_favorito:    player.pokemon_favorito    ?? "",
+          energia_favorita:    player.energia_favorita    ?? "",
+          set_favorito:        player.set_favorito        ?? "",
         }));
       }
+
+      // Cuenta vieja a la que solo le falta la foto: directo al paso donde se sube.
+      if (datosCompletos) setStep(3);
 
       setChecking(false);
     })();
@@ -321,7 +310,7 @@ export default function OnboardingPage() {
     setUploading(true);
     setPreview(URL.createObjectURL(file));
     try {
-      const compressed = await compressImage(file);
+      const compressed = await aAvatarWebp(file);
       const path = `${userId}.webp`;
       const { error: storageError } = await supabase.storage
         .from("avatars")
@@ -393,6 +382,10 @@ export default function OnboardingPage() {
   async function handleSubmit() {
     if (!userId) return;
     setGlobalError("");
+    if (!form.photo_url) {
+      setErrors(e => ({ ...e, photo_url: "Sube una foto de perfil para terminar." }));
+      return;
+    }
     setSubmitting(true);
     const { error } = await supabase.from("players").upsert({
       user_id:          userId,
@@ -630,13 +623,13 @@ export default function OnboardingPage() {
         {/* ── STEP 3: Preferencias Pokémon + foto ─────────────────────────── */}
         {step === 3 && (
           <div>
-            {/* Foto (opcional) */}
+            {/* Foto (obligatoria) */}
             <div style={{ marginBottom: "28px" }}>
               <div style={{
                 fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em",
                 textTransform: "uppercase", color: INK2, marginBottom: "12px",
               }}>
-                Foto de perfil (opcional)
+                Foto de perfil
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
                 <div
@@ -651,8 +644,8 @@ export default function OnboardingPage() {
                   {preview ? (
                     <Image src={preview} alt="Foto" fill style={{ objectFit: "cover" }} unoptimized />
                   ) : (
-                    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px", color: INK2 }}>
-                      👤
+                    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <UserRound size={28} color={COURT} />
                     </div>
                   )}
                 </div>
@@ -674,8 +667,11 @@ export default function OnboardingPage() {
                     {uploading ? "Subiendo…" : preview ? "Cambiar foto" : "Subir foto"}
                   </button>
                   <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "6px 0 0", lineHeight: 1.5 }}>
-                    JPG, PNG o WEBP · Se comprime automáticamente
+                    Obligatoria · JPG, PNG o WEBP · Se convierte a WebP sola
                   </p>
+                  {errors.photo_url && (
+                    <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ff5d5d", margin: "6px 0 0" }}>{errors.photo_url}</p>
+                  )}
                 </div>
                 <input
                   ref={fileRef}

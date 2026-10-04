@@ -65,6 +65,37 @@ export async function aWebp(file: File): Promise<ImagenLista> {
   };
 }
 
+/** Lado mayor de una foto de perfil: se ve a lo sumo en la card 3D del perfil. */
+const AVATAR_MAX = 480;
+
+/**
+ * La foto de perfil, SIEMPRE en WebP.
+ *
+ * El canvas la convierte en casi todos lados, pero Safari anterior a iOS 17
+ * devuelve PNG sin avisar. Para ese caso se carga un codificador WebP en
+ * WebAssembly (solo entonces: pesa ~300 KB y casi nadie lo necesita).
+ */
+export async function aAvatarWebp(file: File): Promise<Blob> {
+  const img = await cargar(file);
+  const escala = Math.min(1, AVATAR_MAX / Math.max(img.naturalWidth, img.naturalHeight));
+  const ancho  = Math.round(img.naturalWidth  * escala);
+  const alto   = Math.round(img.naturalHeight * escala);
+
+  const lienzo = document.createElement("canvas");
+  lienzo.width  = ancho;
+  lienzo.height = alto;
+  const ctx = lienzo.getContext("2d");
+  if (!ctx) throw new Error("El navegador no pudo procesar la imagen");
+  ctx.drawImage(img, 0, 0, ancho, alto);
+
+  const blob = await new Promise<Blob | null>((resolve) => lienzo.toBlob(resolve, "image/webp", 0.82));
+  if (blob?.type === "image/webp") return blob;
+
+  const { encode } = await import("@jsquash/webp");
+  const datos = await encode(ctx.getImageData(0, 0, ancho, alto), { quality: 82 });
+  return new Blob([datos], { type: "image/webp" });
+}
+
 /* La medida que piden todas las redes para la tarjeta grande de vista previa.
    Por debajo de 600x315 la degradan a la miniatura cuadrada. */
 const SOCIAL_ANCHO = 1200;

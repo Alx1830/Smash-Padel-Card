@@ -16,7 +16,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
     profile?.first_name  && profile.first_name.trim()  !== "" &&
     profile?.last_name   && profile.last_name.trim()   !== "" &&
     profile?.pais        && profile.pais.trim()        !== "" &&
-    profile?.tipo_perfil && profile.tipo_perfil.trim() !== "";
+    profile?.tipo_perfil && profile.tipo_perfil.trim() !== "" &&
+    // La foto es obligatoria: quien no la tenga la sube en el último paso del registro.
+    profile?.photo_url   && profile.photo_url.trim()   !== "";
 
   if (!profileComplete) redirect("/onboarding");
 

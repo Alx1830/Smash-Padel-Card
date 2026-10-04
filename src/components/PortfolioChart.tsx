@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Layers } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { SCRYDEX_SET_CODES } from "@/data/set-codes";
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
@@ -17,6 +19,24 @@ function formatUSD(n: number) {
 export type Snapshot       = { date: string; total_usd: number; card_count: number };
 export type HourlySnapshot = { hour_bucket: string; total_usd: number; card_count: number };
 type Range = "1D" | "1M" | "3M" | "6M" | "1Y";
+
+/** Valor del inventario calculado en este momento, sin esperar al cron. */
+export type ValorActual = { total_usd: number; copias: number; unicas: number };
+
+/** "2026-10-03T23:00:00+00:00": la hora de Bogotá guardada como si fuera UTC, igual que el cron. */
+function horaBogotaActual() {
+  const p = Object.fromEntries(new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Bogota", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", hourCycle: "h23",
+  }).formatToParts(new Date()).map(x => [x.type, x.value]));
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:00:00+00:00`;
+}
+
+/** Pone el punto de ahora, reemplazando el que caiga en el mismo día u hora (`largo` = caracteres que se comparan). */
+function conPuntoActual(data: { label: string; value: number }[], label: string, largo: number, value: number | undefined) {
+  if (value == null || value <= 0) return data;
+  const sinEse = data.filter(d => d.label.slice(0, largo) !== label.slice(0, largo));
+  return [...sinEse, { label, value }];
+}
 
 /**
  * Alto reservado para la cabecera del gráfico. Mientras carga solo hay una
@@ -100,9 +120,13 @@ function ChartSVG({ chartData, xLabel, height = 160, width = 600 }: {
   );
 }
 
-export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount, defaultRange = "1D", chartHeight = 160, estirar = false }: {
+export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount, uniqueCount, valorActual, defaultRange = "1D", chartHeight = 160, estirar = false }: {
   snapshots: Snapshot[]; hourlySnapshots: HourlySnapshot[]; loading?: boolean;
   cardCount?: number | null;
+  /** Cartas distintas; con él la etiqueta dice "4 únicas · 18 en total" en vez de solo las copias. */
+  uniqueCount?: number | null;
+  /** Valor de ahora mismo: entra como punto de hoy para que una colección del primer día ya muestre su precio. */
+  valorActual?: number;
   defaultRange?: Range;
   chartHeight?: number;
   /** Que el dibujo ocupe todo el alto libre de su caja, en vez de su alto natural. */
@@ -145,13 +169,13 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
 
   // Vista diaria: datos horarios de hoy en hora Colombia
   const todayUTC = new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" });
-  const hourlyData = hourlySnapshots
+  const hourlyData = conPuntoActual(hourlySnapshots
     .filter(h => h.hour_bucket.slice(0, 10) === todayUTC)
     .sort((a, b) => a.hour_bucket.localeCompare(b.hour_bucket))
     .map(h => ({
       label: h.hour_bucket,
       value: h.total_usd,
-    }));
+    })), horaBogotaActual(), 13, valorActual);
 
   // Vista histórica: filtrada por rango
   const cutoff = (() => {
@@ -163,13 +187,17 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
     return d.toISOString().slice(0, 10);
   })();
 
-  const historicData = snapshots
+  /* El resumen diario lo cierra el cron a las 00:20: sin el punto de hoy, quien
+     agregó sus primeras cartas hoy veía "sin historial" hasta mañana. */
+  const historicData = conPuntoActual(snapshots
     .filter(s => s.date >= cutoff)
     .sort((a, b) => a.date.localeCompare(b.date))
-    .map(s => ({ label: s.date, value: s.total_usd }));
+    .map(s => ({ label: s.date, value: s.total_usd })), todayUTC, 10, valorActual);
 
   const isDay = range === "1D";
-  const data  = isDay ? hourlyData : historicData;
+  const puntos = isDay ? hourlyData : historicData;
+  // Con un solo punto no hay línea que dibujar: se repite para que salga plana.
+  const data = puntos.length === 1 ? [puntos[0], puntos[0]] : puntos;
 
   /* El historial ya no depende de que el dueño entre: lo arma la base cada
      noche (`consolidar_portfolio_diario`). Vacío = colección recién creada. */
@@ -197,8 +225,12 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
       fontFamily: MONO, fontSize: "11px", color: INK0, letterSpacing: "0.06em",
       background: "rgba(46,230,193,0.08)", border: "1px solid rgba(46,230,193,0.25)",
       borderRadius: "7px", padding: "4px 10px", whiteSpace: "nowrap",
+      display: "inline-flex", alignItems: "center", gap: "6px",
     }}>
-      🃏 {cardCount.toLocaleString("es-CO")} {cardCount === 1 ? "carta" : "cartas"}
+      <Layers size={12} color={COURT} />
+      {uniqueCount != null
+        ? `${uniqueCount.toLocaleString("es-CO")} ${uniqueCount === 1 ? "única" : "únicas"} · ${cardCount.toLocaleString("es-CO")} en total`
+        : `${cardCount.toLocaleString("es-CO")} ${cardCount === 1 ? "carta" : "cartas"}`}
     </span>
   );
 
@@ -270,22 +302,63 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
   );
 }
 
+/**
+ * Valor del inventario en este momento, con la misma cuenta que
+ * `snapshot_hourly_portfolios`: precio de la versión, o con mayúscula inicial,
+ * o el normal, por cantidad. Los códigos salen de la tabla de la app.
+ */
+async function valorActualDe(supabase: ReturnType<typeof createClient>, userId: string): Promise<ValorActual | null> {
+  const { data: filas } = await supabase.from("card_inventory")
+    .select("card_id, set_id, version, quantity").eq("user_id", userId).gt("quantity", 0);
+  if (!filas?.length) return null;
+
+  const llaveDe = (f: { card_id: string | number; set_id: string }) => {
+    const code = SCRYDEX_SET_CODES[f.set_id];
+    const numero = String(f.card_id).split(":")[0];
+    return code && /^\d+$/.test(numero) ? `${code}-${parseInt(numero, 10)}` : null;
+  };
+  const llaves = [...new Set(filas.map(llaveDe).filter((k): k is string => !!k))];
+
+  const precios = new Map<string, Record<string, number>>();
+  for (let i = 0; i < llaves.length; i += 200) {
+    const { data } = await supabase.from("card_prices_merged").select("card_id, prices").in("card_id", llaves.slice(i, i + 200));
+    for (const r of data ?? []) precios.set(r.card_id, r.prices as Record<string, number>);
+  }
+
+  let total = 0, copias = 0;
+  const unicas = new Set<string>();
+  for (const f of filas) {
+    copias += f.quantity;
+    unicas.add(`${f.set_id}|${f.card_id}`);
+    const llave = llaveDe(f);
+    const p = llave ? precios.get(llave) : undefined;
+    if (!p) continue;
+    const v = f.version || "normal";
+    const precio = Number(p[v] ?? p[v.charAt(0).toUpperCase() + v.slice(1)] ?? p.normal ?? 0);
+    total += precio * f.quantity;
+  }
+  return { total_usd: Math.round(total * 100) / 100, copias, unicas: unicas.size };
+}
+
 /** Gráfico autónomo para el perfil: lee los snapshots del usuario (solo lectura) */
 export function ProfilePortfolioChart({ userId, cardCount, fixedHeight }: { userId: string; cardCount?: number | null; fixedHeight?: number }) {
   const [snapshots,       setSnapshots]       = useState<Snapshot[]>([]);
   const [hourlySnapshots, setHourlySnapshots] = useState<HourlySnapshot[]>([]);
   const [loading,         setLoading]         = useState(true);
+  const [ahora,           setAhora]           = useState<ValorActual | null>(null);
 
   useEffect(() => {
     const supabase = createClient();
     (async () => {
       const todayUTC = new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" });
-      const [{ data: snaps }, { data: hourly }] = await Promise.all([
+      const [{ data: snaps }, { data: hourly }, valor] = await Promise.all([
         supabase.from("portfolio_snapshots").select("date, total_usd, card_count").eq("user_id", userId).order("date", { ascending: false }).limit(366),
         supabase.from("portfolio_hourly_snapshots").select("hour_bucket, total_usd, card_count").eq("user_id", userId).gte("hour_bucket", `${todayUTC}T00:00:00Z`).order("hour_bucket", { ascending: true }),
+        valorActualDe(supabase, userId),
       ]);
       setSnapshots(snaps ?? []);
       setHourlySnapshots(hourly ?? []);
+      setAhora(valor);
       setLoading(false);
     })();
   }, [userId]);
@@ -313,7 +386,8 @@ export function ProfilePortfolioChart({ userId, cardCount, fixedHeight }: { user
       }}>
         <PortfolioChart
           snapshots={snapshots} hourlySnapshots={hourlySnapshots} loading={loading}
-          cardCount={cardCount} defaultRange="1M" chartHeight={300}
+          cardCount={ahora?.copias ?? cardCount} uniqueCount={ahora?.unicas}
+          valorActual={ahora?.total_usd} defaultRange="1M" chartHeight={300}
         />
       </div>
     </div>
