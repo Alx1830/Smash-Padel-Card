@@ -74,9 +74,9 @@ export default async function UserMarketPage({
     ? await Promise.all([
         supabase.from("market_listings").select("id, card_id, set_id, price_cop, currency, version, language, created_at").eq("user_id", player.user_id).eq("status", "active").order("created_at", { ascending: false }),
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", player.user_id),
-        fetchAllRows<{ card_id: string; set_id: string; quantity: number }>((from, to) => supabase
+        fetchAllRows<{ card_id: string; set_id: string; quantity: number }>(() => supabase
           .from("card_inventory").select("card_id, set_id, quantity")
-          .eq("user_id", player.user_id!).gt("quantity", 0).order("id").range(from, to)),
+          .eq("user_id", player.user_id!).gt("quantity", 0)),
       ])
     : [{ data: null }, { data: null }, []];
 

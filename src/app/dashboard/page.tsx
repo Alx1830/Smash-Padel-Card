@@ -307,9 +307,9 @@ export default function DashboardHome() {
         supabase.from("players").select("username").eq("user_id", user.id).single(),
         supabase.from("follows").select("follower_id").eq("following_id", user.id),
         fetchAllRows<{ card_id: string; set_id: string; version: string | null; quantity: number }>(
-          (from, to) => supabase.from("card_inventory")
+          () => supabase.from("card_inventory")
             .select("card_id, set_id, version, quantity")
-            .eq("user_id", user.id).gt("quantity", 0).order("id").range(from, to)),
+            .eq("user_id", user.id).gt("quantity", 0)),
         supabase.from("portfolio_snapshots").select("date, total_usd, card_count").eq("user_id", user.id).order("date", { ascending: false }).limit(366),
         supabase.from("portfolio_hourly_snapshots").select("hour_bucket, total_usd, card_count").eq("user_id", user.id).order("hour_bucket", { ascending: true }),
       ]);

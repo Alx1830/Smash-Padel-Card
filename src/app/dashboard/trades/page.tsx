@@ -276,12 +276,12 @@ function TradesPageInner() {
       setSent(false);
       // Al editar, los valores ya vienen del trade original
       if (!editId) { setOffer(null); setRequest(null); setCash(""); setMessage(""); }
-      const invOf = (uid: string) => fetchAllRows<InvRow>((from, to) =>
+      const invOf = (uid: string) => fetchAllRows<InvRow>(() =>
         supabase.from("card_inventory").select("card_id, set_id, version, quantity, language")
-          .eq("user_id", uid).gt("quantity", 0).order("id").range(from, to));
-      const wishOf = (uid: string) => fetchAllRows<WishRow>((from, to) =>
+          .eq("user_id", uid).gt("quantity", 0));
+      const wishOf = (uid: string) => fetchAllRows<WishRow>(() =>
         supabase.from("card_wishlist").select("card_id, set_id")
-          .eq("user_id", uid).order("id").range(from, to));
+          .eq("user_id", uid));
       const [myRows, myWishRows, wishRows, peerRows] = await Promise.all([
         invOf(meId), wishOf(meId), wishOf(peer.user_id), invOf(peer.user_id),
       ]);

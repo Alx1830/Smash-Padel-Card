@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Layers } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { SCRYDEX_SET_CODES } from "@/data/set-codes";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
@@ -308,9 +309,12 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
  * o el normal, por cantidad. Los códigos salen de la tabla de la app.
  */
 async function valorActualDe(supabase: ReturnType<typeof createClient>, userId: string): Promise<ValorActual | null> {
-  const { data: filas } = await supabase.from("card_inventory")
-    .select("card_id, set_id, version, quantity").eq("user_id", userId).gt("quantity", 0);
-  if (!filas?.length) return null;
+  // Por tandas y ordenado: un select suelto se corta en 1000 filas y el valor salía de menos.
+  const filas = await fetchAllRows<{ card_id: string | number; set_id: string; version: string | null; quantity: number }>(
+    () => supabase.from("card_inventory")
+      .select("card_id, set_id, version, quantity").eq("user_id", userId).gt("quantity", 0)
+      );
+  if (!filas.length) return null;
 
   const llaveDe = (f: { card_id: string | number; set_id: string }) => {
     const code = SCRYDEX_SET_CODES[f.set_id];

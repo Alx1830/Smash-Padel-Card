@@ -65,13 +65,13 @@ export default async function WishlistPage({
 
   const [wishlistRows, { data: featuredRows }, invRows] = player.user_id
     ? await Promise.all([
-        fetchAllRows<{ card_id: number; set_id: string }>((from, to) => supabase
+        fetchAllRows<{ card_id: number; set_id: string }>(() => supabase
           .from("card_wishlist").select("card_id, set_id")
-          .eq("user_id", player.user_id!).order("id").range(from, to)),
+          .eq("user_id", player.user_id!)),
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", player.user_id),
-        fetchAllRows<{ card_id: string; set_id: string; quantity: number }>((from, to) => supabase
+        fetchAllRows<{ card_id: string; set_id: string; quantity: number }>(() => supabase
           .from("card_inventory").select("card_id, set_id, quantity")
-          .eq("user_id", player.user_id!).gt("quantity", 0).order("id").range(from, to)),
+          .eq("user_id", player.user_id!).gt("quantity", 0)),
       ])
     : [[], { data: null }, []];
 

@@ -68,22 +68,22 @@ export default async function JugadorPage({
   ] = data.user_id
     ? await Promise.all([
         fetchAllRows<ProfInvRow>(
-          (from, to) => supabase
+          () => supabase
             .from("card_inventory")
             .select("card_id, set_id, quantity, version")
             .eq("user_id", data.user_id!)
             .gt("quantity", 0)
-            .order("id").range(from, to)),
+            ),
         supabase
           .from("featured_cards")
           .select("card_id, set_id")
           .eq("user_id", data.user_id),
         fetchAllRows<ProfWishRow>(
-          (from, to) => supabase
+          () => supabase
             .from("card_wishlist")
             .select("card_id, set_id")
             .eq("user_id", data.user_id!)
-            .order("id").range(from, to)),
+            ),
         // Solo el conteo: los sliders cargan sus cartas en cliente, pero la
         // sección debe montarse aunque el jugador no tenga inventario
         supabase
