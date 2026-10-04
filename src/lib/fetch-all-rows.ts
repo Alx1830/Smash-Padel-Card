@@ -8,6 +8,11 @@
  *
  * Se le pasa una funcion que arma la consulta con `.range(from, to)`; se la
  * llama por tandas hasta que una vuelva incompleta.
+ *
+ * La consulta TIENE que llevar `.order("id")` (o cualquier columna unica) antes
+ * del `.range`. Sin orden, Postgres no garantiza que dos tandas sigan el mismo
+ * recorrido: con 1106 filas, la segunda tanda repetia filas de la primera y se
+ * saltaba otras, y al inventario le faltaban 18 cartas de Prize Pack (oct 2026).
  */
 const PAGE = 1000;
 

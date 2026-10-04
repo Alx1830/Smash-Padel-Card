@@ -60,7 +60,7 @@ export default function CardSearchPage() {
       const [{ data: featured }, wishlist, { data: listings }] = await Promise.all([
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", user.id),
         fetchAllRows<WishlistCard>((from, to) => supabase.from("card_wishlist")
-          .select("card_id, set_id").eq("user_id", user.id).range(from, to)),
+          .select("card_id, set_id").eq("user_id", user.id).order("id").range(from, to)),
         supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", user.id).in("status", ["active", "pending"]),
       ]);
       if (featured)  setFeaturedCards(featured as FeaturedCard[]);

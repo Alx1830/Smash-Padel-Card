@@ -73,7 +73,7 @@ export default async function JugadorPage({
             .select("card_id, set_id, quantity, version")
             .eq("user_id", data.user_id!)
             .gt("quantity", 0)
-            .range(from, to)),
+            .order("id").range(from, to)),
         supabase
           .from("featured_cards")
           .select("card_id, set_id")
@@ -83,7 +83,7 @@ export default async function JugadorPage({
             .from("card_wishlist")
             .select("card_id, set_id")
             .eq("user_id", data.user_id!)
-            .range(from, to)),
+            .order("id").range(from, to)),
         // Solo el conteo: los sliders cargan sus cartas en cliente, pero la
         // sección debe montarse aunque el jugador no tenga inventario
         supabase

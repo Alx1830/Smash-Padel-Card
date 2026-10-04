@@ -453,7 +453,7 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
       .from("card_wishlist")
       .select("card_id, set_id")
       .eq("user_id", userId)
-      .range(from, to)
+      .order("id").range(from, to)
     ).then(setWishlistCards);
     supabase
       .from("market_listings")

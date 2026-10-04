@@ -81,7 +81,7 @@ export default function DashboardWishlistPage() {
 
       const [wishlist, { data: featured }, { data: listings }] = await Promise.all([
         fetchAllRows<WishlistRow>((from, to) => supabase.from("card_wishlist")
-          .select("card_id, set_id").eq("user_id", user.id).range(from, to)),
+          .select("card_id, set_id").eq("user_id", user.id).order("id").range(from, to)),
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", user.id),
         supabase.from("market_listings").select("id, card_id, set_id, price_cop, currency, version").eq("user_id", user.id).in("status", ["active", "pending"]),
       ]);

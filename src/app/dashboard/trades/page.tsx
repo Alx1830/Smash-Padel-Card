@@ -278,10 +278,10 @@ function TradesPageInner() {
       if (!editId) { setOffer(null); setRequest(null); setCash(""); setMessage(""); }
       const invOf = (uid: string) => fetchAllRows<InvRow>((from, to) =>
         supabase.from("card_inventory").select("card_id, set_id, version, quantity, language")
-          .eq("user_id", uid).gt("quantity", 0).range(from, to));
+          .eq("user_id", uid).gt("quantity", 0).order("id").range(from, to));
       const wishOf = (uid: string) => fetchAllRows<WishRow>((from, to) =>
         supabase.from("card_wishlist").select("card_id, set_id")
-          .eq("user_id", uid).range(from, to));
+          .eq("user_id", uid).order("id").range(from, to));
       const [myRows, myWishRows, wishRows, peerRows] = await Promise.all([
         invOf(meId), wishOf(meId), wishOf(peer.user_id), invOf(peer.user_id),
       ]);

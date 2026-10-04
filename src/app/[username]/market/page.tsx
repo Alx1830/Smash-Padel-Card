@@ -76,7 +76,7 @@ export default async function UserMarketPage({
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", player.user_id),
         fetchAllRows<{ card_id: string; set_id: string; quantity: number }>((from, to) => supabase
           .from("card_inventory").select("card_id, set_id, quantity")
-          .eq("user_id", player.user_id!).gt("quantity", 0).range(from, to)),
+          .eq("user_id", player.user_id!).gt("quantity", 0).order("id").range(from, to)),
       ])
     : [{ data: null }, { data: null }, []];
 

@@ -67,11 +67,11 @@ export default async function WishlistPage({
     ? await Promise.all([
         fetchAllRows<{ card_id: number; set_id: string }>((from, to) => supabase
           .from("card_wishlist").select("card_id, set_id")
-          .eq("user_id", player.user_id!).range(from, to)),
+          .eq("user_id", player.user_id!).order("id").range(from, to)),
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", player.user_id),
         fetchAllRows<{ card_id: string; set_id: string; quantity: number }>((from, to) => supabase
           .from("card_inventory").select("card_id, set_id, quantity")
-          .eq("user_id", player.user_id!).gt("quantity", 0).range(from, to)),
+          .eq("user_id", player.user_id!).gt("quantity", 0).order("id").range(from, to)),
       ])
     : [[], { data: null }, []];
 

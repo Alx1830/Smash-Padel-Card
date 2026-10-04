@@ -149,7 +149,7 @@ export default function DashboardMarketPage() {
           .order("created_at", { ascending: false }),
         supabase.from("featured_cards").select("card_id, set_id").eq("user_id", user.id),
         fetchAllRows<WishlistCard>((from, to) => supabase.from("card_wishlist")
-          .select("card_id, set_id").eq("user_id", user.id).range(from, to)),
+          .select("card_id, set_id").eq("user_id", user.id).order("id").range(from, to)),
       ]);
 
       const listingRows = (rows ?? []) as Listing[];
