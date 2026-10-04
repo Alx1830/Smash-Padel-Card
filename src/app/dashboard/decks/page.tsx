@@ -127,6 +127,13 @@ export default function DecksPage() {
         .decks-header { padding: 24px 20px 0; }
         @media (min-width: 768px) and (pointer: fine) { .decks-header { padding: 48px 48px 0; } }
         .decks-body { padding: 0 20px 80px; }
+        /* Patrón de grilla: 6 columnas en pantalla grande y siempre 2 en el
+           celular (con minmax(200px) bajaba a una portada por fila). */
+        .decks-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
+        @media (max-width: 1500px) { .decks-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+        @media (max-width: 1240px) { .decks-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (max-width: 1023px) { .decks-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (max-width:  767px) { .decks-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } }
         @media (min-width: 768px) and (pointer: fine) { .decks-body { padding: 0 48px 80px; } }
         @keyframes deck-shimmer {
           0%   { background-position: 200% 0; }
@@ -215,7 +222,7 @@ export default function DecksPage() {
             <p style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2, marginBottom: "16px" }}>
               {decks.length} {decks.length === 1 ? "deck" : "decks"}
             </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "20px" }}>
+            <div className="decks-grid">
             {decks.map(deck => (
               <Link key={deck.id} href={`/dashboard/decks/${deck.id}`} style={{ textDecoration: "none", display: "block" }}>
                 <div
@@ -224,7 +231,7 @@ export default function DecksPage() {
                   onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.6)"; }}
                 >
                   {deck.cover_card_image ? (
-                    <img src={deck.cover_card_image} alt={deck.name} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0 }} />
+                    <img src={deck.cover_card_image} alt={deck.name} loading="lazy" decoding="async" style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0 }} />
                   ) : (
                     <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <Layers size={48} color={COURT} strokeWidth={1.2} />

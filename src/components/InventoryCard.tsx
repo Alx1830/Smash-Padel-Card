@@ -7,6 +7,7 @@ import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import type { UserListing } from "@/components/CardDetailModal";
 import { getCurrencyForCountry } from "@/lib/currency";
 import { fotoChica } from "@/lib/foto-carta";
+import { Check } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
@@ -220,7 +221,7 @@ export function SellPopup({ card, setId, userId, onPublished, onClose }: {
       }}>
         {state === "done" ? (
           <div style={{ textAlign: "center", padding: "20px 0" }}>
-            <div style={{ fontSize: "32px", color: COURT, marginBottom: "10px" }}>✓</div>
+            <div style={{ marginBottom: "10px" }}><Check size={32} color={COURT} /></div>
             <p style={{ fontFamily: MONO, fontSize: "13px", color: COURT, letterSpacing: "0.12em", textTransform: "uppercase", margin: 0 }}>
               Publicado
             </p>

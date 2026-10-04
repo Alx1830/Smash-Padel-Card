@@ -1,29 +1,6 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { PokemonSetsSection } from "@/components/PokemonSetsSection";
-
-const COURT = "#2ee6c1";
-const INK0  = "#f5f7fb";
-const MONO  = "var(--font-jetbrains)";
-const DISP  = "var(--font-archivo)";
-
-export default function InventarioPage() {
-  return (
-    <div style={{ minHeight: "100vh" }}>
-      <div style={{ padding: "48px 48px 0" }}>
-        <div style={{
-          fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em",
-          textTransform: "uppercase", color: COURT,
-          display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
-        }}>
-          <span style={{ width: "20px", height: "1px", background: COURT, display: "inline-block" }} />
-          Mi Colección
-        </div>
-        <h1 style={{ fontFamily: DISP, fontSize: "36px", color: INK0, margin: "0 0 0" }}>
-          Inventario
-        </h1>
-      </div>
-      <PokemonSetsSection />
-    </div>
-  );
+// Era una copia vieja del inventario con otro encabezado.
+export default function DashboardClubs() {
+  redirect("/dashboard/inventario");
 }

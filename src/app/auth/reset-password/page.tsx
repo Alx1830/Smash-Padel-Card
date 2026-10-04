@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { BrandLogo } from "@/components/BrandLogo";
+import { CheckCircle2 } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -71,7 +72,7 @@ function ResetPasswordForm() {
     <>
       {done ? (
         <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: "40px", marginBottom: "16px" }}>✅</div>
+          <div style={{ fontSize: "40px", marginBottom: "16px" }}><CheckCircle2 size={40} color="#2ee6c1" strokeWidth={1.6} /></div>
           <p style={{ fontFamily: MONO, fontSize: "13px", color: INK0, marginBottom: "8px" }}>¡Contraseña actualizada!</p>
           <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, lineHeight: 1.7 }}>
             Redirigiendo a tu dashboard...

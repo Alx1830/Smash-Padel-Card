@@ -3,445 +3,2787 @@
  "tcg_set": "Gym Challenge",
  "code": "gym2",
  "summary": {
-  "total": 20,
-  "ok": 20,
+  "total": 132,
+  "ok": 132,
   "review": 0,
   "missing": 0,
   "pct": 100,
   "variantes": {
-   "total": 20,
-   "resueltas": 20,
+   "total": 264,
+   "resueltas": 264,
    "sinResolver": 0
   }
  },
  "cards": {
+  "1": {
+   "name": "Blaine's Arcanine",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83860,
+   "tcg_name": "Blaine's Arcanine",
+   "tcg_number": "001/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 83860,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 83860,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "2": {
+   "name": "Blaine's Charizard",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83861,
+   "tcg_name": "Blaine's Charizard",
+   "tcg_number": "002/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 83861,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 83861,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "3": {
+   "name": "Brock's Ninetales",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 83973,
+   "tcg_name": "Brock's Ninetales",
+   "tcg_number": "003/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 83973,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 83973,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "4": {
+   "name": "Erika's Venusaur",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85307,
+   "tcg_name": "Erika's Venusaur",
+   "tcg_number": "004/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 85307,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 85307,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "5": {
+   "name": "Giovanni's Gyarados",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85710,
+   "tcg_name": "Giovanni's Gyarados",
+   "tcg_number": "005/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 85710,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 85710,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "6": {
+   "name": "Giovanni's Machamp",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85712,
+   "tcg_name": "Giovanni's Machamp",
+   "tcg_number": "006/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 85712,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 85712,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "7": {
+   "name": "Giovanni's Nidoking",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85718,
+   "tcg_name": "Giovanni's Nidoking",
+   "tcg_number": "007/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 85718,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 85718,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "8": {
+   "name": "Giovanni's Persian",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 85724,
+   "tcg_name": "Giovanni's Persian",
+   "tcg_number": "008/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 85724,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 85724,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "9": {
+   "name": "Koga's Beedrill",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86505,
+   "tcg_name": "Koga's Beedrill",
+   "tcg_number": "009/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 86505,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 86505,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "10": {
+   "name": "Koga's Ditto",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86506,
+   "tcg_name": "Koga's Ditto",
+   "tcg_number": "010/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 86506,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 86506,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "11": {
+   "name": "Lt. Surge's Raichu",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86861,
+   "tcg_name": "Lt. Surge's Raichu",
+   "tcg_number": "011/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 86861,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 86861,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "12": {
+   "name": "Misty's Golduck",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87530,
+   "tcg_name": "Misty's Golduck",
+   "tcg_number": "012/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 87530,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 87530,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "13": {
+   "name": "Misty's Gyarados",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87531,
+   "tcg_name": "Misty's Gyarados",
+   "tcg_number": "013/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 87531,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 87531,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "14": {
+   "name": "Rocket's Mewtwo",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88777,
+   "tcg_name": "Rocket's Mewtwo",
+   "tcg_number": "014/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 88777,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 88777,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "15": {
+   "name": "Rocket's Zapdos",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88800,
+   "tcg_name": "Rocket's Zapdos",
+   "tcg_number": "015/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 88800,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 88800,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "16": {
+   "name": "Sabrina's Alakazam",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 88866,
+   "tcg_name": "Sabrina's Alakazam",
+   "tcg_number": "016/132",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 88866,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 88866,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
   "17": {
    "name": "Blaine",
    "versions": [
-    "holofoil"
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
    ],
    "status": "ok",
    "product_id": 83858,
    "tcg_name": "Blaine (17)",
    "tcg_number": "017/132",
-   "variant_products": [
-    {
-     "suffix": "17",
-     "product_id": 83858
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEditionHolofoil": {
      "product_id": 83858,
-     "printing": "Holofoil"
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 83858,
+     "printing": "Unlimited Holofoil"
     }
    }
   },
   "18": {
    "name": "Giovanni",
    "versions": [
-    "holofoil"
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
    ],
    "status": "ok",
    "product_id": 85708,
    "tcg_name": "Giovanni (18)",
    "tcg_number": "018/132",
-   "variant_products": [
-    {
-     "suffix": "18",
-     "product_id": 85708
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEditionHolofoil": {
      "product_id": 85708,
-     "printing": "Holofoil"
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 85708,
+     "printing": "Unlimited Holofoil"
     }
    }
   },
   "19": {
    "name": "Koga",
    "versions": [
-    "holofoil"
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
    ],
    "status": "ok",
    "product_id": 86502,
    "tcg_name": "Koga (19)",
    "tcg_number": "019/132",
-   "variant_products": [
-    {
-     "suffix": "19",
-     "product_id": 86502
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEditionHolofoil": {
      "product_id": 86502,
-     "printing": "Holofoil"
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 86502,
+     "printing": "Unlimited Holofoil"
     }
    }
   },
   "20": {
    "name": "Sabrina",
    "versions": [
-    "holofoil"
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
    ],
    "status": "ok",
    "product_id": 88860,
    "tcg_name": "Sabrina (20)",
    "tcg_number": "020/132",
-   "variant_products": [
-    {
-     "suffix": "20",
-     "product_id": 88860
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEditionHolofoil": {
      "product_id": 88860,
-     "printing": "Holofoil"
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 88860,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "21": {
+   "name": "Blaine's Ninetales",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83876,
+   "tcg_name": "Blaine's Ninetales",
+   "tcg_number": "021/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83876,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83876,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "22": {
+   "name": "Brock's Dugtrio",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83962,
+   "tcg_name": "Brock's Dugtrio",
+   "tcg_number": "022/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83962,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83962,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "23": {
+   "name": "Giovanni's Nidoqueen",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85719,
+   "tcg_name": "Giovanni's Nidoqueen",
+   "tcg_number": "023/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85719,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85719,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "24": {
+   "name": "Giovanni's Pinsir",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85725,
+   "tcg_name": "Giovanni's Pinsir",
+   "tcg_number": "024/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85725,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85725,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "25": {
+   "name": "Koga's Arbok",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86504,
+   "tcg_name": "Koga's Arbok",
+   "tcg_number": "025/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86504,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86504,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "26": {
+   "name": "Koga's Muk",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86513,
+   "tcg_name": "Koga's Muk",
+   "tcg_number": "026/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86513,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86513,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "27": {
+   "name": "Koga's Pidgeotto",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86515,
+   "tcg_name": "Koga's Pidgeotto",
+   "tcg_number": "027/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86515,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86515,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "28": {
+   "name": "Lt. Surge's Jolteon",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86855,
+   "tcg_name": "Lt. Surge's Jolteon",
+   "tcg_number": "028/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86855,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86855,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "29": {
+   "name": "Sabrina's Gengar",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88875,
+   "tcg_name": "Sabrina's Gengar",
+   "tcg_number": "029/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88875,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88875,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "30": {
+   "name": "Sabrina's Golduck",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88876,
+   "tcg_name": "Sabrina's Golduck",
+   "tcg_number": "030/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88876,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88876,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "31": {
+   "name": "Blaine's Charmeleon",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83864,
+   "tcg_name": "Blaine's Charmeleon",
+   "tcg_number": "031/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83864,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83864,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "32": {
+   "name": "Blaine's Dodrio",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83865,
+   "tcg_name": "Blaine's Dodrio",
+   "tcg_number": "032/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83865,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83865,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "33": {
+   "name": "Blaine's Rapidash",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83882,
+   "tcg_name": "Blaine's Rapidash",
+   "tcg_number": "033/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83882,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83882,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "34": {
+   "name": "Brock's Graveler",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83968,
+   "tcg_name": "Brock's Graveler",
+   "tcg_number": "034/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83968,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83968,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "35": {
+   "name": "Brock's Primeape",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83976,
+   "tcg_name": "Brock's Primeape",
+   "tcg_number": "035/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83976,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83976,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "36": {
+   "name": "Brock's Sandslash",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83984,
+   "tcg_name": "Brock's Sandslash",
+   "tcg_number": "036/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83984,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83984,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "37": {
+   "name": "Brock's Vulpix",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83986,
+   "tcg_name": "Brock's Vulpix",
+   "tcg_number": "037/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83986,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83986,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "38": {
+   "name": "Erika's Bellsprout",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85283,
+   "tcg_name": "Erika's Bellsprout",
+   "tcg_number": "038/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85283,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85283,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "39": {
+   "name": "Erika's Bulbasaur",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85286,
+   "tcg_name": "Erika's Bulbasaur",
+   "tcg_number": "039/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85286,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85286,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "40": {
+   "name": "Erika's Clefairy",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85289,
+   "tcg_name": "Erika's Clefairy",
+   "tcg_number": "040/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85289,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85289,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "41": {
+   "name": "Erika's Ivysaur",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85297,
+   "tcg_name": "Erika's Ivysaur",
+   "tcg_number": "041/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85297,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85297,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "42": {
+   "name": "Giovanni's Machoke",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85713,
+   "tcg_name": "Giovanni's Machoke",
+   "tcg_number": "042/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85713,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85713,
+     "printing": "Unlimited"
     }
    }
   },
   "43": {
    "name": "Giovanni's Meowth",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 85716,
    "tcg_name": "Giovanni's Meowth (43)",
    "tcg_number": "043/132",
-   "variant_products": [
-    {
-     "suffix": "43",
-     "product_id": 85716
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 85716,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85716,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "44": {
+   "name": "Giovanni's Nidorina",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85722,
+   "tcg_name": "Giovanni's Nidorina",
+   "tcg_number": "044/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85722,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85722,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "45": {
+   "name": "Giovanni's Nidorino",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85723,
+   "tcg_name": "Giovanni's Nidorino",
+   "tcg_number": "045/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85723,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85723,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "46": {
+   "name": "Koga's Golbat",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86508,
+   "tcg_name": "Koga's Golbat",
+   "tcg_number": "046/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86508,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86508,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "47": {
+   "name": "Koga's Kakuna",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86510,
+   "tcg_name": "Koga's Kakuna",
+   "tcg_number": "047/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86510,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86510,
+     "printing": "Unlimited"
     }
    }
   },
   "48": {
    "name": "Koga's Koffing",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 86511,
    "tcg_name": "Koga's Koffing (48)",
    "tcg_number": "048/132",
-   "variant_products": [
-    {
-     "suffix": "48",
-     "product_id": 86511
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 86511,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86511,
+     "printing": "Unlimited"
     }
    }
   },
   "49": {
    "name": "Koga's Pidgey",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 86516,
    "tcg_name": "Koga's Pidgey (49)",
    "tcg_number": "049/132",
-   "variant_products": [
-    {
-     "suffix": "49",
-     "product_id": 86516
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 86516,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86516,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "50": {
+   "name": "Koga's Weezing",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86520,
+   "tcg_name": "Koga's Weezing",
+   "tcg_number": "050/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86520,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86520,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "51": {
+   "name": "Lt. Surge's Eevee",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86850,
+   "tcg_name": "Lt. Surge's Eevee",
+   "tcg_number": "051/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86850,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86850,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "52": {
+   "name": "Lt. Surge's Electrode",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86853,
+   "tcg_name": "Lt. Surge's Electrode",
+   "tcg_number": "052/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86853,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86853,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "53": {
+   "name": "Lt. Surge's Raticate",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86864,
+   "tcg_name": "Lt. Surge's Raticate",
+   "tcg_number": "053/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86864,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86864,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "54": {
+   "name": "Misty's Dewgong",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87526,
+   "tcg_name": "Misty's Dewgong",
+   "tcg_number": "054/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87526,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87526,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "55": {
+   "name": "Sabrina's Haunter",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88877,
+   "tcg_name": "Sabrina's Haunter",
+   "tcg_number": "055/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88877,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88877,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "56": {
+   "name": "Sabrina's Hypno",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88879,
+   "tcg_name": "Sabrina's Hypno",
+   "tcg_number": "056/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88879,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88879,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "57": {
+   "name": "Sabrina's Jynx",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88880,
+   "tcg_name": "Sabrina's Jynx",
+   "tcg_number": "057/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88880,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88880,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "58": {
+   "name": "Sabrina's Kadabra",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88882,
+   "tcg_name": "Sabrina's Kadabra",
+   "tcg_number": "058/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88882,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88882,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "59": {
+   "name": "Sabrina's Mr. Mime",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88883,
+   "tcg_name": "Sabrina's Mr. Mime",
+   "tcg_number": "059/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88883,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88883,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "60": {
+   "name": "Blaine's Charmander",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83863,
+   "tcg_name": "Blaine's Charmander",
+   "tcg_number": "060/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83863,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83863,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "61": {
+   "name": "Blaine's Doduo",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83866,
+   "tcg_name": "Blaine's Doduo",
+   "tcg_number": "061/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83866,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83866,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "62": {
+   "name": "Blaine's Growlithe",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83870,
+   "tcg_name": "Blaine's Growlithe",
+   "tcg_number": "062/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83870,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83870,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "63": {
+   "name": "Blaine's Mankey",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83874,
+   "tcg_name": "Blaine's Mankey",
+   "tcg_number": "063/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83874,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83874,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "64": {
+   "name": "Blaine's Ponyta",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83878,
+   "tcg_name": "Blaine's Ponyta",
+   "tcg_number": "064/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83878,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83878,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "65": {
+   "name": "Blaine's Rhyhorn",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83883,
+   "tcg_name": "Blaine's Rhyhorn",
+   "tcg_number": "065/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83883,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83883,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "66": {
+   "name": "Blaine's Vulpix",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83886,
+   "tcg_name": "Blaine's Vulpix",
+   "tcg_number": "066/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83886,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83886,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "67": {
+   "name": "Brock's Diglett",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83961,
+   "tcg_name": "Brock's Diglett",
+   "tcg_number": "067/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83961,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83961,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "68": {
+   "name": "Brock's Geodude",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83965,
+   "tcg_name": "Brock's Geodude",
+   "tcg_number": "068/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83965,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83965,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "69": {
+   "name": "Erika's Jigglypuff",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85298,
+   "tcg_name": "Erika's Jigglypuff",
+   "tcg_number": "069/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85298,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85298,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "70": {
+   "name": "Erika's Oddish",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85302,
+   "tcg_name": "Erika's Oddish",
+   "tcg_number": "070/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85302,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85302,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "71": {
+   "name": "Erika's Paras",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85304,
+   "tcg_name": "Erika's Paras",
+   "tcg_number": "071/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85304,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85304,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "72": {
+   "name": "Giovanni's Machop",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85714,
+   "tcg_name": "Giovanni's Machop",
+   "tcg_number": "072/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85714,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85714,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "73": {
+   "name": "Giovanni's Magikarp",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85715,
+   "tcg_name": "Giovanni's Magikarp",
+   "tcg_number": "073/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85715,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85715,
+     "printing": "Unlimited"
     }
    }
   },
   "74": {
    "name": "Giovanni's Meowth",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 85717,
    "tcg_name": "Giovanni's Meowth (74)",
    "tcg_number": "074/132",
-   "variant_products": [
-    {
-     "suffix": "74",
-     "product_id": 85717
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 85717,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85717,
+     "printing": "Unlimited"
     }
    }
   },
   "75": {
-   "name": "Giovanni's Nidoran ♀",
+   "name": "Giovanni's Nidoran F",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 85720,
    "tcg_name": "Giovanni's Nidoran F",
    "tcg_number": "075/132",
-   "note": "nuestro \"Giovanni's Nidoran ♀\" vs TCG \"Giovanni's Nidoran F\"",
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 85720,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85720,
+     "printing": "Unlimited"
     }
    }
   },
   "76": {
-   "name": "Giovanni's Nidoran ♂",
+   "name": "Giovanni's Nidoran M",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 85721,
    "tcg_name": "Giovanni's Nidoran M",
    "tcg_number": "076/132",
-   "note": "nuestro \"Giovanni's Nidoran ♂\" vs TCG \"Giovanni's Nidoran M\"",
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 85721,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85721,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "77": {
+   "name": "Koga's Ekans",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86507,
+   "tcg_name": "Koga's Ekans",
+   "tcg_number": "077/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86507,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86507,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "78": {
+   "name": "Koga's Grimer",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86509,
+   "tcg_name": "Koga's Grimer",
+   "tcg_number": "078/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86509,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86509,
+     "printing": "Unlimited"
     }
    }
   },
   "79": {
    "name": "Koga's Koffing",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 86512,
    "tcg_name": "Koga's Koffing (79)",
    "tcg_number": "079/132",
-   "variant_products": [
-    {
-     "suffix": "79",
-     "product_id": 86512
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 86512,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86512,
+     "printing": "Unlimited"
     }
    }
   },
   "80": {
    "name": "Koga's Pidgey",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 86517,
    "tcg_name": "Koga's Pidgey (80)",
    "tcg_number": "080/132",
-   "variant_products": [
-    {
-     "suffix": "80",
-     "product_id": 86517
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 86517,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86517,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "81": {
+   "name": "Koga's Tangela",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86518,
+   "tcg_name": "Koga's Tangela",
+   "tcg_number": "081/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86518,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86518,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "82": {
+   "name": "Koga's Weedle",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86519,
+   "tcg_name": "Koga's Weedle",
+   "tcg_number": "082/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86519,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86519,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "83": {
+   "name": "Koga's Zubat",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86521,
+   "tcg_name": "Koga's Zubat",
+   "tcg_number": "083/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86521,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86521,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "84": {
+   "name": "Lt. Surge's Pikachu",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86860,
+   "tcg_name": "Lt. Surge's Pikachu",
+   "tcg_number": "084/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86860,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86860,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "85": {
+   "name": "Lt. Surge's Rattata",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86866,
+   "tcg_name": "Lt. Surge's Rattata",
+   "tcg_number": "085/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86866,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86866,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "86": {
+   "name": "Lt. Surge's Voltorb",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86872,
+   "tcg_name": "Lt. Surge's Voltorb",
+   "tcg_number": "086/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86872,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86872,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "87": {
+   "name": "Misty's Horsea",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87533,
+   "tcg_name": "Misty's Horsea",
+   "tcg_number": "087/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87533,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87533,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "88": {
+   "name": "Misty's Magikarp",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87534,
+   "tcg_name": "Misty's Magikarp",
+   "tcg_number": "088/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87534,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87534,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "89": {
+   "name": "Misty's Poliwag",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87536,
+   "tcg_name": "Misty's Poliwag",
+   "tcg_number": "089/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87536,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87536,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "90": {
+   "name": "Misty's Psyduck",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87540,
+   "tcg_name": "Misty's Psyduck",
+   "tcg_number": "090/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87540,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87540,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "91": {
+   "name": "Misty's Seel",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87544,
+   "tcg_name": "Misty's Seel",
+   "tcg_number": "091/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87544,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87544,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "92": {
+   "name": "Misty's Staryu",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87548,
+   "tcg_name": "Misty's Staryu",
+   "tcg_number": "092/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87548,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87548,
+     "printing": "Unlimited"
     }
    }
   },
   "93": {
    "name": "Sabrina's Abra",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 88864,
    "tcg_name": "Sabrina's Abra (93)",
    "tcg_number": "093/132",
-   "variant_products": [
-    {
-     "suffix": "93",
-     "product_id": 88864
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 88864,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88864,
+     "printing": "Unlimited"
     }
    }
   },
   "94": {
    "name": "Sabrina's Abra",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 88865,
    "tcg_name": "Sabrina's Abra (94)",
    "tcg_number": "094/132",
-   "variant_products": [
-    {
-     "suffix": "94",
-     "product_id": 88865
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 88865,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88865,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "95": {
+   "name": "Sabrina's Drowzee",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88868,
+   "tcg_name": "Sabrina's Drowzee",
+   "tcg_number": "095/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88868,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88868,
+     "printing": "Unlimited"
     }
    }
   },
   "96": {
    "name": "Sabrina's Gastly",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 88871,
    "tcg_name": "Sabrina's Gastly (96)",
    "tcg_number": "096/132",
-   "variant_products": [
-    {
-     "suffix": "96",
-     "product_id": 88871
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 88871,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88871,
+     "printing": "Unlimited"
     }
    }
   },
   "97": {
    "name": "Sabrina's Gastly",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 88872,
    "tcg_name": "Sabrina's Gastly (97)",
    "tcg_number": "097/132",
-   "variant_products": [
-    {
-     "suffix": "97",
-     "product_id": 88872
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 88872,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88872,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "98": {
+   "name": "Sabrina's Porygon",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88885,
+   "tcg_name": "Sabrina's Porygon",
+   "tcg_number": "098/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88885,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88885,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "99": {
+   "name": "Sabrina's Psyduck",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88887,
+   "tcg_name": "Sabrina's Psyduck",
+   "tcg_number": "099/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88887,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88887,
+     "printing": "Unlimited"
     }
    }
   },
   "100": {
    "name": "Blaine",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 83859,
    "tcg_name": "Blaine (100)",
    "tcg_number": "100/132",
-   "variant_products": [
-    {
-     "suffix": "100",
-     "product_id": 83859
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 83859,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83859,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "101": {
+   "name": "Brock's Protection",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83977,
+   "tcg_name": "Brock's Protection",
+   "tcg_number": "101/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83977,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83977,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "102": {
+   "name": "Chaos Gym",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84181,
+   "tcg_name": "Chaos Gym",
+   "tcg_number": "102/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84181,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84181,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "103": {
+   "name": "Erika's Kindness",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85299,
+   "tcg_name": "Erika's Kindness",
+   "tcg_number": "103/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85299,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85299,
+     "printing": "Unlimited"
     }
    }
   },
   "104": {
    "name": "Giovanni",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 85709,
    "tcg_name": "Giovanni (104)",
    "tcg_number": "104/132",
-   "variant_products": [
-    {
-     "suffix": "104",
-     "product_id": 85709
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 85709,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85709,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "105": {
+   "name": "Giovanni's Last Resort",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85711,
+   "tcg_name": "Giovanni's Last Resort",
+   "tcg_number": "105/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85711,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85711,
+     "printing": "Unlimited"
     }
    }
   },
   "106": {
    "name": "Koga",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 86503,
    "tcg_name": "Koga (106)",
    "tcg_number": "106/132",
-   "variant_products": [
-    {
-     "suffix": "106",
-     "product_id": 86503
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 86503,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86503,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "107": {
+   "name": "Lt. Surge's Secret Plan",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86867,
+   "tcg_name": "Lt. Surge's Secret Plan",
+   "tcg_number": "107/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86867,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86867,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "108": {
+   "name": "Misty's Wish",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87553,
+   "tcg_name": "Misty's Wish",
+   "tcg_number": "108/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87553,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87553,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "109": {
+   "name": "Resistance Gym",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88717,
+   "tcg_name": "Resistance Gym",
+   "tcg_number": "109/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88717,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88717,
+     "printing": "Unlimited"
     }
    }
   },
   "110": {
    "name": "Sabrina",
    "versions": [
-    "holofoil"
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 88861,
    "tcg_name": "Sabrina (110)",
    "tcg_number": "110/132",
-   "variant_products": [
-    {
-     "suffix": "110",
-     "product_id": 88861
-    }
-   ],
    "variants": {
-    "holofoil": {
+    "firstEdition": {
      "product_id": 88861,
-     "printing": "Holofoil"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88861,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "111": {
+   "name": "Blaine's Quiz #2",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83880,
+   "tcg_name": "Blaine's Quiz #2",
+   "tcg_number": "111/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83880,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83880,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "112": {
+   "name": "Blaine's Quiz #3",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83881,
+   "tcg_name": "Blaine's Quiz #3",
+   "tcg_number": "112/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83881,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83881,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "113": {
+   "name": "Cinnabar City Gym",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84322,
+   "tcg_name": "Cinnabar City Gym",
+   "tcg_number": "113/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84322,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84322,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "114": {
+   "name": "Fuchsia City Gym",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85578,
+   "tcg_name": "Fuchsia City Gym",
+   "tcg_number": "114/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85578,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85578,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "115": {
+   "name": "Koga's Ninja Trick",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86514,
+   "tcg_name": "Koga's Ninja Trick",
+   "tcg_number": "115/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86514,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86514,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "116": {
+   "name": "Master Ball",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87251,
+   "tcg_name": "Master Ball",
+   "tcg_number": "116/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87251,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87251,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "117": {
+   "name": "Max Revive",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87268,
+   "tcg_name": "Max Revive",
+   "tcg_number": "117/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87268,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87268,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "118": {
+   "name": "Misty's Tears",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87549,
+   "tcg_name": "Misty's Tears",
+   "tcg_number": "118/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87549,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87549,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "119": {
+   "name": "Rocket's Minefield Gym",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88779,
+   "tcg_name": "Rocket's Minefield Gym",
+   "tcg_number": "119/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88779,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88779,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "120": {
+   "name": "Rocket's Secret Experiment",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88790,
+   "tcg_name": "Rocket's Secret Experiment",
+   "tcg_number": "120/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88790,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88790,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "121": {
+   "name": "Sabrina's Psychic Control",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88886,
+   "tcg_name": "Sabrina's Psychic Control",
+   "tcg_number": "121/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88886,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88886,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "122": {
+   "name": "Saffron City Gym",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88892,
+   "tcg_name": "Saffron City Gym",
+   "tcg_number": "122/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88892,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88892,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "123": {
+   "name": "Viridian City Gym",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90386,
+   "tcg_name": "Viridian City Gym",
+   "tcg_number": "123/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90386,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90386,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "124": {
+   "name": "Fervor",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85430,
+   "tcg_name": "Fervor",
+   "tcg_number": "124/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85430,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85430,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "125": {
+   "name": "Transparent Walls",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90017,
+   "tcg_name": "Transparent Walls",
+   "tcg_number": "125/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90017,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90017,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "126": {
+   "name": "Warp Point",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90476,
+   "tcg_name": "Warp Point",
+   "tcg_number": "126/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90476,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90476,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "127": {
+   "name": "Fighting Energy",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85436,
+   "tcg_name": "Fighting Energy",
+   "tcg_number": "127/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85436,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85436,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "128": {
+   "name": "Fire Energy",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85455,
+   "tcg_name": "Fire Energy",
+   "tcg_number": "128/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85455,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85455,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "129": {
+   "name": "Grass Energy",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85872,
+   "tcg_name": "Grass Energy",
+   "tcg_number": "129/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85872,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85872,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "130": {
+   "name": "Lightning Energy",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86758,
+   "tcg_name": "Lightning Energy",
+   "tcg_number": "130/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86758,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86758,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "131": {
+   "name": "Psychic Energy",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88416,
+   "tcg_name": "Psychic Energy",
+   "tcg_number": "131/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88416,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88416,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "132": {
+   "name": "Water Energy",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90504,
+   "tcg_name": "Water Energy",
+   "tcg_number": "132/132",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90504,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90504,
+     "printing": "Unlimited"
     }
    }
   }

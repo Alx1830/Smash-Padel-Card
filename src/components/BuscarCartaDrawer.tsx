@@ -415,7 +415,7 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
         <div className="buscar-results" style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
           {query.trim().length < 2 ? (
             <div style={{ padding: "60px 0", textAlign: "center" }}>
-              <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.2 }}>🔍</div>
+              <div style={{ marginBottom: "16px", opacity: 0.4 }}><Search size={40} color="#2ee6c1" strokeWidth={1.6} /></div>
               <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>
                 Escribe al menos 2 letras para buscar
               </p>

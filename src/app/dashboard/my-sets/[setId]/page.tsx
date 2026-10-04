@@ -437,7 +437,7 @@ export default function MySetEditorPage() {
                   }}
                 >
                   <div style={{ position: "relative", aspectRatio: "5/7", borderRadius: "8px", overflow: "hidden", background: "rgba(255,255,255,0.03)" }}>
-                    {dc.card?.image && <img src={dc.card.image} alt={dc.card?.name ?? dc.card_id} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0, filter: dc.quantity === 0 ? "grayscale(1) brightness(0.75)" : "none", transition: "filter 0.25s" }} />}
+                    {dc.card?.image && <img loading="lazy" decoding="async" src={dc.card.image} alt={dc.card?.name ?? dc.card_id} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0, filter: dc.quantity === 0 ? "grayscale(1) brightness(0.75)" : "none", transition: "filter 0.25s" }} />}
                     <div style={{ position: "absolute", bottom: 4, right: 4, fontFamily: MONO, fontSize: "8px", color: vColor, border: `1px solid ${vColor}55`, borderRadius: "4px", padding: "1px 5px", background: "rgba(5,7,13,0.85)" }}>{vLabel}</div>
                     <div style={{ position: "absolute", top: 4, right: 4, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "2px 7px", fontFamily: MONO, fontSize: "11px", color: dc.quantity === 0 ? INK2 : COURT, fontWeight: 700 }}>{dc.quantity === 0 ? "falta" : `×${dc.quantity}`}</div>
                   </div>
@@ -544,7 +544,7 @@ export default function MySetEditorPage() {
                   return (
                     <div key={`${r.setId}-${r.card.id}-${i}`} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                       <div style={{ position: "relative", aspectRatio: "5/7", borderRadius: "8px", overflow: "hidden", background: "rgba(255,255,255,0.03)", cursor: "pointer" }} onClick={() => addCard(r.card, r.setId)}>
-                        <img src={r.card.image} alt={r.card.name} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0 }} />
+                        <img loading="lazy" decoding="async" src={r.card.image} alt={r.card.name} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0 }} />
                         <div style={{ position: "absolute", bottom: 4, right: 4, fontFamily: MONO, fontSize: "8px", color: vColor, border: `1px solid ${vColor}55`, borderRadius: "4px", padding: "1px 5px", background: "rgba(5,7,13,0.85)" }}>{vLabel}</div>
                         {inSet && (inSet.quantity === 0
                           ? <div style={{ position: "absolute", top: 6, right: 6, background: "rgba(122,130,152,0.9)", borderRadius: "8px", padding: "3px 9px", fontFamily: MONO, fontSize: "11px", color: "#05070d", fontWeight: 800, letterSpacing: "0.04em" }}>en set</div>

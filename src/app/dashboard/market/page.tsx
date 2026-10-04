@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus, Flag } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { fetchAllRows } from "@/lib/fetch-all-rows";
@@ -283,7 +283,7 @@ export default function DashboardMarketPage() {
 
         {!loading && missingLang.length > 0 && (
           <div style={{ marginTop: "20px", display: "flex", alignItems: "center", gap: "14px", flexWrap: "wrap", background: "rgba(255,196,71,0.08)", border: "1px solid rgba(255,196,71,0.3)", borderRadius: "12px", padding: "14px 18px" }}>
-            <span style={{ fontSize: "20px" }}>🏳️</span>
+            <Flag size={20} color="#2ee6c1" strokeWidth={1.6} />
             <div style={{ flex: 1, minWidth: "200px" }}>
               <p style={{ fontFamily: MONO, fontSize: "12px", color: "#ffc447", fontWeight: 700, margin: "0 0 3px", letterSpacing: "0.04em" }}>
                 {missingLang.length} carta{missingLang.length !== 1 ? "s" : ""} sin idioma

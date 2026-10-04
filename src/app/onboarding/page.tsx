@@ -9,6 +9,7 @@ import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { CITIES_BY_COUNTRY } from "@/data/cities";
 import { aAvatarWebp } from "@/lib/imagen-webp";
 import { UserRound } from "lucide-react";
+import { ENERGIA_OPTS, limpiarEnergia } from "@/lib/energias";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -25,18 +26,7 @@ const SET_OPTS = POKEMON_SERIES.flatMap(series =>
   series.sets.map(set => ({ value: set.id, label: `${series.name} — ${set.name}` }))
 );
 
-const ENERGIA_OPTS = [
-  { value: "🍃 Planta",          label: "🍃 Planta" },
-  { value: "🔥 Fuego",           label: "🔥 Fuego" },
-  { value: "💧 Agua",            label: "💧 Agua" },
-  { value: "⚡ Eléctrica/Rayo",  label: "⚡ Eléctrica/Rayo" },
-  { value: "🔮 Psíquica",        label: "🔮 Psíquica" },
-  { value: "🥊 Lucha",           label: "🥊 Lucha" },
-  { value: "🖤 Oscuridad",       label: "🖤 Oscuridad" },
-  { value: "⚔️ Metal",           label: "⚔️ Metal" },
-  { value: "🐉 Dragón",          label: "🐉 Dragón" },
-  { value: "🧚 Hada",            label: "🧚 Hada" },
-];
+// Lista sin emojis en lib/energias.ts
 
 const TIPO_PERFIL_OPTS = [
   { value: "Inversionista",        label: "Inversionista" },
@@ -284,7 +274,7 @@ export default function OnboardingPage() {
           whatsapp_indicativo: player.whatsapp_indicativo ?? "",
           whatsapp_numero:     player.whatsapp_numero     ?? "",
           pokemon_favorito:    player.pokemon_favorito    ?? "",
-          energia_favorita:    player.energia_favorita    ?? "",
+          energia_favorita:    limpiarEnergia(player.energia_favorita),
           set_favorito:        player.set_favorito        ?? "",
         }));
       }

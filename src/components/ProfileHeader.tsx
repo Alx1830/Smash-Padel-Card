@@ -7,6 +7,7 @@ import { FollowButton } from "./FollowButton";
 import { ProfilePortfolioChart } from "./PortfolioChart";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionEffect, getVersionColor } from "@/data/pokemon-cards-meta";
+import { limpiarEnergia } from "@/lib/energias";
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
@@ -266,7 +267,7 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
             </p>
           </div>
           <div style={{ position: "absolute", top: "38%", right: "80px", transform: "translateY(-80%)", textAlign: "right", fontFamily: MONO, fontSize: "15px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2, lineHeight: 2.2, zIndex: 20 }}>
-            <div>Energía Favorita / <b style={{ color: INK0 }}>{player.energiaFavorita || "—"}</b></div>
+            <div>Energía Favorita / <b style={{ color: INK0 }}>{limpiarEnergia(player.energiaFavorita) || "—"}</b></div>
             <div>País / <b style={{ color: INK0 }}>{player.pais || "—"}</b></div>
             <div>Ciudad / <b style={{ color: INK0 }}>{player.ciudad || "—"}</b></div>
           </div>
@@ -302,7 +303,7 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
             {player.tipoPerfil || "Maestro Pokémon"}
           </p>
           <div style={{ marginTop: "20px", display: "flex", flexWrap: "wrap", gap: "8px 24px", fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", color: INK2 }}>
-            <span>Energía Favorita / <b style={{ color: INK0 }}>{player.energiaFavorita || "—"}</b></span>
+            <span>Energía Favorita / <b style={{ color: INK0 }}>{limpiarEnergia(player.energiaFavorita) || "—"}</b></span>
             <span>País / <b style={{ color: INK0 }}>{player.pais || "—"}</b></span>
             <span>Ciudad / <b style={{ color: INK0 }}>{player.ciudad || "—"}</b></span>
           </div>
@@ -382,7 +383,7 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
                   <Row label="Tipo de Perfil"   value={player.tipoPerfil || "—"} />
                   <Row label="Edad"             value={player.edad ? `${player.edad} años` : "—"} />
                   <Row label="Pokémon Favorito" value={player.pokemonFavorito || "—"} />
-                  <Row label="Energía Favorita" value={player.energiaFavorita || "—"} />
+                  <Row label="Energía Favorita" value={limpiarEnergia(player.energiaFavorita) || "—"} />
                 </>
               )}
             </div>
@@ -415,7 +416,7 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
               </h3>
               <Row label="Pokémon Favorito" value={player.pokemonFavorito || "—"} />
               <Row label="Edad"             value={player.edad ? `${player.edad} años` : "—"} />
-              <Row label="Energía Favorita" value={player.energiaFavorita || "—"} />
+              <Row label="Energía Favorita" value={limpiarEnergia(player.energiaFavorita) || "—"} />
               <Row label="Tipo de Perfil"   value={player.tipoPerfil || "—"} />
               <div style={{ marginTop: "40px" }}>
                 <Showcase featuredCards={featuredCards} inventoryRows={inventoryRows} />

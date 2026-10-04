@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
+import { limpiarEnergia } from "@/lib/energias";
 
 interface PlayerCardProps {
   username:        string;
@@ -206,7 +207,7 @@ export function PlayerCard3D({
                 fontFamily: "var(--font-jetbrains)", fontSize: "11px",
                 letterSpacing: "0.1em", color: INK1,
               }}>
-                {energiaFavorita || "—"}
+                {limpiarEnergia(energiaFavorita) || "—"}
               </div>
             )}
 

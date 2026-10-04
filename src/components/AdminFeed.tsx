@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import DOMPurify from "dompurify";
 import { createClient } from "@/lib/supabase/client";
+import { Paperclip, Link2 } from "lucide-react";
 
 function sanitizeUrl(url: string): string {
   try {
@@ -140,7 +141,7 @@ function RichToolbar({ editorRef }: { editorRef: React.RefObject<HTMLDivElement>
             transition: "all 0.15s",
           }}
         >
-          📎
+          <Paperclip size={16} />
         </button>
 
         {clipOpen && (
@@ -220,7 +221,7 @@ function MediaBlock({ url }: { url: string }) {
   /* Link genérico */
   return (
     <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontFamily: MONO, fontSize: "11px", color: COURT, borderBottom: `1px solid ${COURT}44`, textDecoration: "none" }}>
-      🔗 {url}
+      <Link2 size={12} /> {url}
     </a>
   );
 }

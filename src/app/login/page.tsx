@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { isDisposableEmail } from "@/lib/disposable-emails";
 import { BrandLogo } from "@/components/BrandLogo";
+import { MailCheck, KeyRound } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -147,7 +148,7 @@ export default function LoginPage() {
         {done ? (
           /* Registro exitoso */
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "40px", marginBottom: "16px" }}>📬</div>
+            <div style={{ marginBottom: "16px" }}><MailCheck size={40} color="#2ee6c1" strokeWidth={1.6} /></div>
             <p style={{ fontFamily: MONO, fontSize: "13px", color: INK0, marginBottom: "8px" }}>¡Cuenta creada!</p>
             <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, lineHeight: 1.7 }}>
               Revisa tu correo <b style={{ color: COURT }}>{email}</b> para confirmar tu cuenta y luego inicia sesión.
@@ -160,7 +161,7 @@ export default function LoginPage() {
         ) : forgotDone ? (
           /* Recuperación enviada */
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "40px", marginBottom: "16px" }}>🔑</div>
+            <div style={{ marginBottom: "16px" }}><KeyRound size={40} color="#2ee6c1" strokeWidth={1.6} /></div>
             <p style={{ fontFamily: MONO, fontSize: "13px", color: INK0, marginBottom: "8px" }}>¡Correo enviado!</p>
             <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, lineHeight: 1.7 }}>
               Revisa tu bandeja de entrada en <b style={{ color: COURT }}>{email}</b> y sigue el enlace para restablecer tu contraseña.

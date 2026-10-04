@@ -7,6 +7,8 @@ import { CustomSelect } from "@/components/ui/custom-select";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { CITIES_BY_COUNTRY } from "@/data/cities";
 import { aAvatarWebp } from "@/lib/imagen-webp";
+import { ENERGIA_OPTS, limpiarEnergia } from "@/lib/energias";
+import { UserRound, Camera, AlertTriangle, Smartphone } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -60,18 +62,7 @@ const inputStyle: React.CSSProperties = {
   transition: "border-color 0.2s",
 };
 
-const ENERGIA_OPTS = [
-  { value: "🍃 Planta",          label: "🍃 Planta" },
-  { value: "🔥 Fuego",           label: "🔥 Fuego" },
-  { value: "💧 Agua",            label: "💧 Agua" },
-  { value: "⚡ Eléctrica/Rayo",  label: "⚡ Eléctrica/Rayo" },
-  { value: "🔮 Psíquica",        label: "🔮 Psíquica" },
-  { value: "🥊 Lucha",           label: "🥊 Lucha" },
-  { value: "🖤 Oscuridad",       label: "🖤 Oscuridad" },
-  { value: "⚔️ Metal",           label: "⚔️ Metal" },
-  { value: "🐉 Dragón",          label: "🐉 Dragón" },
-  { value: "🧚 Hada",            label: "🧚 Hada" },
-];
+// Lista sin emojis en lib/energias.ts
 
 const TIPO_PERFIL_OPTS = [
   { value: "Inversionista",       label: "Inversionista" },
@@ -290,7 +281,7 @@ export default function PerfilPage() {
           tipo_perfil:         data.tipo_perfil ?? "",
           ciudad:              data.ciudad ?? "",
           edad:                data.edad?.toString() ?? "",
-          energia_favorita:    data.energia_favorita ?? "",
+          energia_favorita:    limpiarEnergia(data.energia_favorita),
           pokemon_favorito:    data.pokemon_favorito ?? "",
           set_favorito:        data.set_favorito ?? "",
           photo_url:           data.photo_url ?? "",
@@ -466,7 +457,7 @@ export default function PerfilPage() {
                 <Image src={preview} alt="Foto de perfil" fill style={{ objectFit: "cover" }} unoptimized />
               ) : (
                 <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "32px", color: INK2 }}>
-                  👤
+                  <UserRound size={32} />
                 </div>
               )}
               <div style={{
@@ -477,7 +468,7 @@ export default function PerfilPage() {
                 onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.opacity = "1"}
                 onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.opacity = "0"}
               >
-                📷
+                <Camera size={20} color="#f5f7fb" />
               </div>
             </div>
             <div>
@@ -506,7 +497,7 @@ export default function PerfilPage() {
           <div className="perfil-section">
             {sectionTitle("01", "Identidad")}
             <div className="perfil-grid-2">
-              <Field label={`Usuario${usernameFixed ? "  🔒" : ""}`}>
+              <Field label={`Usuario${usernameFixed ? " (no se puede cambiar)" : ""}`}>
                 <div style={{ position: "relative" }}>
                   <input
                     style={{ ...inputStyle, opacity: usernameFixed ? 0.6 : 1, cursor: usernameFixed ? "not-allowed" : "text" }}
@@ -526,7 +517,7 @@ export default function PerfilPage() {
                   </p>
                 ) : (
                   <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ffc800", margin: "6px 0 0", lineHeight: 1.5 }}>
-                    ⚠ Elige bien tu usuario — una vez guardado no podrá cambiarse.
+                    <AlertTriangle size={11} style={{ verticalAlign: "-1px" }} /> Elige bien tu usuario — una vez guardado no podrá cambiarse.
                   </p>
                 )}
                 {usernameError && <p style={{ fontFamily: MONO, fontSize: "10px", color: "#ff4f4f", margin: "6px 0 0" }}>✕ {usernameError}</p>}
@@ -572,7 +563,7 @@ export default function PerfilPage() {
               background: "rgba(46,230,193,0.04)", border: "1px solid rgba(46,230,193,0.15)",
             }}>
               <div style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: COURT, marginBottom: "14px", display: "flex", alignItems: "center", gap: "8px" }}>
-                <span>📱</span> WhatsApp
+                <Smartphone size={12} /> WhatsApp
               </div>
               <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "0 0 14px", lineHeight: 1.6 }}>
                 Requerido para vender en el Market. Solo lo verán compradores interesados.
@@ -685,7 +676,7 @@ export default function PerfilPage() {
       {deleteOpen && (
         <div onClick={() => { setDeleteOpen(false); setDeleteText(""); }} style={{ position: "fixed", inset: 0, zIndex: 500, background: "rgba(5,7,13,0.88)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
           <div onClick={e => e.stopPropagation()} style={{ width: "min(440px, 96vw)", background: "#0a0e1a", border: "1px solid rgba(255,79,79,0.25)", borderRadius: "20px", padding: "36px 32px" }}>
-            <div style={{ fontSize: "36px", textAlign: "center", marginBottom: "16px" }}>⚠️</div>
+            <div style={{ textAlign: "center", marginBottom: "16px" }}><AlertTriangle size={36} color="#ff5d5d" strokeWidth={1.6} /></div>
             <h3 style={{ fontFamily: DISP, fontSize: "20px", color: INK0, margin: "0 0 12px", textAlign: "center" }}>Eliminar perfil</h3>
             <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, lineHeight: 1.7, margin: "0 0 24px", textAlign: "center" }}>
               Tu perfil será eliminado y no será visible para nadie. Si vuelves a iniciar sesión dentro de 1 año, tu perfil será restaurado automáticamente. Para confirmar, escribe exactamente:

@@ -15,6 +15,7 @@ import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { slugifySetName } from "@/lib/slug";
 import { GrillaProgresiva } from "@/components/GrillaProgresiva";
 import dynamic from "next/dynamic";
+import { Tag, PartyPopper, Search, Package } from "lucide-react";
 const CardDetailModal = dynamic(
   () => import("@/components/CardDetailModal").then(m => ({ default: m.CardDetailModal })),
   { ssr: false }
@@ -349,7 +350,7 @@ function MiniCard({ cardId, setId, quantity }: { cardId: number | string; setId:
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
       <div style={{ position: "relative", width: "160px", height: "224px", borderRadius: "8px", overflow: "hidden",
         boxShadow: "0 8px 24px rgba(0,0,0,0.6)" }}>
-        <img src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+        <img loading="lazy" decoding="async" src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
         <div style={{
           position: "absolute", bottom: "7px", right: "7px",
           fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.12em",
@@ -746,7 +747,7 @@ function WishlistSlider({
                   (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 14px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,210,79,0.12)";
                 }}
               >
-                <img src={item.card.image} alt={item.card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+                <img loading="lazy" decoding="async" src={item.card.image} alt={item.card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
               </div>
 
               {/* Info */}
@@ -883,7 +884,7 @@ function MarketListingsSlider({ profileUserId, username }: { profileUserId?: str
       {/* Slider or empty state */}
       {!loaded ? null : resolved.length === 0 ? (
         <div style={{ border: "1px dashed rgba(46,230,193,0.2)", borderRadius: "12px", padding: "32px 24px", textAlign: "center" }}>
-          <div style={{ fontSize: "28px", marginBottom: "12px" }}>🏷️</div>
+          <div style={{ marginBottom: "12px" }}><Tag size={28} color="#2ee6c1" strokeWidth={1.6} /></div>
           <p style={{ fontFamily: MONO_C, fontSize: "12px", color: GREEN, fontWeight: 600, marginBottom: "6px", letterSpacing: "0.05em" }}>
             Sin cartas en venta
           </p>
@@ -1094,7 +1095,7 @@ function DecksSlider({ profileUserId, username }: { profileUserId?: string; user
                     }}
                   >
                     {deck.cover_card_image ? (
-                      <img src={deck.cover_card_image} alt={deck.name} decoding="async" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+                      <img loading="lazy" decoding="async" src={deck.cover_card_image} alt={deck.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
                     ) : (
                       <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "26px" }}>🃏</div>
                     )}
@@ -1227,7 +1228,7 @@ function MySetsSlider({ profileUserId, username }: { profileUserId?: string; use
                     }}
                   >
                     {mset.cover_card_image ? (
-                      <img src={mset.cover_card_image} alt={mset.name} decoding="async" style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+                      <img loading="lazy" decoding="async" src={mset.cover_card_image} alt={mset.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
                     ) : (
                       <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "26px" }}>🗂️</div>
                     )}
@@ -1367,7 +1368,7 @@ function SetExpandedPanel({
             </div>
           ) : missingCards.length === 0 ? (
             <div style={{ textAlign: "center", padding: "24px 0", fontFamily: MONO_C, fontSize: "11px", color: INK2_C }}>
-              ¡Tienes el set completo! 🎉
+              ¡Tienes el set completo! <PartyPopper size={14} style={{ verticalAlign: "-2px" }} />
             </div>
           ) : (
             <GrillaProgresiva
@@ -1463,7 +1464,7 @@ function CollectionSection({
                 Cartas que necesito
               </div>
               <div style={{ border: "1px dashed rgba(255,210,79,0.2)", borderRadius: "12px", padding: "32px 24px", textAlign: "center" }}>
-                <div style={{ fontSize: "28px", marginBottom: "12px" }}>🔍</div>
+                <div style={{ marginBottom: "12px" }}><Search size={28} color="#2ee6c1" strokeWidth={1.6} /></div>
                 <p style={{ fontFamily: MONO_C, fontSize: "12px", color: "#ffd24f", fontWeight: 600, marginBottom: "6px", letterSpacing: "0.05em" }}>
                   ¿Estás buscando una carta?
                 </p>
@@ -1496,7 +1497,7 @@ function CollectionSection({
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             {entries.length === 0 && (
               <div style={{ border: "1px dashed rgba(46,230,193,0.2)", borderRadius: "12px", padding: "32px 24px", textAlign: "center" }}>
-                <div style={{ fontSize: "28px", marginBottom: "12px" }}>📦</div>
+                <div style={{ marginBottom: "12px" }}><Package size={28} color="#2ee6c1" strokeWidth={1.6} /></div>
                 <p style={{ fontFamily: MONO_C, fontSize: "12px", color: COURT_C, fontWeight: 600, marginBottom: "6px", letterSpacing: "0.05em" }}>
                   Colección vacía
                 </p>

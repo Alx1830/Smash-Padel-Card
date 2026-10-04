@@ -9,6 +9,7 @@ import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { useScrydexPrice, SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { tcgCardLink } from "@/lib/tcg-link";
+import { X, FolderOpen } from "lucide-react";
 
 const ModalTiltCard = dynamic(
   () => import("@/components/CardDetailModal").then(m => ({ default: m.ModalTiltCard })),
@@ -89,7 +90,7 @@ export function DeckViewClient({
           <div onClick={e => e.stopPropagation()} style={{ width: "min(300px, 78vw)" }}>
             <ModalTiltCard card={previewCard} />
           </div>
-          <button onClick={() => setPreviewCard(null)} style={{ position: "fixed", top: "20px", right: "24px", background: "none", border: "none", color: INK0, fontSize: "24px", cursor: "pointer", lineHeight: 1 }}>✕</button>
+          <button onClick={() => setPreviewCard(null)} style={{ position: "fixed", top: "20px", right: "24px", background: "none", border: "none", color: INK0, fontSize: "24px", cursor: "pointer", lineHeight: 1 }} aria-label="Cerrar"><X size={18} aria-hidden /></button>
         </div>
       )}
 
@@ -145,7 +146,7 @@ export function DeckViewClient({
           </div>
         ) : resolved.length === 0 ? (
           <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "80px 40px", textAlign: "center" }}>
-            <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.3 }}>🗂️</div>
+            <div style={{ marginBottom: "16px", opacity: 0.5 }}><FolderOpen size={40} color="#2ee6c1" strokeWidth={1.6} /></div>
             <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>Este deck está vacío</p>
           </div>
         ) : (
@@ -160,7 +161,7 @@ export function DeckViewClient({
                     onClick={() => setPreviewCard(item.card as PokemonCard)}
                     style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)", flexShrink: 0, cursor: "pointer", filter: item.quantity === 0 ? "grayscale(1) brightness(0.75)" : item.quantity < item.needed ? "grayscale(0.55) brightness(0.9)" : "none" }}
                   >
-                    <img
+                    <img loading="lazy" decoding="async"
                       src={item.card.image}
                       alt={item.card.name}
                       style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }}

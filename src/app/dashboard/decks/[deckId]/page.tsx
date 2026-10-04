@@ -441,7 +441,7 @@ export default function DeckEditorPage() {
                   }}
                 >
                   <div style={{ position: "relative", aspectRatio: "5/7", borderRadius: "8px", overflow: "hidden", background: "rgba(255,255,255,0.03)" }}>
-                    {dc.card?.image && <img src={dc.card.image} alt={dc.card?.name ?? dc.card_id} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0, filter: dc.quantity === 0 ? "grayscale(1) brightness(0.7)" : dc.quantity < dc.needed ? "grayscale(0.55) brightness(0.9)" : "none", transition: "filter 0.25s" }} />}
+                    {dc.card?.image && <img loading="lazy" decoding="async" src={dc.card.image} alt={dc.card?.name ?? dc.card_id} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0, filter: dc.quantity === 0 ? "grayscale(1) brightness(0.7)" : dc.quantity < dc.needed ? "grayscale(0.55) brightness(0.9)" : "none", transition: "filter 0.25s" }} />}
                     <div style={{ position: "absolute", bottom: 4, right: 4, fontFamily: MONO, fontSize: "8px", color: vColor, border: `1px solid ${vColor}55`, borderRadius: "4px", padding: "1px 5px", background: "rgba(5,7,13,0.85)" }}>{vLabel}</div>
                     <div style={{ position: "absolute", top: 4, right: 4, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "2px 7px", fontFamily: MONO, fontSize: "11px", color: dc.quantity >= dc.needed ? COURT : dc.quantity === 0 ? INK2 : "#d6ff3d", fontWeight: 700 }}>{dc.quantity} / {dc.needed}</div>
                   </div>
@@ -452,11 +452,11 @@ export default function DeckEditorPage() {
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "4px" }}>
                         <span style={{ fontFamily: MONO, fontSize: "8px", letterSpacing: "0.14em", textTransform: "uppercase", color: INK2 }}>{label}</span>
                         <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                          <button onClick={onLess} style={{ width: 22, height: 22, borderRadius: "6px", border: "1px solid rgba(255,255,255,0.15)", background: "none", color: INK0, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <button onClick={onLess} aria-label={`Quitar una (${label})`} style={{ width: 22, height: 22, borderRadius: "6px", border: "1px solid rgba(255,255,255,0.15)", background: "none", color: INK0, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
                             <Minus size={11} />
                           </button>
                           <span style={{ fontFamily: MONO, fontSize: "12px", color: INK0, fontWeight: 700, width: "14px", textAlign: "center" }}>{value}</span>
-                          <button onClick={onMore} disabled={!canMore} style={{ width: 22, height: 22, borderRadius: "6px", border: `1px solid ${accent}44`, background: "none", color: accent, cursor: canMore ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", opacity: canMore ? 1 : 0.35 }}>
+                          <button onClick={onMore} disabled={!canMore} aria-label={`Agregar una (${label})`} style={{ width: 22, height: 22, borderRadius: "6px", border: `1px solid ${accent}44`, background: "none", color: accent, cursor: canMore ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", opacity: canMore ? 1 : 0.35 }}>
                             <Plus size={11} />
                           </button>
                         </div>
@@ -584,7 +584,7 @@ export default function DeckEditorPage() {
                   return (
                     <div key={`${r.setId}-${r.card.id}-${i}`} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                       <div style={{ position: "relative", aspectRatio: "5/7", borderRadius: "8px", overflow: "hidden", background: "rgba(255,255,255,0.03)", cursor: canAdd ? "pointer" : "default" }} onClick={() => canAdd && addCard(r.card, r.setId)}>
-                        <img src={r.card.image} alt={r.card.name} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0 }} />
+                        <img loading="lazy" decoding="async" src={r.card.image} alt={r.card.name} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0 }} />
                         <div style={{ position: "absolute", bottom: 4, right: 4, fontFamily: MONO, fontSize: "8px", color: vColor, border: `1px solid ${vColor}55`, borderRadius: "4px", padding: "1px 5px", background: "rgba(5,7,13,0.85)" }}>{vLabel}</div>
                         {inDeck && (
                           <div style={{ position: "absolute", top: 6, right: 6, background: inDeck.quantity >= inDeck.needed ? "#00e676" : "rgba(122,130,152,0.92)", borderRadius: "8px", padding: "3px 9px", fontFamily: MONO, fontSize: "12px", color: "#05070d", fontWeight: 800, letterSpacing: "0.02em", boxShadow: inDeck.quantity >= inDeck.needed ? "0 0 10px rgba(0,230,118,0.6)" : "none" }}>

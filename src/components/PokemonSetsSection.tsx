@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { Search, X } from "lucide-react";
+import { Search, X, Heart } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES, STANDALONE_SETS, type PokemonSet } from "@/data/pokemon-sets";
 import { fetchAllRows } from "@/lib/fetch-all-rows";
@@ -187,7 +187,7 @@ function TiltCard({
               transition: "all 0.15s", width: "100%", justifyContent: "center",
             }}
           >
-            <span style={{ fontSize: "12px" }}>{isWanted ? "♥" : "♡"}</span>
+            <Heart size={12} fill={isWanted ? "currentColor" : "none"} />
             {isWanted ? "En wishlist" : "Wishlist"}
           </button>
         </>

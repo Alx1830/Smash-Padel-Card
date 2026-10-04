@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, usePathname } from "next/navigation";
-import { Bell } from "lucide-react";
+import { Bell, X, Pencil, Settings, FileText } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { BrandLogo } from "@/components/BrandLogo";
 
@@ -207,7 +207,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
                   <Link href="/dashboard/perfil" onClick={() => setAvatarOpen(false)}
                     className="flex items-center gap-3 px-4 py-3 text-xs text-white/80 hover:bg-[#2ee6c1]/10 hover:text-[#2ee6c1] transition-colors"
                     style={{ fontFamily: "var(--font-jetbrains)", letterSpacing: "0.08em" }}>
-                    <span>✎</span> Editar mi perfil
+                    <Pencil size={13} /> Editar mi perfil
                   </Link>
                   {isAdmin && (
                     <>
@@ -215,12 +215,12 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
                       <Link href="/dashboard/users" onClick={() => setAvatarOpen(false)}
                         className="flex items-center gap-3 px-4 py-3 text-xs hover:bg-[#2ee6c1]/10 hover:text-[#2ee6c1] transition-colors"
                         style={{ fontFamily: "var(--font-jetbrains)", letterSpacing: "0.08em", color: "#f59e0b" }}>
-                        <span>⚙</span> Ver usuarios
+                        <Settings size={13} /> Ver usuarios
                       </Link>
                       <Link href="/dashboard/admin/feed" onClick={() => setAvatarOpen(false)}
                         className="flex items-center gap-3 px-4 py-3 text-xs hover:bg-[#2ee6c1]/10 hover:text-[#2ee6c1] transition-colors"
                         style={{ fontFamily: "var(--font-jetbrains)", letterSpacing: "0.08em", color: "#f59e0b" }}>
-                        <span>📝</span> Feed post
+                        <FileText size={13} /> Feed post
                       </Link>
                     </>
                   )}
@@ -276,7 +276,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
             </span>
           )}
           <button onClick={() => setMobileOpen(false)}
-            className="ml-auto text-white/60 hover:text-white text-2xl focus:outline-none">✕</button>
+            className="ml-auto text-white/60 hover:text-white text-2xl focus:outline-none" aria-label="Cerrar"><X size={18} aria-hidden /></button>
         </div>
 
         {/* Nav links */}
@@ -294,7 +294,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
               <Link href="/dashboard/perfil" onClick={() => setMobileOpen(false)}
                 className="text-xl font-bold tracking-widest text-[#2ee6c1]/80 hover:text-[#2ee6c1] transition-colors py-4 border-b border-white/6 uppercase"
                 style={{ fontFamily: "var(--font-archivo)" }}>
-                ✎ Mi perfil
+                <Pencil size={13} style={{ verticalAlign: "-2px" }} /> Mi perfil
               </Link>
               <button onClick={handleLogout}
                 className="text-left text-xl font-bold tracking-widest text-red-400/70 hover:text-red-400 transition-colors py-4 uppercase"

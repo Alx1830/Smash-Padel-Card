@@ -10,6 +10,7 @@ import { CARD_LANGUAGES, INVENTORY_LANGUAGES, DEFAULT_CARD_LANGUAGE } from "@/li
 import { FlagIcon } from "@/components/FlagIcon";
 import { useScrydexPrice, SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { tcgCardLink } from "@/lib/tcg-link";
+import { X } from "lucide-react";
 
 export const COURT = "#2ee6c1";
 export const INK0  = "#f5f7fb";
@@ -458,7 +459,7 @@ export function CardDetailModal({
             color: DARK2, fontSize: "18px", lineHeight: 1, padding: "6px 8px",
             borderRadius: "6px",
           }}
-        >✕</button>
+         aria-label="Cerrar"><X size={18} aria-hidden /></button>
 
         <div className="modal-card-col" style={{ flexShrink: 0, width: "200px" }}>
           <ModalTiltCard card={card} />

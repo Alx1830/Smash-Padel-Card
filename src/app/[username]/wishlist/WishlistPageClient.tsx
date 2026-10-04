@@ -15,6 +15,7 @@ const ModalTiltCard = dynamic(
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { useScrydexPrice, SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { tcgCardLink } from "@/lib/tcg-link";
+import { X, Lock, Search } from "lucide-react";
 
 const COURT = "#ffd24f";
 const INK0  = "#f5f7fb";
@@ -176,7 +177,7 @@ export function WishlistPageClient({
       {authMsg && (
         <div onClick={() => setAuthMsg(null)} style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(5,7,13,0.88)", backdropFilter: "blur(12px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
           <div onClick={e => e.stopPropagation()} style={{ background: "#0d111f", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "20px", padding: "36px 32px", maxWidth: "380px", width: "100%", textAlign: "center" }}>
-            <div style={{ fontSize: "36px", marginBottom: "16px" }}>🔒</div>
+            <div style={{ marginBottom: "16px" }}><Lock size={36} color="#2ee6c1" strokeWidth={1.6} /></div>
             <h3 style={{ fontFamily: DISP, fontSize: "20px", color: INK0, margin: "0 0 12px", letterSpacing: "-0.01em" }}>Acceso requerido</h3>
             <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, lineHeight: 1.7, margin: "0 0 24px", letterSpacing: "0.04em" }}>{authMsg}</p>
             <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
@@ -197,7 +198,7 @@ export function WishlistPageClient({
           <div onClick={e => e.stopPropagation()} style={{ width: "min(300px, 78vw)" }}>
             <ModalTiltCard card={previewCard} />
           </div>
-          <button onClick={() => setPreviewCard(null)} style={{ position: "fixed", top: "20px", right: "24px", background: "none", border: "none", color: INK0, fontSize: "24px", cursor: "pointer", lineHeight: 1 }}>✕</button>
+          <button onClick={() => setPreviewCard(null)} style={{ position: "fixed", top: "20px", right: "24px", background: "none", border: "none", color: INK0, fontSize: "24px", cursor: "pointer", lineHeight: 1 }} aria-label="Cerrar"><X size={18} aria-hidden /></button>
         </div>
       )}
 
@@ -293,6 +294,11 @@ export function WishlistPageClient({
                 animation: wl-shimmer 1.4s ease-in-out infinite;
                 border-radius: 8px;
               }
+              /* Aquí y no dentro de los resultados: si no, el esqueleto salía
+                 en 1 columna en el celular y saltaba a 2 al cargar. */
+              @media (max-width: 767px), (pointer: coarse) {
+                .wl-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; }
+              }
             `}</style>
 
             {!setsLoaded && wishlistRows.length > 0 ? (
@@ -316,7 +322,7 @@ export function WishlistPageClient({
               </div>
             ) : resolved.length === 0 ? (
               <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "80px 40px", textAlign: "center" }}>
-                <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.3 }}>🔍</div>
+                <div style={{ marginBottom: "16px", opacity: 0.5 }}><Search size={40} color="#2ee6c1" strokeWidth={1.6} /></div>
                 <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>La wishlist está vacía</p>
               </div>
             ) : filtered.length === 0 ? (
@@ -326,7 +332,6 @@ export function WishlistPageClient({
               </div>
             ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="wl-cards-grid">
-                <style>{`@media (max-width: 767px), (pointer: coarse) { .wl-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
                 {filtered.map((item, i) => {
                   const color    = getVersionColor(item.card.version);
                   const label    = getVersionLabel(item.card.version);
@@ -337,7 +342,7 @@ export function WishlistPageClient({
                         onClick={() => setPreviewCard(item.card as PokemonCard)}
                         style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)", flexShrink: 0, cursor: "pointer" }}
                       >
-                        <img
+                        <img loading="lazy" decoding="async"
                           src={item.card.image}
                           alt={item.card.name}
                           style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }}

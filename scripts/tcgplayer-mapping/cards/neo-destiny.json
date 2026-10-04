@@ -3,32 +3,2388 @@
  "tcg_set": "Neo Destiny",
  "code": "neo4",
  "summary": {
-  "total": 1,
-  "ok": 1,
+  "total": 113,
+  "ok": 113,
   "review": 0,
   "missing": 0,
   "pct": 100,
   "variantes": {
-   "total": 1,
-   "resueltas": 1,
+   "total": 226,
+   "resueltas": 226,
    "sinResolver": 0
   }
  },
  "cards": {
-  "33": {
-   "name": "Dark Exeggutor",
+  "1": {
+   "name": "Dark Ampharos",
    "versions": [
-    "normal"
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84561,
+   "tcg_name": "Dark Ampharos",
+   "tcg_number": "001/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 84561,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 84561,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "2": {
+   "name": "Dark Crobat",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84576,
+   "tcg_name": "Dark Crobat",
+   "tcg_number": "002/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 84576,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 84576,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "3": {
+   "name": "Dark Donphan",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84579,
+   "tcg_name": "Dark Donphan",
+   "tcg_number": "003/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 84579,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 84579,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "4": {
+   "name": "Dark Espeon",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84592,
+   "tcg_name": "Dark Espeon",
+   "tcg_number": "004/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 84592,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 84592,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "5": {
+   "name": "Dark Feraligatr",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84594,
+   "tcg_name": "Dark Feraligatr",
+   "tcg_number": "005/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 84594,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 84594,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "6": {
+   "name": "Dark Gengar",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84599,
+   "tcg_name": "Dark Gengar",
+   "tcg_number": "006/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 84599,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 84599,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "7": {
+   "name": "Dark Houndoom",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84610,
+   "tcg_name": "Dark Houndoom",
+   "tcg_number": "007/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 84610,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 84610,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "8": {
+   "name": "Dark Porygon2",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84640,
+   "tcg_name": "Dark Porygon2",
+   "tcg_number": "008/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 84640,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 84640,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "9": {
+   "name": "Dark Scizor",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84652,
+   "tcg_name": "Dark Scizor",
+   "tcg_number": "009/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 84652,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 84652,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "10": {
+   "name": "Dark Typhlosion",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84659,
+   "tcg_name": "Dark Typhlosion",
+   "tcg_number": "010/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 84659,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 84659,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "11": {
+   "name": "Dark Tyranitar",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 84660,
+   "tcg_name": "Dark Tyranitar",
+   "tcg_number": "011/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 84660,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 84660,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "12": {
+   "name": "Light Arcanine",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86734,
+   "tcg_name": "Light Arcanine",
+   "tcg_number": "012/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 86734,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 86734,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "13": {
+   "name": "Light Azumarill",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86735,
+   "tcg_name": "Light Azumarill",
+   "tcg_number": "013/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 86735,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 86735,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "14": {
+   "name": "Light Dragonite",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86738,
+   "tcg_name": "Light Dragonite",
+   "tcg_number": "014/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 86738,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 86738,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "15": {
+   "name": "Light Togetic",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 86750,
+   "tcg_name": "Light Togetic",
+   "tcg_number": "015/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 86750,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 86750,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "16": {
+   "name": "Miracle Energy",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 87496,
+   "tcg_name": "Miracle Energy",
+   "tcg_number": "016/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 87496,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 87496,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "17": {
+   "name": "Dark Ariados",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84566,
+   "tcg_name": "Dark Ariados",
+   "tcg_number": "017/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84566,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84566,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "18": {
+   "name": "Dark Magcargo",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84622,
+   "tcg_name": "Dark Magcargo",
+   "tcg_number": "018/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84622,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84622,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "19": {
+   "name": "Dark Omastar",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84635,
+   "tcg_name": "Dark Omastar",
+   "tcg_number": "019/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84635,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84635,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "20": {
+   "name": "Dark Slowking",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84656,
+   "tcg_name": "Dark Slowking",
+   "tcg_number": "020/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84656,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84656,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "21": {
+   "name": "Dark Ursaring",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84663,
+   "tcg_name": "Dark Ursaring",
+   "tcg_number": "021/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84663,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84663,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "22": {
+   "name": "Light Dragonair",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86737,
+   "tcg_name": "Light Dragonair",
+   "tcg_number": "022/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86737,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86737,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "23": {
+   "name": "Light Lanturn",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86742,
+   "tcg_name": "Light Lanturn",
+   "tcg_number": "023/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86742,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86742,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "24": {
+   "name": "Light Ledian",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86743,
+   "tcg_name": "Light Ledian",
+   "tcg_number": "024/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86743,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86743,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "25": {
+   "name": "Light Machamp",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86744,
+   "tcg_name": "Light Machamp",
+   "tcg_number": "025/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86744,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86744,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "26": {
+   "name": "Light Piloswine",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86747,
+   "tcg_name": "Light Piloswine",
+   "tcg_number": "026/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86747,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86747,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "27": {
+   "name": "Unown [G]",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90209,
+   "tcg_name": "Unown [G]",
+   "tcg_number": "027/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90209,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90209,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "28": {
+   "name": "Unown [H]",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90211,
+   "tcg_name": "Unown [H]",
+   "tcg_number": "028/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90211,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90211,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "29": {
+   "name": "Unown [W]",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90240,
+   "tcg_name": "Unown [W]",
+   "tcg_number": "029/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90240,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90240,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "30": {
+   "name": "Unown [X]",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90242,
+   "tcg_name": "Unown [X]",
+   "tcg_number": "030/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90242,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90242,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "31": {
+   "name": "Chansey",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84170,
+   "tcg_name": "Chansey",
+   "tcg_number": "031/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84170,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84170,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "32": {
+   "name": "Dark Croconaw",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84578,
+   "tcg_name": "Dark Croconaw",
+   "tcg_number": "032/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84578,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84578,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "33": {
+   "name": "Dark Exeggcutor",
+   "versions": [
+    "firstEdition",
+    "unlimited"
    ],
    "status": "ok",
    "product_id": 84593,
    "tcg_name": "Dark Exeggcutor",
    "tcg_number": "033/105",
-   "note": "nuestro \"Dark Exeggutor\" vs TCG \"Dark Exeggcutor\"",
    "variants": {
-    "normal": {
+    "firstEdition": {
      "product_id": 84593,
-     "printing": "Normal"
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84593,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "34": {
+   "name": "Dark Flaaffy",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84595,
+   "tcg_name": "Dark Flaaffy",
+   "tcg_number": "034/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84595,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84595,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "35": {
+   "name": "Dark Forretress",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84598,
+   "tcg_name": "Dark Forretress",
+   "tcg_number": "035/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84598,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84598,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "36": {
+   "name": "Dark Haunter",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84609,
+   "tcg_name": "Dark Haunter",
+   "tcg_number": "036/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84609,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84609,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "37": {
+   "name": "Dark Omanyte",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84634,
+   "tcg_name": "Dark Omanyte",
+   "tcg_number": "037/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84634,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84634,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "38": {
+   "name": "Dark Pupitar",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84642,
+   "tcg_name": "Dark Pupitar",
+   "tcg_number": "038/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84642,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84642,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "39": {
+   "name": "Dark Quilava",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84645,
+   "tcg_name": "Dark Quilava",
+   "tcg_number": "039/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84645,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84645,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "40": {
+   "name": "Dark Wigglytuff",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84674,
+   "tcg_name": "Dark Wigglytuff",
+   "tcg_number": "040/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84674,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84674,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "41": {
+   "name": "Heracross",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86060,
+   "tcg_name": "Heracross",
+   "tcg_number": "041/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86060,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86060,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "42": {
+   "name": "Hitmonlee",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86103,
+   "tcg_name": "Hitmonlee",
+   "tcg_number": "042/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86103,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86103,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "43": {
+   "name": "Houndour",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86219,
+   "tcg_name": "Houndour",
+   "tcg_number": "043/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86219,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86219,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "44": {
+   "name": "Jigglypuff",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86311,
+   "tcg_name": "Jigglypuff",
+   "tcg_number": "044/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86311,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86311,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "45": {
+   "name": "Light Dewgong",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86736,
+   "tcg_name": "Light Dewgong",
+   "tcg_number": "045/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86736,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86736,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "46": {
+   "name": "Light Flareon",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86739,
+   "tcg_name": "Light Flareon",
+   "tcg_number": "046/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86739,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86739,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "47": {
+   "name": "Light Golduck",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86740,
+   "tcg_name": "Light Golduck",
+   "tcg_number": "047/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86740,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86740,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "48": {
+   "name": "Light Jolteon",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86741,
+   "tcg_name": "Light Jolteon",
+   "tcg_number": "048/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86741,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86741,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "49": {
+   "name": "Light Machoke",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86745,
+   "tcg_name": "Light Machoke",
+   "tcg_number": "049/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86745,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86745,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "50": {
+   "name": "Light Ninetales",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86746,
+   "tcg_name": "Light Ninetales",
+   "tcg_number": "050/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86746,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86746,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "51": {
+   "name": "Light Slowbro",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86748,
+   "tcg_name": "Light Slowbro",
+   "tcg_number": "051/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86748,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86748,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "52": {
+   "name": "Light Vaporeon",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86751,
+   "tcg_name": "Light Vaporeon",
+   "tcg_number": "052/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86751,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86751,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "53": {
+   "name": "Light Venomoth",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86752,
+   "tcg_name": "Light Venomoth",
+   "tcg_number": "053/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86752,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86752,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "54": {
+   "name": "Light Wigglytuff",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86753,
+   "tcg_name": "Light Wigglytuff",
+   "tcg_number": "054/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86753,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86753,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "55": {
+   "name": "Scyther",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88995,
+   "tcg_name": "Scyther",
+   "tcg_number": "055/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88995,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88995,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "56": {
+   "name": "Togepi",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 89930,
+   "tcg_name": "Togepi",
+   "tcg_number": "056/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 89930,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 89930,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "57": {
+   "name": "Unown [C]",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90201,
+   "tcg_name": "Unown [C]",
+   "tcg_number": "057/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90201,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90201,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "58": {
+   "name": "Unown [P]",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90227,
+   "tcg_name": "Unown [P]",
+   "tcg_number": "058/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90227,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90227,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "59": {
+   "name": "Unown [Q]",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90229,
+   "tcg_name": "Unown [Q]",
+   "tcg_number": "059/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90229,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90229,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "60": {
+   "name": "Unown [Z]",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90246,
+   "tcg_name": "Unown [Z]",
+   "tcg_number": "060/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90246,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90246,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "61": {
+   "name": "Cyndaquil",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84546,
+   "tcg_name": "Cyndaquil",
+   "tcg_number": "061/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84546,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84546,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "62": {
+   "name": "Dark Octillery",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84632,
+   "tcg_name": "Dark Octillery",
+   "tcg_number": "062/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84632,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84632,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "63": {
+   "name": "Dratini",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84929,
+   "tcg_name": "Dratini",
+   "tcg_number": "063/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84929,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84929,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "64": {
+   "name": "Exeggcute",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85342,
+   "tcg_name": "Exeggcute",
+   "tcg_number": "064/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85342,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85342,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "65": {
+   "name": "Gastly",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85647,
+   "tcg_name": "Gastly",
+   "tcg_number": "065/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85647,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85647,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "66": {
+   "name": "Girafarig",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85728,
+   "tcg_name": "Girafarig",
+   "tcg_number": "066/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85728,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85728,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "67": {
+   "name": "Gligar",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85762,
+   "tcg_name": "Gligar",
+   "tcg_number": "067/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85762,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85762,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "68": {
+   "name": "Growlithe",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85952,
+   "tcg_name": "Growlithe",
+   "tcg_number": "068/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85952,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85952,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "69": {
+   "name": "Hitmonchan",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86090,
+   "tcg_name": "Hitmonchan",
+   "tcg_number": "069/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86090,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86090,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "70": {
+   "name": "Larvitar",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86633,
+   "tcg_name": "Larvitar",
+   "tcg_number": "070/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86633,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86633,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "71": {
+   "name": "Ledyba",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86700,
+   "tcg_name": "Ledyba",
+   "tcg_number": "071/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86700,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86700,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "72": {
+   "name": "Light Sunflora",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86749,
+   "tcg_name": "Light Sunflora",
+   "tcg_number": "072/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86749,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86749,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "73": {
+   "name": "Machop",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86988,
+   "tcg_name": "Machop",
+   "tcg_number": "073/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86988,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86988,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "74": {
+   "name": "Mantine",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87180,
+   "tcg_name": "Mantine",
+   "tcg_number": "074/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87180,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87180,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "75": {
+   "name": "Mareep",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87194,
+   "tcg_name": "Mareep",
+   "tcg_number": "075/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87194,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87194,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "76": {
+   "name": "Phanpy",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87997,
+   "tcg_name": "Phanpy",
+   "tcg_number": "076/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87997,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87997,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "77": {
+   "name": "Pineco",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88123,
+   "tcg_name": "Pineco",
+   "tcg_number": "077/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88123,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88123,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "78": {
+   "name": "Porygon",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88305,
+   "tcg_name": "Porygon",
+   "tcg_number": "078/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88305,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88305,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "79": {
+   "name": "Psyduck",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88433,
+   "tcg_name": "Psyduck",
+   "tcg_number": "079/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88433,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88433,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "80": {
+   "name": "Remoraid",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88693,
+   "tcg_name": "Remoraid",
+   "tcg_number": "080/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88693,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88693,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "81": {
+   "name": "Seel",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 89048,
+   "tcg_name": "Seel",
+   "tcg_number": "081/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 89048,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 89048,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "82": {
+   "name": "Slugma",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 89337,
+   "tcg_name": "Slugma",
+   "tcg_number": "082/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 89337,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 89337,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "83": {
+   "name": "Sunkern",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 89618,
+   "tcg_name": "Sunkern",
+   "tcg_number": "083/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 89618,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 89618,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "84": {
+   "name": "Swinub",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 89699,
+   "tcg_name": "Swinub",
+   "tcg_number": "084/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 89699,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 89699,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "85": {
+   "name": "Totodile",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 89993,
+   "tcg_name": "Totodile",
+   "tcg_number": "085/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 89993,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 89993,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "86": {
+   "name": "Unown [L]",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90219,
+   "tcg_name": "Unown [L]",
+   "tcg_number": "086/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90219,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90219,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "87": {
+   "name": "Unown [S]",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90232,
+   "tcg_name": "Unown [S]",
+   "tcg_number": "087/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90232,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90232,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "88": {
+   "name": "Unown [T]",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90234,
+   "tcg_name": "Unown [T]",
+   "tcg_number": "088/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90234,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90234,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "89": {
+   "name": "Unown [V]",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90238,
+   "tcg_name": "Unown [V]",
+   "tcg_number": "089/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90238,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90238,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "90": {
+   "name": "Venonat",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90305,
+   "tcg_name": "Venonat",
+   "tcg_number": "090/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90305,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90305,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "91": {
+   "name": "Vulpix",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 90433,
+   "tcg_name": "Vulpix",
+   "tcg_number": "091/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 90433,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 90433,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "92": {
+   "name": "Broken Ground Gym",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 83990,
+   "tcg_name": "Broken Ground Gym",
+   "tcg_number": "092/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 83990,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 83990,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "93": {
+   "name": "EXP.ALL",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85367,
+   "tcg_name": "EXP.ALL",
+   "tcg_number": "093/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85367,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85367,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "94": {
+   "name": "Impostor Professor Oak's Invention",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86272,
+   "tcg_name": "Impostor Professor Oak's Invention",
+   "tcg_number": "094/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86272,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86272,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "95": {
+   "name": "Radio Tower",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88497,
+   "tcg_name": "Radio Tower",
+   "tcg_number": "095/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88497,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88497,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "96": {
+   "name": "Thought Wave Machine (Rocket's Secret Machine)",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 89898,
+   "tcg_name": "Thought Wave Machine (Rocket's Secret Machine)",
+   "tcg_number": "096/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 89898,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 89898,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "97": {
+   "name": "Counterattack Claws",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 84448,
+   "tcg_name": "Counterattack Claws",
+   "tcg_number": "097/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 84448,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 84448,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "98": {
+   "name": "Energy Amplifier",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85208,
+   "tcg_name": "Energy Amplifier",
+   "tcg_number": "098/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85208,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85208,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "99": {
+   "name": "Energy Stadium",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 85251,
+   "tcg_name": "Energy Stadium",
+   "tcg_number": "099/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 85251,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 85251,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "100": {
+   "name": "Lucky Stadium",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86893,
+   "tcg_name": "Lucky Stadium",
+   "tcg_number": "100/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86893,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86893,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "101": {
+   "name": "Magnifier",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87122,
+   "tcg_name": "Magnifier",
+   "tcg_number": "101/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87122,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87122,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "102": {
+   "name": "Pokemon Personality Test",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 88232,
+   "tcg_name": "Pokemon Personality Test",
+   "tcg_number": "102/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 88232,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 88232,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "103": {
+   "name": "Team Rocket's Evil Deeds",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 89850,
+   "tcg_name": "Team Rocket's Evil Deeds",
+   "tcg_number": "103/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 89850,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 89850,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "104": {
+   "name": "Heal Powder",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 86039,
+   "tcg_name": "Heal Powder",
+   "tcg_number": "104/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 86039,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 86039,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "105": {
+   "name": "Mail from Bill",
+   "versions": [
+    "firstEdition",
+    "unlimited"
+   ],
+   "status": "ok",
+   "product_id": 87123,
+   "tcg_name": "Mail from Bill",
+   "tcg_number": "105/105",
+   "variants": {
+    "firstEdition": {
+     "product_id": 87123,
+     "printing": "1st Edition"
+    },
+    "unlimited": {
+     "product_id": 87123,
+     "printing": "Unlimited"
+    }
+   }
+  },
+  "106": {
+   "name": "Shining Celebi",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89162,
+   "tcg_name": "Shining Celebi",
+   "tcg_number": "106/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 89162,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 89162,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "107": {
+   "name": "Shining Charizard",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89163,
+   "tcg_name": "Shining Charizard",
+   "tcg_number": "107/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 89163,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 89163,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "108": {
+   "name": "Shining Kabutops",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89165,
+   "tcg_name": "Shining Kabutops",
+   "tcg_number": "108/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 89165,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 89165,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "109": {
+   "name": "Shining Mewtwo",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89167,
+   "tcg_name": "Shining Mewtwo",
+   "tcg_number": "109/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 89167,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 89167,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "110": {
+   "name": "Shining Noctowl",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89168,
+   "tcg_name": "Shining Noctowl",
+   "tcg_number": "110/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 89168,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 89168,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "111": {
+   "name": "Shining Raichu",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89169,
+   "tcg_name": "Shining Raichu",
+   "tcg_number": "111/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 89169,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 89169,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "112": {
+   "name": "Shining Steelix",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89170,
+   "tcg_name": "Shining Steelix",
+   "tcg_number": "112/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 89170,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 89170,
+     "printing": "Unlimited Holofoil"
+    }
+   }
+  },
+  "113": {
+   "name": "Shining Tyranitar",
+   "versions": [
+    "firstEditionHolofoil",
+    "unlimitedHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 89171,
+   "tcg_name": "Shining Tyranitar",
+   "tcg_number": "113/105",
+   "variants": {
+    "firstEditionHolofoil": {
+     "product_id": 89171,
+     "printing": "1st Edition Holofoil"
+    },
+    "unlimitedHolofoil": {
+     "product_id": 89171,
+     "printing": "Unlimited Holofoil"
     }
    }
   }

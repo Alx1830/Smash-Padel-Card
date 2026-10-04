@@ -10,6 +10,7 @@ import { PortfolioChart, type Snapshot, type HourlySnapshot } from "@/components
 import { TopLocalCards } from "@/components/TopLocalCards";
 import { MuroActividad } from "@/components/feed/MuroActividad";
 import { MuroNoticias } from "@/components/feed/MuroNoticias";
+import { X } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
@@ -103,7 +104,7 @@ function FollowersPopup({ userId, onClose }: { userId: string; onClose: () => vo
             <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: "0 0 4px" }}>Tus seguidores</p>
             <p style={{ fontFamily: DISP, fontSize: "18px", color: INK0, margin: 0 }}>{followers.length}{hasMore ? "+" : ""} seguidores</p>
           </div>
-          <button onClick={onClose} style={{ background: "none", border: "none", color: INK2, fontSize: "20px", cursor: "pointer", lineHeight: 1 }}>✕</button>
+          <button onClick={onClose} style={{ background: "none", border: "none", color: INK2, fontSize: "20px", cursor: "pointer", lineHeight: 1 }} aria-label="Cerrar"><X size={18} aria-hidden /></button>
         </div>
         {/* Lista */}
         <div style={{ overflowY: "auto", flex: 1 }}>

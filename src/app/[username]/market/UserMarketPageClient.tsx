@@ -23,6 +23,7 @@ const DISP  = "var(--font-archivo)";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { FlagIcon } from "@/components/FlagIcon";
 import { tcgCardLink } from "@/lib/tcg-link";
+import { X, Lock } from "lucide-react";
 
 interface Listing {
   id: string;
@@ -141,7 +142,7 @@ export function UserMarketPageClient({
       {authMsg && (
         <div onClick={() => setAuthMsg(null)} style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(5,7,13,0.88)", backdropFilter: "blur(12px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
           <div onClick={e => e.stopPropagation()} style={{ background: "#0d111f", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "20px", padding: "36px 32px", maxWidth: "380px", width: "100%", textAlign: "center" }}>
-            <div style={{ fontSize: "36px", marginBottom: "16px" }}>🔒</div>
+            <div style={{ marginBottom: "16px" }}><Lock size={36} color="#2ee6c1" strokeWidth={1.6} /></div>
             <h3 style={{ fontFamily: DISP, fontSize: "20px", color: INK0, margin: "0 0 12px", letterSpacing: "-0.01em" }}>Acceso requerido</h3>
             <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, lineHeight: 1.7, margin: "0 0 24px", letterSpacing: "0.04em" }}>{authMsg}</p>
             <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
@@ -162,7 +163,7 @@ export function UserMarketPageClient({
           <div onClick={e => e.stopPropagation()} style={{ width: "min(300px, 78vw)" }}>
             <ModalTiltCard card={previewCard} />
           </div>
-          <button onClick={() => setPreviewCard(null)} style={{ position: "fixed", top: "20px", right: "24px", background: "none", border: "none", color: INK0, fontSize: "24px", cursor: "pointer", lineHeight: 1 }}>✕</button>
+          <button onClick={() => setPreviewCard(null)} style={{ position: "fixed", top: "20px", right: "24px", background: "none", border: "none", color: INK0, fontSize: "24px", cursor: "pointer", lineHeight: 1 }} aria-label="Cerrar"><X size={18} aria-hidden /></button>
         </div>
       )}
 
@@ -283,7 +284,7 @@ export function UserMarketPageClient({
                   return (
                     <div key={listing.id} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
                       <div onClick={() => setPreviewCard(card as PokemonCard)} style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)", flexShrink: 0, cursor: "pointer" }}>
-                        <img src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
+                        <img loading="lazy" decoding="async" src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
                         <div style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>
                           {label}
                         </div>
