@@ -172,6 +172,25 @@ export async function POST(req: NextRequest) {
   const reason = (body.reason ?? "").trim().slice(0, 500);
 
   if (!id || !action) return NextResponse.json({ error: "Faltan datos" }, { status: 400 });
+
+  /* Eliminar del market: la publicación desaparece del todo, en cualquier
+     estado. La carta sigue en el inventario del vendedor, que es otra tabla. */
+  if (action === "delete") {
+    const { data: borrada, error } = await supabaseAdmin
+      .from("market_listings").delete().eq("id", id).select("user_id").maybeSingle();
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (borrada?.user_id) {
+      await supabaseAdmin.from("notifications").insert({
+        user_id: borrada.user_id,
+        type: "listing_removed",
+        title: "Tu publicación fue eliminada del market",
+        body: reason || "Un administrador la quitó. La carta sigue en tu inventario.",
+        data: { url: "/dashboard/market", listing_id: id },
+      });
+    }
+    return NextResponse.json({ ok: true, deleted: true });
+  }
+
   if (action === "reject" && !reason) {
     return NextResponse.json({ error: "El rechazo necesita un motivo" }, { status: 400 });
   }

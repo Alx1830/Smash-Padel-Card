@@ -17,7 +17,7 @@ import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
-import { Check, X, Undo2, Clock, ShieldCheck, UserPlus, UserMinus } from "lucide-react";
+import { Check, X, Undo2, Clock, ShieldCheck, UserPlus, UserMinus, Trash2, Search, SearchX } from "lucide-react";
 
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
@@ -57,6 +57,15 @@ interface Listing {
   player: { username: string; pais: string | null; ciudad: string | null } | null;
 }
 
+/** Precio del vendedor contra el de mercado; ±15 % es el mismo umbral que pinta la tarjeta */
+type FiltroPrecio = "todas" | "sobre" | "en" | "bajo";
+const FILTROS_PRECIO: { id: FiltroPrecio; label: string }[] = [
+  { id: "todas", label: "Todas" },
+  { id: "sobre", label: "Sobre mercado" },
+  { id: "en",    label: "En mercado" },
+  { id: "bajo",  label: "Bajo mercado" },
+];
+
 const TABS: { id: Tab; label: string }[] = [
   { id: "pending",    label: "Por aprobar" },
   { id: "active",     label: "Publicadas" },
@@ -85,6 +94,10 @@ export default function AprobacionesPage() {
   const [trm, setTrm]           = useState<{ cop: number; fecha: string; fuente: string } | null>(null);
   /** Precio de mercado en USD por set: { setId: { "me2pt5-122": { holofoil: 3.2 } } } */
   const [precios, setPrecios]   = useState<Record<string, Record<string, Record<string, number>>>>({});
+  /** Filtros de la grilla: texto (carta, set o @vendedor), set y precio contra mercado */
+  const [busqueda, setBusqueda] = useState("");
+  const [filtroSet, setFiltroSet] = useState("");
+  const [filtroPrecio, setFiltroPrecio] = useState<FiltroPrecio>("todas");
 
   useEffect(() => {
     (async () => {
@@ -175,7 +188,13 @@ export default function AprobacionesPage() {
     return { usd, referenciaCop, diff };
   }
 
-  async function moderar(id: string, action: "approve" | "reject" | "revert", reason?: string) {
+  async function eliminar(l: Listing) {
+    const nombre = datosCarta(l).card?.name ?? `Carta #${l.card_id}`;
+    if (!window.confirm(`¿Eliminar del mercado "${nombre}" de @${l.player?.username ?? "—"}? Se borra la publicación y se le avisa al vendedor. La carta sigue en su inventario.`)) return;
+    await moderar(l.id, "delete");
+  }
+
+  async function moderar(id: string, action: "approve" | "reject" | "revert" | "delete", reason?: string) {
     setTrabajando(id);
     try {
       const res  = await fetch("/api/admin/listings", {
@@ -233,6 +252,31 @@ export default function AprobacionesPage() {
     return { card, setName: ALL_SETS.find(s => s.id === l.set_id)?.name ?? l.set_id };
   }
 
+  /* Sets que aparecen en la pestaña, para el selector */
+  const setsDisponibles = [...new Set(listings.map(l => l.set_id))]
+    .map(id => ({ id, name: ALL_SETS.find(s => s.id === id)?.name ?? id }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  const texto = busqueda.trim().toLowerCase().replace(/^@/, "");
+  const visibles = listings.filter(l => {
+    if (filtroSet && l.set_id !== filtroSet) return false;
+    if (filtroPrecio !== "todas") {
+      const diff = comparar(l)?.diff;
+      if (diff == null) return false;
+      if (filtroPrecio === "sobre" && diff <= 15) return false;
+      if (filtroPrecio === "bajo"  && diff >= -15) return false;
+      if (filtroPrecio === "en"    && Math.abs(diff) > 15) return false;
+    }
+    if (texto) {
+      const { card, setName } = datosCarta(l);
+      const enTexto = [card?.name, setName, l.player?.username, String(l.card_id)]
+        .some(v => v?.toLowerCase().includes(texto));
+      if (!enTexto) return false;
+    }
+    return true;
+  });
+  const hayFiltro = !!texto || !!filtroSet || filtroPrecio !== "todas";
+
   if (checking) {
     return (
       <div style={{ minHeight: "100vh", background: "#05070d", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -270,6 +314,23 @@ export default function AprobacionesPage() {
         .ap-trust   { background: rgba(46,230,193,0.08); border-color: rgba(46,230,193,0.35); color: ${COURT};
                       flex: 0 0 auto; padding: 7px 9px; }
         .ap-revert  { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); color: ${INK1}; }
+        .ap-delete  { width: 100%; flex: 0 0 auto; background: none; border-color: rgba(255,93,93,0.3); color: ${CRIT}; }
+        .ap-delete:hover:not(:disabled) { background: rgba(255,93,93,0.1); }
+
+        .ap-filtros { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+        .ap-buscar  { position: relative; flex: 1 1 260px; max-width: 360px; min-width: 0; }
+        .ap-buscar input, .ap-select {
+          width: 100%; box-sizing: border-box; padding: 9px 12px; border-radius: 999px;
+          background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
+          color: ${INK0}; font-family: ${MONO}; font-size: 11px; outline: none; }
+        .ap-buscar input { padding-left: 32px; }
+        .ap-buscar input:focus, .ap-select:focus { border-color: rgba(46,230,193,0.5); }
+        .ap-select { flex: 0 1 220px; width: auto; cursor: pointer; }
+        .ap-select option { background: #0a0e1a; }
+        @media (max-width: 767px) {
+          .ap-buscar { flex-basis: 100%; max-width: none; }
+          .ap-select { flex: 1 1 100%; }
+        }
 
         /* minmax(0, 1fr) y no 1fr: si no, la columna no baja del ancho de su
            contenido y la grilla desborda en móvil */
@@ -394,8 +455,44 @@ export default function AprobacionesPage() {
             </p>
           </div>
         ) : (
+          <>
+          <div className="ap-filtros">
+            <div className="ap-buscar">
+              <Search size={13} color={INK2} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
+              <input value={busqueda} onChange={e => setBusqueda(e.target.value)}
+                placeholder="Buscar carta, set o @vendedor" aria-label="Buscar" />
+            </div>
+            <select className="ap-select" value={filtroSet} onChange={e => setFiltroSet(e.target.value)} aria-label="Filtrar por set">
+              <option value="">Todos los sets ({setsDisponibles.length})</option>
+              {setsDisponibles.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+            </select>
+          </div>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 20 }}>
+            {FILTROS_PRECIO.map(f => (
+              <button key={f.id} className={`ap-tab${filtroPrecio === f.id ? " on" : ""}`} onClick={() => setFiltroPrecio(f.id)}>
+                {f.label}
+              </button>
+            ))}
+            <span style={{ fontFamily: MONO, fontSize: 10, color: INK2, letterSpacing: "0.06em", marginLeft: 4 }}>
+              {hayFiltro ? `${visibles.length} de ${listings.length}` : `${listings.length}`} {listings.length === 1 ? "carta" : "cartas"}
+            </span>
+            {hayFiltro && (
+              <button className="ap-tab" onClick={() => { setBusqueda(""); setFiltroSet(""); setFiltroPrecio("todas"); }}>
+                Limpiar filtros
+              </button>
+            )}
+          </div>
+
+          {visibles.length === 0 ? (
+            <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: 16, padding: "60px 30px", textAlign: "center" }}>
+              <SearchX size={26} color={INK2} strokeWidth={1.6} />
+              <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.08em", margin: "14px 0 0" }}>
+                Ninguna carta coincide con los filtros. Cambia la búsqueda o toca &quot;Limpiar filtros&quot;.
+              </p>
+            </div>
+          ) : (
           <div className="ap-grid">
-            {listings.map(l => {
+            {visibles.map(l => {
               const { card, setName } = datosCarta(l);
               const verColor = getVersionColor(l.version);
               return (
@@ -484,11 +581,17 @@ export default function AprobacionesPage() {
                         </button>
                       )}
                     </div>
+                    <button className="ap-act ap-delete" disabled={trabajando === l.id}
+                      onClick={() => eliminar(l)} title="Borrar la publicación del market">
+                      <Trash2 size={12} /> Eliminar del mercado
+                    </button>
                   </div>
                 </div>
               );
             })}
           </div>
+          )}
+          </>
         )}
       </div>
 
