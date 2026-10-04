@@ -152,7 +152,9 @@ export function NotificationsDrawer({
   async function handleNotifClick(id: string, data: Record<string, unknown>) {
     await markRead(id);
     const url = data?.url as string | undefined;
-    if (url) {
+    // Solo rutas del propio sitio: una notificación nunca debe sacar al usuario
+    // a otro dominio ("//otro.com" también es externo).
+    if (url && url.startsWith("/") && !url.startsWith("//")) {
       onClose();
       router.push(url);
     }

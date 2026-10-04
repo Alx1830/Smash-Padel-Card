@@ -10,6 +10,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   if (!user) redirect("/login");
 
+  // Cuenta suspendida desde el panel de usuarios: su sesión vieja puede seguir
+  // viva hasta una hora, así que se corta aquí también.
+  const suspendida = (user as { banned_until?: string | null }).banned_until;
+  if (suspendida && new Date(suspendida) > new Date()) redirect("/auth/bloqueado");
+
   // Guard: profile must be complete before accessing the dashboard
   const profileComplete =
     profile?.username    && profile.username.trim()    !== "" &&

@@ -36,7 +36,11 @@
     { "name": "RL_API_AUTH",      "namespace_id": "1002", "simple": { "limit": 15, "period": 60 } },
     { "name": "RL_PUSH_SUBSCRIBE","namespace_id": "1003", "simple": { "limit": 5,  "period": 60 } },
     { "name": "RL_WEBHOOKS",      "namespace_id": "1004", "simple": { "limit": 30, "period": 60 } },
-    { "name": "RL_ADMIN",         "namespace_id": "1005", "simple": { "limit": 20, "period": 60 } }
+    { "name": "RL_ADMIN",         "namespace_id": "1005", "simple": { "limit": 20, "period": 60 } },
+    // Contacto de vendedores del market (público, sin sesión)
+    { "name": "RL_PUBLICO",       "namespace_id": "1006", "simple": { "limit": 60, "period": 60 } },
+    // Avisos de intercambios y comentarios: sin esto se podía spamear push a otro usuario
+    { "name": "RL_INTERACCION",   "namespace_id": "1007", "simple": { "limit": 20, "period": 60 } }
   ],
 
   // SQLite es el unico backend de Durable Objects del plan gratuito.

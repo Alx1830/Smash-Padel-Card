@@ -272,7 +272,10 @@ export default function PerfilPage() {
       setUserId(user.id);
       userIdRef.current = user.id;
       const { data } = await supabase
-        .from("players").select("*").eq("user_id", user.id).single();
+        // Columnas explícitas: last_seen y blocked ya no son legibles desde el navegador.
+        .from("players")
+        .select("username, first_name, last_name, pais, tipo_perfil, ciudad, edad, energia_favorita, pokemon_favorito, set_favorito, photo_url, whatsapp_indicativo, whatsapp_numero, role")
+        .eq("user_id", user.id).single();
       if (data) {
         const admin = data.role === "admin";
         setIsAdmin(admin);

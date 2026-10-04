@@ -62,7 +62,12 @@ export default function LoginPage() {
     if (mode === "login") {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       setLoading(false);
-      if (error) { setError("Correo o contraseña incorrectos"); return; }
+      if (error) {
+        setError(/banned/i.test(error.message)
+          ? "Tu cuenta está suspendida. Escríbenos a admin@facebinder.com si crees que es un error."
+          : "Correo o contraseña incorrectos");
+        return;
+      }
       window.location.href = "/dashboard";
     } else {
       if (isDisposableEmail(email)) {

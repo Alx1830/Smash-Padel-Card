@@ -52,14 +52,19 @@ export default async function WishlistPage({
   const { username } = await params;
   const supabase = await createClient();
 
-  const [{ data: player }, { data: { user } }] = await Promise.all([
-    supabase
-      .from("players")
-      .select("user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, energia_favorita, pokemon_favorito, edad, set_favorito, whatsapp_indicativo, whatsapp_numero")
-      .ilike("username", username)
-      .single(),
-    supabase.auth.getUser(),
-  ]);
+  // El WhatsApp solo se entrega con sesión: la base ya no se lo da a la llave
+  // pública, y contactar desde la wishlist exige estar registrado de todos modos.
+  const { data: { user } } = await supabase.auth.getUser();
+  const { data: player } = await supabase
+    .from("players")
+    .select(`user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, energia_favorita, pokemon_favorito, edad, set_favorito${user ? ", whatsapp_indicativo, whatsapp_numero" : ""}`)
+    .ilike("username", username)
+    .single<{
+      user_id: string; username: string; first_name: string | null; last_name: string | null;
+      pais: string | null; ciudad: string | null; photo_url: string | null; tipo_perfil: string | null;
+      energia_favorita: string | null; pokemon_favorito: string | null; edad: number | null;
+      set_favorito: string | null; whatsapp_indicativo?: string | null; whatsapp_numero?: string | null;
+    }>();
 
   if (!player) notFound();
 

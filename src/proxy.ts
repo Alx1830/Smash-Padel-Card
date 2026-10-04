@@ -15,6 +15,9 @@ const RATE_LIMITED: Record<string, { binding: string; limit: number; windowMs: n
   "/api/push/subscribe": { binding: "RL_PUSH_SUBSCRIBE", limit: 5,  windowMs: 60_000 },
   "/api/webhooks":       { binding: "RL_WEBHOOKS",       limit: 30, windowMs: 60_000 },
   "/api/admin":          { binding: "RL_ADMIN",          limit: 20, windowMs: 60_000 },
+  "/api/vendedores":     { binding: "RL_PUBLICO",        limit: 60, windowMs: 60_000 },
+  "/api/trades":         { binding: "RL_INTERACCION",    limit: 20, windowMs: 60_000 },
+  "/api/post-comments":  { binding: "RL_INTERACCION",    limit: 20, windowMs: 60_000 },
 };
 
 // En proxy hay que pedir el contexto en modo async: el sincrono no esta
@@ -159,5 +162,8 @@ export const config = {
     "/api/push/:path*",
     "/api/webhooks/:path*",
     "/api/admin/:path*",
+    "/api/vendedores",
+    "/api/trades/:path*",
+    "/api/post-comments/:path*",
   ],
 };

@@ -429,10 +429,11 @@ export function MarketPageClient({
       }
 
       const uids = [...new Set(rawListings.map((r: any) => r.user_id))];
-      const { data: playerRows } = await supabase
-        .from("players")
-        .select("user_id, username, pais, ciudad, whatsapp_indicativo, whatsapp_numero")
-        .in("user_id", uids);
+      // El contacto sale del servidor: la tabla ya no entrega teléfonos a la llave pública.
+      const playerRows: any[] = await fetch(`/api/vendedores?ids=${uids.join(",")}`)
+        .then(r => (r.ok ? r.json() : { vendedores: [] }))
+        .then(j => j.vendedores ?? [])
+        .catch(() => []);
       const playerMap: Record<string, any> = {};
       (playerRows ?? []).forEach((p: any) => { playerMap[p.user_id] = p; });
 
