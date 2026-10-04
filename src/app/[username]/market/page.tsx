@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { MobileTabBar } from "@/components/MobileTabBar";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { UserMarketPageClient } from "./UserMarketPageClient";
+import { escaparLike } from "@/lib/escapar-like";
 
 export const revalidate = 300;
 
@@ -24,7 +25,7 @@ export async function generateMetadata({
   const { data } = await adminClient
     .from("players")
     .select("username, first_name, last_name")
-    .ilike("username", username)
+    .ilike("username", escaparLike(username))
     .single();
 
   const display = data?.first_name
@@ -63,7 +64,7 @@ export default async function UserMarketPage({
     adminClient2
       .from("players")
       .select("user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, energia_favorita, pokemon_favorito, edad, set_favorito, whatsapp_indicativo, whatsapp_numero, activo")
-      .ilike("username", username)
+      .ilike("username", escaparLike(username))
       .single(),
     supabase.auth.getUser(),
   ]);

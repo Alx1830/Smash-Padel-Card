@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { webpush } from '@/lib/web-push';
 import webpushLib from 'web-push';
+import { esSecretoWebhook } from '@/lib/secreto-webhook';
 
 /**
  * Avisa a los admins de que hay una carta esperando aprobación.
@@ -22,7 +23,7 @@ interface WebhookPayload {
 
 export async function POST(request: NextRequest) {
   const secret = request.headers.get('x-webhook-secret');
-  if (secret !== process.env.SUPABASE_WEBHOOK_SECRET) {
+  if (!(await esSecretoWebhook(secret))) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 

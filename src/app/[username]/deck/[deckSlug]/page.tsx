@@ -8,6 +8,7 @@ import { MobileTabBar } from "@/components/MobileTabBar";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { slugifySetName } from "@/lib/slug";
 import { DeckViewClient } from "./DeckViewClient";
+import { escaparLike } from "@/lib/escapar-like";
 
 const ALL_SETS = [...POKEMON_SERIES.flatMap(s => s.sets), ...HIDDEN_SETS];
 
@@ -17,7 +18,7 @@ async function loadDeck(username: string, deckSlug: string) {
   const { data: player } = await supabase
     .from("players")
     .select("user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, energia_favorita, pokemon_favorito, edad, set_favorito")
-    .ilike("username", username)
+    .ilike("username", escaparLike(username))
     .single();
   if (!player?.user_id) return null;
 

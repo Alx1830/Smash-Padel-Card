@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
+import { escaparLike } from "@/lib/escapar-like";
 
 /**
  * El jugador, buscado una sola vez por pedido.
@@ -16,7 +17,7 @@ export const traerJugador = cache(async (username: string) => {
   const { data } = await adminClient
     .from("players")
     .select("*")
-    .ilike("username", username)
+    .ilike("username", escaparLike(username))
     .single();
 
   return data && data.activo !== false ? data : null;

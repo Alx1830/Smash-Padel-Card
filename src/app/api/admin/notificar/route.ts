@@ -18,6 +18,7 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { webpush } from "@/lib/web-push";
 import webpushLib from "web-push";
+import { esSecretoWebhook } from "@/lib/secreto-webhook";
 
 /** Nadie lee un título de dos renglones en la barra del celular. */
 const TITULO_MAX  = 70;
@@ -30,8 +31,7 @@ export async function POST(request: NextRequest) {
    * "Enviar"; o la base de datos con el secreto de webhook, que es cuando sale
    * un aviso programado y no hay nadie frente a la pantalla. */
   const secreto = request.headers.get("x-webhook-secret");
-  const esperado = process.env.SUPABASE_WEBHOOK_SECRET;
-  const desdeLaBase = Boolean(esperado) && secreto === esperado;
+  const desdeLaBase = await esSecretoWebhook(secreto);
 
   if (!desdeLaBase) {
     const supabase = await createServerClient();

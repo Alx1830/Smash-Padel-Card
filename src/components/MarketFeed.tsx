@@ -299,7 +299,12 @@ export function MarketFeed() {
   const [items, setItems]       = useState<FeedItem[]>([]);
   const [loading, setLoading]   = useState(false);
   const [hasMore, setHasMore]   = useState(true);
-  const cursorRef   = useRef<string>(new Date().toISOString());
+  /* Un marcador (fecha, id) por lista. Con uno solo de fecha, las cartas que
+     comparten la misma hora —"agregar todas las faltantes" mete 774 en un solo
+     insert— se saltaban para siempre. */
+  type Marcador = { ts: string; id: string } | null;
+  const cursorListRef = useRef<Marcador>(null);
+  const cursorWishRef = useRef<Marcador>(null);
   const loadingRef  = useRef(false);
   const hasMoreRef  = useRef(true);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -309,28 +314,31 @@ export function MarketFeed() {
     loadingRef.current = true;
     setLoading(true);
 
-    const cursor = cursorRef.current;
+    const despues = (m: Marcador) =>
+      m ? `created_at.lt."${m.ts}",and(created_at.eq."${m.ts}",id.lt.${m.id})` : null;
+
+    let qList = supabase
+      .from("market_listings")
+      .select("id, card_id, set_id, price_cop, currency, version, language, created_at, user_id")
+      .eq("status", "active");
+    const fList = despues(cursorListRef.current);
+    if (fList) qList = qList.or(fList);
+
+    let qWish = supabase
+      .from("card_wishlist")
+      .select("id, card_id, set_id, version, created_at, user_id");
+    const fWish = despues(cursorWishRef.current);
+    if (fWish) qWish = qWish.or(fWish);
 
     const [{ data: listings }, { data: wishlists }] = await Promise.all([
-      supabase
-        .from("market_listings")
-        .select("id, card_id, set_id, price_cop, currency, version, language, created_at, user_id")
-        .eq("status", "active")
-        .lt("created_at", cursor)
-        .order("created_at", { ascending: false })
-        .limit(PAGE),
-      supabase
-        .from("card_wishlist")
-        .select("id, card_id, set_id, version, created_at, user_id")
-        .lt("created_at", cursor)
-        .order("created_at", { ascending: false })
-        .limit(PAGE * 2),
+      qList.order("created_at", { ascending: false }).order("id", { ascending: false }).limit(PAGE),
+      qWish.order("created_at", { ascending: false }).order("id", { ascending: false }).limit(PAGE),
     ]);
 
     const combined = [
       ...(listings ?? []).map(r => ({ ...r, _type: "listing" as const })),
       ...(wishlists ?? []).map(r => ({ ...r, price_cop: 0, currency: "COP", _type: "wishlist" as const })),
-    ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    ].sort((a, b) => b.created_at.localeCompare(a.created_at) || b.id.localeCompare(a.id))
      .slice(0, PAGE);
 
     if (combined.length === 0) {
@@ -341,8 +349,14 @@ export function MarketFeed() {
       return;
     }
 
-    if (combined.length < PAGE) { hasMoreRef.current = false; setHasMore(false); }
-    cursorRef.current = combined[combined.length - 1].created_at;
+    // Cada lista avanza hasta lo último suyo que entró; lo que quedó afuera se
+    // vuelve a pedir en la próxima tanda.
+    const ultimaList = combined.filter(r => r._type === "listing").at(-1);
+    const ultimaWish = combined.filter(r => r._type === "wishlist").at(-1);
+    if (ultimaList) cursorListRef.current = { ts: ultimaList.created_at, id: ultimaList.id };
+    if (ultimaWish) cursorWishRef.current = { ts: ultimaWish.created_at, id: ultimaWish.id };
+    const quedan = (listings?.length ?? 0) === PAGE || (wishlists?.length ?? 0) === PAGE || combined.length === PAGE;
+    if (!quedan) { hasMoreRef.current = false; setHasMore(false); }
 
     const listingRaw  = combined.filter(r => r._type === "listing");
     const wishlistRaw = combined.filter(r => r._type === "wishlist");

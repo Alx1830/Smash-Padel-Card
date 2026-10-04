@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { MobileTabBar } from "@/components/MobileTabBar";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { WishlistPageClient } from "./WishlistPageClient";
+import { escaparLike } from "@/lib/escapar-like";
 
 export const revalidate = 3600;
 
@@ -21,7 +22,7 @@ export async function generateMetadata({
   const { data } = await supabase
     .from("players")
     .select("username, first_name, last_name")
-    .ilike("username", username)
+    .ilike("username", escaparLike(username))
     .single();
 
   const display = data?.first_name
@@ -58,7 +59,7 @@ export default async function WishlistPage({
   const { data: player } = await supabase
     .from("players")
     .select(`user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, energia_favorita, pokemon_favorito, edad, set_favorito${user ? ", whatsapp_indicativo, whatsapp_numero" : ""}`)
-    .ilike("username", username)
+    .ilike("username", escaparLike(username))
     .single<{
       user_id: string; username: string; first_name: string | null; last_name: string | null;
       pais: string | null; ciudad: string | null; photo_url: string | null; tipo_perfil: string | null;

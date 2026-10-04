@@ -42,6 +42,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Ese comentario no es tuyo" }, { status: 403 });
   }
 
+  // Un comentario avisa una sola vez: repetir el pedido volvía a mandar push a
+  // todos los admins cada vez.
+  const { count: yaAvisado } = await supabaseAdmin
+    .from("notifications").select("id", { count: "exact", head: true })
+    .eq("type", "post_comment").eq("data->>comment_id", commentId);
+  if (yaAvisado) return NextResponse.json({ ok: true, notificados: 0, push: 0, motivo: "ya avisado" });
+
   // 3. A quién le llega: los admins, menos el que acaba de comentar.
   const { data: admins } = await supabaseAdmin
     .from("players").select("user_id").eq("role", "admin");

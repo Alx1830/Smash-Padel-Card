@@ -15,6 +15,7 @@ import { createClient as createServerClient } from "@/lib/supabase/server";
 import { webpush } from "@/lib/web-push";
 import webpushLib from "web-push";
 import { extractoAuto } from "@/lib/posts";
+import { esSecretoWebhook } from "@/lib/secreto-webhook";
 
 export async function POST(request: NextRequest) {
   // 1. Quién llama
@@ -23,8 +24,7 @@ export async function POST(request: NextRequest) {
   // "Publicar"; o la base de datos con el secreto de webhook, que es cuando
   // sale una publicación programada y no hay nadie sentado frente a la pantalla.
   const secreto = request.headers.get("x-webhook-secret");
-  const esperado = process.env.SUPABASE_WEBHOOK_SECRET;
-  const desdeLaBase = Boolean(esperado) && secreto === esperado;
+  const desdeLaBase = await esSecretoWebhook(secreto);
 
   if (!desdeLaBase) {
     const supabase = await createServerClient();
@@ -49,13 +49,18 @@ export async function POST(request: NextRequest) {
 
   const { data: post } = await supabaseAdmin
     .from("admin_posts")
-    .select("id, title, slug, excerpt, content_html, cover_url, status")
+    .select("id, title, slug, excerpt, content_html, cover_url, status, notified_at")
     .eq("id", postId)
     .single();
 
   if (!post) return NextResponse.json({ error: "La publicación no existe" }, { status: 404 });
   if (post.status !== "published") {
     return NextResponse.json({ error: "Todavía es un borrador" }, { status: 400 });
+  }
+  // Una noticia avisa una sola vez: un doble clic, o el aviso programado junto
+  // con uno manual, mandaba dos push a todos los usuarios.
+  if (post.notified_at) {
+    return NextResponse.json({ error: "Esta noticia ya se avisó" }, { status: 409 });
   }
 
   const url = `/noticias/${post.slug}`;

@@ -241,6 +241,7 @@ export default function PerfilPage() {
   const supabase     = createClient();
   const fileRef      = useRef<HTMLInputElement>(null);
   const [saving, setSaving]           = useState(false);
+  const [cargado, setCargado]         = useState(false);
   const [saved,  setSaved]            = useState(false);
   const [saveError, setSaveError]     = useState("");
   const [uploading, setUploading]     = useState(false);
@@ -271,11 +272,12 @@ export default function PerfilPage() {
       if (!user) return;
       setUserId(user.id);
       userIdRef.current = user.id;
-      const { data } = await supabase
+      const { data, error } = await supabase
         // Columnas explícitas: last_seen y blocked ya no son legibles desde el navegador.
         .from("players")
         .select("username, first_name, last_name, pais, tipo_perfil, ciudad, edad, energia_favorita, pokemon_favorito, set_favorito, photo_url, whatsapp_indicativo, whatsapp_numero, role")
         .eq("user_id", user.id).single();
+      if (error) { setSaveError("No pudimos cargar tu perfil. Recarga la página antes de editar."); return; }
       if (data) {
         const admin = data.role === "admin";
         setIsAdmin(admin);
@@ -296,6 +298,7 @@ export default function PerfilPage() {
           whatsapp_numero:     data.whatsapp_numero ?? "",
         });
         if (data.photo_url) setPreview(data.photo_url);
+        setCargado(true);
       }
     }
     load();
@@ -318,7 +321,12 @@ export default function PerfilPage() {
       const path = `${uid}.webp`;
       const { error: storageError } = await supabase.storage
         .from("avatars").upload(path, compressed, { upsert: true, contentType: "image/webp" });
-      if (storageError) { setPhotoError(`Error al subir: ${storageError.message}`); setUploading(false); return; }
+      if (storageError) {
+        setPhotoError(`Error al subir: ${storageError.message}`);
+        setPreview(form.photo_url);   // vuelve la foto que sí está guardada
+        setUploading(false);
+        return;
+      }
       const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
       const url = `${publicUrl}?t=${Date.now()}`;
       setPreview(url);
@@ -332,14 +340,32 @@ export default function PerfilPage() {
       }
       setPhotoSaved(true);
       setTimeout(() => setPhotoSaved(false), 3000);
-    } catch { setPhotoError("Ocurrió un error inesperado."); }
-    finally { setUploading(false); }
+    } catch {
+      setPhotoError("No se pudo procesar la foto. Prueba con otra imagen.");
+      setPreview(form.photo_url);
+    }
+    finally {
+      setUploading(false);
+      // Sin esto, elegir la misma foto otra vez no dispara onChange y no se puede reintentar.
+      e.target.value = "";
+    }
   }
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    if (!userId) return;
+    // Si el perfil no terminó de cargar, guardar mandaría todo vacío y te
+    // devolvería al registro.
+    if (!userId || !cargado) return;
     setUsernameError("");
+    const faltan = [
+      !form.first_name.trim() && "nombre",
+      !form.last_name.trim()  && "apellido",
+      !form.pais              && "país",
+      !form.tipo_perfil       && "tipo de perfil",
+      !form.photo_url         && "foto de perfil",
+      !form.username.trim()   && "nombre de usuario",
+    ].filter(Boolean);
+    if (faltan.length) { setSaveError(`Completa: ${faltan.join(", ")}.`); return; }
     if (form.username && !usernameFixed) {
       const { data: existing } = await supabase
         .from("players").select("user_id").eq("username", form.username).neq("user_id", userId).single();
@@ -617,7 +643,7 @@ export default function PerfilPage() {
 
         {/* GUARDAR */}
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <button type="submit" disabled={saving || uploading} style={{
+          <button type="submit" disabled={saving || uploading || !cargado} style={{
             padding: "12px 32px", borderRadius: "10px",
             background: `linear-gradient(90deg, ${COURT}, ${BALL})`,
             border: "none", cursor: saving ? "not-allowed" : "pointer",

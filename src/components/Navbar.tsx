@@ -212,7 +212,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
                   {isAdmin && (
                     <>
                       <div className="h-px bg-white/8" />
-                      <Link href="/dashboard/admin/usuarios" onClick={() => setAvatarOpen(false)}
+                      <Link href="/dashboard/users" onClick={() => setAvatarOpen(false)}
                         className="flex items-center gap-3 px-4 py-3 text-xs hover:bg-[#2ee6c1]/10 hover:text-[#2ee6c1] transition-colors"
                         style={{ fontFamily: "var(--font-jetbrains)", letterSpacing: "0.08em", color: "#f59e0b" }}>
                         <span>⚙</span> Ver usuarios

@@ -26,7 +26,22 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid subscription' }, { status: 400 });
   }
 
+  // Solo servicios push reales: el servidor después hace POST a este endpoint en
+  // cada aviso masivo, así que no puede ser una URL cualquiera que elija el usuario.
+  let host = '';
+  try {
+    const url = new URL(subscription.endpoint);
+    if (url.protocol === 'https:' && subscription.endpoint.length <= 1024) host = url.hostname;
+  } catch { /* host queda vacío y se rechaza abajo */ }
+  const PUSH_HOSTS = [/^fcm\.googleapis\.com$/, /(^|\.)push\.apple\.com$/, /(^|\.)push\.services\.mozilla\.com$/, /(^|\.)notify\.windows\.com$/];
+  if (!PUSH_HOSTS.some(re => re.test(host))) {
+    return NextResponse.json({ error: 'Servicio push no reconocido' }, { status: 400 });
+  }
+
   const { keys } = subscription as { endpoint: string; keys: { p256dh: string; auth: string } };
+  if (typeof keys.p256dh !== 'string' || typeof keys.auth !== 'string' || keys.p256dh.length > 200 || keys.auth.length > 100) {
+    return NextResponse.json({ error: 'Invalid subscription' }, { status: 400 });
+  }
 
   const { error } = await supabase
     .from('push_subscriptions')

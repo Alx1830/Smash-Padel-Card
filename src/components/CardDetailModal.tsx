@@ -343,16 +343,23 @@ export function CardDetailModal({
     if (!userId || featuring) return;
     setFeaturing(true);
     const supabase = createClient();
+    // La estrella cambia solo si la base aceptó: antes un insert rechazado
+    // (p. ej. otra versión del mismo número ya destacada) quedaba marcado igual.
     if (isFeatured) {
-      await supabase.from("featured_cards")
+      const { error } = await supabase.from("featured_cards")
         .delete()
         .eq("user_id", userId).eq("card_id", card.card_number).eq("set_id", setId);
-      onFeaturedChange(featuredCards.filter(f => !(Number(f.card_id) === card.card_number && f.set_id === setId)));
+      if (error) window.alert(`No se pudo quitar de destacadas: ${error.message}`);
+      else onFeaturedChange(featuredCards.filter(f => !(Number(f.card_id) === card.card_number && f.set_id === setId)));
     } else {
       if (featCount >= 10) { setFeaturing(false); return; }
-      await supabase.from("featured_cards")
+      const { error } = await supabase.from("featured_cards")
         .insert({ user_id: userId, card_id: card.card_number, set_id: setId });
-      onFeaturedChange([...featuredCards, { card_id: card.card_number, set_id: setId }]);
+      if (error) {
+        window.alert(error.code === "23505"
+          ? "Ya tienes destacada otra versión de esta carta."
+          : `No se pudo destacar: ${error.message}`);
+      } else onFeaturedChange([...featuredCards, { card_id: card.card_number, set_id: setId }]);
     }
     setFeaturing(false);
   };

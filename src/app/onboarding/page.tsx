@@ -308,6 +308,7 @@ export default function OnboardingPage() {
     const file = e.target.files?.[0];
     if (!file || !userId) return;
     setUploading(true);
+    setGlobalError("");
     setPreview(URL.createObjectURL(file));
     try {
       const compressed = await aAvatarWebp(file);
@@ -315,15 +316,19 @@ export default function OnboardingPage() {
       const { error: storageError } = await supabase.storage
         .from("avatars")
         .upload(path, compressed, { upsert: true, contentType: "image/webp" });
-      if (storageError) { setGlobalError(`Error al subir foto: ${storageError.message}`); return; }
+      if (storageError) throw new Error(storageError.message);
       const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
       const url = `${publicUrl}?t=${Date.now()}`;
       setPreview(url);
       set("photo_url", url);
-    } catch {
-      setGlobalError("Error inesperado al procesar la foto.");
+    } catch (err) {
+      // Que no parezca subida si no lo está: vuelve a la foto guardada (o a ninguna).
+      setPreview(form.photo_url);
+      setGlobalError(`No se pudo subir la foto${err instanceof Error && err.message ? `: ${err.message}` : ""}. Prueba de nuevo o con otra imagen.`);
     } finally {
       setUploading(false);
+      // Sin esto, elegir la misma foto otra vez no dispara onChange.
+      e.target.value = "";
     }
   }
 

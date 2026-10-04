@@ -373,6 +373,12 @@ export function PostEditor({ post, authorId }: { post: Post | null; authorId: st
         body: JSON.stringify({ postId: data.id }),
       });
       const info = await res.json().catch(() => null);
+      if (res.status === 409) {
+        setMensaje({ tipo: "ok", texto: "Guardado. Esta noticia ya se había avisado antes, no se repite." });
+        setGuardando(false);
+        router.refresh();
+        return;
+      }
       if (!res.ok) {
         setMensaje({ tipo: "error", texto: `Se publicó, pero el aviso falló: ${info?.error ?? res.status}` });
         setGuardando(false);

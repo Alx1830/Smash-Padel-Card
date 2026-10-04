@@ -192,7 +192,11 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
       setFeaturedCards(prev => prev.filter(f => !((Number(f.card_id) === card.card_number || String(f.card_id) === String(card.id)) && f.set_id === setId)));
     } else {
       if (featuredCards.length >= 10) return;
-      await supabase.from("featured_cards").insert({ user_id: userId, card_id: card.card_number, set_id: setId });
+      const { error } = await supabase.from("featured_cards").insert({ user_id: userId, card_id: card.card_number, set_id: setId });
+      if (error) {
+        window.alert(error.code === "23505" ? "Ya tienes destacada otra versión de esta carta." : `No se pudo destacar: ${error.message}`);
+        return;
+      }
       setFeaturedCards(prev => [...prev, { card_id: card.card_number, set_id: setId }]);
     }
   }
