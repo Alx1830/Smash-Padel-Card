@@ -8,6 +8,7 @@ import { ProfilePortfolioChart } from "./PortfolioChart";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionEffect, getVersionColor } from "@/data/pokemon-cards-meta";
 import { limpiarEnergia } from "@/lib/energias";
+import { ResumenVentas } from "./Resenas";
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
@@ -265,6 +266,7 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
               <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: COURT, display: "inline-block", flexShrink: 0 }} />
               {player.tipoPerfil || "Maestro Pokémon"}
             </p>
+            {player.profileUserId && <ResumenVentas userId={player.profileUserId} fontSize={13} />}
           </div>
           <div style={{ position: "absolute", top: "38%", right: "80px", transform: "translateY(-80%)", textAlign: "right", fontFamily: MONO, fontSize: "15px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2, lineHeight: 2.2, zIndex: 20 }}>
             <div>Energía Favorita / <b style={{ color: INK0 }}>{limpiarEnergia(player.energiaFavorita) || "—"}</b></div>
@@ -302,6 +304,7 @@ export function ProfileHeader({ player, hideMobileDetails, showProfileLink }: { 
             <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: COURT, display: "inline-block", flexShrink: 0 }} />
             {player.tipoPerfil || "Maestro Pokémon"}
           </p>
+          {player.profileUserId && <ResumenVentas userId={player.profileUserId} fontSize={11} />}
           <div style={{ marginTop: "20px", display: "flex", flexWrap: "wrap", gap: "8px 24px", fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", color: INK2 }}>
             <span>Energía Favorita / <b style={{ color: INK0 }}>{limpiarEnergia(player.energiaFavorita) || "—"}</b></span>
             <span>País / <b style={{ color: INK0 }}>{player.pais || "—"}</b></span>

@@ -15,7 +15,8 @@ import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { slugifySetName } from "@/lib/slug";
 import { GrillaProgresiva } from "@/components/GrillaProgresiva";
 import dynamic from "next/dynamic";
-import { Tag, PartyPopper, Search, Package } from "lucide-react";
+import { Tag, PartyPopper, Search, Package, Star } from "lucide-react";
+import { cargarResenas, ResenaFila, ResumenVentas, type Resena, type Compradores } from "./Resenas";
 const CardDetailModal = dynamic(
   () => import("@/components/CardDetailModal").then(m => ({ default: m.CardDetailModal })),
   { ssr: false }
@@ -132,6 +133,7 @@ export function ProfilePage({ player }: { player: PlayerData }) {
               <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: COURT, display: "inline-block", flexShrink: 0 }} />
               {player.tipoPerfil || "Maestro Pokémon"}
             </p>
+            {player.profileUserId && <ResumenVentas userId={player.profileUserId} fontSize={13} />}
           </div>
 
           <div style={{
@@ -190,6 +192,7 @@ export function ProfilePage({ player }: { player: PlayerData }) {
             <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: COURT, display: "inline-block", flexShrink: 0 }} />
             {player.tipoPerfil || "Maestro Pokémon"}
           </p>
+          {player.profileUserId && <ResumenVentas userId={player.profileUserId} fontSize={11} />}
           <div style={{
             marginTop: "20px", display: "flex", flexWrap: "wrap", gap: "8px 24px",
             fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em",
@@ -810,6 +813,64 @@ function WishlistSlider({
           />
         );
       })()}
+    </div>
+  );
+}
+
+/* ── Reseñas de ventas confirmadas ──────────────────────────── */
+function ResenasBloque({ profileUserId, username }: { profileUserId?: string; username?: string }) {
+  const [datos, setDatos] = useState<{ resenas: Resena[]; compradores: Compradores } | null>(null);
+  const BALL = "#d6ff3d";
+
+  useEffect(() => {
+    if (!profileUserId) return;
+    // Una de más para saber si hace falta "Ver todas".
+    cargarResenas(profileUserId, 4).then(setDatos).catch(() => setDatos({ resenas: [], compradores: {} }));
+  }, [profileUserId]);
+
+  const visibles = datos?.resenas.slice(0, 3) ?? [];
+
+  return (
+    <div style={{ marginBottom: "16px", minWidth: 0 }}>
+      <div style={{
+        fontFamily: MONO_C, fontSize: "11px", letterSpacing: "0.22em",
+        textTransform: "uppercase", color: BALL,
+        display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
+      }}>
+        <span style={{ width: "22px", height: "1px", background: BALL, display: "inline-block" }} />
+        Reseñas
+      </div>
+
+      {!datos ? null : visibles.length === 0 ? (
+        <div style={{ border: "1px dashed rgba(214,255,61,0.2)", borderRadius: "12px", padding: "32px 24px", textAlign: "center" }}>
+          <div style={{ marginBottom: "12px" }}><Star size={28} color={BALL} strokeWidth={1.6} /></div>
+          <p style={{ fontFamily: MONO_C, fontSize: "12px", color: BALL, fontWeight: 600, marginBottom: "6px", letterSpacing: "0.05em" }}>
+            Sin reseñas todavía
+          </p>
+          <p style={{ fontFamily: MONO_C, fontSize: "11px", color: INK2_C, lineHeight: 1.6 }}>
+            Cuando vendas una carta a alguien de Facebinder<br />y la confirme, su reseña aparece aquí.
+          </p>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          {visibles.map(r => <ResenaFila key={r.id} r={r} comprador={datos.compradores[r.comprador_id]} />)}
+        </div>
+      )}
+
+      {username && datos && datos.resenas.length > 3 && (
+        <div style={{ marginTop: "12px", textAlign: "center" }}>
+          <Link href={`/${username}/resenas`} style={{
+            display: "inline-block",
+            fontFamily: MONO_C, fontSize: "9px", letterSpacing: "0.14em",
+            textTransform: "uppercase", color: BALL,
+            background: `${BALL}10`, border: `1px solid ${BALL}40`,
+            borderRadius: "6px", padding: "6px 16px",
+            textDecoration: "none",
+          }}>
+            Ver todas →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
@@ -1447,8 +1508,11 @@ function CollectionSection({
 
       <div className="coll-outer" style={{ padding: "64px 14% 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "64px", alignItems: "flex-start" }}>
 
-        {/* ── Columna izquierda: Wishlist + Market ── */}
+        {/* ── Columna izquierda: Reseñas, Market, Wishlist, Sets y Decks ── */}
         <div style={{ minWidth: 0, overflow: "hidden" }}>
+          <ResenasBloque profileUserId={profileUserId} username={username} />
+          <MarketListingsSlider profileUserId={profileUserId} username={username} />
+          <div style={{ marginTop: "40px" }}>
           {wishlistCards.length > 0 ? (
             <WishlistSlider
               wishlistCards={wishlistCards}
@@ -1475,7 +1539,7 @@ function CollectionSection({
               </div>
             </div>
           )}
-          <MarketListingsSlider profileUserId={profileUserId} username={username} />
+          </div>
           <MySetsSlider profileUserId={profileUserId} username={username} />
           <DecksSlider profileUserId={profileUserId} username={username} />
         </div>

@@ -40,6 +40,7 @@ import { CARD_LANGUAGES } from "@/lib/languages";
 import { FlagIcon } from "@/components/FlagIcon";
 import { CardGridSkeleton } from "@/components/CardGridSkeleton";
 import { useErrorDeCarga } from "@/hooks/useErrorDeCarga";
+import { VentaDestinoModal } from "@/components/VentaDestinoModal";
 
 interface Listing {
   id: string;
@@ -180,13 +181,37 @@ export default function DashboardMarketPage() {
     setRemoving(null);
   };
 
-  const handleSold = async (listing: Listing, uid: string) => {
+  /** Publicación cuyo "Vendido" está preguntando a quién se vendió */
+  const [vendiendo, setVendiendo] = useState<Listing | null>(null);
+
+  /* Venta fuera de Facebinder: se cierra la publicación y se descuenta. */
+  const handleSoldFuera = async (listing: Listing, uid: string) => {
+    const supabase = createClient();
+    const { error } = await supabase.from("market_listings").update({ status: "sold" }).eq("id", listing.id);
+    if (error) throw error;
+    await descontarVendida(listing, uid);
+  };
+
+  /* Venta a un usuario: la base cierra la publicación y deja la venta
+     pendiente; el comprador recibe el aviso para confirmarla. */
+  const handleSoldUsuario = async (listing: Listing, uid: string, username: string) => {
+    const supabase = createClient();
+    const { data: ventaId, error } = await supabase.rpc("registrar_venta", {
+      p_listing_id: listing.id, p_comprador_username: username,
+    });
+    if (error) throw new Error(error.message);
+    await descontarVendida(listing, uid);
+    fetch("/api/ventas/notify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ venta_id: ventaId }),
+    }).catch(() => {});
+  };
+
+  const descontarVendida = async (listing: Listing, uid: string) => {
     setRemoving(listing.id);
     const supabase = createClient();
     try {
-      const { error: eVenta } = await supabase.from("market_listings").update({ status: "sold" }).eq("id", listing.id);
-      if (eVenta) throw eVenta;
-
       /* La publicación guarda el número de carta (25) y el inventario la carta
          completa ("025:Pikachu:Normal"): antes se comparaban directo, nunca
          coincidían y la venta no descontaba nada. Se resuelve la carta real. */
@@ -207,11 +232,12 @@ export default function DashboardMarketPage() {
           if (error) throw error;
         }
       }
-      setListings(prev => prev.filter(l => l.id !== listing.id));
-      setUserListings(prev => prev.filter(l => l.id !== listing.id));
     } catch (e) {
-      window.alert(`No se pudo marcar como vendida: ${e instanceof Error ? e.message : String((e as { message?: string })?.message ?? e)}`);
+      // La venta ya quedó registrada; solo falló el descuento.
+      window.alert(`La venta quedó registrada, pero no se pudo descontar del inventario: ${e instanceof Error ? e.message : String((e as { message?: string })?.message ?? e)}`);
     }
+    setListings(prev => prev.filter(l => l.id !== listing.id));
+    setUserListings(prev => prev.filter(l => l.id !== listing.id));
     setRemoving(null);
   };
 
@@ -458,7 +484,7 @@ export default function DashboardMarketPage() {
 
                     <div style={{ display: "flex", gap: "6px", marginTop: "6px" }}>
                       <button
-                        onClick={() => userId && handleSold(listing, userId)}
+                        onClick={() => setVendiendo(listing)}
                         disabled={busy}
                         style={{ flex: 1, fontFamily: MONO, fontSize: "9px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#0a0a0a", background: "#2ee696", border: "none", borderRadius: "7px", padding: "8px 4px", cursor: busy ? "default" : "pointer", opacity: busy ? 0.5 : 1, fontWeight: 700 }}
                       >
@@ -497,6 +523,17 @@ export default function DashboardMarketPage() {
           userListings={userListings}
           onListingsChange={handleListingsChange}
           onClose={() => setModalTarget(null)}
+        />
+      )}
+
+      {vendiendo && userId && (
+        <VentaDestinoModal
+          cardName={cardFor(vendiendo)?.name ?? `Carta #${vendiendo.card_id}`}
+          cardImage={cardFor(vendiendo)?.image}
+          userId={userId}
+          onFuera={() => handleSoldFuera(vendiendo, userId)}
+          onUsuario={username => handleSoldUsuario(vendiendo, userId, username)}
+          onClose={() => setVendiendo(null)}
         />
       )}
 
