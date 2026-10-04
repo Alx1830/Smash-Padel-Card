@@ -220,7 +220,7 @@ export default function MySetEditorPage() {
         supabase, userId,
         { card_id: card.id, set_id: cardSetId, version: card.version },
         qtyEnSet,
-      );
+      ).catch(e => window.alert(`La carta quedó en el set, pero no se pudo reflejar en tu inventario: ${e instanceof Error ? e.message : e}`));
     }
 
     await supabase.from("my_sets").update({
@@ -254,7 +254,7 @@ export default function MySetEditorPage() {
           supabase, userId,
           { card_id: entry.card_id, set_id: entry.set_id, version: entry.version },
           newQty,
-        );
+        ).catch(e => window.alert(`El set se actualizó, pero no se pudo reflejar en tu inventario: ${e instanceof Error ? e.message : e}`));
       }
     }
   }

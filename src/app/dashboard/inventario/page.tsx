@@ -19,6 +19,7 @@ import { FlagIcon } from "@/components/FlagIcon";
 import { Plus, Search, BadgeDollarSign, Star } from "lucide-react";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { useDashboardUser } from "../DashboardUserContext";
+import { useErrorDeCarga } from "@/hooks/useErrorDeCarga";
 
 const CardDetailModal = dynamic(
   () => import("@/components/CardDetailModal").then(m => ({ default: m.CardDetailModal })),
@@ -59,6 +60,7 @@ export default function InventarioPage() {
   const supabase = useMemo(() => createClient(), []);
   const { userId: ctxUserId } = useDashboardUser();
 
+  const fallar = useErrorDeCarga();
   const [userId,        setUserId]        = useState<string | null>(null);
   const [inventory,     setInventory]     = useState<InventoryMap>({});
   const [featuredCards, setFeaturedCards] = useState<FeaturedCard[]>([]);
@@ -162,10 +164,11 @@ export default function InventarioPage() {
     const pricePromises = setIds.map(async (setId) => {
       const sc = SCRYDEX_SET_CODES[setId];
       if (!sc) return;
-      const { data: priceRows } = await supabase
+      // Por tandas: un set grande (Prize Pack ya va en 872) pasa de 1000 filas.
+      const priceRows = await fetchAllRows<{ card_id: string; prices: unknown }>(() => supabase
         .from("card_prices_merged")
         .select("card_id, prices")
-        .like("card_id", `${sc}-%`);
+        .like("card_id", `${sc}-%`), "card_id");
       if (priceRows) {
         const map: Record<string, Record<string, number>> = {};
         for (const row of priceRows) {
@@ -199,7 +202,7 @@ export default function InventarioPage() {
       const { newSets } = await loadData(ctxUserId!);
       await loadAllSetsData(newSets.map(s => s.setId));
     }
-    init();
+    init().catch(fallar);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctxUserId]);
 
@@ -909,8 +912,10 @@ export default function InventarioPage() {
             setDrawerOpen(false);
             if (userIdRef.current) {
               setAllCardsLoaded(false);
-              const { newSets } = await loadData(userIdRef.current);
-              await loadAllSetsData(newSets.map(s => s.setId));
+              try {
+                const { newSets } = await loadData(userIdRef.current);
+                await loadAllSetsData(newSets.map(s => s.setId));
+              } catch (e) { fallar(e); }
             }
           }}
         />

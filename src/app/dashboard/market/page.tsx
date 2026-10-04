@@ -39,6 +39,7 @@ import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { CARD_LANGUAGES } from "@/lib/languages";
 import { FlagIcon } from "@/components/FlagIcon";
 import { CardGridSkeleton } from "@/components/CardGridSkeleton";
+import { useErrorDeCarga } from "@/hooks/useErrorDeCarga";
 
 interface Listing {
   id: string;
@@ -58,6 +59,7 @@ export default function DashboardMarketPage() {
   const [loading, setLoading]     = useState(true);
   const [setCards, setSetCards]   = useState<Record<string, any[]>>({});
   const [removing, setRemoving]   = useState<string | null>(null);
+  const fallar = useErrorDeCarga();
   const [userId, setUserId]       = useState<string | null>(null);
 
   const [fNombre,   setFNombre]   = useState("");
@@ -166,8 +168,8 @@ export default function DashboardMarketPage() {
         await loadManySets([setId]);
         setSetCards(prev => ({ ...prev, [setId]: SET_CARDS[setId] ?? [] }));
       }
-    })();
-  }, []);
+    })().catch(fallar);
+  }, [fallar]);
 
   const handleRemove = async (id: string) => {
     setRemoving(id);
@@ -181,23 +183,35 @@ export default function DashboardMarketPage() {
   const handleSold = async (listing: Listing, uid: string) => {
     setRemoving(listing.id);
     const supabase = createClient();
-    await supabase.from("market_listings").update({ status: "sold" }).eq("id", listing.id);
-    const { data: inv } = await supabase
-      .from("card_inventory").select("quantity")
-      .eq("user_id", uid).eq("card_id", listing.card_id).eq("set_id", listing.set_id)
-      .single();
-    if (inv) {
-      const next = inv.quantity - 1;
-      if (next <= 0) {
-        await supabase.from("card_inventory").delete()
-          .eq("user_id", uid).eq("card_id", listing.card_id).eq("set_id", listing.set_id);
-      } else {
-        await supabase.from("card_inventory").update({ quantity: next })
-          .eq("user_id", uid).eq("card_id", listing.card_id).eq("set_id", listing.set_id);
+    try {
+      const { error: eVenta } = await supabase.from("market_listings").update({ status: "sold" }).eq("id", listing.id);
+      if (eVenta) throw eVenta;
+
+      /* La publicación guarda el número de carta (25) y el inventario la carta
+         completa ("025:Pikachu:Normal"): antes se comparaban directo, nunca
+         coincidían y la venta no descontaba nada. Se resuelve la carta real. */
+      await loadManySets([listing.set_id]);
+      const card = SET_CARDS[listing.set_id]?.find(c => c.card_number === Number(listing.card_id) && c.version === listing.version);
+      if (card) {
+        const { data: filas, error: eInv } = await supabase
+          .from("card_inventory").select("id, quantity, language")
+          .eq("user_id", uid).eq("set_id", listing.set_id).eq("card_id", card.id).eq("version", listing.version)
+          .gt("quantity", 0);
+        if (eInv) throw eInv;
+        // La copia vendida es la del idioma publicado; si no está, cualquiera.
+        const fila = filas?.find(f => f.language === listing.language) ?? filas?.[0];
+        if (fila) {
+          const { error } = fila.quantity <= 1
+            ? await supabase.from("card_inventory").delete().eq("id", fila.id)
+            : await supabase.from("card_inventory").update({ quantity: fila.quantity - 1 }).eq("id", fila.id);
+          if (error) throw error;
+        }
       }
+      setListings(prev => prev.filter(l => l.id !== listing.id));
+      setUserListings(prev => prev.filter(l => l.id !== listing.id));
+    } catch (e) {
+      window.alert(`No se pudo marcar como vendida: ${e instanceof Error ? e.message : String((e as { message?: string })?.message ?? e)}`);
     }
-    setListings(prev => prev.filter(l => l.id !== listing.id));
-    setUserListings(prev => prev.filter(l => l.id !== listing.id));
     setRemoving(null);
   };
 

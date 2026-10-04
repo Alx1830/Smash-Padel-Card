@@ -15,6 +15,7 @@ import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { PROPOSAL_PREFIX } from "@/lib/trade-messages";
 import { DEFAULT_CARD_LANGUAGE, languageLabel } from "@/lib/languages";
 import { FlagIcon } from "@/components/FlagIcon";
+import { useErrorDeCarga } from "@/hooks/useErrorDeCarga";
 import { ArrowLeftRight, Inbox, Search, X, Minus, Plus, Send, Heart, MessageCircle, Pencil } from "lucide-react";
 
 const COURT = "#2ee6c1";
@@ -116,6 +117,7 @@ function TradesPageInner() {
   const router   = useRouter();
   const params   = useSearchParams();
 
+  const fallar = useErrorDeCarga();
   const [meId, setMeId]       = useState<string | null>(null);
   const [myCurrency, setMyCurrency] = useState("COP");
   const [myUsername, setMyUsername] = useState<string | null>(null);
@@ -317,16 +319,16 @@ function TradesPageInner() {
       await Promise.all([...needed].map(async setId => {
         const sc = SCRYDEX_SET_CODES[setId];
         if (!sc) return;
-        const { data: priceRows } = await supabase
-          .from("card_prices_merged").select("card_id, prices").like("card_id", `${sc}-%`);
-        if (cancelled || !priceRows) return;
+        const priceRows = await fetchAllRows<{ card_id: string; prices: unknown }>(() => supabase
+          .from("card_prices_merged").select("card_id, prices").like("card_id", `${sc}-%`), "card_id");
+        if (cancelled) return;
         const map: Record<string, Record<string, number>> = {};
         for (const row of priceRows) map[row.card_id] = row.prices as Record<string, number>;
         setPriceMaps(prev => ({ ...prev, [setId]: map }));
       }));
-    })();
+    })().catch(e => { if (!cancelled) fallar(e); });
     return () => { cancelled = true; };
-  }, [peer, meId, supabase, editId]);
+  }, [peer, meId, supabase, editId, fallar]);
 
   /* ── Precio unitario de mercado (USD) ─────────────────────── */
   const priceOf = useCallback((card: PokemonCard, setId: string): number | null => {

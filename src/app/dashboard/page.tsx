@@ -3,9 +3,9 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
-import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
-import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { useDashboardUser } from "./DashboardUserContext";
+import { valorActualDe, type ValorActual } from "@/lib/valor-portafolio";
+import { useErrorDeCarga } from "@/hooks/useErrorDeCarga";
 import { PortfolioChart, type Snapshot, type HourlySnapshot } from "@/components/PortfolioChart";
 import { TopLocalCards } from "@/components/TopLocalCards";
 import { MuroActividad } from "@/components/feed/MuroActividad";
@@ -57,6 +57,8 @@ function FollowersPopup({ userId, onClose }: { userId: string; onClose: () => vo
       .select("follower_id")
       .eq("following_id", userId)
       .order("created_at", { ascending: false })
+      // Desempate único: con fechas iguales el scroll repetía o se saltaba seguidores.
+      .order("follower_id", { ascending: true })
       .range(offsetRef.current, offsetRef.current + PAGE - 1);
 
     if (!followRows || followRows.length === 0) {
@@ -290,139 +292,38 @@ export default function DashboardHome() {
   const [snapshots,       setSnapshots]       = useState<Snapshot[]>([]);
   const [hourlySnapshots, setHourlySnapshots] = useState<HourlySnapshot[]>([]);
   const [chartLoading,    setChartLoading]    = useState(true);
+  const [valorActual,     setValorActual]     = useState<ValorActual | null>(null);
+  const fallar = useErrorDeCarga();
 
+  /* El historial lo escribe solo la base: snapshot_hourly_portfolios cada hora
+     y consolidar_portfolio_diario cada noche, con el inventario completo. Antes
+     esta página también escribía (y consolidaba) con su propia cuenta, que se
+     cortaba en 1000 filas y llegó a grabar un valor falso. Ahora solo lee, y el
+     valor de este momento sale de la misma función que usa el perfil. */
   useEffect(() => {
     if (!ctxUserId) return;
+    let cancelado = false;
     (async () => {
-      const user = { id: ctxUserId };
-      setUserId(user.id);
-
-      const [
-        { data: prof },
-        { data: followRows },
-        inv,
-        { data: snaps },
-        { data: hourly },
-      ] = await Promise.all([
-        supabase.from("players").select("username").eq("user_id", user.id).single(),
-        supabase.from("follows").select("follower_id").eq("following_id", user.id),
-        fetchAllRows<{ card_id: string; set_id: string; version: string | null; quantity: number }>(
-          () => supabase.from("card_inventory")
-            .select("card_id, set_id, version, quantity")
-            .eq("user_id", user.id).gt("quantity", 0)),
-        supabase.from("portfolio_snapshots").select("date, total_usd, card_count").eq("user_id", user.id).order("date", { ascending: false }).limit(366),
-        supabase.from("portfolio_hourly_snapshots").select("hour_bucket, total_usd, card_count").eq("user_id", user.id).order("hour_bucket", { ascending: true }),
-      ]);
-
-      setFollowerCount(followRows?.length ?? 0);
-      setSnapshots(snaps ?? []);
-
+      setUserId(ctxUserId);
       const todayUTC = new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" }); // YYYY-MM-DD en hora Colombia
-      const hourlyRows = hourly ?? [];
 
-      // Consolidar snapshots horarios de días anteriores en portfolio_snapshots y eliminarlos
-      const pastHourly = hourlyRows.filter(h => h.hour_bucket.slice(0, 10) < todayUTC);
-      if (pastHourly.length > 0) {
-        const byDay: Record<string, typeof pastHourly> = {};
-        for (const h of pastHourly) {
-          const day = h.hour_bucket.slice(0, 10);
-          if (!byDay[day]) byDay[day] = [];
-          byDay[day].push(h);
-        }
-        for (const [day, rows] of Object.entries(byDay)) {
-          const lastRow = rows[rows.length - 1];
-          const existingSnap = (snaps ?? []).find(s => s.date === day);
-          if (!existingSnap) {
-            await supabase.from("portfolio_snapshots").insert({ user_id: user.id, date: day, total_usd: lastRow.total_usd, card_count: lastRow.card_count });
-          }
-        }
-        // Borrar todos los horarios de días anteriores
-        const pastBuckets = pastHourly.map(h => h.hour_bucket);
-        await supabase.from("portfolio_hourly_snapshots").delete().eq("user_id", user.id).in("hour_bucket", pastBuckets);
-        // Recargar snapshots diarios actualizados
-        const { data: freshSnaps } = await supabase.from("portfolio_snapshots").select("date, total_usd, card_count").eq("user_id", user.id).order("date", { ascending: false }).limit(366);
-        setSnapshots(freshSnaps ?? []);
-      }
+      const [{ count: seguidores }, { data: snaps }, { data: hourly }, valor] = await Promise.all([
+        supabase.from("follows").select("follower_id", { count: "exact", head: true }).eq("following_id", ctxUserId),
+        supabase.from("portfolio_snapshots").select("date, total_usd, card_count").eq("user_id", ctxUserId).order("date", { ascending: false }).limit(366),
+        supabase.from("portfolio_hourly_snapshots").select("hour_bucket, total_usd, card_count").eq("user_id", ctxUserId).gte("hour_bucket", `${todayUTC}T00:00:00Z`).order("hour_bucket", { ascending: true }),
+        valorActualDe(supabase, ctxUserId),
+      ]);
+      if (cancelado) return;
 
-      const todayHourly = hourlyRows.filter(h => h.hour_bucket.slice(0, 10) === todayUTC);
-      setHourlySnapshots(todayHourly);
-      setCardCount((inv ?? []).reduce((sum, r) => sum + (r.quantity ?? 0), 0));
-
-      const invRows = inv ?? [];
-
-      function extractCardNumber(cardId: string | number): number {
-        if (typeof cardId === "number") return cardId;
-        return parseInt(String(cardId).split(":")[0], 10);
-      }
-
-      const priceIds = invRows
-        .map(r => {
-          const sc = SCRYDEX_SET_CODES[r.set_id ?? ""];
-          const num = extractCardNumber(r.card_id);
-          return sc && !isNaN(num) ? `${sc}-${num}` : null;
-        })
-        .filter((id): id is string => id !== null);
-
-      let priceMap: Record<string, Record<string, number>> = {};
-
-      if (priceIds.length > 0) {
-        const { data: priceRows } = await supabase
-          .from("card_prices_merged")
-          .select("card_id, prices")
-          .in("card_id", [...new Set(priceIds)]);
-
-        for (const row of priceRows ?? []) {
-          priceMap[row.card_id] = row.prices as Record<string, number>;
-        }
-      }
-
-      let total = 0;
-
-      for (const r of invRows) {
-        const sc  = SCRYDEX_SET_CODES[r.set_id ?? ""];
-        const num = extractCardNumber(r.card_id);
-        const pid = sc && !isNaN(num) ? `${sc}-${num}` : null;
-        const prices = pid ? priceMap[pid] : null;
-        const version = r.version ?? "normal";
-        const price: number | null = prices
-          ? (prices[version] ?? prices[version.charAt(0).toUpperCase() + version.slice(1)] ?? prices["normal"] ?? null)
-          : null;
-
-        if (price !== null) total += price * (r.quantity ?? 1);
-      }
-
-      setStockTotal(total);
+      setFollowerCount(seguidores ?? 0);
+      setSnapshots(snaps ?? []);
+      setHourlySnapshots(hourly ?? []);
+      setValorActual(valor);
+      setStockTotal(valor?.total_usd ?? 0);
+      setCardCount(valor?.copias ?? 0);
       setChartLoading(false);
-
-      if (total > 0) {
-        const cards = (inv ?? []).reduce((sum, r) => sum + (r.quantity ?? 0), 0);
-
-        // Snapshot diario: upsert del día de hoy
-        const todaySnap = (snaps ?? []).find(s => s.date === todayUTC);
-        if (!todaySnap) {
-          const { data: inserted } = await supabase.from("portfolio_snapshots").insert({ user_id: user.id, date: todayUTC, total_usd: total, card_count: cards }).select("date, total_usd, card_count").single();
-          if (inserted) setSnapshots(prev => [inserted, ...prev]);
-        } else if (Math.abs(todaySnap.total_usd - total) > 0.01) {
-          await supabase.from("portfolio_snapshots").update({ total_usd: total, card_count: cards }).eq("user_id", user.id).eq("date", todayUTC);
-          setSnapshots(prev => prev.map(s => s.date === todayUTC ? { ...s, total_usd: total, card_count: cards } : s));
-        }
-
-        // Snapshot horario: upsert de la hora actual en zona Colombia (UTC-5)
-        const now = new Date();
-        const bogotaHour = parseInt(now.toLocaleString("en-US", { timeZone: "America/Bogota", hour: "numeric", hour12: false }), 10);
-        const bogotaDate = now.toLocaleDateString("en-CA", { timeZone: "America/Bogota" }); // YYYY-MM-DD
-        const [bogY, bogM, bogD] = bogotaDate.split("-").map(Number);
-        const hourBucket = new Date(Date.UTC(bogY, bogM - 1, bogD, bogotaHour)).toISOString();
-        const thisHourSnap = todayHourly.find(h => h.hour_bucket === hourBucket);
-        if (!thisHourSnap) {
-          const { data: insertedH } = await supabase.from("portfolio_hourly_snapshots").insert({ user_id: user.id, hour_bucket: hourBucket, total_usd: total, card_count: cards }).select("hour_bucket, total_usd, card_count").single();
-          if (insertedH) setHourlySnapshots(prev => [...prev, insertedH].sort((a, b) => a.hour_bucket.localeCompare(b.hour_bucket)));
-        } else if (Math.abs(thisHourSnap.total_usd - total) > 0.01) {
-          await supabase.from("portfolio_hourly_snapshots").update({ total_usd: total, card_count: cards }).eq("user_id", user.id).eq("hour_bucket", hourBucket);
-          setHourlySnapshots(prev => prev.map(h => h.hour_bucket === hourBucket ? { ...h, total_usd: total, card_count: cards } : h));
-        }
-      }
-    })();
+    })().catch(e => { if (!cancelado) fallar(e); });
+    return () => { cancelado = true; };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctxUserId]);
 
@@ -608,6 +509,8 @@ export default function DashboardHome() {
             /* 300 es el alto que usa cuando no hay columna que se lo dé:
                el mismo del gráfico del perfil. */
             loading={chartLoading} defaultRange="1M" estirar chartHeight={300}
+            cardCount={valorActual?.copias} uniqueCount={valorActual?.unicas}
+            valorActual={valorActual?.total_usd}
           />
         </div>
         <TopLocalCards />

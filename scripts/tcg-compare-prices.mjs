@@ -19,7 +19,7 @@ import { fileURLToPath } from "url";
 import { createClient } from "@supabase/supabase-js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const HOOK_TS = path.resolve(__dirname, "../src/hooks/useScrydexPrice.ts");
+const HOOK_TS = path.resolve(__dirname, "../src/data/set-codes.ts");
 
 const args = process.argv.slice(2);
 const PEORES = (() => { const i = args.indexOf("--peores"); return i >= 0 ? Number(args[i + 1]) : 15; })();
@@ -34,7 +34,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, { auth: {
 /** codigo de set → slug, para poder nombrar los sets en el reporte. */
 function readCodes() {
   const src = fs.readFileSync(HOOK_TS, "utf8");
-  const block = src.slice(src.indexOf("SCRYDEX_SET_CODES"), src.indexOf("const supabase"));
+  const block = src.slice(src.indexOf("SCRYDEX_SET_CODES"));
   const porCodigo = {};
   for (const m of block.matchAll(/"([a-z0-9-]+)":\s*"([a-z0-9]+)"/gi)) porCodigo[m[2]] = m[1];
   return porCodigo;

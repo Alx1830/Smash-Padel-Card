@@ -12,6 +12,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
@@ -154,9 +155,9 @@ export default function AprobacionesPage() {
     await Promise.all(setIds.map(async setId => {
       const sc = SCRYDEX_SET_CODES[setId];
       if (!sc) return;
-      const { data } = await supabase
-        .from("card_prices_merged").select("card_id, prices").like("card_id", `${sc}-%`);
-      if (!data) return;
+      // Por tandas: un set grande (Prize Pack ya va en 872) pasa de 1000 filas.
+      const data = await fetchAllRows<{ card_id: string; prices: unknown }>(() => supabase
+        .from("card_prices_merged").select("card_id, prices").like("card_id", `${sc}-%`), "card_id");
       const mapa: Record<string, Record<string, number>> = {};
       for (const fila of data) mapa[fila.card_id] = fila.prices as Record<string, number>;
       setPrecios(prev => ({ ...prev, [setId]: mapa }));

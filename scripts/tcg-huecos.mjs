@@ -12,7 +12,7 @@ import { fileURLToPath } from "url";
 import { createClient } from "@supabase/supabase-js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const HOOK_TS = path.resolve(__dirname, "../src/hooks/useScrydexPrice.ts");
+const HOOK_TS = path.resolve(__dirname, "../src/data/set-codes.ts");
 const BULK_JS = path.resolve(__dirname, "../scraper/bulk_scrape_prices.js");
 
 const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
@@ -23,7 +23,7 @@ function readCodes() {
   const bulk = fs.readFileSync(BULK_JS, "utf8");
   for (const m of bulk.matchAll(/\{\s*slug:\s*"([^"]+)",\s*code:\s*"([^"]+)"\s*\}/g)) codes[m[1]] = m[2];
   const hook = fs.readFileSync(HOOK_TS, "utf8");
-  const block = hook.slice(hook.indexOf("SCRYDEX_SET_CODES"), hook.indexOf("const supabase"));
+  const block = hook.slice(hook.indexOf("SCRYDEX_SET_CODES"));
   for (const m of block.matchAll(/"([a-z0-9-]+)":\s*"([a-z0-9]+)"/gi)) codes[m[1]] = m[2];
   const porCodigo = {};
   for (const [slug, code] of Object.entries(codes)) porCodigo[code] = slug;

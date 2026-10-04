@@ -347,8 +347,27 @@ async function upsertLote(table, lote, onConflict) {
   }
 }
 
+/**
+ * Mezcla cada carta con los precios que ya tenía. Una carta puede repartir sus
+ * variantes en varios productos (1740 cartas): si el de una variante falló o no
+ * trajo precio esta vuelta, guardar la fila tal cual borraba ese precio y la
+ * vista caía al de Scrydex (viejo) o al normal. Así lo nuevo pisa lo viejo, y
+ * lo que no llegó se queda como estaba.
+ */
+async function mezclarConLoExistente(rows) {
+  const previos = new Map();
+  for (let i = 0; i < rows.length; i += 200) {
+    const ids = rows.slice(i, i + 200).map(r => r.card_id);
+    const { data, error } = await supabase.from("tcg_card_prices").select("card_id, prices").in("card_id", ids);
+    if (error) throw new Error(`tcg_card_prices (lectura): ${error.message}`);
+    (data ?? []).forEach(r => previos.set(r.card_id, r.prices ?? {}));
+  }
+  return rows.map(r => ({ ...r, prices: { ...(previos.get(r.card_id) ?? {}), ...r.prices } }));
+}
+
 async function upsert(rows) {
   if (DRY_RUN) { console.log(`   🧪 dry-run: ${rows.length} filas listas, no se guardan`); return; }
+  rows = await mezclarConLoExistente(rows);
   for (let i = 0; i < rows.length; i += LOTE_ESCRITURA) {
     await upsertLote("tcg_card_prices", rows.slice(i, i + LOTE_ESCRITURA), "card_id");
   }

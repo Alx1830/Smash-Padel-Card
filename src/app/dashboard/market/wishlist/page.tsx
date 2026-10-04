@@ -15,6 +15,8 @@ const CardDetailModal = dynamic(
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { getVersionColor, getVersionLabel } from "@/data/pokemon-cards-meta";
 import { BookSearch } from "lucide-react";
+import { useErrorDeCarga } from "@/hooks/useErrorDeCarga";
+import { DEFAULT_CARD_LANGUAGE } from "@/lib/languages";
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
@@ -70,6 +72,7 @@ export default function DashboardWishlistPage() {
   const [modalInventory, setModalInventory] = useState<InventoryMap>({});
   const [featuredCards, setFeaturedCards]   = useState<FeaturedCard[]>([]);
   const [wishlistCards, setWishlistCards]   = useState<WishlistCard[]>([]);
+  const fallar = useErrorDeCarga();
   const [userListings, setUserListings]     = useState<UserListing[]>([]);
 
   useEffect(() => {
@@ -100,35 +103,44 @@ export default function DashboardWishlistPage() {
         await loadManySets([setId]);
         setSetCards(prev => ({ ...prev, [setId]: SET_CARDS[setId] ?? [] }));
       }
-    })();
-  }, []);
+    })().catch(fallar);
+  }, [fallar]);
 
   const handleBought = async (row: WishlistRow) => {
     if (!userId) return;
     const key = `${row.card_id}::${row.set_id}`;
     setRemoving(key);
     const supabase = createClient();
+    try {
+      await loadManySets([row.set_id]);
+      const card = (SET_CARDS[row.set_id] ?? []).find(c => c.id === row.card_id);
+      // Sin la carta no se sabe la versión: antes se inventaba "N" y quedaba una fila basura.
+      if (!card) throw new Error("No encontramos esta carta en su set.");
 
-    const cards   = setCards[row.set_id] ?? [];
-    const card    = cards.find((c: any) => c.id === row.card_id);
-    const version = card?.version ?? "N";
+      const lang = DEFAULT_CARD_LANGUAGE;
+      const { data: inv, error: eLeer } = await supabase
+        .from("card_inventory").select("quantity")
+        .eq("user_id", userId).eq("card_id", row.card_id).eq("set_id", row.set_id)
+        .eq("version", card.version).eq("language", lang)
+        .maybeSingle();
+      if (eLeer) throw eLeer;
 
-    const { data: inv } = await supabase
-      .from("card_inventory").select("quantity")
-      .eq("user_id", userId).eq("card_id", row.card_id).eq("set_id", row.set_id).eq("version", version)
-      .maybeSingle();
-
-    await supabase.from("card_inventory")
-      .upsert(
-        { user_id: userId, card_id: row.card_id, set_id: row.set_id, version, quantity: (inv?.quantity ?? 0) + 1 },
-        { onConflict: "user_id,card_id,set_id,version" }
+      const { error: eSumar } = await supabase.from("card_inventory").upsert(
+        { user_id: userId, card_id: row.card_id, set_id: row.set_id, version: card.version, language: lang, quantity: (inv?.quantity ?? 0) + 1 },
+        { onConflict: "user_id,card_id,set_id,version,language" },
       );
+      // Solo se quita de la wishlist si de verdad entró al inventario.
+      if (eSumar) throw eSumar;
 
-    await supabase.from("card_wishlist").delete()
-      .eq("user_id", userId).eq("card_id", row.card_id).eq("set_id", row.set_id);
+      const { error: eQuitar } = await supabase.from("card_wishlist").delete()
+        .eq("user_id", userId).eq("card_id", row.card_id).eq("set_id", row.set_id);
+      if (eQuitar) throw eQuitar;
 
-    setWishlistRows(prev => prev.filter(w => !(w.card_id === row.card_id && w.set_id === row.set_id)));
-    setWishlistCards(prev => prev.filter(w => !(w.card_id === row.card_id && w.set_id === row.set_id)));
+      setWishlistRows(prev => prev.filter(w => !(w.card_id === row.card_id && w.set_id === row.set_id)));
+      setWishlistCards(prev => prev.filter(w => !(w.card_id === row.card_id && w.set_id === row.set_id)));
+    } catch (e) {
+      window.alert(`No se pudo pasar al inventario: ${e instanceof Error ? e.message : String((e as { message?: string })?.message ?? e)}`);
+    }
     setRemoving(null);
   };
 

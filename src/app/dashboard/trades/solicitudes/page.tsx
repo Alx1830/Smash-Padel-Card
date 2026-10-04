@@ -4,6 +4,7 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "rea
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { loadManySets, SET_CARDS } from "@/data/pokemon-cards";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
@@ -158,9 +159,8 @@ function SolicitudesPageInner() {
     await Promise.all(setIds.map(async setId => {
       const sc = SCRYDEX_SET_CODES[setId];
       if (!sc) return;
-      const { data: priceRows } = await supabase
-        .from("card_prices_merged").select("card_id, prices").like("card_id", `${sc}-%`);
-      if (!priceRows) return;
+      const priceRows = await fetchAllRows<{ card_id: string; prices: unknown }>(() => supabase
+        .from("card_prices_merged").select("card_id, prices").like("card_id", `${sc}-%`), "card_id");
       const map: Record<string, Record<string, number>> = {};
       for (const row of priceRows) map[row.card_id] = row.prices as Record<string, number>;
       setPriceMaps(prev => ({ ...prev, [setId]: map }));
@@ -253,67 +253,17 @@ function SolicitudesPageInner() {
     setActing(trade.id);
 
     const isReceived = trade.to_user_id === meId;
-    const iGive    = (trade.trade_cards ?? []).filter(c => c.side === (isReceived ? "request" : "offer"));
-    const iReceive = (trade.trade_cards ?? []).filter(c => c.side === (isReceived ? "offer" : "request"));
 
     try {
-      const touched = [...iGive, ...iReceive];
-      const { data: rows } = await supabase
-        .from("card_inventory")
-        .select("card_id, set_id, version, quantity")
-        .eq("user_id", meId)
-        .in("card_id", [...new Set(touched.map(c => String(c.card_id)))]);
-
-      const key = (c: { card_id: string; set_id: string; version: string | null }) =>
-        `${c.card_id}::${c.set_id}::${c.version ?? ""}`;
-      const have: Record<string, number> = {};
-      for (const r of (rows ?? []) as TradeCard[]) have[key(r)] = r.quantity;
-
-      // Lo entregado se descuenta; lo recibido se suma
-      const delta: Record<string, number> = {};
-      const meta:  Record<string, TradeCard> = {};
-      for (const c of iGive)    { delta[key(c)] = (delta[key(c)] ?? 0) - c.quantity; meta[key(c)] = c; }
-      for (const c of iReceive) { delta[key(c)] = (delta[key(c)] ?? 0) + c.quantity; meta[key(c)] = c; }
-
-      for (const [k, d] of Object.entries(delta)) {
-        if (d === 0) continue;
-        const c = meta[k];
-        const next = Math.max(0, (have[k] ?? 0) + d);
-
-        if (next === 0) {
-          await supabase.from("card_inventory").delete()
-            .eq("user_id", meId).eq("card_id", String(c.card_id))
-            .eq("set_id", c.set_id).eq("version", c.version ?? "normal");
-        } else if (have[k] != null) {
-          await supabase.from("card_inventory").update({ quantity: next })
-            .eq("user_id", meId).eq("card_id", String(c.card_id))
-            .eq("set_id", c.set_id).eq("version", c.version ?? "normal");
-        } else {
-          await supabase.from("card_inventory").insert({
-            user_id: meId, card_id: String(c.card_id), set_id: c.set_id,
-            version: c.version ?? "normal", quantity: next,
-          });
-        }
-      }
-
-      /* Lo que llega deja de estar en la wishlist. El trigger de la base hace
-         lo mismo ante cualquier entrada al inventario (ver
-         supabase/wishlist_auto_remove.sql); esto queda por si el trigger no
-         alcanzó a correr y para que la pantalla se refresque al instante.
-         Va con set_id: sin él borraba la misma carta de todos los sets. */
-      for (const c of iReceive) {
-        await supabase.from("card_wishlist").delete()
-          .eq("user_id", meId)
-          .eq("card_id", String(c.card_id))
-          .eq("set_id", c.set_id);
-      }
+      /* Todo pasa en la base, en una sola transacción (confirmar_recepcion):
+         descuenta lo entregado, suma lo recibido, lo saca de la wishlist y
+         marca la fecha. Antes eran varias escrituras sueltas desde aquí que
+         podían quedar a medias o aplicarse dos veces al reintentar. */
+      const { error } = await supabase.rpc("confirmar_recepcion", { p_trade: trade.id });
+      if (error) throw error;
 
       const field = isReceived ? "to_received_at" : "from_received_at";
       const stamp = new Date().toISOString();
-      const { error } = await supabase.from("trades")
-        .update({ [field]: stamp }).eq("id", trade.id);
-      if (error) throw error;
-
       setTrades(prev => prev.map(t => t.id === trade.id ? { ...t, [field]: stamp } : t));
     } catch (err) {
       console.error("[Trades] Error confirmando recepción:", err);

@@ -21,6 +21,7 @@ import { createClient } from "@supabase/supabase-js";
 import { POKEMON_SERIES, type PokemonSet, type PokemonSeries } from "@/data/pokemon-sets";
 import { SCRYDEX_SET_CODES } from "@/data/set-codes";
 import { loadSetCards, SETS_CON_CARTAS, type PokemonCard } from "@/data/pokemon-cards";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
 
 function publico() {
   return createClient(
@@ -121,38 +122,46 @@ async function leerPreciosDelSet(setId: string): Promise<PreciosDelSet> {
   const codigo = SCRYDEX_SET_CODES[setId];
   if (!codigo) return { porCarta: {}, actualizado: null };
 
-  try {
-    const { data } = await publico()
-      .from("card_prices_merged")
-      .select("card_id, prices, updated_at")
-      .like("card_id", `${codigo}-%`)
-      .limit(2000);
+  // Por tandas: `.limit(2000)` no pasa el tope de 1000 filas de la base, y un
+  // set como Prize Pack ya va en 872. Si falla, lanza: así el error no se guarda
+  // tres horas en la caché (ver preciosDelSet abajo).
+  const data = await fetchAllRows<{ card_id: string; prices: unknown; updated_at: string | null }>(() => publico()
+    .from("card_prices_merged")
+    .select("card_id, prices, updated_at")
+    .like("card_id", `${codigo}-%`), "card_id");
 
-    const porCarta: Record<number, PreciosPorVariante> = {};
-    let actualizado: string | null = null;
+  const porCarta: Record<number, PreciosPorVariante> = {};
+  let actualizado: string | null = null;
 
-    for (const fila of data ?? []) {
-      const resto = String(fila.card_id).slice(codigo.length + 1);
-      /* El `like` también trae los códigos que empiezan igual: "sv1-%" no, pero
-         "me2-%" sí traería "me2pt5-…" si el guion no estuviera. Con el guion
-         puesto, lo único que puede colarse es un sufijo que no sea un número. */
-      if (!/^\d+$/.test(resto)) continue;
-      porCarta[Number(resto)] = (fila.prices ?? {}) as PreciosPorVariante;
-      if (fila.updated_at && (!actualizado || fila.updated_at > actualizado)) {
-        actualizado = fila.updated_at as string;
-      }
+  for (const fila of data) {
+    const resto = String(fila.card_id).slice(codigo.length + 1);
+    /* El `like` también trae los códigos que empiezan igual: "sv1-%" no, pero
+       "me2-%" sí traería "me2pt5-…" si el guion no estuviera. Con el guion
+       puesto, lo único que puede colarse es un sufijo que no sea un número. */
+    if (!/^\d+$/.test(resto)) continue;
+    porCarta[Number(resto)] = (fila.prices ?? {}) as PreciosPorVariante;
+    if (fila.updated_at && (!actualizado || fila.updated_at > actualizado)) {
+      actualizado = fila.updated_at as string;
     }
-
-    return { porCarta, actualizado };
-  } catch {
-    return { porCarta: {}, actualizado: null };
   }
+
+  return { porCarta, actualizado };
 }
 
 /* Tres horas, que es cada cuánto el cron de TCGplayer refresca los precios:
    guardarlos más tiempo sería mostrar un precio viejo, y menos sería pedirle
    a la base algo que no cambió. */
-export const preciosDelSet = unstable_cache(leerPreciosDelSet, ["catalogo-precios-set"], { revalidate: 10800 });
+const preciosDelSetEnCache = unstable_cache(leerPreciosDelSet, ["catalogo-precios-set"], { revalidate: 10800 });
+
+/** Si la base falla, la página sale sin precios esta vez, sin guardar el vacío en la caché. */
+export async function preciosDelSet(setId: string): Promise<PreciosDelSet> {
+  try {
+    return await preciosDelSetEnCache(setId);
+  } catch (e) {
+    console.error(`[catalogo] precios de ${setId}:`, e);
+    return { porCarta: {}, actualizado: null };
+  }
+}
 
 /** El precio de una sola carta, para su ficha. */
 async function leerPreciosDeCarta(
@@ -162,23 +171,29 @@ async function leerPreciosDeCarta(
   const codigo = SCRYDEX_SET_CODES[setId];
   if (!codigo) return { precios: {}, actualizado: null };
 
-  try {
-    const { data } = await publico()
-      .from("card_prices_merged")
-      .select("prices, updated_at")
-      .eq("card_id", `${codigo}-${numero}`)
-      .maybeSingle();
+  const { data, error } = await publico()
+    .from("card_prices_merged")
+    .select("prices, updated_at")
+    .eq("card_id", `${codigo}-${numero}`)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
 
-    return {
-      precios: (data?.prices ?? {}) as PreciosPorVariante,
-      actualizado: (data?.updated_at as string) ?? null,
-    };
-  } catch {
+  return {
+    precios: (data?.prices ?? {}) as PreciosPorVariante,
+    actualizado: (data?.updated_at as string) ?? null,
+  };
+}
+
+const preciosDeCartaEnCache = unstable_cache(leerPreciosDeCarta, ["catalogo-precios-carta"], { revalidate: 10800 });
+
+export async function preciosDeCarta(setId: string, numero: number): Promise<{ precios: PreciosPorVariante; actualizado: string | null }> {
+  try {
+    return await preciosDeCartaEnCache(setId, numero);
+  } catch (e) {
+    console.error(`[catalogo] precio de ${setId}/${numero}:`, e);
     return { precios: {}, actualizado: null };
   }
 }
-
-export const preciosDeCarta = unstable_cache(leerPreciosDeCarta, ["catalogo-precios-carta"], { revalidate: 10800 });
 
 /** El precio más alto de una carta, que es el que se muestra en la grilla. */
 export function precioDestacado(precios: PreciosPorVariante | undefined): number | null {

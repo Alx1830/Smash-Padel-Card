@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Layers } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { SCRYDEX_SET_CODES } from "@/data/set-codes";
-import { fetchAllRows } from "@/lib/fetch-all-rows";
+import { valorActualDe, type ValorActual } from "@/lib/valor-portafolio";
+export type { ValorActual };
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
@@ -21,8 +21,6 @@ export type Snapshot       = { date: string; total_usd: number; card_count: numb
 export type HourlySnapshot = { hour_bucket: string; total_usd: number; card_count: number };
 type Range = "1D" | "1M" | "3M" | "6M" | "1Y";
 
-/** Valor del inventario calculado en este momento, sin esperar al cron. */
-export type ValorActual = { total_usd: number; copias: number; unicas: number };
 
 /** "2026-10-03T23:00:00+00:00": la hora de Bogotá guardada como si fuera UTC, igual que el cron. */
 function horaBogotaActual() {
@@ -303,47 +301,6 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
   );
 }
 
-/**
- * Valor del inventario en este momento, con la misma cuenta que
- * `snapshot_hourly_portfolios`: precio de la versión, o con mayúscula inicial,
- * o el normal, por cantidad. Los códigos salen de la tabla de la app.
- */
-async function valorActualDe(supabase: ReturnType<typeof createClient>, userId: string): Promise<ValorActual | null> {
-  // Por tandas y ordenado: un select suelto se corta en 1000 filas y el valor salía de menos.
-  const filas = await fetchAllRows<{ card_id: string | number; set_id: string; version: string | null; quantity: number }>(
-    () => supabase.from("card_inventory")
-      .select("card_id, set_id, version, quantity").eq("user_id", userId).gt("quantity", 0)
-      );
-  if (!filas.length) return null;
-
-  const llaveDe = (f: { card_id: string | number; set_id: string }) => {
-    const code = SCRYDEX_SET_CODES[f.set_id];
-    const numero = String(f.card_id).split(":")[0];
-    return code && /^\d+$/.test(numero) ? `${code}-${parseInt(numero, 10)}` : null;
-  };
-  const llaves = [...new Set(filas.map(llaveDe).filter((k): k is string => !!k))];
-
-  const precios = new Map<string, Record<string, number>>();
-  for (let i = 0; i < llaves.length; i += 200) {
-    const { data } = await supabase.from("card_prices_merged").select("card_id, prices").in("card_id", llaves.slice(i, i + 200));
-    for (const r of data ?? []) precios.set(r.card_id, r.prices as Record<string, number>);
-  }
-
-  let total = 0, copias = 0;
-  const unicas = new Set<string>();
-  for (const f of filas) {
-    copias += f.quantity;
-    unicas.add(`${f.set_id}|${f.card_id}`);
-    const llave = llaveDe(f);
-    const p = llave ? precios.get(llave) : undefined;
-    if (!p) continue;
-    const v = f.version || "normal";
-    const precio = Number(p[v] ?? p[v.charAt(0).toUpperCase() + v.slice(1)] ?? p.normal ?? 0);
-    total += precio * f.quantity;
-  }
-  return { total_usd: Math.round(total * 100) / 100, copias, unicas: unicas.size };
-}
-
 /** Gráfico autónomo para el perfil: lee los snapshots del usuario (solo lectura) */
 export function ProfilePortfolioChart({ userId, cardCount, fixedHeight }: { userId: string; cardCount?: number | null; fixedHeight?: number }) {
   const [snapshots,       setSnapshots]       = useState<Snapshot[]>([]);
@@ -358,7 +315,8 @@ export function ProfilePortfolioChart({ userId, cardCount, fixedHeight }: { user
       const [{ data: snaps }, { data: hourly }, valor] = await Promise.all([
         supabase.from("portfolio_snapshots").select("date, total_usd, card_count").eq("user_id", userId).order("date", { ascending: false }).limit(366),
         supabase.from("portfolio_hourly_snapshots").select("hour_bucket, total_usd, card_count").eq("user_id", userId).gte("hour_bucket", `${todayUTC}T00:00:00Z`).order("hour_bucket", { ascending: true }),
-        valorActualDe(supabase, userId),
+        // Si falla, el historial se muestra igual, sin el punto de hoy.
+        valorActualDe(supabase, userId).catch(() => null),
       ]);
       setSnapshots(snaps ?? []);
       setHourlySnapshots(hourly ?? []);

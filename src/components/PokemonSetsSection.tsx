@@ -453,8 +453,10 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
       .from("card_wishlist")
       .select("card_id, set_id")
       .eq("user_id", userId)
-      
-    ).then(setWishlistCards);
+    ).then(setWishlistCards)
+      // Sin la wishlist cargada, "agregar faltantes" intentaría duplicar filas:
+      // queda marcada como no lista y el botón usa upsert igual.
+      .catch(e => console.error("No se pudo cargar la wishlist", e));
     supabase
       .from("market_listings")
       .select("id, card_id, set_id, price_cop, version")
@@ -469,12 +471,17 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
   useEffect(() => {
     if (!openSetId) return;
     if (cardCache[openSetId]) { setSetCards(cardCache[openSetId]); return; }
+    // Si se cambia de set antes de que termine, el resultado viejo no debe
+    // dibujarse bajo el título del set nuevo.
+    let cancelado = false;
     setLoadingCards(true);
     fetchSetCards(openSetId).then(cards => {
       cardCache[openSetId] = cards;
+      if (cancelado) return;
       setSetCards(cards);
       setLoadingCards(false);
     });
+    return () => { cancelado = true; };
   }, [openSetId]);
 
   useEffect(() => {
@@ -524,9 +531,17 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
     const toAdd   = missing.filter(c => !wishlistCards.some(w => w.card_id === c.id && w.set_id === openSetId));
     if (toAdd.length > 0) {
       const supabase = createClient();
-      await supabase.from("card_wishlist").insert(
-        toAdd.map(c => ({ user_id: userId, card_id: c.id, set_id: openSetId }))
+      // upsert ignorando las que ya estén: con un insert, una sola repetida
+      // hacía fallar el lote entero y la pantalla igual las marcaba agregadas.
+      const { error } = await supabase.from("card_wishlist").upsert(
+        toAdd.map(c => ({ user_id: userId, card_id: c.id, set_id: openSetId })),
+        { onConflict: "user_id,card_id,set_id", ignoreDuplicates: true },
       );
+      if (error) {
+        window.alert(`No se pudieron agregar a la wishlist: ${error.message}`);
+        setAddingWish("idle");
+        return;
+      }
       setWishlistCards(prev => [...prev, ...toAdd.map(c => ({ card_id: c.id, set_id: openSetId! }))]);
     }
     setAddingWish("done");

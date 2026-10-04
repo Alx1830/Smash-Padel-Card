@@ -24,7 +24,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR   = path.resolve(__dirname, "tcgplayer-mapping");
 const SETS_DIR  = path.resolve(__dirname, "../src/data/sets");
 const SETS_TS   = path.resolve(__dirname, "../src/data/pokemon-sets.ts");
-const HOOK_TS   = path.resolve(__dirname, "../src/hooks/useScrydexPrice.ts");
+const HOOK_TS   = path.resolve(__dirname, "../src/data/set-codes.ts");
 
 const API = "https://mp-search-api.tcgplayer.com/v1/search/request?q=&isList=false";
 const UA  = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36";
@@ -82,7 +82,7 @@ function readLocalSets() {
 function readCodes() {
   const src = fs.readFileSync(HOOK_TS, "utf8");
   const codes = {};
-  const block = src.slice(src.indexOf("SCRYDEX_SET_CODES"), src.indexOf("const supabase"));
+  const block = src.slice(src.indexOf("SCRYDEX_SET_CODES"));
   for (const m of block.matchAll(/"([a-z0-9-]+)":\s*"([a-z0-9]+)"/gi)) codes[m[1]] = m[2];
   return codes;
 }

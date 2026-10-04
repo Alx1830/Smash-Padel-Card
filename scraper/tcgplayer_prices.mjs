@@ -117,7 +117,9 @@ async function knownSealed() {
   const map = new Map();
   for (let from = 0; ; from += 1000) {
     const { data, error } = await supabase
-      .from("sealed_products").select("product_id, name").range(from, from + 999);
+      // Ordenado: sin orden las tandas repiten y se saltan filas, y un producto
+      // conocido se tomaba por nuevo y se pisaba su nombre curado.
+      .from("sealed_products").select("product_id, name").order("product_id").range(from, from + 999);
     if (error) throw new Error(`sealed_products: ${error.message}`);
     data.forEach(r => map.set(r.product_id, r.name));
     if (data.length < 1000) break;

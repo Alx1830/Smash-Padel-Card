@@ -12,6 +12,7 @@ import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { InvTiltCard, SellPopup, INV_CARD_KEYFRAMES } from "@/components/InventoryCard";
 import { invKey, type InventoryMap, type FeaturedCard, type WishlistCard, type UserListing } from "@/components/CardDetailModal";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
+import { DEFAULT_CARD_LANGUAGE } from "@/lib/languages";
 
 const CardDetailModal = dynamic(
   () => import("@/components/CardDetailModal").then(m => ({ default: m.CardDetailModal })),
@@ -51,6 +52,8 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
   const [modalTarget,   setModalTarget]   = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [sellTarget,    setSellTarget]    = useState<{ card: PokemonCard; setId: string } | null>(null);
   const [inventory,     setInventory]     = useState<InventoryMap>({});
+  /** Copias por idioma de cada carta, para que + y − toquen la fila correcta. */
+  const idiomasRef = useRef<Record<string, Record<string, number>>>({});
   const [featuredCards, setFeaturedCards] = useState<FeaturedCard[]>([]);
   const [wishlistCards, setWishlistCards] = useState<WishlistCard[]>([]);
   const [userListings,  setUserListings]  = useState<UserListing[]>([]);
@@ -88,20 +91,29 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
         fetchAllRows<WishlistCard>(() => supabase.from("card_wishlist")
           .select("card_id, set_id").eq("user_id", userId)),
         supabase.from("market_listings").select("id, card_id, set_id, price_cop, version").eq("user_id", userId).in("status", ["active", "pending"]),
-        fetchAllRows<{ card_id: string; set_id: string; version: string | null; quantity: number }>(
+        fetchAllRows<{ card_id: string; set_id: string; version: string | null; quantity: number; language: string | null }>(
           () => supabase.from("card_inventory")
-            .select("card_id, set_id, version, quantity")
+            .select("card_id, set_id, version, quantity, language")
             .eq("user_id", userId).gt("quantity", 0)),
       ]);
       if (featured) setFeaturedCards(featured as FeaturedCard[]);
       setWishlistCards(wishlist);
       if (listings) setUserListings(listings as UserListing[]);
+      // Total por carta (suma de idiomas) para la pantalla, y aparte cuántas
+      // hay en cada idioma para saber qué fila tocar con + y −.
       const invMap: InventoryMap = {};
+      const porIdioma: Record<string, Record<string, number>> = {};
       for (const row of inv) {
-        invMap[invKey(row.card_id, row.version ?? "normal", row.set_id)] = row.quantity;
+        const key = invKey(row.card_id, row.version ?? "normal", row.set_id);
+        invMap[key] = (invMap[key] ?? 0) + row.quantity;
+        (porIdioma[key] ??= {})[row.language ?? DEFAULT_CARD_LANGUAGE] = row.quantity;
       }
+      idiomasRef.current = porIdioma;
       setInventory(invMap);
-    })();
+    })().catch(e => {
+      // El buscador sigue sirviendo para buscar; las cantidades quedan sin cargar.
+      console.error("No se pudo cargar el inventario del buscador", e);
+    });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -185,35 +197,47 @@ export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
     }
   }
 
+  /* + y − tocan UNA fila (un idioma). Antes se escribía el total de todos los
+     idiomas en una sola fila: con 2 en español, "+" guardaba 3 en inglés. */
   async function incrementQty(card: PokemonCard, setId: string) {
     const key = invKey(card.id, card.version, setId);
-    const next = (inventory[key] ?? 0) + 1;
-    await supabase.from("card_inventory").upsert({
+    const idiomas = idiomasRef.current[key] ?? {};
+    const conCopias = Object.keys(idiomas).filter(l => idiomas[l] > 0);
+    const lang = conCopias.length === 1 ? conCopias[0] : DEFAULT_CARD_LANGUAGE;
+    const nueva = (idiomas[lang] ?? 0) + 1;
+    const { error } = await supabase.from("card_inventory").upsert({
       user_id: userId, card_id: card.id, set_id: setId,
-      version: card.version, quantity: next,
-    }, { onConflict: "user_id,card_id,set_id,version" });
-    setInventory(prev => ({ ...prev, [key]: next }));
+      version: card.version, language: lang, quantity: nueva,
+    }, { onConflict: "user_id,card_id,set_id,version,language" });
+    if (error) { window.alert(`No se pudo sumar la carta: ${error.message}`); return; }
+    idiomasRef.current[key] = { ...idiomas, [lang]: nueva };
+    setInventory(prev => ({ ...prev, [key]: (prev[key] ?? 0) + 1 }));
   }
 
   async function decrementQty(card: PokemonCard, setId: string) {
     const key = invKey(card.id, card.version, setId);
-    const current = inventory[key] ?? 0;
-    if (current <= 0) return;
-    const next = current - 1;
-    if (next === 0) {
-      await supabase.from("card_inventory")
-        .delete()
-        .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId).eq("version", card.version);
-      setInventory(prev => {
-        const updated = { ...prev };
-        delete updated[key];
-        return updated;
-      });
-    } else {
-      await supabase.from("card_inventory").update({ quantity: next })
-        .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId).eq("version", card.version);
-      setInventory(prev => ({ ...prev, [key]: next }));
-    }
+    const idiomas = idiomasRef.current[key] ?? {};
+    const lang = idiomas[DEFAULT_CARD_LANGUAGE] > 0
+      ? DEFAULT_CARD_LANGUAGE
+      : Object.keys(idiomas).find(l => idiomas[l] > 0);
+    if (!lang) return;
+    const nueva = idiomas[lang] - 1;
+    const filtro = supabase.from("card_inventory");
+    const { error } = nueva <= 0
+      ? await filtro.delete()
+          .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId).eq("version", card.version).eq("language", lang)
+      : await filtro.update({ quantity: nueva })
+          .eq("user_id", userId).eq("card_id", card.id).eq("set_id", setId).eq("version", card.version).eq("language", lang);
+    if (error) { window.alert(`No se pudo quitar la carta: ${error.message}`); return; }
+    const resto = { ...idiomas };
+    if (nueva <= 0) delete resto[lang]; else resto[lang] = nueva;
+    idiomasRef.current[key] = resto;
+    setInventory(prev => {
+      const total = (prev[key] ?? 0) - 1;
+      const updated = { ...prev };
+      if (total <= 0) delete updated[key]; else updated[key] = total;
+      return updated;
+    });
   }
 
   const openModal = useCallback((result: CardResult) => {

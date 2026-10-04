@@ -18,27 +18,33 @@ export async function ensureInInventory(
 ) {
   if (!userId || quantity <= 0) return;
 
-  const { data: current } = await supabase
+  // Cuenta las copias de TODOS los idiomas: si ya tiene la carta en español, el
+  // set no debe inventarle una copia en inglés.
+  const { data: filas, error } = await supabase
     .from("card_inventory")
-    .select("quantity")
+    .select("quantity, language")
     .eq("user_id", userId)
     .eq("card_id", card.card_id)
     .eq("set_id", card.set_id)
-    .eq("language", DEFAULT_CARD_LANGUAGE)
-    .eq("version", card.version)
-    .maybeSingle();
+    .eq("version", card.version);
+  // Sin poder leer no se escribe: antes un fallo aquí terminaba pisando un
+  // conteo mayor con el del set.
+  if (error) throw new Error(`No se pudo leer el inventario: ${error.message}`);
 
-  if ((current?.quantity ?? 0) >= quantity) return;
+  const total = (filas ?? []).reduce((s, f) => s + (f.quantity ?? 0), 0);
+  if (total >= quantity) return;
 
-  await supabase.from("card_inventory").upsert(
+  const enDefecto = (filas ?? []).find(f => f.language === DEFAULT_CARD_LANGUAGE)?.quantity ?? 0;
+  const { error: eGuardar } = await supabase.from("card_inventory").upsert(
     {
       user_id:  userId,
       card_id:  card.card_id,
       set_id:   card.set_id,
       version:  card.version,
       language: DEFAULT_CARD_LANGUAGE,
-      quantity,
+      quantity: enDefecto + (quantity - total),
     },
     { onConflict: "user_id,card_id,set_id,version,language" },
   );
+  if (eGuardar) throw new Error(`No se pudo guardar en el inventario: ${eGuardar.message}`);
 }
