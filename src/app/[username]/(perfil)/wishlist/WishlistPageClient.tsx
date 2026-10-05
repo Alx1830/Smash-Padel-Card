@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
+import { Desplegable } from "@/components/ui/Desplegable";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import dynamic from "next/dynamic";
 const ModalTiltCard = dynamic(
@@ -15,7 +16,7 @@ const ModalTiltCard = dynamic(
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
 import { useScrydexPrice, SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { tcgCardLink } from "@/lib/tcg-link";
-import { X, Lock, Search } from "lucide-react";
+import { X, Lock, Search, ImageOff, SlidersHorizontal, ChevronDown } from "lucide-react";
 
 const COURT = "#ffd24f";
 const INK0  = "#f5f7fb";
@@ -25,6 +26,8 @@ const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
 interface WishlistRow { card_id: number | string; set_id: string; }
+/** Cartas por tanda del scroll infinito */
+const PAGINA = 24;
 interface SetInfo     { id: string; name: string; logo: string; }
 
 function CardPriceTag({ card, setId }: { card: PokemonCard; setId: string }) {
@@ -83,6 +86,11 @@ export function WishlistPageClient({
   const [previewCard, setPreviewCard] = useState<PokemonCard | null>(null);
   const [authMsg,     setAuthMsg]     = useState<string | null>(null);
   const [setsLoaded,  setSetsLoaded]  = useState(false);
+  const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
+  /** Cartas pintadas: de PAGINA en PAGINA al hacer scroll, como el inventario.
+      Con 400+ cartas de una vez el celular se quedaba sin memoria. */
+  const [visibles, setVisibles] = useState(PAGINA);
+  const centinela = useRef<HTMLDivElement>(null);
 
   const updateURL = useCallback((nombre: string, set: string, variante: string) => {
     const params = new URLSearchParams();
@@ -93,9 +101,10 @@ export function WishlistPageClient({
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   }, [router, pathname]);
 
-  function setFNombre(v: string)   { setFNombreRaw(v);   updateURL(v,       fSet,      fVariante); }
-  function setFSet(v: string)      { setFSetRaw(v);       updateURL(fNombre, v,         fVariante); }
-  function setFVariante(v: string) { setFVarianteRaw(v);  updateURL(fNombre, fSet,      v); }
+  // Al cambiar un filtro se vuelve a la primera tanda
+  function setFNombre(v: string)   { setFNombreRaw(v);   setVisibles(PAGINA); updateURL(v,       fSet,      fVariante); }
+  function setFSet(v: string)      { setFSetRaw(v);       setVisibles(PAGINA); updateURL(fNombre, v,         fVariante); }
+  function setFVariante(v: string) { setFVarianteRaw(v);  setVisibles(PAGINA); updateURL(fNombre, fSet,      v); }
 
   useEffect(() => {
     const ids = [...new Set(wishlistRows.map(w => w.set_id))];
@@ -127,11 +136,20 @@ export function WishlistPageClient({
     });
   }, [resolved, fNombre, fSet, fVariante]);
 
+  useEffect(() => {
+    const el = centinela.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(e => { if (e[0].isIntersecting) setVisibles(v => v + PAGINA); }, { rootMargin: "400px" });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [filtered.length, visibles]);
+
   const hasFilters = fNombre || fSet || fVariante;
   function clearFilters() {
     setFNombreRaw("");
     setFSetRaw("");
     setFVarianteRaw("");
+    setVisibles(PAGINA);
     router.replace(pathname, { scroll: false });
   }
 
@@ -168,7 +186,6 @@ export function WishlistPageClient({
     textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px",
   };
   const sDivider: React.CSSProperties = { height: "1px", background: "rgba(255,255,255,0.06)", margin: "18px 0" };
-  const sSelect: React.CSSProperties = { ...sInput, cursor: "pointer", appearance: "none", WebkitAppearance: "none" };
 
   return (
     <div style={{ width: "100%", background: BG0 }}>
@@ -177,7 +194,7 @@ export function WishlistPageClient({
       {authMsg && (
         <div onClick={() => setAuthMsg(null)} style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(5,7,13,0.88)", backdropFilter: "blur(12px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
           <div onClick={e => e.stopPropagation()} style={{ background: "#0d111f", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "20px", padding: "36px 32px", maxWidth: "380px", width: "100%", textAlign: "center" }}>
-            <div style={{ marginBottom: "16px" }}><Lock size={36} color="#2ee6c1" strokeWidth={1.6} /></div>
+            <div style={{ marginBottom: "16px", display: "flex", justifyContent: "center" }}><Lock size={36} color="#2ee6c1" strokeWidth={1.6} /></div>
             <h3 style={{ fontFamily: DISP, fontSize: "20px", color: INK0, margin: "0 0 12px", letterSpacing: "-0.01em" }}>Acceso requerido</h3>
             <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, lineHeight: 1.7, margin: "0 0 24px", letterSpacing: "0.04em" }}>{authMsg}</p>
             <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
@@ -198,14 +215,22 @@ export function WishlistPageClient({
           <div onClick={e => e.stopPropagation()} style={{ width: "min(300px, 78vw)" }}>
             <ModalTiltCard card={previewCard} />
           </div>
-          <button onClick={() => setPreviewCard(null)} style={{ position: "fixed", top: "20px", right: "24px", background: "none", border: "none", color: INK0, fontSize: "24px", cursor: "pointer", lineHeight: 1 }} aria-label="Cerrar"><X size={18} aria-hidden /></button>
+          <button className="wl-cerrar" onClick={() => setPreviewCard(null)} style={{ position: "fixed", top: "20px", right: "24px", background: "none", border: "none", color: INK0, fontSize: "24px", cursor: "pointer", lineHeight: 1 }} aria-label="Cerrar"><X size={18} aria-hidden /></button>
         </div>
       )}
 
       {/* ══ HEADER SECTION ══ */}
-      <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 24px 16px" }} className="wl-section-header">
-        <style>{`@media (min-width: 1024px) and (pointer: fine) { .wl-section-header { padding: 32px 80px 16px !important; } }`}</style>
-        <div style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
+      <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }} className="wl-section-header">
+        <style>{`
+          .wl-section-header { padding: 32px 24px 16px; }
+          @media (min-width: 1024px) and (pointer: fine) { .wl-section-header { padding: 32px 80px 16px; } }
+          /* Celular y tablet: el marco del perfil ya pone los 16px a los lados; cabecera centrada */
+          @media (max-width: 1023px), (pointer: coarse) {
+            .wl-section-header { padding: 24px 0 8px; text-align: center; }
+            .wl-ante { justify-content: center; }
+          }
+        `}</style>
+        <div className="wl-ante" style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
           <span style={{ width: "18px", height: "1px", background: COURT, display: "inline-block" }} />
           <Link href={`/${username}`} style={{ color: COURT, textDecoration: "none" }}>@{username}</Link>
           <span style={{ color: INK2 }}>›</span>
@@ -223,16 +248,43 @@ export function WishlistPageClient({
       </section>
 
       {/* ══ BODY ══ */}
-      <section style={{ padding: "32px 24px 80px" }} className="wl-body">
+      <section className="wl-body">
         <style>{`
-          @media (min-width: 1024px) and (pointer: fine) { .wl-body { padding: 48px 80px 80px !important; } }
+          .wl-body { padding: 32px 24px 80px; }
+          @media (min-width: 1024px) and (pointer: fine) { .wl-body { padding: 48px 80px 80px; } }
           .wl-layout { display: flex; gap: 32px; align-items: flex-start; }
           .wl-sidebar { width: 240px; flex-shrink: 0; }
+          /* Los filtros acompañan el scroll. El sticky va en la columna entera: puesto
+             en el panel de adentro no hacía nada, porque la columna medía lo mismo
+             que el panel y no le dejaba espacio para moverse. 96px = debajo de la barra de arriba. */
+          @media (min-width: 1024px) and (pointer: fine) {
+            .wl-sidebar { position: sticky; top: 96px; align-self: flex-start; }
+          }
           .wl-grid-area { flex: 1; min-width: 0; }
+          .wl-toggle { display: none; }
+          /* Celular y tablet: los filtros se pliegan detrás de un botón, igual que en
+             el inventario y en En venta, para que las cartas queden a la vista. */
           @media (max-width: 1023px), (pointer: coarse) {
-            .wl-layout { flex-direction: column; }
+            .wl-body { padding: 20px 0 32px; }
+            .wl-layout { flex-direction: column; align-items: stretch; gap: 16px; }
             .wl-sidebar { width: 100% !important; }
-            .wl-sidebar > div { position: static !important; }
+            .wl-toggle {
+              display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;
+              min-height: 46px; padding: 10px 16px; box-sizing: border-box;
+              border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.09); cursor: pointer;
+            }
+            .wl-panel { display: none; }
+            .wl-panel.open { display: block; margin-top: 10px; padding: 16px !important; }
+            /* El botón ya dice "Filtros": adentro solo queda "Limpiar" */
+            .wl-panel-titulo { display: none; }
+            .wl-panel-cab { justify-content: flex-end !important; margin-bottom: 14px !important; }
+            .wl-panel-cab:not(:has(button)) { display: none !important; }
+            .wl-panel button, .wl-panel input { min-height: 40px; }
+            .wl-cerrar {
+              top: max(12px, env(safe-area-inset-top)) !important; right: 12px !important; width: 44px; height: 44px;
+              display: flex; align-items: center; justify-content: center; border-radius: 50%;
+              background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(255,255,255,0.12) !important;
+            }
           }
         `}</style>
 
@@ -240,9 +292,16 @@ export function WishlistPageClient({
 
           {/* ── Sidebar ── */}
           <aside className="wl-sidebar">
-            <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", padding: "20px", position: "sticky", top: "80px" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
-                <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", color: COURT }}>Filtros</span>
+            <button type="button" className="wl-toggle" onClick={() => setFiltrosAbiertos(o => !o)} aria-expanded={filtrosAbiertos}>
+              <span style={{ display: "flex", alignItems: "center", gap: "10px", fontFamily: MONO, fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", color: COURT }}>
+                <SlidersHorizontal size={15} />
+                Filtros{hasFilters ? " · activos" : ""}
+              </span>
+              <ChevronDown size={16} color={INK2} style={{ flexShrink: 0, transition: "transform .2s", transform: filtrosAbiertos ? "rotate(180deg)" : "none" }} />
+            </button>
+            <div className={`wl-panel${filtrosAbiertos ? " open" : ""}`} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", padding: "20px" }}>
+              <div className="wl-panel-cab" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+                <span className="wl-panel-titulo" style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", color: COURT }}>Filtros</span>
                 {hasFilters && (
                   <button onClick={clearFilters} style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#d95555", background: "none", border: "1px solid rgba(209,53,53,0.3)", borderRadius: "5px", padding: "3px 10px", cursor: "pointer" }}>
                     Limpiar
@@ -259,24 +318,20 @@ export function WishlistPageClient({
 
               <div>
                 <label style={sLabel}>Variante</label>
-                <select value={fVariante} onChange={e => setFVariante(e.target.value)} style={sSelect}>
-                  <option value="" style={{ background: "#0a0e1a" }}>Todas las variantes</option>
-                  {setVersions.map(v => (
-                    <option key={v} value={v} style={{ background: "#0a0e1a", color: INK0 }}>{getVersionLabel(v)}</option>
-                  ))}
-                </select>
+                <Desplegable ariaLabel="Variante" acento={COURT} value={fVariante} onChange={setFVariante} opciones={[
+                  { value: "", label: "Todas las variantes" },
+                  ...setVersions.map(v => ({ value: v, label: getVersionLabel(v) })),
+                ]} />
               </div>
 
               <div style={sDivider} />
 
               <div>
                 <label style={sLabel}>Set</label>
-                <select value={fSet} onChange={e => setFSet(e.target.value)} style={sSelect}>
-                  <option value="" style={{ background: "#0a0e1a" }}>Todos los sets</option>
-                  {allSets.filter(s => resolved.some(r => r.set_id === s.id)).map(s => (
-                    <option key={s.id} value={s.id} style={{ background: "#0a0e1a", color: INK0 }}>{s.name}</option>
-                  ))}
-                </select>
+                <Desplegable ariaLabel="Set" acento={COURT} value={fSet} onChange={setFSet} opciones={[
+                  { value: "", label: "Todos los sets" },
+                  ...allSets.filter(s => resolved.some(r => r.set_id === s.id)).map(s => ({ value: s.id, label: s.name, logo: s.logo })),
+                ]} />
               </div>
             </div>
           </aside>
@@ -296,13 +351,30 @@ export function WishlistPageClient({
               }
               /* Aquí y no dentro de los resultados: si no, el esqueleto salía
                  en 1 columna en el celular y saltaba a 2 al cargar. */
-              @media (max-width: 767px), (pointer: coarse) {
-                .wl-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; }
+              .wl-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+              .wl-version { max-width: calc(100% - 16px); box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+              @media (max-width: 1023px), (pointer: coarse) {
+                .wl-cards-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+              }
+              @media (min-width: 1024px) and (pointer: coarse) {
+                .wl-cards-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+              }
+              /* En 2 columnas no caben precio y dos botones en una fila: el precio
+                 va arriba y los botones debajo, a lo ancho y de 40px de alto. */
+              @media (max-width: 767px) {
+                .wl-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+                .wl-info { padding: 10px !important; gap: 8px !important; }
+                .wl-acciones { flex-wrap: wrap; justify-content: center; }
+                .wl-acciones > span { flex-basis: 100%; text-align: center; }
+                .wl-acciones > button { min-height: 40px; min-width: 0; }
+                /* La acción secundaria (TCGPlayer) queda solo con su icono */
+                .wl-tcg { flex: 0 0 40px !important; }
+                .wl-tcg-txt { display: none; }
               }
             `}</style>
 
             {!setsLoaded && wishlistRows.length > 0 ? (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="wl-cards-grid">
+              <div className="wl-cards-grid">
                 {Array.from({ length: Math.min(wishlistRows.length, 12) }).map((_, i) => (
                   <div key={i} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
                     <div className="wl-skeleton" style={{ width: "100%", aspectRatio: "5/7", flexShrink: 0 }} />
@@ -322,7 +394,7 @@ export function WishlistPageClient({
               </div>
             ) : resolved.length === 0 ? (
               <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "80px 40px", textAlign: "center" }}>
-                <div style={{ marginBottom: "16px", opacity: 0.5 }}><Search size={40} color="#2ee6c1" strokeWidth={1.6} /></div>
+                <div style={{ marginBottom: "16px", opacity: 0.5, display: "flex", justifyContent: "center" }}><Search size={40} color="#2ee6c1" strokeWidth={1.6} /></div>
                 <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>La wishlist está vacía</p>
               </div>
             ) : filtered.length === 0 ? (
@@ -331,8 +403,8 @@ export function WishlistPageClient({
                 <button onClick={clearFilters} style={{ fontFamily: MONO, fontSize: "10px", color: COURT, background: "none", border: `1px solid ${COURT}44`, borderRadius: "6px", padding: "6px 16px", cursor: "pointer" }}>Limpiar filtros</button>
               </div>
             ) : (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="wl-cards-grid">
-                {filtered.map((item, i) => {
+              <div className="wl-cards-grid">
+                {filtered.slice(0, visibles).map((item, i) => {
                   const color    = getVersionColor(item.card.version);
                   const label    = getVersionLabel(item.card.version);
                   const tcgQuery = encodeURIComponent([item.card.name, item.set.name, label].filter(Boolean).join(" "));
@@ -354,13 +426,13 @@ export function WishlistPageClient({
                           }}
                         />
                         <div className="wl-img-ph" style={{ display: "none", position: "absolute", inset: 0, flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "8px", background: "rgba(255,255,255,0.03)" }}>
-                          <span style={{ fontSize: "28px", opacity: 0.3 }}>🃏</span>
+                          <ImageOff size={26} color={INK2} strokeWidth={1.6} aria-hidden />
                           <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", textAlign: "center", padding: "0 8px" }}>{item.card.name}</span>
                         </div>
-                        <div style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>{label}</div>
+                        <div className="wl-version" style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>{label}</div>
                       </div>
-                      <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
-                        <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "6px 10px", alignItems: "center" }}>
+                      <div className="wl-info" style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", gap: "6px 10px", alignItems: "center" }}>
                           <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2, letterSpacing: "0.08em", whiteSpace: "nowrap" }}>#{String(item.card.card_number).padStart(3, "0")}</span>
                           <span style={{ fontFamily: MONO, fontSize: "11px", color: INK0, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.card.name}</span>
                           <div style={{ position: "relative", width: "56px", height: "18px" }}>
@@ -368,15 +440,16 @@ export function WishlistPageClient({
                           </div>
                           <span style={{ fontFamily: MONO, fontSize: "9px", color: INK2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.set.name}</span>
                         </div>
-                        <div style={{ display: "flex", gap: "6px", marginTop: "auto", paddingTop: "2px", alignItems: "center" }}>
+                        <div className="wl-acciones" style={{ display: "flex", gap: "6px", marginTop: "auto", paddingTop: "2px", alignItems: "center" }}>
                           <CardPriceTag card={item.card as PokemonCard} setId={item.set_id} />
                           <button
+                            className="wl-tcg" aria-label="Ver en TCGPlayer"
                             onClick={() => { const w=430,h=600,left=screen.availWidth-w-16,top=screen.availHeight-h-16; window.open(tcgCardLink(item.set_id, item.card.card_number, decodeURIComponent(tcgQuery)),"tcgplayer",`width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`); }}
                             style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", padding: "8px 4px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#2ee696", background: "#ffffff", borderRadius: "8px", fontWeight: 700, border: "none", cursor: "pointer" }}
                           >
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src="https://www.tcgplayer.com/favicon.ico" alt="TCGPlayer" width={12} height={12} style={{ flexShrink: 0 }} />
-                            TCGPlayer
+                            <span className="wl-tcg-txt">TCGPlayer</span>
                           </button>
                           <button
                             onClick={e => handleVender(item.card, item.set, e)}
@@ -391,6 +464,7 @@ export function WishlistPageClient({
                 })}
               </div>
             )}
+            {setsLoaded && visibles < filtered.length && <div ref={centinela} style={{ height: 1 }} />}
           </div>
         </div>
       </section>

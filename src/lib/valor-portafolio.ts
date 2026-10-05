@@ -17,9 +17,19 @@ export type ValorActual = { total_usd: number; copias: number; unicas: number };
  * Si una lectura falla, lanza: es mejor no mostrar un valor que mostrar uno bajo.
  */
 export async function valorActualDe(supabase: SupabaseClient, userId: string): Promise<ValorActual | null> {
-  const filas = await fetchAllRows<{ card_id: string | number; set_id: string; version: string | null; quantity: number }>(
+  const filas = await fetchAllRows<FilaInventario>(
     () => supabase.from("card_inventory")
       .select("card_id, set_id, version, quantity").eq("user_id", userId).gt("quantity", 0));
+  return valorDeFilas(supabase, filas);
+}
+
+export type FilaInventario = { card_id: string | number; set_id: string; version: string | null; quantity: number };
+
+/**
+ * La misma cuenta, para quien ya tiene el inventario leído (el perfil lo lee
+ * en el servidor y así el navegador no tiene que volver a bajarlo).
+ */
+export async function valorDeFilas(supabase: SupabaseClient, filas: FilaInventario[]): Promise<ValorActual | null> {
   if (!filas.length) return null;
 
   const llaveDe = (f: { card_id: string | number; set_id: string }) => {

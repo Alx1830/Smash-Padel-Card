@@ -301,57 +301,157 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
   );
 }
 
+/** Pantalla de celular: ahí el perfil nuevo muestra el portafolio en versión mini. */
+const CELULAR = "(max-width: 767px)";
+
 /** Gráfico autónomo para el perfil: lee los snapshots del usuario (solo lectura) */
-export function ProfilePortfolioChart({ userId, cardCount, fixedHeight }: { userId: string; cardCount?: number | null; fixedHeight?: number }) {
+export function ProfilePortfolioChart({ userId, cardCount, fixedHeight, sinTitulo, valorInicial, miniEnCelular }: {
+  userId: string; cardCount?: number | null; fixedHeight?: number;
+  /** El perfil nuevo pone el título en su panel: aquí no se repite */
+  sinTitulo?: boolean;
+  /** Valor de hoy ya calculado en el servidor: evita bajar el inventario
+      entero al navegador. undefined = calcularlo aquí, como antes. */
+  valorInicial?: ValorActual | null;
+  /** En el celular, solo el valor, su variación del mes y la cantidad de
+      cartas, sin gráfico ni botones de rango. Tableta y escritorio no cambian.
+      Pensado para usarse junto con `valorInicial`. */
+  miniEnCelular?: boolean;
+}) {
   const [snapshots,       setSnapshots]       = useState<Snapshot[]>([]);
   const [hourlySnapshots, setHourlySnapshots] = useState<HourlySnapshot[]>([]);
   const [loading,         setLoading]         = useState(true);
   const [ahora,           setAhora]           = useState<ValorActual | null>(null);
+  /** Valor de hace un mes (el primer punto del rango 1M), solo para la variación de la versión mini */
+  const [haceUnMes,       setHaceUnMes]       = useState<number | null>(null);
 
   useEffect(() => {
     const supabase = createClient();
-    (async () => {
+    let vivo = true;
+    let cargado = false;
+
+    // El historial completo (hasta 366 días + las horas de hoy) solo se baja
+    // si el gráfico se va a ver. En el celular con la versión mini no hace
+    // falta: si la pantalla crece (el teléfono se gira, por ejemplo) se carga ahí.
+    const cargarHistorial = async () => {
+      if (cargado) return;
+      cargado = true;
       const todayUTC = new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" });
       const [{ data: snaps }, { data: hourly }, valor] = await Promise.all([
         supabase.from("portfolio_snapshots").select("date, total_usd, card_count").eq("user_id", userId).order("date", { ascending: false }).limit(366),
         supabase.from("portfolio_hourly_snapshots").select("hour_bucket, total_usd, card_count").eq("user_id", userId).gte("hour_bucket", `${todayUTC}T00:00:00Z`).order("hour_bucket", { ascending: true }),
         // Si falla, el historial se muestra igual, sin el punto de hoy.
-        valorActualDe(supabase, userId).catch(() => null),
+        valorInicial !== undefined ? Promise.resolve(valorInicial) : valorActualDe(supabase, userId).catch(() => null),
       ]);
+      if (!vivo) return;
       setSnapshots(snaps ?? []);
       setHourlySnapshots(hourly ?? []);
       setAhora(valor);
       setLoading(false);
-    })();
-  }, [userId]);
+    };
+
+    const celular = miniEnCelular ? window.matchMedia(CELULAR) : null;
+    if (!celular?.matches) {
+      cargarHistorial();
+      return () => { vivo = false; };
+    }
+
+    // Versión mini: una sola fila, la primera del último mes, para la variación.
+    const desde = new Date();
+    desde.setMonth(desde.getMonth() - 1);
+    supabase.from("portfolio_snapshots").select("total_usd").eq("user_id", userId)
+      .gte("date", desde.toISOString().slice(0, 10)).order("date", { ascending: true }).limit(1)
+      .then(({ data }) => { if (vivo) setHaceUnMes(data?.[0]?.total_usd ?? null); });
+
+    const alCambiar = () => { if (!celular.matches) cargarHistorial(); };
+    celular.addEventListener("change", alCambiar);
+    return () => { vivo = false; celular.removeEventListener("change", alCambiar); };
+  }, [userId, valorInicial, miniEnCelular]);
+
+  const completo = (
+    <div style={{
+      background: "rgba(255,255,255,0.02)",
+      border: "1px solid rgba(255,255,255,0.08)",
+      borderRadius: "16px",
+      padding: "24px",
+      height: fixedHeight ? `${fixedHeight}px` : undefined,
+      overflow: fixedHeight ? "hidden" : undefined,
+      boxSizing: "border-box",
+    }}>
+      <PortfolioChart
+        snapshots={snapshots} hourlySnapshots={hourlySnapshots} loading={loading}
+        cardCount={ahora?.copias ?? cardCount} uniqueCount={ahora?.unicas}
+        valorActual={ahora?.total_usd} defaultRange="1M" chartHeight={300}
+      />
+    </div>
+  );
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       {/* Header estilo "MIS CARTAS DESTACADAS" */}
-      <div style={{
+      {!sinTitulo && <div style={{
         fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em",
         textTransform: "uppercase", color: COURT,
         display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
       }}>
         <span style={{ width: "22px", height: "1px", background: COURT, display: "inline-block" }} />
         Valor estimado del portafolio
-      </div>
+      </div>}
 
-      <div style={{
-        background: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        borderRadius: "16px",
-        padding: "24px",
-        height: fixedHeight ? `${fixedHeight}px` : undefined,
-        overflow: fixedHeight ? "hidden" : undefined,
-        boxSizing: "border-box",
+      {miniEnCelular ? (
+        <>
+          {/* Las dos versiones van en el HTML y el CSS muestra una: así no
+              hay salto al cargar, que es lo que pasaría eligiendo con JS. */}
+          <style>{`
+            .pfc-mini { display: none; }
+            @media ${CELULAR} {
+              .pfc-mini { display: block; }
+              .pfc-completo { display: none; }
+            }
+          `}</style>
+          <div className="pfc-mini">
+            <PortafolioMini valor={valorInicial?.total_usd ?? 0} antes={haceUnMes}
+              copias={valorInicial?.copias ?? cardCount ?? 0} unicas={valorInicial?.unicas ?? null} />
+          </div>
+          <div className="pfc-completo">{completo}</div>
+        </>
+      ) : completo}
+    </div>
+  );
+}
+
+/** Versión mini del portafolio: valor, variación del mes y cantidad de cartas, centrados. */
+function PortafolioMini({ valor, antes, copias, unicas }: {
+  valor: number; antes: number | null; copias: number; unicas: number | null;
+}) {
+  const delta = antes != null && antes > 0 && valor > 0 ? valor - antes : null;
+  const sube = (delta ?? 0) >= 0;
+  return (
+    <div style={{
+      display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", textAlign: "center",
+      padding: "18px 12px", borderRadius: "12px",
+      background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.08)",
+    }}>
+      <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: 0 }}>
+        Valor actual
+      </p>
+      <span style={{ fontFamily: DISP, fontSize: "28px", lineHeight: 1.1, color: COURT, maxWidth: "100%", overflowWrap: "anywhere" }}>
+        {formatUSD(valor)}
+      </span>
+      {delta != null && (
+        <span style={{ fontFamily: MONO, fontSize: "11px", color: sube ? "#4ade80" : "#f87171", letterSpacing: "0.04em" }}>
+          {sube ? "▲ +" : "▼ "}{formatUSD(Math.abs(delta))} ({sube ? "+" : "-"}{Math.abs((delta / antes!) * 100).toFixed(1)}%) · 1 mes
+        </span>
+      )}
+      <span style={{
+        marginTop: "4px", fontFamily: MONO, fontSize: "11px", color: INK0, letterSpacing: "0.04em",
+        background: "rgba(46,230,193,0.08)", border: "1px solid rgba(46,230,193,0.25)",
+        borderRadius: "7px", padding: "5px 10px", display: "inline-flex", alignItems: "center", gap: "6px", maxWidth: "100%",
       }}>
-        <PortfolioChart
-          snapshots={snapshots} hourlySnapshots={hourlySnapshots} loading={loading}
-          cardCount={ahora?.copias ?? cardCount} uniqueCount={ahora?.unicas}
-          valorActual={ahora?.total_usd} defaultRange="1M" chartHeight={300}
-        />
-      </div>
+        <Layers size={12} color={COURT} style={{ flexShrink: 0 }} />
+        {unicas != null
+          ? `${unicas.toLocaleString("es-CO")} ${unicas === 1 ? "única" : "únicas"} · ${copias.toLocaleString("es-CO")} en total`
+          : `${copias.toLocaleString("es-CO")} ${copias === 1 ? "carta" : "cartas"}`}
+      </span>
     </div>
   );
 }

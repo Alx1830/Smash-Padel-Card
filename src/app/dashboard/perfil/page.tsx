@@ -9,6 +9,9 @@ import { CITIES_BY_COUNTRY } from "@/data/cities";
 import { aAvatarWebp } from "@/lib/imagen-webp";
 import { ENERGIA_OPTS, limpiarEnergia } from "@/lib/energias";
 import { UserRound, Camera, AlertTriangle, Smartphone } from "lucide-react";
+import { EditorPortada } from "@/components/perfil/EditorPortada";
+import { LogoRed, REDES } from "@/components/perfil/Redes";
+import { isValidStoreCover } from "@/data/store-covers";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -32,6 +35,15 @@ interface PerfilForm {
   photo_url:           string;
   whatsapp_indicativo: string;
   whatsapp_numero:     string;
+  cover_url:           string;
+  cover_position:      number;
+  cover_position_movil: number;
+  cover_position_movil_y: number;
+  social_facebook:     string;
+  social_instagram:    string;
+  social_tiktok:       string;
+  social_youtube:      string;
+  mostrar_whatsapp:    boolean;
 }
 
 const SET_OPTS = POKEMON_SERIES.flatMap(series =>
@@ -255,6 +267,9 @@ export default function PerfilPage() {
     set_favorito: "", photo_url: "",
     whatsapp_indicativo: "+57",
     whatsapp_numero: "",
+    cover_url: "", cover_position: 50, cover_position_movil: 50, cover_position_movil_y: 0,
+    social_facebook: "", social_instagram: "", social_tiktok: "", social_youtube: "",
+    mostrar_whatsapp: false,
   });
 
   useEffect(() => {
@@ -266,7 +281,7 @@ export default function PerfilPage() {
       const { data, error } = await supabase
         // Columnas explícitas: last_seen y blocked ya no son legibles desde el navegador.
         .from("players")
-        .select("username, first_name, last_name, pais, tipo_perfil, ciudad, edad, energia_favorita, pokemon_favorito, set_favorito, photo_url, whatsapp_indicativo, whatsapp_numero, role")
+        .select("username, first_name, last_name, pais, tipo_perfil, ciudad, edad, energia_favorita, pokemon_favorito, set_favorito, photo_url, whatsapp_indicativo, whatsapp_numero, role, cover_url, cover_position, cover_position_movil, cover_position_movil_y, social_facebook, social_instagram, social_tiktok, social_youtube, mostrar_whatsapp")
         .eq("user_id", user.id).single();
       if (error) { setSaveError("No pudimos cargar tu perfil. Recarga la página antes de editar."); return; }
       if (data) {
@@ -287,6 +302,15 @@ export default function PerfilPage() {
           photo_url:           data.photo_url ?? "",
           whatsapp_indicativo: data.whatsapp_indicativo ?? "+57",
           whatsapp_numero:     data.whatsapp_numero ?? "",
+          cover_url:           data.cover_url ?? "",
+          cover_position:      data.cover_position ?? 50,
+          cover_position_movil: data.cover_position_movil ?? 50,
+          cover_position_movil_y: data.cover_position_movil_y ?? 0,
+          social_facebook:     data.social_facebook ?? "",
+          social_instagram:    data.social_instagram ?? "",
+          social_tiktok:       data.social_tiktok ?? "",
+          social_youtube:      data.social_youtube ?? "",
+          mostrar_whatsapp:    data.mostrar_whatsapp === true,
         });
         if (data.photo_url) setPreview(data.photo_url);
         setCargado(true);
@@ -295,7 +319,7 @@ export default function PerfilPage() {
     load();
   }, []);
 
-  function set(field: keyof PerfilForm, value: string) {
+  function set(field: { [K in keyof PerfilForm]: PerfilForm[K] extends string ? K : never }[keyof PerfilForm], value: string) {
     setForm(f => ({ ...f, [field]: value }));
   }
 
@@ -379,6 +403,16 @@ export default function PerfilPage() {
       photo_url:           form.photo_url,
       whatsapp_indicativo: form.whatsapp_indicativo || null,
       whatsapp_numero:     form.whatsapp_numero || null,
+      // La base solo acepta las portadas autorizadas (players_cover_url_check)
+      cover_url:           isValidStoreCover(form.cover_url) ? (form.cover_url || null) : null,
+      cover_position:      Math.min(100, Math.max(0, Math.round(form.cover_position))),
+      cover_position_movil: Math.min(100, Math.max(0, Math.round(form.cover_position_movil))),
+      cover_position_movil_y: Math.min(100, Math.max(0, Math.round(form.cover_position_movil_y))),
+      social_facebook:     form.social_facebook.trim()  || null,
+      social_instagram:    form.social_instagram.trim() || null,
+      social_tiktok:       form.social_tiktok.trim()    || null,
+      social_youtube:      form.social_youtube.trim()   || null,
+      mostrar_whatsapp:    form.mostrar_whatsapp && !!form.whatsapp_numero,
     }, { onConflict: "user_id" });
     setSaving(false);
     if (error) {
@@ -421,6 +455,15 @@ export default function PerfilPage() {
         @media (max-width: 540px) {
           .perfil-grid-2 { grid-template-columns: 1fr !important; }
           .perfil-section { min-width: 100% !important; }
+        }
+        /* Sección 03 en celular y tablet: casilla de WhatsApp de 20px con toda la
+           fila tocable, y los campos de redes a 44px de alto */
+        @media (max-width: 767px), (pointer: coarse) {
+          .pf-redes input { min-height: 44px; }
+          /* El campo escribe a 16px (regla de globals.css), pero la pista no cabría */
+          .pf-redes input::placeholder { font-size: 13px; }
+          .pf-mostrar-wa { padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); }
+          .pf-mostrar-wa input { width: 20px !important; height: 20px !important; margin-top: 0 !important; }
         }
       `}</style>
 
@@ -629,6 +672,63 @@ export default function PerfilPage() {
                 </Field>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* 03 PORTADA Y REDES */}
+        <div className="perfil-sections" style={{ marginBottom: "48px" }}>
+          <div className="perfil-section">
+            {sectionTitle("03", "Portada y redes")}
+            <Field label="Portada de tu perfil">
+              <EditorPortada
+                value={form.cover_url}
+                onChange={v => set("cover_url", v)}
+                position={form.cover_position}
+                onPositionChange={p => setForm(f => ({ ...f, cover_position: p }))}
+                positionMovil={{ x: form.cover_position_movil, y: form.cover_position_movil_y }}
+                onPositionMovilChange={p => setForm(f => ({ ...f, cover_position_movil: p.x, cover_position_movil_y: p.y }))}
+              />
+            </Field>
+            <div className="perfil-grid-2 pf-redes">
+              <Field label="Facebook">
+                <div style={{ position: "relative" }}>
+                  <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: REDES.facebook.color, lineHeight: 0 }}><LogoRed red="facebook" size={15} /></span>
+                  <input value={form.social_facebook} onChange={e => set("social_facebook", e.target.value)} placeholder="tuusuario  ·  o pega el enlace" maxLength={200} style={{ ...inputStyle, paddingLeft: 36 }} />
+                </div>
+              </Field>
+              <Field label="Instagram">
+                <div style={{ position: "relative" }}>
+                  <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: REDES.instagram.color, lineHeight: 0 }}><LogoRed red="instagram" size={15} /></span>
+                  <input value={form.social_instagram} onChange={e => set("social_instagram", e.target.value)} placeholder="@tuusuario  ·  o pega el enlace" maxLength={200} style={{ ...inputStyle, paddingLeft: 36 }} />
+                </div>
+              </Field>
+              <Field label="TikTok">
+                <div style={{ position: "relative" }}>
+                  <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: REDES.tiktok.color, lineHeight: 0 }}><LogoRed red="tiktok" size={15} /></span>
+                  <input value={form.social_tiktok} onChange={e => set("social_tiktok", e.target.value)} placeholder="@tuusuario  ·  o pega el enlace" maxLength={200} style={{ ...inputStyle, paddingLeft: 36 }} />
+                </div>
+              </Field>
+              <Field label="YouTube">
+                <div style={{ position: "relative" }}>
+                  <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: REDES.youtube.color, lineHeight: 0 }}><LogoRed red="youtube" size={15} /></span>
+                  <input value={form.social_youtube} onChange={e => set("social_youtube", e.target.value)} placeholder="@tucanal  ·  o pega el enlace" maxLength={200} style={{ ...inputStyle, paddingLeft: 36 }} />
+                </div>
+              </Field>
+            </div>
+            <label className="pf-mostrar-wa" style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: form.whatsapp_numero ? "pointer" : "default", opacity: form.whatsapp_numero ? 1 : 0.5 }}>
+              <input type="checkbox" checked={form.mostrar_whatsapp} disabled={!form.whatsapp_numero}
+                onChange={e => setForm(f => ({ ...f, mostrar_whatsapp: e.target.checked }))}
+                style={{ width: 15, height: 15, marginTop: 2, accentColor: COURT, cursor: "inherit", flexShrink: 0 }} />
+              <span style={{ fontFamily: MONO, fontSize: 11, color: INK0, lineHeight: 1.6 }}>
+                <span style={{ color: REDES.whatsapp.color, verticalAlign: "-2px", marginRight: 6 }}><LogoRed red="whatsapp" size={14} /></span>
+                Mostrar el botón de WhatsApp en mi perfil
+                <span style={{ display: "block", fontSize: 10, color: INK2 }}>
+                  {form.whatsapp_numero
+                    ? "Usa el número de Identidad. Tu número no se muestra: solo quien tenga sesión puede abrir el chat."
+                    : "Primero agrega tu número de WhatsApp en Identidad."}
+                </span>
+              </span>
+            </label>
           </div>
         </div>
 

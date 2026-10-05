@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useMemo, useEffect } from "react";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
+import { Desplegable } from "@/components/ui/Desplegable";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import dynamic from "next/dynamic";
 const ModalTiltCard = dynamic(
@@ -23,7 +24,7 @@ const DISP  = "var(--font-archivo)";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { FlagIcon } from "@/components/FlagIcon";
 import { tcgCardLink } from "@/lib/tcg-link";
-import { X, Lock } from "lucide-react";
+import { X, Lock, Tag, SlidersHorizontal, ChevronDown } from "lucide-react";
 
 interface Listing {
   id: string;
@@ -58,6 +59,7 @@ export function UserMarketPageClient({
   const [previewCard,  setPreviewCard]  = useState<PokemonCard | null>(null);
   const [authMsg,      setAuthMsg]      = useState<string | null>(null);
   const [loadedSets,   setLoadedSets]   = useState<Set<string>>(new Set());
+  const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
 
   useEffect(() => {
     const ids = [...new Set(listings.map(l => l.set_id))];
@@ -133,7 +135,6 @@ export function UserMarketPageClient({
     textTransform: "uppercase", color: INK2, display: "block", marginBottom: "8px",
   };
   const sDivider: React.CSSProperties = { height: "1px", background: "rgba(255,255,255,0.06)", margin: "18px 0" };
-  const sSelect: React.CSSProperties = { ...sInput, cursor: "pointer", appearance: "none", WebkitAppearance: "none" };
 
   return (
     <div style={{ width: "100%", background: BG0 }}>
@@ -142,7 +143,7 @@ export function UserMarketPageClient({
       {authMsg && (
         <div onClick={() => setAuthMsg(null)} style={{ position: "fixed", inset: 0, zIndex: 9999, background: "rgba(5,7,13,0.88)", backdropFilter: "blur(12px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
           <div onClick={e => e.stopPropagation()} style={{ background: "#0d111f", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "20px", padding: "36px 32px", maxWidth: "380px", width: "100%", textAlign: "center" }}>
-            <div style={{ marginBottom: "16px" }}><Lock size={36} color="#2ee6c1" strokeWidth={1.6} /></div>
+            <div style={{ marginBottom: "16px", display: "flex", justifyContent: "center" }}><Lock size={36} color="#2ee6c1" strokeWidth={1.6} /></div>
             <h3 style={{ fontFamily: DISP, fontSize: "20px", color: INK0, margin: "0 0 12px", letterSpacing: "-0.01em" }}>Acceso requerido</h3>
             <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, lineHeight: 1.7, margin: "0 0 24px", letterSpacing: "0.04em" }}>{authMsg}</p>
             <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
@@ -163,14 +164,22 @@ export function UserMarketPageClient({
           <div onClick={e => e.stopPropagation()} style={{ width: "min(300px, 78vw)" }}>
             <ModalTiltCard card={previewCard} />
           </div>
-          <button onClick={() => setPreviewCard(null)} style={{ position: "fixed", top: "20px", right: "24px", background: "none", border: "none", color: INK0, fontSize: "24px", cursor: "pointer", lineHeight: 1 }} aria-label="Cerrar"><X size={18} aria-hidden /></button>
+          <button className="um-cerrar" onClick={() => setPreviewCard(null)} style={{ position: "fixed", top: "20px", right: "24px", background: "none", border: "none", color: INK0, fontSize: "24px", cursor: "pointer", lineHeight: 1 }} aria-label="Cerrar"><X size={18} aria-hidden /></button>
         </div>
       )}
 
       {/* ══ HEADER SECTION ══ */}
-      <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 24px 16px" }} className="um-section-header">
-        <style>{`@media (min-width: 1024px) and (pointer: fine) { .um-section-header { padding: 32px 80px 16px !important; } }`}</style>
-        <div style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
+      <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }} className="um-section-header">
+        <style>{`
+          .um-section-header { padding: 32px 24px 16px; }
+          @media (min-width: 1024px) and (pointer: fine) { .um-section-header { padding: 32px 80px 16px; } }
+          /* Celular y tablet: el marco del perfil ya pone los 16px a los lados; cabecera centrada */
+          @media (max-width: 1023px), (pointer: coarse) {
+            .um-section-header { padding: 24px 0 8px; text-align: center; }
+            .um-ante { justify-content: center; }
+          }
+        `}</style>
+        <div className="um-ante" style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
           <span style={{ width: "18px", height: "1px", background: COURT, display: "inline-block" }} />
           <Link href={`/${username}`} style={{ color: COURT, textDecoration: "none" }}>@{username}</Link>
           <span style={{ color: INK2 }}>›</span>
@@ -187,22 +196,78 @@ export function UserMarketPageClient({
       </section>
 
       {/* ══ BODY ══ */}
-      <section style={{ padding: "32px 24px 80px" }} className="um-body">
+      <section className="um-body">
         <style>{`
-          @media (min-width: 1024px) and (pointer: fine) { .um-body { padding: 48px 80px 80px !important; } }
+          .um-body { padding: 32px 24px 80px; }
+          @media (min-width: 1024px) and (pointer: fine) { .um-body { padding: 48px 80px 80px; } }
           .um-layout { display: flex; gap: 32px; align-items: flex-start; }
           .um-sidebar { width: 240px; flex-shrink: 0; }
+          /* Los filtros acompañan el scroll. El sticky va en la columna entera: puesto
+             en el panel de adentro no hacía nada, porque la columna medía lo mismo
+             que el panel y no le dejaba espacio para moverse. 96px = debajo de la barra de arriba. */
+          @media (min-width: 1024px) and (pointer: fine) {
+            .um-sidebar { position: sticky; top: 96px; align-self: flex-start; }
+          }
           .um-grid-area { flex: 1; min-width: 0; }
-          @media (max-width: 1023px), (pointer: coarse) { .um-layout { flex-direction: column; } .um-sidebar { display: none; } }
+          .um-toggle { display: none; }
+          /* Celular y tablet: antes los filtros desaparecían. Ahora se pliegan detrás
+             de un botón, igual que en el inventario y en la wishlist. */
+          @media (max-width: 1023px), (pointer: coarse) {
+            .um-body { padding: 20px 0 32px; }
+            .um-layout { flex-direction: column; align-items: stretch; gap: 16px; }
+            .um-sidebar { width: 100%; }
+            .um-toggle {
+              display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;
+              min-height: 46px; padding: 10px 16px; box-sizing: border-box;
+              border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.09); cursor: pointer;
+            }
+            .um-panel { display: none; }
+            .um-panel.open { display: block; margin-top: 10px; padding: 16px !important; }
+            /* El botón ya dice "Filtros": adentro solo queda "Limpiar" */
+            .um-panel-titulo { display: none; }
+            .um-panel-cab { justify-content: flex-end !important; margin-bottom: 14px !important; }
+            .um-panel-cab:not(:has(button)) { display: none !important; }
+            .um-panel button, .um-panel input { min-height: 40px; }
+            .um-cerrar {
+              top: max(12px, env(safe-area-inset-top)) !important; right: 12px !important; width: 44px; height: 44px;
+              display: flex; align-items: center; justify-content: center; border-radius: 50%;
+              background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(255,255,255,0.12) !important;
+            }
+          }
+          .um-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+          .um-version { max-width: calc(100% - 16px); box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+          @media (max-width: 1023px), (pointer: coarse) {
+            .um-cards-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+          }
+          @media (min-width: 1024px) and (pointer: coarse) {
+            .um-cards-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+          }
+          @media (max-width: 767px) {
+            .um-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+            .um-info { padding: 10px !important; gap: 8px !important; }
+            .um-acciones > * { min-height: 40px; min-width: 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
+            /* La acción secundaria (TCGPlayer) queda solo con su icono */
+            .um-tcg { flex: 0 0 40px !important; }
+            .um-tcg-txt { display: none; }
+          }
         `}</style>
 
         <div className="um-layout">
 
           {/* ── Sidebar ── */}
           <aside className="um-sidebar">
-            <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", padding: "20px", position: "sticky", top: "80px" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
-                <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", color: COURT }}>Filtros</span>
+            {listings.length > 0 && (
+              <button type="button" className="um-toggle" onClick={() => setFiltrosAbiertos(o => !o)} aria-expanded={filtrosAbiertos}>
+                <span style={{ display: "flex", alignItems: "center", gap: "10px", fontFamily: MONO, fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", color: COURT }}>
+                  <SlidersHorizontal size={15} />
+                  Filtros{hasFilters ? " · activos" : ""}
+                </span>
+                <ChevronDown size={16} color={INK2} style={{ flexShrink: 0, transition: "transform .2s", transform: filtrosAbiertos ? "rotate(180deg)" : "none" }} />
+              </button>
+            )}
+            <div className={`um-panel${filtrosAbiertos ? " open" : ""}`} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", padding: "20px" }}>
+              <div className="um-panel-cab" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+                <span className="um-panel-titulo" style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", color: COURT }}>Filtros</span>
                 {hasFilters && (
                   <button onClick={clearFilters} style={{ fontFamily: MONO, fontSize: "9px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#d95555", background: "none", border: "1px solid rgba(209,53,53,0.3)", borderRadius: "5px", padding: "3px 10px", cursor: "pointer" }}>
                     Limpiar
@@ -219,24 +284,20 @@ export function UserMarketPageClient({
 
               <div>
                 <label style={sLabel}>Variante</label>
-                <select value={fVariante} onChange={e => setFVariante(e.target.value)} style={sSelect}>
-                  <option value="" style={{ background: "#0a0e1a" }}>Todas las variantes</option>
-                  {setVersions.map(v => (
-                    <option key={v} value={v} style={{ background: "#0a0e1a", color: INK0 }}>{getVersionLabel(v)}</option>
-                  ))}
-                </select>
+                <Desplegable ariaLabel="Variante" acento={COURT} value={fVariante} onChange={setFVariante} opciones={[
+                  { value: "", label: "Todas las variantes" },
+                  ...setVersions.map(v => ({ value: v, label: getVersionLabel(v) })),
+                ]} />
               </div>
 
               <div style={sDivider} />
 
               <div>
                 <label style={sLabel}>Set</label>
-                <select value={fSet} onChange={e => setFSet(e.target.value)} style={sSelect}>
-                  <option value="" style={{ background: "#0a0e1a" }}>Todos los sets</option>
-                  {allSets.filter(s => resolved.some(r => r.set.id === s.id)).map(s => (
-                    <option key={s.id} value={s.id} style={{ background: "#0a0e1a", color: INK0 }}>{s.name}</option>
-                  ))}
-                </select>
+                <Desplegable ariaLabel="Set" acento={COURT} value={fSet} onChange={setFSet} opciones={[
+                  { value: "", label: "Todos los sets" },
+                  ...allSets.filter(s => resolved.some(r => r.set.id === s.id)).map(s => ({ value: s.id, label: s.name, logo: s.logo })),
+                ]} />
               </div>
 
               <div style={sDivider} />
@@ -261,7 +322,7 @@ export function UserMarketPageClient({
           <div className="um-grid-area">
             {listings.length === 0 ? (
               <div style={{ border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "16px", padding: "80px 40px", textAlign: "center" }}>
-                <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.3 }}>◬</div>
+                <div style={{ marginBottom: "16px", opacity: 0.5, display: "flex", justifyContent: "center" }}><Tag size={40} color={COURT} strokeWidth={1.6} /></div>
                 <p style={{ fontFamily: MONO, fontSize: "12px", color: INK2, letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>
                   Sin cartas en venta
                 </p>
@@ -274,8 +335,7 @@ export function UserMarketPageClient({
                 </button>
               </div>
             ) : (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "16px" }} className="um-cards-grid">
-                <style>{`@media (max-width: 767px), (pointer: coarse) { .um-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; } }`}</style>
+              <div className="um-cards-grid">
                 {filtered.map(({ card, set, listing }) => {
                   const color = getVersionColor(listing.version);
                   const label = getVersionLabel(listing.version);
@@ -285,7 +345,7 @@ export function UserMarketPageClient({
                     <div key={listing.id} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
                       <div onClick={() => setPreviewCard(card as PokemonCard)} style={{ position: "relative", width: "100%", aspectRatio: "5/7", background: "rgba(255,255,255,0.03)", flexShrink: 0, cursor: "pointer" }}>
                         <img loading="lazy" decoding="async" src={card.image} alt={card.name} style={{ objectFit: "cover", width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }} />
-                        <div style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>
+                        <div className="um-version" style={{ position: "absolute", bottom: "8px", right: "8px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.12em", color, border: `1px solid ${color}55`, borderRadius: "4px", padding: "2px 7px", background: "rgba(5,7,13,0.85)" }}>
                           {label}
                         </div>
                         {listing.language && (
@@ -294,8 +354,8 @@ export function UserMarketPageClient({
                           </div>
                         )}
                       </div>
-                      <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
-                        <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "6px 10px", alignItems: "center" }}>
+                      <div className="um-info" style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", gap: "6px 10px", alignItems: "center" }}>
                           <span style={{ fontFamily: MONO, fontSize: "10px", color: INK2, letterSpacing: "0.08em", whiteSpace: "nowrap" }}>
                             #{String(card.card_number).padStart(3, "0")}
                           </span>
@@ -311,14 +371,15 @@ export function UserMarketPageClient({
                           </div>
                         </div>
 
-                        <div style={{ display: "flex", gap: "6px", marginTop: "auto", paddingTop: "2px" }}>
+                        <div className="um-acciones" style={{ display: "flex", gap: "6px", marginTop: "auto", paddingTop: "2px" }}>
                           <button
+                            className="um-tcg" aria-label="Ver en TCGPlayer"
                             onClick={() => { const w=430,h=600,left=screen.availWidth-w-16,top=screen.availHeight-h-16; window.open(tcgCardLink(listing.set_id, card.card_number, decodeURIComponent(tcgQuery)),"tcgplayer",`width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`); }}
                             style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", padding: "8px 4px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#2ee696", background: "#ffffff", borderRadius: "8px", fontWeight: 700, border: "none", cursor: "pointer" }}
                           >
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src="https://www.tcgplayer.com/favicon.ico" alt="TCGPlayer" width={12} height={12} style={{ flexShrink: 0 }} />
-                            TCGPlayer
+                            <span className="um-tcg-txt">TCGPlayer</span>
                           </button>
                           {whatsappNumero ? (
                             <button

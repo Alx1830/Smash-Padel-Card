@@ -171,6 +171,36 @@ html, body {
   }
 }
 
+/* ═══ Desplegables ═══════════════════════════════════════════════════════════
+   Ningún desplegable del sitio puede abrir la lista blanca con el resaltado
+   azul del sistema: queda ilegible. Lo correcto es usar
+   components/ui/Desplegable.tsx; esto es la red de seguridad para los <select>
+   nativos que todavía queden: el navegador los pinta en modo oscuro. */
+html { color-scheme: dark; }
+select option, select optgroup { background-color: #0d1520; color: #f5f7fb; }
+
+/* ═══ Barras de desplazamiento ═══════════════════════════════════════════════
+   TODAS las del sitio se ven igual: delgadas y oscuras. Nunca la barra blanca
+   con flechas del sistema, que parece de Windows XP. `scrollbar-color` lo
+   leen Chrome 121+, Edge, Firefox y Safari 18+; las reglas ::-webkit- cubren
+   los navegadores anteriores. */
+* { scrollbar-width: thin; scrollbar-color: #3a4256 transparent; }
+html { scrollbar-color: #3a4256 #070a12; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+html::-webkit-scrollbar-track { background: #070a12; }
+::-webkit-scrollbar-thumb {
+  background: #3a4256; border-radius: 10px;
+  border: 2px solid transparent; background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background-color: #4b5570; }
+::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+::-webkit-scrollbar-corner { background: transparent; }
+
+/* Listas internas (desplegables, ventanas): el mismo estilo de arriba.
+   La clase queda para marcarlas; el color lo da la regla general. */
+.fb-scroll { overscroll-behavior: contain; }
+
 /* ═══ Carrusel de fotos de una noticia ═══════════════════════════════════════
    Vive acá y no junto al resto de los estilos de la nota porque lo necesitan
    tres lugares a la vez: la noticia publicada, la vista previa del panel y el

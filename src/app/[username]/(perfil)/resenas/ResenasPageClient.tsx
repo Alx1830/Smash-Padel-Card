@@ -37,14 +37,21 @@ export function ResenasPageClient({ vendedorId, username }: { vendedorId: string
         @media (max-width: 1240px) { .rs-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
         @media (max-width: 1023px) { .rs-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
         @media (max-width:  767px) {
-          .rs-page { padding: 28px 16px; }
           .rs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+        }
+        /* Celular y tablet: el marco del perfil ya pone los 16px a los lados, y la
+           cabecera y el estado vacío van centrados */
+        @media (max-width: 1023px), (pointer: coarse) {
+          .rs-page { padding: 24px 0 8px; }
+          .rs-cab { text-align: center; }
+          .rs-ante { justify-content: center; }
+          .rs-vacio { margin: 0 auto; }
         }
       `}</style>
 
       <div className="rs-wrap">
-        <div style={{ marginBottom: "28px" }}>
-          <div style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em", textTransform: "uppercase", color: "#2ee6c1", display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+        <div className="rs-cab" style={{ marginBottom: "28px" }}>
+          <div className="rs-ante" style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em", textTransform: "uppercase", color: "#2ee6c1", display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span style={{ width: "22px", height: "1px", background: "#2ee6c1", display: "inline-block" }} />
             Ventas confirmadas
           </div>
@@ -61,8 +68,8 @@ export function ResenasPageClient({ vendedorId, username }: { vendedorId: string
         {error ? (
           <p style={{ fontFamily: MONO, fontSize: "11px", color: "#ff5d5d" }}>No se pudieron cargar las reseñas. Recarga la página.</p>
         ) : !datos ? null : resenas.length === 0 ? (
-          <div style={{ border: "1px dashed rgba(214,255,61,0.2)", borderRadius: "12px", padding: "32px 24px", textAlign: "center", maxWidth: "520px" }}>
-            <div style={{ marginBottom: "12px" }}><Star size={28} color={BALL} strokeWidth={1.6} /></div>
+          <div className="rs-vacio" style={{ border: "1px dashed rgba(214,255,61,0.2)", borderRadius: "12px", padding: "32px 24px", textAlign: "center", maxWidth: "520px" }}>
+            <div style={{ marginBottom: "12px", display: "flex", justifyContent: "center" }}><Star size={28} color={BALL} strokeWidth={1.6} /></div>
             <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, lineHeight: 1.6, margin: 0 }}>
               @{username} todavía no tiene ventas confirmadas. Cuando un comprador de Facebinder confirme una, su reseña aparece aquí.
             </p>

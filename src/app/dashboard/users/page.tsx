@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { UserRoundPlus, X, ListFilter, ArrowUp, ArrowDown, Download } from "lucide-react";
+import { UserRoundPlus, X, ListFilter, ArrowUp, ArrowDown, Download, Crown } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BALL  = "#d6ff3d";
@@ -42,6 +42,7 @@ interface AdminUser {
   last_name?: string;
   photo_url?: string;
   blocked?: boolean;
+  verificado?: boolean;
   last_seen?: string | null;
   last_sign_in_at?: string | null;
   last_active?: string | null;
@@ -303,6 +304,19 @@ export default function AdminUsersPage() {
       body: JSON.stringify({ userId: user.id, blocked: newBlocked }),
     });
     setUsers(prev => prev.map(u => u.id === user.id ? { ...u, blocked: newBlocked } : u));
+    setBusy(null);
+  }
+
+  /* La corona del perfil nuevo: por ahora solo la asigna un admin */
+  async function handleVerify(user: AdminUser) {
+    const verificado = !user.verificado;
+    setBusy(user.id);
+    const res = await fetch("/api/admin/verify-user", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: user.id, verificado }),
+    });
+    if (res.ok) setUsers(prev => prev.map(u => u.id === user.id ? { ...u, verificado } : u));
     setBusy(null);
   }
 
@@ -665,6 +679,14 @@ export default function AdminUsersPage() {
                           style={{ padding: "4px 10px", borderRadius: "6px", border: `1px solid ${u.blocked ? `${COURT}55` : "rgba(209,53,53,0.4)"}`, background: u.blocked ? `${COURT}15` : "rgba(209,53,53,0.08)", color: u.blocked ? COURT : "#d95555", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.08em", textTransform: "uppercase", cursor: isBusy ? "default" : "pointer", opacity: isBusy ? 0.5 : 1 }}
                         >
                           {isBusy ? "…" : u.blocked ? "Desbloquear" : "Bloquear"}
+                        </button>
+                        <button
+                          onClick={() => handleVerify(u)}
+                          disabled={isBusy}
+                          title={u.verificado ? "Quitar la corona" : "Dar la corona de verificado"}
+                          style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: "6px", border: `1px solid ${u.verificado ? "rgba(255,201,77,0.5)" : "rgba(255,255,255,0.15)"}`, background: u.verificado ? "rgba(255,201,77,0.12)" : "transparent", color: u.verificado ? "#ffc94d" : INK2, fontFamily: MONO, fontSize: "9px", letterSpacing: "0.08em", textTransform: "uppercase", cursor: isBusy ? "default" : "pointer", opacity: isBusy ? 0.5 : 1 }}
+                        >
+                          <Crown size={11} fill={u.verificado ? "#ffc94d" : "none"} /> {u.verificado ? "Verificado" : "Verificar"}
                         </button>
                         <button
                           onClick={() => handleDelete(u)}

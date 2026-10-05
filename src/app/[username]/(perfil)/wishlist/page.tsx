@@ -4,9 +4,6 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { fetchAllRows } from "@/lib/fetch-all-rows";
-import { Footer } from "@/components/Footer";
-import { MobileTabBar } from "@/components/MobileTabBar";
-import { ProfileHeader } from "@/components/ProfileHeader";
 import { WishlistPageClient } from "./WishlistPageClient";
 import { escaparLike } from "@/lib/escapar-like";
 
@@ -69,41 +66,20 @@ export default async function WishlistPage({
 
   if (!player) notFound();
 
-  const [wishlistRows, { data: featuredRows }, invRows] = player.user_id
+  const [wishlistRows] = player.user_id
     ? await Promise.all([
         fetchAllRows<{ card_id: number; set_id: string }>(() => supabase
           .from("card_wishlist").select("card_id, set_id")
-          .eq("user_id", player.user_id!)),
-        supabase.from("featured_cards").select("card_id, set_id").eq("user_id", player.user_id),
-        fetchAllRows<{ card_id: string; set_id: string; quantity: number }>(() => supabase
-          .from("card_inventory").select("card_id, set_id, quantity")
-          .eq("user_id", player.user_id!).gt("quantity", 0)),
+          .eq("user_id", player.user_id!))
+
       ])
-    : [[], { data: null }, []];
+    : [[]];
 
   const allSets = POKEMON_SERIES.flatMap(s => s.sets);
 
-  const profileHeader = {
-    username:        player.username,
-    firstName:       player.first_name ?? "",
-    lastName:        player.last_name ?? "",
-    tipoPerfil:      player.tipo_perfil ?? "",
-    pais:            player.pais ?? "",
-    ciudad:          player.ciudad ?? "",
-    energiaFavorita: player.energia_favorita ?? "",
-    pokemonFavorito: player.pokemon_favorito ?? "",
-    edad:            player.edad ?? 0,
-    setFavoritoId:   player.set_favorito ?? undefined,
-    photoUrl:        player.photo_url ?? undefined,
-    profileUserId:   player.user_id ?? undefined,
-    currentUserId:   user?.id ?? null,
-    featuredCards:   (featuredRows ?? []) as { card_id: number | string; set_id: string }[],
-    inventoryRows:   (invRows ?? []) as { card_id: number | string; set_id: string; quantity: number }[],
-  };
 
   return (
-    <main style={{ background: "#05070d", minHeight: "100vh" }}>
-      <ProfileHeader player={profileHeader} hideMobileDetails showProfileLink />
+    <>
       <Suspense>
         <WishlistPageClient
           username={player.username}
@@ -113,8 +89,6 @@ export default async function WishlistPage({
           whatsappNumero={player.whatsapp_numero ?? ""}
         />
       </Suspense>
-      <Footer />
-      <MobileTabBar />
-    </main>
+    </>
   );
 }

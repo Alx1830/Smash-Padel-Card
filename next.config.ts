@@ -27,13 +27,19 @@ const securityHeaders = [
       // recuadro gris en lugar del video, sin decir por qué.
       "frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.tcgplayer.com https://www.instagram.com https://instagram.com https://www.tiktok.com https://platform.twitter.com https://platform.x.com",
       "object-src 'none'",
-      "upgrade-insecure-requests",
+      // Solo en producción: el servidor de desarrollo no tiene https, y al
+      // abrirlo desde el celular por la IP de la red el navegador pasaba todo
+      // a https y la página llegaba sin estilos ni código (localhost se salva).
+      ...(process.env.NODE_ENV === "production" ? ["upgrade-insecure-requests"] : []),
     ].join("; "),
   },
 ];
 
 const nextConfig: NextConfig = {
   turbopack: {},
+  /* Para probar en el celular desde la misma red Wi-Fi: el servidor de
+     desarrollo bloquea por defecto sus archivos pedidos desde otra dirección. */
+  allowedDevOrigins: ["192.168.1.121"],
   experimental: {
     staleTimes: { dynamic: 30, static: 180 },
   },

@@ -3,10 +3,6 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { notFound } from "next/navigation";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
-import { fetchAllRows } from "@/lib/fetch-all-rows";
-import { Footer } from "@/components/Footer";
-import { MobileTabBar } from "@/components/MobileTabBar";
-import { ProfileHeader } from "@/components/ProfileHeader";
 import { UserMarketPageClient } from "./UserMarketPageClient";
 import { escaparLike } from "@/lib/escapar-like";
 
@@ -60,50 +56,28 @@ export default async function UserMarketPage({
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
-  const [{ data: player }, { data: { user } }] = await Promise.all([
+  const [{ data: player }] = await Promise.all([
     adminClient2
       .from("players")
       .select("user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, energia_favorita, pokemon_favorito, edad, set_favorito, whatsapp_indicativo, whatsapp_numero, activo")
       .ilike("username", escaparLike(username))
       .single(),
-    supabase.auth.getUser(),
   ]);
 
   if (!player || player.activo === false) notFound();
 
-  const [{ data: listings }, { data: featuredRows }, invRows] = player.user_id
+  const [{ data: listings }] = player.user_id
     ? await Promise.all([
-        supabase.from("market_listings").select("id, card_id, set_id, price_cop, currency, version, language, created_at").eq("user_id", player.user_id).eq("status", "active").order("created_at", { ascending: false }),
-        supabase.from("featured_cards").select("card_id, set_id").eq("user_id", player.user_id),
-        fetchAllRows<{ card_id: string; set_id: string; quantity: number }>(() => supabase
-          .from("card_inventory").select("card_id, set_id, quantity")
-          .eq("user_id", player.user_id!).gt("quantity", 0)),
+        supabase.from("market_listings").select("id, card_id, set_id, price_cop, currency, version, language, created_at").eq("user_id", player.user_id).eq("status", "active").order("created_at", { ascending: false })
+
       ])
-    : [{ data: null }, { data: null }, []];
+    : [{ data: null }];
 
   const allSets = POKEMON_SERIES.flatMap(s => s.sets);
 
-  const profileHeader = {
-    username:        player.username,
-    firstName:       player.first_name ?? "",
-    lastName:        player.last_name ?? "",
-    tipoPerfil:      player.tipo_perfil ?? "",
-    pais:            player.pais ?? "",
-    ciudad:          player.ciudad ?? "",
-    energiaFavorita: player.energia_favorita ?? "",
-    pokemonFavorito: player.pokemon_favorito ?? "",
-    edad:            player.edad ?? 0,
-    setFavoritoId:   player.set_favorito ?? undefined,
-    photoUrl:        player.photo_url ?? undefined,
-    profileUserId:   player.user_id ?? undefined,
-    currentUserId:   user?.id ?? null,
-    featuredCards:   (featuredRows ?? []) as { card_id: number | string; set_id: string }[],
-    inventoryRows:   (invRows ?? []) as { card_id: number | string; set_id: string; quantity: number }[],
-  };
 
   return (
-    <main style={{ background: "#05070d", minHeight: "100vh" }}>
-      <ProfileHeader player={profileHeader} hideMobileDetails showProfileLink />
+    <>
       <UserMarketPageClient
         username={player.username}
         pais={player.pais ?? ""}
@@ -113,8 +87,6 @@ export default async function UserMarketPage({
         listings={(listings ?? []) as { id: string; card_id: number | string; set_id: string; price_cop: number; currency: string; version: string; language: string | null; created_at: string }[]}
         allSets={allSets.map(s => ({ id: s.id, name: s.name, logo: s.logo }))}
       />
-      <Footer />
-      <MobileTabBar />
-    </main>
+    </>
   );
 }

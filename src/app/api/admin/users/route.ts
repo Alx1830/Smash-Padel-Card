@@ -18,7 +18,7 @@ export async function GET() {
 
   const { data: players } = await supabaseAdmin
     .from("players")
-    .select("user_id, username, first_name, last_name, photo_url, blocked, last_seen");
+    .select("user_id, username, first_name, last_name, photo_url, blocked, verificado, last_seen");
 
   const playerMap: Record<string, any> = {};
   (players ?? []).forEach(p => { playerMap[p.user_id] = p; });
