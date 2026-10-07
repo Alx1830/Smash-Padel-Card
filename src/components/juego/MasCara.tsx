@@ -39,8 +39,12 @@ const FOTOS = "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon";
 const SEGUNDOS = 10;
 /** Se piden de más: la base descarta empates y la precarga descarta fotos rotas. */
 const RONDAS_PEDIDAS = 30;
-/** Con menos que esto no vale la pena arrancar: se pide otra tanda. */
+/** Con estas listas se arranca; el resto de la tanda se sigue bajando jugando. */
 const RONDAS_MINIMAS = 8;
+/** Cuando quedan estas rondas por delante, se pide la tanda siguiente. */
+const RONDAS_DE_RESERVA = 8;
+/** Si una foto no avisa que se pintó, el reloj arranca igual pasado esto. */
+const ESPERA_MAXIMA_MS = 3000;
 
 interface Carta { id: string; precio: number }
 type Ronda = Carta[];
@@ -78,12 +82,24 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
   const reloj      = useRef<ReturnType<typeof setInterval> | null>(null);
   const jugandoRef = useRef(false);
   const puntajeRef = useRef(0);
+  /* Las rondas también viven en una ref: se van sumando mientras se juega, y
+     el turno que responde tiene que ver las que llegaron después del clic. */
+  const rondasRef  = useRef<Ronda[]>([]);
+  /* La tanda que se está bajando, para no pedir dos a la vez. */
+  const reserva    = useRef<Promise<void> | null>(null);
+  /* Cambia en cada partida: una tanda de la partida anterior no se suma. */
+  const partida    = useRef(0);
+  /* Fotos de la ronda en pantalla que ya se pintaron; con las dos, corre el reloj. */
+  const pintadas   = useRef(0);
+  const espera     = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pistaBatalla = useRef<HTMLAudioElement>(null);
   const pistaDerrota = useRef<HTMLAudioElement>(null);
 
   const pararReloj = () => {
     if (reloj.current) clearInterval(reloj.current);
     reloj.current = null;
+    if (espera.current) clearTimeout(espera.current);
+    espera.current = null;
   };
 
 
@@ -154,27 +170,67 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
     }, 100);
   }, [terminar]);
 
-  /* ── Empezar ──────────────────────────────────────────────────────────── */
+  /* ── Las rondas ───────────────────────────────────────────────────────── */
 
-  /** Pide rondas y devuelve solo las que tienen las dos fotos enteras. */
-  const conseguirRondas = useCallback(async (alAvanzar?: (p: number) => void) => {
-    const supabase = createClient();
-    const { data } = await supabase.rpc("juego_rondas", { cantidad: RONDAS_PEDIDAS });
-    const sorteadas = (data ?? []) as Ronda[];
-    if (sorteadas.length === 0) return [];
+  /**
+   * Pide una tanda a la base y va sumando a la partida las rondas que tienen
+   * las dos fotos enteras, a medida que se confirman. No hay que esperarla
+   * entera: con las primeras ya se puede jugar, y el resto llega por detrás.
+   */
+  const pedirTanda = useCallback((alSumar?: (listas: number) => void) => {
+    if (reserva.current) return reserva.current;
+    const esta = partida.current;
 
-    const buenas: Ronda[] = [];
-    /* De a cuatro tandas en paralelo: bajar treinta rondas de a una tardaría
-       demasiado, y bajarlas todas juntas ahoga la conexión del celular. */
-    for (let i = 0; i < sorteadas.length; i += 4) {
-      const tanda = sorteadas.slice(i, i + 4);
-      const listas = await Promise.all(tanda.map(servible));
-      tanda.forEach((r, n) => { if (listas[n]) buenas.push(r); });
-      alAvanzar?.(Math.min(95, 20 + Math.round((buenas.length / RONDAS_MINIMAS) * 75)));
-      if (buenas.length >= RONDAS_MINIMAS) break;
-    }
-    return buenas;
+    reserva.current = (async () => {
+      const supabase = createClient();
+      const { data } = await supabase.rpc("juego_rondas", { cantidad: RONDAS_PEDIDAS });
+      const sorteadas = (data ?? []) as Ronda[];
+
+      /* De a cuatro rondas en paralelo: de a una tardaría demasiado, y todas
+         juntas ahogan la conexión del celular. */
+      for (let i = 0; i < sorteadas.length; i += 4) {
+        const tanda = sorteadas.slice(i, i + 4);
+        const listas = await Promise.all(tanda.map(servible));
+        if (esta !== partida.current) return;
+        const buenas = tanda.filter((_, n) => listas[n]);
+        if (buenas.length > 0) {
+          rondasRef.current = [...rondasRef.current, ...buenas];
+          setRondas(rondasRef.current);
+        }
+        alSumar?.(rondasRef.current.length);
+      }
+    })().finally(() => { reserva.current = null; });
+
+    return reserva.current;
   }, []);
+
+  /**
+   * Prepara la ronda que va a aparecer. El reloj no corre todavía: arranca
+   * cuando las dos fotos se pintaron (ver `fotoPintada`), así los diez
+   * segundos son para mirar las cartas y no para esperar a que aparezcan.
+   */
+  const mostrarRonda = useCallback((n: number) => {
+    pararReloj();
+    pintadas.current = 0;
+    setRestante(SEGUNDOS);
+    setIndice(n);
+    /* Por si un celular no avisa que pintó la foto: el juego no se queda
+       colgado esperándola. */
+    espera.current = setTimeout(() => {
+      if (jugandoRef.current && !reloj.current) arrancarReloj(puntajeRef.current);
+    }, ESPERA_MAXIMA_MS);
+    /* Quedan pocas por delante: la tanda siguiente se pide ya. */
+    if (rondasRef.current.length - n <= RONDAS_DE_RESERVA) pedirTanda();
+  }, [arrancarReloj, pedirTanda]);
+
+  const fotoPintada = () => {
+    pintadas.current += 1;
+    if (pintadas.current === 2 && jugandoRef.current && !reloj.current) {
+      arrancarReloj(puntajeRef.current);
+    }
+  };
+
+  /* ── Empezar ──────────────────────────────────────────────────────────── */
 
   const empezar = useCallback(async () => {
     /* Antes que nada: el permiso del navegador para sonar dura apenas unos
@@ -183,32 +239,41 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
     setFase("cargando");
     setAvance(0);
 
+    partida.current += 1;
+    reserva.current = null;
+    rondasRef.current = [];
+    setRondas([]);
+
     /* Hasta el 20% la barra sube sola, mientras la base sortea; de ahí en
-       adelante avanza con las fotos que se van bajando de verdad. */
+       adelante avanza con las fotos que se van bajando de verdad. Se arranca
+       con las primeras rondas listas; la tanda sigue bajando mientras se juega. */
     const subir = setInterval(() => setAvance((a) => (a < 20 ? a + 2 : a)), 40);
-    const buenas = await conseguirRondas(setAvance);
+    await new Promise<void>((listo) => {
+      pedirTanda((listas) => {
+        setAvance(Math.min(95, 20 + Math.round((listas / RONDAS_MINIMAS) * 75)));
+        if (listas >= RONDAS_MINIMAS) listo();
+      }).then(() => listo());
+    });
     clearInterval(subir);
 
-    if (buenas.length === 0) { setFase("inicio"); return; }
+    if (rondasRef.current.length === 0) { setFase("inicio"); return; }
 
     setAvance(100);
     await esperar(300);
 
-    setRondas(buenas);
-    setIndice(0);
     setPuntaje(0);
     puntajeRef.current = 0;
     setElegida(null);
     setMotivo(null);
     jugandoRef.current = true;
     setFase("jugando");
-    arrancarReloj(0);
-  }, [arrancarReloj, conseguirRondas]);
+    mostrarRonda(0);
+  }, [mostrarRonda, pedirTanda]);
 
   /* ── Responder ────────────────────────────────────────────────────────── */
 
   const responder = (carta: Carta) => {
-    if (elegida || fase !== "jugando") return;
+    if (elegida || fase !== "jugando" || !reloj.current) return;
     pararReloj();
     setElegida(carta.id);
 
@@ -225,18 +290,14 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
     puntajeRef.current = puntos;
 
     setTimeout(async () => {
+      /* Solo pasa si la conexión no alcanzó a bajar la tanda siguiente
+         mientras se jugaban las anteriores: se la espera. */
+      if (indice + 1 >= rondasRef.current.length) await (reserva.current ?? pedirTanda());
+      if (!jugandoRef.current) return;
+      if (indice + 1 >= rondasRef.current.length) { terminar("tiempo", puntos); return; }
       setPuntaje(puntos);
       setElegida(null);
-      if (indice + 1 >= rondas.length) {
-        /* Se acabaron: otra tanda y la partida sigue, para quien llega lejos. */
-        const mas = await conseguirRondas();
-        if (mas.length === 0) { terminar("tiempo", puntos); return; }
-        setRondas(mas);
-        setIndice(0);
-      } else {
-        setIndice(indice + 1);
-      }
-      arrancarReloj(puntos);
+      mostrarRonda(indice + 1);
     }, 850);
   };
 
@@ -281,7 +342,7 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
                   const esLaCara = c.precio === mayor;
                   return (
                     <button
-                      key={c.id}
+                      key={`${indice}-${c.id}`}
                       className={
                         "jg-carta"
                         + (revelado && esLaCara ? " cara" : "")
@@ -291,10 +352,11 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
                       disabled={revelado}
                       onClick={() => responder(c)}
                     >
-                      {/* La foto ya está en la memoria del navegador: se pintó
-                          entera durante la carga, así que acá no puede fallar. */}
+                      {/* La foto ya se bajó entera durante la carga, así que acá
+                          no puede fallar; igual el reloj espera a que se pinte. */}
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={`${FOTOS}/${c.id}/large`} alt="" decoding="async" />
+                      <img src={`${FOTOS}/${c.id}/large`} alt="" decoding="async"
+                        onLoad={fotoPintada} onError={fotoPintada} />
                       {revelado && (
                         <span className="jg-precio" style={{ color: esLaCara ? COURT : INK1 }}>
                           ${c.precio.toFixed(2)}
@@ -486,7 +548,12 @@ function servible(ronda: Ronda): Promise<boolean> {
     const img = new Image();
     /* Si el bucket no responde, no se espera para siempre. */
     const reloj = setTimeout(() => responder(false), 8000);
-    img.onload  = () => { clearTimeout(reloj); responder(img.naturalWidth > 1); };
+    /* Una carta es vertical (5:7, alto ≈ 1,4 × ancho). El aviso "Image Coming
+       Soon" que TCGplayer entrega en vez de la foto no lo es: se descarta. */
+    img.onload  = () => {
+      clearTimeout(reloj);
+      responder(img.naturalWidth > 1 && img.naturalHeight >= img.naturalWidth * 1.2);
+    };
     img.onerror = () => { clearTimeout(reloj); responder(false); };
     img.src = `${FOTOS}/${c.id}/large`;
   }))).then((r) => r.every(Boolean));
