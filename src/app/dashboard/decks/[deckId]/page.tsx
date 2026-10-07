@@ -204,16 +204,25 @@ export default function DeckEditorPage() {
     return card.name.toLowerCase().includes("energy");
   }
 
+  /** Si un clic más en el buscador todavía puede sumar una copia conseguida */
+  function canAddMore(entry: DeckCard) {
+    if (entry.quantity < entry.needed) return true;
+    return totalCards < MAX_CARDS && (isEnergy(entry.card!) || entry.needed < 4);
+  }
+
   async function addCard(card: PokemonCard, setId: string) {
     const existing = deckCards.find(c => c.card_id === card.id && c.set_id === setId && c.version === card.version);
 
     if (existing) {
-      if (totalCards >= MAX_CARDS) return;
-      if (!isEnergy(card) && existing.needed >= 4) return;
-      const newNeeded = existing.needed + 1;
-      await supabase.from("deck_cards").update({ needed: newNeeded }).eq("id", existing.id);
-      setDeckCards(prev => prev.map(c => c.id === existing.id ? { ...c, needed: newNeeded } : c));
+      // Cada clic siguiente suma una copia conseguida; si ya se tienen todas
+      // las que pide el deck, el deck pasa a pedir una más
+      if (!canAddMore(existing)) return;
+      const newQty = existing.quantity + 1;
+      const newNeeded = Math.max(existing.needed, newQty);
+      await supabase.from("deck_cards").update({ quantity: newQty, needed: newNeeded }).eq("id", existing.id);
+      setDeckCards(prev => prev.map(c => c.id === existing.id ? { ...c, quantity: newQty, needed: newNeeded } : c));
     } else {
+      if (totalCards >= MAX_CARDS) return;
       // Primer clic: el deck pide 1 copia y todavía no se tiene ninguna
       const { data } = await supabase.from("deck_cards").insert({
         deck_id: deckId, card_id: card.id, set_id: setId, version: card.version, needed: 1, quantity: 0,
@@ -580,7 +589,7 @@ export default function DeckEditorPage() {
                   const vColor = getVersionColor(r.card.version);
                   const vLabel = getVersionLabel(r.card.version);
                   const inDeck = deckCards.find(c => c.card_id === r.card.id && c.set_id === r.setId && c.version === r.card.version);
-                  const canAdd = totalCards < MAX_CARDS && (isEnergy(r.card) || (inDeck?.needed ?? 0) < 4);
+                  const canAdd = inDeck ? canAddMore(inDeck) : totalCards < MAX_CARDS;
                   return (
                     <div key={`${r.setId}-${r.card.id}-${i}`} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                       <div style={{ position: "relative", aspectRatio: "5/7", borderRadius: "8px", overflow: "hidden", background: "rgba(255,255,255,0.03)", cursor: canAdd ? "pointer" : "default" }} onClick={() => canAdd && addCard(r.card, r.setId)}>
