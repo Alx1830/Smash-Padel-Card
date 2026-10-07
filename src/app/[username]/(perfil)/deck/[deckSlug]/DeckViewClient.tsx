@@ -95,8 +95,8 @@ export function DeckViewClient({
       )}
 
       {/* ══ HEADER SECTION ══ */}
-      <section style={{ borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 24px 16px" }} className="dk-section-header">
-        <style>{`@media (min-width: 1024px) and (pointer: fine) { .dk-section-header { padding: 32px 80px 16px !important; } }`}</style>
+      {/* El marco del perfil (cabecera, pestañas y márgenes) lo pone el layout */}
+      <section style={{ paddingBottom: "16px" }}>
         <div style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: PINK, display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
           <span style={{ width: "18px", height: "1px", background: PINK, display: "inline-block" }} />
           <Link href={`/${username}`} style={{ color: PINK, textDecoration: "none" }}>@{username}</Link>
@@ -118,9 +118,8 @@ export function DeckViewClient({
       </section>
 
       {/* ══ BODY ══ */}
-      <section style={{ padding: "32px 24px 80px" }} className="dk-body">
+      <section style={{ paddingTop: "16px" }}>
         <style>{`
-          @media (min-width: 1024px) and (pointer: fine) { .dk-body { padding: 48px 80px 80px !important; } }
           @keyframes dk-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
           .dk-skeleton {
             background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.04) 75%);

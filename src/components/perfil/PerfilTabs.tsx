@@ -20,7 +20,9 @@ export const PESTANAS = [
 export function PerfilTabs({ username }: { username: string }) {
   const pathname = usePathname();
   const base = `/${username}`;
-  const actual = decodeURIComponent(pathname).replace(new RegExp(`^/${username}`, "i"), "").replace(/^\//, "").split("/")[0];
+  const seccion = decodeURIComponent(pathname).replace(new RegExp(`^/${username}`, "i"), "").replace(/^\//, "").split("/")[0];
+  // Un deck suelto (/usuario/deck/slug) cuelga de la pestaña Decks
+  const actual = seccion === "deck" ? "decks" : seccion;
   const fila = useRef<HTMLDivElement>(null);
 
   /* En el celular y la tableta no entran las siete pestañas: la activa se

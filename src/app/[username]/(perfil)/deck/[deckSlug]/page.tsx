@@ -3,9 +3,6 @@ import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { POKEMON_SERIES, HIDDEN_SETS } from "@/data/pokemon-sets";
-import { Footer } from "@/components/Footer";
-import { MobileTabBar } from "@/components/MobileTabBar";
-import { ProfileHeader } from "@/components/ProfileHeader";
 import { slugifySetName } from "@/lib/slug";
 import { DeckViewClient } from "./DeckViewClient";
 import { escaparLike } from "@/lib/escapar-like";
@@ -17,7 +14,7 @@ async function loadDeck(username: string, deckSlug: string) {
 
   const { data: player } = await supabase
     .from("players")
-    .select("user_id, username, first_name, last_name, pais, ciudad, photo_url, tipo_perfil, energia_favorita, pokemon_favorito, edad, set_favorito")
+    .select("user_id, username, first_name, last_name")
     .ilike("username", escaparLike(username))
     .single();
   if (!player?.user_id) return null;
@@ -83,41 +80,15 @@ export default async function DeckPage({
 
   const { player, deck, cards } = data;
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  const profileHeader = {
-    username:        player.username,
-    firstName:       player.first_name ?? "",
-    lastName:        player.last_name ?? "",
-    tipoPerfil:      player.tipo_perfil ?? "",
-    pais:            player.pais ?? "",
-    ciudad:          player.ciudad ?? "",
-    energiaFavorita: player.energia_favorita ?? "",
-    pokemonFavorito: player.pokemon_favorito ?? "",
-    edad:            player.edad ?? 0,
-    setFavoritoId:   player.set_favorito ?? undefined,
-    photoUrl:        player.photo_url ?? undefined,
-    profileUserId:   player.user_id ?? undefined,
-    currentUserId:   user?.id ?? null,
-    featuredCards:   [] as { card_id: number | string; set_id: string }[],
-    inventoryRows:   [] as { card_id: number | string; set_id: string; quantity: number }[],
-  };
-
   return (
-    <main style={{ background: "#05070d", minHeight: "100vh" }}>
-      <ProfileHeader player={profileHeader} hideMobileDetails showProfileLink />
-      <Suspense>
-        <DeckViewClient
-          username={player.username}
-          deckName={deck.name}
-          description={deck.description ?? ""}
-          rows={cards as { card_id: string; set_id: string; version: string; needed: number; quantity: number; position: number }[]}
-          allSets={ALL_SETS.map(s => ({ id: s.id, name: s.name, logo: s.logo }))}
-        />
-      </Suspense>
-      <Footer />
-      <MobileTabBar />
-    </main>
+    <Suspense>
+      <DeckViewClient
+        username={player.username}
+        deckName={deck.name}
+        description={deck.description ?? ""}
+        rows={cards as { card_id: string; set_id: string; version: string; needed: number; quantity: number; position: number }[]}
+        allSets={ALL_SETS.map(s => ({ id: s.id, name: s.name, logo: s.logo }))}
+      />
+    </Suspense>
   );
 }
