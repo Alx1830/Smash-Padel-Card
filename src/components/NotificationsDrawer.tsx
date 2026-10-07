@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { X, Bell, UserPlus, UserCheck, ShoppingBag, MessagesSquare, Check, ArrowLeftRight, Star } from "lucide-react";
+import { X, Bell, UserPlus, UserCheck, ShoppingBag, MessagesSquare, Check, ArrowLeftRight, Star, MessageSquareQuote, Flag } from "lucide-react";
 import type { AppNotification } from "@/types/notifications";
 
 const COURT = "#2ee6c1";
@@ -32,6 +32,8 @@ function notifMeta(type: string): { color: string; Icon: React.ComponentType<{ s
   if (type === "venta_confirmar")     return { color: "#d6ff3d", Icon: Star };
   if (type === "venta_completada")    return { color: COURT,     Icon: Star };
   if (type === "venta_anulada")       return { color: "#ff6b6b", Icon: X };
+  if (type === "referencia_nueva")    return { color: "#d6ff3d", Icon: MessageSquareQuote };
+  if (type === "referencia_reportada") return { color: "#ff6b6b", Icon: Flag };
   return { color: COURT, Icon: ShoppingBag };
 }
 

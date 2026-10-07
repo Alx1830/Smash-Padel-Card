@@ -276,7 +276,7 @@ export default async function ResumenPage({ params }: { params: Promise<{ userna
         <div className="pf-o7 pf-estira">
           <Panel icon={Star} color={GOLD} titulo="Reseñas" verTodas={`${base}/resenas`}>
             <ResenasMini vendedorId={j.userId} vacio={
-              <Vacio icon={Star} color={GOLD} texto={esDueno ? "Cuando vendas una carta a alguien de FaceBinder y la confirme, su reseña sale aquí." : "Todavía no tiene ventas confirmadas."} />
+              <Vacio icon={Star} color={GOLD} texto={esDueno ? "Aquí salen las ventas que te confirmen y las referencias que te dejen otros usuarios." : "Todavía no tiene reseñas. Si ya negociaste con este usuario, déjale una referencia."} />
             } />
           </Panel>
         </div>

@@ -13,7 +13,7 @@ import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { fotoChica } from "@/lib/foto-carta";
-import { cargarResenas, ResenaFila, type Resena, type Compradores } from "@/components/Resenas";
+import { cargarResenas, cargarReferencias, ResenaFila, ReferenciaFila, type Resena, type Referencia, type Compradores } from "@/components/Resenas";
 import { GOLD, HEART, COURT, INK0, INK2, MONO, INNER_BORDER } from "./tokens";
 
 const SET_NOMBRE = new Map(POKEMON_SERIES.flatMap(s => s.sets).map(s => [s.id, s.name]));
@@ -284,17 +284,34 @@ export function MiniGrillaCartas({ refs, modo, href }: { refs: (RefCarta | RefVe
 }
 
 /* ══ Últimas reseñas ══ */
+/* Ventas confirmadas y referencias de la comunidad juntas, las tres más
+   nuevas; cada una lleva su etiqueta para que no se confundan. */
+type Opinion =
+  | { tipo: "venta"; fecha: string; r: Resena }
+  | { tipo: "referencia"; fecha: string; r: Referencia };
+
 export function ResenasMini({ vendedorId, vacio }: { vendedorId: string; vacio: React.ReactNode }) {
-  const [datos, setDatos] = useState<{ resenas: Resena[]; compradores: Compradores } | null>(null);
+  const [datos, setDatos] = useState<{ opiniones: Opinion[]; personas: Compradores } | null>(null);
   useEffect(() => {
-    cargarResenas(vendedorId, 3).then(setDatos).catch(() => setDatos({ resenas: [], compradores: {} }));
+    Promise.all([
+      cargarResenas(vendedorId, 3).catch(() => ({ resenas: [] as Resena[], compradores: {} as Compradores })),
+      cargarReferencias(vendedorId, 3).catch(() => ({ referencias: [] as Referencia[], autores: {} as Compradores })),
+    ]).then(([v, ref]) => {
+      const opiniones: Opinion[] = [
+        ...v.resenas.map(r => ({ tipo: "venta" as const, fecha: r.respondida_at, r })),
+        ...ref.referencias.map(r => ({ tipo: "referencia" as const, fecha: r.creada, r })),
+      ].sort((a, b) => b.fecha.localeCompare(a.fecha)).slice(0, 3);
+      setDatos({ opiniones, personas: { ...v.compradores, ...ref.autores } });
+    });
   }, [vendedorId]);
 
   if (!datos) return <div style={{ height: 80 }} />;
-  if (datos.resenas.length === 0) return <>{vacio}</>;
+  if (datos.opiniones.length === 0) return <>{vacio}</>;
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      {datos.resenas.map(r => <ResenaFila key={r.id} r={r} comprador={datos.compradores[r.comprador_id]} />)}
+      {datos.opiniones.map(o => o.tipo === "venta"
+        ? <ResenaFila key={o.r.id} r={o.r} comprador={datos.personas[o.r.comprador_id]} />
+        : <ReferenciaFila key={o.r.id} r={o.r} autor={datos.personas[o.r.autor_id]} />)}
     </div>
   );
 }

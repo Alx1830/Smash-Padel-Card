@@ -18,7 +18,7 @@ export async function generateMetadata({
     : data?.username ?? username;
 
   const title = `Reseñas de ${display} · FaceBinder`;
-  const description = `Lo que dicen los compradores de ${display}: ventas de cartas Pokémon TCG confirmadas y calificadas en FaceBinder.`;
+  const description = `Lo que dicen de ${display} sus compradores y la comunidad: ventas de cartas Pokémon TCG confirmadas y referencias en FaceBinder.`;
 
   return {
     title,
