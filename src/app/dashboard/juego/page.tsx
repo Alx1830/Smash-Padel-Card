@@ -10,6 +10,7 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { MasCara, type Puesto } from "@/components/juego/MasCara";
+import { PUESTOS_RANKING } from "@/components/juego/ranking";
 
 export const metadata: Metadata = {
   title: "Higher Or Lower | Facebinder",
@@ -21,7 +22,7 @@ export const dynamic = "force-dynamic";
 
 export default async function JuegoPage() {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("juego_ranking", { limite: 10 });
+  const { data } = await supabase.rpc("juego_ranking", { limite: PUESTOS_RANKING });
 
   return <MasCara rankingInicial={(data ?? []) as Puesto[]} />;
 }

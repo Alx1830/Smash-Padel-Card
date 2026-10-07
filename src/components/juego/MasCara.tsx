@@ -23,6 +23,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Play, Timer, Trophy, RotateCcw, Medal, Volume2, VolumeX, Check } from "lucide-react";
 import { musica, interruptor, registrarPistas } from "./musica";
+import { PUESTOS_RANKING } from "./ranking";
 
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
@@ -134,7 +135,7 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
     await supabase.from("game_scores").insert({ user_id: user.id, score: puntos });
-    const { data } = await supabase.rpc("juego_ranking", { limite: 10 });
+    const { data } = await supabase.rpc("juego_ranking", { limite: PUESTOS_RANKING });
     setRanking((data ?? []) as Puesto[]);
   }, []);
 
@@ -492,7 +493,7 @@ function Ranking({ puestos }: { puestos: Puesto[] }) {
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
         <Trophy size={15} color={BALL} strokeWidth={1.8} />
         <h2 style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: INK1, margin: 0 }}>
-          Los diez mejores
+          Los {PUESTOS_RANKING} mejores
         </h2>
       </div>
 
@@ -504,7 +505,7 @@ function Ranking({ puestos }: { puestos: Puesto[] }) {
           </p>
         </div>
       ) : (
-        <div style={{ border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, background: "rgba(255,255,255,0.02)", overflow: "hidden" }}>
+        <div className="jg-lista">
           {puestos.map((p, i) => (
             <div key={p.username} className="jg-fila">
               <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, color: i === 0 ? BALL : i < 3 ? COURT : INK2, textAlign: "center" }}>
@@ -595,11 +596,15 @@ const ESTILOS = `
   .jg-tablero { display: grid; grid-template-columns: minmax(0, 1fr) 320px;
     gap: 20px; align-items: start; }
 
-  /* Acompaña el alto del escenario y, si diez nombres no entran, se recorre
-     por dentro en vez de estirar la página. */
+  /* Mide lo mismo que el escenario: la caja de la lista baja hasta el fondo
+     del juego y, como veinte nombres no entran, se recorre por dentro en vez
+     de estirar la página. */
   .jg-ranking { height: clamp(520px, 82vh, 900px); display: flex;
     flex-direction: column; min-height: 0; }
-  .jg-ranking > div:last-child { overflow-y: auto; min-height: 0; }
+  .jg-lista { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+    border: 1px solid rgba(255,255,255,0.07); border-radius: 12px;
+    background: rgba(255,255,255,0.02);
+    scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.14) transparent; }
 
   /* El escenario ocupa el ancho que haya y un alto cómodo de la pantalla; el
      alto va acotado para que en un monitor alto no haya que bajar a ver las
@@ -713,8 +718,10 @@ const ESTILOS = `
   /* Debajo de esto el ranking al costado dejaría el juego muy angosto: baja. */
   @media (max-width: 1023px), (pointer: coarse) {
     .jg-tablero { grid-template-columns: minmax(0, 1fr); gap: 30px; }
+    /* En celular y tablet la lista va completa debajo del juego, sin
+       recorrido interno: un scroll dentro de otro es incómodo con el dedo. */
     .jg-ranking { height: auto; }
-    .jg-ranking > div:last-child { overflow-y: visible; }
+    .jg-lista { flex: none; overflow-y: visible; }
   }
 
   @media (max-width: 767px), (pointer: coarse) {

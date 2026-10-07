@@ -1,4 +1,6 @@
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { fetchAllRows } from "@/lib/fetch-all-rows";
 import { loadSetCards } from "@/data/pokemon-cards";
@@ -9,21 +11,28 @@ import { traerJugador } from "../jugador";
 
 export type SetStat = { setId: string; unique: number; total: number; totalQty: number };
 
+/** Cuánto vale lo guardado del perfil para quien no es su dueño. */
+const VIGENCIA_S = 300;
+
 /**
- * Todo lo que necesitan la cabecera y las pestañas del perfil nuevo. Con
- * `cache()` se calcula una sola vez por pedido aunque lo pidan el layout y la
- * página. El inventario se lee aquí, en el servidor, y solo sale el resumen
- * por set: el perfil viejo mandaba miles de filas al navegador.
+ * Lo público del perfil: lo mismo para cualquiera que lo mire. No lee las
+ * cookies de quien visita, por eso puede guardarse entre visitas.
  */
-export const traerPerfil = cache(async (username: string) => {
+async function calcularPerfil(username: string) {
   const jugador = await traerJugador(username);
   if (!jugador) return null;
 
-  const supabase = await createClient();
+  /* Con la llave de servicio y no con la sesión de quien visita: lo que se
+     guarda no puede depender de quién lo pidió primero. Todo lo que se lee
+     acá ya es público (inventario, métricas y resumen de ventas). La llave se
+     lee adentro y nunca al importar, que es lo que exige el build de Cloudflare. */
+  const supabase = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
   const uid = jugador.user_id as string;
 
-  const [{ data: { user } }, { data: metricasDb }, { data: resumen }, inventario] = await Promise.all([
-    supabase.auth.getUser(),
+  const [{ data: metricasDb }, { data: resumen }, inventario] = await Promise.all([
     supabase.rpc("perfil_metricas", { p_user_id: uid }),
     supabase.rpc("resumen_ventas", { p_user_id: uid }),
     fetchAllRows<{ card_id: string; set_id: string; version: string | null; quantity: number }>(() => supabase
@@ -102,8 +111,6 @@ export const traerPerfil = cache(async (username: string) => {
       }
       return links;
     })(),
-    visitanteId: user?.id ?? null,
-    esDueno:     user?.id === uid,
     metricas,
     sets,
     ventas: {
@@ -111,8 +118,49 @@ export const traerPerfil = cache(async (username: string) => {
       promedio: fila?.promedio == null ? null : Number(fila.promedio),
       resenas:  Number(fila?.resenas ?? 0),
     },
-    logros: calcularLogros(metricas),
     valorActual,
+  };
+}
+
+/* Cada apertura de un perfil eran seis consultas a la base (jugador,
+   inventario completo, precios de todo el inventario en tandas, métricas,
+   ventas y sesión), y cada una queda anotada en los registros de Supabase, que
+   tienen cupo mensual. Mil aperturas al día, buena parte de robots de
+   buscadores y redes, eran el 40 % de esos registros. Ahora se guarda unos
+   minutos: un perfil ajeno puede mostrar un cambio hasta 5 minutos tarde. */
+const perfilGuardado = unstable_cache(calcularPerfil, ["perfil-publico-v1"], { revalidate: VIGENCIA_S });
+
+/**
+ * Todo lo que necesitan la cabecera y las pestañas del perfil nuevo. Con
+ * `cache()` se calcula una sola vez por pedido aunque lo pidan el layout y la
+ * página. El inventario se lee aquí, en el servidor, y solo sale el resumen
+ * por set: el perfil viejo mandaba miles de filas al navegador.
+ */
+export const traerPerfil = cache(async (username: string) => {
+  const supabase = await createClient();
+  /* getClaims() verifica la sesión en el propio servidor, sin ir a Supabase
+     (el proyecto firma con ES256); getUser() era un viaje más por visita. */
+  const [{ data: claims }, guardado] = await Promise.all([
+    supabase.auth.getClaims(),
+    perfilGuardado(username.toLowerCase()),
+  ]);
+  const visitanteId = (claims?.claims.sub as string | undefined) ?? null;
+
+  /* El dueño ve siempre lo de este momento: acaba de sumar una carta y la
+     quiere ver. Tampoco se confía en un "no existe" guardado: alguien recién
+     registrado no puede quedar cinco minutos sin perfil. */
+  const datos = !guardado || guardado.jugador.userId === visitanteId
+    ? await calcularPerfil(username)
+    : guardado;
+  if (!datos) return null;
+
+  return {
+    ...datos,
+    visitanteId,
+    esDueno: datos.jugador.userId === visitanteId,
+    /* Fuera de lo guardado: los logros llevan su ícono, que es un componente
+       y no se puede guardar como dato. */
+    logros: calcularLogros(datos.metricas),
   };
 });
 

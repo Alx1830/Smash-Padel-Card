@@ -2,7 +2,7 @@
 
 /**
  * Pestaña "En vivo": quién está en la página ahora mismo y cómo va el día.
- * "En línea" es quien avisó en los últimos 75 s (lo decide panel_en_vivo()).
+ * "En línea" es quien avisó en los últimos 135 s (lo decide panel_en_vivo()).
  */
 
 import { useMemo } from "react";

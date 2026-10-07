@@ -3,8 +3,8 @@
 /**
  * Quién está en la página ahora mismo, y reportes por días de todo lo guardado.
  *
- * Cada navegador avisa cada 30 s (components/RastreoVisitas.tsx) y acá se
- * cuenta como "en línea" a quien avisó en los últimos 75 s. Los datos salen de
+ * Cada navegador avisa cada 60 s (components/RastreoVisitas.tsx) y acá se
+ * cuenta como "en línea" a quien avisó en los últimos 135 s. Los datos salen de
  * panel_en_vivo() y reporte_visitas(), que solo responden a un admin: las
  * tablas no son legibles por nadie más. La pestaña En vivo se refresca sola
  * cada 5 s; la pestaña y el rango de días quedan en la URL.

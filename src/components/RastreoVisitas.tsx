@@ -9,16 +9,16 @@ import { leerDispositivo, esRobot } from "@/lib/dispositivo";
  * Avisa a la base que este navegador está en la página, para el panel de admin
  * "En vivo" (/dashboard/admin/en-vivo).
  *
- * - Un aviso al entrar y en cada cambio de página, y uno cada 30 s mientras
+ * - Un aviso al entrar y en cada cambio de página, y uno cada 60 s mientras
  *   la pestaña siga abierta. El panel cuenta como "en línea" a quien avisó en
- *   los últimos 75 s.
+ *   los últimos 135 s (dos latidos y un margen).
  * - Al cerrar la pestaña manda un último aviso que lo saca en el acto.
  * - No guarda la IP: el país y la ciudad los da Cloudflare (/api/geo).
  * - En desarrollo no mide, igual que Analytics: si no, cada recarga mientras
  *   se trabaja entraría como visita.
  */
 
-const INTERVALO = 30_000;
+const INTERVALO = 60_000;
 const CLAVE_ID     = "fb-visitante";
 const INACTIVIDAD = 30 * 60_000;
 const CLAVE_SESION = "fb-sesion";
