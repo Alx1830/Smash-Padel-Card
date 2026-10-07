@@ -7,11 +7,12 @@
  * sigue; se falla, se acaba el tiempo o se cambia de pestaña, y termina. El
  * puntaje son las rondas acertadas de corrido, y queda guardado en la base.
  *
- * Las rondas llegan todas juntas al empezar, no de a una: con el reloj corriendo
- * en el navegador, esperar al servidor entre ronda y ronda le comería tiempo al
- * jugador. Los precios viajan con ellas, así que alguien decidido puede mirarlos
- * en las herramientas del navegador. Es un juego de sala de espera, no un
- * torneo: se prefirió que responda al instante antes que blindarlo.
+ * La base es el árbitro (ver las funciones juego_* en Supabase). Las rondas
+ * llegan por tandas y SIN precios; cada respuesta va a la base, que decide si
+ * acertó, mide el tiempo de la ronda con su propio reloj, devuelve los precios
+ * y escribe el puntaje ella sola. Desde el 06/10/2026: antes los precios
+ * viajaban con las cartas y el navegador guardaba el puntaje, y una cuenta
+ * anotó del 18 al 49 en 37 segundos.
  *
  * Ninguna carta llega a la pantalla sin que su foto esté bajada y entera. Unas
  * pocas del catálogo no tienen imagen en el bucket, y una ronda con un cuadro
@@ -38,8 +39,6 @@ const FOTOS = "https://pub-01b8e296fe944e688fd2100376d4af4a.r2.dev/pokemon";
 
 /** Lo que dura una ronda. */
 const SEGUNDOS = 10;
-/** Se piden de más: la base descarta empates y la precarga descarta fotos rotas. */
-const RONDAS_PEDIDAS = 30;
 /** Con estas listas se arranca; el resto de la tanda se sigue bajando jugando. */
 const RONDAS_MINIMAS = 8;
 /** Cuando quedan estas rondas por delante, se pide la tanda siguiente. */
@@ -47,8 +46,16 @@ const RONDAS_DE_RESERVA = 8;
 /** Si una foto no avisa que se pintó, el reloj arranca igual pasado esto. */
 const ESPERA_MAXIMA_MS = 3000;
 
-interface Carta { id: string; precio: number }
-type Ronda = Carta[];
+/** El precio llega recién cuando la base corrige la respuesta. */
+interface Carta { id: string; precio?: number }
+/** `n` es la posición de la ronda en la partida guardada en la base. */
+interface Ronda { n: number; cartas: Carta[] }
+interface Jugada {
+  correcta: boolean;
+  precios: { id: string; precio: number }[];
+  puntaje: number;
+  motivo: Motivo | null;
+}
 
 export interface Puesto {
   username: string;
@@ -58,7 +65,8 @@ export interface Puesto {
 }
 
 type Fase = "inicio" | "cargando" | "jugando" | "fin";
-type Motivo = "fallo" | "tiempo" | "abandono";
+/** "invalida": la base recibió una respuesta más rápida que un humano. */
+type Motivo = "fallo" | "tiempo" | "abandono" | "invalida";
 
 export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
   const [fase, setFase] = useState<Fase>("inicio");
@@ -90,6 +98,8 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
   const reserva    = useRef<Promise<void> | null>(null);
   /* Cambia en cada partida: una tanda de la partida anterior no se suma. */
   const partida    = useRef(0);
+  /* La partida abierta en la base, a la que van las respuestas. */
+  const partidaId  = useRef<string | null>(null);
   /* Fotos de la ronda en pantalla que ya se pintaron; con las dos, corre el reloj. */
   const pintadas   = useRef(0);
   const espera     = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -121,20 +131,27 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
 
   /* ── Terminar ─────────────────────────────────────────────────────────── */
 
-  const terminar = useCallback(async (razon: Motivo, puntos: number) => {
+  /**
+   * Cierra la partida en pantalla. El puntaje lo escribe la base, no el
+   * navegador: si la cerró ella (un fallo), solo se pide el ranking; si se
+   * acabó el reloj o se fue de la pestaña, se le avisa para que la cierre.
+   */
+  const terminar = useCallback(async (razon: Motivo, cerradaEnLaBase = false) => {
     pararReloj();
     jugandoRef.current = false;
     musica.derrota(interruptor.leer());
     setMotivo(razon);
     setFase("fin");
 
-    /* Un cero no es una marca: no ensucia el ranking de nadie. */
-    if (puntos === 0) return;
-
     const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-    await supabase.from("game_scores").insert({ user_id: user.id, score: puntos });
+    const id = partidaId.current;
+    if (!cerradaEnLaBase && id) {
+      const { data } = await supabase.rpc("juego_terminar", { p_partida: id, p_motivo: razon });
+      if (typeof data === "number") { puntajeRef.current = data; setPuntaje(data); }
+    }
+
+    /* Un cero no es una marca: no cambia el ranking de nadie. */
+    if (puntajeRef.current === 0) return;
     const { data } = await supabase.rpc("juego_ranking", { limite: PUESTOS_RANKING });
     setRanking((data ?? []) as Puesto[]);
   }, []);
@@ -143,7 +160,7 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
 
   useEffect(() => {
     const vigilar = () => {
-      if (document.hidden && jugandoRef.current) terminar("abandono", puntajeRef.current);
+      if (document.hidden && jugandoRef.current) terminar("abandono");
     };
     document.addEventListener("visibilitychange", vigilar);
     /* En el celular, cambiar de app no siempre dispara lo de arriba. */
@@ -156,7 +173,9 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
 
   /* ── El reloj de la ronda ─────────────────────────────────────────────── */
 
-  const arrancarReloj = useCallback((puntosActuales: number) => {
+  /* El reloj en pantalla es para el jugador. La base lleva el suyo y no acepta
+     una respuesta fuera de tiempo aunque el navegador la mande. */
+  const arrancarReloj = useCallback(() => {
     pararReloj();
     setRestante(SEGUNDOS);
     const fin = Date.now() + SEGUNDOS * 1000;
@@ -164,7 +183,7 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
       const quedan = (fin - Date.now()) / 1000;
       if (quedan <= 0) {
         setRestante(0);
-        terminar("tiempo", puntosActuales);
+        terminar("tiempo");
       } else {
         setRestante(quedan);
       }
@@ -177,6 +196,9 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
    * Pide una tanda a la base y va sumando a la partida las rondas que tienen
    * las dos fotos enteras, a medida que se confirman. No hay que esperarla
    * entera: con las primeras ya se puede jugar, y el resto llega por detrás.
+   *
+   * La primera tanda abre la partida en la base; las siguientes se suman a
+   * ella. Llegan sin precios: la base los muestra recién al responder.
    */
   const pedirTanda = useCallback((alSumar?: (listas: number) => void) => {
     if (reserva.current) return reserva.current;
@@ -184,14 +206,28 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
 
     reserva.current = (async () => {
       const supabase = createClient();
-      const { data } = await supabase.rpc("juego_rondas", { cantidad: RONDAS_PEDIDAS });
-      const sorteadas = (data ?? []) as Ronda[];
+      let sorteadas: Ronda[] = [];
+      if (!partidaId.current) {
+        const { data } = await supabase.rpc("juego_empezar");
+        if (esta !== partida.current || !data) return;
+        partidaId.current = data.partida as string;
+        sorteadas = data.rondas as Ronda[];
+      } else {
+        const { data } = await supabase.rpc("juego_mas_rondas", { p_partida: partidaId.current });
+        sorteadas = (data ?? []) as Ronda[];
+      }
+      const id = partidaId.current;
 
       /* De a cuatro rondas en paralelo: de a una tardaría demasiado, y todas
          juntas ahogan la conexión del celular. */
       for (let i = 0; i < sorteadas.length; i += 4) {
         const tanda = sorteadas.slice(i, i + 4);
         const listas = await Promise.all(tanda.map(servible));
+        if (esta !== partida.current) return;
+        /* La base exige jugar las rondas en orden: las de foto rota se le
+           avisan antes de sumar las buenas, o la siguiente quedaría fuera de turno. */
+        const rotas = tanda.filter((_, n) => !listas[n]).map((r) => r.n);
+        if (rotas.length > 0) await supabase.rpc("juego_descartar", { p_partida: id, p_n: rotas });
         if (esta !== partida.current) return;
         const buenas = tanda.filter((_, n) => listas[n]);
         if (buenas.length > 0) {
@@ -218,7 +254,7 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
     /* Por si un celular no avisa que pintó la foto: el juego no se queda
        colgado esperándola. */
     espera.current = setTimeout(() => {
-      if (jugandoRef.current && !reloj.current) arrancarReloj(puntajeRef.current);
+      if (jugandoRef.current && !reloj.current) arrancarReloj();
     }, ESPERA_MAXIMA_MS);
     /* Quedan pocas por delante: la tanda siguiente se pide ya. */
     if (rondasRef.current.length - n <= RONDAS_DE_RESERVA) pedirTanda();
@@ -226,9 +262,7 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
 
   const fotoPintada = () => {
     pintadas.current += 1;
-    if (pintadas.current === 2 && jugandoRef.current && !reloj.current) {
-      arrancarReloj(puntajeRef.current);
-    }
+    if (pintadas.current === 2 && jugandoRef.current && !reloj.current) arrancarReloj();
   };
 
   /* ── Empezar ──────────────────────────────────────────────────────────── */
@@ -241,6 +275,7 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
     setAvance(0);
 
     partida.current += 1;
+    partidaId.current = null;
     reserva.current = null;
     rondasRef.current = [];
     setRondas([]);
@@ -257,10 +292,14 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
     });
     clearInterval(subir);
 
-    if (rondasRef.current.length === 0) { setFase("inicio"); return; }
+    if (rondasRef.current.length === 0 || !partidaId.current) { setFase("inicio"); return; }
 
     setAvance(100);
-    await esperar(300);
+    /* Desde acá corre el reloj de la base para la primera ronda. */
+    await Promise.all([
+      createClient().rpc("juego_listo", { p_partida: partidaId.current }),
+      esperar(300),
+    ]);
 
     setPuntaje(0);
     puntajeRef.current = 0;
@@ -273,30 +312,40 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
 
   /* ── Responder ────────────────────────────────────────────────────────── */
 
-  const responder = (carta: Carta) => {
-    if (elegida || fase !== "jugando" || !reloj.current) return;
+  const responder = async (carta: Carta) => {
+    if (elegida || fase !== "jugando" || !reloj.current || !partidaId.current) return;
     pararReloj();
     setElegida(carta.id);
 
-    const ronda = rondas[indice];
-    const mayor = Math.max(...ronda.map((c) => c.precio));
+    /* La base decide si acertó y recién ahí entrega los precios. */
+    const ronda = rondasRef.current[indice];
+    const { data, error } = await createClient().rpc("juego_responder", {
+      p_partida: partidaId.current, p_n: ronda.n, p_carta: carta.id,
+    });
+    if (!jugandoRef.current) return;
+    if (error || !data) { terminar("tiempo"); return; }
+    const jugada = data as Jugada;
 
-    if (carta.precio < mayor) {
+    const precios = new Map(jugada.precios.map((p) => [p.id, p.precio]));
+    rondasRef.current = rondasRef.current.map((r, i) => i !== indice ? r
+      : { ...r, cartas: r.cartas.map((c) => ({ ...c, precio: precios.get(c.id) })) });
+    setRondas(rondasRef.current);
+    puntajeRef.current = jugada.puntaje;
+
+    if (!jugada.correcta) {
+      setPuntaje(jugada.puntaje);
       /* Un respiro para que se vea cuál era la cara antes del resumen. */
-      setTimeout(() => terminar("fallo", puntajeRef.current), 1300);
+      setTimeout(() => terminar(jugada.motivo ?? "fallo", true), 1300);
       return;
     }
-
-    const puntos = puntajeRef.current + 1;
-    puntajeRef.current = puntos;
 
     setTimeout(async () => {
       /* Solo pasa si la conexión no alcanzó a bajar la tanda siguiente
          mientras se jugaban las anteriores: se la espera. */
       if (indice + 1 >= rondasRef.current.length) await (reserva.current ?? pedirTanda());
       if (!jugandoRef.current) return;
-      if (indice + 1 >= rondasRef.current.length) { terminar("tiempo", puntos); return; }
-      setPuntaje(puntos);
+      if (indice + 1 >= rondasRef.current.length) { terminar("tiempo"); return; }
+      setPuntaje(jugada.puntaje);
       setElegida(null);
       mostrarRonda(indice + 1);
     }, 850);
@@ -305,9 +354,11 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
   /* ── Pantalla ─────────────────────────────────────────────────────────── */
 
   const ronda = rondas[indice];
-  const mayor = ronda ? Math.max(...ronda.map((c) => c.precio)) : 0;
-  const revelado = elegida !== null || motivo !== null;
-  const acerto = revelado && ronda?.some((c) => c.id === elegida && c.precio === mayor);
+  /* Se revela cuando la base devolvió los precios, no al tocar la carta. */
+  const revelado = !!ronda && ronda.cartas.every((c) => c.precio !== undefined);
+  const mayor = revelado ? Math.max(...ronda.cartas.map((c) => c.precio ?? 0)) : 0;
+  /* Sin respuesta corregida no hay animación de acierto ni de fallo. */
+  const acerto = revelado && elegida ? ronda.cartas.some((c) => c.id === elegida && c.precio === mayor) : null;
 
   return (
     <div className="jg-page">
@@ -339,7 +390,7 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
             <div className="jg-juego">
               <Marcador puntaje={puntaje} restante={restante} />
               <div className="jg-grid">
-                {ronda.map((c) => {
+                {ronda.cartas.map((c) => {
                   const esLaCara = c.precio === mayor;
                   return (
                     <button
@@ -350,7 +401,7 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
                         + (revelado && c.id === elegida && !esLaCara ? " mala" : "")
                         + (revelado && !esLaCara && c.id !== elegida ? " apagada" : "")
                       }
-                      disabled={revelado}
+                      disabled={elegida !== null || revelado}
                       onClick={() => responder(c)}
                     >
                       {/* La foto ya se bajó entera durante la carga, así que acá
@@ -360,7 +411,7 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
                         onLoad={fotoPintada} onError={fotoPintada} />
                       {revelado && (
                         <span className="jg-precio" style={{ color: esLaCara ? COURT : INK1 }}>
-                          ${c.precio.toFixed(2)}
+                          ${(c.precio ?? 0).toFixed(2)}
                         </span>
                       )}
                       {revelado && c.id === elegida && (
@@ -466,17 +517,20 @@ function Final({ puntaje, motivo, onJugar }: {
 }) {
   const titulo = motivo === "tiempo"   ? "Se acabó el tiempo"
                : motivo === "abandono" ? "Te fuiste de la pestaña"
+               : motivo === "invalida" ? "Jugada no válida"
                :                         "Esa valía menos";
   return (
     <div className="jg-panel">
-      <span className="jg-rotulo" style={{ color: motivo === "fallo" ? CRIT : BALL }}>
+      <span className="jg-rotulo" style={{ color: motivo === "fallo" || motivo === "invalida" ? CRIT : BALL }}>
         {titulo}
       </span>
       <p style={{ fontFamily: DISP, fontSize: "clamp(30px, 7vw, 46px)", fontWeight: 700, color: INK0, margin: 0, lineHeight: 1 }}>
         {puntaje} {puntaje === 1 ? "ronda" : "rondas"}
       </p>
       <p className="jg-reglas" style={{ margin: 0 }}>
-        {puntaje === 0
+        {motivo === "invalida"
+          ? "La respuesta llegó más rápido de lo que alguien alcanza a mirar las cartas. La partida no cuenta."
+          : puntaje === 0
           ? "Ni una. El cero no entra al ranking."
           : "Anotado. Mira dónde quedaste abajo."}
       </p>
@@ -545,7 +599,7 @@ const esperar = (ms: number) => new Promise((r) => setTimeout(r, ms));
  * un cuadro roto: la ronda quedaba decidida por cuál de las dos se veía.
  */
 function servible(ronda: Ronda): Promise<boolean> {
-  return Promise.all(ronda.map((c) => new Promise<boolean>((responder) => {
+  return Promise.all(ronda.cartas.map((c) => new Promise<boolean>((responder) => {
     const img = new Image();
     /* Si el bucket no responde, no se espera para siempre. */
     const reloj = setTimeout(() => responder(false), 8000);
