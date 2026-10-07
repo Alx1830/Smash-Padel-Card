@@ -245,23 +245,21 @@ export default function DeckEditorPage() {
     router.push("/dashboard/decks");
   }
 
-  /** Cuántas copias ya conseguí: nunca menos de 0 ni más de las que pide el deck */
+  /**
+   * Botones de "Tengo". Sumar funciona igual que un clic en el buscador.
+   * Restar baja lo conseguido (y lo que pide el deck, si iban parejos);
+   * restar en 0 saca la carta del deck.
+   */
   async function changeQty(deckCardId: string, delta: number) {
     const entry = deckCards.find(c => c.id === deckCardId);
     if (!entry) return;
-    const newQty = entry.quantity + delta;
-    if (newQty < 0 || newQty > entry.needed) return;
-    await supabase.from("deck_cards").update({ quantity: newQty }).eq("id", deckCardId);
-    setDeckCards(prev => prev.map(c => c.id === deckCardId ? { ...c, quantity: newQty } : c));
-  }
 
-  /** Cuántas copias pide el deck. Al llegar a 0 la carta sale de la lista. */
-  async function changeNeeded(deckCardId: string, delta: number) {
-    const entry = deckCards.find(c => c.id === deckCardId);
-    if (!entry) return;
-    const newNeeded = entry.needed + delta;
+    if (delta > 0) {
+      if (entry.card) await addCard(entry.card, entry.set_id);
+      return;
+    }
 
-    if (newNeeded <= 0) {
+    if (entry.quantity === 0) {
       await supabase.from("deck_cards").delete().eq("id", deckCardId);
       const remaining = deckCards.filter(c => c.id !== deckCardId);
       setDeckCards(remaining);
@@ -270,13 +268,11 @@ export default function DeckEditorPage() {
       }
       return;
     }
-    if (delta > 0 && totalCards >= MAX_CARDS) return;
-    if (delta > 0 && !isEnergy(entry.card!) && newNeeded > 4) return;
 
-    // Si el deck pide menos, lo conseguido no puede quedar por encima
-    const newQty = Math.min(entry.quantity, newNeeded);
-    await supabase.from("deck_cards").update({ needed: newNeeded, quantity: newQty }).eq("id", deckCardId);
-    setDeckCards(prev => prev.map(c => c.id === deckCardId ? { ...c, needed: newNeeded, quantity: newQty } : c));
+    const newQty = entry.quantity - 1;
+    const newNeeded = entry.needed > entry.quantity ? entry.needed : Math.max(newQty, 1);
+    await supabase.from("deck_cards").update({ quantity: newQty, needed: newNeeded }).eq("id", deckCardId);
+    setDeckCards(prev => prev.map(c => c.id === deckCardId ? { ...c, quantity: newQty, needed: newNeeded } : c));
   }
 
   if (loading) {
@@ -456,25 +452,19 @@ export default function DeckEditorPage() {
                   </div>
                   <p style={{ fontFamily: MONO, fontSize: "10px", color: INK0, margin: 0, textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{dc.card?.name ?? dc.card_id}</p>
                   {(() => {
-                    const canNeedMore = totalCards < MAX_CARDS && (isEnergy(dc.card!) || dc.needed < 4);
-                    const row = (label: string, value: number, onLess: () => void, onMore: () => void, canMore: boolean, accent: string) => (
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "4px" }}>
-                        <span style={{ fontFamily: MONO, fontSize: "8px", letterSpacing: "0.14em", textTransform: "uppercase", color: INK2 }}>{label}</span>
+                    const canMore = canAddMore(dc);
+                    return (
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "4px", marginTop: "auto" }}>
+                        <span style={{ fontFamily: MONO, fontSize: "8px", letterSpacing: "0.14em", textTransform: "uppercase", color: INK2 }}>Tengo</span>
                         <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                          <button onClick={onLess} aria-label={`Quitar una (${label})`} style={{ width: 22, height: 22, borderRadius: "6px", border: "1px solid rgba(255,255,255,0.15)", background: "none", color: INK0, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <button onClick={() => changeQty(dc.id, -1)} aria-label={dc.quantity === 0 ? "Quitar del deck" : "Quitar una"} style={{ width: 22, height: 22, borderRadius: "6px", border: "1px solid rgba(255,255,255,0.15)", background: "none", color: INK0, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
                             <Minus size={11} />
                           </button>
-                          <span style={{ fontFamily: MONO, fontSize: "12px", color: INK0, fontWeight: 700, width: "14px", textAlign: "center" }}>{value}</span>
-                          <button onClick={onMore} disabled={!canMore} aria-label={`Agregar una (${label})`} style={{ width: 22, height: 22, borderRadius: "6px", border: `1px solid ${accent}44`, background: "none", color: accent, cursor: canMore ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", opacity: canMore ? 1 : 0.35 }}>
+                          <span style={{ fontFamily: MONO, fontSize: "12px", color: INK0, fontWeight: 700, width: "14px", textAlign: "center" }}>{dc.quantity}</span>
+                          <button onClick={() => changeQty(dc.id, 1)} disabled={!canMore} aria-label="Agregar una" style={{ width: 22, height: 22, borderRadius: "6px", border: `1px solid ${COURT}44`, background: "none", color: COURT, cursor: canMore ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", opacity: canMore ? 1 : 0.35 }}>
                             <Plus size={11} />
                           </button>
                         </div>
-                      </div>
-                    );
-                    return (
-                      <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginTop: "auto" }}>
-                        {row("Tengo", dc.quantity, () => changeQty(dc.id, -1), () => changeQty(dc.id, 1), dc.quantity < dc.needed, COURT)}
-                        {row("Necesito", dc.needed, () => changeNeeded(dc.id, -1), () => changeNeeded(dc.id, 1), canNeedMore, "#d6ff3d")}
                       </div>
                     );
                   })()}
