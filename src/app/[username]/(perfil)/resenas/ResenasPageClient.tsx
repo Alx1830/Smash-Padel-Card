@@ -271,11 +271,19 @@ function FormReferencia({ perfilId, username, visitante, alGuardar }: {
   const guardar = async () => {
     setEnviando(true);
     setAviso(null);
-    const { error } = await createClient().rpc("referencia_guardar", {
+    const { data: referenciaId, error } = await createClient().rpc("referencia_guardar", {
       p_perfil: perfilId, p_estrellas: estrellas, p_comentario: texto,
     });
     setEnviando(false);
     if (error) { setAviso(error.message); return; }
+    // Solo la primera vez: editar una referencia no vuelve a avisar
+    if (!mia) {
+      fetch("/api/referencias/notify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ referencia_id: referenciaId }),
+      }).catch(() => {});
+    }
     setMia({ id: mia?.id ?? "", autor_id: visitante, estrellas, comentario: texto.trim(), creada: mia?.creada ?? new Date().toISOString(), editada: mia ? new Date().toISOString() : null });
     setAbierto(false);
     alGuardar();
