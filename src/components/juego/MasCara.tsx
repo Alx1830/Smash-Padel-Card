@@ -25,6 +25,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Play, Timer, Trophy, RotateCcw, Medal, Volume2, VolumeX, Check } from "lucide-react";
 import { musica, interruptor, registrarPistas } from "./musica";
 import { PUESTOS_RANKING } from "./ranking";
+import { VolverAJuegos } from "./VolverAJuegos";
 
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
@@ -370,6 +371,7 @@ export function MasCara({ rankingInicial }: { rankingInicial: Puesto[] }) {
       <audio ref={pistaDerrota} src="/juego/fail.mp3" preload="auto" />
 
       <div className="jg-wrap">
+        <VolverAJuegos />
         {sonido && sonidoBloqueado && (
           <p className="jg-aviso">
             Tu navegador bloqueó la música. Revisa que la pestaña no esté silenciada

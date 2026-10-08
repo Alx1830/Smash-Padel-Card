@@ -22,6 +22,7 @@ import { musica, interruptor, registrarPistas } from "@/components/juego/musica"
 import { PUESTOS_RANKING } from "@/components/juego/ranking";
 import type { Puesto } from "@/components/juego/MasCara";
 import { TIPOS, tipoDe, urlIlustracion, type PokemonPublico, type PokemonRepaso, type TipoId } from "./tipos";
+import { VolverAJuegos } from "@/components/juego/VolverAJuegos";
 
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
@@ -196,6 +197,7 @@ export function JuegoTipos({ rankingInicial }: { rankingInicial: Puesto[] }) {
       <audio ref={pistaDerrota} src="/juego/fail.mp3" preload="auto" />
 
       <div className="jt-wrap">
+        <VolverAJuegos />
         {sonido && sonidoBloqueado && (
           <p className="jt-aviso">Tu navegador bloqueó la música. Revisa que la pestaña no esté silenciada y vuelve a tocar el botón de sonido.</p>
         )}
