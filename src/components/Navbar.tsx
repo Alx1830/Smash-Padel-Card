@@ -131,13 +131,20 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
     <>
       <nav className={`flex fixed left-0 right-0 z-50 items-center justify-between px-6 py-4 border-b border-[#2ee6c1]/10 bg-[#05070d]/90 backdrop-blur-md ${pathname === "/" ? "top-8" : "top-0"}`}>
 
-        {/* Logo */}
-        <Link href={loggedIn ? "/dashboard" : "/"} className="flex items-center shrink-0">
+        {/* Logo — en celular y tablet va solo a la izquierda; en computador se
+            muda al lado de INICIO, dentro del grupo de enlaces */}
+        <Link href={loggedIn ? "/dashboard" : "/"} className="flex lg:hidden items-center shrink-0">
           <BrandLogo height={38} style={{ pointerEvents: "none" }} />
         </Link>
 
+        {/* Hueco del mismo ancho que el lado derecho: deja el grupo centrado */}
+        <div className="hidden lg:block flex-1" aria-hidden />
+
         {/* Links — hidden on mobile/tablet, visible on desktop */}
         <div className="hidden lg:flex items-center gap-8">
+          <Link href={loggedIn ? "/dashboard" : "/"} className="flex items-center shrink-0" style={{ marginLeft: -20, marginRight: 20 }}>
+            <BrandLogo height={34} style={{ pointerEvents: "none" }} />
+          </Link>
           {(loggedIn ? NAV_LINKS_AUTH : NAV_LINKS_GUEST).map(({ label, href }) => (
             <Link key={label} href={href}
               className="text-xs font-medium tracking-[0.15em] text-white/60 hover:text-[#2ee6c1] transition-colors duration-200"
@@ -148,7 +155,7 @@ export function Navbar({ initialLoggedIn, initialPhotoUrl, initialUsername }: Na
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-end gap-4 lg:flex-1">
 
           {/* Bell — only when logged in */}
           {loggedIn && (
