@@ -1,27 +1,27 @@
 /**
- * Los 18 tipos de Pokémon: nombre en español y su color de siempre.
+ * Los 18 tipos de Pokémon: nombre en español y su color (sacado de los carteles de tipo de los juegos).
  * La clave es el nombre en inglés, que es como los guarda la base.
  */
 
 export const TIPOS = [
-  { id: "Normal",   nombre: "Normal",    color: "#A8A77A" },
-  { id: "Fire",     nombre: "Fuego",     color: "#EE8130" },
-  { id: "Water",    nombre: "Agua",      color: "#6390F0" },
-  { id: "Grass",    nombre: "Planta",    color: "#7AC74C" },
-  { id: "Electric", nombre: "Eléctrico", color: "#F7D02C" },
-  { id: "Ice",      nombre: "Hielo",     color: "#96D9D6" },
-  { id: "Fighting", nombre: "Lucha",     color: "#C22E28" },
-  { id: "Poison",   nombre: "Veneno",    color: "#A33EA1" },
-  { id: "Ground",   nombre: "Tierra",    color: "#E2BF65" },
-  { id: "Flying",   nombre: "Volador",   color: "#A98FF3" },
-  { id: "Psychic",  nombre: "Psíquico",  color: "#F95587" },
-  { id: "Bug",      nombre: "Bicho",     color: "#A6B91A" },
-  { id: "Rock",     nombre: "Roca",      color: "#B6A136" },
-  { id: "Ghost",    nombre: "Fantasma",  color: "#735797" },
-  { id: "Dragon",   nombre: "Dragón",    color: "#6F35FC" },
-  { id: "Dark",     nombre: "Siniestro", color: "#705746" },
-  { id: "Steel",    nombre: "Acero",     color: "#B7B7CE" },
-  { id: "Fairy",    nombre: "Hada",      color: "#D685AD" },
+  { id: "Normal",   nombre: "Normal",    color: "#C4C2BA" },
+  { id: "Fire",     nombre: "Fuego",     color: "#E04010" },
+  { id: "Water",    nombre: "Agua",      color: "#3890E8" },
+  { id: "Grass",    nombre: "Planta",    color: "#60B040" },
+  { id: "Electric", nombre: "Eléctrico", color: "#F0B828" },
+  { id: "Ice",      nombre: "Hielo",     color: "#68D0F0" },
+  { id: "Fighting", nombre: "Lucha",     color: "#7A3222" },
+  { id: "Poison",   nombre: "Veneno",    color: "#904890" },
+  { id: "Ground",   nombre: "Tierra",    color: "#C8A858" },
+  { id: "Flying",   nombre: "Volador",   color: "#90A0E8" },
+  { id: "Psychic",  nombre: "Psíquico",  color: "#E04880" },
+  { id: "Bug",      nombre: "Bicho",     color: "#A8B828" },
+  { id: "Rock",     nombre: "Roca",      color: "#B09858" },
+  { id: "Ghost",    nombre: "Fantasma",  color: "#6060A8" },
+  { id: "Dragon",   nombre: "Dragón",    color: "#7060D0" },
+  { id: "Dark",     nombre: "Siniestro", color: "#4A3A32" },
+  { id: "Steel",    nombre: "Acero",     color: "#B0B0C0" },
+  { id: "Fairy",    nombre: "Hada",      color: "#F0B0F0" },
 ] as const;
 
 export type TipoId = (typeof TIPOS)[number]["id"];

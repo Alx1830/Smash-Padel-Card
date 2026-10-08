@@ -167,7 +167,7 @@ export function nombreRuta(ruta: string | null): string {
     "/dashboard/decks": "Decks",
     "/dashboard/my-sets": "Mis sets",
     "/dashboard/trades": "Intercambios",
-    "/dashboard/juego": "Higher Or Lower",
+    "/dashboard/higher-or-lower": "Higher Or Lower",
     "/dashboard/perfil": "Editar perfil",
     "/dashboard/buscar": "Buscar carta",
     "/noticias": "Noticias",

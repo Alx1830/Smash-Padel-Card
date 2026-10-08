@@ -435,7 +435,7 @@ export function DashboardLayoutClient({
                 const decksActive = pathname.startsWith("/dashboard/decks");
                 const mySetsActive = pathname.startsWith("/dashboard/my-sets");
                 const tradesActive = pathname.startsWith("/dashboard/trades");
-                const juegoActive = pathname.startsWith("/dashboard/juego");
+                const juegoActive = pathname.startsWith("/dashboard/higher-or-lower");
                 const tiposActive = pathname.startsWith("/dashboard/type-master");
                 const noticiasActive = pathname.startsWith("/noticias");
                 const intActive = decksActive || mySetsActive || tradesActive || juegoActive || tiposActive || noticiasActive;
@@ -467,7 +467,7 @@ export function DashboardLayoutClient({
                         <ArrowLeftRight size={14} color={tradesActive ? COURT : INK2} strokeWidth={1.8} />
                         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: tradesActive ? COURT : "rgba(245,247,251,0.65)" }}>Intercambios</span>
                       </Link>
-                      <Link href="/dashboard/juego" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: juegoActive ? `${COURT}18` : "transparent", border: juegoActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                      <Link href="/dashboard/higher-or-lower" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: juegoActive ? `${COURT}18` : "transparent", border: juegoActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
                         onMouseEnter={e => { if (!juegoActive) e.currentTarget.style.background = `${COURT}10`; }}
                         onMouseLeave={e => { if (!juegoActive) e.currentTarget.style.background = "transparent"; }}
                       >

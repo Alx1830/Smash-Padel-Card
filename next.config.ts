@@ -76,6 +76,8 @@ const nextConfig: NextConfig = {
     return [
       { source: "/post", destination: "/noticias", permanent: true },
       { source: "/post/:path*", destination: "/noticias/:path*", permanent: true },
+      /* Higher Or Lower vivía en /dashboard/juego; los avisos viejos apuntan ahí. */
+      { source: "/dashboard/juego", destination: "/dashboard/higher-or-lower", permanent: true },
     ];
   },
   async headers() {

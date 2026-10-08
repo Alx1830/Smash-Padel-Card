@@ -37,7 +37,7 @@ const DESTINOS = [
   { url: "/dashboard/market",          label: "Market" },
   { url: "/dashboard/market/wishlist", label: "Mi wishlist" },
   { url: "/dashboard/inventario",      label: "Mi colección" },
-  { url: "/dashboard/juego",           label: "Higher Or Lower (el juego)" },
+  { url: "/dashboard/higher-or-lower", label: "Higher Or Lower (el juego)" },
   { url: "/dashboard/decks",           label: "Decks" },
   { url: "/dashboard/my-sets",         label: "Mis sets" },
   { url: "/dashboard/trades",          label: "Intercambios" },

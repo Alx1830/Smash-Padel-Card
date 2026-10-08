@@ -385,13 +385,15 @@ const ESTILOS = `
   @keyframes jt-sello { 0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0; } 30% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; } 100% { transform: translate(-50%, -160%) scale(1); opacity: 0; } }
 
   .jt-tipos { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; flex-shrink: 0; }
-  .jt-tipo { position: relative; padding: 11px 2px; border-radius: 10px; cursor: pointer; font-family: ${MONO}; font-size: 11px; font-weight: 700;
-    color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.7); border: 2px solid rgba(255,255,255,0.08);
-    background: color-mix(in srgb, var(--c) 55%, #0b0f18); transition: transform 0.08s, background 0.12s, opacity 0.12s;
+  /* Píldora del color del tipo con letra blanca contorneada, como los carteles de los juegos */
+  .jt-tipo { position: relative; padding: 11px 2px; border-radius: 999px; cursor: pointer; font-family: ${MONO}; font-size: 11px; font-weight: 800;
+    color: #fff; text-shadow: -1px -1px 0 #1a1a1a, 1px -1px 0 #1a1a1a, -1px 1px 0 #1a1a1a, 1px 1px 0 #1a1a1a;
+    border: 2px solid #1a1a1a; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.45);
+    background: var(--c); transition: transform 0.08s, filter 0.12s, opacity 0.12s, box-shadow 0.12s;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .jt-tipo:hover:not(:disabled) { background: color-mix(in srgb, var(--c) 80%, #0b0f18); }
+  .jt-tipo:hover:not(:disabled) { filter: brightness(1.12); }
   .jt-tipo:active:not(:disabled) { transform: scale(0.96); }
-  .jt-tipo.on { background: var(--c); border-color: #fff; }
+  .jt-tipo.on { border-color: #fff; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.45), 0 0 0 2px #fff, 0 0 12px var(--c); }
   .jt-tipo.fijo, .jt-tipo.ok { border-color: ${COURT}; box-shadow: 0 0 0 2px ${COURT}; }
   .jt-tipo.tachado { opacity: 0.28; cursor: default; text-decoration: line-through; border-color: ${CRIT}; }
 
