@@ -63,7 +63,8 @@ export default async function ResumenPage({ params }: { params: Promise<{ userna
     <div className="pf-resumen">
       <IgualarAltos contenedor=".pf-resumen" />
       <style>{`
-        /* Logros, Inventario y Cartas en venta miden lo mismo que la Wishlist.
+        /* Logros, Wishlist, Decks públicos y Cartas en venta miden lo mismo: el
+           alto del más alto (IgualarAltos), tengan cartas o estén vacíos.
            Solo con columnas: apilados en el celular no hace falta. */
         .pf-igual { display: flex; flex-direction: column; }
         .pf-igual > .pf-panel-cuerpo { flex: 1; display: flex; flex-direction: column; justify-content: center; }
@@ -254,7 +255,7 @@ export default async function ResumenPage({ params }: { params: Promise<{ userna
       <div className="pf-col pf-col-der">
 
         <div className="pf-o5">
-          <Panel icon={Heart} color={MAGENTA} titulo="Wishlist" verTodas={`${base}/wishlist`} alto="referencia">
+          <Panel icon={Heart} color={MAGENTA} titulo="Wishlist" verTodas={`${base}/wishlist`} alto="igual">
             {!deseos?.length ? (
               <Vacio icon={Heart} color={MAGENTA} texto={esDueno ? "Marca como 'Buscando' las cartas que te faltan y aparecen aquí." : "Su wishlist está vacía."} />
             ) : (
