@@ -436,7 +436,7 @@ export function DashboardLayoutClient({
                 const mySetsActive = pathname.startsWith("/dashboard/my-sets");
                 const tradesActive = pathname.startsWith("/dashboard/trades");
                 const juegoActive = pathname.startsWith("/dashboard/juego");
-                const tiposActive = pathname.startsWith("/dashboard/que-tipo");
+                const tiposActive = pathname.startsWith("/dashboard/type-master");
                 const noticiasActive = pathname.startsWith("/noticias");
                 const intActive = decksActive || mySetsActive || tradesActive || juegoActive || tiposActive || noticiasActive;
                 return (
@@ -474,12 +474,12 @@ export function DashboardLayoutClient({
                         <Dices size={14} color={juegoActive ? COURT : INK2} strokeWidth={1.8} />
                         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: juegoActive ? COURT : "rgba(245,247,251,0.65)" }}>Higher Or Lower</span>
                       </Link>
-                      <Link href="/dashboard/que-tipo" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: tiposActive ? `${COURT}18` : "transparent", border: tiposActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                      <Link href="/dashboard/type-master" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: tiposActive ? `${COURT}18` : "transparent", border: tiposActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
                         onMouseEnter={e => { if (!tiposActive) e.currentTarget.style.background = `${COURT}10`; }}
                         onMouseLeave={e => { if (!tiposActive) e.currentTarget.style.background = "transparent"; }}
                       >
                         <Shapes size={14} color={tiposActive ? COURT : INK2} strokeWidth={1.8} />
-                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: tiposActive ? COURT : "rgba(245,247,251,0.65)" }}>¿De qué tipo es?</span>
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: tiposActive ? COURT : "rgba(245,247,251,0.65)" }}>Type Master</span>
                       </Link>
                       <Link href="/noticias" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: noticiasActive ? `${COURT}18` : "transparent", border: noticiasActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
                         onMouseEnter={e => { if (!noticiasActive) e.currentTarget.style.background = `${COURT}10`; }}

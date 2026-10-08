@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * "¿De qué tipo es?" — minijuego flash de la sección Interactivo.
+ * "Type Master" — minijuego flash de la sección Interactivo.
  *
  * Sale un Pokémon y hay que marcar su tipo; si tiene dos, los dos (el orden no
  * importa). Apenas se marcan tantos tipos como tiene, se manda la respuesta.
@@ -206,7 +206,7 @@ export function JuegoTipos({ rankingInicial }: { rankingInicial: Puesto[] }) {
 
             {fase === "inicio" && (
               <div className="jt-panel">
-                <span className="jt-rotulo">¿De qué tipo es?</span>
+                <span className="jt-rotulo">Type Master</span>
                 <p className="jt-reglas">
                   Sale un Pokémon y marcas su tipo; si tiene dos, los dos. Si fallas, no
                   pasa al siguiente hasta que aciertes. Tienes un minuto: cada acierto suma
