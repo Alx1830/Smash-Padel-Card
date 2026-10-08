@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { usePegadoAlVisor } from "@/hooks/usePegadoAlVisor";
 import {
   House, UserRoundPen, LayoutGrid, Store, Gamepad2,
-  Swords, WalletCards, ArrowLeftRight, BookSearch, Dices, Newspaper } from "lucide-react";
+  Swords, WalletCards, ArrowLeftRight, BookSearch, Dices, Shapes, Newspaper } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const LIME  = "#d6ff3d";
@@ -72,7 +72,7 @@ export function MobileTabBar({ username: initialUsername }: { username?: string 
   const intActive    = pathname.startsWith("/dashboard/decks")
                     || pathname.startsWith("/dashboard/my-sets")
                     || pathname.startsWith("/dashboard/trades")
-                    || pathname.startsWith("/dashboard/juego")
+                    || pathname.startsWith("/dashboard/juego") || pathname.startsWith("/dashboard/que-tipo")
                     || pathname.startsWith("/noticias");
   const invActive    = pathname === "/dashboard/inventario"
                     || pathname === "/dashboard/inventario/cards"
@@ -114,6 +114,7 @@ export function MobileTabBar({ username: initialUsername }: { username?: string 
               <PopupLink href="/dashboard/my-sets" Icon={WalletCards}    label="Mis Sets"     onClick={() => setInteractivoOpen(false)} />
               <PopupLink href="/dashboard/trades"  Icon={ArrowLeftRight} label="Intercambios" onClick={() => setInteractivoOpen(false)} />
               <PopupLink href="/dashboard/juego"   Icon={Dices}          label="Higher Or Lower"        onClick={() => setInteractivoOpen(false)} />
+              <PopupLink href="/dashboard/que-tipo" Icon={Shapes}        label="¿De qué tipo es?"       onClick={() => setInteractivoOpen(false)} />
               <PopupLink href="/noticias"             Icon={Newspaper}      label="Noticias"     onClick={() => setInteractivoOpen(false)} />
             </Popup>
           )}

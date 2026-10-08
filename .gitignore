@@ -52,3 +52,14 @@ scripts/tcgplayer-mapping/.cache/
 .wrangler/
 cloudflare-env.d.ts
 cf-*.log
+
+# Dibujos pagos del juego de la tienda (LimeZu): la licencia prohíbe redistribuirlos.
+# Se generan con scripts/juego/preparar-assets.py (rama local juego-tienda-tcg).
+/public/juego/catalogo/
+/public/juego/local/
+/public/juego/muebles/
+/public/juego/objetos/
+/public/juego/personaje/
+/public/juego/tilesets/
+# Ilustraciones del minijuego de tipos: se generan con scripts/pokedex y van a R2
+/public/pokedex/

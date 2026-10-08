@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { MobileTabBar } from "@/components/MobileTabBar";
-import { Wrench, House, UserRoundPen, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Swords, Gamepad2, WalletCards, ArrowLeftRight, Dices, Newspaper } from "lucide-react";
+import { Wrench, House, UserRoundPen, User, LayoutGrid, Store, LogOut, Pencil, BookSearch, Swords, Gamepad2, WalletCards, ArrowLeftRight, Dices, Shapes, Newspaper } from "lucide-react";
 import { ENLACES_ADMIN, ADMIN_COLOR } from "@/components/admin/enlaces";
 import { MenuAdminMovil } from "@/components/admin/MenuAdminMovil";
 import { useNotifications } from "@/hooks/useNotifications";
@@ -436,8 +436,9 @@ export function DashboardLayoutClient({
                 const mySetsActive = pathname.startsWith("/dashboard/my-sets");
                 const tradesActive = pathname.startsWith("/dashboard/trades");
                 const juegoActive = pathname.startsWith("/dashboard/juego");
+                const tiposActive = pathname.startsWith("/dashboard/que-tipo");
                 const noticiasActive = pathname.startsWith("/noticias");
-                const intActive = decksActive || mySetsActive || tradesActive || juegoActive || noticiasActive;
+                const intActive = decksActive || mySetsActive || tradesActive || juegoActive || tiposActive || noticiasActive;
                 return (
                   <div key="interactivo" style={{ marginBottom: "4px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 14px 6px" }}>
@@ -472,6 +473,13 @@ export function DashboardLayoutClient({
                       >
                         <Dices size={14} color={juegoActive ? COURT : INK2} strokeWidth={1.8} />
                         <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: juegoActive ? COURT : "rgba(245,247,251,0.65)" }}>Higher Or Lower</span>
+                      </Link>
+                      <Link href="/dashboard/que-tipo" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: tiposActive ? `${COURT}18` : "transparent", border: tiposActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
+                        onMouseEnter={e => { if (!tiposActive) e.currentTarget.style.background = `${COURT}10`; }}
+                        onMouseLeave={e => { if (!tiposActive) e.currentTarget.style.background = "transparent"; }}
+                      >
+                        <Shapes size={14} color={tiposActive ? COURT : INK2} strokeWidth={1.8} />
+                        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.08em", color: tiposActive ? COURT : "rgba(245,247,251,0.65)" }}>¿De qué tipo es?</span>
                       </Link>
                       <Link href="/noticias" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 14px", borderRadius: "8px", textDecoration: "none", background: noticiasActive ? `${COURT}18` : "transparent", border: noticiasActive ? `1px solid ${COURT}33` : "1px solid transparent", transition: "all 0.15s" }}
                         onMouseEnter={e => { if (!noticiasActive) e.currentTarget.style.background = `${COURT}10`; }}
