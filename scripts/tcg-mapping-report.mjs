@@ -25,6 +25,13 @@ const sets = JSON.parse(fs.readFileSync(path.join(MAP_DIR, "sets.json"), "utf8")
 const FLAG = { ok: 0, review: 1, missing: 2 };
 const filas = [];
 const pendientes = [];
+// Versiones que en TCGplayer son un producto aparte (Master Ball, Poke Ball,
+// Cosmos Holo...): setId -> numero -> version -> product_id. Solo las que no
+// comparten ficha con la carta base, para que el boton de precios no mande la
+// Master Ball a la pagina de la Reverse Holo. Las versiones que TCGplayer no
+// tiene (sellos, Cosmos Holo de sets viejos...) van con 0: el boton busca por
+// nombre en vez de abrir la ficha de la carta comun, que tiene otro precio.
+const variantes = {};
 let tot = 0, ok = 0, rev = 0, mis = 0;
 let vTot = 0, vOk = 0;   // variantes: lo que de verdad se colecciona
 
@@ -50,6 +57,14 @@ for (const file of fs.readdirSync(CARDS_DIR)) {
   vTot += j.summary.variantes?.total ?? 0;
   vOk  += j.summary.variantes?.resueltas ?? 0;
   for (const [n, c] of Object.entries(j.cards)) {
+    for (const [v, x] of Object.entries(c.variants ?? {})) {
+      if (x.product_id && x.product_id !== c.product_id) {
+        ((variantes[j.set] ??= {})[n] ??= {})[v.toLowerCase()] = x.product_id;
+      }
+    }
+    for (const v of c.versions ?? []) {
+      if (!c.variants?.[v]?.product_id) ((variantes[j.set] ??= {})[n] ??= {})[v.toLowerCase()] = 0;
+    }
     if (c.status === "ok") continue;
     pendientes.push({
       set: sets[j.set]?.name ?? j.set,
@@ -67,7 +82,7 @@ const sinEquivalente = Object.entries(sets)
   .map(([id, e]) => ({ id, nombre: e.name, motivo: e.note }))
   .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
 
-const datos = { filas, pendientes, sinEquivalente, resumen: { tot, ok, rev, mis, sets: filas.length, vTot, vOk } };
+const datos = { filas, pendientes, sinEquivalente, variantes, resumen: { tot, ok, rev, mis, sets: filas.length, vTot, vOk } };
 
 // Los mismos datos para la seccion de admin dentro de la app
 const PUBLIC_JSON = path.resolve(__dirname, "../public/tcg-mapping.json");

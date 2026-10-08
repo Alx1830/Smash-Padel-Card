@@ -444,7 +444,7 @@ export function WishlistPageClient({
                           <CardPriceTag card={item.card as PokemonCard} setId={item.set_id} />
                           <button
                             className="wl-tcg" aria-label="Ver en TCGPlayer"
-                            onClick={() => { const w=430,h=600,left=screen.availWidth-w-16,top=screen.availHeight-h-16; window.open(tcgCardLink(item.set_id, item.card.card_number, decodeURIComponent(tcgQuery)),"tcgplayer",`width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`); }}
+                            onClick={() => { const w=430,h=600,left=screen.availWidth-w-16,top=screen.availHeight-h-16; window.open(tcgCardLink(item.set_id, item.card.card_number, decodeURIComponent(tcgQuery), item.card.version),"tcgplayer",`width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`); }}
                             style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", padding: "8px 4px", fontFamily: MONO, fontSize: "9px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#2ee696", background: "#ffffff", borderRadius: "8px", fontWeight: 700, border: "none", cursor: "pointer" }}
                           >
                             {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -34,6 +34,17 @@ function productIdDelMapeo(setId: string, cardNumber: number): number | null {
   return indice[setId]?.[cardNumber] ?? null;
 }
 
+/* Versiones con ficha propia en TCGplayer (Master Ball, Poke Ball...):
+   setId → número → versión en minúsculas → product_id. Un 0 es una versión
+   que TCGplayer no tiene (sellos, Cosmos Holo de sets viejos): mandarla a la
+   ficha de la carta común mostraría el precio de otra carta. null = la versión
+   vive dentro de la ficha de la carta (Normal, Reverse Holo...). */
+function productIdDeVersion(setId: string, cardNumber: number, version: string): number | null {
+  const v = (mapping as unknown as { variantes?: Record<string, Record<string, Record<string, number>>> })
+    .variantes?.[setId]?.[String(cardNumber)]?.[version.toLowerCase().replace(/\s+/g, "")];
+  return v ?? null;
+}
+
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ setId: string; cardNumber: string }> },
@@ -41,10 +52,13 @@ export async function GET(
   const { setId, cardNumber } = await params;
   const num = Number(cardNumber);
   const q   = req.nextUrl.searchParams.get("q") ?? "";
+  const ver = req.nextUrl.searchParams.get("v") ?? "";
 
   let productId: number | null = null;
+  /* La versión no existe en TCGplayer: se busca por nombre, con la versión */
+  const sinFicha = Number.isFinite(num) && !!ver && productIdDeVersion(setId, num, ver) === 0;
 
-  if (Number.isFinite(num)) {
+  if (Number.isFinite(num) && !sinFicha) {
     /* La corrección del admin gana: el mapeo automático pudo equivocarse */
     try {
       const supabase = await createClient();
@@ -57,6 +71,8 @@ export async function GET(
       if (data?.product_id) productId = Number(data.product_id);
     } catch { /* sin fix: seguimos con el mapeo */ }
 
+    /* La Master Ball no está en la ficha de la carta base: tiene la suya */
+    if (ver) productId ??= productIdDeVersion(setId, num, ver);
     productId ??= productIdDelMapeo(setId, num);
   }
 

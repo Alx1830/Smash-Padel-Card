@@ -113,7 +113,7 @@ function SkeletonPost({ yellow }: { yellow?: boolean }) {
 
 function PostCard({ item }: { item: FeedItem }) {
   const isWishlist = item.type === "wishlist";
-  const tcgUrl = tcgCardLink(item.set_id, item.cardNumber, [item.cardName, item.setName, item.versionLabel].join(" "));
+  const tcgUrl = tcgCardLink(item.set_id, item.cardNumber, [item.cardName, item.setName, item.versionLabel].join(" "), item.version);
   const displayName = item.player?.username ?? "Usuario";
 
   // Listing: WhatsApp para comprar

@@ -541,7 +541,7 @@ export function CardDetailModal({
                 {/* Ver precios — TCGPlayer */}
                 {(() => {
                   const tcgQuery = [card.name, setInfo?.name ?? "", VERSION_FULL[label] ?? label].filter(Boolean).join(" ");
-                  const tcgUrl   = tcgCardLink(setId, card.card_number, tcgQuery);
+                  const tcgUrl   = tcgCardLink(setId, card.card_number, tcgQuery, card.version);
                   return (
                     <button
                       onClick={() => {
