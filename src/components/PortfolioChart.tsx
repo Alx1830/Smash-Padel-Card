@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Layers } from "lucide-react";
+import { Box, Layers, TrendingDown, TrendingUp } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { valorActualDe, type ValorActual } from "@/lib/valor-portafolio";
 export type { ValorActual };
@@ -10,6 +10,7 @@ const COURT = "#2ee6c1";
 const BG0   = "#05070d";
 const INK0  = "#f5f7fb";
 const INK2  = "#7a8298";
+const ROJO  = "#ff5d5d";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
@@ -119,7 +120,14 @@ function ChartSVG({ chartData, xLabel, height = 160, width = 600 }: {
   );
 }
 
-export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount, uniqueCount, valorActual, defaultRange = "1D", chartHeight = 160, estirar = false }: {
+const MESES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
+/** "2026-09-10" → "10 Sep" */
+function diaMes(fecha: string) {
+  return `${parseInt(fecha.slice(8, 10), 10)} ${MESES[parseInt(fecha.slice(5, 7), 10) - 1] ?? ""}`;
+}
+
+export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount, uniqueCount, valorActual, defaultRange = "1D", chartHeight = 160, estirar = false, panel = false }: {
   snapshots: Snapshot[]; hourlySnapshots: HourlySnapshot[]; loading?: boolean;
   cardCount?: number | null;
   /** Cartas distintas; con él la etiqueta dice "4 únicas · 18 en total" en vez de solo las copias. */
@@ -130,6 +138,9 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
   chartHeight?: number;
   /** Que el dibujo ocupe todo el alto libre de su caja, en vez de su alto natural. */
   estirar?: boolean;
+  /** Cabecera del inicio del panel: rótulo con icono, valor grande con su
+      variación y los rangos a la derecha. El perfil sigue con la de siempre. */
+  panel?: boolean;
 }) {
   const [range, setRange] = useState<Range>(defaultRange);
 
@@ -214,10 +225,43 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
           color: range === r ? BG0 : INK2,
           border: range === r ? "none" : "1px solid rgba(255,255,255,0.08)",
           transition: "all 0.15s",
-        }}>{r}</button>
+        }}>{panel && r === "1Y" ? "1A" : r}</button>
       ))}
     </div>
   );
+
+  /* La cabecera del panel: igual con datos o sin ellos, así el recuadro no
+     cambia de alto cuando llega el historial. */
+  const cabeceraPanel = (valor: number | null, delta: number | null, pct: number) => {
+    const sube = (delta ?? 0) >= 0;
+    return (
+      <div style={{ marginBottom: "18px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
+          <Box size={18} color={COURT} strokeWidth={1.6} />
+          <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, letterSpacing: "0.2em", textTransform: "uppercase", margin: 0 }}>
+            {isDay ? "Valor del inventario · hoy" : "Valor del inventario"}
+          </p>
+        </div>
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
+          <div style={{ minWidth: 0 }}>
+            <p style={{ fontFamily: DISP, fontSize: "clamp(26px, 3.4vw, 38px)", color: COURT, margin: 0, lineHeight: 1.1 }}>
+              {valor == null ? "—" : formatUSD(valor)}
+            </p>
+            <p style={{ fontFamily: MONO, fontSize: "12px", color: sube ? COURT : ROJO, margin: "8px 0 0", minHeight: "1.4em", display: "flex", alignItems: "center", gap: "6px" }}>
+              {delta != null && <>
+                {sube ? <TrendingUp size={13} /> : <TrendingDown size={13} />}
+                {sube ? "+" : "−"}{formatUSD(Math.abs(delta))} ({sube ? "+" : ""}{pct.toFixed(1)}%)
+              </>}
+            </p>
+            <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, margin: "6px 0 0" }}>
+              Valor estimado de todas tus cartas.
+            </p>
+          </div>
+          {rangeButtons}
+        </div>
+      </div>
+    );
+  };
 
   const cardCountBadge = cardCount != null && (
     <span style={{
@@ -235,6 +279,7 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
 
   if (data.length === 0) return (
     <div>
+      {panel ? cabeceraPanel(loading ? null : valorActual ?? null, null, 0) : (
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "20px", flexWrap: "wrap", gap: "10px", minHeight: HEADER_MIN_H }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
           <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: 0 }}>
@@ -244,6 +289,7 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
         </div>
         {rangeButtons}
       </div>
+      )}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: `${chartHeight}px` }}>
         {loading ? (
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
@@ -270,11 +316,13 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
         const hh = h.getUTCHours().toString().padStart(2, "0");
         return `${hh}:00`;
       }
-    : (d: { label: string }) => d.label.slice(5); // MM-DD
+    : panel
+      ? (d: { label: string }) => diaMes(d.label)
+      : (d: { label: string }) => d.label.slice(5); // MM-DD
 
   return (
     <div>
-      {/* Header */}
+      {panel ? cabeceraPanel(last.value, delta, pct) : (
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "20px", flexWrap: "wrap", gap: "10px", minHeight: HEADER_MIN_H }}>
         <div>
           <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: "0 0 6px" }}>
@@ -292,6 +340,7 @@ export function PortfolioChart({ snapshots, hourlySnapshots, loading, cardCount,
         </div>
         {rangeButtons}
       </div>
+      )}
 
       <div ref={hueco} style={estirar ? { flex: 1, minHeight: 0, display: "flex", alignItems: "stretch" } : undefined}>
         <ChartSVG chartData={data} xLabel={xLabel}

@@ -649,7 +649,7 @@ export function DashboardLayoutClient({
 
         {/* ══ MAIN CONTENT ══ */}
         <main className="dash-main" style={{ flex: 1 }}>
-          <DashboardUserProvider userId={userId} isAdmin={isAdmin}>{children}</DashboardUserProvider>
+          <DashboardUserProvider userId={userId} isAdmin={isAdmin} username={username}>{children}</DashboardUserProvider>
           {/* En el celular estas herramientas no caben en ningún menú: se
               abren deslizando desde el borde izquierdo. */}
           {isAdmin && <MenuAdminMovil />}

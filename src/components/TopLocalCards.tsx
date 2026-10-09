@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useDashboardUser } from "@/app/dashboard/DashboardUserContext";
-import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
+import { SET_CARDS, SET_CARD_COUNT, loadManySets } from "@/data/pokemon-cards";
+import { SCRYDEX_SET_CODES } from "@/data/set-codes";
 import { getVersionLabel } from "@/data/pokemon-cards-meta";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
-import { Store } from "lucide-react";
+import { ArrowRight, Store, Trophy } from "lucide-react";
 import { fotoChica } from "@/lib/foto-carta";
 
 const COURT = "#2ee6c1";
@@ -30,7 +31,10 @@ interface TopCard {
 }
 
 /** Las 5 cartas más caras publicadas en el país del usuario */
-export function TopLocalCards() {
+export function TopLocalCards({ enFila = false }: {
+  /** Las cinco una al lado de la otra, para cuando la caja va a lo ancho. */
+  enFila?: boolean;
+} = {}) {
   /* Quién es el visitante ya lo averiguó el panel al entrar. Preguntárselo de
      nuevo a Supabase hacía que varios pedidos se pelearan por el mismo
      cerrojo del token, y el que perdía tiraba un error en la consola. */
@@ -109,44 +113,34 @@ export function TopLocalCards() {
   }, [userId]);
 
   return (
-    <div style={{
-      background: "rgba(255,255,255,0.02)",
-      border: "1px solid rgba(255,255,255,0.08)",
-      borderRadius: "16px",
-      padding: "20px",
-      display: "flex", flexDirection: "column",
-    }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-        <Store size={14} color={LIME} strokeWidth={1.8} />
-        <p style={{
-          fontFamily: MONO, fontSize: "9px", color: INK2,
-          letterSpacing: "0.18em", textTransform: "uppercase", margin: 0,
-        }}>
-          Top 5 en venta
+    <div className={"tl-caja" + (enFila ? " fila" : "")}>
+      <div className="tl-cabeza">
+        <Trophy size={18} color={LIME} strokeWidth={1.6} />
+        <p className="tl-titulo" title={pais ? `Lo más caro publicado en ${pais}` : undefined}>
+          Top cartas en venta
         </p>
+        <Link href="/market" className="tl-vertodas">
+          Ver todas <ArrowRight size={12} aria-hidden />
+        </Link>
       </div>
-      <p style={{ fontFamily: MONO, fontSize: "10px", color: INK2, margin: "0 0 14px" }}>
-        {pais ? `Lo más caro publicado en ${pais}` : "Lo más caro publicado en el market"}
-      </p>
 
       {loading ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div className="tl-lista">
           <style>{`@keyframes fb-pulse{0%,100%{opacity:.3}50%{opacity:.7}}`}</style>
           {[0, 1, 2, 3, 4].map(i => (
             <div key={i} style={{
-              /* 58px = alto real de la fila: miniatura de 30px en 5/7 (42px)
-                 + 7px de padding arriba y abajo + 1px de borde a cada lado */
-              height: 58, borderRadius: 10, background: "rgba(255,255,255,0.05)",
+              height: 62, borderRadius: 10, background: "rgba(255,255,255,0.05)",
               animation: `fb-pulse 1.4s ease-in-out infinite ${i * 0.1}s`,
             }} />
           ))}
         </div>
       ) : cards.length === 0 ? (
-        <p style={{ fontFamily: MONO, fontSize: "11px", color: INK2, margin: 0, lineHeight: 1.6 }}>
-          Todavía no hay cartas publicadas cerca de ti.
-        </p>
+        <div className="tl-vacio">
+          <Store size={20} color={INK2} strokeWidth={1.5} />
+          <p>Todavía no hay cartas publicadas cerca de ti. Publica una desde tu inventario.</p>
+        </div>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div className="tl-lista">
           {cards.map((c, i) => {
             // Los listings viejos guardan solo el número de carta, los nuevos
             // el id completo "NNN:Nombre:Versión"
@@ -156,65 +150,82 @@ export function TopLocalCards() {
               ?? pool.find(pc => String(pc.card_number) === String(c.card_id));
             const name = card?.name?.trim() || String(c.card_id).split(":")[1] || "Carta";
             const version = c.version ?? card?.version ?? "";
+            /* "SV7 · 104/142": el código del set y el número, como viene impreso en la carta. */
+            const codigo = SCRYDEX_SET_CODES[c.set_id]?.toUpperCase();
+            const numero = card?.card_number ?? String(c.card_id).split(":")[0];
+            const total = SET_CARD_COUNT[c.set_id];
+            const linea = codigo
+              ? `${codigo} · ${numero}${total ? `/${total}` : ""}`
+              : version ? getVersionLabel(version) : `${c.listings} en venta`;
+            const precio = `${CURRENCY_SYMBOL[c.currency] ?? "$"}${formatPrice(c.topPrice, c.currency)}`;
             return (
-              <Link key={c.key} href="/market" className="top-local-row" style={{
-                display: "flex", alignItems: "center", gap: 10,
-                padding: "7px 9px", borderRadius: 10, textDecoration: "none",
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.06)",
-              }}>
-                <span style={{
-                  fontFamily: DISP, fontSize: 13, color: i === 0 ? LIME : INK2,
-                  width: 14, textAlign: "center", flexShrink: 0,
-                }}>{i + 1}</span>
+              <Link key={c.key} href="/market" className="tl-fila">
+                <span className="tl-puesto">{i + 1}</span>
 
                 {card?.image
-                  ? <img src={fotoChica(card.image)} alt="" loading="lazy" style={{
-                      width: 30, aspectRatio: "5/7", objectFit: "contain",
-                      borderRadius: 4, flexShrink: 0,
-                    }} />
-                  : <div style={{
-                      width: 30, aspectRatio: "5/7", borderRadius: 4, flexShrink: 0,
-                      background: "rgba(255,255,255,0.06)",
-                    }} />}
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  ? <img src={fotoChica(card.image)} alt="" loading="lazy" decoding="async" className="tl-foto" />
+                  : <div className="tl-foto" />}
 
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{
-                    fontFamily: MONO, fontSize: 11, color: INK0, margin: 0,
-                    overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                  }} title={name}>{name}</p>
-                  <p style={{ fontFamily: MONO, fontSize: 9, color: INK2, margin: 0 }}>
-                    {version ? getVersionLabel(version) : "—"} · {c.listings} en venta
-                  </p>
+                  <p className="tl-nombre" title={name}>{name}</p>
+                  <p className="tl-set">{linea}</p>
+                  {enFila && <p className="tl-precio">{precio}</p>}
                 </div>
 
-                <span style={{
-                  fontFamily: MONO, fontSize: 10, fontWeight: 700, color: COURT,
-                  flexShrink: 0, whiteSpace: "nowrap",
-                }}>
-                  {CURRENCY_SYMBOL[c.currency] ?? "$"}{formatPrice(c.topPrice, c.currency)}
-                </span>
+                {!enFila && <span className="tl-precio">{precio}</span>}
               </Link>
             );
           })}
         </div>
       )}
 
-      <Link href="/market" style={{
-        marginTop: 14, textAlign: "center", padding: "9px",
-        borderRadius: 9, textDecoration: "none",
-        border: `1px solid ${LIME}33`, background: `${LIME}0e`, color: LIME,
-        fontFamily: MONO, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase",
-      }}>
-        Ir al market local →
-      </Link>
-
       <style>{`
-        .top-local-row { transition: border-color 0.15s, background 0.15s; }
-        .top-local-row:hover {
-          border-color: ${LIME}44 !important;
-          background: rgba(214,255,61,0.06) !important;
+        .tl-caja { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 16px; padding: 20px; display: flex; flex-direction: column; min-width: 0; }
+        .tl-cabeza { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+        .tl-titulo { font-family: ${MONO}; font-size: 10px; color: ${INK2}; letter-spacing: 0.2em;
+          text-transform: uppercase; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tl-vertodas { margin-left: auto; flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px;
+          font-family: ${MONO}; font-size: 11px; color: ${COURT}; text-decoration: none;
+          border: 1px solid ${COURT}44; border-radius: 8px; padding: 6px 12px;
+          transition: background 0.15s; }
+        .tl-vertodas:hover { background: ${COURT}14; }
+        .tl-lista { display: flex; flex-direction: column; }
+        .tl-fila { display: flex; align-items: center; gap: 12px; padding: 9px 6px;
+          text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.06);
+          border-radius: 8px; transition: background 0.15s; }
+        .tl-fila:last-child { border-bottom: none; }
+        .tl-fila:hover { background: rgba(255,255,255,0.04); }
+        .tl-puesto { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          font-family: ${DISP}; font-size: 12px; color: ${INK0};
+          border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03); }
+        .tl-fila:first-child .tl-puesto { color: ${LIME}; border-color: ${LIME}66; }
+        .tl-foto { width: 38px; aspect-ratio: 5 / 7; object-fit: cover; border-radius: 4px;
+          flex-shrink: 0; background: rgba(255,255,255,0.06); }
+        .tl-nombre { font-family: ${MONO}; font-size: 12px; font-weight: 600; color: ${INK0}; margin: 0;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tl-set { font-family: ${MONO}; font-size: 10px; color: ${INK2}; margin: 3px 0 0;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tl-precio { font-family: ${DISP}; font-size: 14px; color: ${COURT}; flex-shrink: 0; white-space: nowrap; }
+        /* A lo ancho: cinco tarjetas en fila, con el precio debajo del nombre. */
+        .tl-caja.fila .tl-lista { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+        .tl-caja.fila .tl-fila { border: 1px solid rgba(255,255,255,0.07); border-radius: 12px;
+          background: rgba(255,255,255,0.02); padding: 10px; gap: 10px; }
+        .tl-caja.fila .tl-fila:last-child { border-bottom: 1px solid rgba(255,255,255,0.07); }
+        .tl-caja.fila .tl-fila:hover { border-color: ${COURT}44; }
+        .tl-caja.fila .tl-foto { width: 48px; }
+        .tl-caja.fila .tl-precio { margin: 6px 0 0; }
+        @media (max-width: 1500px) {
+          .tl-caja.fila .tl-puesto { width: 22px; height: 22px; font-size: 11px; }
         }
+        @media (max-width: 1023px) {
+          .tl-caja.fila .tl-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+        }
+        .tl-vacio { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
+          border: 1px dashed rgba(255,255,255,0.12); border-radius: 12px; padding: 24px 16px; }
+        .tl-vacio p { font-family: ${MONO}; font-size: 11px; color: ${INK2}; margin: 0; line-height: 1.6; }
       `}</style>
     </div>
   );

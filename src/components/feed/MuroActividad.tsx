@@ -24,7 +24,7 @@ import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { fotoChica } from "@/lib/foto-carta";
 import { formatPrice, CURRENCY_SYMBOL } from "@/lib/currency";
 import { ESTILOS_MURO } from "./estilos";
-import { Activity, Store, BookSearch, MessageCircle, Send, X } from "lucide-react";
+import { ArrowRight, Store, BookSearch, MessageCircle, Send, X } from "lucide-react";
 
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
@@ -216,9 +216,9 @@ export function MuroActividad() {
   return (
     <section className="mu-caja">
       <header className="mu-cabeza">
-        <Activity size={14} color={LIME} strokeWidth={1.8} />
-        <h2 className="mu-titulo">Qué está pasando</h2>
-        <Link href="/dashboard/market" className="mu-vertodo">Al market →</Link>
+        <Store size={18} color={COURT} strokeWidth={1.6} />
+        <h2 className="mu-titulo ma-titulo">Actividad <span style={{ color: COURT }}>del mercado</span></h2>
+        <Link href="/market" className="ma-vertodas">Ver todas <ArrowRight size={12} aria-hidden /></Link>
       </header>
 
       <div className="mu-lista">
@@ -512,6 +512,12 @@ function haceCuanto(cuando: string): string {
 }
 
 const ESTILOS = `
+  .ma-titulo { font-size: 10px; letter-spacing: 0.2em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ma-vertodas { margin-left: auto; flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px;
+    font-family: ${MONO}; font-size: 11px; color: ${COURT}; text-decoration: none;
+    border: 1px solid ${COURT}44; border-radius: 8px; padding: 6px 12px; transition: background 0.15s; }
+  .ma-vertodas:hover { background: ${COURT}14; }
+
   /* El color dice de qué se trata antes de leer nada: verde lo que está en
      venta, amarillo lo que alguien busca. */
   .ma-post { border: 1px solid rgba(255,255,255,0.06); border-left-width: 3px;

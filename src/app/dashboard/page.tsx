@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useSyncExternalStore } from "react";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { useDashboardUser } from "./DashboardUserContext";
@@ -9,25 +9,21 @@ import { useErrorDeCarga } from "@/hooks/useErrorDeCarga";
 import { PortfolioChart, type Snapshot, type HourlySnapshot } from "@/components/PortfolioChart";
 import { TopLocalCards } from "@/components/TopLocalCards";
 import { MuroActividad } from "@/components/feed/MuroActividad";
+import { usePushPermission } from "@/hooks/usePushPermission";
 import { MuroNoticias } from "@/components/feed/MuroNoticias";
-import { X } from "lucide-react";
+import { BuscadorPanel } from "@/components/dashboard/BuscadorPanel";
+import Link from "next/link";
+import { Bell, Check, ChevronRight, Plus, RectangleVertical, Smartphone, TrendingDown, TrendingUp, Users, X } from "lucide-react";
 
 const COURT = "#2ee6c1";
 const BG0   = "#05070d";
 const INK0  = "#f5f7fb";
 const INK1  = "#c9cfdd";
 const INK2  = "#7a8298";
+const ROJO  = "#ff5d5d";
 const MONO  = "var(--font-jetbrains)";
 const DISP  = "var(--font-archivo)";
 
-
-function formatCOP(n: number) {
-  return "$" + n.toLocaleString("es-CO") + " COP";
-}
-
-function formatUSD(n: number) {
-  return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " USD";
-}
 
 /* ── Followers popup with infinite scroll ── */
 interface Follower {
@@ -135,160 +131,206 @@ function FollowersPopup({ userId, onClose }: { userId: string; onClose: () => vo
   );
 }
 
-/* ── PWA Install Widget ── */
-function InstallWidget() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isIOS, setIsIOS]                   = useState(false);
-  const [isInstalled, setIsInstalled]       = useState(false);
-  const [showIOSGuide, setShowIOSGuide]     = useState(false);
-  const [notifState, setNotifState]         = useState<NotificationPermission | "unsupported">("unsupported");
-  const [subscribing, setSubscribing]       = useState(false);
-  const [subscribed, setSubscribed]         = useState(false);
+/* ── Tarjeta de dato de arriba ── */
+
+/** Línea chiquita de los últimos 30 días, sin ejes: solo la forma. */
+function Sparkline({ valores }: { valores: number[] }) {
+  if (valores.length < 2) return null;
+  const W = 96, H = 34;
+  const min = Math.min(...valores), max = Math.max(...valores);
+  const rango = max - min || 1;
+  const x = (i: number) => (i / (valores.length - 1)) * W;
+  const y = (v: number) => H - 3 - ((v - min) / rango) * (H - 6);
+  const linea = valores.map((v, i) => `${x(i)},${y(v)}`).join(" ");
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} className="kp-spark" aria-hidden>
+      <defs>
+        <linearGradient id="kp-spark-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={COURT} stopOpacity="0.3" />
+          <stop offset="100%" stopColor={COURT} stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path d={`M0,${H} L${linea.replace(/ /g, " L")} L${W},${H} Z`} fill="url(#kp-spark-grad)" />
+      <polyline points={linea} fill="none" stroke={COURT} strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function Variacion({ sube, children }: { sube: boolean; children: React.ReactNode }) {
+  return (
+    <span className="kp-var" style={{ color: sube ? COURT : ROJO }}>
+      {sube ? <TrendingUp size={12} aria-hidden /> : <TrendingDown size={12} aria-hidden />}
+      {children}
+    </span>
+  );
+}
+
+function Kpi({ Icono, rotulo, valor, pie, spark, href, onClick }: {
+  Icono: typeof Users; rotulo: string; valor: React.ReactNode; pie: React.ReactNode;
+  spark?: number[]; href?: string; onClick?: () => void;
+}) {
+  const flecha = <ChevronRight size={15} aria-hidden />;
+  return (
+    <div className="kp-card">
+      <Icono size={26} color={COURT} strokeWidth={1.5} className="kp-icono" aria-hidden />
+      <div className="kp-cuerpo">
+        <p className="kp-rotulo">{rotulo}</p>
+        <p className="kp-valor">{valor}</p>
+        <p className="kp-pie">{pie}</p>
+      </div>
+      {href
+        ? <Link href={href} className="kp-ir" aria-label={rotulo}>{flecha}</Link>
+        : <button onClick={onClick} className="kp-ir" aria-label={rotulo}>{flecha}</button>}
+      {spark && <Sparkline valores={spark} />}
+    </div>
+  );
+}
+
+/* ── Instalar la app ── */
+
+/** El aviso de instalación que Chrome guarda para cuando se lo pida. */
+interface AvisoInstalar extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<unknown>;
+}
+
+const sinSuscripcion = () => () => {};
+/** Abierta como app (desde el ícono del inicio) y no desde el navegador. */
+const enModoApp = () => window.matchMedia("(display-mode: standalone)").matches
+  || (navigator as Navigator & { standalone?: boolean }).standalone === true;
+
+const PASOS: Record<"ios" | "android", { titulo: string; pasos: string[] }> = {
+  ios: {
+    titulo: "Instalar en iPhone",
+    pasos: [
+      "Abre facebinder.com en Safari (no en Chrome ni en otro navegador).",
+      "Toca el botón Compartir, el cuadrado con la flecha hacia arriba.",
+      "Elige «Agregar a pantalla de inicio».",
+      "Toca «Agregar» arriba a la derecha.",
+    ],
+  },
+  android: {
+    titulo: "Instalar en Android",
+    pasos: [
+      "Abre facebinder.com en Chrome.",
+      "Toca el menú de los tres puntos, arriba a la derecha.",
+      "Elige «Instalar app» o «Agregar a la pantalla principal».",
+      "Confirma con «Instalar».",
+    ],
+  },
+};
+
+function InstalarApp() {
+  /* Se lee del navegador sin efecto: en el servidor da "no instalada" y en el
+     cliente el valor real, sin pasar por un setState al montar. */
+  const instalada = useSyncExternalStore(sinSuscripcion, enModoApp, () => false);
+  const { permissionState, requestPermission } = usePushPermission();
+  const [aviso, setAviso] = useState<AvisoInstalar | null>(null);
+  const [guia, setGuia] = useState<"ios" | "android" | null>(null);
+  const [activando, setActivando] = useState(false);
 
   useEffect(() => {
-    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-    setIsIOS(ios);
-    if (window.matchMedia("(display-mode: standalone)").matches) setIsInstalled(true);
-    if ("Notification" in window) setNotifState(Notification.permission);
-    const handler = (e: Event) => { e.preventDefault(); setDeferredPrompt(e); };
-    window.addEventListener("beforeinstallprompt", handler);
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+    const guardar = (e: Event) => { e.preventDefault(); setAviso(e as AvisoInstalar); };
+    window.addEventListener("beforeinstallprompt", guardar);
+    return () => window.removeEventListener("beforeinstallprompt", guardar);
   }, []);
 
-  async function handleInstall() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      setDeferredPrompt(null);
-    } else if (isIOS) {
-      setShowIOSGuide(true);
-    }
-  }
+  /* En Android, si Chrome ya ofreció instalar, se instala directo; si no
+     (otro navegador, o ya la rechazó), se muestran los pasos. */
+  const android = async () => {
+    if (!aviso) { setGuia("android"); return; }
+    await aviso.prompt();
+    await aviso.userChoice;
+    setAviso(null);
+  };
 
-  async function handleActivarNotifs() {
-    if (!("Notification" in window) || !("serviceWorker" in navigator)) return;
-    setSubscribing(true);
-    try {
-      // Limpiar dismiss anterior
-      localStorage.removeItem("push_permission_dismissed");
-
-      const result = await Notification.requestPermission();
-      setNotifState(result);
-
-      if (result === "granted") {
-        const registration = await navigator.serviceWorker.ready;
-        const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-        if (!vapidKey) return;
-
-        // Cancelar suscripción anterior si existe
-        const existingSub = await registration.pushManager.getSubscription();
-        if (existingSub) await existingSub.unsubscribe();
-
-        const padding = "=".repeat((4 - (vapidKey.length % 4)) % 4);
-        const base64 = (vapidKey + padding).replace(/-/g, "+").replace(/_/g, "/");
-        const raw = window.atob(base64);
-        const key = new Uint8Array(raw.length);
-        for (let i = 0; i < raw.length; i++) key[i] = raw.charCodeAt(i);
-
-        const subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: key.buffer as ArrayBuffer,
-        });
-
-        await fetch("/api/push/subscribe", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(subscription),
-        });
-
-        setSubscribed(true);
-      }
-    } catch (e) {
-      console.error("[Push]", e);
-    } finally {
-      setSubscribing(false);
-    }
-  }
-
-  const showNotifButton = isInstalled && notifState !== "unsupported" && notifState !== "denied";
+  const activar = async () => {
+    setActivando(true);
+    try { await requestPermission(); } finally { setActivando(false); }
+  };
 
   return (
-    <>
-      <div style={{ display: "flex", flexDirection: "column", height: "100%", gap: "12px" }}>
-        <div>
-          <p style={{ fontFamily: MONO, fontSize: "9px", color: INK2, letterSpacing: "0.18em", textTransform: "uppercase", margin: "0 0 6px" }}>
-            {isInstalled ? "App instalada" : "Instalar app"}
-          </p>
-          <p style={{ fontFamily: DISP, fontSize: "18px", color: INK0, margin: "0 0 4px" }}>
-            {isIOS ? "Guardar en iOS" : "Instalar en Android"}
-          </p>
-          <p className="st-pie">
-            {isInstalled ? "App instalada correctamente" : "Accede como app nativa desde tu inicio"}
-          </p>
-        </div>
-        {/* minHeight = alto de un botón (34px). Los botones se deciden después
-            de hidratar (beforeinstallprompt, display-mode, Notification) y sin
-            el hueco reservado la tarjeta crece y empuja todo el panel. */}
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: "auto", minHeight: "34px" }}>
-          {!isInstalled && (
-            <button onClick={handleInstall} style={{
-              padding: "9px 16px", borderRadius: "9px",
-              background: `linear-gradient(90deg, ${COURT}, #d6ff3d)`,
-              border: "none", cursor: "pointer",
-              fontFamily: MONO, fontSize: "11px", fontWeight: 700, color: BG0,
-              letterSpacing: "0.08em",
-            }}>
-              {isIOS ? "Ver instrucciones" : "Instalar →"}
-            </button>
-          )}
-          {showNotifButton && (
-            <button onClick={handleActivarNotifs} disabled={subscribing || subscribed || notifState === "granted"} style={{
-              padding: "9px 16px", borderRadius: "9px",
-              background: subscribed || notifState === "granted" ? "rgba(46,230,193,0.1)" : "rgba(46,230,193,0.15)",
-              border: `1px solid ${subscribed || notifState === "granted" ? "rgba(46,230,193,0.4)" : "rgba(46,230,193,0.3)"}`,
-              cursor: subscribing || subscribed || notifState === "granted" ? "default" : "pointer",
-              fontFamily: MONO, fontSize: "11px", fontWeight: 600, color: COURT,
-              letterSpacing: "0.06em", transition: "opacity 0.2s",
-              opacity: subscribing ? 0.6 : 1,
-            }}>
-              {subscribing ? "Activando..." : subscribed || notifState === "granted" ? "✓ Notificaciones activas" : "Activar notificaciones"}
-            </button>
-          )}
-        </div>
+    <div className="kp-card">
+      <Smartphone size={26} color={COURT} strokeWidth={1.5} className="kp-icono" aria-hidden />
+      <div className="kp-cuerpo" style={{ paddingRight: 0 }}>
+        <p className="kp-rotulo">{instalada ? "App instalada" : "Instalar la app"}</p>
+        {instalada ? (
+          <>
+            <p className="kp-pie" style={{ paddingRight: 0 }}>Ya la estás usando como app.</p>
+            {permissionState === "granted" ? (
+              <p className="kp-var" style={{ color: COURT, fontFamily: MONO, fontSize: 11, marginTop: 10 }}>
+                <Check size={12} aria-hidden /> Notificaciones activas
+              </p>
+            ) : permissionState === "default" && (
+              <div className="ia-botones">
+                <button className="ia-boton" onClick={activar} disabled={activando}>
+                  <Bell size={13} aria-hidden /> {activando ? "Activando…" : "Activar notificaciones"}
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <p className="kp-pie" style={{ paddingRight: 0 }}>Tenla en tu inicio, como una app.</p>
+            <div className="ia-botones">
+              <button className="ia-boton" onClick={() => setGuia("ios")}>
+                <Smartphone size={13} aria-hidden /> iPhone
+              </button>
+              <button className="ia-boton" onClick={android}>
+                <Smartphone size={13} aria-hidden /> Android
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
-      {/* iOS guide modal */}
-      {showIOSGuide && (
-        <div onClick={() => setShowIOSGuide(false)} style={{ position: "fixed", inset: 0, zIndex: 300, background: "rgba(5,7,13,0.85)", backdropFilter: "blur(8px)", display: "flex", alignItems: "flex-end", justifyContent: "center", padding: "20px" }}>
-          <div onClick={e => e.stopPropagation()} style={{ width: "min(400px, 92vw)", background: "#0a0e1a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "20px", padding: "28px 24px" }}>
-            <p style={{ fontFamily: DISP, fontSize: "18px", color: INK0, margin: "0 0 16px" }}>Agregar a inicio en iPhone</p>
-            {[
-              { n: "1", t: "Abre Safari (no Chrome ni otro navegador)" },
-              { n: "2", t: 'Toca el botón Compartir ↑ en la barra inferior' },
-              { n: "3", t: '"Agregar a pantalla de inicio"' },
-              { n: "4", t: 'Toca "Agregar" en la esquina superior derecha' },
-            ].map(s => (
-              <div key={s.n} style={{ display: "flex", gap: "12px", marginBottom: "12px" }}>
-                <span style={{ fontFamily: MONO, fontSize: "11px", color: COURT, letterSpacing: "0.1em", flexShrink: 0 }}>{s.n}.</span>
-                <span style={{ fontFamily: MONO, fontSize: "11px", color: INK1, lineHeight: 1.6 }}>{s.t}</span>
+      {guia && (
+        <div onClick={() => setGuia(null)} className="ia-fondo" role="dialog" aria-label={PASOS[guia].titulo}>
+          <div onClick={e => e.stopPropagation()} className="ia-guia">
+            <p style={{ fontFamily: DISP, fontSize: 18, color: INK0, margin: "0 0 16px", display: "flex", alignItems: "center", gap: 10 }}>
+              <Smartphone size={18} color={COURT} aria-hidden /> {PASOS[guia].titulo}
+            </p>
+            {PASOS[guia].pasos.map((t, i) => (
+              <div key={i} style={{ display: "flex", gap: 12, marginBottom: 12 }}>
+                <span style={{ fontFamily: MONO, fontSize: 11, color: COURT, flexShrink: 0 }}>{i + 1}.</span>
+                <span style={{ fontFamily: MONO, fontSize: 11, color: INK1, lineHeight: 1.6 }}>{t}</span>
               </div>
             ))}
-            <button onClick={() => setShowIOSGuide(false)} style={{ marginTop: "8px", width: "100%", padding: "10px", borderRadius: "10px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: INK2, fontFamily: MONO, fontSize: "11px", cursor: "pointer" }}>Cerrar</button>
+            <button onClick={() => setGuia(null)} className="ia-cerrar">Cerrar</button>
           </div>
         </div>
       )}
-    </>
+
+      <style>{`
+        .ia-botones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .ia-boton { display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+          padding: 7px 12px; border-radius: 9px; font-family: ${MONO}; font-size: 11px; font-weight: 600;
+          color: ${COURT}; background: ${COURT}14; border: 1px solid ${COURT}55;
+          transition: background 0.15s; }
+        .ia-boton:hover { background: ${COURT}26; }
+        .ia-boton:disabled { opacity: 0.6; cursor: default; }
+        .ia-fondo { position: fixed; inset: 0; z-index: 300; background: rgba(5,7,13,0.85);
+          display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .ia-guia { width: min(400px, 92vw); background: #0a0e1a; border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 20px; padding: 28px 24px; }
+        .ia-cerrar { margin-top: 8px; width: 100%; padding: 10px; border-radius: 10px; cursor: pointer;
+          background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+          color: ${INK2}; font-family: ${MONO}; font-size: 11px; }
+        @media (max-width: 767px) {
+          .ia-boton { padding: 6px 9px; font-size: 10px; }
+        }
+      `}</style>
+    </div>
   );
 }
 
 /* ── Main page ── */
 export default function DashboardHome() {
   const supabase = createClient();
-  const { userId: ctxUserId } = useDashboardUser();
+  const { userId: ctxUserId, username } = useDashboardUser();
   const [userId,          setUserId]          = useState<string | null>(null);
   const [followerCount,   setFollowerCount]   = useState<number | null>(null);
-  const [stockTotal,      setStockTotal]      = useState<number | null>(null);
-  const [cardCount,       setCardCount]       = useState<number | null>(null);
+  const [seguidoresSemana, setSeguidoresSemana] = useState<number | null>(null);
   const [showFollowers,   setShowFollowers]   = useState(false);
   const [snapshots,       setSnapshots]       = useState<Snapshot[]>([]);
   const [hourlySnapshots, setHourlySnapshots] = useState<HourlySnapshot[]>([]);
@@ -307,9 +349,11 @@ export default function DashboardHome() {
     (async () => {
       setUserId(ctxUserId);
       const todayUTC = new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" }); // YYYY-MM-DD en hora Colombia
+      const haceUnaSemana = new Date(Date.now() - 7 * 86400000).toISOString();
 
-      const [{ count: seguidores }, { data: snaps }, { data: hourly }, valor] = await Promise.all([
+      const [{ count: seguidores }, { count: nuevos }, { data: snaps }, { data: hourly }, valor] = await Promise.all([
         supabase.from("follows").select("follower_id", { count: "exact", head: true }).eq("following_id", ctxUserId),
+        supabase.from("follows").select("follower_id", { count: "exact", head: true }).eq("following_id", ctxUserId).gte("created_at", haceUnaSemana),
         supabase.from("portfolio_snapshots").select("date, total_usd, card_count").eq("user_id", ctxUserId).order("date", { ascending: false }).limit(366),
         supabase.from("portfolio_hourly_snapshots").select("hour_bucket, total_usd, card_count").eq("user_id", ctxUserId).gte("hour_bucket", `${todayUTC}T00:00:00Z`).order("hour_bucket", { ascending: true }),
         valorActualDe(supabase, ctxUserId),
@@ -317,210 +361,207 @@ export default function DashboardHome() {
       if (cancelado) return;
 
       setFollowerCount(seguidores ?? 0);
+      setSeguidoresSemana(nuevos ?? 0);
       setSnapshots(snaps ?? []);
       setHourlySnapshots(hourly ?? []);
       setValorActual(valor);
-      setStockTotal(valor?.total_usd ?? 0);
-      setCardCount(valor?.copias ?? 0);
       setChartLoading(false);
     })().catch(e => { if (!cancelado) fallar(e); });
     return () => { cancelado = true; };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctxUserId]);
 
+  /* ── Lo que dicen las tarjetas de arriba, sacado del mismo historial ── */
+  const hoy = new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" });
+  const corte = new Date(`${hoy}T12:00:00Z`);
+  corte.setUTCDate(corte.getUTCDate() - 30);
+  const hace30 = corte.toISOString().slice(0, 10);
+  const inicioMes = hoy.slice(0, 8) + "01";
+  const total = valorActual?.total_usd ?? (chartLoading ? null : 0);
+
+  // Un punto por día de los últimos 30, y el de hoy con el valor de ahora.
+  const serie30 = snapshots
+    .filter(s => s.date >= hace30 && s.date !== hoy)
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map(s => s.total_usd);
+  if (total) serie30.push(total);
+  const delta30 = serie30.length >= 2 && serie30[0] > 0 ? serie30[serie30.length - 1] - serie30[0] : null;
+  const pct30 = delta30 != null ? (delta30 / serie30[0]) * 100 : null;
+
+  /* Las cartas del mes se comparan contra el mismo conteo de la base (el del
+     último cierre antes del día 1), no contra el de `valorActualDe`: ese suma
+     también los sets sin precio y la resta daría cartas que nadie agregó. */
+  const conteoAhora = hourlySnapshots.length
+    ? hourlySnapshots[hourlySnapshots.length - 1].card_count
+    : snapshots[0]?.card_count;
+  const conteoMes = snapshots.find(s => s.date < inicioMes)?.card_count;
+  const cartasMes = conteoAhora != null && conteoMes != null ? conteoAhora - conteoMes : null;
+
+  const fmtNum = (n: number) => n.toLocaleString("es-CO");
 
   return (
-    <div className="dash-home-wrap" style={{ minHeight: "100vh" }}>
+    <div className="dh-page">
       <style>{`
-        .dash-home-wrap { padding: 24px; }
-        @media (min-width: 768px) and (pointer: fine) { .dash-home-wrap { padding: 48px; } }
-        .st-card { background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
-          padding: 24px; display: flex; flex-direction: column; gap: 10px; }
-        .st-rotulo { font-family: ${MONO}; font-size: 9px; color: ${INK2};
-          letter-spacing: 0.18em; text-transform: uppercase; margin: 0; }
-        .st-numero { font-family: ${DISP}; font-size: clamp(28px, 5vw, 40px);
-          color: ${INK0}; margin: 0; line-height: 1; }
-        /* El valor llega del cliente y pasa de "—" a "$1.234,56 USD", que
-           envuelve: sin el hueco reservado la tarjeta crece y empuja el panel. */
-        .st-plata { font-size: clamp(22px, 4vw, 32px); color: ${COURT};
-          line-height: 1.1; min-height: 2.2em; }
-        .st-pie { font-family: ${MONO}; font-size: 10px; color: ${INK2};
-          margin: 0; line-height: 1.5; }
-        .st-accion { margin-top: auto; align-self: flex-start; font-family: ${MONO};
-          font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
-          color: ${COURT}; background: none; border: 1px solid ${COURT}44;
-          border-radius: 7px; padding: 6px 14px; cursor: pointer; }
+        .dh-page { background: ${BG0}; min-height: 100vh; padding: 40px 24px; }
+        .dh-wrap { display: flex; flex-direction: column; gap: 16px; }
+        @media (max-width: 767px) { .dh-page { padding: 28px 16px; } .dh-wrap { gap: 12px; } }
 
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: 16px;
-          margin-bottom: 40px;
-        }
-        @media (max-width: 900px), (pointer: coarse) {
-          .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
-            margin-bottom: 24px; }
-
-          /* En el celular estas cuatro tarjetas son un dato y poco más: lo que
-             importa está debajo. Se aprietan todo lo que se puede sin que el
-             número pierda protagonismo. */
-          .st-card { padding: 12px 13px; gap: 4px; border-radius: 13px; }
-          .st-rotulo { font-size: 8.5px; letter-spacing: 0.14em; }
-          .st-numero { font-size: 26px; }
-          /* El valor en dólares entra en una línea con esta letra, así que ya
-             no hace falta reservarle dos. */
-          .st-plata { font-size: 19px; min-height: 0; }
-          .st-pie { font-size: 9px; line-height: 1.4; }
-          .st-accion { padding: 4px 10px; font-size: 9px; margin-top: 2px; }
-
-        }
-        @media (max-width: 480px) {
-          .stats-grid { grid-template-columns: 1fr 1fr; }
-        }
-        /* El tablero: los datos propios a la izquierda y los dos muros al
-           costado, cada uno a lo alto de la columna. */
-        .dash-tablero { display: grid; gap: 16px;
-          grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr);
-          align-items: stretch; }
-        .dash-izq { min-width: 0; display: flex; flex-direction: column; }
-
-
-        /* Debajo de 1500px tres columnas dejan los muros ilegibles: bajan a lo
-           ancho, de a dos. */
-        @media (max-width: 1500px) {
-          .dash-tablero { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-          .dash-izq { grid-column: 1 / -1; }
-        }
-        /* Y en el celular, uno debajo del otro. */
-        @media (max-width: 1023px), (pointer: coarse) {
-          .dash-tablero { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+        /* ── Cabecera con el arte de fondo ── */
+        .dh-hero { position: relative; overflow: hidden; border-radius: 18px;
+          padding: 28px 28px 30px; display: flex; align-items: flex-end;
+          justify-content: space-between; gap: 20px; flex-wrap: wrap;
+          border: 1px solid rgba(255,255,255,0.06); background: #070a12; }
+        /* El arte se apaga hacia la izquierda, donde va el texto, y hacia
+           abajo, para que la cabecera se funda con el resto del panel. */
+        .dh-hero-arte { position: absolute; inset: 0; pointer-events: none;
+          background: url(/covers/megaevo.webp) right center / cover no-repeat;
+          opacity: 0.5;
+          -webkit-mask-image: linear-gradient(to left, #000 15%, transparent 85%);
+                  mask-image: linear-gradient(to left, #000 15%, transparent 85%); }
+        .dh-hero-arte::after { content: ""; position: absolute; inset: 0;
+          background: linear-gradient(to bottom, transparent 40%, #070a12 100%); }
+        .dh-hero > *:not(.dh-hero-arte) { position: relative; }
+        .dh-ante { font-family: ${MONO}; font-size: 11px; letter-spacing: 0.22em;
+          text-transform: uppercase; color: ${COURT}; display: flex; align-items: center;
+          gap: 10px; margin: 0 0 12px; }
+        .dh-ante::before { content: ""; width: 22px; height: 1px; background: ${COURT}; }
+        .dh-titulo { font-family: ${DISP}; font-size: clamp(22px, 4vw, 32px); color: ${INK0};
+          margin: 0; line-height: 1.15; overflow-wrap: anywhere; }
+        .dh-bajada { font-family: ${MONO}; font-size: 11px; color: ${INK2}; margin: 8px 0 0; }
+        .dh-acciones { display: flex; align-items: center; gap: 12px; flex: 1 1 380px;
+          justify-content: flex-end; min-width: 0; }
+        .dh-registrar { display: inline-flex; align-items: center; gap: 8px; height: 44px;
+          padding: 0 18px; border-radius: 12px; flex-shrink: 0; text-decoration: none;
+          background: ${COURT}; color: ${BG0}; font-family: ${MONO}; font-size: 12px; font-weight: 700;
+          box-shadow: 0 0 24px ${COURT}40; transition: box-shadow 0.15s; }
+        .dh-registrar:hover { box-shadow: 0 0 32px ${COURT}70; }
+        @media (max-width: 767px) {
+          .dh-hero { padding: 22px 16px; }
+          .dh-acciones { flex-basis: 100%; }
+          .dh-registrar { padding: 0 14px; }
         }
 
-        /* Con los muros al costado, la columna izquierda queda angosta: las
-           cuatro tarjetas se acomodan de a dos y el gráfico deja de compartir
-           renglón con el top de ventas. */
+        /* ── Las cuatro tarjetas de datos ── */
+        .kp-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+        @media (max-width: 1240px) { .kp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 767px)  { .kp-grid { gap: 10px; } }
+        .kp-card { position: relative; display: flex; gap: 14px; min-width: 0;
+          padding: 18px 18px 16px; border-radius: 16px;
+          background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); }
+        .kp-icono { flex-shrink: 0; margin-top: 2px; }
+        .kp-cuerpo { min-width: 0; flex: 1; padding-right: 30px; }
+        .kp-rotulo { font-family: ${MONO}; font-size: 9px; color: ${INK2}; letter-spacing: 0.2em;
+          text-transform: uppercase; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .kp-valor { font-family: ${DISP}; font-size: clamp(22px, 2.4vw, 30px); color: ${INK0};
+          margin: 8px 0 0; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        /* El pie deja lugar a la línea de la derecha. */
+        .kp-pie { font-family: ${MONO}; font-size: 11px; color: ${INK2}; margin: 8px 0 0;
+          min-height: 1.4em; padding-right: 70px; }
+        .kp-var { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+        .kp-ir { position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; border-radius: 50%;
+          display: flex; align-items: center; justify-content: center; cursor: pointer;
+          color: ${INK1}; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+          transition: border-color 0.15s, color 0.15s; }
+        .kp-ir:hover { border-color: ${COURT}66; color: ${COURT}; }
+        .kp-spark { position: absolute; right: 16px; bottom: 14px; }
 
-        .portfolio-row {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 16px;
-          margin-bottom: 40px;
+        /* En el celular: el icono arriba, más apretado, y sin la línea. */
+        @media (max-width: 767px) {
+          .kp-card { flex-direction: column; gap: 8px; padding: 13px; border-radius: 13px; }
+          .kp-icono { width: 20px; height: 20px; }
+          .kp-cuerpo { padding-right: 0; }
+          .kp-rotulo { font-size: 8.5px; letter-spacing: 0.14em; }
+          .kp-valor { font-size: 20px; margin-top: 5px; }
+          .kp-pie { font-size: 9.5px; padding-right: 0; margin-top: 5px; }
+          .kp-ir { top: 10px; right: 10px; width: 26px; height: 26px; }
+          .kp-spark { display: none; }
         }
-        @media (min-width: 1100px) and (pointer: fine) {
-          .portfolio-row { grid-template-columns: minmax(0, 1fr) 320px; }
+
+        /* ── El tablero: gráfico, actividad y top a la izquierda; noticias al costado ── */
+        .dh-tablero { display: grid; gap: 16px;
+          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.95fr);
+          grid-template-areas: "graf act noti" "top top noti"; }
+        .dh-graf { grid-area: graf; min-width: 0; display: flex; flex-direction: column;
+          background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 16px; padding: 20px 22px; }
+        .dh-graf > * { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+        .dh-top  { grid-area: top; min-width: 0; }
+        /* Los dos muros no estiran el tablero: la actividad toma el alto del
+           gráfico, las noticias el de las dos filas, y se recorren por dentro.
+           Sin esto cada publicación nueva alargaba la fila entera. */
+        .dh-act  { grid-area: act;  min-width: 0; min-height: 0; contain: size; }
+        .dh-noti { grid-area: noti; min-width: 0; min-height: 0; contain: size; }
+        .dh-act .mu-caja, .dh-noti .mu-caja { padding: 20px; }
+
+        @media (max-width: 1240px) {
+          .dh-tablero { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            grid-template-areas: "graf graf" "act noti" "top top"; }
+          .dh-act, .dh-noti { contain: none; }
         }
-
-        /* En monitor ancho el panel entra entero en la pantalla: la página no
-           se desplaza y cada columna se recorre por dentro. Es lo que deja las
-           cuatro columnas empezando y terminando a la misma altura. */
-        @media (min-width: 1501px) and (pointer: fine) {
-          .dash-home-wrap { height: 100vh; overflow: hidden;
-            display: flex; flex-direction: column; }
-          .dash-tablero { flex: 1; min-height: 0; }
-
-          /* Dos filas: las cuatro tarjetas ocupan lo que necesitan y el resto
-             se lo lleva el renglón de abajo. */
-          .dash-izq { display: grid; grid-template-rows: auto minmax(0, 1fr);
-            gap: 16px; min-height: 0; }
-          .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr));
-            margin-bottom: 0; }
-          .portfolio-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-            min-height: 0; margin-bottom: 0; }
-          /* El top de ventas se recorre por dentro si no entra, en vez de
-             estirar la columna y desalinear la cuadrícula. */
-          .portfolio-row > * { min-height: 0; overflow-y: auto; }
-
-          /* El dibujo se queda con el alto que sobre bajo el encabezado. */
-          .dash-grafico { display: flex; flex-direction: column; }
-          .dash-grafico > * { flex: 1; min-height: 0;
-            display: flex; flex-direction: column; }
+        @media (max-width: 767px) {
+          .dh-tablero { grid-template-columns: minmax(0, 1fr); gap: 12px;
+            grid-template-areas: "graf" "act" "top" "noti"; }
+          .dh-graf { padding: 16px; }
         }
       `}</style>
 
-      {/* Header dentro del área del grid */}
-      <div style={{ marginBottom: "16px", fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em", textTransform: "uppercase", color: COURT, display: "flex", alignItems: "center", gap: "10px" }}>
-        <span style={{ width: "20px", height: "1px", background: COURT, display: "inline-block" }} />
-        Panel de control
-      </div>
+      <div className="dh-wrap">
+        {/* Cabecera */}
+        <header className="dh-hero">
+          <div className="dh-hero-arte" aria-hidden />
+          <div style={{ minWidth: 0 }}>
+            <p className="dh-ante">Panel de control</p>
+            <h1 className="dh-titulo">¡Hola, {username ?? "coleccionista"}!</h1>
+            <p className="dh-bajada">Aquí tienes un resumen de tu actividad en FaceBinder.</p>
+          </div>
+          <div className="dh-acciones">
+            <BuscadorPanel userId={userId} />
+            <Link href="/dashboard/inventario" className="dh-registrar">
+              <Plus size={16} aria-hidden /> Registrar carta
+            </Link>
+          </div>
+        </header>
 
-      <div className="dash-tablero">
-        {/* Columna izquierda: los datos propios */}
-        <div className="dash-izq">
-      {/* 4 en fila */}
-      <div className="stats-grid">
-
-        {/* Seguidores */}
-        <div className="st-card">
-          <p className="st-rotulo">Seguidores</p>
-          <p className="st-numero">
-            {followerCount ?? "—"}
-          </p>
-          <button
+        {/* Las cuatro tarjetas */}
+        <div className="kp-grid">
+          <Kpi
+            Icono={Users} rotulo="Seguidores"
+            valor={followerCount == null ? "—" : fmtNum(followerCount)}
+            pie={seguidoresSemana ? <Variacion sube>+{fmtNum(seguidoresSemana)} esta semana</Variacion> : followerCount == null ? "" : "Sin nuevos esta semana"}
             onClick={() => setShowFollowers(true)}
-            className="st-accion"
-          >
-            Ver todos →
-          </button>
-        </div>
-
-        {/* Dinero en stock */}
-        <div className="st-card">
-          <p className="st-rotulo">Dinero en stock</p>
-          {/* 2.2em = dos líneas con line-height 1.1. El valor llega del cliente
-              y en móvil pasa de "—" a "$1.234,56 USD", que envuelve: sin el
-              hueco reservado la tarjeta crece y empuja el panel entero. */}
-          <p className="st-numero st-plata">
-            {stockTotal === null ? "—" : stockTotal === 0 ? "$0.00 USD" : formatUSD(stockTotal)}
-          </p>
-          <p className="st-pie">
-            Valor total de tus cartas
-          </p>
-        </div>
-
-        {/* Cartas en inventario */}
-        <div className="st-card">
-          <p className="st-rotulo">Cartas en inventario</p>
-          <p className="st-numero">
-            {cardCount ?? "—"}
-          </p>
-          <p className="st-pie">
-            {cardCount === 1 ? "carta registrada" : "cartas registradas"}
-          </p>
-        </div>
-
-        {/* Instalar app */}
-        <div className="st-card">
-          <InstallWidget />
-        </div>
-
-      </div>
-
-      {/* Gráfico histórico + lo que más se vende cerca */}
-      <div className="portfolio-row">
-        <div className="dash-grafico" style={{
-          background: "rgba(255,255,255,0.02)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: "16px",
-          padding: "24px",
-          minWidth: 0,
-        }}>
-          <PortfolioChart
-            snapshots={snapshots} hourlySnapshots={hourlySnapshots}
-            /* 300 es el alto que usa cuando no hay columna que se lo dé:
-               el mismo del gráfico del perfil. */
-            loading={chartLoading} defaultRange="1M" estirar chartHeight={300}
-            cardCount={valorActual?.copias} uniqueCount={valorActual?.unicas}
-            valorActual={valorActual?.total_usd}
           />
-        </div>
-        <TopLocalCards />
-      </div>
+          <Kpi
+            Icono={TrendingUp} rotulo="Variación del inventario"
+            valor={pct30 == null ? "—" : `${pct30 >= 0 ? "+" : ""}${pct30.toFixed(1)}%`}
+            pie={delta30 != null
+              ? <Variacion sube={delta30 >= 0}>{delta30 >= 0 ? "+" : "−"}${Math.abs(delta30).toFixed(2)} en 30 días</Variacion>
+              : "Últimos 30 días"}
+            spark={serie30} href="/dashboard/inventario"
+          />
+          <Kpi
+            Icono={RectangleVertical} rotulo="Cartas registradas"
+            valor={valorActual ? fmtNum(valorActual.copias) : chartLoading ? "—" : "0"}
+            pie={cartasMes && cartasMes > 0
+              ? <Variacion sube>+{fmtNum(cartasMes)} este mes</Variacion>
+              : valorActual ? `${fmtNum(valorActual.unicas)} distintas` : ""}
+            href="/dashboard/inventario"
+          />
+          <InstalarApp />
         </div>
 
-        {/* Las dos columnas de la derecha, a lo alto */}
-        <MuroActividad />
-        <MuroNoticias />
+        {/* El tablero */}
+        <div className="dh-tablero">
+          <div className="dh-graf">
+            <PortfolioChart
+              snapshots={snapshots} hourlySnapshots={hourlySnapshots}
+              loading={chartLoading} defaultRange="1M" estirar chartHeight={260} panel
+              valorActual={valorActual?.total_usd}
+            />
+          </div>
+          <div className="dh-act"><MuroActividad /></div>
+          <div className="dh-top"><TopLocalCards enFila /></div>
+          <div className="dh-noti"><MuroNoticias /></div>
+        </div>
       </div>
 
       {/* Popup seguidores */}

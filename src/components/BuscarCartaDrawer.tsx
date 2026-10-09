@@ -38,14 +38,16 @@ interface CardResult {
 interface BuscarCartaDrawerProps {
   userId: string;
   onClose: () => void;
+  /** Lo que ya se escribió en otro buscador (el del inicio del panel). */
+  consultaInicial?: string;
 }
 
-export function BuscarCartaDrawer({ userId, onClose }: BuscarCartaDrawerProps) {
+export function BuscarCartaDrawer({ userId, onClose, consultaInicial = "" }: BuscarCartaDrawerProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
 
-  const [query,     setQuery]     = useState("");
+  const [query,     setQuery]     = useState(consultaInicial);
   const [results,   setResults]   = useState<CardResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
