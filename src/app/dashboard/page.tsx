@@ -407,13 +407,18 @@ export default function DashboardHome() {
         @media (max-width: 767px) { .dh-page { padding: 28px 16px; } .dh-wrap { gap: 12px; } }
 
         /* ── Cabecera con el arte de fondo ── */
-        .dh-hero { position: relative; overflow: hidden; border-radius: 18px;
+        /* Sin overflow: hidden: la lista del buscador sale por debajo de la
+           cabecera y quedaba cortada. El recorte de las esquinas lo hace el
+           arte. Tampoco lleva z-index: el buscador de cartas se abre desde acá
+           a pantalla completa y quedaría atrapado debajo de la barra de abajo. */
+        .dh-hero { position: relative; border-radius: 18px;
           padding: 28px 28px 30px; display: flex; align-items: flex-end;
           justify-content: space-between; gap: 20px; flex-wrap: wrap;
           border: 1px solid rgba(255,255,255,0.06); background: #070a12; }
         /* El arte se apaga hacia la izquierda, donde va el texto, y hacia
            abajo, para que la cabecera se funda con el resto del panel. */
         .dh-hero-arte { position: absolute; inset: 0; pointer-events: none;
+          border-radius: inherit; overflow: hidden;
           background: url(/covers/megaevo.webp) right center / cover no-repeat;
           opacity: 0.5;
           -webkit-mask-image: linear-gradient(to left, #000 15%, transparent 85%);
