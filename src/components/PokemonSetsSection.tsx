@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { Search, X, Heart } from "lucide-react";
+import { Search, X, Heart, ChevronLeft, Check, Layers } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES, STANDALONE_SETS, type PokemonSet } from "@/data/pokemon-sets";
 import { fetchAllRows } from "@/lib/fetch-all-rows";
@@ -322,73 +322,115 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ── Progress bar ──────────────────────────────────────────── */
-function SetProgress({ cards, inventory, setId }: { cards: PokemonCard[]; inventory: InventoryMap; setId: string }) {
-  if (!cards.length) return null;
+/* ── Franja del set: volver, logo, nombre y progreso en una sola pieza ── */
+function SetHeader({
+  set, seriesName, cards, inventory, userId, loading, onBack,
+}: {
+  set: PokemonSet; seriesName?: string; cards: PokemonCard[];
+  inventory: InventoryMap; userId?: string; loading: boolean;
+  onBack: () => void;
+}) {
   const total    = cards.length;
-  const unique   = cards.filter(c => (inventory[invKey(c.id, c.version, setId)] ?? 0) > 0).length;
-  const totalQty = cards.reduce((s, c) => s + (inventory[invKey(c.id, c.version, setId)] ?? 0), 0);
-  const pct = total > 0 ? Math.round((unique / total) * 100) : 0;
+  const unique   = cards.filter(c => (inventory[invKey(c.id, c.version, set.id)] ?? 0) > 0).length;
+  const totalQty = cards.reduce((s, c) => s + (inventory[invKey(c.id, c.version, set.id)] ?? 0), 0);
+  const pct      = total > 0 ? Math.round((unique / total) * 100) : 0;
 
   return (
-    <div style={{ marginBottom: "32px", padding: "20px 24px", background: "rgba(255,255,255,0.02)", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", flexWrap: "wrap", gap: "8px" }}>
-        <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.15em", textTransform: "uppercase", color: INK2 }}>
-          Progreso Master Set
-        </span>
-        <div style={{ display: "flex", gap: "24px" }}>
-          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: COURT }}>{unique}/{total} únicas</span>
-          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: INK2 }}>{totalQty} total</span>
-          <span style={{ fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em", color: INK0 }}>{pct}%</span>
+    <HeadStrip
+      logo={set.logo}
+      eyebrow={seriesName}
+      title={set.name}
+      subtitle={loading ? "Cargando…" : `${total} cartas`}
+      onBack={onBack}
+    >
+      {userId && total > 0 && (
+        <div className="pks-progress" style={{ flex: "0 1 340px", minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "10px", marginBottom: "7px" }}>
+            <span style={{ fontFamily: DISP, fontSize: "18px", color: INK0, lineHeight: 1 }}>
+              {pct}<span style={{ fontSize: "12px", color: INK2 }}>%</span>
+            </span>
+            <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.06em", color: INK2, whiteSpace: "nowrap" }}>
+              <span style={{ color: COURT, fontWeight: 600 }}>{unique}</span>/{total} únicas · {totalQty} copias
+            </span>
+          </div>
+          <div style={{ height: "6px", background: "rgba(255,255,255,0.07)", borderRadius: "999px", overflow: "hidden" }}>
+            <div style={{
+              height: "100%", width: `${pct}%`, minWidth: pct > 0 ? "6px" : 0,
+              background: `linear-gradient(90deg, ${COURT}, #d6ff3d)`,
+              borderRadius: "999px", transition: "width 0.4s ease",
+            }} />
+          </div>
+        </div>
+      )}
+    </HeadStrip>
+  );
+}
+
+/**
+ * Franja de cabecera con botón de volver. La usan la vista de una serie y la de
+ * un set, para que "volver" esté siempre en el mismo lugar.
+ */
+function HeadStrip({
+  logo, eyebrow, title, subtitle, onBack, children,
+}: {
+  logo: string; eyebrow?: string; title: string; subtitle?: string;
+  onBack: () => void; children?: React.ReactNode;
+}) {
+  return (
+    <div className="pks-sethead" style={{
+      display: "flex", alignItems: "center", gap: "18px",
+      padding: "14px 18px", marginBottom: "16px",
+      background: "rgba(255,255,255,0.02)", borderRadius: "14px",
+      border: "1px solid rgba(255,255,255,0.07)",
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "14px", minWidth: 0, flex: "1 1 auto" }}>
+        <button type="button" onClick={onBack} aria-label="Volver" className="pks-back">
+          <ChevronLeft size={18} aria-hidden />
+        </button>
+        <div className="pks-head-logo" style={{ position: "relative", width: "96px", height: "40px", flexShrink: 0 }}>
+          <Image src={logo} alt="" fill sizes="96px" style={{ objectFit: "contain", objectPosition: "left center" }} />
+        </div>
+        <div style={{ minWidth: 0 }}>
+          {eyebrow && (
+            <div style={{
+              fontFamily: MONO, fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase",
+              color: COURT, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+            }}>
+              {eyebrow}
+            </div>
+          )}
+          <h3 style={{
+            fontFamily: DISP, fontSize: "clamp(17px, 2.2vw, 21px)", color: INK0, margin: "2px 0 0",
+            lineHeight: 1.15, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+          }}>
+            {title}
+          </h3>
+          {subtitle && (
+            <div style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.08em", color: INK2, marginTop: "2px" }}>
+              {subtitle}
+            </div>
+          )}
         </div>
       </div>
-      <div style={{ height: "4px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", overflow: "hidden" }}>
-        <div style={{
-          height: "100%", width: `${pct}%`,
-          background: `linear-gradient(90deg, ${COURT}, #4ff0ff)`,
-          borderRadius: "2px", transition: "width 0.4s ease",
-        }} />
-      </div>
+      {children}
     </div>
+  );
+}
+
+/* ── Píldora de filtro ─────────────────────────────────────── */
+function Pill({ active, onClick, children, count }: {
+  active: boolean; onClick: () => void; children: React.ReactNode; count?: number;
+}) {
+  return (
+    <button type="button" onClick={onClick} className={`pks-pill${active ? " pks-pill--on" : ""}`}>
+      {children}
+      {count !== undefined && <span className="pks-pill-n">{count}</span>}
+    </button>
   );
 }
 
 /* ── Main section ───────────────────────────────────────────── */
 type InvFilter = "todas" | "tengo" | "faltan";
-
-/* ── Breadcrumb ─────────────────────────────────────────────── */
-function Breadcrumb({ items }: { items: { label: string; onClick?: () => void }[] }) {
-  return (
-    <div style={{
-      display: "flex", alignItems: "center", gap: "8px",
-      fontFamily: MONO, fontSize: "11px", letterSpacing: "0.12em",
-      marginBottom: "28px", flexWrap: "wrap",
-    }}>
-      {items.map((item, i) => (
-        <span key={i} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          {i > 0 && <span style={{ color: INK2 }}>›</span>}
-          {item.onClick ? (
-            <button
-              type="button"
-              onClick={item.onClick}
-              style={{
-                background: "none", border: "none", cursor: "pointer",
-                color: COURT, fontFamily: MONO, fontSize: "11px",
-                letterSpacing: "0.12em", textTransform: "uppercase", padding: 0,
-                textDecoration: "underline", textDecorationColor: `${COURT}55`,
-                textUnderlineOffset: "3px",
-              }}
-            >
-              {item.label}
-            </button>
-          ) : (
-            <span style={{ color: INK0, textTransform: "uppercase" }}>{item.label}</span>
-          )}
-        </span>
-      ))}
-    </div>
-  );
-}
 
 type DrillView = "series" | "sets" | "cards";
 
@@ -570,36 +612,18 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
 
   return (
     <section style={{ background: BG0, padding: "0 0 80px" }}>
-      {/* Header */}
-      <div className="pks-header" style={{ padding: "64px 80px 48px" }}>
-        <div style={{
-          fontFamily: MONO, fontSize: "11px", letterSpacing: "0.22em",
-          textTransform: "uppercase", color: COURT,
-          display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px",
-        }}>
-          <span style={{ width: "22px", height: "1px", background: COURT, display: "inline-block" }} />
-          Colección
-        </div>
-        <h2 style={{
-          fontFamily: DISP, fontSize: "clamp(28px, 3vw, 42px)",
-          letterSpacing: "-0.02em", margin: 0, color: INK0,
-        }}>
-          Pokémon Master Set's
-        </h2>
-        <p style={{
-          fontFamily: MONO, fontSize: "12px", letterSpacing: "0.1em",
-          color: INK2, marginTop: "10px", textTransform: "uppercase",
-        }}>
-          {POKEMON_SERIES.filter(s => !s.standalone).length} expansiones · {POKEMON_SERIES.reduce((a, s) => a + s.sets.length, 0)} sets
-        </p>
-      </div>
-
-      <div className="pks-body" style={{ padding: "0 80px" }}>
+      {/* Sin cabecera propia: quien la usa ya pone el título ("Agregar al inventario") */}
+      <div className="pks-body" style={{ padding: "24px 32px 0" }}>
 
         {/* ── VISTA: Series ── */}
         {view === "series" && (
           <>
-            <SectionLabel>Expansiones</SectionLabel>
+            <SectionLabel>
+              Expansiones
+              <span style={{ color: INK2, letterSpacing: "0.12em" }}>
+                · {POKEMON_SERIES.filter(s => !s.standalone).length} series · {POKEMON_SERIES.reduce((a, s) => a + s.sets.length, 0)} sets
+              </span>
+            </SectionLabel>
             <div className="pks-thumbs" style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
               {POKEMON_SERIES.filter(s => !s.standalone).map(series => (
                 <Thumb
@@ -637,11 +661,13 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
         {/* ── VISTA: Sets ── */}
         {view === "sets" && openSeries && (
           <>
-            <Breadcrumb items={[
-              { label: "Expansiones", onClick: goToSeries },
-              { label: openSeries.name },
-            ]} />
-            <SectionLabel>{openSeries.name} — {openSeries.sets.length} sets</SectionLabel>
+            <HeadStrip
+              logo={openSeries.icon}
+              eyebrow="Expansiones"
+              title={openSeries.name}
+              subtitle={`${openSeries.sets.length} sets`}
+              onBack={goToSeries}
+            />
             <div className="pks-thumbs" style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "40px" }}>
               {openSeries.sets.map(set => {
                 const cardCount = SET_CARD_COUNT[set.id] ?? 0;
@@ -684,105 +710,109 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
           const hasMore = filteredCards.length > visibleCount;
           return (
             <>
-              <Breadcrumb items={[
-                { label: "Expansiones", onClick: goToSeries },
-                // Un set suelto no tiene expansión que mostrar en el camino.
-                ...(setSeries && !setSeries.standalone
-                  ? [{ label: setSeries.name, onClick: () => goToSets(setSeries.id) }]
-                  : []),
-                { label: openSet.name },
-              ]} />
+              <SetHeader
+                set={openSet}
+                // Un set suelto no tiene expansión: "volver" lleva a Expansiones.
+                seriesName={setSeries && !setSeries.standalone ? setSeries.name : undefined}
+                cards={allCards}
+                inventory={inventory}
+                userId={userId}
+                loading={loadingCards || loadingInv}
+                onBack={() => setSeries && !setSeries.standalone ? goToSets(setSeries.id) : goToSeries()}
+              />
 
-              <SectionLabel>
-                {openSet.name} — {allCards.length} cartas
-                {(loadingCards || loadingInv) && <span style={{ color: INK2, fontSize: "10px", marginLeft: "8px" }}>cargando...</span>}
-              </SectionLabel>
-
-              {userId && <SetProgress cards={allCards} inventory={inventory} setId={openSet.id} />}
-
-              {/* Filtros */}
+              {/* Filtros: buscador + wishlist arriba, píldoras abajo */}
               {(() => {
                 const tengoCount  = allCards.filter(c => (inventory[invKey(c.id, c.version, openSet.id)] ?? 0) > 0).length;
-                const faltanCount = allCards.filter(c => (inventory[invKey(c.id, c.version, openSet.id)] ?? 0) === 0).length;
-                const sSelect: React.CSSProperties = {
-                  fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em",
-                  color: INK0, background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px",
-                  padding: "8px 12px", cursor: "pointer", outline: "none",
-                  appearance: "none", WebkitAppearance: "none",
-                  minWidth: "180px",
+                const faltanCount = allCards.length - tengoCount;
+                const pasaEstado = (c: PokemonCard) => {
+                  const qty = inventory[invKey(c.id, c.version, openSet.id)] ?? 0;
+                  if (invFilter === "tengo"  && qty === 0) return false;
+                  if (invFilter === "faltan" && qty  >  0) return false;
+                  return true;
                 };
+                const setFiltro = (fn: () => void) => { fn(); setVisibleCount(PAGE_SIZE); };
                 return (
-                  <div style={{ display: "flex", gap: "10px", marginBottom: "28px", flexWrap: "wrap", alignItems: "center" }}>
-                    <div style={{ position: "relative", display: "flex", alignItems: "center", flex: "1 1 220px", minWidth: 0, maxWidth: "320px" }}>
-                      <Search size={14} style={{ position: "absolute", left: "12px", color: INK2, pointerEvents: "none" }} />
-                      <input
-                        type="text"
-                        value={search}
-                        onChange={e => { setSearch(e.target.value); setVisibleCount(PAGE_SIZE); }}
-                        placeholder="Buscar carta..."
-                        style={{
-                          ...sSelect,
-                          minWidth: 0, width: "100%", cursor: "text",
-                          padding: "8px 32px 8px 34px",
-                        }}
-                      />
-                      {search && (
+                  <div style={{ marginBottom: "24px" }}>
+                    <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "10px" }}>
+                      <div style={{ position: "relative", display: "flex", alignItems: "center", flex: "1 1 auto", minWidth: 0, maxWidth: "420px" }}>
+                        <Search size={14} style={{ position: "absolute", left: "14px", color: INK2, pointerEvents: "none" }} />
+                        <input
+                          type="text"
+                          value={search}
+                          onChange={e => setFiltro(() => setSearch(e.target.value))}
+                          placeholder="Buscar por nombre o número"
+                          className="pks-search"
+                        />
+                        {search && (
+                          <button
+                            type="button"
+                            onClick={() => setFiltro(() => setSearch(""))}
+                            aria-label="Limpiar búsqueda"
+                            style={{
+                              position: "absolute", right: "10px", display: "flex", alignItems: "center",
+                              background: "none", border: "none", padding: "2px", cursor: "pointer", color: INK2,
+                            }}
+                          >
+                            <X size={14} />
+                          </button>
+                        )}
+                      </div>
+                      {userId && (
                         <button
                           type="button"
-                          onClick={() => { setSearch(""); setVisibleCount(PAGE_SIZE); }}
-                          aria-label="Limpiar búsqueda"
+                          onClick={handleAddAllMissingToWishlist}
+                          disabled={addingWish === "loading" || setCards.length === 0 || faltanCount === 0}
+                          title="Agrega a tu wishlist todas las cartas que te faltan de este set"
+                          className="pks-wish"
                           style={{
-                            position: "absolute", right: "8px", display: "flex", alignItems: "center",
-                            background: "none", border: "none", padding: "2px", cursor: "pointer", color: INK2,
+                            color: addingWish === "done" ? BG0 : "#e05580",
+                            background: addingWish === "done" ? COURT : "rgba(224,85,128,0.08)",
+                            borderColor: addingWish === "done" ? COURT : "rgba(224,85,128,0.4)",
+                            opacity: addingWish === "loading" || faltanCount === 0 ? 0.5 : 1,
+                            cursor: addingWish === "loading" || faltanCount === 0 ? "default" : "pointer",
                           }}
                         >
-                          <X size={14} />
+                          {addingWish === "done" ? <Check size={13} aria-hidden /> : <Heart size={13} aria-hidden />}
+                          <span className="pks-wish-txt">
+                            {addingWish === "done" ? "Agregadas" : addingWish === "loading" ? "Agregando…" : "Faltantes a wishlist"}
+                          </span>
                         </button>
                       )}
                     </div>
-                    {userId && (
-                      <select value={invFilter} onChange={e => { setInvFilter(e.target.value as InvFilter); setVisibleCount(PAGE_SIZE); }} style={sSelect}>
-                        <option value="todas" style={{ background: "#0a0e1a" }}>Todas ({allCards.length})</option>
-                        <option value="tengo" style={{ background: "#0a0e1a" }}>En inventario ({tengoCount})</option>
-                        <option value="faltan" style={{ background: "#0a0e1a" }}>Restantes ({faltanCount})</option>
-                      </select>
-                    )}
-                    <select value={versionFilter} onChange={e => { setVersionFilter(e.target.value); setVisibleCount(PAGE_SIZE); }} style={sSelect}>
-                      <option value="todas" style={{ background: "#0a0e1a" }}>Todas las variantes</option>
-                      {setVersions.map(v => {
-                        const cnt = allCards.filter(c => {
-                          const qty = inventory[invKey(c.id, c.version, openSet.id)] ?? 0;
-                          if (invFilter === "tengo"  && qty === 0) return false;
-                          if (invFilter === "faltan" && qty  >  0) return false;
-                          return c.version === v;
-                        }).length;
-                        return (
-                          <option key={v} value={v} style={{ background: "#0a0e1a" }}>
-                            {getVersionLabel(v)} ({cnt})
-                          </option>
-                        );
-                      })}
-                    </select>
-                    {userId && (
-                      <button
-                        type="button"
-                        onClick={handleAddAllMissingToWishlist}
-                        disabled={addingWish === "loading" || setCards.length === 0}
-                        style={{
-                          fontFamily: MONO, fontSize: "11px", letterSpacing: "0.1em",
-                          color: addingWish === "done" ? BG0 : COURT,
-                          background: addingWish === "done" ? COURT : "rgba(46,230,193,0.08)",
-                          border: `1px solid ${COURT}55`,
-                          borderRadius: "8px", padding: "8px 16px",
-                          cursor: addingWish === "loading" || setCards.length === 0 ? "default" : "pointer",
-                          opacity: addingWish === "loading" ? 0.6 : 1,
-                          transition: "all 0.2s", whiteSpace: "nowrap",
-                        }}
-                      >
-                        {addingWish === "done" ? "Listo ✓" : addingWish === "loading" ? "Agregando..." : `+ Wishlist restantes (${faltanCount})`}
-                      </button>
-                    )}
+
+                    <div className="pks-pills">
+                      {userId && (
+                        <div className="pks-pill-group pks-pill-group--estado" role="group" aria-label="Filtrar por inventario">
+                          <Pill active={invFilter === "todas"}  onClick={() => setFiltro(() => setInvFilter("todas"))}  count={allCards.length}>Todas</Pill>
+                          <Pill active={invFilter === "tengo"}  onClick={() => setFiltro(() => setInvFilter("tengo"))}  count={tengoCount}>Tengo</Pill>
+                          <Pill active={invFilter === "faltan"} onClick={() => setFiltro(() => setInvFilter("faltan"))} count={faltanCount}>Faltan</Pill>
+                        </div>
+                      )}
+                      {setVersions.length > 1 && (
+                        <>
+                          {userId && <span className="pks-pill-sep" aria-hidden />}
+                          <div className="pks-pill-group" role="group" aria-label="Filtrar por variante">
+                            <Pill active={versionFilter === "todas"} onClick={() => setFiltro(() => setVersionFilter("todas"))}>
+                              <Layers size={12} aria-hidden style={{ flexShrink: 0 }} />
+                              <span className="pks-hide-sm">Todas las variantes</span>
+                              <span className="pks-show-sm">Todas</span>
+                            </Pill>
+                            {setVersions.map(v => (
+                              <Pill
+                                key={v}
+                                active={versionFilter === v}
+                                onClick={() => setFiltro(() => setVersionFilter(v))}
+                                count={allCards.filter(c => c.version === v && pasaEstado(c)).length}
+                              >
+                                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: getVersionColor(v), flexShrink: 0 }} />
+                                {VERSION_FULL[getVersionLabel(v)] ?? getVersionLabel(v)}
+                              </Pill>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
                 );
               })()}
@@ -852,9 +882,71 @@ export function PokemonSetsSection({ userId }: { userId?: string }) {
         .tcg-card-wrap { width: 240px; }
         .tcg-card-body { width: 240px; height: 336px; overflow: hidden; position: relative; background: linear-gradient(135deg, #0e1420 0%, #161d2e 50%, #0e1420 100%); }
         .pks-thumb:not(.pks-thumb--open):not(.pks-thumb--gray):hover { background: rgba(46,230,193,0.05) !important; }
+
+        .pks-back {
+          width: 34px; height: 34px; flex-shrink: 0; border-radius: 10px;
+          display: flex; align-items: center; justify-content: center; cursor: pointer;
+          background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: ${INK0};
+          transition: background 0.15s, border-color 0.15s;
+        }
+        .pks-back:hover { background: rgba(46,230,193,0.1); border-color: ${COURT}66; }
+
+        .pks-search {
+          width: 100%; min-width: 0; height: 38px; padding: 0 34px 0 38px;
+          font-family: ${MONO}; font-size: 12px; letter-spacing: 0.04em; color: ${INK0};
+          background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 999px; outline: none; transition: border-color 0.15s, background 0.15s;
+        }
+        .pks-search::placeholder { color: ${INK2}; }
+        .pks-search:focus { border-color: ${COURT}88; background: rgba(46,230,193,0.04); }
+
+        .pks-wish {
+          display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 16px;
+          flex-shrink: 0; white-space: nowrap; border-radius: 999px; border: 1px solid;
+          font-family: ${MONO}; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+          transition: all 0.2s; margin-left: auto;
+        }
+
+        .pks-pills {
+          display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+        }
+        .pks-pill-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
+        .pks-show-sm { display: none; }
+        .pks-pill {
+          display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 12px;
+          flex-shrink: 0; white-space: nowrap; cursor: pointer; border-radius: 999px;
+          font-family: ${MONO}; font-size: 10.5px; letter-spacing: 0.06em; color: #c9cfdd;
+          background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+          transition: background 0.15s, border-color 0.15s, color 0.15s;
+        }
+        .pks-pill:hover { border-color: rgba(255,255,255,0.2); color: ${INK0}; }
+        .pks-pill--on, .pks-pill--on:hover { background: rgba(46,230,193,0.12); border-color: ${COURT}88; color: ${INK0}; }
+        .pks-pill-n { font-size: 9.5px; color: ${INK2}; }
+        .pks-pill--on .pks-pill-n { color: ${COURT}; }
+        .pks-pill-sep { width: 1px; height: 18px; background: rgba(255,255,255,0.1); margin: 0 6px; flex-shrink: 0; }
+
         @media (max-width: 767px), (pointer: coarse) {
-          .pks-header { padding: 48px 12px 32px !important; }
-          .pks-body   { padding: 0 12px !important; }
+          .pks-body   { padding: 16px 16px 0 !important; }
+          .pks-sethead { flex-wrap: wrap; gap: 12px !important; padding: 12px 14px !important; }
+          .pks-progress { flex: 1 1 100% !important; }
+          .pks-head-logo { width: 72px !important; height: 32px !important; }
+          .pks-search { font-size: 16px; height: 40px; }  /* 16px: iOS no hace zoom al tocarlo */
+          .pks-wish { width: 40px; height: 40px; padding: 0; justify-content: center; }
+          .pks-wish-txt { display: none; }
+          /* En el celular: estado como control segmentado a todo el ancho y las
+             variantes debajo, partiendo línea. Nada queda cortado en el borde. */
+          .pks-pills { flex-direction: column; align-items: stretch; gap: 8px; }
+          .pks-pill-sep { display: none; }
+          .pks-pill-group--estado {
+            display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0;
+            padding: 3px; border-radius: 999px;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+          }
+          .pks-pill-group--estado .pks-pill { justify-content: center; border-color: transparent; background: none; height: 32px; }
+          .pks-pill-group--estado .pks-pill--on { background: rgba(46,230,193,0.14); border-color: ${COURT}88; }
+          .pks-pill { height: 32px; font-size: 11px; }
+          .pks-hide-sm { display: none; }
+          .pks-show-sm { display: inline; }
           .pks-cards-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             gap: 28px 10px !important;

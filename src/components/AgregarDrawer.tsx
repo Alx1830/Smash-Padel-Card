@@ -64,7 +64,7 @@ export function AgregarDrawer({ userId, onClose }: AgregarDrawerProps) {
           color: ${INK2};
           cursor: pointer;
           display: flex; align-items: center; justify-content: center;
-          width: 40px; height: 40px;
+          width: 34px; height: 34px;
           transition: background 0.15s, color 0.15s, border-color 0.15s;
           flex-shrink: 0;
         }
@@ -79,6 +79,7 @@ export function AgregarDrawer({ userId, onClose }: AgregarDrawerProps) {
           margin: 0 auto 0;
           flex-shrink: 0;
         }
+        @media (max-width: 420px) { .agregar-drawer-sub { display: none; } }
       `}</style>
 
       {/* Backdrop */}
@@ -110,37 +111,34 @@ export function AgregarDrawer({ userId, onClose }: AgregarDrawerProps) {
         }}
       >
         {/* Drag pill */}
-        <div style={{ padding: "14px 0 0", flexShrink: 0, cursor: "grab" }} onClick={handleClose}>
+        <div style={{ padding: "8px 0 0", flexShrink: 0, cursor: "grab" }} onClick={handleClose}>
           <div className="agregar-drawer-pill" />
         </div>
 
-        {/* Header */}
+        {/* Header: una sola línea */}
         <div style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "16px 24px 12px",
+          display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px",
+          padding: "8px 16px 10px 24px",
           borderBottom: "1px solid rgba(255,255,255,0.06)",
           flexShrink: 0,
         }}>
-          <div>
-            <p style={{
-              fontFamily: MONO, fontSize: "10px", letterSpacing: "0.22em",
-              textTransform: "uppercase", color: COURT,
-              display: "flex", alignItems: "center", gap: "8px",
-              margin: "0 0 6px",
-            }}>
-              <span style={{ width: "16px", height: "1px", background: COURT, display: "inline-block" }} />
-              Mi Colección
-            </p>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "12px", minWidth: 0 }}>
             <h2 style={{
-              fontFamily: DISP, fontSize: "22px", color: INK0,
-              fontWeight: 900, margin: 0, letterSpacing: "-0.01em",
+              fontFamily: DISP, fontSize: "18px", color: INK0,
+              fontWeight: 900, margin: 0, letterSpacing: "-0.01em", whiteSpace: "nowrap",
             }}>
               Agregar al inventario
             </h2>
+            <span className="agregar-drawer-sub" style={{
+              fontFamily: MONO, fontSize: "10px", letterSpacing: "0.22em",
+              textTransform: "uppercase", color: COURT, whiteSpace: "nowrap",
+            }}>
+              Mi colección
+            </span>
           </div>
 
           <button className="agregar-drawer-close" onClick={handleClose} aria-label="Cerrar">
-            <X size={18} strokeWidth={2} />
+            <X size={16} strokeWidth={2} />
           </button>
         </div>
 

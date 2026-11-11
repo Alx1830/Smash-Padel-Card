@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { POKEMON_SERIES } from "@/data/pokemon-sets";
 import { getVersionLabel, getVersionEffect, getVersionColor, type PokemonCard } from "@/data/pokemon-cards-meta";
@@ -10,7 +11,7 @@ import { CARD_LANGUAGES, INVENTORY_LANGUAGES, DEFAULT_CARD_LANGUAGE } from "@/li
 import { FlagIcon } from "@/components/FlagIcon";
 import { useScrydexPrice, SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import { tcgCardLink } from "@/lib/tcg-link";
-import { X } from "lucide-react";
+import { X, ExternalLink, Star, Search, Check, Tag, Info } from "lucide-react";
 
 export const COURT = "#2ee6c1";
 export const INK0  = "#f5f7fb";
@@ -406,26 +407,28 @@ export function CardDetailModal({
         : "—"
     : null;
 
-  const tableRows: { label: string; value: React.ReactNode }[] = [
-    { label: "Número", value: `#${String(card.card_number).padStart(3, "0")}` },
-    { label: "Tipo",   value: versionFull },
-    {
-      label: "Set",
-      value: setInfo
-        ? <div style={{ position: "relative", width: "90px", height: "32px" }}>
-            <Image src={setInfo.logo} alt={setInfo.name} fill style={{ objectFit: "contain", objectPosition: "left center" }} />
-          </div>
-        : setId,
-    },
-    ...(priceDisplay !== null ? [{
-      label: "Precio",
-      value: (
-        <span style={{ color: pricesLoading ? DARK2 : scrydexPrice !== null ? "#15a98e" : DARK2 }}>
-          {priceDisplay}
-        </span>
-      ),
-    }] : []),
-  ];
+  const versionColor = getVersionColor(card.version);
+
+  /** Un solo aviso bajo los botones, en vez de tres párrafos sueltos. */
+  const hint =
+    !canFeature && !hasInInv ? "Agrégala a tu inventario para destacarla o venderla."
+    : !canFeature && hasInInv && featCount >= 10 ? "Máximo 10 destacadas: quita una para sumar esta."
+    : null;
+
+  const chip: React.CSSProperties = {
+    fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase",
+    padding: "4px 9px", borderRadius: "999px", fontWeight: 600, whiteSpace: "nowrap",
+  };
+
+  const actionBtn = (enabled: boolean, extra: React.CSSProperties): React.CSSProperties => ({
+    display: "flex", alignItems: "center", justifyContent: "center", gap: "7px",
+    padding: "10px 8px", minWidth: 0,
+    fontFamily: MONO, fontSize: "10.5px", letterSpacing: "0.12em", textTransform: "uppercase",
+    fontWeight: 700, borderRadius: "10px", whiteSpace: "nowrap",
+    cursor: enabled ? "pointer" : "default", opacity: enabled ? 1 : 0.4,
+    transition: "all 0.2s",
+    ...extra,
+  });
 
   return (
     <div
@@ -442,9 +445,9 @@ export function CardDetailModal({
         style={{
           background: MODAL_BG,
           borderRadius: "20px",
-          padding: "36px",
-          maxWidth: "680px", width: "100%",
-          display: "flex", gap: "32px", alignItems: "flex-start",
+          padding: "24px",
+          maxWidth: "860px", width: "100%",
+          display: "flex", gap: "28px", alignItems: "stretch",
           position: "relative",
           boxShadow: "0 40px 100px rgba(0,0,0,0.9)",
           maxHeight: "90vh", overflowY: "auto",
@@ -461,53 +464,78 @@ export function CardDetailModal({
           }}
          aria-label="Cerrar"><X size={18} aria-hidden /></button>
 
-        <div className="modal-card-col" style={{ flexShrink: 0, width: "200px" }}>
-          <ModalTiltCard card={card} />
+        {/* La carta manda: columna ancha sobre un panel propio */}
+        <div className="modal-card-col" style={{
+          flexShrink: 0, width: "340px",
+          background: "radial-gradient(ellipse 80% 70% at 50% 45%, rgba(46,230,193,0.10), rgba(5,7,13,0.05) 75%)",
+          borderRadius: "16px", padding: "22px",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <div style={{ width: "100%" }}>
+            <ModalTiltCard card={card} />
+          </div>
         </div>
 
-        <div className="modal-details-col" style={{ flex: 1, minWidth: 0 }}>
+        <div className="modal-details-col" style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", paddingTop: "4px" }}>
+          {/* Cabecera: set, nombre y fichas */}
+          {setInfo && (
+            <div style={{ position: "relative", width: "110px", height: "34px", marginBottom: "10px" }}>
+              <Image src={setInfo.logo} alt={setInfo.name} fill sizes="110px" style={{ objectFit: "contain", objectPosition: "left center" }} />
+            </div>
+          )}
           <h2 style={{
-            fontFamily: DISP, fontSize: "20px", letterSpacing: "-0.01em",
-            margin: "0 0 20px", color: DARK, lineHeight: 1.1,
+            fontFamily: DISP, fontSize: "clamp(20px, 3vw, 26px)", letterSpacing: "-0.01em",
+            margin: "0 36px 10px 0", color: DARK, lineHeight: 1.1,
           }}>
             {card.name}
           </h2>
-
-          <div style={{ marginBottom: "28px" }}>
-            {tableRows.map((row, i) => (
-              <div key={i} style={{
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-                padding: "10px 0",
-                borderBottom: `1px solid ${BORDER_CLR}`,
-                borderTop: i === 0 ? `1px solid ${BORDER_CLR}` : undefined,
-                gap: "8px",
-              }}>
-                <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: DARK2, flexShrink: 0 }}>
-                  {row.label}
-                </span>
-                <span style={{ fontFamily: MONO, fontSize: "13px", color: DARK, fontWeight: 600 }}>
-                  {row.value}
-                </span>
-              </div>
-            ))}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "16px" }}>
+            <span style={{ ...chip, background: "rgba(5,7,13,0.06)", color: DARK }}>
+              #{String(card.card_number).padStart(3, "0")}
+            </span>
+            <span style={{ ...chip, background: DARK, color: versionColor }}>
+              {VERSION_FULL[versionFull] ?? versionFull}
+            </span>
+            {setInfo && (
+              <span style={{ ...chip, background: "rgba(5,7,13,0.06)", color: DARK2, maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {setInfo.name}
+              </span>
+            )}
           </div>
+
+          {/* Precio: el único dato grande */}
+          {priceDisplay !== null && (
+            <div style={{
+              display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "10px",
+              padding: "12px 14px", borderRadius: "12px", marginBottom: "18px",
+              background: "rgba(46,230,193,0.08)", border: "1px solid rgba(46,230,193,0.25)",
+            }}>
+              <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: DARK2 }}>
+                Precio mercado
+              </span>
+              <span style={{
+                fontFamily: DISP, fontSize: "22px", fontWeight: 700,
+                color: scrydexPrice !== null && !pricesLoading ? "#15a98e" : DARK2,
+              }}>
+                {priceDisplay}
+              </span>
+            </div>
+          )}
 
           {userId && (
             <>
-              <div style={{ marginBottom: "14px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-                  <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: DARK2 }}>
+              <div style={{ marginBottom: "16px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", marginBottom: "8px" }}>
+                  <span style={{ fontFamily: MONO, fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: DARK2 }}>
                     Inventario
                   </span>
-                  {qty > 0 && (
-                    <span style={{ fontFamily: MONO, fontSize: "10px", color: DARK2, letterSpacing: "0.06em" }}>
-                      {qty} en total
-                    </span>
-                  )}
+                  <span style={{ fontFamily: MONO, fontSize: "10px", color: qty > 0 ? "#15a98e" : DARK2, letterSpacing: "0.06em", fontWeight: 600 }}>
+                    {qty} en total
+                  </span>
                 </div>
 
-                {/* Un contador por idioma, igual que en el panel de agregar */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                {/* Un contador por idioma, en una sola fila */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px 16px", padding: "10px 12px", borderRadius: "12px", border: `1px solid ${BORDER_CLR}` }}>
                   {INVENTORY_LANGUAGES.map(lang => (
                     <QtyControl
                       key={lang.code}
@@ -536,9 +564,8 @@ export function CardDetailModal({
                 )}
               </div>
 
-              {/* Fila 1: Ver precios | Destacar */}
-              <div style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
-                {/* Ver precios — TCGPlayer */}
+              {/* Acciones: 2×2, bajas y con icono */}
+              <div className="modal-actions" style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px" }}>
                 {(() => {
                   const tcgQuery = [card.name, setInfo?.name ?? "", VERSION_FULL[label] ?? label].filter(Boolean).join(" ");
                   const tcgUrl   = tcgCardLink(setId, card.card_number, tcgQuery, card.version);
@@ -550,18 +577,9 @@ export function CardDetailModal({
                         const top  = screen.availHeight - h - 16;
                         window.open(tcgUrl, "tcgplayer", `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`);
                       }}
-                      style={{
-                        flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "5px",
-                        padding: "12px 8px",
-                        fontFamily: MONO, fontSize: "11px", letterSpacing: "0.14em", textTransform: "uppercase",
-                        borderRadius: "10px", fontWeight: 700, cursor: "pointer",
-                        background: "rgba(5,7,13,0.05)", color: "#05070d",
-                        border: "1.5px solid rgba(5,7,13,0.2)",
-                        transition: "all 0.2s",
-                      }}
+                      style={actionBtn(true, { background: "rgba(5,7,13,0.05)", color: DARK, border: "1.5px solid rgba(5,7,13,0.18)" })}
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="https://www.tcgplayer.com/favicon.ico" alt="" width={12} height={12} style={{ flexShrink: 0 }} />
+                      <ExternalLink size={13} aria-hidden style={{ flexShrink: 0 }} />
                       Ver precios
                     </button>
                   );
@@ -569,80 +587,53 @@ export function CardDetailModal({
                 <button
                   onClick={handleToggleFeatured}
                   disabled={featuring || !canFeature || !profileComplete}
-                  style={{
-                    flex: 1, padding: "12px 8px",
-                    fontFamily: MONO, fontSize: "11px", letterSpacing: "0.16em",
-                    textTransform: "uppercase", borderRadius: "10px",
-                    cursor: featuring || !canFeature || !profileComplete ? "default" : "pointer",
-                    transition: "all 0.2s",
-                    opacity: featuring ? 0.6 : (!canFeature || !profileComplete) ? 0.4 : 1,
-                    background: isFeatured ? "#2ee6c1" : "rgba(46,230,193,0.1)",
-                    color: isFeatured ? "#05070d" : "#0d6b5e",
-                    border: "1.5px solid #2ee6c1",
-                  }}
+                  style={actionBtn(!featuring && canFeature && profileComplete, {
+                    background: isFeatured ? COURT : "rgba(46,230,193,0.1)",
+                    color: isFeatured ? DARK : "#0d6b5e",
+                    border: `1.5px solid ${COURT}`,
+                  })}
                 >
-                  {isFeatured ? "✓ Destacada" : "Destacar"}
+                  <Star size={13} aria-hidden fill={isFeatured ? "currentColor" : "none"} style={{ flexShrink: 0 }} />
+                  {isFeatured ? "Destacada" : "Destacar"}
+                  <span style={{ opacity: 0.6, fontWeight: 500 }}>{featCount}/10</span>
                 </button>
-              </div>
-
-              {/* Fila 2: Buscando | Vender */}
-              <div style={{ display: "flex", gap: "8px" }}>
                 <button
                   onClick={() => profileComplete && handleToggleWishlist()}
                   disabled={toggling || !profileComplete}
-                  style={{
-                    flex: 1, padding: "12px 8px",
-                    fontFamily: MONO, fontSize: "11px", letterSpacing: "0.16em",
-                    textTransform: "uppercase", borderRadius: "10px",
-                    cursor: toggling || !profileComplete ? "default" : "pointer",
-                    transition: "all 0.2s",
-                    opacity: toggling ? 0.6 : !profileComplete ? 0.4 : 1,
+                  style={actionBtn(!toggling && profileComplete, {
                     background: isWanted ? "#ffd24f" : "rgba(255,210,79,0.12)",
                     color: isWanted ? "#2a2a2a" : "#7a5c00",
                     border: "1.5px solid #ffd24f",
-                  }}
+                  })}
                 >
-                  {isWanted ? "✓ Buscando" : "Buscando"}
+                  {isWanted ? <Check size={13} aria-hidden style={{ flexShrink: 0 }} /> : <Search size={13} aria-hidden style={{ flexShrink: 0 }} />}
+                  Buscando
                 </button>
                 <button
                   onClick={() => canSell && profileComplete && setSellingMode(true)}
                   disabled={!canSell || !profileComplete}
-                  style={{
-                    flex: 1, padding: "12px 8px",
-                    fontFamily: MONO, fontSize: "11px", letterSpacing: "0.16em",
-                    textTransform: "uppercase", borderRadius: "10px",
-                    cursor: canSell && profileComplete ? "pointer" : "default",
-                    transition: "all 0.2s",
-                    opacity: canSell && profileComplete ? 1 : 0.4,
+                  style={actionBtn(canSell && profileComplete, {
                     background: canSell && profileComplete ? "#2ee696" : "rgba(46,230,150,0.1)",
                     color: canSell && profileComplete ? "#0a0a0a" : "#0a5c30",
                     border: "1.5px solid #2ee696",
-                  }}
+                  })}
                 >
+                  <Tag size={13} aria-hidden style={{ flexShrink: 0 }} />
                   Vender
                 </button>
               </div>
 
-              {!profileComplete && missingFields.length > 0 && (
-                <p style={{ fontFamily: MONO, fontSize: "10px", color: "#f59e0b", margin: "8px 0 0", letterSpacing: "0.08em", textAlign: "center", lineHeight: 1.6 }}>
+              {!profileComplete && missingFields.length > 0 ? (
+                <p style={{ fontFamily: MONO, fontSize: "10px", color: "#b45309", margin: "10px 0 0", letterSpacing: "0.06em", lineHeight: 1.6 }}>
                   Completa tu perfil para usar estas funciones: <b>{missingFields.join(", ")}</b>.{" "}
-                  <a href="/dashboard/perfil" style={{ color: "#f59e0b", textDecoration: "underline" }}>Ir al perfil →</a>
+                  <Link href="/dashboard/perfil" style={{ color: "#b45309", textDecoration: "underline" }}>Ir al perfil</Link>
+                </p>
+              ) : hint && (
+                <p style={{ display: "flex", alignItems: "center", gap: "6px", fontFamily: MONO, fontSize: "10px", color: DARK2, margin: "10px 0 0", letterSpacing: "0.06em", lineHeight: 1.5 }}>
+                  <Info size={12} aria-hidden style={{ flexShrink: 0 }} />
+                  {hint}
                 </p>
               )}
-              {!canFeature && !hasInInv && (
-                <p style={{ fontFamily: MONO, fontSize: "10px", color: "#d95555", margin: "8px 0 0", letterSpacing: "0.08em", textAlign: "center" }}>
-                  Necesitas tener esta carta en tu inventario para destacarla.
-                </p>
-              )}
-              {!canFeature && hasInInv && featCount >= 10 && (
-                <p style={{ fontFamily: MONO, fontSize: "10px", color: "#d95555", margin: "8px 0 0", letterSpacing: "0.08em", textAlign: "center" }}>
-                  Máximo 10 cartas destacadas — quita una para agregar esta.
-                </p>
-              )}
-
-              <p style={{ fontFamily: MONO, fontSize: "10px", color: DARK2, margin: "10px 0 0", letterSpacing: "0.08em", textAlign: "center" }}>
-                {featCount}/10 cartas destacadas
-              </p>
 
               <div style={{ marginTop: "16px" }}>
                 {sellingMode ? (
@@ -771,13 +762,18 @@ export function CardDetailModal({
           50%  { opacity: 1;   filter: brightness(1.3) saturate(1.6); }
           100% { opacity: 0.6; filter: brightness(0.9) saturate(1.2); }
         }
-        @media (max-width: 540px) {
+        @media (max-width: 820px) {
+          .modal-card-col { width: 280px !important; }
+        }
+        @media (max-width: 640px) {
           .card-modal-inner {
             flex-direction: column !important;
-            align-items: center !important;
-            padding: 24px 20px !important;
+            align-items: stretch !important;
+            gap: 18px !important;
+            padding: 18px 16px !important;
           }
-          .modal-card-col { width: 160px !important; }
+          .modal-card-col { width: 100% !important; padding: 18px !important; }
+          .modal-card-col > div { width: min(260px, 70vw) !important; }
           .modal-details-col { width: 100% !important; }
         }
       `}</style>
