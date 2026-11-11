@@ -19,6 +19,7 @@ export const SCRYDEX_SET_CODES: Record<string, string> = {
   "ascended-heroes":      "me2pt5",
   "perfect-order":        "me3",
   "chaos-rising":         "me4",
+  "delta-reign":          "me6",
   "pitch-black":          "me5",
 
   // ── Scarlet & Violet Series ───────────────────────────────────────────────

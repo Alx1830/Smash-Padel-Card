@@ -111,6 +111,11 @@ export const TCG_SETS = [
     setName: "ME: 30th Celebration", name: "30th Celebration",
     placeholder: "/pokemon-sets/30th-celebration.logo.webp",
   },
+  {
+    slug: "delta-reign", code: "me6",
+    setName: "ME06: Delta Reign", name: "Delta Reign",
+    placeholder: "/pokemon-sets/delta-reign.logo.webp",
+  },
 ];
 
 export const MAPS_DIR = path.resolve(__dirname, "tcgplayer-sets");

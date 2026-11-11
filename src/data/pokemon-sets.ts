@@ -28,6 +28,7 @@ export const POKEMON_SERIES: PokemonSeries[] = [
     name: "Mega Evolution Series",
     icon: `${P}Mega-Evolution.logo.422.png`,
     sets: [
+      { id: "delta-reign",            name: "Delta Reign",                     logo: `${P}delta-reign.logo.webp` },
       { id: "30th-celebration",       name: "30th Celebration",                logo: `${P}30th-celebration.logo.webp` },
       { id: "pitch-black",            name: "Pitch Black",                     logo: `${P}Pitch-Black.logo.png`,                          symbol: `${P}Pitch-Black.symbol.png` },
       { id: "chaos-rising",           name: "Chaos Rising",                    logo: `${P}Chaos-Rising.logo.431.png`,                    symbol: `${P}Chaos-Rising.symbol.431.png` },
