@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
-import { Plus, Layers, EyeOff } from "lucide-react";
+import { Plus, Layers, EyeOff, ClipboardPaste } from "lucide-react";
 import Link from "next/link";
+import ImportarMazo from "@/components/decks/ImportarMazo";
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
@@ -34,6 +35,7 @@ export default function DecksPage() {
   const [newName,  setNewName]  = useState("");
   const [newDesc,  setNewDesc]  = useState("");
   const [saving,   setSaving]   = useState(false);
+  const [importando, setImportando] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -149,24 +151,42 @@ export default function DecksPage() {
         </div>
         <h1 style={{ fontFamily: DISP, fontSize: "36px", color: INK0, margin: "0 0 24px" }}>Decks</h1>
 
-        <button
-          onClick={() => setCreating(true)}
-          style={{
-            display: "inline-flex", alignItems: "center", gap: "8px",
-            padding: "11px 22px", borderRadius: "10px", background: COURT, color: "#05070d",
-            fontFamily: MONO, fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em",
-            textTransform: "uppercase", border: "none", cursor: "pointer",
-            marginBottom: "36px", transition: "opacity 0.15s",
-          }}
-          onMouseEnter={e => (e.currentTarget.style.opacity = "0.88")}
-          onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
-        >
-          <Plus size={14} strokeWidth={2.5} />
-          Crear Deck
-        </button>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "36px" }}>
+          <button
+            onClick={() => setCreating(true)}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "8px",
+              padding: "11px 22px", borderRadius: "10px", background: COURT, color: "#05070d",
+              fontFamily: MONO, fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em",
+              textTransform: "uppercase", border: "none", cursor: "pointer",
+              transition: "opacity 0.15s",
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = "0.88")}
+            onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+          >
+            <Plus size={14} strokeWidth={2.5} />
+            Crear Deck
+          </button>
+          <button
+            onClick={() => setImportando(true)}
+            disabled={!userId}
+            title="Pegar una lista copiada en Limitless o TCG Live"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "8px",
+              padding: "11px 22px", borderRadius: "10px", background: "rgba(46,230,193,0.06)", color: COURT,
+              fontFamily: MONO, fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em",
+              textTransform: "uppercase", border: `1px solid ${COURT}55`, cursor: "pointer",
+            }}
+          >
+            <ClipboardPaste size={14} strokeWidth={2} />
+            Importar mazo
+          </button>
+        </div>
       </div>
 
       <div className="decks-body">
+        {importando && userId && <ImportarMazo userId={userId} onClose={() => setImportando(false)} />}
+
         {/* Create modal */}
         {creating && (
           <div style={{

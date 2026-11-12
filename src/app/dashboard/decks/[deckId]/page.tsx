@@ -8,7 +8,9 @@ import { SET_CARDS, loadManySets } from "@/data/pokemon-cards";
 import { getVersionLabel, getVersionColor } from "@/data/pokemon-cards-meta";
 import { SCRYDEX_SET_CODES } from "@/hooks/useScrydexPrice";
 import type { PokemonCard } from "@/data/pokemon-cards-meta";
-import { ArrowLeft, Search, Plus, Minus, Trash2, X, Pencil, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Search, Plus, Minus, Trash2, X, Pencil, Eye, EyeOff, Package, ClipboardCopy, Check } from "lucide-react";
+import { fetchAllRows } from "@/lib/fetch-all-rows";
+import { copiarLista, nombreDeCardId, numeroDeCardId } from "@/lib/decklist";
 
 const COURT = "#2ee6c1";
 const INK0  = "#f5f7fb";
@@ -57,6 +59,16 @@ export default function DeckEditorPage() {
   const [searchResults, setSearchResults] = useState<{ card: PokemonCard; setId: string; setName: string }[]>([]);
   const [isSearching,   setIsSearching]   = useState(false);
   const searchTokenRef = useRef(0);
+  /**
+   * Inventario del usuario, contado de dos formas: la misma impresión (set +
+   * número, cualquier versión: normal, reverse…) y por nombre en cualquier set,
+   * para avisar si la carta se tiene en otra edición.
+   */
+  const [invImpresion, setInvImpresion] = useState<Record<string, number>>({});
+  const [invNombre,    setInvNombre]    = useState<Record<string, number>>({});
+  const [copiado, setCopiado] = useState<null | "ok" | "error">(null);
+  /** Carta cuya cajita de "Pide" está abierta (al tocar el 1 / 3) */
+  const [neededAbierto, setNeededAbierto] = useState<string | null>(null);
 
   // El tope de 60 se mide contra las copias que el deck pide, no contra las conseguidas
   const totalCards = deckCards.reduce((s, c) => s + c.needed, 0);
@@ -133,6 +145,23 @@ export default function DeckEditorPage() {
       ]);
 
       if (!deck) { router.push("/dashboard/decks"); return; }
+
+      // El inventario no frena la carga del deck: llega cuando llega
+      fetchAllRows<{ card_id: string; set_id: string; quantity: number }>(() => supabase.from("card_inventory")
+        .select("card_id, set_id, quantity").eq("user_id", user.id).gt("quantity", 0))
+        .then(filas => {
+          const porImpresion: Record<string, number> = {};
+          const porNombre: Record<string, number> = {};
+          for (const f of filas) {
+            const n = numeroDeCardId(String(f.card_id));
+            if (n !== null) porImpresion[`${f.set_id}:${n}`] = (porImpresion[`${f.set_id}:${n}`] ?? 0) + f.quantity;
+            const nombre = nombreDeCardId(String(f.card_id));
+            if (nombre) porNombre[nombre] = (porNombre[nombre] ?? 0) + f.quantity;
+          }
+          setInvImpresion(porImpresion);
+          setInvNombre(porNombre);
+        })
+        .catch(e => console.error("No se pudo cargar el inventario del deck", e));
       setDeckName(deck.name);
       setDeckDesc(deck.description ?? "");
       setIsPublic(deck.is_public ?? true);
@@ -240,6 +269,26 @@ export default function DeckEditorPage() {
     }).eq("id", deckId);
   }
 
+  /** Cuántas tengo en el inventario: [misma impresión, otras ediciones con el mismo nombre] */
+  function enInventario(dc: DeckCard): [number, number] {
+    if (!dc.card) return [0, 0];
+    const exacta = invImpresion[`${dc.set_id}:${dc.card.card_number}`] ?? 0;
+    const total = invNombre[dc.card.name.trim().toLowerCase()] ?? 0;
+    return [exacta, Math.max(0, total - exacta)];
+  }
+
+  /** Copia el deck en el formato de Limitless / TCG Live */
+  async function copiarDeck() {
+    const { texto } = copiarLista(deckCards.filter(dc => dc.card).map(dc => ({ setId: dc.set_id, card: dc.card!, cantidad: dc.needed })));
+    try {
+      await navigator.clipboard.writeText(texto);
+      setCopiado("ok");
+    } catch {
+      setCopiado("error");
+    }
+    setTimeout(() => setCopiado(null), 2200);
+  }
+
   async function deleteDeck() {
     await supabase.from("decks").delete().eq("id", deckId);
     router.push("/dashboard/decks");
@@ -247,7 +296,7 @@ export default function DeckEditorPage() {
 
   /**
    * Botones de "Tengo". Sumar funciona igual que un clic en el buscador.
-   * Restar baja lo conseguido (y lo que pide el deck, si iban parejos);
+   * Restar baja solo lo conseguido (lo que pide el deck va con "Pide");
    * restar en 0 saca la carta del deck.
    */
   async function changeQty(deckCardId: string, delta: number) {
@@ -270,9 +319,26 @@ export default function DeckEditorPage() {
     }
 
     const newQty = entry.quantity - 1;
-    const newNeeded = entry.needed > entry.quantity ? entry.needed : Math.max(newQty, 1);
+    // Lo que pide el deck se cambia aparte, con los botones de "Pide"
+    const newNeeded = entry.needed;
     await supabase.from("deck_cards").update({ quantity: newQty, needed: newNeeded }).eq("id", deckCardId);
     setDeckCards(prev => prev.map(c => c.id === deckCardId ? { ...c, quantity: newQty, needed: newNeeded } : c));
+  }
+
+  /**
+   * Botones de "Pide": cuántas copias lleva el deck. Respeta el tope de 60 y
+   * las 4 copias (menos en energías). Nunca baja de 1 (para sacar la carta
+   * está el − de Tengo en 0) y si baja de lo conseguido, lo conseguido baja con él.
+   */
+  async function changeNeeded(deckCardId: string, delta: number) {
+    const entry = deckCards.find(c => c.id === deckCardId);
+    if (!entry?.card) return;
+    const newNeeded = entry.needed + delta;
+    if (newNeeded < 1) return;
+    if (delta > 0 && (totalCards >= MAX_CARDS || (!isEnergy(entry.card) && entry.needed >= 4))) return;
+    const newQty = Math.min(entry.quantity, newNeeded);
+    setDeckCards(prev => prev.map(c => c.id === deckCardId ? { ...c, needed: newNeeded, quantity: newQty } : c));
+    await supabase.from("deck_cards").update({ needed: newNeeded, quantity: newQty }).eq("id", deckCardId);
   }
 
   if (loading) {
@@ -349,7 +415,7 @@ export default function DeckEditorPage() {
               </span>
             </div>
           </div>
-          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", alignItems: "center" }}>
             {deckPrice > 0 && (
               <div style={{ display: "flex", gap: "18px", marginRight: "6px" }}>
                 <div style={{ textAlign: "right" }}>
@@ -370,6 +436,23 @@ export default function DeckEditorPage() {
                 </div>
               </div>
             )}
+            <button
+              onClick={copiarDeck}
+              disabled={deckCards.length === 0}
+              title="Copiar la lista para pegarla en TCG Live o Limitless"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "8px",
+                padding: "11px 18px", borderRadius: "10px",
+                background: "rgba(46,230,193,0.06)", color: copiado === "error" ? "#ff5d5d" : COURT,
+                border: `1px solid ${copiado === "error" ? "#ff5d5d55" : COURT + "55"}`,
+                fontFamily: MONO, fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em",
+                textTransform: "uppercase", cursor: deckCards.length === 0 ? "default" : "pointer",
+                opacity: deckCards.length === 0 ? 0.5 : 1,
+              }}
+            >
+              {copiado === "ok" ? <Check size={14} strokeWidth={2.5} /> : <ClipboardCopy size={14} strokeWidth={2} />}
+              {copiado === "ok" ? "Copiada" : copiado === "error" ? "No se pudo copiar" : "Copiar lista"}
+            </button>
             <button
               onClick={() => setPickerOpen(true)}
               disabled={totalCards >= MAX_CARDS}
@@ -448,7 +531,51 @@ export default function DeckEditorPage() {
                   <div style={{ position: "relative", aspectRatio: "5/7", borderRadius: "8px", overflow: "hidden", background: "rgba(255,255,255,0.03)" }}>
                     {dc.card?.image && <img loading="lazy" decoding="async" src={dc.card.image} alt={dc.card?.name ?? dc.card_id} style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", inset: 0, filter: dc.quantity === 0 ? "grayscale(1) brightness(0.7)" : dc.quantity < dc.needed ? "grayscale(0.55) brightness(0.9)" : "none", transition: "filter 0.25s" }} />}
                     <div style={{ position: "absolute", bottom: 4, right: 4, fontFamily: MONO, fontSize: "8px", color: vColor, border: `1px solid ${vColor}55`, borderRadius: "4px", padding: "1px 5px", background: "rgba(5,7,13,0.85)" }}>{vLabel}</div>
-                    <div style={{ position: "absolute", top: 4, right: 4, background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "2px 7px", fontFamily: MONO, fontSize: "11px", color: dc.quantity >= dc.needed ? COURT : dc.quantity === 0 ? INK2 : "#d6ff3d", fontWeight: 700 }}>{dc.quantity} / {dc.needed}</div>
+                    <button
+                      onClick={() => setNeededAbierto(neededAbierto === dc.id ? null : dc.id)}
+                      title="Cambiar cuántas copias pide el deck"
+                      aria-expanded={neededAbierto === dc.id}
+                      style={{ position: "absolute", top: 4, right: 4, zIndex: 3, background: "rgba(5,7,13,0.85)", border: `1px solid ${neededAbierto === dc.id ? COURT + "88" : "transparent"}`, borderRadius: "6px", padding: "2px 7px", fontFamily: MONO, fontSize: "11px", color: dc.quantity >= dc.needed ? COURT : dc.quantity === 0 ? INK2 : "#d6ff3d", fontWeight: 700, cursor: "pointer" }}
+                    >
+                      {dc.quantity} / {dc.needed}
+                    </button>
+                    {neededAbierto === dc.id && (() => {
+                      const puedeBajar = dc.needed > 1;
+                      const puedeSubir = totalCards < MAX_CARDS && (isEnergy(dc.card!) || dc.needed < 4);
+                      const boton = (activo: boolean) => ({ width: 26, height: 26, borderRadius: "7px", border: "1px solid rgba(255,255,255,0.18)", background: "none", color: INK0, cursor: activo ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", opacity: activo ? 1 : 0.35 } as const);
+                      return (
+                        <>
+                          {/* Clic afuera: cierra */}
+                          <div onClick={() => setNeededAbierto(null)} style={{ position: "fixed", inset: 0, zIndex: 2 }} />
+                          <div style={{ position: "absolute", top: 30, right: 4, zIndex: 3, background: "#0d1520", border: `1px solid ${COURT}55`, borderRadius: "10px", padding: "8px 10px", boxShadow: "0 10px 30px rgba(0,0,0,0.6)" }}>
+                            <div style={{ fontFamily: MONO, fontSize: "8px", letterSpacing: "0.16em", textTransform: "uppercase", color: COURT, marginBottom: "6px", textAlign: "center" }}>Pide</div>
+                            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                              <button onClick={() => changeNeeded(dc.id, -1)} disabled={!puedeBajar} aria-label="El deck pide una menos" style={boton(puedeBajar)}>
+                                <Minus size={12} />
+                              </button>
+                              <span style={{ fontFamily: MONO, fontSize: "13px", color: INK0, fontWeight: 700, minWidth: "16px", textAlign: "center" }}>{dc.needed}</span>
+                              <button onClick={() => changeNeeded(dc.id, 1)} disabled={!puedeSubir} aria-label="El deck pide una más" style={boton(puedeSubir)}>
+                                <Plus size={12} />
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })()}
+                    {(() => {
+                      const [exacta, otras] = enInventario(dc);
+                      const color = exacta >= dc.needed ? COURT : exacta > 0 ? "#d6ff3d" : INK2;
+                      return (
+                        <div
+                          title={`En tu inventario: ${exacta} de esta edición${otras > 0 ? ` y ${otras} de otras ediciones con el mismo nombre` : ""}`}
+                          style={{ position: "absolute", top: 4, left: 4, display: "flex", alignItems: "center", gap: "3px", background: "rgba(5,7,13,0.85)", borderRadius: "6px", padding: "2px 6px", fontFamily: MONO, fontSize: "11px", fontWeight: 700, color }}
+                        >
+                          <Package size={11} strokeWidth={2} />
+                          {exacta}
+                          {otras > 0 && <span style={{ fontSize: "9px", color: INK2, fontWeight: 400 }}>+{otras}</span>}
+                        </div>
+                      );
+                    })()}
                   </div>
                   <p style={{ fontFamily: MONO, fontSize: "10px", color: INK0, margin: 0, textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{dc.card?.name ?? dc.card_id}</p>
                   {(() => {

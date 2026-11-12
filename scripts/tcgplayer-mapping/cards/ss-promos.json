@@ -1,0 +1,5508 @@
+{
+ "set": "ss-promos",
+ "tcg_set": "SWSH: Sword & Shield Promo Cards",
+ "code": "swshp",
+ "summary": {
+  "total": 307,
+  "ok": 307,
+  "review": 0,
+  "missing": 0,
+  "pct": 100,
+  "variantes": {
+   "total": 334,
+   "resueltas": 334,
+   "sinResolver": 0
+  }
+ },
+ "cards": {
+  "1": {
+   "name": "Grookey",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 200300,
+   "tcg_name": "Grookey - SWSH001",
+   "tcg_number": "SWSH001",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 200300,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "2": {
+   "name": "Scorbunny",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 200301,
+   "tcg_name": "Scorbunny - SWSH002",
+   "tcg_number": "SWSH002",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 200301,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "3": {
+   "name": "Sobble",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 200302,
+   "tcg_name": "Sobble - SWSH003",
+   "tcg_number": "SWSH003",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 200302,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "4": {
+   "name": "Meowth V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 205465,
+   "tcg_name": "Meowth V - SWSH004",
+   "tcg_number": "SWSH004",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 205465,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "5": {
+   "name": "Meowth VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 205466,
+   "tcg_name": "Meowth VMAX - SWSH005",
+   "tcg_number": "SWSH005",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 205466,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "6": {
+   "name": "Rillaboom",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 208261,
+   "tcg_name": "Rillaboom - SWSH006 (Prerelease)",
+   "tcg_number": "SWSH006",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 208260
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 208261,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 208260,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "7": {
+   "name": "Frosmoth",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 208262,
+   "tcg_name": "Frosmoth - SWSH007 (Prerelease)",
+   "tcg_number": "SWSH007",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 208263
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 208262,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 208263,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "8": {
+   "name": "Galarian Perrserker",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 208265,
+   "tcg_name": "Galarian Perrserker - SWSH008 (Prerelease)",
+   "tcg_number": "SWSH008",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 208264
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 208265,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 208264,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "9": {
+   "name": "Cinccino",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 208266,
+   "tcg_name": "Cinccino - SWSH009 (Prerelease)",
+   "tcg_number": "SWSH009",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 208267
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 208266,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 208267,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "10": {
+   "name": "Gossifleur",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 206429,
+   "tcg_name": "Gossifleur - SWSH010",
+   "tcg_number": "SWSH010",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 206429,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "11": {
+   "name": "Wooloo",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 206427,
+   "tcg_name": "Wooloo - SWSH011",
+   "tcg_number": "SWSH011",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 206427,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "12": {
+   "name": "Morpeko",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 206428,
+   "tcg_name": "Morpeko - SWSH012",
+   "tcg_number": "SWSH012",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 206428,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "13": {
+   "name": "Galarian Ponyta",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 206430,
+   "tcg_name": "Galarian Ponyta - SWSH013",
+   "tcg_number": "SWSH013",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 206430,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "14": {
+   "name": "Rillaboom V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 206421,
+   "tcg_name": "Rillaboom V - SWSH014",
+   "tcg_number": "SWSH014",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 206421,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "15": {
+   "name": "Cinderace V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 206419,
+   "tcg_name": "Cinderace V - SWSH015",
+   "tcg_number": "SWSH015",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 206419,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "16": {
+   "name": "Inteleon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 206418,
+   "tcg_name": "Inteleon V - SWSH016",
+   "tcg_number": "SWSH016",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 206418,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "17": {
+   "name": "Toxtricity V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 206425,
+   "tcg_name": "Toxtricity V - SWSH017",
+   "tcg_number": "SWSH017",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 206425,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "18": {
+   "name": "Zacian V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 214233,
+   "tcg_name": "Zacian V - SWSH018",
+   "tcg_number": "SWSH018",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 214233,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "19": {
+   "name": "Zamazenta V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 214234,
+   "tcg_name": "Zamazenta V - SWSH019",
+   "tcg_number": "SWSH019",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 214234,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "20": {
+   "name": "Pikachu",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 214241,
+   "tcg_name": "Pikachu - SWSH020",
+   "tcg_number": "SWSH020",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 214241,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "21": {
+   "name": "Polteageist V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 214235,
+   "tcg_name": "Polteageist V - SWSH021",
+   "tcg_number": "SWSH021",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 214235,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "22": {
+   "name": "Flapple",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 213096,
+   "tcg_name": "Flapple - SWSH022 (Prerelease)",
+   "tcg_number": "SWSH022",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 213097
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 213096,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 213097,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "23": {
+   "name": "Luxray",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 213144,
+   "tcg_name": "Luxray - SWSH023 (Prerelease)",
+   "tcg_number": "SWSH023",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 213145
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 213144,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 213145,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "24": {
+   "name": "Coalossal",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 213196,
+   "tcg_name": "Coalossal - SWSH024 (Prerelease)",
+   "tcg_number": "SWSH024",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 213197
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 213196,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 213197,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "25": {
+   "name": "Garbodor",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 213211,
+   "tcg_name": "Garbodor - SWSH025 (Prerelease)",
+   "tcg_number": "SWSH025",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 213212
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 213211,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 213212,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "26": {
+   "name": "Mantine",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 214237,
+   "tcg_name": "Mantine - SWSH026",
+   "tcg_number": "SWSH026",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 214237,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "27": {
+   "name": "Noctowl",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 214238,
+   "tcg_name": "Noctowl - SWSH027",
+   "tcg_number": "SWSH027",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 214238,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "28": {
+   "name": "Duraludon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 214239,
+   "tcg_name": "Duraludon - SWSH028",
+   "tcg_number": "SWSH028",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 214239,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "29": {
+   "name": "Rayquaza",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 214240,
+   "tcg_name": "Rayquaza - SWSH029",
+   "tcg_number": "SWSH029",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 214240,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "30": {
+   "name": "Copperajah V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 214228,
+   "tcg_name": "Copperajah V - SWSH030",
+   "tcg_number": "SWSH030",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 214228,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "31": {
+   "name": "Morpeko",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 210579,
+   "tcg_name": "Morpeko - SWSH031",
+   "tcg_number": "SWSH031",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 210579,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "32": {
+   "name": "Snorlax",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 210578,
+   "tcg_name": "Snorlax - SWSH032",
+   "tcg_number": "SWSH032",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 210578,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "33": {
+   "name": "Zacian",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 220313,
+   "tcg_name": "Zacian - SWSH033",
+   "tcg_number": "SWSH033",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 220313,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "34": {
+   "name": "Zamazenta",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 220314,
+   "tcg_name": "Zamazenta - SWSH034",
+   "tcg_number": "SWSH034",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 220314,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "35": {
+   "name": "Decidueye",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 218579,
+   "tcg_name": "Decidueye - SWSH035 (Prerelease)",
+   "tcg_number": "SWSH035",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 218578
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 218579,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 218578,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "36": {
+   "name": "Arctozolt",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 218580,
+   "tcg_name": "Arctozolt - SWSH036 (Prerelease)",
+   "tcg_number": "SWSH036",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 218581
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 218580,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 218581,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "37": {
+   "name": "Hydreigon",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 218583,
+   "tcg_name": "Hydreigon - SWSH037 (Prerelease)",
+   "tcg_number": "SWSH037",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 218582
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 218583,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 218582,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "38": {
+   "name": "Kangaskhan",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 218574,
+   "tcg_name": "Kangaskhan - SWSH038 (Prerelease)",
+   "tcg_number": "SWSH038",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 218576
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 218574,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 218576,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "39": {
+   "name": "Pikachu",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 220268,
+   "tcg_name": "Pikachu - SWSH039",
+   "tcg_number": "SWSH039",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 220268,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "40": {
+   "name": "Hatenna",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 220269,
+   "tcg_name": "Hatenna - SWSH040",
+   "tcg_number": "SWSH040",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 220269,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "41": {
+   "name": "Flareon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 220270,
+   "tcg_name": "Flareon - SWSH041",
+   "tcg_number": "SWSH041",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 220270,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "42": {
+   "name": "Eevee",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 220271,
+   "tcg_name": "Eevee - SWSH042",
+   "tcg_number": "SWSH042",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 220271,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "43": {
+   "name": "Galarian Sirfetch'd V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 220273,
+   "tcg_name": "Galarian Sirfetch'd V - SWSH043",
+   "tcg_number": "SWSH043",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 220273,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "44": {
+   "name": "Eternatus V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 220279,
+   "tcg_name": "Eternatus V - SWSH044",
+   "tcg_number": "SWSH044",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 220279,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "45": {
+   "name": "Eternatus VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 220281,
+   "tcg_name": "Eternatus VMAX - SWSH045",
+   "tcg_number": "SWSH045",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 220281,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "46": {
+   "name": "Eldegoss",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 223751,
+   "tcg_name": "Eldegoss - SWSH046",
+   "tcg_number": "SWSH046",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 223751,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "47": {
+   "name": "Drednaw",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 223750,
+   "tcg_name": "Drednaw - SWSH047",
+   "tcg_number": "SWSH047",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 223750,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "48": {
+   "name": "Centiskorch",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 223749,
+   "tcg_name": "Centiskorch - SWSH048",
+   "tcg_number": "SWSH048",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 223749,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "49": {
+   "name": "Dubwool V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 223752,
+   "tcg_name": "Dubwool V - SWSH049",
+   "tcg_number": "SWSH049",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 223752,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "50": {
+   "name": "Charizard V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 223754,
+   "tcg_name": "Charizard V - SWSH050",
+   "tcg_number": "SWSH050",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 223754,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "51": {
+   "name": "Lapras",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 222071,
+   "tcg_name": "Lapras - SWSH051",
+   "tcg_number": "SWSH051",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 222071,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "52": {
+   "name": "Gengar",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 222072,
+   "tcg_name": "Gengar - SWSH052",
+   "tcg_number": "SWSH052",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 222072,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "53": {
+   "name": "Machamp",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 222073,
+   "tcg_name": "Machamp - SWSH053",
+   "tcg_number": "SWSH053",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 222073,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "54": {
+   "name": "Coalossal",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 222074,
+   "tcg_name": "Coalossal - SWSH054",
+   "tcg_number": "SWSH054",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 222074,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "55": {
+   "name": "Hatterene V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 223755,
+   "tcg_name": "Hatterene V - SWSH055",
+   "tcg_number": "SWSH055",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 223755,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "56": {
+   "name": "Morpeko V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 223757,
+   "tcg_name": "Morpeko V - SWSH056",
+   "tcg_number": "SWSH056",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 223757,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "57": {
+   "name": "Grimmsnarl V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 223758,
+   "tcg_name": "Grimmsnarl V - SWSH057",
+   "tcg_number": "SWSH057",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 223758,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "58": {
+   "name": "Alcremie",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 227029,
+   "tcg_name": "Alcremie - SWSH058",
+   "tcg_number": "SWSH058",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 227029,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "59": {
+   "name": "Galarian Obstagoon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 227030,
+   "tcg_name": "Galarian Obstagoon - SWSH059",
+   "tcg_number": "SWSH059",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 227030,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "60": {
+   "name": "Duraludon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 227031,
+   "tcg_name": "Duraludon - SWSH060",
+   "tcg_number": "SWSH060",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 227031,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "61": {
+   "name": "Pikachu V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232434,
+   "tcg_name": "Pikachu V - SWSH061",
+   "tcg_number": "SWSH061",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232434,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "62": {
+   "name": "Pikachu VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251086,
+   "tcg_name": "Pikachu VMAX - SWSH062",
+   "tcg_number": "SWSH062",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251086,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "63": {
+   "name": "Pikachu V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 220315,
+   "tcg_name": "Pikachu V - SWSH063",
+   "tcg_number": "SWSH063",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 220315,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "64": {
+   "name": "Eternatus V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 220316,
+   "tcg_name": "Eternatus V - SWSH064",
+   "tcg_number": "SWSH064",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 220316,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "65": {
+   "name": "Eevee V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 220317,
+   "tcg_name": "Eevee V - SWSH065",
+   "tcg_number": "SWSH065",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 220317,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "66": {
+   "name": "Charizard",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 224365,
+   "tcg_name": "Charizard - SWSH066 (Prerelease)",
+   "tcg_number": "SWSH066",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 224366
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 224365,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 224366,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "67": {
+   "name": "Donphan",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 224368,
+   "tcg_name": "Donphan - SWSH067 (Prerelease)",
+   "tcg_number": "SWSH067",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 224367
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 224368,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 224367,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "68": {
+   "name": "Snorlax",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 224361,
+   "tcg_name": "Snorlax - SWSH068 (Prerelease)",
+   "tcg_number": "SWSH068",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 224362
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 224361,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 224362,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "69": {
+   "name": "Lugia",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 224364,
+   "tcg_name": "Lugia - SWSH069 (Prerelease)",
+   "tcg_number": "SWSH069",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 224363
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 224364,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 224363,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "70": {
+   "name": "Grookey",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 227028,
+   "tcg_name": "Grookey - SWSH070",
+   "tcg_number": "SWSH070",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 227028,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "71": {
+   "name": "Scorbunny",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 227027,
+   "tcg_name": "Scorbunny - SWSH071",
+   "tcg_number": "SWSH071",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 227027,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "72": {
+   "name": "Vaporeon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 221753,
+   "tcg_name": "Vaporeon - SWSH072",
+   "tcg_number": "SWSH072",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 221753,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "73": {
+   "name": "Sobble",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 221754,
+   "tcg_name": "Sobble - SWSH073",
+   "tcg_number": "SWSH073",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 221754,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "74": {
+   "name": "Special Delivery Pikachu",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 227646,
+   "tcg_name": "Special Delivery Pikachu - SWSH074",
+   "tcg_number": "SWSH074",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 227646,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "75": {
+   "name": "Special Delivery Charizard",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 282259,
+   "tcg_name": "Special Delivery Charizard - SWSH075",
+   "tcg_number": "SWSH075",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 282259,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "76": {
+   "name": "Zacian V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 228595,
+   "tcg_name": "Zacian V - SWSH076",
+   "tcg_number": "SWSH076",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 228595,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "77": {
+   "name": "Zamazenta V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 228596,
+   "tcg_name": "Zamazenta V - SWSH077",
+   "tcg_number": "SWSH077",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 228596,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "78": {
+   "name": "Orbeetle V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 227025,
+   "tcg_name": "Orbeetle V - SWSH078",
+   "tcg_number": "SWSH078",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 227025,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "79": {
+   "name": "Galarian Mr. Rime",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232450,
+   "tcg_name": "Galarian Mr. Rime - SWSH079",
+   "tcg_number": "SWSH079",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232450,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "80": {
+   "name": "Dedenne",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232453,
+   "tcg_name": "Dedenne - SWSH080",
+   "tcg_number": "SWSH080",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232453,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "81": {
+   "name": "Polteageist",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232458,
+   "tcg_name": "Polteageist - SWSH081",
+   "tcg_number": "SWSH081",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232458,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "82": {
+   "name": "Bunnelby",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232461,
+   "tcg_name": "Bunnelby - SWSH082",
+   "tcg_number": "SWSH082",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232461,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "83": {
+   "name": "Alakazam V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 228980,
+   "tcg_name": "Alakazam V - SWSH083",
+   "tcg_number": "SWSH083",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 228980,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "84": {
+   "name": "Eldegoss V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232481,
+   "tcg_name": "Eldegoss V - SWSH084",
+   "tcg_number": "SWSH084",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232481,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "85": {
+   "name": "Boltund V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232499,
+   "tcg_name": "Boltund V - SWSH085",
+   "tcg_number": "SWSH085",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232499,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "86": {
+   "name": "Cramorant V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232503,
+   "tcg_name": "Cramorant V - SWSH086",
+   "tcg_number": "SWSH086",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232503,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "87": {
+   "name": "Eevee VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232611,
+   "tcg_name": "Eevee VMAX - SWSH087",
+   "tcg_number": "SWSH087",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232611,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "88": {
+   "name": "Cherrim",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 234276,
+   "tcg_name": "Cherrim - SWSH088 (Prerelease)",
+   "tcg_number": "SWSH088",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 234276,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "89": {
+   "name": "Octillery",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 234277,
+   "tcg_name": "Octillery - SWSH089 (Prerelease)",
+   "tcg_number": "SWSH089",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 234277,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "90": {
+   "name": "Houndoom",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 234278,
+   "tcg_name": "Houndoom - SWSH090 (Prerelease)",
+   "tcg_number": "SWSH090",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 234278,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "91": {
+   "name": "Bronzong",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 234279,
+   "tcg_name": "Bronzong - SWSH091 (Prerelease)",
+   "tcg_number": "SWSH091",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 234279,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "92": {
+   "name": "Charmander",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 234282,
+   "tcg_name": "Charmander - SWSH092",
+   "tcg_number": "SWSH092",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 234282,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "93": {
+   "name": "Arrokuda",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 234283,
+   "tcg_name": "Arrokuda - SWSH093",
+   "tcg_number": "SWSH093",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 234283,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "94": {
+   "name": "Jolteon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 234284,
+   "tcg_name": "Jolteon - SWSH094",
+   "tcg_number": "SWSH094",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 234284,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "95": {
+   "name": "Eevee",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 234287,
+   "tcg_name": "Eevee - SWSH095",
+   "tcg_number": "SWSH095",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 234287,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "96": {
+   "name": "Dragapult V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232610,
+   "tcg_name": "Dragapult V - SWSH096",
+   "tcg_number": "SWSH096",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232610,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "97": {
+   "name": "Dragapult VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232608,
+   "tcg_name": "Dragapult VMAX - SWSH097",
+   "tcg_number": "SWSH097",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232608,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "98": {
+   "name": "Crobat V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232612,
+   "tcg_name": "Crobat V - SWSH098",
+   "tcg_number": "SWSH098",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232612,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "99": {
+   "name": "Crobat VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232613,
+   "tcg_name": "Crobat VMAX - SWSH099",
+   "tcg_number": "SWSH099",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232613,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "100": {
+   "name": "Venusaur V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232723,
+   "tcg_name": "Venusaur V - SWSH100",
+   "tcg_number": "SWSH100",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232723,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "101": {
+   "name": "Blastoise V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 232724,
+   "tcg_name": "Blastoise V - SWSH101",
+   "tcg_number": "SWSH101",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 232724,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "102": {
+   "name": "Venusaur VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 234298,
+   "tcg_name": "Venusaur VMAX - SWSH102",
+   "tcg_number": "SWSH102",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 234298,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "103": {
+   "name": "Blastoise VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 234299,
+   "tcg_name": "Blastoise VMAX - SWSH103",
+   "tcg_number": "SWSH103",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 234299,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "104": {
+   "name": "Victini V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 238546,
+   "tcg_name": "Victini V - SWSH104",
+   "tcg_number": "SWSH104",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 238546,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "105": {
+   "name": "Gardevoir V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 238545,
+   "tcg_name": "Gardevoir V - SWSH105",
+   "tcg_number": "SWSH105",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 238545,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "106": {
+   "name": "Single Strike Urshifu V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 234296,
+   "tcg_name": "Single Strike Urshifu V - SWSH106",
+   "tcg_number": "SWSH106",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 234296,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "107": {
+   "name": "Rapid Strike Urshifu V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 234297,
+   "tcg_name": "Rapid Strike Urshifu V - SWSH107",
+   "tcg_number": "SWSH107",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 234297,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "108": {
+   "name": "Empoleon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 238555,
+   "tcg_name": "Empoleon V - SWSH108",
+   "tcg_number": "SWSH108",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 238555,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "109": {
+   "name": "Tyranitar V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 238553,
+   "tcg_name": "Tyranitar V - SWSH109",
+   "tcg_number": "SWSH109",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 238553,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "110": {
+   "name": "Crobat V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 245875,
+   "tcg_name": "Crobat V - SWSH110",
+   "tcg_number": "SWSH110",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 245875,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "111": {
+   "name": "Galarian Rapidash V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 236054,
+   "tcg_name": "Galarian Rapidash V - SWSH111",
+   "tcg_number": "SWSH111",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 236054,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "112": {
+   "name": "Cinderace",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 240891,
+   "tcg_name": "Cinderace - SWSH112 (Prerelease)",
+   "tcg_number": "SWSH112",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 240891,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "113": {
+   "name": "Inteleon",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 240892,
+   "tcg_name": "Inteleon - SWSH113 (Prerelease)",
+   "tcg_number": "SWSH113",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 240892,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "114": {
+   "name": "Cresselia",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 240893,
+   "tcg_name": "Cresselia - SWSH114 (Prerelease)",
+   "tcg_number": "SWSH114",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 240893,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "115": {
+   "name": "Passimian",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 240894,
+   "tcg_name": "Passimian - SWSH115 (Prerelease)",
+   "tcg_number": "SWSH115",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 240894,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "116": {
+   "name": "Morpeko",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 241881,
+   "tcg_name": "Morpeko - SWSH116",
+   "tcg_number": "SWSH116",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 241881,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "117": {
+   "name": "Phanpy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 241882,
+   "tcg_name": "Phanpy - SWSH117",
+   "tcg_number": "SWSH117",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 241882,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "118": {
+   "name": "Eevee",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 241883,
+   "tcg_name": "Eevee - SWSH118",
+   "tcg_number": "SWSH118",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 241883,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "119": {
+   "name": "Snorlax",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 241884,
+   "tcg_name": "Snorlax - SWSH119",
+   "tcg_number": "SWSH119",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 241884,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "120": {
+   "name": "Marnie",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 245871,
+   "tcg_name": "Marnie - SWSH120",
+   "tcg_number": "SWSH120",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 245871,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "121": {
+   "name": "Marnie",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 245872,
+   "tcg_name": "Marnie - SWSH121",
+   "tcg_number": "SWSH121",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 245872,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "122": {
+   "name": "Flaaffy",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 246931,
+   "tcg_name": "Flaaffy - SWSH122 (Prerelease)",
+   "tcg_number": "SWSH122",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 246931,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "123": {
+   "name": "Galarian Articuno",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 246927,
+   "tcg_name": "Galarian Articuno - SWSH123 (Prerelease)",
+   "tcg_number": "SWSH123",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 246927,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "124": {
+   "name": "Galarian Zapdos",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 246933,
+   "tcg_name": "Galarian Zapdos - SWSH124 (Prerelease)",
+   "tcg_number": "SWSH124",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 246933,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "125": {
+   "name": "Galarian Moltres",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 246929,
+   "tcg_name": "Galarian Moltres - SWSH125 (Prerelease)",
+   "tcg_number": "SWSH125",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 246929,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "126": {
+   "name": "Galarian Slowpoke",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 247290,
+   "tcg_name": "Galarian Slowpoke - SWSH126",
+   "tcg_number": "SWSH126",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 247290,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "127": {
+   "name": "Eevee",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 247291,
+   "tcg_name": "Eevee - SWSH127",
+   "tcg_number": "SWSH127",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 247291,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "128": {
+   "name": "Eiscue",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 247292,
+   "tcg_name": "Eiscue - SWSH128",
+   "tcg_number": "SWSH128",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 247292,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "129": {
+   "name": "Umbreon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 247294,
+   "tcg_name": "Umbreon - SWSH129",
+   "tcg_number": "SWSH129",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 247294,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "130": {
+   "name": "Ice Rider Calyrex V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 245868,
+   "tcg_name": "Ice Rider Calyrex V - SWSH130",
+   "tcg_number": "SWSH130",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 245868,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "131": {
+   "name": "Shadow Rider Calyrex V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 245867,
+   "tcg_name": "Shadow Rider Calyrex V - SWSH131",
+   "tcg_number": "SWSH131",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 245867,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "132": {
+   "name": "Dragapult",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251088,
+   "tcg_name": "Dragapult (Prime) - SWSH132",
+   "tcg_number": "SWSH132",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251088,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "133": {
+   "name": "Lance's Charizard V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251089,
+   "tcg_name": "Lance's Charizard V - SWSH133",
+   "tcg_number": "SWSH133",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251089,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "134": {
+   "name": "Dark Sylveon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251090,
+   "tcg_name": "Dark Sylveon V - SWSH134",
+   "tcg_number": "SWSH134",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251090,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "135": {
+   "name": "Zacian LV. X",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251091,
+   "tcg_name": "Zacian LV. X - SWSH135",
+   "tcg_number": "SWSH135",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251091,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "136": {
+   "name": "Mimikyu",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251092,
+   "tcg_name": "Mimikyu (Delta Species) - SWSH136",
+   "tcg_number": "SWSH136",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251092,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "137": {
+   "name": "Light Toxtricity",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251093,
+   "tcg_name": "Light Toxtricity - SWSH137",
+   "tcg_number": "SWSH137",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251093,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "138": {
+   "name": "Hydreigon C lv.61",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251094,
+   "tcg_name": "Hydreigon C lv.61 - SWSH138",
+   "tcg_number": "SWSH138",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251094,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "139": {
+   "name": "Pikachu V-Union",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251095,
+   "tcg_name": "Pikachu V-Union - SWSH139",
+   "tcg_number": "SWSH139",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251095,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "140": {
+   "name": "Pikachu V-Union",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251096,
+   "tcg_name": "Pikachu V-Union - SWSH140",
+   "tcg_number": "SWSH140",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251096,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "141": {
+   "name": "Pikachu V-Union",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251097,
+   "tcg_name": "Pikachu V-Union - SWSH141",
+   "tcg_number": "SWSH141",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251097,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "142": {
+   "name": "Pikachu V-Union",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251098,
+   "tcg_name": "Pikachu V-Union - SWSH142",
+   "tcg_number": "SWSH142",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251098,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "143": {
+   "name": "Pikachu V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251101,
+   "tcg_name": "Pikachu V - SWSH143",
+   "tcg_number": "SWSH143",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251101,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "144": {
+   "name": "Greninja Star",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 248731,
+   "tcg_name": "Greninja Star",
+   "tcg_number": "SWSH144",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 248731,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "145": {
+   "name": "Pikachu V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251102,
+   "tcg_name": "Pikachu V - SWSH145",
+   "tcg_number": "SWSH145",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251102,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "146": {
+   "name": "Poke Ball",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 251103,
+   "tcg_name": "Poke Ball - SWSH146",
+   "tcg_number": "SWSH146",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 251103,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "147": {
+   "name": "Rayquaza V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 250577,
+   "tcg_name": "Rayquaza V - SWSH147",
+   "tcg_number": "SWSH147",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 250577,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "148": {
+   "name": "Noivern V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 250578,
+   "tcg_name": "Noivern V - SWSH148",
+   "tcg_number": "SWSH148",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 250578,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "149": {
+   "name": "Flareon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 247295,
+   "tcg_name": "Flareon V - SWSH149",
+   "tcg_number": "SWSH149",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 247295,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "150": {
+   "name": "Vaporeon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 247296,
+   "tcg_name": "Vaporeon V - SWSH150",
+   "tcg_number": "SWSH150",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 247296,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "151": {
+   "name": "Jolteon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 247297,
+   "tcg_name": "Jolteon V - SWSH151",
+   "tcg_number": "SWSH151",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 247297,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "152": {
+   "name": "Professor's Research",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 268709,
+   "tcg_name": "Professor's Research [Professor Juniper] - SWSH152",
+   "tcg_number": "SWSH152",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 268709,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "153": {
+   "name": "Pikachu",
+   "versions": [
+    "holidayCalendar"
+   ],
+   "status": "ok",
+   "product_id": 283301,
+   "tcg_name": "Pikachu - SWSH153 (Holiday Calendar)",
+   "tcg_number": "SWSH153",
+   "variant_products": [],
+   "variants": {
+    "holidayCalendar": {
+     "product_id": 283301,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "154": {
+   "name": "Dragonite V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 247298,
+   "tcg_name": "Dragonite V - SWSH154",
+   "tcg_number": "SWSH154",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 247298,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "155": {
+   "name": "Greninja V-UNION",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 248887,
+   "tcg_name": "Greninja V-UNION - SWSH155",
+   "tcg_number": "SWSH155",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 248887,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "156": {
+   "name": "Greninja V-UNION",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 248888,
+   "tcg_name": "Greninja V-UNION - SWSH156",
+   "tcg_number": "SWSH156",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 248888,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "157": {
+   "name": "Greninja V-UNION",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 248889,
+   "tcg_name": "Greninja V-UNION - SWSH157",
+   "tcg_number": "SWSH157",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 248889,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "158": {
+   "name": "Greninja V-UNION",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 248890,
+   "tcg_name": "Greninja V-UNION - SWSH158",
+   "tcg_number": "SWSH158",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 248890,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "159": {
+   "name": "Mewtwo V-UNION",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 248891,
+   "tcg_name": "Mewtwo V-UNION - SWSH159",
+   "tcg_number": "SWSH159",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 248891,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "160": {
+   "name": "Mewtwo V-UNION",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 248892,
+   "tcg_name": "Mewtwo V-UNION - SWSH160",
+   "tcg_number": "SWSH160",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 248892,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "161": {
+   "name": "Mewtwo V-UNION",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 248893,
+   "tcg_name": "Mewtwo V-UNION - SWSH161",
+   "tcg_number": "SWSH161",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 248893,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "162": {
+   "name": "Mewtwo V-UNION",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 248894,
+   "tcg_name": "Mewtwo V-UNION - SWSH162",
+   "tcg_number": "SWSH162",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 248894,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "163": {
+   "name": "Zacian V-UNION",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 247364,
+   "tcg_name": "Zacian V-UNION - SWSH163",
+   "tcg_number": "SWSH163",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 247364,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "164": {
+   "name": "Zacian V-UNION",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 247365,
+   "tcg_name": "Zacian V-UNION - SWSH164",
+   "tcg_number": "SWSH164",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 247365,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "165": {
+   "name": "Zacian V-UNION",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 247366,
+   "tcg_name": "Zacian V-UNION - SWSH165",
+   "tcg_number": "SWSH165",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 247366,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "166": {
+   "name": "Zacian V-UNION",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 247367,
+   "tcg_name": "Zacian V-UNION - SWSH166",
+   "tcg_number": "SWSH166",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 247367,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "167": {
+   "name": "Professor Burnet",
+   "versions": [
+    "anniversaryStamp",
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 247300,
+   "tcg_name": "Professor Burnet - SWSH167 (25th Anniversary Stamp)",
+   "tcg_number": "SWSH167",
+   "variant_products": [
+    {
+     "suffix": "normal",
+     "product_id": 247299
+    }
+   ],
+   "variants": {
+    "anniversaryStamp": {
+     "product_id": 247300,
+     "printing": "Normal"
+    },
+    "normal": {
+     "product_id": 247299,
+     "printing": "Normal"
+    }
+   }
+  },
+  "168": {
+   "name": "Oricorio",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 253404,
+   "tcg_name": "Oricorio - SWSH168 (Prerelease)",
+   "tcg_number": "SWSH168",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 253404,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "169": {
+   "name": "Pyukumuku",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 253405,
+   "tcg_name": "Pyukumuku - SWSH169 (Prerelease)",
+   "tcg_number": "SWSH169",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 253405,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "170": {
+   "name": "Deoxys",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 253406,
+   "tcg_name": "Deoxys - SWSH170 (Prerelease)",
+   "tcg_number": "SWSH170",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 253406,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "171": {
+   "name": "Latias",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 253407,
+   "tcg_name": "Latias - SWSH171 (Prerelease)",
+   "tcg_number": "SWSH171",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 253407,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "172": {
+   "name": "Tepig",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 253408,
+   "tcg_name": "Tepig - SWSH172",
+   "tcg_number": "SWSH172",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 253408,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "173": {
+   "name": "Blitzle",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 253409,
+   "tcg_name": "Blitzle - SWSH173",
+   "tcg_number": "SWSH173",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 253409,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "174": {
+   "name": "Espeon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 253410,
+   "tcg_name": "Espeon - SWSH174",
+   "tcg_number": "SWSH174",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 253410,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "175": {
+   "name": "Eevee",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 253413,
+   "tcg_name": "Eevee - SWSH175",
+   "tcg_number": "SWSH175",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 253413,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "176": {
+   "name": "Hoopa V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 253412,
+   "tcg_name": "Hoopa V - SWSH176",
+   "tcg_number": "SWSH176",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 253412,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "177": {
+   "name": "Special Delivery Bidoof",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 247386,
+   "tcg_name": "Special Delivery Bidoof",
+   "tcg_number": "SWSH177",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 247386,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "178": {
+   "name": "Professor's Research",
+   "versions": [
+    "normal",
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 246275,
+   "tcg_name": "Professor's Research [Professor Willow] - SWSH178 (with Pokemon Go Code)",
+   "tcg_number": "SWSH178",
+   "variant_products": [
+    {
+     "suffix": "holofoil",
+     "product_id": 278705
+    }
+   ],
+   "variants": {
+    "normal": {
+     "product_id": 246275,
+     "printing": "Normal"
+    },
+    "holofoil": {
+     "product_id": 278705,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "179": {
+   "name": "Flareon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 253414,
+   "tcg_name": "Flareon V - SWSH179",
+   "tcg_number": "SWSH179",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 253414,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "180": {
+   "name": "Flareon VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 253415,
+   "tcg_name": "Flareon VMAX - SWSH180",
+   "tcg_number": "SWSH180",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 253415,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "181": {
+   "name": "Vaporeon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 253416,
+   "tcg_name": "Vaporeon V - SWSH181",
+   "tcg_number": "SWSH181",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 253416,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "182": {
+   "name": "Vaporeon VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 253417,
+   "tcg_name": "Vaporeon VMAX - SWSH182",
+   "tcg_number": "SWSH182",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 253417,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "183": {
+   "name": "Jolteon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 253418,
+   "tcg_name": "Jolteon V - SWSH183",
+   "tcg_number": "SWSH183",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 253418,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "184": {
+   "name": "Jolteon VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 253419,
+   "tcg_name": "Jolteon VMAX - SWSH184",
+   "tcg_number": "SWSH184",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 253419,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "185": {
+   "name": "Moltres",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 264277,
+   "tcg_name": "Moltres - SWSH185",
+   "tcg_number": "SWSH185",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 264277,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "186": {
+   "name": "Lucario",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 264278,
+   "tcg_name": "Lucario - SWSH186",
+   "tcg_number": "SWSH186",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 264278,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "187": {
+   "name": "Liepard",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 264279,
+   "tcg_name": "Liepard - SWSH187",
+   "tcg_number": "SWSH187",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 264279,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "188": {
+   "name": "Bibarel",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 264280,
+   "tcg_name": "Bibarel - SWSH188",
+   "tcg_number": "SWSH188",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 264280,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "189": {
+   "name": "Flapple",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 264282,
+   "tcg_name": "Flapple - SWSH189",
+   "tcg_number": "SWSH189",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 264282,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "190": {
+   "name": "Eevee",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 264283,
+   "tcg_name": "Eevee - SWSH190",
+   "tcg_number": "SWSH190",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 264283,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "191": {
+   "name": "Leafeon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 264284,
+   "tcg_name": "Leafeon - SWSH191",
+   "tcg_number": "SWSH191",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 264284,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "192": {
+   "name": "Glaceon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 264285,
+   "tcg_name": "Glaceon - SWSH192",
+   "tcg_number": "SWSH192",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 264285,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "193": {
+   "name": "Galarian Obstagoon",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 268708,
+   "tcg_name": "Galarian Obstagoon - SWSH193",
+   "tcg_number": "SWSH193",
+   "variant_products": [],
+   "variants": {
+    "normal": {
+     "product_id": 268708,
+     "printing": "Normal"
+    }
+   }
+  },
+  "194": {
+   "name": "Leafeon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 262563,
+   "tcg_name": "Leafeon V - SWSH194",
+   "tcg_number": "SWSH194",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 262563,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "195": {
+   "name": "Leafeon VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 262566,
+   "tcg_name": "Leafeon VSTAR - SWSH195",
+   "tcg_number": "SWSH195",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 262566,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "196": {
+   "name": "Glaceon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 262571,
+   "tcg_name": "Glaceon V - SWSH196",
+   "tcg_number": "SWSH196",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 262571,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "197": {
+   "name": "Glaceon VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 262569,
+   "tcg_name": "Glaceon VSTAR - SWSH197",
+   "tcg_number": "SWSH197",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 262569,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "198": {
+   "name": "Pikachu V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 260711,
+   "tcg_name": "Pikachu V - SWSH198",
+   "tcg_number": "SWSH198",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 260711,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "199": {
+   "name": "Lycanroc V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 266616,
+   "tcg_name": "Lycanroc V - SWSH199",
+   "tcg_number": "SWSH199",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 266616,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "200": {
+   "name": "Corviknight V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 266627,
+   "tcg_name": "Corviknight V - SWSH200",
+   "tcg_number": "SWSH200",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 266627,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "201": {
+   "name": "Espeon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 268710,
+   "tcg_name": "Espeon V - SWSH201",
+   "tcg_number": "SWSH201",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 268710,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "202": {
+   "name": "Sylveon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 268711,
+   "tcg_name": "Sylveon V - SWSH202",
+   "tcg_number": "SWSH202",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 268711,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "203": {
+   "name": "Umbreon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 268712,
+   "tcg_name": "Umbreon V - SWSH203",
+   "tcg_number": "SWSH203",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 268712,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "204": {
+   "name": "Arceus V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 271837,
+   "tcg_name": "Arceus V - SWSH204",
+   "tcg_number": "SWSH204",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 271837,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "205": {
+   "name": "Hisuian Basculegion",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 273154,
+   "tcg_name": "Hisuian Basculegion - SWSH205",
+   "tcg_number": "SWSH205",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 273154,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "206": {
+   "name": "Wyrdeer",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 273155,
+   "tcg_name": "Wyrdeer - SWSH206",
+   "tcg_number": "SWSH206",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 273155,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "207": {
+   "name": "Hisuian Samurott",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 273156,
+   "tcg_name": "Hisuian Samurott - SWSH207",
+   "tcg_number": "SWSH207",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 273156,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "208": {
+   "name": "Magnezone",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 273158,
+   "tcg_name": "Magnezone - SWSH208",
+   "tcg_number": "SWSH208",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 273158,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "209": {
+   "name": "Toxel",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 273583,
+   "tcg_name": "Toxel - SWSH209",
+   "tcg_number": "SWSH209",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 273583,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "210": {
+   "name": "Oricorio",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 273585,
+   "tcg_name": "Oricorio - SWSH210",
+   "tcg_number": "SWSH210",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 273585,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "211": {
+   "name": "Sylveon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 273588,
+   "tcg_name": "Sylveon - SWSH211",
+   "tcg_number": "SWSH211",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 273588,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "212": {
+   "name": "Eevee",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 273590,
+   "tcg_name": "Eevee - SWSH212",
+   "tcg_number": "SWSH212",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 273590,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "213": {
+   "name": "Lucario V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 268306,
+   "tcg_name": "Lucario V - SWSH213",
+   "tcg_number": "SWSH213",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 268306,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "214": {
+   "name": "Lucario VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 268304,
+   "tcg_name": "Lucario VSTAR - SWSH214",
+   "tcg_number": "SWSH214",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 268304,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "215": {
+   "name": "Morpeko V-Union",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 268444,
+   "tcg_name": "Morpeko V-Union - SWSH215",
+   "tcg_number": "SWSH215",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 268444,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "216": {
+   "name": "Morpeko V-Union",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 268445,
+   "tcg_name": "Morpeko V-Union - SWSH216",
+   "tcg_number": "SWSH216",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 268445,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "217": {
+   "name": "Morpeko V-Union",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 268446,
+   "tcg_name": "Morpeko V-Union - SWSH217",
+   "tcg_number": "SWSH217",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 268446,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "218": {
+   "name": "Morpeko V-Union",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 268447,
+   "tcg_name": "Morpeko V-Union - SWSH218",
+   "tcg_number": "SWSH218",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 268447,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "219": {
+   "name": "Boltund V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 270468,
+   "tcg_name": "Boltund V - SWSH219",
+   "tcg_number": "SWSH219",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 270468,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "220": {
+   "name": "Rowlet",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 268705,
+   "tcg_name": "Rowlet - SWSH220",
+   "tcg_number": "SWSH220",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 268705,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "221": {
+   "name": "Cyndaquil",
+   "versions": [
+    "holofoil",
+    "cosmosHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 268706,
+   "tcg_name": "Cyndaquil - SWSH221",
+   "tcg_number": "SWSH221",
+   "variant_products": [
+    {
+     "suffix": "cosmosHolofoil",
+     "product_id": 489390
+    }
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 268706,
+     "printing": "Holofoil"
+    },
+    "cosmosHolofoil": {
+     "product_id": 489390,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "222": {
+   "name": "Oshawott",
+   "versions": [
+    "holofoil",
+    "cosmosHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 268707,
+   "tcg_name": "Oshawott - SWSH222",
+   "tcg_number": "SWSH222",
+   "variant_products": [
+    {
+     "suffix": "cosmosHolofoil",
+     "product_id": 594750
+    }
+   ],
+   "variants": {
+    "holofoil": {
+     "product_id": 268707,
+     "printing": "Holofoil"
+    },
+    "cosmosHolofoil": {
+     "product_id": 594750,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "223": {
+   "name": "Mewtwo V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 270718,
+   "tcg_name": "Mewtwo V - SWSH223",
+   "tcg_number": "SWSH223",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 270718,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "224": {
+   "name": "Melmetal V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 270719,
+   "tcg_name": "Melmetal V - SWSH224",
+   "tcg_number": "SWSH224",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 270719,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "225": {
+   "name": "Alolan Exeggutor V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 270723,
+   "tcg_name": "Alolan Exeggutor V - SWSH225",
+   "tcg_number": "SWSH225",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 270723,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "226": {
+   "name": "Spark",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 270720,
+   "tcg_name": "Spark - SWSH226",
+   "tcg_number": "SWSH226",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 270720,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "227": {
+   "name": "Blanche",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 270721,
+   "tcg_name": "Blanche - SWSH227",
+   "tcg_number": "SWSH227",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 270721,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "228": {
+   "name": "Candela",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 270722,
+   "tcg_name": "Candela - SWSH228",
+   "tcg_number": "SWSH228",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 270722,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "229": {
+   "name": "Mewtwo V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277040,
+   "tcg_name": "Mewtwo V - SWSH229",
+   "tcg_number": "SWSH229",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 277040,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "230": {
+   "name": "Radiant Eevee",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 270724,
+   "tcg_name": "Radiant Eevee - SWSH230",
+   "tcg_number": "SWSH230",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 270724,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "231": {
+   "name": "Bulbasaur",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 275828,
+   "tcg_name": "Bulbasaur - SWSH231",
+   "tcg_number": "SWSH231",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 275828,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "232": {
+   "name": "Charmander",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 275829,
+   "tcg_name": "Charmander - SWSH232",
+   "tcg_number": "SWSH232",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 275829,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "233": {
+   "name": "Squirtle",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 275830,
+   "tcg_name": "Squirtle - SWSH233",
+   "tcg_number": "SWSH233",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 275830,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "234": {
+   "name": "Pikachu",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 277039,
+   "tcg_name": "Pikachu - SWSH234",
+   "tcg_number": "SWSH234",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 277039,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "235": {
+   "name": "Dragonite V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 275844,
+   "tcg_name": "Dragonite V - SWSH235",
+   "tcg_number": "SWSH235",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 275844,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "236": {
+   "name": "Dragonite VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 275843,
+   "tcg_name": "Dragonite VSTAR - SWSH236",
+   "tcg_number": "SWSH236",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 275843,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "237": {
+   "name": "Hisuian Typhlosion V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 275167,
+   "tcg_name": "Hisuian Typhlosion V - SWSH237",
+   "tcg_number": "SWSH237",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 275167,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "238": {
+   "name": "Hisuian Decidueye V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 275166,
+   "tcg_name": "Hisuian Decidueye V - SWSH238",
+   "tcg_number": "SWSH238",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 275166,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "239": {
+   "name": "Hisuian Samurott V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 275165,
+   "tcg_name": "Hisuian Samurott V - SWSH239",
+   "tcg_number": "SWSH239",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 275165,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "240": {
+   "name": "Finneon",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 285254,
+   "tcg_name": "Finneon - SWSH240 (Prerelease)",
+   "tcg_number": "SWSH240",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 680245
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 285254,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 680245,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "241": {
+   "name": "Gengar",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 285257,
+   "tcg_name": "Gengar - SWSH241 (Prerelease)",
+   "tcg_number": "SWSH241",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 607368
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 285257,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 607368,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "242": {
+   "name": "Comfey",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 285253,
+   "tcg_name": "Comfey - SWSH242 (Prerelease)",
+   "tcg_number": "SWSH242",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 285253,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "243": {
+   "name": "Machamp",
+   "versions": [
+    "prereleaseStamp"
+   ],
+   "status": "ok",
+   "product_id": 285251,
+   "tcg_name": "Machamp - SWSH243 (Prerelease)",
+   "tcg_number": "SWSH243",
+   "variant_products": [],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 285251,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "244": {
+   "name": "Scorbunny",
+   "versions": [
+    "cosmosHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 285264,
+   "tcg_name": "Scorbunny - SWSH244 (Cosmos Holo)",
+   "tcg_number": "SWSH244",
+   "variant_products": [],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 285264,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "245": {
+   "name": "Croagunk",
+   "versions": [
+    "cosmosHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 285259,
+   "tcg_name": "Croagunk - SWSH245 (Cosmos Holo)",
+   "tcg_number": "SWSH245",
+   "variant_products": [],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 285259,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "246": {
+   "name": "Weavile",
+   "versions": [
+    "cosmosHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 285262,
+   "tcg_name": "Weavile - SWSH246 (Cosmos Holo)",
+   "tcg_number": "SWSH246",
+   "variant_products": [],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 285262,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "247": {
+   "name": "Regigigas",
+   "versions": [
+    "cosmosHolofoil"
+   ],
+   "status": "ok",
+   "product_id": 285258,
+   "tcg_name": "Regigigas - SWSH247 (Cosmos Holo)",
+   "tcg_number": "SWSH247",
+   "variant_products": [],
+   "variants": {
+    "cosmosHolofoil": {
+     "product_id": 285258,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "248": {
+   "name": "Kleavor V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 273938,
+   "tcg_name": "Kleavor V (Full Art) - SWSH248",
+   "tcg_number": "SWSH248",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 273938,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "249": {
+   "name": "Kleavor VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 273939,
+   "tcg_name": "Kleavor VSTAR - SWSH249",
+   "tcg_number": "SWSH249",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 273939,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "250": {
+   "name": "Lumineon V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 279141,
+   "tcg_name": "Lumineon V - SWSH250",
+   "tcg_number": "SWSH250",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 279141,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "251": {
+   "name": "Boss's Orders",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 489944,
+   "tcg_name": "Boss's Orders (Full Art)",
+   "tcg_number": "SWSH251",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 489944,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "252": {
+   "name": "Infernape V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 283369,
+   "tcg_name": "Infernape V - SWSH252",
+   "tcg_number": "SWSH252",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 283369,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "253": {
+   "name": "Origin Forme Palkia V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 449512,
+   "tcg_name": "Origin Forme Palkia V",
+   "tcg_number": "SWSH253",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 449512,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "254": {
+   "name": "Origin Forme Palkia VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 449511,
+   "tcg_name": "Origin Forme Palkia VSTAR",
+   "tcg_number": "SWSH254",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 449511,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "255": {
+   "name": "Origin Forme Dialga V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 449510,
+   "tcg_name": "Origin Forme Dialga V",
+   "tcg_number": "SWSH255",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 449510,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "256": {
+   "name": "Origin Forme Dialga VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 449509,
+   "tcg_name": "Origin Forme Dialga VSTAR",
+   "tcg_number": "SWSH256",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 449509,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "257": {
+   "name": "Rotom V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 450653,
+   "tcg_name": "Rotom V - SWSH257",
+   "tcg_number": "SWSH257",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 450653,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "258": {
+   "name": "Gallade V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 450656,
+   "tcg_name": "Gallade V - SWSH258",
+   "tcg_number": "SWSH258",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 450656,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "259": {
+   "name": "Giratina V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 450657,
+   "tcg_name": "Giratina V - SWSH259",
+   "tcg_number": "SWSH259",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 450657,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "260": {
+   "name": "Charizard V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 285384,
+   "tcg_name": "Charizard V - SWSH260",
+   "tcg_number": "SWSH260",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 285384,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "261": {
+   "name": "Charizard VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 285378,
+   "tcg_name": "Charizard VMAX - SWSH261",
+   "tcg_number": "SWSH261",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 285378,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "262": {
+   "name": "Charizard VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 285396,
+   "tcg_name": "Charizard VSTAR - SWSH262",
+   "tcg_number": "SWSH262",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 285396,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "263": {
+   "name": "Zeraora V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 449518,
+   "tcg_name": "Zeraora V - SWSH263",
+   "tcg_number": "SWSH263",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 449518,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "264": {
+   "name": "Zeraora VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 449519,
+   "tcg_name": "Zeraora VMAX - SWSH264",
+   "tcg_number": "SWSH264",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 449519,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "265": {
+   "name": "Zeraora VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 449520,
+   "tcg_name": "Zeraora VSTAR - SWSH265",
+   "tcg_number": "SWSH265",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 449520,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "266": {
+   "name": "Deoxys V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 449521,
+   "tcg_name": "Deoxys V - SWSH266",
+   "tcg_number": "SWSH266",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 449521,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "267": {
+   "name": "Deoxys VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 449522,
+   "tcg_name": "Deoxys VMAX - SWSH267",
+   "tcg_number": "SWSH267",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 449522,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "268": {
+   "name": "Deoxys VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 449523,
+   "tcg_name": "Deoxys VSTAR - SWSH268",
+   "tcg_number": "SWSH268",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 449523,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "269": {
+   "name": "Sunflora",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 451844,
+   "tcg_name": "Sunflora - SWSH269 (Prerelease)",
+   "tcg_number": "SWSH269",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 451884
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 451844,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 451884,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "270": {
+   "name": "Rapidash",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 451845,
+   "tcg_name": "Rapidash - SWSH270 (Prerelease)",
+   "tcg_number": "SWSH270",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 451885
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 451845,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 451885,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "271": {
+   "name": "Kirlia",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 451846,
+   "tcg_name": "Kirlia - SWSH271 (Prerelease)",
+   "tcg_number": "SWSH271",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 451886
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 451846,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 451886,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "272": {
+   "name": "Archeops",
+   "versions": [
+    "prereleaseStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 451847,
+   "tcg_name": "Archeops - SWSH272 (Prerelease)",
+   "tcg_number": "SWSH272",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 451887
+    }
+   ],
+   "variants": {
+    "prereleaseStamp": {
+     "product_id": 451847,
+     "printing": "Holofoil"
+    },
+    "staffStamp": {
+     "product_id": 451887,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "273": {
+   "name": "Hisuian Basculin",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 454228,
+   "tcg_name": "Hisuian Basculin - SWSH273",
+   "tcg_number": "SWSH273",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 454228,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "274": {
+   "name": "Cranidos",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 454227,
+   "tcg_name": "Cranidos - SWSH274",
+   "tcg_number": "SWSH274",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 454227,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "275": {
+   "name": "Manaphy",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 454226,
+   "tcg_name": "Manaphy - SWSH275",
+   "tcg_number": "SWSH275",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 454226,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "276": {
+   "name": "Togetic",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 454225,
+   "tcg_name": "Togetic - SWSH276",
+   "tcg_number": "SWSH276",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 454225,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "277": {
+   "name": "Rillaboom",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 475621,
+   "tcg_name": "Rillaboom - SWSH277",
+   "tcg_number": "SWSH277",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 475621,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "278": {
+   "name": "Cinderace",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 475622,
+   "tcg_name": "Cinderace - SWSH278",
+   "tcg_number": "SWSH278",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 475622,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "279": {
+   "name": "Inteleon",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 475623,
+   "tcg_name": "Inteleon - SWSH279",
+   "tcg_number": "SWSH279",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 475623,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "280": {
+   "name": "Regieleki V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 453483,
+   "tcg_name": "Regieleki V - SWSH280",
+   "tcg_number": "SWSH280",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 453483,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "281": {
+   "name": "Regidrago V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 453485,
+   "tcg_name": "Regidrago V - SWSH281",
+   "tcg_number": "SWSH281",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 453485,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "282": {
+   "name": "Galarian Articuno",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 488271,
+   "tcg_name": "Galarian Articuno - SWSH282",
+   "tcg_number": "SWSH282",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 488271,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "283": {
+   "name": "Galarian Zapdos",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 488274,
+   "tcg_name": "Galarian Zapdos - SWSH283",
+   "tcg_number": "SWSH283",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 488274,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "284": {
+   "name": "Galarian Moltres",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 488275,
+   "tcg_name": "Galarian Moltres - SWSH284",
+   "tcg_number": "SWSH284",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 488275,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "285": {
+   "name": "Pikachu V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 478423,
+   "tcg_name": "Pikachu V - SWSH285",
+   "tcg_number": "SWSH285",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 478423,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "286": {
+   "name": "Pikachu VMAX",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 478424,
+   "tcg_name": "Pikachu VMAX - SWSH286",
+   "tcg_number": "SWSH286",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 478424,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "287": {
+   "name": "Morpeko V-Union",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 477065,
+   "tcg_name": "Morpeko V-Union - SWSH287",
+   "tcg_number": "SWSH287",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 477065,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "288": {
+   "name": "Morpeko V-Union",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 477066,
+   "tcg_name": "Morpeko V-Union - SWSH288",
+   "tcg_number": "SWSH288",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 477066,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "289": {
+   "name": "Morpeko V-Union",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 477067,
+   "tcg_name": "Morpeko V-Union - SWSH289",
+   "tcg_number": "SWSH289",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 477067,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "290": {
+   "name": "Morpeko V-Union",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 477068,
+   "tcg_name": "Morpeko V-Union - SWSH290",
+   "tcg_number": "SWSH290",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 477068,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "291": {
+   "name": "Lucario VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 475642,
+   "tcg_name": "Lucario VSTAR - SWSH291",
+   "tcg_number": "SWSH291",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 475642,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "292": {
+   "name": "Zacian V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 477063,
+   "tcg_name": "Zacian V (Shiny) - SWSH292",
+   "tcg_number": "SWSH292",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 477063,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "293": {
+   "name": "Zamazenta V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 477064,
+   "tcg_name": "Zamazenta V (Shiny) - SWSH293",
+   "tcg_number": "SWSH293",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 477064,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "294": {
+   "name": "Hisuian Electrode V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 451115,
+   "tcg_name": "Hisuian Electrode V - SWSH294",
+   "tcg_number": "SWSH294",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 451115,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "295": {
+   "name": "Virizion V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 449515,
+   "tcg_name": "Virizion V - SWSH295",
+   "tcg_number": "SWSH295",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 449515,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "296": {
+   "name": "Champions Festival",
+   "versions": [
+    "worldChampionshipsStamp",
+    "staffStamp"
+   ],
+   "status": "ok",
+   "product_id": 575154,
+   "tcg_name": "Champions Festival - SWSH296 (World Championships 2022)",
+   "tcg_number": "SWSH296",
+   "variant_products": [
+    {
+     "suffix": "staffStamp",
+     "product_id": 503454
+    }
+   ],
+   "variants": {
+    "worldChampionshipsStamp": {
+     "product_id": 575154,
+     "printing": "Normal"
+    },
+    "staffStamp": {
+     "product_id": 503454,
+     "printing": "Normal"
+    }
+   }
+  },
+  "297": {
+   "name": "Hisuian Zoroark V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 449526,
+   "tcg_name": "Hisuian Zoroark V - SWSH297",
+   "tcg_number": "SWSH297",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 449526,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "298": {
+   "name": "Hisuian Zoroark VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 449527,
+   "tcg_name": "Hisuian Zoroark VSTAR - SWSH298",
+   "tcg_number": "SWSH298",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 449527,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "299": {
+   "name": "Jirachi V - 299",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 544371,
+   "tcg_name": "Jirachi V - 299",
+   "tcg_number": "SWSH299",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 544371,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "300": {
+   "name": "Unown V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 505968,
+   "tcg_name": "Unown V - SWSH300",
+   "tcg_number": "SWSH300",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 505968,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "301": {
+   "name": "Lugia V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 505996,
+   "tcg_name": "Lugia V - SWSH301",
+   "tcg_number": "SWSH301",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 505996,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "302": {
+   "name": "Klara",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 489692,
+   "tcg_name": "Klara (Full Art)",
+   "tcg_number": "SWSH302",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 489692,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "303": {
+   "name": "Bulbasaur",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 485843,
+   "tcg_name": "Bulbasaur (Illustration Contest 2022)",
+   "tcg_number": "SWSH303",
+   "variant_products": [],
+   "variants": {
+    "normal": {
+     "product_id": 485843,
+     "printing": "Normal"
+    }
+   }
+  },
+  "304": {
+   "name": "Arcanine",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 485844,
+   "tcg_name": "Arcanine (Illustration Contest 2022)",
+   "tcg_number": "SWSH304",
+   "variant_products": [],
+   "variants": {
+    "normal": {
+     "product_id": 485844,
+     "printing": "Normal"
+    }
+   }
+  },
+  "305": {
+   "name": "Greninja",
+   "versions": [
+    "normal"
+   ],
+   "status": "ok",
+   "product_id": 485845,
+   "tcg_name": "Greninja (Illustration Contest 2022)",
+   "tcg_number": "SWSH305",
+   "variant_products": [],
+   "variants": {
+    "normal": {
+     "product_id": 485845,
+     "printing": "Normal"
+    }
+   }
+  },
+  "306": {
+   "name": "Arceus V",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 499989,
+   "tcg_name": "Arceus V - SWSH306",
+   "tcg_number": "SWSH306",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 499989,
+     "printing": "Holofoil"
+    }
+   }
+  },
+  "307": {
+   "name": "Arceus VSTAR",
+   "versions": [
+    "holofoil"
+   ],
+   "status": "ok",
+   "product_id": 499984,
+   "tcg_name": "Arceus VSTAR - SWSH307",
+   "tcg_number": "SWSH307",
+   "variant_products": [],
+   "variants": {
+    "holofoil": {
+     "product_id": 499984,
+     "printing": "Holofoil"
+    }
+   }
+  }
+ }
+}

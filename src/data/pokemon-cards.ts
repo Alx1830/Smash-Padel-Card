@@ -401,7 +401,7 @@ export const SET_CARD_COUNT: Record<string, number> = {
   "rebel-clash": 404,
   "darkness-ablaze": 395,
   "hidden-fates": 142,
-  "ss-promos": 0,
+  "ss-promos": 334,
   "cosmic-eclipse": 470,
   "detective-pikachu": 18,
   "unbroken-bonds": 441,
