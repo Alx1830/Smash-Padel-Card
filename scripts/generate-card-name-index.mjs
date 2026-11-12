@@ -15,7 +15,9 @@ for (const file of readdirSync(setsDir)) {
   const src = readFileSync(join(setsDir, file), "utf8");
   const names = new Set();
   for (const m of src.matchAll(/name:\s*"((?:[^"\\]|\\.)*)"/g)) {
-    const name = m[1].trim().toLowerCase();
+    // Sin tildes: TCGplayer escribe "Poke Pad" y otros sets "Poké Pad"; el
+    // buscador compara sin tildes de los dos lados (src/lib/sin-tildes.ts)
+    const name = m[1].trim().toLowerCase().normalize("NFD").replace(/\p{M}/gu, "");
     if (name) names.add(name);
   }
   if (names.size) index[setId] = [...names].sort().join("\n");

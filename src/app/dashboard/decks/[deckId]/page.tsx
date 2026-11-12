@@ -1,5 +1,6 @@
 "use client";
 
+import { sinTildes } from "@/lib/sin-tildes";
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -189,9 +190,10 @@ export default function DeckEditorPage() {
     if (q.length < 2) return;
     const timer = setTimeout(async () => {
       setIsSearching(true);
+      const qs = sinTildes(q);
       const { SET_NAME_INDEX } = await import("@/data/card-name-index");
       const matchingSetIds = Object.keys(SET_NAME_INDEX)
-        .filter(setId => SET_NAME_INDEX[setId].includes(q));
+        .filter(setId => SET_NAME_INDEX[setId].includes(qs));
       await loadManySets(matchingSetIds);
       if (token !== searchTokenRef.current) return;
 
@@ -201,7 +203,7 @@ export default function DeckEditorPage() {
         if (!cards.length) continue;
         const setInfo = ALL_SETS.find(s => s.id === setId);
         for (const card of cards) {
-          if (card.name.toLowerCase().includes(q))
+          if (sinTildes(card.name).includes(qs))
             out.push({ card: card as PokemonCard, setId, setName: setInfo?.name ?? setId });
         }
       }
@@ -215,6 +217,35 @@ export default function DeckEditorPage() {
     }, 350);
     return () => clearTimeout(timer);
   }, [query]);
+
+  /**
+   * Mientras se arrastra una carta, Chrome en Windows no deja usar la rueda del
+   * mouse (el arrastre nativo se queda con ella). Para llegar a cartas que están
+   * fuera de la pantalla, la página se desplaza sola al acercar la carta al
+   * borde de arriba o de abajo: más rápido cuanto más cerca del borde.
+   */
+  useEffect(() => {
+    if (dragIdx === null) return;
+    const ZONA = 120;        // px desde el borde donde empieza a desplazarse
+    const VELOCIDAD = 22;    // px por cuadro pegado al borde
+    let y: number | null = null;
+    let cuadro = 0;
+    const alMover = (e: DragEvent) => { y = e.clientY; };
+    const paso = () => {
+      if (y !== null) {
+        const alto = window.innerHeight;
+        if (y < ZONA) window.scrollBy(0, -Math.ceil(VELOCIDAD * (1 - y / ZONA)));
+        else if (y > alto - ZONA) window.scrollBy(0, Math.ceil(VELOCIDAD * (1 - (alto - y) / ZONA)));
+      }
+      cuadro = requestAnimationFrame(paso);
+    };
+    document.addEventListener("dragover", alMover);
+    cuadro = requestAnimationFrame(paso);
+    return () => {
+      document.removeEventListener("dragover", alMover);
+      cancelAnimationFrame(cuadro);
+    };
+  }, [dragIdx]);
 
   async function saveOrder(newCards: DeckCard[]) {
     setDeckCards(newCards);
@@ -506,6 +537,8 @@ export default function DeckEditorPage() {
                   key={dc.id}
                   draggable
                   onDragStart={() => setDragIdx(index)}
+                  // Soltar fuera de una carta también termina el arrastre (y el desplazamiento automático)
+                  onDragEnd={() => { setDragIdx(null); setDragOver(null); }}
                   onDragOver={e => { e.preventDefault(); setDragOver(index); }}
                   onDragLeave={() => setDragOver(null)}
                   onDrop={e => {

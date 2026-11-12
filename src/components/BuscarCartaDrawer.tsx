@@ -1,5 +1,6 @@
 "use client";
 
+import { sinTildes } from "@/lib/sin-tildes";
 import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
@@ -129,9 +130,10 @@ export function BuscarCartaDrawer({ userId, onClose, consultaInicial = "" }: Bus
     if (q.length < 2) return;
     const timer = setTimeout(async () => {
       setIsLoading(true);
+      const qs = sinTildes(q);
       const { SET_NAME_INDEX } = await import("@/data/card-name-index");
       const matchingSetIds = Object.keys(SET_NAME_INDEX)
-        .filter(setId => SET_NAME_INDEX[setId].includes(q));
+        .filter(setId => SET_NAME_INDEX[setId].includes(qs));
       await loadManySets(matchingSetIds);
       if (token !== searchTokenRef.current) return;
 
@@ -141,7 +143,7 @@ export function BuscarCartaDrawer({ userId, onClose, consultaInicial = "" }: Bus
         if (!cards.length) continue;
         const setInfo = ALL_SETS.find(s => s.id === setId);
         for (const card of cards) {
-          if (card.name.toLowerCase().includes(q))
+          if (sinTildes(card.name).includes(qs))
             out.push({ card: card as PokemonCard, setId, setName: setInfo?.name ?? setId });
         }
       }

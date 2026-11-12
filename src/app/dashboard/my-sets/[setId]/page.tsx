@@ -1,5 +1,6 @@
 "use client";
 
+import { sinTildes } from "@/lib/sin-tildes";
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -152,9 +153,10 @@ export default function MySetEditorPage() {
     if (q.length < 2) return;
     const timer = setTimeout(async () => {
       setIsSearching(true);
+      const qs = sinTildes(q);
       const { SET_NAME_INDEX } = await import("@/data/card-name-index");
       const matchingSetIds = Object.keys(SET_NAME_INDEX)
-        .filter(sid => SET_NAME_INDEX[sid].includes(q));
+        .filter(sid => SET_NAME_INDEX[sid].includes(qs));
       await loadManySets(matchingSetIds);
       if (token !== searchTokenRef.current) return;
 
@@ -164,7 +166,7 @@ export default function MySetEditorPage() {
         if (!cards.length) continue;
         const setInfo = ALL_SETS.find(s => s.id === sid);
         for (const card of cards) {
-          if (card.name.toLowerCase().includes(q))
+          if (sinTildes(card.name).includes(qs))
             out.push({ card: card as PokemonCard, setId: sid, setName: setInfo?.name ?? sid });
         }
       }
